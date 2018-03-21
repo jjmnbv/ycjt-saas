@@ -14,6 +14,8 @@
     <modules>
         <module>auth</module>
         <module>user</module>
+        <module>channel</module>
+        <module>collection</module>
 
     </modules>
 
