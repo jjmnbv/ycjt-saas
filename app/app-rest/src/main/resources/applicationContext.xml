@@ -97,7 +97,7 @@
 
     <!-- 配置扫描包，加载mapper代理对象 -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.fqgj.*.*.*.mapper;com.fqgj.*.*.mapper;com.fqgj.youjie.order.mapper"></property>
+        <property name="basePackage" value="com.beitu.**.mapper"></property>
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
     </bean>
 
