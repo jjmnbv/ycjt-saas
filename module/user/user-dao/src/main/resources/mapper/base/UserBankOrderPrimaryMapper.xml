@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fqgj.youjie.user.dao.impl.UserBankOrderDaoImpl">
+    <resultMap id="BaseResultMap" type="com.fqgj.youjie.user.entity.UserBankOrder">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="user_code" jdbcType="VARCHAR" property="userCode"/>
+        <result column="order_no" jdbcType="VARCHAR" property="orderNo"/>
+        <result column="op_type" jdbcType="TINYINT" property="opType"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="number" jdbcType="VARCHAR" property="number"/>
+        <result column="user_bank_id" jdbcType="BIGINT" property="userBankId"/>
+        <result column="amount" jdbcType="DECIMAL" property="amount"/>
+        <result column="actual_amount" jdbcType="DECIMAL" property="actualAmount"/>
+        <result column="base_fee" jdbcType="DECIMAL" property="baseFee"/>
+        <result column="fee_rate" jdbcType="DECIMAL" property="feeRate"/>
+        <result column="fee" jdbcType="DECIMAL" property="fee"/>
+        <result column="provider_type" jdbcType="TINYINT" property="providerType"/>
+        <result column="detail_id" jdbcType="BIGINT" property="detailId"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="ip_address" jdbcType="VARCHAR" property="ipAddress"/>
+        <result column="lng_lat" jdbcType="VARCHAR" property="lngLat"/>
+        <result column="location" jdbcType="VARCHAR" property="location"/>
+        <result column="deleted" jdbcType="BIT" property="deleted"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        user_id,
+        user_code,
+        order_no,
+        op_type,
+        `name`,
+        `number`,
+        user_bank_id,
+        amount,
+        actual_amount,
+        base_fee,
+        fee_rate,
+        fee,
+        provider_type,
+        detail_id,
+        status,
+        ip_address,
+        lng_lat,
+        location,
+        deleted,
+        gmt_modified,
+        gmt_create
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from user_bank_order
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.fqgj.youjie.user.entity.UserBankOrder" useGeneratedKeys="true">
+        insert into user_bank_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId !=null">
+            user_id,
+            </if>
+            <if test="userCode !=null">
+                user_code,
+            </if>
+            <if test="orderNo !=null">
+            order_no,
+            </if>
+            <if test="opType !=null">
+            op_type,
+            </if>
+            <if test="name !=null">
+            `name`,
+            </if>
+            <if test="number !=null">
+            `number`,
+            </if>
+            <if test="userBankId !=null">
+            user_bank_id,
+            </if>
+            <if test="amount !=null">
+            amount,
+            </if>
+            <if test="actualAmount !=null">
+            actual_amount,
+            </if>
+            <if test="baseFee !=null">
+            base_fee,
+            </if>
+            <if test="feeRate !=null">
+            fee_rate,
+            </if>
+            <if test="fee !=null">
+            fee,
+            </if>
+            <if test="providerType !=null">
+            provider_type,
+            </if>
+            <if test="detailId !=null">
+            detail_id,
+            </if>
+            <if test="status !=null">
+            status,
+            </if>
+            <if test="ipAddress !=null">
+            ip_address,
+            </if>
+            <if test="lngLat !=null">
+            lng_lat,
+            </if>
+            <if test="location !=null">
+            location,
+            </if>
+            <if test="deleted !=null">
+            deleted,
+            </if>
+            <if test="gmtModified !=null">
+            gmt_modified,
+            </if>
+            <if test="gmtCreate !=null">
+            gmt_create,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+            #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="userCode != null">
+                #{userCode,jdbcType=VARCHAR},
+            </if>
+            <if test="orderNo != null">
+            #{orderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="opType != null">
+            #{opType,jdbcType=TINYINT},
+            </if>
+            <if test="name != null">
+            #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="number != null">
+            #{number,jdbcType=VARCHAR},
+            </if>
+            <if test="userBankId != null">
+            #{userBankId,jdbcType=BIGINT},
+            </if>
+            <if test="amount != null">
+            #{amount,jdbcType=DECIMAL},
+            </if>
+            <if test="actualAmount != null">
+            #{actualAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="baseFee != null">
+            #{baseFee,jdbcType=DECIMAL},
+            </if>
+            <if test="feeRate != null">
+            #{feeRate,jdbcType=DECIMAL},
+            </if>
+            <if test="fee != null">
+            #{fee,jdbcType=DECIMAL},
+            </if>
+            <if test="providerType != null">
+            #{providerType,jdbcType=TINYINT},
+            </if>
+            <if test="detailId != null">
+            #{detailId,jdbcType=BIGINT},
+            </if>
+            <if test="status != null">
+            #{status,jdbcType=TINYINT},
+            </if>
+            <if test="ipAddress != null">
+            #{ipAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="lngLat != null">
+            #{lngLat,jdbcType=VARCHAR},
+            </if>
+            <if test="location != null">
+            #{location,jdbcType=VARCHAR},
+            </if>
+            <if test="deleted != null">
+            #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified != null">
+            #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtCreate != null">
+            #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.fqgj.youjie.user.entity.UserBankOrder">
+        update user_bank_order
+        <set>
+            <if test="userId !=null">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="userCode !=null">
+                user_code = #{userCode,jdbcType=VARCHAR},
+            </if>
+            <if test="orderNo !=null">
+                order_no = #{orderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="opType !=null">
+                op_type = #{opType,jdbcType=TINYINT},
+            </if>
+            <if test="name !=null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="number !=null">
+                number = #{number,jdbcType=VARCHAR},
+            </if>
+            <if test="userBankId !=null">
+                user_bank_id = #{userBankId,jdbcType=BIGINT},
+            </if>
+            <if test="amount !=null">
+                amount = #{amount,jdbcType=DECIMAL},
+            </if>
+            <if test="actualAmount !=null">
+                actual_amount = #{actualAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="baseFee !=null">
+                base_fee = #{baseFee,jdbcType=DECIMAL},
+            </if>
+            <if test="feeRate !=null">
+                fee_rate = #{feeRate,jdbcType=DECIMAL},
+            </if>
+            <if test="fee !=null">
+                fee = #{fee,jdbcType=DECIMAL},
+            </if>
+            <if test="providerType !=null">
+                provider_type = #{providerType,jdbcType=TINYINT},
+            </if>
+            <if test="detailId !=null">
+                detail_id = #{detailId,jdbcType=BIGINT},
+            </if>
+            <if test="status !=null">
+                status = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="ipAddress !=null">
+                ip_address = #{ipAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="lngLat !=null">
+                lng_lat = #{lngLat,jdbcType=VARCHAR},
+            </if>
+            <if test="location !=null">
+                location = #{location,jdbcType=VARCHAR},
+            </if>
+            <if test="deleted !=null">
+                deleted = #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteByPrimaryKey">
+        update  user_bank_order
+        set deleted = 1
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="selectByParams" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_bank_order
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                AND id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userId !=null">
+               AND user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="userCode !=null">
+                and user_code = #{userCode,jdbcType=VARCHAR}
+            </if>
+            <if test="orderNo !=null">
+              AND  order_no = #{orderNo,jdbcType=VARCHAR}
+            </if>
+            <if test="opType !=null">
+              AND  op_type = #{opType,jdbcType=TINYINT}
+            </if>
+            <if test="name !=null">
+              AND  `name` = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="number !=null">
+              AND  `number`  = #{number,jdbcType=VARCHAR}
+            </if>
+            <if test="userBankId !=null">
+              AND user_bank_id = #{userBankId,jdbcType=BIGINT}
+            </if>
+            <if test="amount !=null">
+              AND  amount = #{amount,jdbcType=DECIMAL}
+            </if>
+            <if test="actualAmount !=null">
+              AND actual_amount = #{actualAmount,jdbcType=DECIMAL}
+            </if>
+            <if test="baseFee !=null">
+              AND   base_fee = #{baseFee,jdbcType=DECIMAL}
+            </if>
+            <if test="feeRate !=null">
+              AND   fee_rate = #{feeRate,jdbcType=DECIMAL}
+            </if>
+            <if test="fee !=null">
+              AND   fee = #{fee,jdbcType=DECIMAL}
+            </if>
+            <if test="providerType !=null">
+              AND   provider_type = #{providerType,jdbcType=TINYINT}
+            </if>
+            <if test="detailId !=null">
+              AND   detail_id = #{detailId,jdbcType=BIGINT}
+            </if>
+            <if test="status !=null">
+              AND  status = #{status,jdbcType=TINYINT}
+            </if>
+            <if test="ipAddress !=null">
+              AND   ip_address = #{ipAddress,jdbcType=VARCHAR}
+            </if>
+            <if test="lngLat !=null">
+              AND   lng_lat = #{lngLat,jdbcType=VARCHAR}
+            </if>
+            <if test="location !=null">
+              AND   location = #{location,jdbcType=VARCHAR}
+            </if>
+            <if test="deleted !=null">
+              AND   deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+              AND   gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="startDate != null">
+                and  gmt_create >= #{startDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="endDate != null">
+                and gmt_create &lt;= #{endDate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+        ORDER BY gmt_modified DESC
+        <include refid="paginationSql"/>
+    </select>
+
+    <select id="queryTotal" resultType="INTEGER">
+        select count(*) from user_bank_order
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="userId !=null">
+                AND user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="userCode !=null">
+                and user_code = #{userCode,jdbcType=VARCHAR}
+            </if>
+            <if test="orderNo !=null">
+                AND  order_no = #{orderNo,jdbcType=VARCHAR}
+            </if>
+            <if test="opType !=null">
+                AND  op_type = #{opType,jdbcType=TINYINT}
+            </if>
+            <if test="name !=null">
+                AND  `name` = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="number !=null">
+                AND  `number`  = #{number,jdbcType=VARCHAR}
+            </if>
+            <if test="userBankId !=null">
+                AND user_bank_id = #{userBankId,jdbcType=BIGINT}
+            </if>
+            <if test="amount !=null">
+                AND  amount = #{amount,jdbcType=DECIMAL}
+            </if>
+            <if test="actualAmount !=null">
+                AND actual_amount = #{actualAmount,jdbcType=DECIMAL}
+            </if>
+            <if test="baseFee !=null">
+                AND   base_fee = #{baseFee,jdbcType=DECIMAL}
+            </if>
+            <if test="feeRate !=null">
+                AND   fee_rate = #{feeRate,jdbcType=DECIMAL}
+            </if>
+            <if test="fee !=null">
+                AND   fee = #{fee,jdbcType=DECIMAL}
+            </if>
+            <if test="providerType !=null">
+                AND   provider_type = #{providerType,jdbcType=TINYINT}
+            </if>
+            <if test="detailId !=null">
+                AND   detail_id = #{detailId,jdbcType=BIGINT}
+            </if>
+            <if test="status !=null">
+                AND  status = #{status,jdbcType=TINYINT}
+            </if>
+            <if test="ipAddress !=null">
+                AND   ip_address = #{ipAddress,jdbcType=VARCHAR}
+            </if>
+            <if test="lngLat !=null">
+                AND   lng_lat = #{lngLat,jdbcType=VARCHAR}
+            </if>
+            <if test="location !=null">
+                AND   location = #{location,jdbcType=VARCHAR}
+            </if>
+            <if test="deleted !=null">
+                AND   deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                AND   gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="startDate != null">
+                and gmt_create >= #{startDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="endDate != null">
+                and gmt_create &lt;= #{endDate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </select>
+
+    <sql id="paginationSql">
+        <if test="page != null">
+            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+        </if>
+    </sql>
+</mapper>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>获取成功</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1,user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="shortcut icon" href="img/favicon.ico">
+    <style>
+        body, p, h1, h2, h3, h4, h5, h6, ul, ol, li, dl, dt, dd, table, th, td, form, fieldset, legend, input, textarea, button, select {
+            margin: 0;
+            padding: 0
+        }
+
+        h1, h2, h3, h4, h5, h6, p, b, strong {
+            font-weight: normal
+        }
+
+        img, fieldset {
+            border: 0
+        }
+
+        ul, ol {
+            list-style: none
+        }
+
+        a {
+            text-decoration: none
+        }
+
+        * {
+            -webkit-tap-highlight-color: transparent
+        }
+
+        input::-webkit-input-placeholder {
+            color: #cdcdcd
+        }
+
+        input:focus::-webkit-input-placeholder {
+            color: #cdcdcd
+        }
+
+        body {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none
+        }
+
+        body, html {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif
+        }
+
+        .wrap {
+            width: 100%;
+            min-width: 320px;
+            max-width: 640px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .wrap .icon {
+            padding-top: 4.8rem;
+        }
+
+        .wrap .icon img {
+            width: 8rem;
+            height: 8rem;
+        }
+
+        .wrap h2 {
+            padding: 2.5rem 0 2.4rem;
+            text-align: center;
+            font-size: 2.4rem;
+            color: #626262;
+        }
+
+        .wrap p {
+            font-size: 1.6rem;
+            color: #989898;
+            line-height: 2.5rem;
+            padding: 0 1.5rem;
+            text-align: left;
+        }
+
+        .wrap p span {
+            color: #F97A2B;
+        }
+
+        .wrap .button {
+            height: 4rem;
+            line-height: 4rem;
+            width: 20rem;
+            display: inline-block;
+            border-radius: 2.5rem;
+            font-size: 1.6rem;
+            border: 1px solid #989898;
+            color: #626262;
+            margin-top: 10rem;
+        }
+    </style>
+    <script type="text/javascript" src="js/global.js"></script>
+    <script type="text/javascript" src="js/bridge.js?t=1244"></script>
+    <script type="text/javascript" src="js/md5.min.js"></script>
+    <script type="text/javascript" src="js/zepto.min.js"></script>
+</head>
+
+<body>
+<div class="wrap">
+    <div class="icon">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACgCAMAAAC8EZcfAAAAtFBMVEUAAACLw0mKw0mLw0mLw0qKw0qLw0qLw0mLw0mMw0qKxEmQyEyRyE+i6V2LwkmKxEqNxEmLxUuNyEyQ0GCKw0mLw0mKwkqLwkmKw0qLwkuLxEqLw0qKwkuNw0uLwkuMwkmOwk2KwkmLw0qMzE2OxlWL0V2Kwkn////5/Pf9/vz0+e6XyF3P5rbR57eWyFzS57n4+/PS57qPxVG83Jeizm77/fj1+e+t1H/r9ODG4afd7cqYyl8WNu0kAAAAJnRSTlMA++vFnvn2v66JgyQYA994SkUeCPbt0rmmk3lyaWJcUD87NxQSCxsBV9cAAAShSURBVHjazNiJcqJAEMbxHu5DMIB3vI+PGFNblsZc+/7vtZVSi7CWwUygh98T/AuahoHKsJiNXMPp6p1QM00t7Ohdx3BHswWpt4qaht7GFW3daEYrUiWZerpAIaF704TY+QPbws0se+ATo+VQx4/pwyWxCCaOCSmmMwmoag1Xwy9oboOqFPdb+KVWP6aq+IZACYThUxX8nkBJRK/8xMQzUSLTS6hUdyFKFt5ReWIHFXBiKkfQtFAJqxlQCRo2KmOXsBUjDRXSIvqdwBOolPCCut7eMm7zXAMDbS69/CywsCRX4liAiRiThHswuqcfc8HKpR8ywMyo9fX75NZ2/iTmcAwlxjfvPwElxI37cG5BEWtON2hoUEZrUKHAhkJ2QEU8KOVRgUhAKRHVdwDPY1jfAbxhDJuogSZdFVuoASumaxzUgkNX3KEmrrzykhA1ESZ1XNGF69o3URumT5d6qJEeXfAFFPn7+v76jDzhqz8lneyeHraH7fZjhxzjYkcLKLFLD+mndbrBVyKmvD6U2Dyu06P1G3L6lNNogVfWd7bd46tWQ+k5OOvLPCHHpS8CDbyyvswbcrSAMhMwy/oyH8ibKP6M2bzk+w7vyHOyvqUJXtn1yzz8QZ65pLMhGBT17fG/IZ3pYFDQ94QLOp34YFTcl/HpaAAJDH0Y0JENCQx9sI99iQUJDH2wEvo0hQSOPmAqexZh6oMnu2R4+k6LZiUggaUPYkVEESTw9AGR7A8jpj40ZU9LTH0wZJ8Rnr7jU9KGBKY+tIkWkMHUByxoBilMfZjRCFKY+jAiF1KY+uDKbhmmPhjkQApTHxzqQgpTH7qko9DzDpd4+qBTp6jubb1dP+5xgaUPHQrxrf0hPdohj6cPIWn4zmt6sn7cIIenDxqZ+MbuJb1WyNMH8x/v9pLTMBAEYRhjG5IYjCAQHgIBAipekEAAhfvfjGUvIvyb8RQ+wSeN5Onpru4Hfr0vQWj2qe4/4s9uCUKXL464BSAIzT61ews44mThOodPi/4f9UcAQWjyqYSr7rsDodmnSyoWXkFo9mmC5dYKhF6fKihYQWj3aQolPwjtPt3BowmEdp8e4dkJQrtPT7883FG4/h/fBbQ+QGj3qYTmEQrZt9KYr4L2GwjtPp1AAxOEdp9OoQVMQrevePlTE/1tV+j1qaQxBAutPs1wkMNCp08PPApjodF3MOdholho8+lw0DiWhS6fboYNtFlo8qkZGAkg4Xbr8ZWDQxUk9Ph0mxhL2RV6fPVzQrAnhHafJinRqBDafbpPCpeF0O3bP06L54XQ69M0NeAYQqvv/Cg5IhpCo0/XGUK2m87nK87GxJRD6PKpGhf0DqHJVzQjo/IhtPh0NXrZIIQOX92MX9cIYX6fZlkWXkKY29fOs64Mbbqf6u6YCGAYBoJgm0kVFEaQJvyJhYTG3hMCEbj94f/WMxxdfe8avaubrfHhn59O8vGpn+8er+vufkLOR/g+Y+BDED6l4WMkPufigzg+KeSjTD5r5cNgPq3m43Q+7+cDiQFi0kc6feY0AMUGqF0fKw5wzwEwO0COB9D2AHtfGA4oTC8Uxiv2zH/8gZelkZFGn4EAAAAASUVORK5CYII="/>
+    </div>
+    <h2 id="msg_h2">您已认证成功</h2>
+    <a class="button" style="display: none;">关闭页面</a>
+</div>
+
+<script src="js/resize.js"></script>
+<script type="text/javascript">
+    var appClient = null;
+    var appData = null;
+    var appSecret = "";
+    var from = null;
+    var success = null;
+    $(document).ready(function () {
+        from = getQueryString("from");
+        success = getQueryString("success");
+        if(success == false || success == 'false'){
+            $("#msg_h2").html("认证失败");
+        }
+        if (from == "h5") {
+            window.location.href = "https://m.sdzz.la";
+        } else if (from == "react")  {
+            window.location.href =  "https://sdzz-h5-rt.fqgj.net";
+        }
+
+        if (window.android) {
+            appClient = new AppClient(window.android, true);
+            init();
+        } else {
+            setupWebViewJavascriptBridge(function (bridge) {
+                appClient = new AppClient(bridge, false);
+                init();
+            });
+        }
+
+        $(".button").click(function () {
+            $(this).hide();
+            appClient.closeZmxy();
+
+        });
+
+    });
+
+    function startWork() {
+        appClient.showLoading();
+        appClient.closeZmxy();
+    }
+
+    function initDataCallback(data) {
+        appData = JSON.parse(data);
+        startWork();
+    }
+    function init() {
+        /* var domain = {
+         "title" : "",
+         "type" : "",
+         "callback" : ""
+         };
+         appClient.setTitle(domain); */
+        // get init domain
+        appClient.getInitData("initDataCallback", initDataCallback);
+    }
+    Date.prototype.format = function (fmt) {
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "h+": this.getHours() % 12 == 0 ? 12 : this.getHours() % 12, //小时
+            "H+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+        var week = {
+            "0": "\u65e5",
+            "1": "\u4e00",
+            "2": "\u4e8c",
+            "3": "\u4e09",
+            "4": "\u56db",
+            "5": "\u4e94",
+            "6": "\u516d"
+        };
+        if (/(y+)/.test(fmt)) {
+            fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        }
+        if (/(E+)/.test(fmt)) {
+            fmt = fmt.replace(RegExp.$1, ((RegExp.$1.length > 1) ? (RegExp.$1.length > 2 ? "\u661f\u671f" : "\u5468") : "") + week[this.getDay() + ""]);
+        }
+        for (var k in o) {
+            if (new RegExp("(" + k + ")").test(fmt)) {
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            }
+        }
+        return fmt;
+    };
+
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+</script>
+</body>
+
+</html>

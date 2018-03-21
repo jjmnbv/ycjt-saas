@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fqgj.youjie.user.dao.impl.UserProfileDaoImpl">
+    <resultMap id="BaseResultMap" type="com.fqgj.youjie.user.entity.UserProfile">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="user_code" jdbcType="VARCHAR" property="userCode"/>
+        <result column="qq" jdbcType="VARCHAR" property="qq"/>
+        <result column="education" jdbcType="TINYINT" property="education"/>
+        <result column="live_province" jdbcType="TINYINT" property="liveProvince"/>
+        <result column="live_city" jdbcType="BIGINT" property="liveCity"/>
+        <result column="live_detail_address" jdbcType="VARCHAR" property="liveDetailAddress"/>
+        <result column="live_duration" jdbcType="TINYINT" property="liveDuration"/>
+        <result column="marriage_status" jdbcType="TINYINT" property="marriageStatus"/>
+        <result column="deleted" jdbcType="BIT" property="deleted"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,
+        user_id,
+        user_code,
+        qq,
+        education,
+        live_province,
+        live_city,
+        live_detail_address,
+        live_duration,
+        marriage_status,
+        deleted,
+        gmt_modified,
+        gmt_create
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_profile
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.fqgj.youjie.user.entity.UserProfile"  useGeneratedKeys="true">
+        insert into user_profile
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId !=null">
+                user_id,
+            </if>
+            <if test="userCode !=null">
+                user_code,
+            </if>
+            <if test="qq !=null">
+                qq,
+            </if>
+            <if test="education !=null">
+                education,
+            </if>
+            <if test="liveProvince !=null">
+                live_province,
+            </if>
+            <if test="liveCity !=null">
+                live_city,
+            </if>
+            <if test="liveDetailAddress !=null">
+                live_detail_address,
+            </if>
+            <if test="liveDuration !=null">
+                live_duration,
+            </if>
+            <if test="marriageStatus !=null">
+                marriage_status,
+            </if>
+            <if test="deleted !=null">
+                deleted,
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified,
+            </if>
+            <if test="gmtCreate !=null">
+                gmt_create,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="userCode != null">
+                #{userCode,jdbcType=VARCHAR},
+            </if>
+            <if test="qq != null">
+                #{qq,jdbcType=VARCHAR},
+            </if>
+            <if test="education != null">
+                #{education,jdbcType=TINYINT},
+            </if>
+            <if test="liveProvince != null">
+                #{liveProvince,jdbcType=TINYINT},
+            </if>
+            <if test="liveCity != null">
+                #{liveCity,jdbcType=BIGINT},
+            </if>
+            <if test="liveDetailAddress != null">
+                #{liveDetailAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="liveDuration != null">
+                #{liveDuration,jdbcType=TINYINT},
+            </if>
+            <if test="marriageStatus != null">
+                #{marriageStatus,jdbcType=TINYINT},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.fqgj.youjie.user.entity.UserProfile">
+        update user_profile
+        <set>
+            <if test="userId !=null">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="userCode !=null">
+                user_code = #{userCode,jdbcType=VARCHAR},
+            </if>
+            <if test="qq !=null">
+                qq = #{qq,jdbcType=VARCHAR},
+            </if>
+            <if test="education !=null">
+                education = #{education,jdbcType=TINYINT},
+            </if>
+            <if test="liveProvince !=null">
+                live_province = #{liveProvince,jdbcType=TINYINT},
+            </if>
+            <if test="liveCity !=null">
+                live_city = #{liveCity,jdbcType=BIGINT},
+            </if>
+            <if test="liveDetailAddress !=null">
+                live_detail_address = #{liveDetailAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="liveDuration !=null">
+                live_duration = #{liveDuration,jdbcType=TINYINT},
+            </if>
+            <if test="marriageStatus !=null">
+                marriage_status = #{marriageStatus,jdbcType=TINYINT},
+            </if>
+            <if test="deleted !=null">
+                deleted = #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteByPrimaryKey">
+        update  user_profile
+        set deleted = 1
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <sql id="paginationSql">
+        <if test="page != null">
+            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+        </if>
+    </sql>
+
+    <sql id="paging">
+        <if test="offset != null and limit != null">
+            limit #{offset},#{limit}
+        </if>
+    </sql>
+
+    <select id="selectByParams" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_profile
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userId !=null">
+                and user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="userCode !=null">
+                and user_code = #{userCode,jdbcType=VARCHAR}
+            </if>
+            <if test="qq !=null">
+                and qq = #{qq,jdbcType=VARCHAR}
+            </if>
+            <if test="education !=null">
+                and education = #{education,jdbcType=TINYINT}
+            </if>
+            <if test="liveProvince !=null">
+                and live_province = #{liveProvince,jdbcType=TINYINT}
+            </if>
+            <if test="liveCity !=null">
+                and live_city = #{liveCity,jdbcType=BIGINT}
+            </if>
+            <if test="liveDetailAddress !=null">
+                and live_detail_address = #{liveDetailAddress,jdbcType=VARCHAR}
+            </if>
+            <if test="liveDuration !=null">
+                and live_duration = #{liveDuration,jdbcType=TINYINT}
+            </if>
+            <if test="marriageStatus !=null">
+                and marriage_status = #{marriageStatus,jdbcType=TINYINT}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+        <include refid="paging"/>
+    </select>
+    <select id="queryTotal" resultType="INTEGER">
+        select count(*) from user_profile
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userId !=null">
+                and user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="userCode !=null">
+                and user_code = #{userCode,jdbcType=VARCHAR}
+            </if>
+            <if test="qq !=null">
+                and qq = #{qq,jdbcType=VARCHAR}
+            </if>
+            <if test="education !=null">
+                and education = #{education,jdbcType=TINYINT}
+            </if>
+            <if test="liveProvince !=null">
+                and live_province = #{liveProvince,jdbcType=TINYINT}
+            </if>
+            <if test="liveCity !=null">
+                and live_city = #{liveCity,jdbcType=BIGINT}
+            </if>
+            <if test="liveDetailAddress !=null">
+                and live_detail_address = #{liveDetailAddress,jdbcType=VARCHAR}
+            </if>
+            <if test="liveDuration !=null">
+                and live_duration = #{liveDuration,jdbcType=TINYINT}
+            </if>
+            <if test="marriageStatus !=null">
+                and marriage_status = #{marriageStatus,jdbcType=TINYINT}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </select>
+</mapper>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fqgj.youjie.user.dao.impl.UserReportAccessLogDaoImpl">
+
+    <select id="selectByUserIdAndOrderId" parameterType="HashMap" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user_report_access_log
+        WHERE user_id = #{userId,jdbcType=BIGINT}
+        AND order_id = #{orderId,jdbcType=BIGINT}
+        AND deleted=0
+        ORDER BY id DESC
+        limit 1
+    </select>
+
+    <select id="selectByUserIdAndReportId" parameterType="HashMap" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user_report_access_log
+        WHERE user_id = #{userId,jdbcType=BIGINT}
+        AND report_id = #{reportId,jdbcType=BIGINT}
+        AND deleted=0
+        ORDER BY id DESC
+        limit 1
+    </select>
+
+    <select id="selectByUserIdAndBorrowerId" parameterType="HashMap" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user_report_access_log
+        WHERE user_id = #{userId,jdbcType=BIGINT}
+        AND borrower_id = #{borrowerId,jdbcType=BIGINT}
+        AND deleted=0
+        ORDER BY id DESC
+        limit 1
+    </select>
+
+    <select id="selectOrderIdsOrderByReportViewCount" parameterType="HashMap" resultType="Long">
+        SELECT `t`.`order_id` FROM
+        (
+        SELECT `order_id`,COUNT(*) AS `count`
+        FROM `user_report_access_log`
+        WHERE
+        <if test="orderIds !=null">
+            `order_id` IN
+            <foreach item="item" index="index" collection="orderIds" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            AND
+        </if>
+        <if test="timestamp != null ">
+            <![CDATA[gmt_create <= #{timestamp,jdbcType=TIMESTAMP}]]>
+            AND
+        </if>
+        `deleted` = 0
+        GROUP BY `order_id`
+        ) `t`
+        LEFT JOIN `order_recommend` `or`
+        ON `t`.`order_id` = `or`.`order_id`
+        ORDER BY `t`.`count` ASC, `or`.`id` DESC
+    </select>
+
+</mapper>

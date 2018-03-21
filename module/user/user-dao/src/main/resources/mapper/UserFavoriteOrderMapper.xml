@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fqgj.youjie.user.dao.impl.UserFavoriteOrderDaoImpl">
+
+    <select id="listUserFavoriteOrder" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from `user_favorite_order`
+        where user_id = #{userId,jdbcType=BIGINT} and deleted = 0 order by id desc
+        <include refid="paginationSql"/>
+    </select>
+
+    <select id="countUserFavoriteOrder" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        select COUNT(1)
+        from `user_favorite_order`
+        where user_id = #{userId,jdbcType=BIGINT} and deleted = 0
+    </select>
+
+    <update id="batchCancelCollectOrder" parameterType="java.util.Map">
+        update user_favorite_order SET
+        deleted = 1,
+        gmt_modified = SYSDATE()
+        where user_id = #{userId,jdbcType=BIGINT} and deleted = 0 and order_id in
+        <foreach item="orderId" index="index" collection="orderIdArray" open="(" separator="," close=")">
+            #{orderId}
+        </foreach>
+    </update>
+
+    <update id="cancelCollectOrder" parameterType="java.util.Map">
+        update user_favorite_order SET
+        deleted = 1,
+        gmt_modified = SYSDATE()
+        where user_id = #{userId,jdbcType=BIGINT} and order_id = #{orderId,jdbcType=BIGINT} and deleted = 0
+    </update>
+
+    <update id="deleteByUserId" parameterType="java.lang.Long">
+        update user_favorite_order SET
+        deleted = 1,
+        gmt_modified = SYSDATE()
+        where user_id = #{userId,jdbcType=BIGINT} and deleted = 0
+    </update>
+
+</mapper>

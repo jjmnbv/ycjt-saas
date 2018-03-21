@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fqgj.youjie.user.dao.impl.UserCjpFaceRecognitionDaoImpl">
+    <resultMap id="BaseResultMap" type="com.fqgj.youjie.user.entity.UserCjpFaceRecognition">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="user_code" jdbcType="VARCHAR" property="userCode"/>
+        <result column="face_best_url" jdbcType="VARCHAR" property="faceBestUrl"/>
+        <result column="face_env_url" jdbcType="VARCHAR" property="faceEnvUrl"/>
+        <result column="face_action1_url" jdbcType="VARCHAR" property="faceAction1Url"/>
+        <result column="face_action2_url" jdbcType="VARCHAR" property="faceAction2Url"/>
+        <result column="face_action3_url" jdbcType="VARCHAR" property="faceAction3Url"/>
+        <result column="detail_id" jdbcType="BIGINT" property="detailId"/>
+        <result column="deleted" jdbcType="BIT" property="deleted"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,
+        user_id,
+        user_code,
+        face_best_url,
+        face_env_url,
+        face_action1_url,
+        face_action2_url,
+        face_action3_url,
+        detail_id,
+        deleted,
+        gmt_modified,
+        gmt_create
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_cjp_face_recognition
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.fqgj.youjie.user.entity.UserCjpFaceRecognition"  useGeneratedKeys="true">
+        insert into user_cjp_face_recognition
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId !=null">
+                user_id,
+            </if>
+            <if test="userCode !=null">
+                user_code,
+            </if>
+            <if test="faceBestUrl !=null">
+                face_best_url,
+            </if>
+            <if test="faceEnvUrl !=null">
+                face_env_url,
+            </if>
+            <if test="faceAction1Url !=null">
+                face_action1_url,
+            </if>
+            <if test="faceAction2Url !=null">
+                face_action2_url,
+            </if>
+            <if test="faceAction3Url !=null">
+                face_action3_url,
+            </if>
+            <if test="detailId !=null">
+                detail_id,
+            </if>
+            <if test="deleted !=null">
+                deleted,
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified,
+            </if>
+            <if test="gmtCreate !=null">
+                gmt_create,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="userCode != null">
+                #{userCode,jdbcType=VARCHAR},
+            </if>
+            <if test="faceBestUrl != null">
+                #{faceBestUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="faceEnvUrl != null">
+                #{faceEnvUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="faceAction1Url != null">
+                #{faceAction1Url,jdbcType=VARCHAR},
+            </if>
+            <if test="faceAction2Url != null">
+                #{faceAction2Url,jdbcType=VARCHAR},
+            </if>
+            <if test="faceAction3Url != null">
+                #{faceAction3Url,jdbcType=VARCHAR},
+            </if>
+            <if test="detailId != null">
+                #{detailId,jdbcType=BIGINT},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.fqgj.youjie.user.entity.UserCjpFaceRecognition">
+        update user_cjp_face_recognition
+        <set>
+            <if test="userId !=null">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="userCode !=null">
+                user_code = #{userCode,jdbcType=VARCHAR},
+            </if>
+            <if test="faceBestUrl !=null">
+                face_best_url = #{faceBestUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="faceEnvUrl !=null">
+                face_env_url = #{faceEnvUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="faceAction1Url !=null">
+                face_action1_url = #{faceAction1Url,jdbcType=VARCHAR},
+            </if>
+            <if test="faceAction2Url !=null">
+                face_action2_url = #{faceAction2Url,jdbcType=VARCHAR},
+            </if>
+            <if test="faceAction3Url !=null">
+                face_action3_url = #{faceAction3Url,jdbcType=VARCHAR},
+            </if>
+            <if test="detailId !=null">
+                detail_id = #{detailId,jdbcType=BIGINT},
+            </if>
+            <if test="deleted !=null">
+                deleted = #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteByPrimaryKey">
+        update  user_cjp_face_recognition
+        set deleted = 1
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <sql id="paginationSql">
+        <if test="page != null">
+            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+        </if>
+    </sql>
+
+    <sql id="paging">
+        <if test="offset != null and limit != null">
+            limit #{offset},#{limit}
+        </if>
+    </sql>
+
+    <select id="selectByParams" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_cjp_face_recognition
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userId !=null">
+                and user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="userCode !=null">
+                and user_code = #{userCode,jdbcType=VARCHAR}
+            </if>
+            <if test="faceBestUrl !=null">
+                and face_best_url = #{faceBestUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="faceEnvUrl !=null">
+                and face_env_url = #{faceEnvUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="faceAction1Url !=null">
+                and face_action1_url = #{faceAction1Url,jdbcType=VARCHAR}
+            </if>
+            <if test="faceAction2Url !=null">
+                and face_action2_url = #{faceAction2Url,jdbcType=VARCHAR}
+            </if>
+            <if test="faceAction3Url !=null">
+                and face_action3_url = #{faceAction3Url,jdbcType=VARCHAR}
+            </if>
+            <if test="detailId !=null">
+                and detail_id = #{detailId,jdbcType=BIGINT}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+        <include refid="paging"/>
+    </select>
+    <select id="queryTotal" resultType="INTEGER">
+        select count(*) from user_cjp_face_recognition
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userId !=null">
+                and user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="userCode !=null">
+                and user_code = #{userCode,jdbcType=VARCHAR}
+            </if>
+            <if test="faceBestUrl !=null">
+                and face_best_url = #{faceBestUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="faceEnvUrl !=null">
+                and face_env_url = #{faceEnvUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="faceAction1Url !=null">
+                and face_action1_url = #{faceAction1Url,jdbcType=VARCHAR}
+            </if>
+            <if test="faceAction2Url !=null">
+                and face_action2_url = #{faceAction2Url,jdbcType=VARCHAR}
+            </if>
+            <if test="faceAction3Url !=null">
+                and face_action3_url = #{faceAction3Url,jdbcType=VARCHAR}
+            </if>
+            <if test="detailId !=null">
+                and detail_id = #{detailId,jdbcType=BIGINT}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </select>
+</mapper>

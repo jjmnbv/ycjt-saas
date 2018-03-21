@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fqgj.youjie.user.dao.impl.UserTransferOrderDaoImpl">
+    <resultMap id="BaseResultMap" type="com.fqgj.youjie.user.entity.UserTransferOrder">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="user_code" jdbcType="VARCHAR" property="userCode"/>
+        <result column="target_id" jdbcType="BIGINT" property="targetId"/>
+        <result column="target_code" jdbcType="VARCHAR" property="targetCode"/>
+        <result column="value" jdbcType="DECIMAL" property="value"/>
+        <result column="fee" jdbcType="DECIMAL" property="fee"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="user_comment" jdbcType="VARCHAR" property="userComment"/>
+        <result column="target_comment" jdbcType="VARCHAR" property="targetComment"/>
+        <result column="deleted" jdbcType="BIT" property="deleted"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,
+        user_id,
+        user_code,
+        target_id,
+        target_code,
+        `value`,
+        fee,
+        status,
+        user_comment,
+        target_comment,
+        deleted,
+        gmt_modified,
+        gmt_create
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_transfer_order
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.fqgj.youjie.user.entity.UserTransferOrder"  useGeneratedKeys="true">
+        insert into user_transfer_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId !=null">
+                user_id,
+            </if>
+            <if test="userCode !=null">
+                user_code,
+            </if>
+            <if test="targetId !=null">
+                target_id,
+            </if>
+            <if test="targetCode !=null">
+                target_code,
+            </if>
+            <if test="value !=null">
+                `value`,
+            </if>
+            <if test="fee !=null">
+                fee,
+            </if>
+            <if test="status !=null">
+                status,
+            </if>
+            <if test="userComment !=null">
+                user_comment,
+            </if>
+            <if test="targetComment !=null">
+                target_comment,
+            </if>
+            <if test="deleted !=null">
+                deleted,
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified,
+            </if>
+            <if test="gmtCreate !=null">
+                gmt_create,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="userCode != null">
+                #{userCode,jdbcType=VARCHAR},
+            </if>
+            <if test="targetId != null">
+                #{targetId,jdbcType=BIGINT},
+            </if>
+            <if test="targetCode != null">
+                #{targetCode,jdbcType=VARCHAR},
+            </if>
+            <if test="value != null">
+                #{value,jdbcType=DECIMAL},
+            </if>
+            <if test="fee != null">
+                #{fee,jdbcType=DECIMAL},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="userComment != null">
+                #{userComment,jdbcType=VARCHAR},
+            </if>
+            <if test="targetComment != null">
+                #{targetComment,jdbcType=VARCHAR},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.fqgj.youjie.user.entity.UserTransferOrder">
+        update user_transfer_order
+        <set>
+            <if test="userId !=null">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="userCode !=null">
+                user_code = #{userCode,jdbcType=VARCHAR},
+            </if>
+            <if test="targetId !=null">
+                target_id = #{targetId,jdbcType=BIGINT},
+            </if>
+            <if test="targetCode !=null">
+                target_code = #{targetCode,jdbcType=VARCHAR},
+            </if>
+            <if test="value !=null">
+                `value` = #{value,jdbcType=DECIMAL},
+            </if>
+            <if test="fee !=null">
+                fee = #{fee,jdbcType=DECIMAL},
+            </if>
+            <if test="status !=null">
+                status = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="userComment !=null">
+                user_comment = #{userComment,jdbcType=VARCHAR},
+            </if>
+            <if test="targetComment !=null">
+                target_comment = #{targetComment,jdbcType=VARCHAR},
+            </if>
+            <if test="deleted !=null">
+                deleted = #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteByPrimaryKey">
+        update  user_transfer_order
+        set deleted = 1
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <sql id="paginationSql">
+        <if test="page != null">
+            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+        </if>
+    </sql>
+
+    <sql id="paging">
+        <if test="offset != null and limit != null">
+            limit #{offset},#{limit}
+        </if>
+    </sql>
+
+    <select id="selectByParams" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_transfer_order
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userId !=null">
+                and user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="userCode !=null">
+                and user_code = #{userCode,jdbcType=VARCHAR}
+            </if>
+            <if test="targetId !=null">
+                and target_id = #{targetId,jdbcType=BIGINT}
+            </if>
+            <if test="targetCode !=null">
+                and target_code = #{targetCode,jdbcType=VARCHAR}
+            </if>
+            <if test="value !=null">
+                and `value` = #{value,jdbcType=DECIMAL}
+            </if>
+            <if test="fee !=null">
+                and fee = #{fee,jdbcType=DECIMAL}
+            </if>
+            <if test="status !=null">
+                and status = #{status,jdbcType=TINYINT}
+            </if>
+            <if test="userComment !=null">
+                and user_comment = #{userComment,jdbcType=VARCHAR}
+            </if>
+            <if test="targetComment !=null">
+                and target_comment = #{targetComment,jdbcType=VARCHAR}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+        <include refid="paging"/>
+    </select>
+    <select id="queryTotal" resultType="INTEGER">
+        select count(*) from user_transfer_order
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userId !=null">
+                and user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="userCode !=null">
+                and user_code = #{userCode,jdbcType=VARCHAR}
+            </if>
+            <if test="targetId !=null">
+                and target_id = #{targetId,jdbcType=BIGINT}
+            </if>
+            <if test="targetCode !=null">
+                and target_code = #{targetCode,jdbcType=VARCHAR}
+            </if>
+            <if test="value !=null">
+                and `value` = #{value,jdbcType=DECIMAL}
+            </if>
+            <if test="fee !=null">
+                and fee = #{fee,jdbcType=DECIMAL}
+            </if>
+            <if test="status !=null">
+                and status = #{status,jdbcType=TINYINT}
+            </if>
+            <if test="userComment !=null">
+                and user_comment = #{userComment,jdbcType=VARCHAR}
+            </if>
+            <if test="targetComment !=null">
+                and target_comment = #{targetComment,jdbcType=VARCHAR}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </select>
+</mapper>
