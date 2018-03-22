@@ -4,6 +4,9 @@ import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.api.ApiResponse;
 import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.application.credit.BorrowerBaseInfoApplication;
+import com.beitu.saas.app.application.credit.vo.BorrowerEmergentContactVo;
+import com.beitu.saas.app.application.credit.vo.BorrowerIdentityInfoVo;
+import com.beitu.saas.app.application.credit.vo.BorrowerWorkInfoVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.rest.controller.borrow.request.BorrowUserLoginRequest;
 import com.beitu.saas.rest.controller.borrow.response.BorrowUserLoginSuccessResponse;
@@ -101,10 +104,10 @@ public class H5Controller {
 
     @RequestMapping(value = "/credit/identity/info/get", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "获取风控模块身份证信息", response = CreditIdentityInfoResponse.class)
-    public DataApiResponse<CreditIdentityInfoResponse> getCreditIdentityInfo() {
+    @ApiOperation(value = "获取风控模块身份证信息", response = BorrowerIdentityInfoVo.class)
+    public DataApiResponse<BorrowerIdentityInfoVo> getCreditIdentityInfo() {
         // TODO
-        return new DataApiResponse<>(new CreditIdentityInfoResponse());
+        return new DataApiResponse<>(borrowerBaseInfoApplication.getUserIdentityInfoVo(""));
     }
 
     @RequestMapping(value = "/credit/identity/info/save", method = RequestMethod.POST)
@@ -117,10 +120,10 @@ public class H5Controller {
 
     @RequestMapping(value = "/credit/work/info/get", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "获取风控模块工作信息", response = ApiResponse.class)
-    public DataApiResponse<CreditPersonalInfoResponse> getCreditWorkInfo() {
+    @ApiOperation(value = "获取风控模块工作信息", response = BorrowerWorkInfoVo.class)
+    public DataApiResponse<BorrowerWorkInfoVo> getCreditWorkInfo() {
         // TODO
-        return new DataApiResponse<>(new CreditPersonalInfoResponse());
+        return new DataApiResponse<>(borrowerBaseInfoApplication.getUserWorkInfoVo(""));
     }
 
     @RequestMapping(value = "/credit/work/info/save", method = RequestMethod.POST)
@@ -131,18 +134,18 @@ public class H5Controller {
         return new ApiResponse();
     }
 
-    @RequestMapping(value = "/credit/emergent/info/get", method = RequestMethod.POST)
+    @RequestMapping(value = "/credit/emergent/contact/get", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "获取风控模块个人信息", response = ApiResponse.class)
-    public DataApiResponse<CreditPersonalInfoResponse> saveCreditApplyInfo() {
-        // TODO
-        return new DataApiResponse<>(new CreditPersonalInfoResponse());
+    @ApiOperation(value = "获取风控模块个人信息", response = BorrowerEmergentContactVo.class)
+    public DataApiResponse<BorrowerEmergentContactVo> getCreditEmergentContact() {
+        // TODO'
+        return new DataApiResponse<>(borrowerBaseInfoApplication.getUserEmergentContactVo(""));
     }
 
-    @RequestMapping(value = "/credit/emergent/info/save", method = RequestMethod.POST)
+    @RequestMapping(value = "/credit/emergent/contact/save", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "保存风控模块个人信息", response = ApiResponse.class)
-    public ApiResponse saveCreditApplyInfo(@RequestBody @Valid CreditSavePersonalInfoRequest req) {
+    public ApiResponse saveCreditEmergentContact(@RequestBody @Valid CreditSavePersonalInfoRequest req) {
         // TODO
         return new ApiResponse();
     }
