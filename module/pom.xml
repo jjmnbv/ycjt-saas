@@ -13,7 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>auth</module>
-        <module>user</module>
+        <module>borrower</module>
         <module>channel</module>
         <module>collection</module>
         <module>sms</module>

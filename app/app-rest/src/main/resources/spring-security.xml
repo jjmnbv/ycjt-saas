@@ -13,9 +13,9 @@
 
     <authentication-manager>
         <authentication-provider>
-            <user-service>
+            <user-com.beitu.saas.borrower.service>
                 <user name="ycjt" password="ycjt@783g" authorities="ROLE_USER" />
-            </user-service>
+            </user-com.beitu.saas.borrower.service>
         </authentication-provider>
     </authentication-manager>
 

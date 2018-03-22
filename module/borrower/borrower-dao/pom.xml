@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>borrower</artifactId>
+        <groupId>com.beitu.saas</groupId>
+        <version>0.1</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>borrower-dao</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.beitu.saas</groupId>
+            <artifactId>borrower-entity</artifactId>
+            <version>0.1</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.fqgj.plugin</groupId>
+                <artifactId>generator-maven-plugin</artifactId>
+                <version>0.1.0</version>
+                <configuration>
+                    <driverClassName>com.mysql.jdbc.Driver</driverClassName>
+                    <url>jdbc:mysql://rm-bp178268rthqxsmr9.mysql.rds.aliyuncs.com:3306/youjie?useUnicode=yes&amp;characterEncoding=utf-8&amp;allowMultiQueries=true</url>
+                    <username>ycjt_server</username>
+                    <password>hDL34Xfxnerxckv*h4Z8AphWB9UPn6j></password>
+                    <!--基础包路径-->
+                    <basePackage>com.beitu.saas.borrower</basePackage>
+                    <bean>entity</bean>
+                    <domain>domain</domain>
+                    <dao>dao</dao>
+                    <daoImpl>dao.impl</daoImpl>
+                    <service>service</service>
+                    <serviceImpl>service.impl</serviceImpl>
+                    <baseMapper>mapper.base</baseMapper>
+                    <mapper>mapper</mapper>
+                    <controller>controller</controller>
+                    <!--#多个表逗号分割,all:全部表;user,article-->
+                    <tables>
+                        <!--saas_borrower,saas_borrower_carrier,saas_borrower_carrier_ext,saas_borrower_emergent_contact,saas_borrower_identity_info,saas_borrower_personal_info,saas_borrower_real_info,saas_borrower_token,-->saas_borrower_work_info
+                    </tables>
+                    <!--#多个模块逗号分割,生成什么模块all:全部模块;controller,domain,bean,dao,daoImpl,com.beitu.saas.borrower.service,serviceImpl,baseMapper,mapper-->
+                    <generatorModules>dao,daoImpl,mapper,baseMapper,bean,service,serviceImpl,domain</generatorModules>
+                    <!--#强制重新生成,默认false;true时全部重新生成;第一次生成全部文件,后面只生成bean,base目录下面的mapperxml-->
+                    <forceReCreate>true</forceReCreate>
+                    <!--#下划线转驼峰-->
+                    <mapUnderscoreToCamelCase>true</mapUnderscoreToCamelCase>
+                    <columnOverrides>
+                        <column>is_read,is_max</column>
+                        <property>read,max</property>
+                    </columnOverrides>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
