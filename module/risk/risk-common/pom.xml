@@ -20,12 +20,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.beitu.saas</groupId>
-            <artifactId>risk-service</artifactId>
-            <version>0.1</version>
-        </dependency>
-
-        <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
         </dependency>
