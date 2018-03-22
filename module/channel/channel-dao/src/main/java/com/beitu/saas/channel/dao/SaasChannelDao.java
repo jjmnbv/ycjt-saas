@@ -19,4 +19,6 @@ public interface SaasChannelDao  extends BaseMapper<SaasChannelEntity> {
 
     Integer countChannelEntityList(SaasChannelParam saasChannelParam);
 
+    SaasChannelEntity selectChannelEntityByChannelCode(String channelCode);
+
 }

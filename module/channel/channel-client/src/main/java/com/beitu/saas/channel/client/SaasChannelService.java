@@ -20,4 +20,9 @@ public interface SaasChannelService<T extends BaseEntity> extends BaseService<T>
      */
     List<SaasChannelEntity> getSaasChannelList(SaasChannelParam param, Page page);
 
+    /**
+     * 操作渠道功能
+     */
+    void operateSaasChannel(String channelCode, Integer status);
+
 }

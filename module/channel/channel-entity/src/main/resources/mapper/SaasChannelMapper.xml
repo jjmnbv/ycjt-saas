@@ -8,21 +8,21 @@
             <trim prefixOverrides="and">
 
                 <if test="saasChannelParam !=null and saasChannelParam.merchantCode != null">
-                    and saasChannelParam.merchant_code = #{saasChannelParam.merchantCode,jdbcType=VARCHAR}
+                    and merchant_code = #{saasChannelParam.merchantCode,jdbcType=VARCHAR}
                 </if>
                 <if test="saasChannelParam !=null and saasChannelParam.channelName != null">
-                    and saasChannelParam.channel_name = #{saasChannelParam.channelName,jdbcType=VARCHAR}
+                    and channel_name = #{saasChannelParam.channelName,jdbcType=VARCHAR}
                 </if>
                 <if test="saasChannelParam !=null and saasChannelParam.channelCode != null">
-                    and saasChannelParam.channel_code = #{saasChannelParam.channelCode,jdbcType=VARCHAR}
+                    and channel_code = #{saasChannelParam.channelCode,jdbcType=VARCHAR}
                 </if>
                 <if test="saasChannelParam !=null and saasChannelParam.channelStatus != null">
-                    and saasChannelParam.channel_status = #{saasChannelParam.channelStatus,jdbcType=INTEGER}
+                    and channel_status = #{saasChannelParam.channelStatus,jdbcType=INTEGER}
                 </if>
                 <if test="saasChannelParam !=null and saasChannelParam.chargePerson != null">
-                    and saasChannelParam.charge_person = #{saasChannelParam.chargePerson,jdbcType=VARCHAR}
+                    and charge_person = #{saasChannelParam.chargePerson,jdbcType=VARCHAR}
                 </if>
-                and ag.deleted = 0
+                and deleted = 0
             </trim>
         </where>
     </sql>
@@ -41,4 +41,16 @@
         from saas_channel
         <include refid="Param_Where_Clause"/>
     </select>
+
+    <select id="selectChannelEntityByChannelCode" parameterType="map" resultType="com.beitu.saas.channel.entity.SaasChannelEntity">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from saas_channel
+        <if test="channelCode !=null">
+            and channel_code = #{channelCode,jdbcType=VARCHAR}
+        </if>
+        and deleted = 0
+    </select>
+
+
 </mapper>

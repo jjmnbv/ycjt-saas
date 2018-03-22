@@ -9,6 +9,7 @@ import com.beitu.saas.channel.enums.ChannelErrorCodeEnum;
 import com.beitu.saas.common.consts.ConstantNum;
 import com.beitu.saas.rest.controller.channel.request.ChannelQueryRequestVo;
 import com.beitu.saas.rest.controller.channel.request.ChannelRequestVo;
+import com.beitu.saas.rest.controller.channel.request.OperateSaasChannelRequestVo;
 import com.beitu.saas.rest.controller.channel.response.SaasChannelListResponse;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.api.Response;
@@ -44,6 +45,8 @@ public class ChannelController {
 
     @Autowired
     private SaasChannelApplication saasChannelApplication;
+    @Autowired
+    private SaasChannelService saasChannelService;
 
     /**
      * 新建渠道
@@ -84,7 +87,7 @@ public class ChannelController {
             LOGGER.error("==  创建渠道失败, 机构号:{}, 渠道名称:{} ,失败原因:{}  ==", channelRequestVo.getMerchantCode(), channelRequestVo.getChannelName(), e);
             return Response.error(null, ChannelErrorCodeEnum.PARAM_INVALID.getMsg());
         }
-        return Response.ok().putData("创建渠道成功");
+        return Response.ok().putData("操作成功");
     }
 
 
@@ -111,5 +114,16 @@ public class ChannelController {
         SaasChannelListResponse saasChannelListResponse = new SaasChannelListResponse(hasNextPage, pageNo + ConstantNum.ONE, saasChannelList);
 
         return Response.ok().putData(saasChannelListResponse);
+    }
+
+
+    /**
+     * 禁用/启用 渠道操作
+     */
+    @ApiOperation(value = "禁用/启用", response = Response.class)
+    @RequestMapping(value = "/operateSaasChannel", method = RequestMethod.POST)
+    public Response operateSaasChannel(@RequestBody OperateSaasChannelRequestVo operateSaasChannelRequestVo) {
+        saasChannelService.operateSaasChannel(operateSaasChannelRequestVo.getChannelCode(), operateSaasChannelRequestVo.getStatus());
+        return Response.ok().putData("操作成功");
     }
 }
