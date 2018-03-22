@@ -1,7 +1,7 @@
 package com.beitu.saas.risk.handler.platform.zmxy;
 
 
-import com.fgqj.youjie.common.utils.ConfigUtil;
+import com.beitu.saas.common.config.ConfigUtil;
 import com.fqgj.log.factory.LogFactory;
 import com.fqgj.log.interfaces.Log;
 import com.beitu.saas.risk.domain.platform.zmxy.score.TripleZmxyScoreOutput;

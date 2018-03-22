@@ -6,7 +6,7 @@
 package com.beitu.saas.risk.handler.platform.tongdun;
 
 import com.alibaba.fastjson.JSONObject;
-import com.fgqj.youjie.common.utils.ConfigUtil;
+import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.risk.domain.enums.ErrorCodeEnums;
 import com.beitu.saas.risk.domain.exception.BizException;
 import com.beitu.saas.risk.helpers.MySSLProtocolSocketFactory;
