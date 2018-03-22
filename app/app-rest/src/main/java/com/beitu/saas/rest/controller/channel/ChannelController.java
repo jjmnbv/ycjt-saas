@@ -50,8 +50,10 @@ public class ChannelController {
     @RequestMapping(value = "/addChannel", method = RequestMethod.POST)
     public Response addAgency(@RequestBody ChannelRequestVo channelRequestVo) {
         List<SaasChannelRiskSettingsVo> settingsVos = new ArrayList<>();
+        boolean setModule = CollectionUtils.isNotEmpty(channelRequestVo.getSaasModuleVoList()) && CollectionUtils.isEmpty(channelRequestVo.getSaasModuleItemVoList());
+        boolean setModuleItem = CollectionUtils.isNotEmpty(channelRequestVo.getSaasModuleItemVoList());
 
-        if (CollectionUtils.isNotEmpty(channelRequestVo.getSaasModuleItemVoList())) {
+        if (setModuleItem) {
             channelRequestVo.getSaasModuleItemVoList().stream().forEach(x -> {
                 SaasChannelRiskSettingsVo saasChannelRiskSettingsVo = new SaasChannelRiskSettingsVo();
                 saasChannelRiskSettingsVo.setModuleCode(x.getModuleCode())
@@ -59,7 +61,7 @@ public class ChannelController {
                         .setRequired(x.getRequired());
                 settingsVos.add(saasChannelRiskSettingsVo);
             });
-        } else if (CollectionUtils.isNotEmpty(channelRequestVo.getSaasModuleVoList())) {
+        } else if (setModule) {
             channelRequestVo.getSaasModuleVoList().stream().forEach(x -> {
                 SaasChannelRiskSettingsVo settingsVo = new SaasChannelRiskSettingsVo();
                 settingsVo.setModuleCode(x.getModuleCode())
