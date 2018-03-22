@@ -138,7 +138,7 @@ public class RedisKeyConsts {
      * 订单接单上限key
      */
     public static final String ORDER_LOCK_MAX_KEY = "YCJT_ORDER_LOCK_MAX_KEY_{id}";
-    
+
     /**
      * 运营商互通联系人数Redis Key前缀
      */
@@ -153,15 +153,25 @@ public class RedisKeyConsts {
      * 查看订单记录 订单
      */
     public static final String ORDER_VIEWED_ORDER_KEY = "YCJT_VIEWED_ORDER_{orderId}";
-    
+
     /**
      * 商户接单剩余单数Redis Key前缀
      */
     public static final String MERCHANT_RECEIVE_COUNT_KEY = "YCJT_MERCHANT_RECEIVE_COUNT_{merchantId}";
-    
+
     /**
      * 商户抢单剩余单数Redis Key前缀
      */
     public static final String MERCHANT_SCRAMBLE_COUNT_KEY = "YCJT_MERCHANT_SCRAMBLE_COUNT_{merchantId}";
+
+    /**
+     * H5 登录 验证码 去重请求 Redis Key前缀
+     */
+    public static final String H5_LOGIN_VERIFYCODE_KEY = "BEITU_SAAS_H5_LOGIN_VERIFYCODE_{mobile}";
+
+    /**
+     * H5 登录 验证码 保存 Redis Key前缀
+     */
+    public static final String H5_SAVE_LOGIN_VERIFYCODE_KEY = "BEITU_SAAS_H5_SAVE_LOGIN_VERIFYCODE_{mobile}";
 
 }

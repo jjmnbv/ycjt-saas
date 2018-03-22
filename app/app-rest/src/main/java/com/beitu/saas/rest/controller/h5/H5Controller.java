@@ -3,15 +3,18 @@ package com.beitu.saas.rest.controller.h5;
 import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.api.ApiResponse;
 import com.beitu.saas.app.api.DataApiResponse;
+import com.beitu.saas.app.application.SendApplication;
 import com.beitu.saas.app.application.credit.BorrowerBaseInfoApplication;
 import com.beitu.saas.app.application.credit.vo.BorrowerEmergentContactVo;
 import com.beitu.saas.app.application.credit.vo.BorrowerIdentityInfoVo;
 import com.beitu.saas.app.application.credit.vo.BorrowerWorkInfoVo;
-import com.beitu.saas.app.common.RequestLocalInfo;
-import com.beitu.saas.rest.controller.borrow.request.BorrowUserLoginRequest;
-import com.beitu.saas.rest.controller.borrow.response.BorrowUserLoginSuccessResponse;
+import com.beitu.saas.app.enums.BorrowerOrderApplyStatusEnum;
+import com.beitu.saas.common.consts.RedisKeyConsts;
+import com.beitu.saas.common.consts.TimeConsts;
 import com.beitu.saas.rest.controller.h5.request.*;
 import com.beitu.saas.rest.controller.h5.response.*;
+import com.beitu.saas.sms.enums.SmsErrorCodeEnum;
+import com.beitu.saas.sms.enums.VerifyCodeTypeEnum;
 import com.fqgj.base.services.redis.RedisClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -37,11 +40,25 @@ public class H5Controller {
     @Autowired
     private BorrowerBaseInfoApplication borrowerBaseInfoApplication;
 
+    @Autowired
+    private RedisClient redisClient;
+
+    @Autowired
+    private SendApplication sendApplication;
+
     @VisitorAccessible
     @RequestMapping(value = "/user/verifyCode/send", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "获取验证码", response = ApiResponse.class)
     public ApiResponse sendVerifyCode(@RequestBody @Valid VerifyCodeSendRequest req) {
+        String mobile = req.getMobile();
+        if (redisClient.setnx(RedisKeyConsts.H5_LOGIN_VERIFYCODE_KEY, mobile, mobile)) {
+            return new ApiResponse(SmsErrorCodeEnum.REPEAT_REQUEST);
+        }
+        redisClient.expire(RedisKeyConsts.H5_LOGIN_VERIFYCODE_KEY, TimeConsts.ONE_MINUTE, mobile);
+        String verifyCode = "1234";
+        sendApplication.sendCodeAndNotifyMessage(mobile, verifyCode, VerifyCodeTypeEnum.REGISTER);
+        redisClient.set(RedisKeyConsts.H5_SAVE_LOGIN_VERIFYCODE_KEY, verifyCode, TimeConsts.TWO_MINUTE, mobile);
         return new ApiResponse();
     }
 
@@ -62,12 +79,12 @@ public class H5Controller {
         return new DataApiResponse<>(new UserHomeResponse());
     }
 
-    @RequestMapping(value = "/user/status", method = RequestMethod.POST)
+    @RequestMapping(value = "/user/apply/status", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "获取用户订单状态", response = UserOrderStatusResponse.class)
     public DataApiResponse<UserOrderStatusResponse> getBorrowerStatus() {
         // TODO
-        return new DataApiResponse<>(new UserOrderStatusResponse());
+        return new DataApiResponse<>(new UserOrderStatusResponse(BorrowerOrderApplyStatusEnum.NO_SUBMIT.getType()));
     }
 
     @RequestMapping(value = "/credit/list", method = RequestMethod.POST)
@@ -144,7 +161,7 @@ public class H5Controller {
 
     @RequestMapping(value = "/credit/emergent/contact/get", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "获取风控模块个人信息", response = BorrowerEmergentContactVo.class)
+    @ApiOperation(value = "获取风控模块紧急联系人信息", response = BorrowerEmergentContactVo.class)
     public DataApiResponse<BorrowerEmergentContactVo> getCreditEmergentContact() {
         // TODO'
         return new DataApiResponse<>(borrowerBaseInfoApplication.getUserEmergentContactVo(""));
@@ -152,7 +169,7 @@ public class H5Controller {
 
     @RequestMapping(value = "/credit/emergent/contact/save", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "保存风控模块个人信息", response = ApiResponse.class)
+    @ApiOperation(value = "保存风控模块紧急联系人信息", response = ApiResponse.class)
     public ApiResponse saveCreditEmergentContact(@RequestBody @Valid CreditSaveEmergentContactRequest req) {
         // TODO
         return new ApiResponse();
