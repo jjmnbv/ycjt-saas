@@ -1,7 +1,7 @@
 package com.beitu.saas.app.domain;
 
 
-import com.fgqj.youjie.common.utils.MobileUtil;
+import com.beitu.saas.common.utils.MobileUtil;
 import com.fqgj.common.api.exception.ApiErrorException;
 import org.apache.commons.lang3.StringUtils;
 

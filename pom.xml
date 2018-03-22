@@ -664,12 +664,12 @@
                 <artifactId>generator-maven-plugin</artifactId>
                 <version>0.1.2</version>
                 <configuration>
-                    <driverClassName>com.mysql.jdbc.Driver</driverClassName>youjie
-                    <url>jdbc:mysql://rdsmuenvmmfjjrao.mysql.rds.aliyuncs.com:3306/youjie?useUnicode=yes&amp;characterEncoding=utf-8&amp;allowMultiQueries=true</url>
-                    <username>fqgj2015</username>
-                    <password>fqgj2015Test</password>
+                    <driverClassName>com.mysql.jdbc.Driver</driverClassName>
+                    <url>jdbc:mysql://rm-bp178268rthqxsmr9.mysql.rds.aliyuncs.com:3306/youjie?useUnicode=yes&amp;characterEncoding=utf-8&amp;allowMultiQueries=true</url>
+                    <username>ycjt_server</username>
+                    <password>hDL34Xfxnerxckv*h4Z8AphWB9UPn6j></password>
                     <!--基础包路径-->
-                    <basePackage>com.fqgj.youjie.user</basePackage>
+                    <basePackage>com.beitu.saas</basePackage>
                     <bean>entity</bean>
                     <domain>domain</domain>
                     <dao>dao</dao>
