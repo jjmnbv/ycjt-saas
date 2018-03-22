@@ -85,7 +85,7 @@ public class ChannelController {
             saasChannelApplication.createChannel(saasChannelVo, settingsVos);
         } catch (Exception e) {
             LOGGER.error("==  创建渠道失败, 机构号:{}, 渠道名称:{} ,失败原因:{}  ==", channelRequestVo.getMerchantCode(), channelRequestVo.getChannelName(), e);
-            return Response.error(null, ChannelErrorCodeEnum.PARAM_INVALID.getMsg());
+            return Response.error(null, ChannelErrorCodeEnum.CHANNEL_PARAM_INVALID.getMsg());
         }
         return Response.ok().putData("操作成功");
     }
