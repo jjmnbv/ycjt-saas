@@ -64,19 +64,22 @@ public class UserAccessRightInterceptor implements HandlerInterceptor {
         response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type,Accept,X-Requested-With,remember-me,bid,basicParams");
 
-        String basicParams = request.getHeader("basicParams");
-        RequestBasicInfo basicVO = JSONUtils.json2pojo(basicParams, RequestBasicInfo.class);
-
         if (isWebResources(request)) {
             return true;
         }
-
+        HandlerMethod handlerMethod = (HandlerMethod) o;
+        SignIgnore signIgnoreAnnotation = handlerMethod.getMethodAnnotation(SignIgnore.class);
+        if (signIgnoreAnnotation != null) {
+            return true;
+        }
+        String basicParams = request.getHeader("basicParams");
+        RequestBasicInfo basicVO = JSONUtils.json2pojo(basicParams, RequestBasicInfo.class);
         if (StringUtils.isNotEmpty(basicVO.getToken())) {
             if (!verifyHeader(request)) {
                 throw new ApplicationException("无效的token");
             }
         } else {
-            HandlerMethod handlerMethod = (HandlerMethod) o;
+
             VisitorAccessible annotation = handlerMethod.getMethodAnnotation(VisitorAccessible.class);
             if (annotation != null) {
                 return true;
