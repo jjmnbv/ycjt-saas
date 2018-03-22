@@ -7,6 +7,7 @@ import com.beitu.saas.rest.controller.borrow.request.BorrowUserLoginRequest;
 import com.beitu.saas.rest.controller.borrow.response.BorrowUserLoginSuccessResponse;
 import com.beitu.saas.rest.controller.h5.request.UserLoginRequest;
 import com.beitu.saas.rest.controller.h5.request.VerifyCodeSendRequest;
+import com.beitu.saas.rest.controller.h5.response.CreditModuleListResponse;
 import com.beitu.saas.rest.controller.h5.response.UserHomeResponse;
 import com.beitu.saas.rest.controller.h5.response.UserLoginSuccessResponse;
 import com.fqgj.base.services.redis.RedisClient;
@@ -61,8 +62,24 @@ public class H5Controller {
 
     @RequestMapping(value = "/credit/list", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "风控项列表获取", response = UserHomeResponse.class)
-    public DataApiResponse<UserHomeResponse> listCreditModule() {
+    @ApiOperation(value = "获取风控模块列表", response = CreditModuleListResponse.class)
+    public DataApiResponse<CreditModuleListResponse> listCreditModule() {
+        // TODO
+        return new DataApiResponse<>(new CreditModuleListResponse());
+    }
+
+    @RequestMapping(value = "/credit/apply/info/get", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "获取风控模块申请表信息", response = UserHomeResponse.class)
+    public DataApiResponse<UserHomeResponse> getCreditApplyInfo() {
+        // TODO
+        return new DataApiResponse<>(new UserHomeResponse());
+    }
+
+    @RequestMapping(value = "/credit/apply/info/save", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "保存风控模块申请表信息", response = UserHomeResponse.class)
+    public DataApiResponse<UserHomeResponse> saveCreditApplyInfo() {
         // TODO
         return new DataApiResponse<>(new UserHomeResponse());
     }
