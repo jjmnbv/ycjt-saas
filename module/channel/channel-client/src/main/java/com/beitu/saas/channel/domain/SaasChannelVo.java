@@ -31,6 +31,16 @@ public class SaasChannelVo {
      *渠道连接
      */
     private String linkUrl;
+
+    /**
+     *渠道长连接
+     */
+    private String longLinkUrl;
+
+    /**
+     *渠道短连接
+     */
+    private String shortLinkUrl;
     /**
      *负责人
      */
@@ -48,6 +58,24 @@ public class SaasChannelVo {
      * 创建时间
      */
     private Date gmtCreate;
+
+    public String getLongLinkUrl() {
+        return longLinkUrl;
+    }
+
+    public SaasChannelVo setLongLinkUrl(String longLinkUrl) {
+        this.longLinkUrl = longLinkUrl;
+        return this;
+    }
+
+    public String getShortLinkUrl() {
+        return shortLinkUrl;
+    }
+
+    public SaasChannelVo setShortLinkUrl(String shortLinkUrl) {
+        this.shortLinkUrl = shortLinkUrl;
+        return this;
+    }
 
     public Date getGmtCreate() {
         return gmtCreate;

@@ -10,6 +10,7 @@ import com.beitu.saas.channel.entity.SaasChannelEntity;
 import com.beitu.saas.channel.entity.SaasChannelRiskSettingsEntity;
 import com.beitu.saas.channel.enums.ChannelStatusEnum;
 import com.beitu.saas.common.utils.OrderNoUtil;
+import com.beitu.saas.common.utils.ShortUrlUtil;
 import com.fqgj.common.api.Page;
 import com.fqgj.log.factory.LogFactory;
 import com.fqgj.log.interfaces.Log;
@@ -73,7 +74,8 @@ public class SaasChannelApplication {
                     .setChannelName(x.getChannelName())
                     .setChannelStatus(x.getChannelStatus())
                     .setChargePerson(x.getChargePerson())
-                    .setLinkUrl(x.getLinkUrl())
+                    .setLongLinkUrl(x.getLinkUrl())// TODO: 2018/3/22 加上域名
+                    .setShortLinkUrl(ShortUrlUtil.generateShortUrl(x.getLinkUrl()))// TODO: 2018/3/22 加上域名
                     .setCreator(x.getCreator())
                     .setGmtCreate(x.getGmtCreate())
                     .setRemark(x.getRemark());
