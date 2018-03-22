@@ -3,34 +3,32 @@ package com.beitu.saas.app.common;
 
 import com.fqgj.common.utils.StringUtils;
 import com.fqgj.exception.common.ApplicationException;
-import com.fqgj.youjie.auth.domain.Admin;
 
 import java.util.UUID;
 
 /**
- * Created with IntelliJ IDEA.
- * User: yujianfu (mr.vencnet@gmail.com)
- * Date: 16/8/26
- * Time: 上午11:07
+ * @author xiaochong
+ * @create 2018/3/22 下午5:57
+ * @description
  */
 public class RequestLocalInfo{
-    private static final ThreadLocal<Admin> currentAdmin = new ThreadLocal<>();
+    private static final ThreadLocal<RequestUserInfo> currentAdmin = new ThreadLocal<>();
     private static final ThreadLocal<String> currentTraceId = new ThreadLocal<>();
 
-    public static void putCurrentAdmin(Admin user) {
-        if (user == null) {
+    public static void putCurrentAdmin(RequestUserInfo requestUserInfo) {
+        if (requestUserInfo == null) {
             throw new ApplicationException("Current user not exist");
         }
         reset();
-        currentAdmin.set(user);
+        currentAdmin.set(requestUserInfo);
     }
 
-    public static Admin getCurrentAdmin() {
-        Admin user = currentAdmin.get();
-        if (user == null) {
+    public static RequestUserInfo getCurrentAdmin() {
+        RequestUserInfo requestUserInfo = currentAdmin.get();
+        if (requestUserInfo == null) {
             throw new ApplicationException("Current user not exist");
         }
-        return user;
+        return requestUserInfo;
     }
 
     public static String getCurrentTraceId() {
@@ -42,7 +40,6 @@ public class RequestLocalInfo{
 
         return traceId;
     }
-
 
     public static void reset() {
         currentAdmin.remove();
