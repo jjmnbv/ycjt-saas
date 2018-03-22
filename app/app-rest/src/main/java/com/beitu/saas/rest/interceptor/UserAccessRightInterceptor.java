@@ -12,8 +12,6 @@ import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.app.common.RequestUserInfo;
 import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.borrower.domain.SaasBorrowerVo;
-import com.beitu.saas.borrower.entity.SaasBorrower;
-import com.beitu.saas.borrower.entity.SaasBorrowerToken;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.enums.RestCodeEnum;
 import com.fqgj.base.services.redis.RedisClient;
