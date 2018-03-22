@@ -3,8 +3,8 @@ import com.fqgj.common.entity.BaseEntity;
 
 /**
 * User: fenqiguanjia
-* Date: 2018-03-21
-* Time: 20:58:19.337
+* Date: 2018-03-22
+* Time: 11:13:06.167
 * TableDesc:渠道风控配置信息表
 */
 public class SaasChannelRiskSettingsEntity extends BaseEntity{
@@ -23,7 +23,7 @@ public class SaasChannelRiskSettingsEntity extends BaseEntity{
     /**
     *是否必填(0-否,1-是)
     */
-    private Integer requried;
+    private Integer required;
 
 
     public  String getChannelCode(){
@@ -53,12 +53,12 @@ public class SaasChannelRiskSettingsEntity extends BaseEntity{
         return this;
     }
 
-    public  Integer getRequried(){
-        return this.requried;
+    public  Integer getRequired(){
+        return this.required;
     }
 
-    public  SaasChannelRiskSettingsEntity setRequried(Integer requried){
-        this.requried = requried;
+    public  SaasChannelRiskSettingsEntity setRequired(Integer required){
+        this.required = required;
         return this;
     }
 }

@@ -3,8 +3,8 @@ import com.fqgj.common.entity.BaseEntity;
 
 /**
 * User: fenqiguanjia
-* Date: 2018-03-21
-* Time: 20:58:19.256
+* Date: 2018-03-22
+* Time: 11:40:43.402
 * TableDesc:渠道信息表
 */
 public class SaasChannelEntity extends BaseEntity{
@@ -35,7 +35,7 @@ public class SaasChannelEntity extends BaseEntity{
     /**
     *创建人
     */
-    private String creater;
+    private String creator;
     /**
     *备注
     */
@@ -96,12 +96,12 @@ public class SaasChannelEntity extends BaseEntity{
         return this;
     }
 
-    public  String getCreater(){
-        return this.creater;
+    public  String getCreator(){
+        return this.creator;
     }
 
-    public  SaasChannelEntity setCreater(String creater){
-        this.creater = creater;
+    public  SaasChannelEntity setCreator(String creator){
+        this.creator = creator;
         return this;
     }
 

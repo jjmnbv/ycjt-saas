@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.fqgj.demo.dao.impl.SaasChannelRiskSettingsDaoImpl">
-    <resultMap id="BaseResultMap" type="com.fqgj.demo.entity.SaasChannelRiskSettingsEntity">
+<mapper namespace="com.beitu.saas.channel.dao.impl.SaasChannelRiskSettingsDaoImpl">
+    <resultMap id="BaseResultMap" type="com.beitu.saas.channel.entity.SaasChannelRiskSettingsEntity">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="channel_code" jdbcType="VARCHAR" property="channelCode"/>
         <result column="module_code" jdbcType="VARCHAR" property="moduleCode"/>
         <result column="item_code" jdbcType="VARCHAR" property="itemCode"/>
-        <result column="requried" jdbcType="TINYINT" property="requried"/>
+        <result column="required" jdbcType="TINYINT" property="required"/>
         <result column="deleted" jdbcType="BIT" property="deleted"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
         <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
@@ -18,7 +18,7 @@
     channel_code,
     module_code,
     item_code,
-    requried,
+    required,
     deleted,
     gmt_modified,
     gmt_create
@@ -33,7 +33,7 @@
     </select>
 
     <insert id="insert" keyColumn="id" keyProperty="id"
-            parameterType="com.fqgj.demo.entity.SaasChannelRiskSettingsEntity" useGeneratedKeys="true">
+            parameterType="com.beitu.saas.channel.entity.SaasChannelRiskSettingsEntity" useGeneratedKeys="true">
         insert into saas_channel_risk_settings
         <trim prefix="(" suffix=")" suffixOverrides=",">
                 <if test="channelCode !=null">
@@ -45,8 +45,8 @@
                 <if test="itemCode !=null">
                 item_code,
                 </if>
-                <if test="requried !=null">
-                requried,
+                <if test="required !=null">
+                required,
                 </if>
                 <if test="deleted !=null">
                 deleted,
@@ -68,8 +68,8 @@
                 <if test="itemCode != null">
                     #{itemCode,jdbcType=VARCHAR},
                 </if>
-                <if test="requried != null">
-                    #{requried,jdbcType=TINYINT},
+                <if test="required != null">
+                    #{required,jdbcType=TINYINT},
                 </if>
                 <if test="deleted != null">
                     #{deleted,jdbcType=BIT},
@@ -83,7 +83,7 @@
         </trim>
     </insert>
 
-    <update id="updateByPrimaryKey" parameterType="com.fqgj.demo.entity.SaasChannelRiskSettingsEntity">
+    <update id="updateByPrimaryKey" parameterType="com.beitu.saas.channel.entity.SaasChannelRiskSettingsEntity">
         update saas_channel_risk_settings
         <set>
                 <if test="channelCode !=null">
@@ -95,8 +95,8 @@
                 <if test="itemCode !=null">
                 item_code = #{itemCode,jdbcType=VARCHAR},
                 </if>
-                <if test="requried !=null">
-                requried = #{requried,jdbcType=TINYINT},
+                <if test="required !=null">
+                required = #{required,jdbcType=TINYINT},
                 </if>
                 <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},
@@ -143,8 +143,8 @@
             <if test="itemCode !=null">
                 and item_code = #{itemCode,jdbcType=VARCHAR}
             </if>
-            <if test="requried !=null">
-                and requried = #{requried,jdbcType=TINYINT}
+            <if test="required !=null">
+                and required = #{required,jdbcType=TINYINT}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}
@@ -173,8 +173,8 @@
             <if test="itemCode !=null">
                 and item_code = #{itemCode,jdbcType=VARCHAR}
             </if>
-            <if test="requried !=null">
-                and requried = #{requried,jdbcType=TINYINT}
+            <if test="required !=null">
+                and required = #{required,jdbcType=TINYINT}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}

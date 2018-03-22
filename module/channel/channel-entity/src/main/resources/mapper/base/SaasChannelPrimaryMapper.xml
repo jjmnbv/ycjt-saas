@@ -10,7 +10,7 @@
         <result column="channel_status" jdbcType="TINYINT" property="channelStatus"/>
         <result column="link_url" jdbcType="CHAR" property="linkUrl"/>
         <result column="charge_person" jdbcType="VARCHAR" property="chargePerson"/>
-        <result column="creater" jdbcType="VARCHAR" property="creater"/>
+        <result column="creator" jdbcType="VARCHAR" property="creator"/>
         <result column="remark" jdbcType="VARCHAR" property="remark"/>
         <result column="deleted" jdbcType="BIT" property="deleted"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
@@ -25,7 +25,7 @@
     channel_status,
     link_url,
     charge_person,
-    creater,
+    creator,
     remark,
     deleted,
     gmt_modified,
@@ -62,8 +62,8 @@
                 <if test="chargePerson !=null">
                 charge_person,
                 </if>
-                <if test="creater !=null">
-                creater,
+                <if test="creator !=null">
+                creator,
                 </if>
                 <if test="remark !=null">
                 remark,
@@ -97,8 +97,8 @@
                 <if test="chargePerson != null">
                     #{chargePerson,jdbcType=VARCHAR},
                 </if>
-                <if test="creater != null">
-                    #{creater,jdbcType=VARCHAR},
+                <if test="creator != null">
+                    #{creator,jdbcType=VARCHAR},
                 </if>
                 <if test="remark != null">
                     #{remark,jdbcType=VARCHAR},
@@ -136,8 +136,8 @@
                 <if test="chargePerson !=null">
                 charge_person = #{chargePerson,jdbcType=VARCHAR},
                 </if>
-                <if test="creater !=null">
-                creater = #{creater,jdbcType=VARCHAR},
+                <if test="creator !=null">
+                creator = #{creator,jdbcType=VARCHAR},
                 </if>
                 <if test="remark !=null">
                 remark = #{remark,jdbcType=VARCHAR},
@@ -196,8 +196,8 @@
             <if test="chargePerson !=null">
                 and charge_person = #{chargePerson,jdbcType=VARCHAR}
             </if>
-            <if test="creater !=null">
-                and creater = #{creater,jdbcType=VARCHAR}
+            <if test="creator !=null">
+                and creator = #{creator,jdbcType=VARCHAR}
             </if>
             <if test="remark !=null">
                 and remark = #{remark,jdbcType=VARCHAR}
@@ -238,8 +238,8 @@
             <if test="chargePerson !=null">
                 and charge_person = #{chargePerson,jdbcType=VARCHAR}
             </if>
-            <if test="creater !=null">
-                and creater = #{creater,jdbcType=VARCHAR}
+            <if test="creator !=null">
+                and creator = #{creator,jdbcType=VARCHAR}
             </if>
             <if test="remark !=null">
                 and remark = #{remark,jdbcType=VARCHAR}
