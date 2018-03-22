@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beitu.saas.channel.dao.impl.SaasChannelDaoImpl">
+    <resultMap id="BaseResultMap" type="com.beitu.saas.channel.entity.SaasChannelEntity">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode"/>
+        <result column="channel_code" jdbcType="VARCHAR" property="channelCode"/>
+        <result column="channel_name" jdbcType="VARCHAR" property="channelName"/>
+        <result column="channel_status" jdbcType="TINYINT" property="channelStatus"/>
+        <result column="link_url" jdbcType="CHAR" property="linkUrl"/>
+        <result column="charge_person" jdbcType="VARCHAR" property="chargePerson"/>
+        <result column="creater" jdbcType="VARCHAR" property="creater"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="deleted" jdbcType="BIT" property="deleted"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id,
+    merchant_code,
+    channel_code,
+    channel_name,
+    channel_status,
+    link_url,
+    charge_person,
+    creater,
+    remark,
+    deleted,
+    gmt_modified,
+    gmt_create
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Long"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_channel
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" keyColumn="id" keyProperty="id"
+            parameterType="com.beitu.saas.channel.entity.SaasChannelEntity" useGeneratedKeys="true">
+        insert into saas_channel
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="merchantCode !=null">
+                merchant_code,
+                </if>
+                <if test="channelCode !=null">
+                channel_code,
+                </if>
+                <if test="channelName !=null">
+                channel_name,
+                </if>
+                <if test="channelStatus !=null">
+                channel_status,
+                </if>
+                <if test="linkUrl !=null">
+                link_url,
+                </if>
+                <if test="chargePerson !=null">
+                charge_person,
+                </if>
+                <if test="creater !=null">
+                creater,
+                </if>
+                <if test="remark !=null">
+                remark,
+                </if>
+                <if test="deleted !=null">
+                deleted,
+                </if>
+                <if test="gmtModified !=null">
+                gmt_modified,
+                </if>
+                <if test="gmtCreate !=null">
+                gmt_create,
+                </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="merchantCode != null">
+                    #{merchantCode,jdbcType=VARCHAR},
+                </if>
+                <if test="channelCode != null">
+                    #{channelCode,jdbcType=VARCHAR},
+                </if>
+                <if test="channelName != null">
+                    #{channelName,jdbcType=VARCHAR},
+                </if>
+                <if test="channelStatus != null">
+                    #{channelStatus,jdbcType=TINYINT},
+                </if>
+                <if test="linkUrl != null">
+                    #{linkUrl,jdbcType=CHAR},
+                </if>
+                <if test="chargePerson != null">
+                    #{chargePerson,jdbcType=VARCHAR},
+                </if>
+                <if test="creater != null">
+                    #{creater,jdbcType=VARCHAR},
+                </if>
+                <if test="remark != null">
+                    #{remark,jdbcType=VARCHAR},
+                </if>
+                <if test="deleted != null">
+                    #{deleted,jdbcType=BIT},
+                </if>
+                <if test="gmtModified != null">
+                    #{gmtModified,jdbcType=TIMESTAMP},
+                </if>
+                <if test="gmtCreate != null">
+                    #{gmtCreate,jdbcType=TIMESTAMP},
+                </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.beitu.saas.channel.entity.SaasChannelEntity">
+        update saas_channel
+        <set>
+                <if test="merchantCode !=null">
+                merchant_code = #{merchantCode,jdbcType=VARCHAR},
+                </if>
+                <if test="channelCode !=null">
+                channel_code = #{channelCode,jdbcType=VARCHAR},
+                </if>
+                <if test="channelName !=null">
+                channel_name = #{channelName,jdbcType=VARCHAR},
+                </if>
+                <if test="channelStatus !=null">
+                channel_status = #{channelStatus,jdbcType=TINYINT},
+                </if>
+                <if test="linkUrl !=null">
+                link_url = #{linkUrl,jdbcType=CHAR},
+                </if>
+                <if test="chargePerson !=null">
+                charge_person = #{chargePerson,jdbcType=VARCHAR},
+                </if>
+                <if test="creater !=null">
+                creater = #{creater,jdbcType=VARCHAR},
+                </if>
+                <if test="remark !=null">
+                remark = #{remark,jdbcType=VARCHAR},
+                </if>
+                <if test="deleted !=null">
+                deleted = #{deleted,jdbcType=BIT},
+                </if>
+                <if test="gmtModified !=null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+                </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteByPrimaryKey">
+        update  saas_channel
+        set deleted = 1
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <sql id="paginationSql">
+        <if test="page != null">
+            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+        </if>
+    </sql>
+
+    <sql id="paging">
+        <if test="offset != null and limit != null">
+            limit #{offset},#{limit}
+        </if>
+    </sql>
+
+    <select id="selectByParams" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_channel
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="merchantCode !=null">
+                and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+            </if>
+            <if test="channelCode !=null">
+                and channel_code = #{channelCode,jdbcType=VARCHAR}
+            </if>
+            <if test="channelName !=null">
+                and channel_name = #{channelName,jdbcType=VARCHAR}
+            </if>
+            <if test="channelStatus !=null">
+                and channel_status = #{channelStatus,jdbcType=TINYINT}
+            </if>
+            <if test="linkUrl !=null">
+                and link_url = #{linkUrl,jdbcType=CHAR}
+            </if>
+            <if test="chargePerson !=null">
+                and charge_person = #{chargePerson,jdbcType=VARCHAR}
+            </if>
+            <if test="creater !=null">
+                and creater = #{creater,jdbcType=VARCHAR}
+            </if>
+            <if test="remark !=null">
+                and remark = #{remark,jdbcType=VARCHAR}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+        <include refid="paging"/>
+    </select>
+    <select id="queryTotal" resultType="INTEGER">
+        select count(*) from saas_channel
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="merchantCode !=null">
+                and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+            </if>
+            <if test="channelCode !=null">
+                and channel_code = #{channelCode,jdbcType=VARCHAR}
+            </if>
+            <if test="channelName !=null">
+                and channel_name = #{channelName,jdbcType=VARCHAR}
+            </if>
+            <if test="channelStatus !=null">
+                and channel_status = #{channelStatus,jdbcType=TINYINT}
+            </if>
+            <if test="linkUrl !=null">
+                and link_url = #{linkUrl,jdbcType=CHAR}
+            </if>
+            <if test="chargePerson !=null">
+                and charge_person = #{chargePerson,jdbcType=VARCHAR}
+            </if>
+            <if test="creater !=null">
+                and creater = #{creater,jdbcType=VARCHAR}
+            </if>
+            <if test="remark !=null">
+                and remark = #{remark,jdbcType=VARCHAR}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </select>
+</mapper>

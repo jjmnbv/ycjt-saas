@@ -119,6 +119,11 @@
             <artifactId>app-application</artifactId>
             <version>0.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.beitu.saas</groupId>
+            <artifactId>channel-service</artifactId>
+            <version>0.1</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>app-rest</finalName>

@@ -14,10 +14,17 @@
     <modules>
         <module>auth</module>
         <module>user</module>
+        <module>channel</module>
+        <module>collection</module>
 
     </modules>
 
     <dependencies>
+        <dependency>
+            <groupId>com.beitu.saas</groupId>
+            <artifactId>common</artifactId>
+            <version>0.1</version>
+        </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
