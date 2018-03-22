@@ -62,6 +62,14 @@ public class H5Controller {
         return new DataApiResponse<>(new UserHomeResponse());
     }
 
+    @RequestMapping(value = "/user/status", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "获取用户订单状态", response = UserOrderStatusResponse.class)
+    public DataApiResponse<UserOrderStatusResponse> getBorrowerStatus() {
+        // TODO
+        return new DataApiResponse<>(new UserOrderStatusResponse());
+    }
+
     @RequestMapping(value = "/credit/list", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "风控项列表获取", response = CreditModuleListResponse.class)
