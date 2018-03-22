@@ -8,7 +8,7 @@
         <result column="channel_code" jdbcType="VARCHAR" property="channelCode"/>
         <result column="channel_name" jdbcType="VARCHAR" property="channelName"/>
         <result column="channel_status" jdbcType="TINYINT" property="channelStatus"/>
-        <result column="link_url" jdbcType="CHAR" property="linkUrl"/>
+        <result column="link_url" jdbcType="VARCHAR" property="linkUrl"/>
         <result column="charge_person" jdbcType="VARCHAR" property="chargePerson"/>
         <result column="creator" jdbcType="VARCHAR" property="creator"/>
         <result column="remark" jdbcType="VARCHAR" property="remark"/>
@@ -131,7 +131,7 @@
                 channel_status = #{channelStatus,jdbcType=TINYINT},
                 </if>
                 <if test="linkUrl !=null">
-                link_url = #{linkUrl,jdbcType=CHAR},
+                link_url = #{linkUrl,jdbcType=VARCHAR},
                 </if>
                 <if test="chargePerson !=null">
                 charge_person = #{chargePerson,jdbcType=VARCHAR},
@@ -191,7 +191,7 @@
                 and channel_status = #{channelStatus,jdbcType=TINYINT}
             </if>
             <if test="linkUrl !=null">
-                and link_url = #{linkUrl,jdbcType=CHAR}
+                and link_url = #{linkUrl,jdbcType=VARCHAR}
             </if>
             <if test="chargePerson !=null">
                 and charge_person = #{chargePerson,jdbcType=VARCHAR}
@@ -233,7 +233,7 @@
                 and channel_status = #{channelStatus,jdbcType=TINYINT}
             </if>
             <if test="linkUrl !=null">
-                and link_url = #{linkUrl,jdbcType=CHAR}
+                and link_url = #{linkUrl,jdbcType=VARCHAR}
             </if>
             <if test="chargePerson !=null">
                 and charge_person = #{chargePerson,jdbcType=VARCHAR}

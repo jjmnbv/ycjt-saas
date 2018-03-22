@@ -14,9 +14,17 @@ public class SaasChannelVo {
      */
     private String merchantCode;
     /**
+     *渠道号
+     */
+    private String channelCode;
+    /**
      *渠道名称
      */
     private String channelName;
+    /**
+     *渠道状态(0-开启,1-关闭)
+     */
+    private Integer channelStatus;
     /**
      *渠道连接
      */
@@ -43,12 +51,30 @@ public class SaasChannelVo {
         return this;
     }
 
+    public String getChannelCode() {
+        return channelCode;
+    }
+
+    public SaasChannelVo setChannelCode(String channelCode) {
+        this.channelCode = channelCode;
+        return this;
+    }
+
     public String getChannelName() {
         return channelName;
     }
 
     public SaasChannelVo setChannelName(String channelName) {
         this.channelName = channelName;
+        return this;
+    }
+
+    public Integer getChannelStatus() {
+        return channelStatus;
+    }
+
+    public SaasChannelVo setChannelStatus(Integer channelStatus) {
+        this.channelStatus = channelStatus;
         return this;
     }
 
