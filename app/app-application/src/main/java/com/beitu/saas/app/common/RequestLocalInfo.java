@@ -25,24 +25,12 @@ public class RequestLocalInfo {
     }
 
     public static RequestUserInfo getCurrentAdmin() {
+
         RequestUserInfo requestUserInfo = currentAdmin.get();
         if (requestUserInfo == null) {
             throw new ApplicationException("Current borrower not exist");
         }
         return requestUserInfo;
-    }
-
-    public static SaasBorrowerVo getCurrentBorrower() {
-        SaasBorrowerVo saasBorrowerVo;
-        try {
-            saasBorrowerVo = (SaasBorrowerVo) currentAdmin.get().getUser();
-        } catch (Exception e) {
-            throw new ApplicationException("illegal request");
-        }
-        if (saasBorrowerVo == null) {
-            throw new ApplicationException("Current borrower not exist");
-        }
-        return saasBorrowerVo;
     }
 
     public static String getCurrentTraceId() {

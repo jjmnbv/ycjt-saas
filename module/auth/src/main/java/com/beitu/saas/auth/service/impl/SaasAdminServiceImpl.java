@@ -48,7 +48,7 @@ public class SaasAdminServiceImpl extends AbstractBaseService implements SaasAdm
 
     @Override
     public SaasAdmin getSaasAdminByMoblie(String mobile) {
-        List<SaasAdmin> saasAdminList = saasAdminDao.selectByParams(new HashMap<String, Object>() {{
+        List<SaasAdmin> saasAdminList = saasAdminDao.selectByParams(new HashMap<String, Object>(2) {{
             put("mobile", mobile);
             put("deleted", false);
         }});

@@ -48,8 +48,8 @@ public class SaasChannelApplication {
         String channelCode = OrderNoUtil.makeOrderNum();
         saasChannelEntity.setChannelCode(channelCode)
                 .setChannelStatus(ChannelStatusEnum.OPEN.getType())
-                .setLinkUrl("阿婆罗配置" + channelCode); // TODO: 2018/3/22
-//                .setCreator(RequestLocalInfo.getCurrentAdmin().getName());
+                .setLinkUrl("阿婆罗配置" + channelCode) // TODO: 2018/3/22
+                .setCreator(RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getName());
         saasChannelService.create(saasChannelEntity);
 
         saasChannelRiskSettingsVoList.stream().forEach(x -> {

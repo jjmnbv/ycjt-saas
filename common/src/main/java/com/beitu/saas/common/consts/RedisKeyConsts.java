@@ -8,86 +8,20 @@ public class RedisKeyConsts {
     /**
      * 验证码Redis Key前缀
      */
-    public static final String VERIFY_CODE_PREFIX = "YOUJIE_VERIFYCODE_";
-
-    /**
-     * 信用报告查询Redis Key前缀
-     */
-    public static final String CREDIT_REPORT_PREFIX = "YOUJIE_CREDIT_REPORT_";
-
-    /**
-     * 支付密码重置Redis Key前缀
-     */
-    public static final String RESET_TRANSACTION_PASSWORD_PREFIX = "YOUJIE_RESET_TRANSACTION_";
-
-    /**
-     * 连连支付Redis Key前缀
-     */
-    public static final String LIAN_LIAN_PAY_INFO_KEY = "YOUJIE_LIANLIAN_PAY_INFO_{orderNo}_{date}";
-
-    /**
-     * 连连支付处理Redis Key前缀
-     */
-    public static final String LIAN_LIAN_PAY_PROCESS_KEY = "YOUJIE_LIANLIAN_PAY_PROCESS_{userId}";
-
-    /**
-     * 连连处理提现Redis Key前缀
-     */
-    public static final String LIAN_LIAN_WITHDRAW_PROCESS_KEY = "YOUJIE_LIANLIAN_WITHDRAW_PROCESS_{userId}";
-
-    /**
-     * 推送处理Redis Key前缀
-     */
-    public static final String PUSH_KEY = "YOUJIE_PUSH_KEY_{num}_{userId}";
+    public static final String VERIFY_CODE_PREFIX = "SAAS_VERIFYCODE_";
 
     /**
      * H5运营商爬取Redis Key前缀
      */
-    public static final String H5_CARRIER_CRAWLING = "YOUJIE_H5_CARRIER_CRAWLING_{userId}";
-
-    /**
-     * 淘宝爬虫Redis Key前缀
-     */
-    public static final String TAOBAO_CRAWL_PREFIX = "YOUJIE_TAOBAO_CRAWL_";
-
-    /**
-     * 京东爬虫Redis Key前缀
-     */
-    public static final String JD_CRAWL_PREFIX = "YOUJIE_JD_CRAWL_";
-
-    /**
-     * 支付密码错误计数Redis Key前缀
-     */
-    public static final String WRONG_TRANSCTION_PASSWORD_COUNT_PREFIX = "YOUJIE_WTP_CNT_";
-
-    /**
-     * 借条支付锁定Redis Key前缀
-     */
-    public static final String BORROW_CONFIRM_LOCK_PREFIX = "YOUJIE_BORROW_CONFIRM_LOCK_";
-
-    public static final String REPAYMENT_LOCK_PREFIX = "YOUJIE_REPAYMENT_";
-
-    /**
-     * 人脸识别缓存
-     */
-    public static final String TEMP_ALIPAY_FACE_PREFIX = "YOUJIE_ALIPAY_FACE_{userId}";
-
-    /**
-     * 运营商通话记录导出文件 缓存Key前缀
-     */
-    public static final String EXPORT_CARRIER_FILE_PREFIX = "EXPORT_CARRIER_CALLLOG_FILE_{id}";
-
-    /**
-     * 通讯录导出文件 缓存Key前缀
-     */
-    public static final String EXPORT_CONTACT_FILE_PREFIX = "EXPORT_CONTACT_FILE_{id}";
+    public static final String H5_CARRIER_CRAWLING = "SAAS_H5_CARRIER_CRAWLING_{userId}";
 
     /**
      * 重复提交缓存
      */
-    public static final String REPEAT_PREFIX = "YOUJIE_REPEAT_{id}";
+    public static final String REPEAT_PREFIX = "SAAS_REPEAT_{id}";
 
     /**
+     * <<<<<<< HEAD
      * 省市信息
      */
     public static final String LOCATION_INFO_VO = "LOCATION_INFO_VO";
@@ -160,9 +94,9 @@ public class RedisKeyConsts {
     public static final String MERCHANT_RECEIVE_COUNT_KEY = "YCJT_MERCHANT_RECEIVE_COUNT_{merchantId}";
 
     /**
-     * 商户抢单剩余单数Redis Key前缀
+     * 重复提交缓存
      */
-    public static final String MERCHANT_SCRAMBLE_COUNT_KEY = "YCJT_MERCHANT_SCRAMBLE_COUNT_{merchantId}";
+    public static final String SAAS_TOKEN_KEY = "SAAS_TOKEN_{id}";
 
     /**
      * H5 登录 验证码 去重请求 Redis Key前缀
