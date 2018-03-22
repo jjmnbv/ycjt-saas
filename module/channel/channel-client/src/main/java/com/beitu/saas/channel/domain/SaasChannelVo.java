@@ -1,5 +1,7 @@
 package com.beitu.saas.channel.domain;
 
+import java.util.Date;
+
 /**
  * Created with IntelliJ IDEA.
  * Description:
@@ -41,6 +43,20 @@ public class SaasChannelVo {
      *备注
      */
     private String remark;
+
+    /**
+     * 创建时间
+     */
+    private Date gmtCreate;
+
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public SaasChannelVo setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
+        return this;
+    }
 
     public String getMerchantCode() {
         return merchantCode;

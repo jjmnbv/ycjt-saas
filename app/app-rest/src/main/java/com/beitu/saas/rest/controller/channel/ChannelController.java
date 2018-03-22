@@ -56,7 +56,7 @@ public class ChannelController {
      */
     @ApiOperation(value = "新建渠道", response = Response.class)
     @RequestMapping(value = "/addChannel", method = RequestMethod.POST)
-    public Response addAgency(@RequestBody ChannelRequestVo channelRequestVo) {
+    public Response addChannel(@RequestBody ChannelRequestVo channelRequestVo) {
         List<SaasChannelRiskSettingsVo> settingsVos = new ArrayList<>();
         boolean setModule = CollectionUtils.isNotEmpty(channelRequestVo.getSaasModuleVoList()) && CollectionUtils.isEmpty(channelRequestVo.getSaasModuleItemVoList());
         boolean setModuleItem = CollectionUtils.isNotEmpty(channelRequestVo.getSaasModuleItemVoList());
@@ -98,7 +98,7 @@ public class ChannelController {
      */
     @RequestMapping(value = "/saasChannelList", method = RequestMethod.POST)
     @ApiOperation(value = "渠道列表", response = SaasChannelListResponse.class)
-    public Response getAgencyList(@RequestBody ChannelQueryRequestVo channelQueryRequestVo) {
+    public Response getSaasChannelList(@RequestBody ChannelQueryRequestVo channelQueryRequestVo) {
         Integer pageNo = 1;
         if (null != channelQueryRequestVo.getPageNo()) {
             pageNo = channelQueryRequestVo.getPageNo();

@@ -75,6 +75,7 @@ public class SaasChannelApplication {
                     .setChargePerson(x.getChargePerson())
                     .setLinkUrl(x.getLinkUrl())
                     .setCreator(x.getCreator())
+                    .setGmtCreate(x.getGmtCreate())
                     .setRemark(x.getRemark());
 
             saasChannelVoList.add(saasChannelVo);
