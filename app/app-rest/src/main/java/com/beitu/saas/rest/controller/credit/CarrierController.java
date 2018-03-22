@@ -70,7 +70,7 @@ public class CarrierController {
     @ResponseBody
     @ApiOperation(value = "H5运营商认证地址获取接口", response = CarrierH5Response.class)
     public DataApiResponse<CarrierH5Response> getCarrierH5() {
-        SaasBorrowerVo saasBorrowerVo = RequestLocalInfo.getCurrentBorrower();
+        SaasBorrowerVo saasBorrowerVo = RequestLocalInfo.getCurrentAdmin().getSaasBorrower();
         String url = carrierApplication.getCarrierH5Url(saasBorrowerVo.getBorrowerCode(), saasBorrowerVo.getMobile());
         return new DataApiResponse<>(new CarrierH5Response(url));
     }
