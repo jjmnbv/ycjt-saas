@@ -35,8 +35,7 @@ public class SwaggerConfig {
     public Docket ycjtApi() {
         ParameterBuilder tokenPar = new ParameterBuilder();
         List<Parameter> pars = new ArrayList<Parameter>();
-        tokenPar.name("accessToken").description("token").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
-        pars.add(tokenPar.build());
+        tokenPar.name("basicParams").description("接口校验头").modelRef(new ModelRef("string")).parameterType("header").required(false).build();pars.add(tokenPar.build());
         return new Docket(DocumentationType.SWAGGER_2).enable(configUtil.getSwaggerEnable())
                 .groupName("message")
                 .select()

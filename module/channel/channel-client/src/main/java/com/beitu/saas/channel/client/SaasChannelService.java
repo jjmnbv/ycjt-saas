@@ -1,5 +1,6 @@
 package com.beitu.saas.channel.client;
 
+import com.beitu.saas.channel.domain.SaasChannelVo;
 import com.beitu.saas.channel.param.SaasChannelParam;
 import com.beitu.saas.channel.entity.SaasChannelEntity;
 import com.fqgj.common.api.Page;
@@ -24,5 +25,7 @@ public interface SaasChannelService<T extends BaseEntity> extends BaseService<T>
      * 操作渠道功能
      */
     void operateSaasChannel(String channelCode, Integer status);
+
+    SaasChannelVo getByChannelCode(String channelCode);
 
 }

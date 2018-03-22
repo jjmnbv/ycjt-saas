@@ -1,5 +1,6 @@
 package com.beitu.saas.rest.controller.h5;
 
+import com.beitu.saas.app.annotations.SignIgnore;
 import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.api.ApiResponse;
 import com.beitu.saas.app.api.DataApiResponse;
@@ -8,7 +9,9 @@ import com.beitu.saas.app.application.credit.BorrowerBaseInfoApplication;
 import com.beitu.saas.app.application.credit.vo.BorrowerEmergentContactVo;
 import com.beitu.saas.app.application.credit.vo.BorrowerIdentityInfoVo;
 import com.beitu.saas.app.application.credit.vo.BorrowerWorkInfoVo;
+import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.app.enums.BorrowerOrderApplyStatusEnum;
+import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.consts.TimeConsts;
 import com.beitu.saas.rest.controller.h5.request.*;
@@ -16,6 +19,10 @@ import com.beitu.saas.rest.controller.h5.response.*;
 import com.beitu.saas.sms.enums.SmsErrorCodeEnum;
 import com.beitu.saas.sms.enums.VerifyCodeTypeEnum;
 import com.fqgj.base.services.redis.RedisClient;
+import com.fqgj.common.api.annotations.ParamsValidate;
+import com.fqgj.common.utils.RandomUtil;
+import com.fqgj.common.utils.StrUtils;
+import com.fqgj.common.utils.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,30 +51,23 @@ public class H5Controller {
     private RedisClient redisClient;
 
     @Autowired
-    private SendApplication sendApplication;
+    private ConfigUtil configUtil;
 
     @VisitorAccessible
-    @RequestMapping(value = "/user/verifyCode/send", method = RequestMethod.POST)
-    @ResponseBody
-    @ApiOperation(value = "获取验证码", response = ApiResponse.class)
-    public ApiResponse sendVerifyCode(@RequestBody @Valid VerifyCodeSendRequest req) {
-        String mobile = req.getMobile();
-        if (redisClient.setnx(RedisKeyConsts.H5_LOGIN_VERIFYCODE_KEY, mobile, mobile)) {
-            return new ApiResponse(SmsErrorCodeEnum.REPEAT_REQUEST);
-        }
-        redisClient.expire(RedisKeyConsts.H5_LOGIN_VERIFYCODE_KEY, TimeConsts.ONE_MINUTE, mobile);
-        String verifyCode = "1234";
-        sendApplication.sendCodeAndNotifyMessage(mobile, verifyCode, VerifyCodeTypeEnum.REGISTER);
-        redisClient.set(RedisKeyConsts.H5_SAVE_LOGIN_VERIFYCODE_KEY, verifyCode, TimeConsts.TWO_MINUTE, mobile);
-        return new ApiResponse();
-    }
-
-    @VisitorAccessible
+    @SignIgnore
+    @ParamsValidate
     @RequestMapping(value = "/user/login", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "登录", response = UserLoginSuccessResponse.class)
     public DataApiResponse<UserLoginSuccessResponse> login(@RequestBody @Valid UserLoginRequest req) {
-        // TODO
+        String verifyCode = redisClient.get(RedisKeyConsts.H5_SAVE_LOGIN_VERIFYCODE_KEY, req.getMobile());
+        if (StringUtils.isEmpty(verifyCode)) {
+            return new DataApiResponse<>(SmsErrorCodeEnum.VERIFY_CODE_FAILURE);
+        }
+        if (!verifyCode.equals(req.getVerifyCode())) {
+            return new DataApiResponse<>(SmsErrorCodeEnum.INPUT_WRONG_VERIFY_CODE);
+        }
+        //login 操作
         return new DataApiResponse<>(new UserLoginSuccessResponse());
     }
 
@@ -75,6 +75,8 @@ public class H5Controller {
     @ResponseBody
     @ApiOperation(value = "用户首页", response = UserHomeResponse.class)
     public DataApiResponse<UserHomeResponse> home() {
+        String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
+
         // TODO
         return new DataApiResponse<>(new UserHomeResponse());
     }

@@ -1,5 +1,6 @@
 package com.beitu.saas.channel.service.impl;
 
+import com.beitu.saas.channel.domain.SaasChannelVo;
 import com.beitu.saas.channel.param.SaasChannelParam;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.dao.SaasChannelDao;
@@ -38,6 +39,12 @@ public class SaasChannelServiceImpl extends AbstractBaseService implements SaasC
         channelEntity.setChannelStatus(status);
         saasChannelDao.updateByPrimaryKey(channelEntity);
     }
+
+    @Override
+    public SaasChannelVo getByChannelCode(String channelCode) {
+        return null;
+    }
+
 }
 
 

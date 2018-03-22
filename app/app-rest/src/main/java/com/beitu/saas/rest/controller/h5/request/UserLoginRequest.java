@@ -32,6 +32,14 @@ public class UserLoginRequest extends ParamsObject {
         this.mobile = mobile;
     }
 
+    public String getVerifyCode() {
+        return verifyCode;
+    }
+
+    public void setVerifyCode(String verifyCode) {
+        this.verifyCode = verifyCode;
+    }
+
     @Override
     public void validate() {
         if (!MobileUtil.isMobile(mobile)) {
