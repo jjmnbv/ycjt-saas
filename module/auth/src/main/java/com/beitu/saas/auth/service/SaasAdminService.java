@@ -1,4 +1,5 @@
 package com.beitu.saas.auth.service;
+import com.beitu.saas.auth.entity.SaasAdmin;
 import com.fqgj.common.base.BaseService;
 import com.fqgj.common.entity.BaseEntity;
 
@@ -9,4 +10,9 @@ import com.fqgj.common.entity.BaseEntity;
 */
 public interface SaasAdminService<T extends BaseEntity> extends BaseService<T> {
 
+    String login(String mobile, String paasword);
+
+    SaasAdmin getSaasAdminByMoblie(String mobile);
+
+    SaasAdmin getSaasAdminByAdminCode(String adminCode);
 }

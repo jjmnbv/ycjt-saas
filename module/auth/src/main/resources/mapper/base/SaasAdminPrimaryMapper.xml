@@ -19,7 +19,7 @@
         code,
         merchant_code,
         password,
-        name,
+        `name`,
         mobile,
         enable,
         deleted,
@@ -47,7 +47,7 @@
                 password,
             </if>
             <if test="name !=null">
-                name,
+                `name`,
             </if>
             <if test="mobile !=null">
                 mobile,
@@ -109,7 +109,7 @@
                 password = #{password,jdbcType=VARCHAR},
             </if>
             <if test="name !=null">
-                name = #{name,jdbcType=VARCHAR},
+                `name` = #{name,jdbcType=VARCHAR},
             </if>
             <if test="mobile !=null">
                 mobile = #{mobile,jdbcType=VARCHAR},
@@ -163,7 +163,7 @@
                 and password = #{password,jdbcType=VARCHAR}
             </if>
             <if test="name !=null">
-                and name = #{name,jdbcType=VARCHAR}
+                and `name` = #{name,jdbcType=VARCHAR}
             </if>
             <if test="mobile !=null">
                 and mobile = #{mobile,jdbcType=VARCHAR}
@@ -199,7 +199,7 @@
                 and password = #{password,jdbcType=VARCHAR}
             </if>
             <if test="name !=null">
-                and name = #{name,jdbcType=VARCHAR}
+                and `name` = #{name,jdbcType=VARCHAR}
             </if>
             <if test="mobile !=null">
                 and mobile = #{mobile,jdbcType=VARCHAR}
