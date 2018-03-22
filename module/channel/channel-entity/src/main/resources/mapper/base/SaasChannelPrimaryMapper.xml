@@ -8,9 +8,9 @@
         <result column="channel_code" jdbcType="VARCHAR" property="channelCode"/>
         <result column="channel_name" jdbcType="VARCHAR" property="channelName"/>
         <result column="channel_status" jdbcType="TINYINT" property="channelStatus"/>
-        <result column="link_url" jdbcType="CHAR" property="linkUrl"/>
+        <result column="link_url" jdbcType="VARCHAR" property="linkUrl"/>
         <result column="charge_person" jdbcType="VARCHAR" property="chargePerson"/>
-        <result column="creater" jdbcType="VARCHAR" property="creater"/>
+        <result column="creator" jdbcType="VARCHAR" property="creator"/>
         <result column="remark" jdbcType="VARCHAR" property="remark"/>
         <result column="deleted" jdbcType="BIT" property="deleted"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
@@ -25,7 +25,7 @@
     channel_status,
     link_url,
     charge_person,
-    creater,
+    creator,
     remark,
     deleted,
     gmt_modified,
@@ -62,8 +62,8 @@
                 <if test="chargePerson !=null">
                 charge_person,
                 </if>
-                <if test="creater !=null">
-                creater,
+                <if test="creator !=null">
+                creator,
                 </if>
                 <if test="remark !=null">
                 remark,
@@ -97,8 +97,8 @@
                 <if test="chargePerson != null">
                     #{chargePerson,jdbcType=VARCHAR},
                 </if>
-                <if test="creater != null">
-                    #{creater,jdbcType=VARCHAR},
+                <if test="creator != null">
+                    #{creator,jdbcType=VARCHAR},
                 </if>
                 <if test="remark != null">
                     #{remark,jdbcType=VARCHAR},
@@ -131,13 +131,13 @@
                 channel_status = #{channelStatus,jdbcType=TINYINT},
                 </if>
                 <if test="linkUrl !=null">
-                link_url = #{linkUrl,jdbcType=CHAR},
+                link_url = #{linkUrl,jdbcType=VARCHAR},
                 </if>
                 <if test="chargePerson !=null">
                 charge_person = #{chargePerson,jdbcType=VARCHAR},
                 </if>
-                <if test="creater !=null">
-                creater = #{creater,jdbcType=VARCHAR},
+                <if test="creator !=null">
+                creator = #{creator,jdbcType=VARCHAR},
                 </if>
                 <if test="remark !=null">
                 remark = #{remark,jdbcType=VARCHAR},
@@ -191,13 +191,13 @@
                 and channel_status = #{channelStatus,jdbcType=TINYINT}
             </if>
             <if test="linkUrl !=null">
-                and link_url = #{linkUrl,jdbcType=CHAR}
+                and link_url = #{linkUrl,jdbcType=VARCHAR}
             </if>
             <if test="chargePerson !=null">
                 and charge_person = #{chargePerson,jdbcType=VARCHAR}
             </if>
-            <if test="creater !=null">
-                and creater = #{creater,jdbcType=VARCHAR}
+            <if test="creator !=null">
+                and creator = #{creator,jdbcType=VARCHAR}
             </if>
             <if test="remark !=null">
                 and remark = #{remark,jdbcType=VARCHAR}
@@ -233,13 +233,13 @@
                 and channel_status = #{channelStatus,jdbcType=TINYINT}
             </if>
             <if test="linkUrl !=null">
-                and link_url = #{linkUrl,jdbcType=CHAR}
+                and link_url = #{linkUrl,jdbcType=VARCHAR}
             </if>
             <if test="chargePerson !=null">
                 and charge_person = #{chargePerson,jdbcType=VARCHAR}
             </if>
-            <if test="creater !=null">
-                and creater = #{creater,jdbcType=VARCHAR}
+            <if test="creator !=null">
+                and creator = #{creator,jdbcType=VARCHAR}
             </if>
             <if test="remark !=null">
                 and remark = #{remark,jdbcType=VARCHAR}
