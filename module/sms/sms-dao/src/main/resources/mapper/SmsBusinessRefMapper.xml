@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="SmsBusinessRefDaoImpl">
+<mapper namespace="com.beitu.saas.sms.dao.impl.SmsBusinessRefDaoImpl">
 
-    <resultMap id="CustomResultMap" type="BusinessRefInfo">
+    <resultMap id="CustomResultMap" type="com.beitu.saas.sms.model.BusinessRefInfo">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="app_id" jdbcType="BIGINT" property="appId"/>
         <result column="biz_function_id" jdbcType="BIGINT" property="bizFunctionId"/>
