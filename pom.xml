@@ -114,12 +114,16 @@
         <!--swagger-->
         <swagger2.version>2.5.0</swagger2.version>
         <spring-security.version>3.1.4.RELEASE</spring-security.version>
-
-        <!--risk-->
-        <risk-version>4.2</risk-version>
         <!-- poi -->
         <poi-version>3.9</poi-version>
         <xjd-user-version>1.3.4-new-SNAPSHOT</xjd-user-version>
+
+        <!--risk-->
+        <httpcomponents-client.version>4.5.3</httpcomponents-client.version>
+        <zmxy-sdk-version>3.0</zmxy-sdk-version>
+        <jackson-core.version>2.8.10</jackson-core.version>
+        <jackson-annotations.version>2.8.0</jackson-annotations.version>
+        <joda-time.version>2.9.9</joda-time.version>
 
     </properties>
 
@@ -636,6 +640,25 @@
                 <artifactId>jcommander</artifactId>
                 <version>1.64</version>
             </dependency>
+            <dependency>
+                <groupId>org.freemarker</groupId>
+                <artifactId>freemarker</artifactId>
+                <version>2.3.23</version>
+            </dependency>
+
+            <!-- risk end -->
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpmime</artifactId>
+                <version>${httpcomponents-client.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.antgroup</groupId>
+                <artifactId>zmxy-sdk</artifactId>
+                <version>${zmxy-sdk-version}</version>
+            </dependency>
+            <!-- risk end -->
+
         </dependencies>
     </dependencyManagement>
 
@@ -664,12 +687,12 @@
                 <artifactId>generator-maven-plugin</artifactId>
                 <version>0.1.2</version>
                 <configuration>
-                    <driverClassName>com.mysql.jdbc.Driver</driverClassName>youjie
-                    <url>jdbc:mysql://rdsmuenvmmfjjrao.mysql.rds.aliyuncs.com:3306/youjie?useUnicode=yes&amp;characterEncoding=utf-8&amp;allowMultiQueries=true</url>
-                    <username>fqgj2015</username>
-                    <password>fqgj2015Test</password>
+                    <driverClassName>com.mysql.jdbc.Driver</driverClassName>
+                    <url>jdbc:mysql://rm-bp178268rthqxsmr9.mysql.rds.aliyuncs.com:3306/youjie?useUnicode=yes&amp;characterEncoding=utf-8&amp;allowMultiQueries=true</url>
+                    <username>ycjt_server</username>
+                    <password>hDL34Xfxnerxckv*h4Z8AphWB9UPn6j></password>
                     <!--基础包路径-->
-                    <basePackage>com.fqgj.youjie.user</basePackage>
+                    <basePackage>com.beitu.saas</basePackage>
                     <bean>entity</bean>
                     <domain>domain</domain>
                     <dao>dao</dao>
@@ -679,10 +702,10 @@
                     <baseMapper>mapper.base</baseMapper>
                     <mapper>mapper</mapper>
                     <controller>controller</controller>
-                    <!--#多个表逗号分割,all:全部表;user,article-->
-                    <tables>lender_recommend_filter</tables>
+                    <!--#多个表逗号分割,all:全部表;borrower,article-->
+                    <tables>saas_admin</tables>
                     <!--#多个模块逗号分割,生成什么模块all:全部模块;controller,domain,bean,dao,daoImpl,service,serviceImpl,baseMapper,mapper-->
-                    <generatorModules>all</generatorModules>
+                    <generatorModules>domain,bean,dao,daoImpl,service,serviceImpl,baseMapper,mapper</generatorModules>
                     <!--#强制重新生成,默认false;true时全部重新生成;第一次生成全部文件,后面只生成bean,base目录下面的mapperxml-->
                     <forceReCreate>true</forceReCreate>
                     <!--#下划线转驼峰-->

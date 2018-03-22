@@ -413,4 +413,66 @@ public class ConfigUtil {
         return config.getProperty("test.white.list", "");
     }
 
+    /************  risk begin **************/
+    public String getCarrierH5TypeName() {
+        return config.getProperty("carrier.carrierH5Type", "");
+    }
+
+    public String getTongdunUrl() {
+        return config.getProperty("tongdun.url", "");
+    }
+
+    public String getTongdunQueryUrl() {
+        return config.getProperty("tongdun.queryUrl", "");
+    }
+
+    public String getTongdunPartnerCode() {
+        return config.getProperty("tongdun.partnerCode", "");
+    }
+
+    public String getTongdunPartnerKey() {
+        return config.getProperty("tongdun.partnerKey", "");
+    }
+
+    public String getTongdunAppName() {
+        return config.getProperty("tongdun.appName", "");
+    }
+
+    public String getJkzjZmxyAppId() {
+        return config.getProperty("jkzjZmxy.appId", "1002307");
+    }
+
+    public String getJkzjZmxyPrivateKey() {
+        return config.getProperty("jkzjZmxy.privateKey", "");
+    }
+
+    public String getJkzjZmxyZhimaPublicKey() {
+        return config.getProperty("jkzjZmxy.zhimaPublicKey", "");
+    }
+
+    public String getZmxyFeedbackTypeId() {
+        return config.getProperty("zmxy.feedbackTypeId", "");
+    }
+
+    public String getZmxyZhimaFilePath() {
+        return config.getProperty("zmxy.zhimaFilePath", "");
+    }
+
+    public String getYouqianZmxyAppId() {
+        return config.getProperty("youqianZmxy.appId", "");
+    }
+
+    public String getYouqianZmxyPrivateKey() {
+        return config.getProperty("youqianZmxy.privateKey", "");
+    }
+
+    public String getYouqianZmxyZhimaPublicKey() {
+        return config.getProperty("youqianZmxy.zhimaPublicKey", "");
+    }
+
+    public String getH5TianjiCarrierNotifyUrl() {
+        return config.getProperty("carrier.tianji.notify.url", "");
+    }
+    /************* risk end *************/
+
 }

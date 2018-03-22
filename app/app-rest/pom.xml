@@ -139,6 +139,26 @@
             <artifactId>base-services</artifactId>
             <version>${base-services-version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.beitu.saas</groupId>
+            <artifactId>risk-service</artifactId>
+            <version>0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.beitu.saas</groupId>
+            <artifactId>borrower-service</artifactId>
+            <version>0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.beitu.saas</groupId>
+            <artifactId>auth</artifactId>
+            <version>0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.beitu.saas</groupId>
+            <artifactId>sms-service</artifactId>
+            <version>0.1</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>app-rest</finalName>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>sms</artifactId>
+        <groupId>com.beitu.saas</groupId>
+        <version>0.1</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>sms-dao</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>com.beitu.saas</groupId>
+            <artifactId>sms-entity</artifactId>
+            <version>0.1</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.fqgj.plugin</groupId>
+                <artifactId>generator-maven-plugin</artifactId>
+                <version>0.1.0</version>
+                <configuration>
+                    <driverClassName>com.mysql.jdbc.Driver</driverClassName>
+                    <url>jdbc:mysql://rdsmuenvmmfjjrao.mysql.rds.aliyuncs.com:3306/youjie?useUnicode=yes&amp;characterEncoding=utf-8&amp;allowMultiQueries=true</url>
+                    <username>fqgj2015</username>
+                    <password>fqgj2015Test</password>
+                    <!--基础包路径-->
+                    <basePackage>com.fqgj.sms</basePackage>
+                    <bean>entity</bean>
+                    <domain>domain</domain>
+                    <dao>dao</dao>
+                    <daoImpl>dao.impl</daoImpl>
+                    <service>service</service>
+                    <serviceImpl>service.impl</serviceImpl>
+                    <baseMapper>mapper.base</baseMapper>
+                    <mapper>mapper</mapper>
+                    <controller>controller</controller>
+                    <!--#多个表逗号分割,all:全部表;borrower,article-->
+                    <tables>
+                        sms_app_info,sms_biz_function,sms_business_ref,sms_message,sms_message_template,sms_send_rule,sms_servicer
+                    </tables>
+                    <!--#多个模块逗号分割,生成什么模块all:全部模块;controller,domain,bean,dao,daoImpl,service,serviceImpl,baseMapper,mapper-->
+                    <generatorModules>bean,dao,daoImpl,mapper,baseMapper</generatorModules>
+                    <!--#强制重新生成,默认false;true时全部重新生成;第一次生成全部文件,后面只生成bean,base目录下面的mapperxml-->
+                    <forceReCreate>true</forceReCreate>
+                    <!--#下划线转驼峰-->
+                    <mapUnderscoreToCamelCase>true</mapUnderscoreToCamelCase>
+                    <columnOverrides>
+                        <column>is_read,is_max</column>
+                        <property>read,max</property>
+                    </columnOverrides>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

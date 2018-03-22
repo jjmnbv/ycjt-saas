@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SmsBusinessRefDaoImpl">
+
+    <resultMap id="CustomResultMap" type="BusinessRefInfo">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="app_id" jdbcType="BIGINT" property="appId"/>
+        <result column="biz_function_id" jdbcType="BIGINT" property="bizFunctionId"/>
+        <result column="app_servicer_id" jdbcType="BIGINT" property="appServicerId"/>
+        <result column="message_template_id" jdbcType="BIGINT" property="messageTemplateId"/>
+        <result column="send_rule_id" jdbcType="BIGINT" property="sendRuleId"/>
+        <result column="rank" jdbcType="INTEGER" property="rank"/>
+        <result column="send_flag" jdbcType="SMALLINT" property="sendFlag"/>
+
+        <result column="biz_code" jdbcType="VARCHAR" property="bizCode"/>
+        <result column="biz_name" jdbcType="VARCHAR" property="bizName"/>
+
+        <result column="servicer_code" jdbcType="VARCHAR" property="servicerCode"/>
+        <result column="link_info" jdbcType="VARCHAR" property="linkInfo"/>
+
+        <result column="msg_type" jdbcType="SMALLINT" property="msgType"/>
+        <result column="template_type" jdbcType="TINYINT" property="templateType"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="replace_list" jdbcType="VARCHAR" property="replaceList"/>
+        <result column="desc_info" jdbcType="VARCHAR" property="descInfo"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+
+        <result column="ruleContent" jdbcType="VARCHAR" property="ruleContent"/>
+
+        <result column="deleted" jdbcType="BIT" property="deleted"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+    </resultMap>
+
+    <select id="getAllBusinessRefInfo" resultMap="CustomResultMap">
+        select ref.id as id,
+        ref.app_id as app_id,
+        (select app_code from sms_app_info where id = ref.app_id) as app_code,
+        ref.biz_function_id as biz_function_id,
+        ref.app_servicer_id as app_servicer_id,
+        ref.message_template_id as message_template_id,
+        ref.send_rule_id as send_rule_id,
+        ref.rank as rank,
+        ref.send_flag as send_flag,
+        fun.biz_code as biz_code,
+        fun.biz_name as biz_name,
+        appServer.servicer_code as servicer_code,
+        appServer.link_info as link_info,
+        template.msg_type as msg_type,
+        template.template_type as template_type,
+        template.content as content,
+        template.replace_list as replace_list,
+        template.desc_info as desc_info,
+        template.sign as appSign,
+        template.type as type,
+        (select rule_content from sms_send_rule where id = ref.send_rule_id and app_id = ref.app_id limit 1) as rule_content,
+        ref.deleted as deleted,
+        ref.gmt_modified as gmt_modified,
+        ref.gmt_create as gmt_create
+        from sms_business_ref ref, sms_biz_function fun, sms_app_servicer_ref appServer, sms_message_template template
+        where ref.biz_function_id = fun.id and ref.app_id = fun.app_id and ref.message_template_id = template.id and ref.app_id = template.app_id
+              and ref.app_servicer_id = appServer.id
+              and ref.deleted = 0 and fun.deleted = 0 and template.deleted = 0
+    </select>
+
+</mapper>

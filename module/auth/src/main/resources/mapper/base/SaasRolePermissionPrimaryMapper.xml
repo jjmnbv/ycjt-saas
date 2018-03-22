@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beitu.saas.auth.dao.impl.SaasRolePermissionDaoImpl">
+    <resultMap id="BaseResultMap" type="com.beitu.saas.auth.entity.SaasRolePermission">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="role_id" jdbcType="INTEGER" property="roleId"/>
+        <result column="permission_key" jdbcType="INTEGER" property="permissionKey"/>
+        <result column="permission_type" jdbcType="BIGINT" property="permissionType"/>
+        <result column="deleted" jdbcType="BIT" property="deleted"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,
+        role_id,
+        permission_key,
+        permission_type,
+        deleted,
+        gmt_modified,
+        gmt_create
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_role_permission
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.beitu.saas.auth.entity.SaasRolePermission"  useGeneratedKeys="true">
+        insert into saas_role_permission
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="roleId !=null">
+                role_id,
+            </if>
+            <if test="permissionKey !=null">
+                permission_key,
+            </if>
+            <if test="permissionType !=null">
+                permission_type,
+            </if>
+            <if test="deleted !=null">
+                deleted,
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified,
+            </if>
+            <if test="gmtCreate !=null">
+                gmt_create,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="roleId != null">
+                #{roleId,jdbcType=INTEGER},
+            </if>
+            <if test="permissionKey != null">
+                #{permissionKey,jdbcType=INTEGER},
+            </if>
+            <if test="permissionType != null">
+                #{permissionType,jdbcType=BIGINT},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.beitu.saas.auth.entity.SaasRolePermission">
+        update saas_role_permission
+        <set>
+            <if test="roleId !=null">
+                role_id = #{roleId,jdbcType=INTEGER},
+            </if>
+            <if test="permissionKey !=null">
+                permission_key = #{permissionKey,jdbcType=INTEGER},
+            </if>
+            <if test="permissionType !=null">
+                permission_type = #{permissionType,jdbcType=BIGINT},
+            </if>
+            <if test="deleted !=null">
+                deleted = #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="deleteByPrimaryKey">
+        update  saas_role_permission
+        set deleted = 1
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <sql id="paginationSql">
+        <if test="page != null">
+            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+        </if>
+    </sql>
+
+    <sql id="paging">
+        <if test="offset != null and limit != null">
+            limit #{offset},#{limit}
+        </if>
+    </sql>
+
+    <select id="selectByParams" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_role_permission
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="roleId !=null">
+                and role_id = #{roleId,jdbcType=INTEGER}
+            </if>
+            <if test="permissionKey !=null">
+                and permission_key = #{permissionKey,jdbcType=INTEGER}
+            </if>
+            <if test="permissionType !=null">
+                and permission_type = #{permissionType,jdbcType=BIGINT}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+        <include refid="paging"/>
+    </select>
+    <select id="queryTotal" resultType="INTEGER">
+        select count(*) from saas_role_permission
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="roleId !=null">
+                and role_id = #{roleId,jdbcType=INTEGER}
+            </if>
+            <if test="permissionKey !=null">
+                and permission_key = #{permissionKey,jdbcType=INTEGER}
+            </if>
+            <if test="permissionType !=null">
+                and permission_type = #{permissionType,jdbcType=BIGINT}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </select>
+</mapper>

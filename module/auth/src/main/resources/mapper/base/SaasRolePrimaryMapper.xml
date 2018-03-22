@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beitu.saas.auth.dao.impl.SaasRoleDaoImpl">
+    <resultMap id="BaseResultMap" type="com.beitu.saas.auth.entity.SaasRole">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="create_name" jdbcType="VARCHAR" property="createName"/>
+        <result column="enabled" jdbcType="BIT" property="enabled"/>
+        <result column="deleted" jdbcType="BIT" property="deleted"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,
+        merchant_code,
+        name,
+        description,
+        create_name,
+        enabled,
+        deleted,
+        gmt_modified,
+        gmt_create
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_role
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.beitu.saas.auth.entity.SaasRole"  useGeneratedKeys="true">
+        insert into saas_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="merchantCode !=null">
+                merchant_code,
+            </if>
+            <if test="name !=null">
+                name,
+            </if>
+            <if test="description !=null">
+                description,
+            </if>
+            <if test="createName !=null">
+                create_name,
+            </if>
+            <if test="enabled !=null">
+                enabled,
+            </if>
+            <if test="deleted !=null">
+                deleted,
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified,
+            </if>
+            <if test="gmtCreate !=null">
+                gmt_create,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="merchantCode != null">
+                #{merchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="createName != null">
+                #{createName,jdbcType=VARCHAR},
+            </if>
+            <if test="enabled != null">
+                #{enabled,jdbcType=BIT},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.beitu.saas.auth.entity.SaasRole">
+        update saas_role
+        <set>
+            <if test="merchantCode !=null">
+                merchant_code = #{merchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="name !=null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="description !=null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="createName !=null">
+                create_name = #{createName,jdbcType=VARCHAR},
+            </if>
+            <if test="enabled !=null">
+                enabled = #{enabled,jdbcType=BIT},
+            </if>
+            <if test="deleted !=null">
+                deleted = #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="deleteByPrimaryKey">
+        update  saas_role
+        set deleted = 1
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <sql id="paginationSql">
+        <if test="page != null">
+            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+        </if>
+    </sql>
+
+    <sql id="paging">
+        <if test="offset != null and limit != null">
+            limit #{offset},#{limit}
+        </if>
+    </sql>
+
+    <select id="selectByParams" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_role
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="merchantCode !=null">
+                and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+            </if>
+            <if test="name !=null">
+                and name = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="description !=null">
+                and description = #{description,jdbcType=VARCHAR}
+            </if>
+            <if test="createName !=null">
+                and create_name = #{createName,jdbcType=VARCHAR}
+            </if>
+            <if test="enabled !=null">
+                and enabled = #{enabled,jdbcType=BIT}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+        <include refid="paging"/>
+    </select>
+    <select id="queryTotal" resultType="INTEGER">
+        select count(*) from saas_role
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="merchantCode !=null">
+                and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+            </if>
+            <if test="name !=null">
+                and name = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="description !=null">
+                and description = #{description,jdbcType=VARCHAR}
+            </if>
+            <if test="createName !=null">
+                and create_name = #{createName,jdbcType=VARCHAR}
+            </if>
+            <if test="enabled !=null">
+                and enabled = #{enabled,jdbcType=BIT}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </select>
+</mapper>
