@@ -10,4 +10,10 @@ import com.fqgj.common.entity.BaseEntity;
 */
 public interface SaasChannelService<T extends BaseEntity> extends BaseService<T> {
 
+    /**
+     * 创建渠道
+     *
+     */
+    void createChannel();
+
 }
