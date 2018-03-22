@@ -17,6 +17,7 @@
         <module>channel</module>
         <module>collection</module>
         <module>sms</module>
+        <module>finance</module>
     </modules>
 
     <dependencies>

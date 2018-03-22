@@ -3,22 +3,17 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>collection</artifactId>
+        <artifactId>finance</artifactId>
         <groupId>com.beitu.saas</groupId>
         <version>0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>collection-service</artifactId>
+    <artifactId>finance-dao</artifactId>
     <dependencies>
         <dependency>
             <groupId>com.beitu.saas</groupId>
-            <artifactId>collection-dao</artifactId>
-            <version>0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.beitu.saas</groupId>
-            <artifactId>collection-client</artifactId>
+            <artifactId>finance-entity</artifactId>
             <version>0.1</version>
         </dependency>
     </dependencies>
