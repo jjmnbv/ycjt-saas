@@ -16,6 +16,7 @@
         <module>user</module>
         <module>channel</module>
         <module>collection</module>
+        <module>finance</module>
 
     </modules>
 
