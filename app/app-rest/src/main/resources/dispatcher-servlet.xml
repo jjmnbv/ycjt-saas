@@ -12,7 +12,7 @@
 	http://www.springframework.org/schema/context/spring-context.xsd  http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
 
     <context:annotation-config/>
-    <context:component-scan base-package="com.beitu.saas.rest.controller">
+    <context:component-scan base-package="com.fqgj;com.beitu.saas.rest.controller">
         <context:exclude-filter type="assignable" expression="com.fqgj.common.api.annotations.BeanFieldValidatorImpl"></context:exclude-filter>
     </context:component-scan>
     <!--<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">-->
