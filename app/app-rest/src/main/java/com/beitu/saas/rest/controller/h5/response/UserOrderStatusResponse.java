@@ -15,6 +15,10 @@ public class UserOrderStatusResponse implements ResponseData {
     @ApiModelProperty(value = "订单状态")
     private Integer orderStatus;
 
+    public UserOrderStatusResponse(Integer orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
     public Integer getOrderStatus() {
         return orderStatus;
     }
