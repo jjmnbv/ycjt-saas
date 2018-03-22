@@ -16,7 +16,7 @@
         <module>user</module>
         <module>channel</module>
         <module>collection</module>
-
+        <module>sms</module>
     </modules>
 
     <dependencies>
