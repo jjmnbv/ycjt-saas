@@ -2,7 +2,7 @@ package com.beitu.saas.sms.service.sms.impl;
 
 
 import com.alibaba.fastjson.JSON;
-import com.fgqj.youjie.common.utils.DateUtil;
+import com.beitu.saas.common.utils.DateUtil;
 import com.fqgj.base.services.redis.RedisClient;
 import com.fqgj.log.factory.LogFactory;
 import com.fqgj.log.interfaces.Log;
