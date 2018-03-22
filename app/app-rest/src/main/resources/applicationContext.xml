@@ -19,7 +19,7 @@
     <apollo:config namespaces="DEV.SYSTEM_PUBLIC_CONFIG"/>
 
 
-    <context:component-scan base-package="com.beitu.saas.*" >
+    <context:component-scan base-package="com.beitu.saas.*;com.fqgj.common.base.*;com.fqgj" >
         <context:exclude-filter type="assignable" expression="com.fqgj.common.api.annotations.BeanFieldValidatorImpl"></context:exclude-filter>
     </context:component-scan>
 
