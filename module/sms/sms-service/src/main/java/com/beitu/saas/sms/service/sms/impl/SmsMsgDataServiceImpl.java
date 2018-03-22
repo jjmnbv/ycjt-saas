@@ -1,23 +1,21 @@
 package com.beitu.saas.sms.service.sms.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.sms.client.plugin.*;
 import com.beitu.saas.sms.domain.SmsMsgLinkInfo;
 import com.beitu.saas.sms.model.BusinessRefInfo;
 import com.beitu.saas.sms.ro.SmsMsgBatchContentRO;
 import com.beitu.saas.sms.util.DataQueueUtils;
-import com.fgqj.youjie.common.utils.ConfigUtil;
 import com.fqgj.base.services.redis.RedisClient;
 import com.fqgj.log.factory.LogFactory;
 import com.fqgj.log.interfaces.Log;
-import com.fqgj.sms.client.plugin.*;
 import com.beitu.saas.sms.dao.SmsMessageDao;
 import com.beitu.saas.sms.model.MsgInfo;
 import com.beitu.saas.sms.enums.Contans;
 import com.beitu.saas.sms.enums.MsgTypeEnum;
 import com.beitu.saas.sms.enums.ServicerEnum;
 import com.beitu.saas.sms.enums.SmsTypeEnum;
-import com.fqgj.sms.model.*;
 import com.beitu.saas.sms.ro.BatchSmsSendRquestRO;
 import com.beitu.saas.sms.ro.SingleSmsSendRequestRO;
 import com.beitu.saas.sms.ro.StateCode;

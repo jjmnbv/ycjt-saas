@@ -34,7 +34,7 @@ public class h5Controller {
     @RequestMapping(value = "/user/verifyCode/send", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "借款人用户登录", response = BorrowUserLoginSuccessResponse.class)
-    public DataApiResponse<BorrowUserLoginSuccessResponse> login(@RequestBody @Valid BorrowUserLoginRequest req) {
+    public DataApiResponse<BorrowUserLoginSuccessResponse> login1(@RequestBody @Valid BorrowUserLoginRequest req) {
         // TODO
         return new DataApiResponse<>(new BorrowUserLoginSuccessResponse());
     }
