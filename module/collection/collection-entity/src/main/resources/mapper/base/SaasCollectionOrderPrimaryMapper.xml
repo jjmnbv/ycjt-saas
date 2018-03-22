@@ -5,6 +5,7 @@
     <resultMap id="BaseResultMap" type="com.beitu.saas.collection.entity.SaasCollectionOrderEntity">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="order_no" jdbcType="VARCHAR" property="orderNo"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
         <result column="deleted" jdbcType="BIT" property="deleted"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
         <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
@@ -13,6 +14,7 @@
     <sql id="Base_Column_List">
     id,
     order_no,
+    status,
     deleted,
     gmt_modified,
     gmt_create
@@ -33,6 +35,9 @@
                 <if test="orderNo !=null">
                 order_no,
                 </if>
+                <if test="status !=null">
+                status,
+                </if>
                 <if test="deleted !=null">
                 deleted,
                 </if>
@@ -46,6 +51,9 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
                 <if test="orderNo != null">
                     #{orderNo,jdbcType=VARCHAR},
+                </if>
+                <if test="status != null">
+                    #{status,jdbcType=TINYINT},
                 </if>
                 <if test="deleted != null">
                     #{deleted,jdbcType=BIT},
@@ -64,6 +72,9 @@
         <set>
                 <if test="orderNo !=null">
                 order_no = #{orderNo,jdbcType=VARCHAR},
+                </if>
+                <if test="status !=null">
+                status = #{status,jdbcType=TINYINT},
                 </if>
                 <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},
@@ -104,6 +115,9 @@
             <if test="orderNo !=null">
                 and order_no = #{orderNo,jdbcType=VARCHAR}
             </if>
+            <if test="status !=null">
+                and status = #{status,jdbcType=TINYINT}
+            </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}
             </if>
@@ -124,6 +138,9 @@
             </if>
             <if test="orderNo !=null">
                 and order_no = #{orderNo,jdbcType=VARCHAR}
+            </if>
+            <if test="status !=null">
+                and status = #{status,jdbcType=TINYINT}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}
