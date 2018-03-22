@@ -14,58 +14,58 @@ import io.swagger.annotations.ApiModelProperty;
 public class UserBaseInfoResponse implements ResponseData {
 
     @ApiModelProperty(value = "个人信息")
-    private UserPersonalInfoVo userPersonalInfoVo;
+    private BorrowerPersonalInfoVo borrowerPersonalInfoVo;
 
     @ApiModelProperty(value = "身份信息")
-    private UserIdentityInfoVo userIdentityInfoVo;
+    private BorrowerIdentityInfoVo borrowerIdentityInfoVo;
 
     @ApiModelProperty(value = "工作信息")
-    private UserWorkInfoVo userWorkInfoVo;
+    private BorrowerWorkInfoVo borrowerWorkInfoVo;
 
     @ApiModelProperty(value = "紧急联系人")
-    private UserEmergentContactVo userEmergentContactVo;
+    private BorrowerEmergentContactVo userEmergentContactVo;
 
     @ApiModelProperty(value = "生活区域")
-    private UserLivingAreaVo userLivingAreaVo;
+    private BorrowerLivingAreaVo borrowerLivingAreaVo;
 
-    public UserPersonalInfoVo getUserPersonalInfoVo() {
-        return userPersonalInfoVo;
+    public BorrowerPersonalInfoVo getBorrowerPersonalInfoVo() {
+        return borrowerPersonalInfoVo;
     }
 
-    public void setUserPersonalInfoVo(UserPersonalInfoVo userPersonalInfoVo) {
-        this.userPersonalInfoVo = userPersonalInfoVo;
+    public void setBorrowerPersonalInfoVo(BorrowerPersonalInfoVo borrowerPersonalInfoVo) {
+        this.borrowerPersonalInfoVo = borrowerPersonalInfoVo;
     }
 
-    public UserIdentityInfoVo getUserIdentityInfoVo() {
-        return userIdentityInfoVo;
+    public BorrowerIdentityInfoVo getBorrowerIdentityInfoVo() {
+        return borrowerIdentityInfoVo;
     }
 
-    public void setUserIdentityInfoVo(UserIdentityInfoVo userIdentityInfoVo) {
-        this.userIdentityInfoVo = userIdentityInfoVo;
+    public void setBorrowerIdentityInfoVo(BorrowerIdentityInfoVo borrowerIdentityInfoVo) {
+        this.borrowerIdentityInfoVo = borrowerIdentityInfoVo;
     }
 
-    public UserWorkInfoVo getUserWorkInfoVo() {
-        return userWorkInfoVo;
+    public BorrowerWorkInfoVo getBorrowerWorkInfoVo() {
+        return borrowerWorkInfoVo;
     }
 
-    public void setUserWorkInfoVo(UserWorkInfoVo userWorkInfoVo) {
-        this.userWorkInfoVo = userWorkInfoVo;
+    public void setBorrowerWorkInfoVo(BorrowerWorkInfoVo borrowerWorkInfoVo) {
+        this.borrowerWorkInfoVo = borrowerWorkInfoVo;
     }
 
-    public UserEmergentContactVo getUserEmergentContactVo() {
+    public BorrowerEmergentContactVo getUserEmergentContactVo() {
         return userEmergentContactVo;
     }
 
-    public void setUserEmergentContactVo(UserEmergentContactVo userEmergentContactVo) {
+    public void setUserEmergentContactVo(BorrowerEmergentContactVo userEmergentContactVo) {
         this.userEmergentContactVo = userEmergentContactVo;
     }
 
-    public UserLivingAreaVo getUserLivingAreaVo() {
-        return userLivingAreaVo;
+    public BorrowerLivingAreaVo getBorrowerLivingAreaVo() {
+        return borrowerLivingAreaVo;
     }
 
-    public void setUserLivingAreaVo(UserLivingAreaVo userLivingAreaVo) {
-        this.userLivingAreaVo = userLivingAreaVo;
+    public void setBorrowerLivingAreaVo(BorrowerLivingAreaVo borrowerLivingAreaVo) {
+        this.borrowerLivingAreaVo = borrowerLivingAreaVo;
     }
 
 }

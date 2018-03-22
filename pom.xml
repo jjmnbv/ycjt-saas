@@ -684,7 +684,7 @@
                     <baseMapper>mapper.base</baseMapper>
                     <mapper>mapper</mapper>
                     <controller>controller</controller>
-                    <!--#多个表逗号分割,all:全部表;user,article-->
+                    <!--#多个表逗号分割,all:全部表;borrower,article-->
                     <tables>saas_admin</tables>
                     <!--#多个模块逗号分割,生成什么模块all:全部模块;controller,domain,bean,dao,daoImpl,service,serviceImpl,baseMapper,mapper-->
                     <generatorModules>domain,bean,dao,daoImpl,service,serviceImpl,baseMapper,mapper</generatorModules>

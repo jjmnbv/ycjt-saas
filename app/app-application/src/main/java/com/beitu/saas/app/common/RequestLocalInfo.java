@@ -1,6 +1,7 @@
 package com.beitu.saas.app.common;
 
 
+import com.beitu.saas.borrower.domain.SaasBorrowerVo;
 import com.fqgj.common.utils.StringUtils;
 import com.fqgj.exception.common.ApplicationException;
 
@@ -11,13 +12,13 @@ import java.util.UUID;
  * @create 2018/3/22 下午5:57
  * @description
  */
-public class RequestLocalInfo{
+public class RequestLocalInfo {
     private static final ThreadLocal<RequestUserInfo> currentAdmin = new ThreadLocal<>();
     private static final ThreadLocal<String> currentTraceId = new ThreadLocal<>();
 
     public static void putCurrentAdmin(RequestUserInfo requestUserInfo) {
         if (requestUserInfo == null) {
-            throw new ApplicationException("Current user not exist");
+            throw new ApplicationException("Current borrower not exist");
         }
         reset();
         currentAdmin.set(requestUserInfo);
@@ -26,9 +27,22 @@ public class RequestLocalInfo{
     public static RequestUserInfo getCurrentAdmin() {
         RequestUserInfo requestUserInfo = currentAdmin.get();
         if (requestUserInfo == null) {
-            throw new ApplicationException("Current user not exist");
+            throw new ApplicationException("Current borrower not exist");
         }
         return requestUserInfo;
+    }
+
+    public static SaasBorrowerVo getCurrentBorrower() {
+        SaasBorrowerVo saasBorrowerVo;
+        try {
+            saasBorrowerVo = (SaasBorrowerVo) currentAdmin.get().getUser();
+        } catch (Exception e) {
+            throw new ApplicationException("illegal request");
+        }
+        if (saasBorrowerVo == null) {
+            throw new ApplicationException("Current borrower not exist");
+        }
+        return saasBorrowerVo;
     }
 
     public static String getCurrentTraceId() {

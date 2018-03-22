@@ -40,7 +40,7 @@
                     <baseMapper>mapper.base</baseMapper>
                     <mapper>mapper</mapper>
                     <controller>controller</controller>
-                    <!--#多个表逗号分割,all:全部表;user,article-->
+                    <!--#多个表逗号分割,all:全部表;borrower,article-->
                     <tables>
                         sms_app_info,sms_biz_function,sms_business_ref,sms_message,sms_message_template,sms_send_rule,sms_servicer
                     </tables>

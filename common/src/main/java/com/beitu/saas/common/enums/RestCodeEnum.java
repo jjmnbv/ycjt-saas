@@ -26,15 +26,15 @@ import java.util.Map;
  * 105	请求参数过多	Too many parameters
  * 106	未知的签名方法	Unsupported signature method
  * 107	timestamp参数无效	Invalid/Used timestamp parameter
- * 108	无效的user id	Invalid user id
- * 109	无效的用户资料字段名	Invalid user info field
+ * 108	无效的user id	Invalid borrower id
+ * 109	无效的用户资料字段名	Invalid borrower info field
  * 110	无效的access token	Access token invalid or no longer valid
  * 111	access token过期	Access token expired
  * 112	session key过期	Session key expired
  * 114   无效的ip参数 Invalid Ip
  * 210	用户不可见	User not visible
  * 211	获取未授权的字段	Unsupported permission
- * 212	没有权限获取用户的email	No permission to access user email
+ * 212	没有权限获取用户的email	No permission to access borrower email
  * 800	未知的存储操作错误	Unknown domain store API error
  * 801	无效的操作方法	Invalid operation
  * 802	数据存储空间已超过设定的上限	Data store allowable quota was exceeded
