@@ -1,7 +1,6 @@
 package com.beitu.saas.rest.interceptor;
 
 
-import com.aliyun.openservices.ons.api.Admin;
 import com.beitu.saas.app.annotations.IgnoreRepeatRequest;
 import com.beitu.saas.app.annotations.SignIgnore;
 import com.beitu.saas.app.annotations.VisitorAccessible;
@@ -11,6 +10,7 @@ import com.beitu.saas.app.common.RequestBasicInfo;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.app.common.RequestUserInfo;
 import com.beitu.saas.auth.entity.SaasAdmin;
+import com.beitu.saas.auth.service.SaasAdminService;
 import com.beitu.saas.borrower.domain.SaasBorrowerVo;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.enums.RestCodeEnum;
@@ -45,6 +45,9 @@ public class UserAccessRightInterceptor implements HandlerInterceptor {
 
     @Autowired
     private AdminInfoApplication adminInfoApplication;
+
+    @Autowired
+    private SaasAdminService saasAdminService;
 
     @Autowired
     private BorrowerApplication borrowerApplication;
@@ -127,6 +130,7 @@ public class UserAccessRightInterceptor implements HandlerInterceptor {
     private Boolean hasPermission(RequestBasicInfo basicVO) {
         RequestUserInfo requestUserInfo = new RequestUserInfo();
         requestUserInfo.setRequestBasicInfo(basicVO);
+        String userCode = redisClient.get(RedisKeyConsts.SAAS_TOKEN_KEY, basicVO.getToken());
         if (basicVO.getPlatform().equals("h5")) {
             SaasBorrowerVo saasBorrowerVo = borrowerApplication.getBorrowerByAccessToken(basicVO.getToken());
             if (saasBorrowerVo == null) {
@@ -134,10 +138,10 @@ public class UserAccessRightInterceptor implements HandlerInterceptor {
             }
             requestUserInfo.setUser(saasBorrowerVo);
         } else if (basicVO.getPlatform().equals("web")) {
-            SaasAdmin saasAdmin = adminInfoApplication.getSaasAdminByAccessToken(basicVO.getToken());
-            if (saasAdmin == null) {
+            if (StringUtils.isEmpty(userCode)){
                 return false;
             }
+            SaasAdmin saasAdmin = saasAdminService.getSaasAdminByAdminCode(userCode);
             requestUserInfo.setUser(saasAdmin);
         } else {
             throw new ApplicationException("平台非法");
