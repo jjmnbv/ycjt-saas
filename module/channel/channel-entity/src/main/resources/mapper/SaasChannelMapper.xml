@@ -1,6 +1,56 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.fqgj.demo.dao.impl.SaasChannelDaoImpl">
+<mapper namespace="com.beitu.saas.channel.dao.impl.SaasChannelDaoImpl">
+
+    <sql id="Param_Where_Clause">
+        <where>
+            <trim prefixOverrides="and">
+
+                <if test="saasChannelParam !=null and saasChannelParam.merchantCode != null">
+                    and merchant_code = #{saasChannelParam.merchantCode,jdbcType=VARCHAR}
+                </if>
+                <if test="saasChannelParam !=null and saasChannelParam.channelName != null">
+                    and channel_name = #{saasChannelParam.channelName,jdbcType=VARCHAR}
+                </if>
+                <if test="saasChannelParam !=null and saasChannelParam.channelCode != null">
+                    and channel_code = #{saasChannelParam.channelCode,jdbcType=VARCHAR}
+                </if>
+                <if test="saasChannelParam !=null and saasChannelParam.channelStatus != null">
+                    and channel_status = #{saasChannelParam.channelStatus,jdbcType=INTEGER}
+                </if>
+                <if test="saasChannelParam !=null and saasChannelParam.chargePerson != null">
+                    and charge_person = #{saasChannelParam.chargePerson,jdbcType=VARCHAR}
+                </if>
+                and deleted = 0
+            </trim>
+        </where>
+    </sql>
+
+
+    <select id="selectChannelEntityList" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from saas_channel
+        <include refid="Param_Where_Clause"/>
+        <include refid="paginationSql"/>
+    </select>
+
+    <select id="countChannelEntityList" parameterType="map" resultType="INTEGER">
+        SELECT COUNT(*)
+        from saas_channel
+        <include refid="Param_Where_Clause"/>
+    </select>
+
+    <select id="selectChannelEntityByChannelCode" parameterType="map" resultType="com.beitu.saas.channel.entity.SaasChannelEntity">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from saas_channel
+        <if test="channelCode !=null">
+            and channel_code = #{channelCode,jdbcType=VARCHAR}
+        </if>
+        and deleted = 0
+    </select>
+
 
 </mapper>

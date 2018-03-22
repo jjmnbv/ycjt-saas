@@ -10,7 +10,7 @@ import io.swagger.annotations.ApiModel;
  * Time: 上午11:31
  */
 @ApiModel(description = "风控模块字段")
-public class SaasModuleItemVo {
+public class SaasModuleItemRequestVo {
     /**
      * 模块号
      */
@@ -33,7 +33,7 @@ public class SaasModuleItemVo {
         return moduleCode;
     }
 
-    public SaasModuleItemVo setModuleCode(String moduleCode) {
+    public SaasModuleItemRequestVo setModuleCode(String moduleCode) {
         this.moduleCode = moduleCode;
         return this;
     }
@@ -42,7 +42,7 @@ public class SaasModuleItemVo {
         return itemCode;
     }
 
-    public SaasModuleItemVo setItemCode(String itemCode) {
+    public SaasModuleItemRequestVo setItemCode(String itemCode) {
         this.itemCode = itemCode;
         return this;
     }
@@ -51,7 +51,7 @@ public class SaasModuleItemVo {
         return itemDesc;
     }
 
-    public SaasModuleItemVo setItemDesc(String itemDesc) {
+    public SaasModuleItemRequestVo setItemDesc(String itemDesc) {
         this.itemDesc = itemDesc;
         return this;
     }
@@ -60,7 +60,7 @@ public class SaasModuleItemVo {
         return required;
     }
 
-    public SaasModuleItemVo setRequired(Integer required) {
+    public SaasModuleItemRequestVo setRequired(Integer required) {
         this.required = required;
         return this;
     }
