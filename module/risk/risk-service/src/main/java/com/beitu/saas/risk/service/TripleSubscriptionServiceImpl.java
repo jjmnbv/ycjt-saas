@@ -1,10 +1,10 @@
 package com.beitu.saas.risk.service;
 
+import com.beitu.saas.common.enums.ProductTypeEnum;
 import com.fqgj.log.factory.LogFactory;
 import com.fqgj.log.interfaces.Log;
 import com.beitu.saas.risk.client.service.TripleSubscriptionService;
 import com.beitu.saas.risk.domain.enums.ErrorCodeEnums;
-import com.fgqj.youjie.common.enums.ProductTypeEnum;
 import com.beitu.saas.risk.domain.enums.triple.TripleServiceTypeEnum;
 import com.beitu.saas.risk.domain.exception.BizException;
 import com.beitu.saas.risk.domain.platform.TripleServiceBaseInput;

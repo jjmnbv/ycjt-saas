@@ -114,12 +114,16 @@
         <!--swagger-->
         <swagger2.version>2.5.0</swagger2.version>
         <spring-security.version>3.1.4.RELEASE</spring-security.version>
-
-        <!--risk-->
-        <risk-version>4.2</risk-version>
         <!-- poi -->
         <poi-version>3.9</poi-version>
         <xjd-user-version>1.3.4-new-SNAPSHOT</xjd-user-version>
+
+        <!--risk-->
+        <httpcomponents-client.version>4.5.3</httpcomponents-client.version>
+        <zmxy-sdk-version>3.0</zmxy-sdk-version>
+        <jackson-core.version>2.8.10</jackson-core.version>
+        <jackson-annotations.version>2.8.0</jackson-annotations.version>
+        <joda-time.version>2.9.9</joda-time.version>
 
     </properties>
 
@@ -641,6 +645,20 @@
                 <artifactId>freemarker</artifactId>
                 <version>2.3.23</version>
             </dependency>
+
+            <!-- risk end -->
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpmime</artifactId>
+                <version>${httpcomponents-client.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.antgroup</groupId>
+                <artifactId>zmxy-sdk</artifactId>
+                <version>${zmxy-sdk-version}</version>
+            </dependency>
+            <!-- risk end -->
+
         </dependencies>
     </dependencyManagement>
 
