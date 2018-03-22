@@ -17,13 +17,4 @@
         <module>channel-service</module>
         <module>channel-client</module>
     </modules>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.beitu.saas</groupId>
-            <artifactId>common</artifactId>
-            <version>0.1</version>
-        </dependency>
-    </dependencies>
-
 </project>
