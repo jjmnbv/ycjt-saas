@@ -3,6 +3,7 @@ package com.beitu.saas.app.common;
 
 import com.fqgj.common.utils.StringUtils;
 import com.fqgj.exception.common.ApplicationException;
+import com.fqgj.youjie.auth.domain.Admin;
 
 import java.util.UUID;
 
@@ -13,10 +14,10 @@ import java.util.UUID;
  * Time: 上午11:07
  */
 public class RequestLocalInfo{
-    private static final ThreadLocal<Object> currentAdmin = new ThreadLocal<>();
+    private static final ThreadLocal<Admin> currentAdmin = new ThreadLocal<>();
     private static final ThreadLocal<String> currentTraceId = new ThreadLocal<>();
 
-    public static void putCurrentAdmin(Object user) {
+    public static void putCurrentAdmin(Admin user) {
         if (user == null) {
             throw new ApplicationException("Current user not exist");
         }
@@ -24,8 +25,8 @@ public class RequestLocalInfo{
         currentAdmin.set(user);
     }
 
-    public static Object getCurrentAdmin() {
-        Object user = currentAdmin.get();
+    public static Admin getCurrentAdmin() {
+        Admin user = currentAdmin.get();
         if (user == null) {
             throw new ApplicationException("Current user not exist");
         }
