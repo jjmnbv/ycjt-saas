@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
  * Time: 下午3:22
  */
 @ApiModel(description = "渠道列表查询请求参数")
-public class ChannelQueryRequestVo extends ParamsObject {
+public class SaasChannelQueryRequestVo extends ParamsObject {
     /**
      * 页码
      */
@@ -41,7 +41,7 @@ public class ChannelQueryRequestVo extends ParamsObject {
         return pageNo;
     }
 
-    public ChannelQueryRequestVo setPageNo(Integer pageNo) {
+    public SaasChannelQueryRequestVo setPageNo(Integer pageNo) {
         this.pageNo = pageNo;
         return this;
     }
@@ -50,7 +50,7 @@ public class ChannelQueryRequestVo extends ParamsObject {
         return merchantCode;
     }
 
-    public ChannelQueryRequestVo setMerchantCode(String merchantCode) {
+    public SaasChannelQueryRequestVo setMerchantCode(String merchantCode) {
         this.merchantCode = merchantCode;
         return this;
     }
@@ -59,7 +59,7 @@ public class ChannelQueryRequestVo extends ParamsObject {
         return channelName;
     }
 
-    public ChannelQueryRequestVo setChannelName(String channelName) {
+    public SaasChannelQueryRequestVo setChannelName(String channelName) {
         this.channelName = channelName;
         return this;
     }
@@ -68,7 +68,7 @@ public class ChannelQueryRequestVo extends ParamsObject {
         return channelCode;
     }
 
-    public ChannelQueryRequestVo setChannelCode(String channelCode) {
+    public SaasChannelQueryRequestVo setChannelCode(String channelCode) {
         this.channelCode = channelCode;
         return this;
     }
@@ -77,7 +77,7 @@ public class ChannelQueryRequestVo extends ParamsObject {
         return channelStatus;
     }
 
-    public ChannelQueryRequestVo setChannelStatus(Integer channelStatus) {
+    public SaasChannelQueryRequestVo setChannelStatus(Integer channelStatus) {
         this.channelStatus = channelStatus;
         return this;
     }
@@ -86,7 +86,7 @@ public class ChannelQueryRequestVo extends ParamsObject {
         return chargePerson;
     }
 
-    public ChannelQueryRequestVo setChargePerson(String chargePerson) {
+    public SaasChannelQueryRequestVo setChargePerson(String chargePerson) {
         this.chargePerson = chargePerson;
         return this;
     }

@@ -13,7 +13,7 @@ import org.hibernate.validator.constraints.NotBlank;
  * Time: 上午11:09
  */
 @ApiModel(description = "新增模块字段")
-public class ModuleItemRequestVo extends ParamsObject {
+public class SaasModuleItemRequestVo extends ParamsObject {
 
     @NotBlank(message = "模块号不能为空")
     @ApiModelProperty(value = "模块号", required = true)
@@ -31,7 +31,7 @@ public class ModuleItemRequestVo extends ParamsObject {
         return moduleCode;
     }
 
-    public ModuleItemRequestVo setModuleCode(String moduleCode) {
+    public SaasModuleItemRequestVo setModuleCode(String moduleCode) {
         this.moduleCode = moduleCode;
         return this;
     }
@@ -40,7 +40,7 @@ public class ModuleItemRequestVo extends ParamsObject {
         return itemCode;
     }
 
-    public ModuleItemRequestVo setItemCode(String itemCode) {
+    public SaasModuleItemRequestVo setItemCode(String itemCode) {
         this.itemCode = itemCode;
         return this;
     }
@@ -49,7 +49,7 @@ public class ModuleItemRequestVo extends ParamsObject {
         return itemeDesc;
     }
 
-    public ModuleItemRequestVo setItemeDesc(String itemeDesc) {
+    public SaasModuleItemRequestVo setItemeDesc(String itemeDesc) {
         this.itemeDesc = itemeDesc;
         return this;
     }

@@ -13,7 +13,7 @@ import org.hibernate.validator.constraints.NotBlank;
  * Time: 下午5:37
  */
 @ApiModel(description = "操作代理功能入参")
-public class OperateSaasChannelRequestVo extends ParamsObject {
+public class SaasOperateSaasChannelRequestVo extends ParamsObject {
 
     @ApiModelProperty(value = "渠道号", required = true)
     @javax.validation.constraints.NotNull(message = "渠道号不能为空")
@@ -27,7 +27,7 @@ public class OperateSaasChannelRequestVo extends ParamsObject {
         return channelCode;
     }
 
-    public OperateSaasChannelRequestVo setChannelCode(String channelCode) {
+    public SaasOperateSaasChannelRequestVo setChannelCode(String channelCode) {
         this.channelCode = channelCode;
         return this;
     }
@@ -36,7 +36,7 @@ public class OperateSaasChannelRequestVo extends ParamsObject {
         return status;
     }
 
-    public OperateSaasChannelRequestVo setStatus(Integer status) {
+    public SaasOperateSaasChannelRequestVo setStatus(Integer status) {
         this.status = status;
         return this;
     }

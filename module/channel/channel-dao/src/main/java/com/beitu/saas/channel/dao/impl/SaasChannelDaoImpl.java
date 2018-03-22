@@ -1,6 +1,6 @@
 package com.beitu.saas.channel.dao.impl;
 
-import com.beitu.saas.channel.SaasChannelParam;
+import com.beitu.saas.channel.param.SaasChannelParam;
 import com.beitu.saas.channel.dao.SaasChannelDao;
 import com.beitu.saas.channel.entity.SaasChannelEntity;
 import com.fqgj.common.api.Page;

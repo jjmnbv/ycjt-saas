@@ -12,6 +12,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * Description:
@@ -27,6 +30,43 @@ public class SaasModuleApplication {
     private SaasModuleService saasModuleService;
     @Autowired
     private SaasModuleItemService saasModuleItemService;
+
+    /**
+     * 查询所有风控模块
+     *
+     * @return
+     */
+    public List<SaasModuleVo> getModuleList() {
+        List<SaasModuleVo> moduleVos = new ArrayList<>();
+        List<SaasModuleEntity> saasModuleEntityList = saasModuleService.getSaasModuleEntityList();
+
+        saasModuleEntityList.forEach(x -> {
+            SaasModuleVo moduleVo = new SaasModuleVo()
+                    .setModuleCode(x.getModuleCode())
+                    .setModuleDesc(x.getModuleDesc());
+            moduleVos.add(moduleVo);
+        });
+        return moduleVos;
+    }
+
+    /**
+     * 查询所有风控模块
+     *
+     * @return
+     */
+    public List<SaasModuleItemVo> getModuleItemList(String moduleCode) {
+        List<SaasModuleItemVo> moduleItemVoList = new ArrayList<>();
+        List<SaasModuleItemEntity> moduleItemEntityList = saasModuleItemService.getSaasModuleItemEntityList(moduleCode);
+
+        moduleItemEntityList.forEach(x -> {
+            SaasModuleItemVo saasModuleItemVo = new SaasModuleItemVo()
+                    .setModuleCode(x.getModuleCode())
+                    .setItemCode(x.getItemCode())
+                    .setItemDesc(x.getItemDesc());
+            moduleItemVoList.add(saasModuleItemVo);
+        });
+        return moduleItemVoList;
+    }
 
     /**
      * 创建风控模块

@@ -14,7 +14,7 @@ import org.hibernate.validator.constraints.NotBlank;
  * Time: 上午11:09
  */
 @ApiModel(description = "新增风控模块")
-public class ModuleRequestVo extends ParamsObject {
+public class SaasModuleRequestVo extends ParamsObject {
 
     @NotBlank(message = "模块号不能为空")
     @ApiModelProperty(value = "模块号", required = true)
@@ -28,7 +28,7 @@ public class ModuleRequestVo extends ParamsObject {
         return moduleCode;
     }
 
-    public ModuleRequestVo setModuleCode(String moduleCode) {
+    public SaasModuleRequestVo setModuleCode(String moduleCode) {
         this.moduleCode = moduleCode;
         return this;
     }
@@ -37,7 +37,7 @@ public class ModuleRequestVo extends ParamsObject {
         return moduleDesc;
     }
 
-    public ModuleRequestVo setModuleDesc(String moduleDesc) {
+    public SaasModuleRequestVo setModuleDesc(String moduleDesc) {
         this.moduleDesc = moduleDesc;
         return this;
     }

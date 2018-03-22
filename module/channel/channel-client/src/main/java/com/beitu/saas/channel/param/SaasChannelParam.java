@@ -1,4 +1,4 @@
-package com.beitu.saas.channel;
+package com.beitu.saas.channel.param;
 
 /**
  * Created with IntelliJ IDEA.

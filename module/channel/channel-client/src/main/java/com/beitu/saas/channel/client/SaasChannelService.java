@@ -1,6 +1,6 @@
 package com.beitu.saas.channel.client;
 
-import com.beitu.saas.channel.SaasChannelParam;
+import com.beitu.saas.channel.param.SaasChannelParam;
 import com.beitu.saas.channel.entity.SaasChannelEntity;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.base.BaseService;

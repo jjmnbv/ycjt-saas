@@ -1,7 +1,7 @@
 package com.beitu.saas.app.application.channel;
 
 import com.beitu.saas.app.common.RequestLocalInfo;
-import com.beitu.saas.channel.SaasChannelParam;
+import com.beitu.saas.channel.param.SaasChannelParam;
 import com.beitu.saas.channel.client.SaasChannelRiskSettingsService;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.domain.SaasChannelRiskSettingsVo;

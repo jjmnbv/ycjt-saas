@@ -15,7 +15,7 @@ import java.util.List;
  * Time: 上午11:09
  */
 @ApiModel(description = "新增渠道")
-public class ChannelRequestVo extends ParamsObject {
+public class SaasChannelRequestVo extends ParamsObject {
 
     @NotBlank(message = "机构号不能为空")
     @ApiModelProperty(value = "机构号", required = true)
@@ -37,17 +37,17 @@ public class ChannelRequestVo extends ParamsObject {
     /**
      * 风控模块选项
      */
-    private List<SaasModuleVo> saasModuleVoList;
+    private List<SaasModuleRequestVo> saasModuleRequestVos;
     /**
      * 风控模块具体字段
      */
-    private List<SaasModuleItemVo> saasModuleItemVoList;
+    private List<SaasModuleItemRequestVo> saasModuleItemRequestVos;
 
     public String getMerchantCode() {
         return merchantCode;
     }
 
-    public ChannelRequestVo setMerchantCode(String merchantCode) {
+    public SaasChannelRequestVo setMerchantCode(String merchantCode) {
         this.merchantCode = merchantCode;
         return this;
     }
@@ -56,7 +56,7 @@ public class ChannelRequestVo extends ParamsObject {
         return channelName;
     }
 
-    public ChannelRequestVo setChannelName(String channelName) {
+    public SaasChannelRequestVo setChannelName(String channelName) {
         this.channelName = channelName;
         return this;
     }
@@ -65,7 +65,7 @@ public class ChannelRequestVo extends ParamsObject {
         return chargePerson;
     }
 
-    public ChannelRequestVo setChargePerson(String chargePerson) {
+    public SaasChannelRequestVo setChargePerson(String chargePerson) {
         this.chargePerson = chargePerson;
         return this;
     }
@@ -74,26 +74,26 @@ public class ChannelRequestVo extends ParamsObject {
         return remark;
     }
 
-    public ChannelRequestVo setRemark(String remark) {
+    public SaasChannelRequestVo setRemark(String remark) {
         this.remark = remark;
         return this;
     }
 
-    public List<SaasModuleVo> getSaasModuleVoList() {
-        return saasModuleVoList;
+    public List<SaasModuleRequestVo> getSaasModuleRequestVos() {
+        return saasModuleRequestVos;
     }
 
-    public ChannelRequestVo setSaasModuleVoList(List<SaasModuleVo> saasModuleVoList) {
-        this.saasModuleVoList = saasModuleVoList;
+    public SaasChannelRequestVo setSaasModuleRequestVos(List<SaasModuleRequestVo> saasModuleRequestVos) {
+        this.saasModuleRequestVos = saasModuleRequestVos;
         return this;
     }
 
-    public List<SaasModuleItemVo> getSaasModuleItemVoList() {
-        return saasModuleItemVoList;
+    public List<SaasModuleItemRequestVo> getSaasModuleItemRequestVos() {
+        return saasModuleItemRequestVos;
     }
 
-    public ChannelRequestVo setSaasModuleItemVoList(List<SaasModuleItemVo> saasModuleItemVoList) {
-        this.saasModuleItemVoList = saasModuleItemVoList;
+    public SaasChannelRequestVo setSaasModuleItemRequestVos(List<SaasModuleItemRequestVo> saasModuleItemRequestVos) {
+        this.saasModuleItemRequestVos = saasModuleItemRequestVos;
         return this;
     }
 
