@@ -61,7 +61,7 @@ public class SaasModuleController {
 
 
     /**
-     * 新建渠道
+     * 新建风控模块
      *
      * @param saasModuleRequestVo
      * @return
@@ -82,7 +82,7 @@ public class SaasModuleController {
 
 
     /**
-     * 新建渠道
+     * 新建风控模块字段
      *
      * @param saasModuleItemRequestVo
      * @return

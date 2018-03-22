@@ -6,10 +6,10 @@ import java.math.BigDecimal;
  * Created with IntelliJ IDEA.
  * Description:
  * User: WatsonQiu
- * Date: 2018/1/26
- * Time: 下午5:15
+ * Date: 2018/3/22
+ * Time: 下午7:35
  */
-public class ConstantNum {
+public class ContantNum {
     public static final int ZERO = 0;
     public static final int ONE = 1;
     public static final int TWO = 2;
