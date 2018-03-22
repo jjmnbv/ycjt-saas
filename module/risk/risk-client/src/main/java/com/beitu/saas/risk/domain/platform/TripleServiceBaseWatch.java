@@ -1,6 +1,6 @@
 package com.beitu.saas.risk.domain.platform;
 
-import com.fgqj.youjie.common.enums.ProductTypeEnum;
+import com.beitu.saas.common.enums.ProductTypeEnum;
 import com.beitu.saas.risk.domain.enums.triple.TripleServiceTypeEnum;
 
 /**

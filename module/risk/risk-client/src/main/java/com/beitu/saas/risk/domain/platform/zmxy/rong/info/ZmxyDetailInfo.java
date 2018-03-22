@@ -2,7 +2,7 @@ package com.beitu.saas.risk.domain.platform.zmxy.rong.info;
 
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.qlkj.risk.domain.platform.zmxy.rong.*;
+import com.beitu.saas.risk.domain.platform.zmxy.rong.*;
 
 import java.io.Serializable;
 
