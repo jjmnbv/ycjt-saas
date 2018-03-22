@@ -5,7 +5,7 @@
     <resultMap id="BaseResultMap" type="com.beitu.saas.borrower.entity.SaasBorrowerPersonalInfo">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="borrower_code" jdbcType="VARCHAR" property="borrowerCode"/>
-        <result column="QQ" jdbcType="VARCHAR" property="qQ"/>
+        <result column="qq" jdbcType="VARCHAR" property="qq"/>
         <result column="education" jdbcType="TINYINT" property="education"/>
         <result column="address" jdbcType="VARCHAR" property="address"/>
         <result column="live_duration" jdbcType="VARCHAR" property="liveDuration"/>
@@ -19,7 +19,7 @@
     <sql id="Base_Column_List">
     id,
     borrower_code,
-    QQ,
+    qq,
     education,
     address,
     live_duration,
@@ -45,8 +45,8 @@
                 <if test="borrowerCode !=null">
                 borrower_code,
                 </if>
-                <if test="qQ !=null">
-                QQ,
+                <if test="qq !=null">
+                qq,
                 </if>
                 <if test="education !=null">
                 education,
@@ -77,8 +77,8 @@
                 <if test="borrowerCode != null">
                     #{borrowerCode,jdbcType=VARCHAR},
                 </if>
-                <if test="qQ != null">
-                    #{qQ,jdbcType=VARCHAR},
+                <if test="qq != null">
+                    #{qq,jdbcType=VARCHAR},
                 </if>
                 <if test="education != null">
                     #{education,jdbcType=TINYINT},
@@ -113,8 +113,8 @@
                 <if test="borrowerCode !=null">
                 borrower_code = #{borrowerCode,jdbcType=VARCHAR},
                 </if>
-                <if test="qQ !=null">
-                QQ = #{qQ,jdbcType=VARCHAR},
+                <if test="qq !=null">
+                qq = #{qq,jdbcType=VARCHAR},
                 </if>
                 <if test="education !=null">
                 education = #{education,jdbcType=TINYINT},
@@ -170,8 +170,8 @@
             <if test="borrowerCode !=null">
                 and borrower_code = #{borrowerCode,jdbcType=VARCHAR}
             </if>
-            <if test="qQ !=null">
-                and QQ = #{qQ,jdbcType=VARCHAR}
+            <if test="qq !=null">
+                and qq = #{qq,jdbcType=VARCHAR}
             </if>
             <if test="education !=null">
                 and education = #{education,jdbcType=TINYINT}
@@ -209,8 +209,8 @@
             <if test="borrowerCode !=null">
                 and borrower_code = #{borrowerCode,jdbcType=VARCHAR}
             </if>
-            <if test="qQ !=null">
-                and QQ = #{qQ,jdbcType=VARCHAR}
+            <if test="qq !=null">
+                and qq = #{qq,jdbcType=VARCHAR}
             </if>
             <if test="education !=null">
                 and education = #{education,jdbcType=TINYINT}

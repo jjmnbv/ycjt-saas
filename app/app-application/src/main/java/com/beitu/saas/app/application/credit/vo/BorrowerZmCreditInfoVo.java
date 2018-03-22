@@ -10,7 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @description
  */
 @ApiModel(value = "用户芝麻信用信息模块")
-public class UserZmCreditInfoVo implements ResponseData {
+public class BorrowerZmCreditInfoVo implements ResponseData {
 
     @ApiModelProperty(value = "芝麻分")
     private String zmScore;

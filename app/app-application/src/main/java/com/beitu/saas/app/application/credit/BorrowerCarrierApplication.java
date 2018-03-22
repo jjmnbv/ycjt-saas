@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
  * @description
  */
 @Service
-public class UserCarrierApplication {
+public class BorrowerCarrierApplication {
 
     @Autowired
     private CarrierHandler carrierHandler;

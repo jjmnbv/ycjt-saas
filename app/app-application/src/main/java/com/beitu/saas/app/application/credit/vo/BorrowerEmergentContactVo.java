@@ -10,7 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @description
  */
 @ApiModel(value = "用户紧急联系人信息模块")
-public class UserEmergentContactVo implements ResponseData {
+public class BorrowerEmergentContactVo implements ResponseData {
 
     @ApiModelProperty(value = "直系亲属")
     private String familyType;

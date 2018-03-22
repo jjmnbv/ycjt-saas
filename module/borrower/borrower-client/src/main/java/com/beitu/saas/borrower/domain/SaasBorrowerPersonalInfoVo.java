@@ -20,7 +20,7 @@ public class SaasBorrowerPersonalInfoVo implements ResponseData, Serializable {
     /**
      * QQ
      */
-    private String qQ;
+    private String qq;
     /**
      * 学历
      */
@@ -59,12 +59,12 @@ public class SaasBorrowerPersonalInfoVo implements ResponseData, Serializable {
         this.borrowerCode = borrowerCode;
     }
 
-    public String getQQ() {
-        return this.qQ;
+    public String getQq() {
+        return qq;
     }
 
-    public void setQQ(String qQ) {
-        this.qQ = qQ;
+    public void setQq(String qq) {
+        this.qq = qq;
     }
 
     public Integer getEducation() {

@@ -12,7 +12,7 @@ import java.util.Date;
  * @description
  */
 @ApiModel(value = "用户生活区域详情")
-public class UserLivingAreaDetailVo implements ResponseData {
+public class BorrowerLivingAreaDetailVo implements ResponseData {
 
     @ApiModelProperty(value = "活跃地区")
     private String address;

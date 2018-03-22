@@ -10,7 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @description
  */
 @ApiModel(value = "用户个人信息模块")
-public class UserPersonalInfoVo implements ResponseData {
+public class BorrowerPersonalInfoVo implements ResponseData {
 
     @ApiModelProperty(value = "客户姓名")
     private String userName;
