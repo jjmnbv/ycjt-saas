@@ -3,6 +3,7 @@ package com.beitu.saas.rest.controller.channel;
 import com.beitu.saas.app.application.channel.SaasChannelApplication;
 import com.beitu.saas.channel.domain.SaasChannelRiskSettingsVo;
 import com.beitu.saas.channel.domain.SaasChannelVo;
+import com.beitu.saas.channel.enums.ChannelErrorCodeEnum;
 import com.beitu.saas.rest.controller.channel.request.ChannelRequestVo;
 import com.beitu.saas.rest.controller.channel.request.SaasModuleItemVo;
 import com.beitu.saas.rest.controller.channel.request.SaasModuleVo;
@@ -72,8 +73,13 @@ public class ChannelController {
 
         SaasChannelVo saasChannelVo = new SaasChannelVo();
         BeanUtils.copyProperties(channelRequestVo, saasChannelVo);
-        saasChannelApplication.createChannel(saasChannelVo, settingsVos);
 
-        return Response.ok().putData("新建渠道成功");
+        try {
+            saasChannelApplication.createChannel(saasChannelVo, settingsVos);
+        } catch (Exception e) {
+            LOGGER.error("==  创建渠道失败, 机构号:{}, 渠道名称:{} ,失败原因:{}  ==", channelRequestVo.getMerchantCode(), channelRequestVo.getChannelName(), e);
+            return Response.error(null, ChannelErrorCodeEnum.PARAM_INVALID.getMsg());
+        }
+        return Response.ok().putData("创建渠道成功");
     }
 }
