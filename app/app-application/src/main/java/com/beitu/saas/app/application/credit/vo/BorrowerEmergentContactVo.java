@@ -12,21 +12,34 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "用户紧急联系人信息模块")
 public class BorrowerEmergentContactVo implements ResponseData {
 
+    /**
+     * 直系亲属联系人类型
+     */
     @ApiModelProperty(value = "直系亲属")
     private String familyType;
-
+    /**
+     * 直系亲属联系人输入姓名
+     */
     @ApiModelProperty(value = "直系亲属姓名")
     private String familyName;
-
+    /**
+     * 直系亲属联系人手机号
+     */
     @ApiModelProperty(value = "直系亲属手机号码")
     private String familyMobile;
-
+    /**
+     * 同事朋友联系人类型
+     */
     @ApiModelProperty(value = "同事朋友")
     private String friendType;
-
+    /**
+     * 同事朋友联系人输入姓名
+     */
     @ApiModelProperty(value = "同事朋友姓名")
     private String friendName;
-
+    /**
+     * 同事朋友联系人手机号
+     */
     @ApiModelProperty(value = "同事朋友手机号码")
     private String friendMobile;
 

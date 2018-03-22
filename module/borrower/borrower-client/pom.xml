@@ -18,6 +18,11 @@
             <artifactId>common</artifactId>
             <version>2.7</version>
         </dependency>
+        <dependency>
+            <groupId>com.beitu.saas</groupId>
+            <artifactId>borrower-entity</artifactId>
+            <version>0.1</version>
+        </dependency>
     </dependencies>
 
 </project>

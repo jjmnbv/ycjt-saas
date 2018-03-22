@@ -12,35 +12,46 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "用户工作信息模块")
 public class BorrowerWorkInfoVo implements ResponseData {
 
+    /**
+     * 职业
+     */
     @ApiModelProperty(value = "职业")
-    private String profession;
-
+    private Integer careerType;
+    /**
+     * 月收入
+     */
     @ApiModelProperty(value = "月收入")
-    private String monthlyIncome;
-
+    private Integer salary;
+    /**
+     * 发薪日
+     */
     @ApiModelProperty(value = "发薪日")
     private Integer payDay;
-
+    /**
+     * 公司名称
+     */
     @ApiModelProperty(value = "公司名称")
     private String companyName;
-
+    /**
+     * 公司详细地址
+     */
     @ApiModelProperty(value = "公司地址")
-    private String companyAddress;
+    private String companyDetailAddress;
 
-    public String getProfession() {
-        return profession;
+    public Integer getCareerType() {
+        return careerType;
     }
 
-    public void setProfession(String profession) {
-        this.profession = profession;
+    public void setCareerType(Integer careerType) {
+        this.careerType = careerType;
     }
 
-    public String getMonthlyIncome() {
-        return monthlyIncome;
+    public Integer getSalary() {
+        return salary;
     }
 
-    public void setMonthlyIncome(String monthlyIncome) {
-        this.monthlyIncome = monthlyIncome;
+    public void setSalary(Integer salary) {
+        this.salary = salary;
     }
 
     public Integer getPayDay() {
@@ -59,12 +70,12 @@ public class BorrowerWorkInfoVo implements ResponseData {
         this.companyName = companyName;
     }
 
-    public String getCompanyAddress() {
-        return companyAddress;
+    public String getCompanyDetailAddress() {
+        return companyDetailAddress;
     }
 
-    public void setCompanyAddress(String companyAddress) {
-        this.companyAddress = companyAddress;
+    public void setCompanyDetailAddress(String companyDetailAddress) {
+        this.companyDetailAddress = companyDetailAddress;
     }
 
 }

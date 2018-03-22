@@ -16,8 +16,9 @@
         <module>borrower</module>
         <module>channel</module>
         <module>collection</module>
-        <module>sms</module>
         <module>finance</module>
+        <module>risk</module>
+        <module>sms</module>
     </modules>
 
     <dependencies>

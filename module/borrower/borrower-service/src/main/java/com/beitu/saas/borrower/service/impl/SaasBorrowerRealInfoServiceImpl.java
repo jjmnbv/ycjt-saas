@@ -2,6 +2,7 @@ package com.beitu.saas.borrower.service.impl;
 
 import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
 import com.beitu.saas.borrower.dao.SaasBorrowerRealInfoDao;
+import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
 import com.fqgj.log.enhance.Module;
@@ -21,6 +22,12 @@ public class SaasBorrowerRealInfoServiceImpl extends AbstractBaseService impleme
 
     @Autowired
     private SaasBorrowerRealInfoDao saasBorrowerRealInfoDao;
+
+    @Override
+    public SaasBorrowerRealInfoVo getBorrowerRealInfoByBorrowerCode(String borrowerCode) {
+        return null;
+    }
+
 }
 
 

@@ -129,7 +129,7 @@ public class H5Controller {
     @RequestMapping(value = "/credit/work/info/save", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "保存风控模块工作信息", response = ApiResponse.class)
-    public ApiResponse saveCreditWorkInfo(@RequestBody @Valid CreditSavePersonalInfoRequest req) {
+    public ApiResponse saveCreditWorkInfo(@RequestBody @Valid CreditSaveWorkInfoRequest req) {
         // TODO
         return new ApiResponse();
     }
@@ -145,7 +145,7 @@ public class H5Controller {
     @RequestMapping(value = "/credit/emergent/contact/save", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "保存风控模块个人信息", response = ApiResponse.class)
-    public ApiResponse saveCreditEmergentContact(@RequestBody @Valid CreditSavePersonalInfoRequest req) {
+    public ApiResponse saveCreditEmergentContact(@RequestBody @Valid CreditSaveEmergentContactRequest req) {
         // TODO
         return new ApiResponse();
     }
