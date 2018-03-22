@@ -31,7 +31,7 @@ public class SaasAdminServiceImpl extends AbstractBaseService implements SaasAdm
     private SaasAdminDao saasAdminDao;
 
     @Override
-    public String login(String mobile, String paasword) {
+    public SaasAdmin login(String mobile, String paasword) {
         SaasAdmin saasAdmin = getSaasAdminByMoblie(mobile);
         if (null == saasAdmin) {
             throw new ApplicationException("账号不存在");
@@ -42,8 +42,7 @@ public class SaasAdminServiceImpl extends AbstractBaseService implements SaasAdm
         if (!saasAdmin.getPassword().equals(MD5.md5(paasword))) {
             throw new ApplicationException("密码错误");
         }
-        //TODO 返回token
-        return "";
+        return saasAdmin;
     }
 
     @Override
