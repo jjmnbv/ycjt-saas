@@ -7,10 +7,10 @@ package com.beitu.saas.app.enums;
  */
 public enum BorrowerOrderApplyStatusEnum {
 
-    NEW(1, "未提交"),
-    SUBMIT(2, "审核中"),
+    NO_SUBMIT(1, "未提交"),
+    REVIEWING(2, "审核中"),
     REFUSE(3, "驳回"),
-    FINISH(4, "完成借款");
+    FINISHED(4, "完成借款");
 
     BorrowerOrderApplyStatusEnum(Integer type, String value) {
         this.type = type;
