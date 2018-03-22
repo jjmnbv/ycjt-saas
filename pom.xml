@@ -636,6 +636,11 @@
                 <artifactId>jcommander</artifactId>
                 <version>1.64</version>
             </dependency>
+            <dependency>
+                <groupId>org.freemarker</groupId>
+                <artifactId>freemarker</artifactId>
+                <version>2.3.23</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -680,9 +685,9 @@
                     <mapper>mapper</mapper>
                     <controller>controller</controller>
                     <!--#多个表逗号分割,all:全部表;user,article-->
-                    <tables>lender_recommend_filter</tables>
+                    <tables>saas_admin</tables>
                     <!--#多个模块逗号分割,生成什么模块all:全部模块;controller,domain,bean,dao,daoImpl,service,serviceImpl,baseMapper,mapper-->
-                    <generatorModules>all</generatorModules>
+                    <generatorModules>domain,bean,dao,daoImpl,service,serviceImpl,baseMapper,mapper</generatorModules>
                     <!--#强制重新生成,默认false;true时全部重新生成;第一次生成全部文件,后面只生成bean,base目录下面的mapperxml-->
                     <forceReCreate>true</forceReCreate>
                     <!--#下划线转驼峰-->

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beitu.saas.auth.dao.impl.SaasPermissionDaoImpl">
+    <resultMap id="BaseResultMap" type="com.beitu.saas.auth.entity.SaasPermission">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="permission" jdbcType="VARCHAR" property="permission"/>
+        <result column="relation_id" jdbcType="INTEGER" property="relationId"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="deleted" jdbcType="TINYINT" property="deleted"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,
+        name,
+        permission,
+        relation_id,
+        type,
+        deleted,
+        gmt_modified,
+        gmt_create
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_permission
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.beitu.saas.auth.entity.SaasPermission"  useGeneratedKeys="true">
+        insert into saas_permission
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name !=null">
+                name,
+            </if>
+            <if test="permission !=null">
+                permission,
+            </if>
+            <if test="relationId !=null">
+                relation_id,
+            </if>
+            <if test="type !=null">
+                type,
+            </if>
+            <if test="deleted !=null">
+                deleted,
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified,
+            </if>
+            <if test="gmtCreate !=null">
+                gmt_create,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="permission != null">
+                #{permission,jdbcType=VARCHAR},
+            </if>
+            <if test="relationId != null">
+                #{relationId,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=TINYINT},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.beitu.saas.auth.entity.SaasPermission">
+        update saas_permission
+        <set>
+            <if test="name !=null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="permission !=null">
+                permission = #{permission,jdbcType=VARCHAR},
+            </if>
+            <if test="relationId !=null">
+                relation_id = #{relationId,jdbcType=INTEGER},
+            </if>
+            <if test="type !=null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="deleted !=null">
+                deleted = #{deleted,jdbcType=TINYINT},
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteByPrimaryKey">
+        update  saas_permission
+        set deleted = 1
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <sql id="paginationSql">
+        <if test="page != null">
+            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+        </if>
+    </sql>
+
+    <sql id="paging">
+        <if test="offset != null and limit != null">
+            limit #{offset},#{limit}
+        </if>
+    </sql>
+
+    <select id="selectByParams" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_permission
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="name !=null">
+                and name = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="permission !=null">
+                and permission = #{permission,jdbcType=VARCHAR}
+            </if>
+            <if test="relationId !=null">
+                and relation_id = #{relationId,jdbcType=INTEGER}
+            </if>
+            <if test="type !=null">
+                and type = #{type,jdbcType=INTEGER}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=TINYINT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+        <include refid="paging"/>
+    </select>
+    <select id="queryTotal" resultType="INTEGER">
+        select count(*) from saas_permission
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="name !=null">
+                and name = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="permission !=null">
+                and permission = #{permission,jdbcType=VARCHAR}
+            </if>
+            <if test="relationId !=null">
+                and relation_id = #{relationId,jdbcType=INTEGER}
+            </if>
+            <if test="type !=null">
+                and type = #{type,jdbcType=INTEGER}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=TINYINT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </select>
+</mapper>
