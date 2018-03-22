@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * User: jungle
  * Date: 2018-03-22
- * Time: 15:56:46.957
+ * Time: 20:25:59.850
  */
 public class SaasBorrowerCarrierVo implements ResponseData, Serializable {
 
@@ -25,7 +25,7 @@ public class SaasBorrowerCarrierVo implements ResponseData, Serializable {
     /**
      * 手机号
      */
-    private Integer mobile;
+    private String mobile;
     /**
      * 过期时间
      */
@@ -60,11 +60,11 @@ public class SaasBorrowerCarrierVo implements ResponseData, Serializable {
         this.url = url;
     }
 
-    public Integer getMobile() {
+    public String getMobile() {
         return this.mobile;
     }
 
-    public void setMobile(Integer mobile) {
+    public void setMobile(String mobile) {
         this.mobile = mobile;
     }
 

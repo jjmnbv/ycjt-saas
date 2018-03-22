@@ -136,6 +136,11 @@
         </dependency>
         <dependency>
             <groupId>com.beitu.saas</groupId>
+            <artifactId>auth</artifactId>
+            <version>0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.beitu.saas</groupId>
             <artifactId>sms-service</artifactId>
             <version>0.1</version>
         </dependency>

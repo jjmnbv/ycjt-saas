@@ -1,10 +1,13 @@
 package com.beitu.saas.borrower.entity;
+
 import com.fqgj.common.entity.BaseEntity;
+
 import java.util.Date;
+
 /**
 * User: jungle
 * Date: 2018-03-22
-* Time: 15:56:47.011
+* Time: 20:25:59.895
 * TableDesc:SAAS借款人TOKEN表
 */
 public class SaasBorrowerToken extends BaseEntity{

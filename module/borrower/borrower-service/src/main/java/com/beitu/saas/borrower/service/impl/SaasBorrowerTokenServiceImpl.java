@@ -18,9 +18,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class SaasBorrowerTokenServiceImpl extends AbstractBaseService implements SaasBorrowerTokenService {
 
-
     @Autowired
     private SaasBorrowerTokenDao saasBorrowerTokenDao;
+
+    @Override
+    public String getBorrowerCodeByToken(String token) {
+        return null;
+    }
+
 }
 
 

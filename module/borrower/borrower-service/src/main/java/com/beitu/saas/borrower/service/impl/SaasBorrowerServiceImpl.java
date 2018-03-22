@@ -2,6 +2,7 @@ package com.beitu.saas.borrower.service.impl;
 
 import com.beitu.saas.borrower.client.SaasBorrowerService;
 import com.beitu.saas.borrower.dao.SaasBorrowerDao;
+import com.beitu.saas.borrower.domain.SaasBorrowerVo;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
 import com.fqgj.log.enhance.Module;
@@ -18,9 +19,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class SaasBorrowerServiceImpl extends AbstractBaseService implements SaasBorrowerService {
 
-
     @Autowired
     private SaasBorrowerDao saasBorrowerDao;
+
+    @Override
+    public SaasBorrowerVo getByBorrowerCode(String borrowerCode) {
+        return null;
+    }
+
 }
 
 

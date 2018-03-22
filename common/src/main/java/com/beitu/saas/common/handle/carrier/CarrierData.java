@@ -223,8 +223,8 @@ public class CarrierData implements Serializable {
                 }
                 break;
             case RONG_THREE_CARRIER:
-                if (jsonObject.containsKey("user")) {
-                    JSONObject user = jsonObject.getJSONObject("user");
+                if (jsonObject.containsKey("borrower")) {
+                    JSONObject user = jsonObject.getJSONObject("borrower");
                     if (user.containsKey("id_card")) {//身份证
                         carriers.setIdNumber(user.getString("id_card"));
                     }

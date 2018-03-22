@@ -5,8 +5,9 @@
     <resultMap id="BaseResultMap" type="com.beitu.saas.borrower.entity.SaasBorrowerWorkInfo">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="borrower_code" jdbcType="VARCHAR" property="borrowerCode"/>
+        <result column="order_numb" jdbcType="VARCHAR" property="orderNumb"/>
         <result column="career_type" jdbcType="TINYINT" property="careerType"/>
-        <result column="salary" jdbcType="TINYINT" property="salary"/>
+        <result column="salary" jdbcType="SMALLINT" property="salary"/>
         <result column="pay_day" jdbcType="TINYINT" property="payDay"/>
         <result column="company_name" jdbcType="VARCHAR" property="companyName"/>
         <result column="company_detail_address" jdbcType="VARCHAR" property="companyDetailAddress"/>
@@ -19,6 +20,7 @@
     <sql id="Base_Column_List">
     id,
     borrower_code,
+    order_numb,
     career_type,
     salary,
     pay_day,
@@ -44,6 +46,9 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
                 <if test="borrowerCode !=null">
                 borrower_code,
+                </if>
+                <if test="orderNumb !=null">
+                order_numb,
                 </if>
                 <if test="careerType !=null">
                 career_type,
@@ -77,11 +82,14 @@
                 <if test="borrowerCode != null">
                     #{borrowerCode,jdbcType=VARCHAR},
                 </if>
+                <if test="orderNumb != null">
+                    #{orderNumb,jdbcType=VARCHAR},
+                </if>
                 <if test="careerType != null">
                     #{careerType,jdbcType=TINYINT},
                 </if>
                 <if test="salary != null">
-                    #{salary,jdbcType=TINYINT},
+                    #{salary,jdbcType=SMALLINT},
                 </if>
                 <if test="payDay != null">
                     #{payDay,jdbcType=TINYINT},
@@ -113,11 +121,14 @@
                 <if test="borrowerCode !=null">
                 borrower_code = #{borrowerCode,jdbcType=VARCHAR},
                 </if>
+                <if test="orderNumb !=null">
+                order_numb = #{orderNumb,jdbcType=VARCHAR},
+                </if>
                 <if test="careerType !=null">
                 career_type = #{careerType,jdbcType=TINYINT},
                 </if>
                 <if test="salary !=null">
-                salary = #{salary,jdbcType=TINYINT},
+                salary = #{salary,jdbcType=SMALLINT},
                 </if>
                 <if test="payDay !=null">
                 pay_day = #{payDay,jdbcType=TINYINT},
@@ -170,11 +181,14 @@
             <if test="borrowerCode !=null">
                 and borrower_code = #{borrowerCode,jdbcType=VARCHAR}
             </if>
+            <if test="orderNumb !=null">
+                and order_numb = #{orderNumb,jdbcType=VARCHAR}
+            </if>
             <if test="careerType !=null">
                 and career_type = #{careerType,jdbcType=TINYINT}
             </if>
             <if test="salary !=null">
-                and salary = #{salary,jdbcType=TINYINT}
+                and salary = #{salary,jdbcType=SMALLINT}
             </if>
             <if test="payDay !=null">
                 and pay_day = #{payDay,jdbcType=TINYINT}
@@ -209,11 +223,14 @@
             <if test="borrowerCode !=null">
                 and borrower_code = #{borrowerCode,jdbcType=VARCHAR}
             </if>
+            <if test="orderNumb !=null">
+                and order_numb = #{orderNumb,jdbcType=VARCHAR}
+            </if>
             <if test="careerType !=null">
                 and career_type = #{careerType,jdbcType=TINYINT}
             </if>
             <if test="salary !=null">
-                and salary = #{salary,jdbcType=TINYINT}
+                and salary = #{salary,jdbcType=SMALLINT}
             </if>
             <if test="payDay !=null">
                 and pay_day = #{payDay,jdbcType=TINYINT}

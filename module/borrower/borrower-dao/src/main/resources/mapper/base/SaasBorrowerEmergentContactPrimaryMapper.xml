@@ -5,6 +5,7 @@
     <resultMap id="BaseResultMap" type="com.beitu.saas.borrower.entity.SaasBorrowerEmergentContact">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="borrower_code" jdbcType="VARCHAR" property="borrowerCode"/>
+        <result column="order_numb" jdbcType="VARCHAR" property="orderNumb"/>
         <result column="family_type" jdbcType="VARCHAR" property="familyType"/>
         <result column="family_name" jdbcType="VARCHAR" property="familyName"/>
         <result column="family_mobile" jdbcType="VARCHAR" property="familyMobile"/>
@@ -20,6 +21,7 @@
     <sql id="Base_Column_List">
     id,
     borrower_code,
+    order_numb,
     family_type,
     family_name,
     family_mobile,
@@ -46,6 +48,9 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
                 <if test="borrowerCode !=null">
                 borrower_code,
+                </if>
+                <if test="orderNumb !=null">
+                order_numb,
                 </if>
                 <if test="familyType !=null">
                 family_type,
@@ -81,6 +86,9 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
                 <if test="borrowerCode != null">
                     #{borrowerCode,jdbcType=VARCHAR},
+                </if>
+                <if test="orderNumb != null">
+                    #{orderNumb,jdbcType=VARCHAR},
                 </if>
                 <if test="familyType != null">
                     #{familyType,jdbcType=VARCHAR},
@@ -120,6 +128,9 @@
         <set>
                 <if test="borrowerCode !=null">
                 borrower_code = #{borrowerCode,jdbcType=VARCHAR},
+                </if>
+                <if test="orderNumb !=null">
+                order_numb = #{orderNumb,jdbcType=VARCHAR},
                 </if>
                 <if test="familyType !=null">
                 family_type = #{familyType,jdbcType=VARCHAR},
@@ -181,6 +192,9 @@
             <if test="borrowerCode !=null">
                 and borrower_code = #{borrowerCode,jdbcType=VARCHAR}
             </if>
+            <if test="orderNumb !=null">
+                and order_numb = #{orderNumb,jdbcType=VARCHAR}
+            </if>
             <if test="familyType !=null">
                 and family_type = #{familyType,jdbcType=VARCHAR}
             </if>
@@ -222,6 +236,9 @@
             </if>
             <if test="borrowerCode !=null">
                 and borrower_code = #{borrowerCode,jdbcType=VARCHAR}
+            </if>
+            <if test="orderNumb !=null">
+                and order_numb = #{orderNumb,jdbcType=VARCHAR}
             </if>
             <if test="familyType !=null">
                 and family_type = #{familyType,jdbcType=VARCHAR}

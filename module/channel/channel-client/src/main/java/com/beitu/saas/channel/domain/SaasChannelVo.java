@@ -1,5 +1,7 @@
 package com.beitu.saas.channel.domain;
 
+import java.util.Date;
+
 /**
  * Created with IntelliJ IDEA.
  * Description:
@@ -14,9 +16,17 @@ public class SaasChannelVo {
      */
     private String merchantCode;
     /**
+     *渠道号
+     */
+    private String channelCode;
+    /**
      *渠道名称
      */
     private String channelName;
+    /**
+     *渠道状态(0-开启,1-关闭)
+     */
+    private Integer channelStatus;
     /**
      *渠道连接
      */
@@ -34,6 +44,20 @@ public class SaasChannelVo {
      */
     private String remark;
 
+    /**
+     * 创建时间
+     */
+    private Date gmtCreate;
+
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public SaasChannelVo setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
+        return this;
+    }
+
     public String getMerchantCode() {
         return merchantCode;
     }
@@ -43,12 +67,30 @@ public class SaasChannelVo {
         return this;
     }
 
+    public String getChannelCode() {
+        return channelCode;
+    }
+
+    public SaasChannelVo setChannelCode(String channelCode) {
+        this.channelCode = channelCode;
+        return this;
+    }
+
     public String getChannelName() {
         return channelName;
     }
 
     public SaasChannelVo setChannelName(String channelName) {
         this.channelName = channelName;
+        return this;
+    }
+
+    public Integer getChannelStatus() {
+        return channelStatus;
+    }
+
+    public SaasChannelVo setChannelStatus(Integer channelStatus) {
+        this.channelStatus = channelStatus;
         return this;
     }
 

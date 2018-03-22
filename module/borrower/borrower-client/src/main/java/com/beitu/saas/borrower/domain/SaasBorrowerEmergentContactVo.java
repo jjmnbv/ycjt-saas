@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * User: jungle
  * Date: 2018-03-22
- * Time: 15:56:46.979
+ * Time: 20:25:59.870
  */
 public class SaasBorrowerEmergentContactVo implements ResponseData, Serializable {
 
@@ -17,6 +17,10 @@ public class SaasBorrowerEmergentContactVo implements ResponseData, Serializable
      * 借款人CODE
      */
     private String borrowerCode;
+    /**
+     * 订单号
+     */
+    private String orderNumb;
     /**
      * 直系亲属联系人类型
      */
@@ -61,6 +65,14 @@ public class SaasBorrowerEmergentContactVo implements ResponseData, Serializable
 
     public void setBorrowerCode(String borrowerCode) {
         this.borrowerCode = borrowerCode;
+    }
+
+    public String getOrderNumb() {
+        return this.orderNumb;
+    }
+
+    public void setOrderNumb(String orderNumb) {
+        this.orderNumb = orderNumb;
     }
 
     public String getFamilyType() {

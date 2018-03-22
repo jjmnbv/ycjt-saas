@@ -266,7 +266,7 @@ public class CarrierH5TianjiHandler implements CarrierH5Handler {
         //报表数据对象
         JSONObject dataObject = JSONObject.parseObject(data);
         JSONObject mobileobject = new JSONObject();
-        //基础信息mobile.user
+        //基础信息mobile.borrower
         JSONObject userdataObject = dataObject.getJSONObject("userdata");
         JSONObject userObject = userdataObject;
         //通话记录mobile.tel[].teldata[]
@@ -308,7 +308,7 @@ public class CarrierH5TianjiHandler implements CarrierH5Handler {
         //充值记录mobile.recharge[]
         JSONArray rechargedataArray = dataObject.getJSONArray("rechargedata");
         JSONArray rechargeArray = rechargedataArray;
-        mobileobject.put("user", userObject);
+        mobileobject.put("borrower", userObject);
         mobileobject.put("tel", telArray);
         mobileobject.put("msg", msgArray);
         mobileobject.put("bill", billArray);

@@ -1,21 +1,28 @@
 package com.beitu.saas.rest.interceptor;
 
 
+import com.aliyun.openservices.ons.api.Admin;
 import com.beitu.saas.app.annotations.IgnoreRepeatRequest;
 import com.beitu.saas.app.annotations.SignIgnore;
 import com.beitu.saas.app.annotations.VisitorAccessible;
+import com.beitu.saas.app.application.auth.AdminInfoApplication;
+import com.beitu.saas.app.application.borrower.BorrowerApplication;
+import com.beitu.saas.app.common.RequestBasicInfo;
 import com.beitu.saas.app.common.RequestLocalInfo;
-import com.beitu.saas.common.config.ConfigUtil;
+import com.beitu.saas.app.common.RequestUserInfo;
+import com.beitu.saas.auth.entity.SaasAdmin;
+import com.beitu.saas.borrower.domain.SaasBorrowerVo;
+import com.beitu.saas.borrower.entity.SaasBorrower;
+import com.beitu.saas.borrower.entity.SaasBorrowerToken;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.enums.RestCodeEnum;
 import com.fqgj.base.services.redis.RedisClient;
 import com.fqgj.base.services.redis.TimeConsts;
-import com.fqgj.common.api.enums.BasicErrorCodeEnum;
+import com.fqgj.common.utils.JSONUtils;
 import com.fqgj.common.utils.MD5;
 import com.fqgj.exception.common.ApplicationException;
 
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,7 +32,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.InputStream;
 
 
 /**
@@ -37,10 +43,13 @@ import java.io.InputStream;
 public class UserAccessRightInterceptor implements HandlerInterceptor {
 
     @Autowired
-    private ConfigUtil configUtil;
+    private RedisClient redisClient;
 
     @Autowired
-    private RedisClient redisClient;
+    private AdminInfoApplication adminInfoApplication;
+
+    @Autowired
+    private BorrowerApplication borrowerApplication;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
@@ -48,15 +57,17 @@ public class UserAccessRightInterceptor implements HandlerInterceptor {
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
         response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type,Accept,X-Requested-With,remember-me,bid,accessToken");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type,Accept,X-Requested-With,remember-me,bid,basicParams");
 
-        String accessToken = request.getHeader("accessToken");
+        String basicParams = request.getHeader("basicParams");
+        RequestBasicInfo basicVO = JSONUtils.json2pojo(basicParams, RequestBasicInfo.class);
+
         if (isWebResources(request)) {
             return true;
         }
 
-        if (org.apache.commons.lang3.StringUtils.isNotEmpty(accessToken)) {
-            if (!hasPermission(accessToken)) {
+        if (StringUtils.isNotEmpty(basicVO.getToken())) {
+            if (!verifyHeader(request)) {
                 throw new ApplicationException("无效的token");
             }
         } else {
@@ -72,7 +83,7 @@ public class UserAccessRightInterceptor implements HandlerInterceptor {
             }
             IgnoreRepeatRequest ignoreRepeatRequest = handlerMethod.getMethodAnnotation(IgnoreRepeatRequest.class);
             if (null != ignoreRepeatRequest) {
-                if (!isRepeatSubmit(request,accessToken)) {
+                if (!isRepeatSubmit(request, basicVO.getToken())) {
                     throw new ApplicationException(RestCodeEnum.REPEAT_REQUEST);
                 }
             }
@@ -115,34 +126,36 @@ public class UserAccessRightInterceptor implements HandlerInterceptor {
         }
     }
 
-    private Boolean hasPermission(String accessToken) {
-    //TODO 查询tokn
-    //        Admin admin = adminService.getByAccessToken(accessToken);
-    //        if (admin == null) {
-    //            return false;
-    //        }
-
-        RequestLocalInfo.putCurrentAdmin(null);
+    private Boolean hasPermission(RequestBasicInfo basicVO) {
+        RequestUserInfo requestUserInfo = new RequestUserInfo();
+        requestUserInfo.setRequestBasicInfo(basicVO);
+        if (basicVO.getPlatform().equals("h5")) {
+            SaasBorrowerVo saasBorrowerVo = borrowerApplication.getBorrowerByAccessToken(basicVO.getToken());
+            if (saasBorrowerVo == null) {
+                return false;
+            }
+            requestUserInfo.setUser(saasBorrowerVo);
+        } else if (basicVO.getPlatform().equals("web")) {
+            SaasAdmin saasAdmin = adminInfoApplication.getSaasAdminByAccessToken(basicVO.getToken());
+            if (saasAdmin == null) {
+                return false;
+            }
+            requestUserInfo.setUser(saasAdmin);
+        } else {
+            throw new ApplicationException("平台非法");
+        }
+        RequestLocalInfo.putCurrentAdmin(requestUserInfo);
         return true;
     }
 
-    private String getRequestBody(HttpServletRequest request) {
-
-        String businessParams = "";
-
-        try {
-            InputStream inputStream = request.getInputStream();
-            businessParams = IOUtils.toString(inputStream);
-            if (StringUtils.isNotEmpty(businessParams)) {
-                return businessParams;
-            }
-        } catch (Exception e) {
-            throw new ApplicationException(BasicErrorCodeEnum.PARAM_RESOLVE_ERROR);
+    private Boolean verifyHeader(HttpServletRequest request) throws Exception {
+        String basicParams = request.getHeader("basicParams");
+        if (StringUtils.isBlank(basicParams)) {
+            throw new ApplicationException(RestCodeEnum.SYSTEM_PARAMTER_ERROR);
         }
 
-
-        return businessParams;
-
+        RequestBasicInfo basicVO = JSONUtils.json2pojo(basicParams, RequestBasicInfo.class);
+        return hasPermission(basicVO);
     }
 
     private boolean isRepeatSubmit(HttpServletRequest request, String accessToken) {

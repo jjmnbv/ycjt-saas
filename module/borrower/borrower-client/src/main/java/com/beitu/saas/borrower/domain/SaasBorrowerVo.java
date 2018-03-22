@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * User: jungle
  * Date: 2018-03-22
- * Time: 15:56:46.948
+ * Time: 20:25:59.840
  */
 public class SaasBorrowerVo implements ResponseData, Serializable {
 

@@ -5,6 +5,7 @@
     <resultMap id="BaseResultMap" type="com.beitu.saas.borrower.entity.SaasBorrowerIdentityInfo">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="borrower_code" jdbcType="VARCHAR" property="borrowerCode"/>
+        <result column="order_numb" jdbcType="VARCHAR" property="orderNumb"/>
         <result column="front_url" jdbcType="VARCHAR" property="frontUrl"/>
         <result column="back_url" jdbcType="VARCHAR" property="backUrl"/>
         <result column="hold_url" jdbcType="VARCHAR" property="holdUrl"/>
@@ -17,6 +18,7 @@
     <sql id="Base_Column_List">
     id,
     borrower_code,
+    order_numb,
     front_url,
     back_url,
     hold_url,
@@ -40,6 +42,9 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
                 <if test="borrowerCode !=null">
                 borrower_code,
+                </if>
+                <if test="orderNumb !=null">
+                order_numb,
                 </if>
                 <if test="frontUrl !=null">
                 front_url,
@@ -66,6 +71,9 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
                 <if test="borrowerCode != null">
                     #{borrowerCode,jdbcType=VARCHAR},
+                </if>
+                <if test="orderNumb != null">
+                    #{orderNumb,jdbcType=VARCHAR},
                 </if>
                 <if test="frontUrl != null">
                     #{frontUrl,jdbcType=VARCHAR},
@@ -96,6 +104,9 @@
         <set>
                 <if test="borrowerCode !=null">
                 borrower_code = #{borrowerCode,jdbcType=VARCHAR},
+                </if>
+                <if test="orderNumb !=null">
+                order_numb = #{orderNumb,jdbcType=VARCHAR},
                 </if>
                 <if test="frontUrl !=null">
                 front_url = #{frontUrl,jdbcType=VARCHAR},
@@ -148,6 +159,9 @@
             <if test="borrowerCode !=null">
                 and borrower_code = #{borrowerCode,jdbcType=VARCHAR}
             </if>
+            <if test="orderNumb !=null">
+                and order_numb = #{orderNumb,jdbcType=VARCHAR}
+            </if>
             <if test="frontUrl !=null">
                 and front_url = #{frontUrl,jdbcType=VARCHAR}
             </if>
@@ -180,6 +194,9 @@
             </if>
             <if test="borrowerCode !=null">
                 and borrower_code = #{borrowerCode,jdbcType=VARCHAR}
+            </if>
+            <if test="orderNumb !=null">
+                and order_numb = #{orderNumb,jdbcType=VARCHAR}
             </if>
             <if test="frontUrl !=null">
                 and front_url = #{frontUrl,jdbcType=VARCHAR}

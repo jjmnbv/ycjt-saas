@@ -4,7 +4,7 @@ import com.fqgj.common.entity.BaseEntity;
 /**
 * User: jungle
 * Date: 2018-03-22
-* Time: 15:56:47.001
+* Time: 20:25:59.889
 * TableDesc:SAAS借款人实名信息表
 */
 public class SaasBorrowerRealInfo extends BaseEntity{

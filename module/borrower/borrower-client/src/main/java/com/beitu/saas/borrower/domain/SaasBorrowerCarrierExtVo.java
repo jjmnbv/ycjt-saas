@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * User: jungle
  * Date: 2018-03-22
- * Time: 15:56:46.967
+ * Time: 20:25:59.861
  */
 public class SaasBorrowerCarrierExtVo implements ResponseData, Serializable {
 

@@ -4,10 +4,22 @@ import com.alibaba.fastjson.JSON;
 import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.application.credit.CarrierApplication;
+import com.beitu.saas.app.application.credit.vo.CarrierH5CallbackVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
+import com.beitu.saas.borrower.client.SaasBorrowerService;
+import com.beitu.saas.borrower.consts.UserProfileConsts;
+import com.beitu.saas.borrower.domain.SaasBorrowerVo;
 import com.beitu.saas.common.config.ConfigUtil;
+import com.beitu.saas.common.consts.RedisKeyConsts;
+import com.beitu.saas.common.consts.TimeConsts;
 import com.beitu.saas.rest.controller.credit.response.CarrierH5Response;
+import com.beitu.saas.risk.domain.carrier.h5.enums.CarrierH5StatusEnum;
+import com.beitu.saas.risk.domain.carrier.h5.enums.CarrierH5TypeEnum;
+import com.beitu.saas.risk.domain.enums.ErrorCodeEnums;
+import com.beitu.saas.risk.domain.exception.BizException;
 import com.beitu.saas.risk.handler.carrier.h5.tianji.CarrierH5TianjiHandler;
+import com.beitu.saas.risk.handler.carrier.h5.tianji.enums.CarrierTianjiStatusEnum;
+import com.beitu.saas.risk.handler.carrier.h5.tianji.vo.CarrierTianjiCacheVo;
 import com.fqgj.base.services.redis.RedisClient;
 import com.fqgj.exception.common.ApplicationException;
 import com.fqgj.log.factory.LogFactory;
@@ -51,13 +63,15 @@ public class CarrierController {
     @Autowired
     private CarrierH5TianjiHandler carrierH5TianjiHandler;
 
+    @Autowired
+    private SaasBorrowerService saasBorrowerService;
+
     @RequestMapping(value = "/h5/get", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "H5运营商认证地址获取接口", response = CarrierH5Response.class)
     public DataApiResponse<CarrierH5Response> getCarrierH5() {
-        Long userId = RequestLocalInfo.getCurrentUser().getUserId();
-        String mobile = RequestLocalInfo.getCurrentUser().getMobile();
-        String url = carrierApplication.getCarrierH5Url(userId, mobile);
+        SaasBorrowerVo saasBorrowerVo = RequestLocalInfo.getCurrentBorrower();
+        String url = carrierApplication.getCarrierH5Url(saasBorrowerVo.getBorrowerCode(), saasBorrowerVo.getMobile());
         return new DataApiResponse<>(new CarrierH5Response(url));
     }
 
@@ -68,9 +82,9 @@ public class CarrierController {
         String taskId = request.getParameter("outUniqueId");
         String success = "false";
         if (StringUtils.isNotEmpty(userId) && StringUtils.isNotEmpty(taskId)) {
-            UserBasicInfo userBasicInfo = userInformationApplication.getUserBasicInfoById(Long.valueOf(userId));
-            if (userBasicInfo != null) {
-                if (carrierApplication.carrierTaskAndUserMatch(userId, userBasicInfo.getMobile(), taskId)) {
+            SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCode(userId);
+            if (saasBorrowerVo != null) {
+                if (carrierApplication.carrierTaskAndUserMatch(userId, saasBorrowerVo.getMobile(), taskId)) {
                     redisClient.set(RedisKeyConsts.H5_CARRIER_CRAWLING, taskId, TimeConsts.TEN_MINUTES, userId);
                     success = "true";
                 }
@@ -142,13 +156,13 @@ public class CarrierController {
                 }
             }
         }
-        CarrierH5CallbackRequestVo requestVo = new CarrierH5CallbackRequestVo();
-        requestVo.setUserCode(userId);
-        requestVo.setTaskId(outUniqueId);
-        requestVo.setStatus(status);
-        requestVo.setData(reportData);
-        requestVo.setCarrierType(CarrierH5TypeEnum.CARRIER_TIANJI);
-        carrierApplication.carrierH5Callback(requestVo);
+        CarrierH5CallbackVo h5CallbackVo = new CarrierH5CallbackVo();
+        h5CallbackVo.setUserCode(userId);
+        h5CallbackVo.setTaskId(outUniqueId);
+        h5CallbackVo.setStatus(status);
+        h5CallbackVo.setData(reportData);
+        h5CallbackVo.setCarrierType(CarrierH5TypeEnum.CARRIER_TIANJI);
+        carrierApplication.carrierH5Callback(h5CallbackVo);
     }
 
 }

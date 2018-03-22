@@ -4,7 +4,7 @@ import com.fqgj.common.entity.BaseEntity;
 /**
 * User: jungle
 * Date: 2018-03-22
-* Time: 16:14:37.950
+* Time: 20:25:59.903
 * TableDesc:SAAS借款人工作信息表
 */
 public class SaasBorrowerWorkInfo extends BaseEntity{
@@ -12,6 +12,10 @@ public class SaasBorrowerWorkInfo extends BaseEntity{
     *借款人CODE
     */
     private String borrowerCode;
+    /**
+    *订单号
+    */
+    private String orderNumb;
     /**
     *职业
     */
@@ -44,6 +48,15 @@ public class SaasBorrowerWorkInfo extends BaseEntity{
 
     public  SaasBorrowerWorkInfo setBorrowerCode(String borrowerCode){
         this.borrowerCode = borrowerCode;
+        return this;
+    }
+
+    public  String getOrderNumb(){
+        return this.orderNumb;
+    }
+
+    public  SaasBorrowerWorkInfo setOrderNumb(String orderNumb){
+        this.orderNumb = orderNumb;
         return this;
     }
 

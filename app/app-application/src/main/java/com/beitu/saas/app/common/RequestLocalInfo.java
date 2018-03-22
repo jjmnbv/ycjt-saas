@@ -1,36 +1,48 @@
 package com.beitu.saas.app.common;
 
 
+import com.beitu.saas.borrower.domain.SaasBorrowerVo;
 import com.fqgj.common.utils.StringUtils;
 import com.fqgj.exception.common.ApplicationException;
-import com.fqgj.youjie.auth.domain.Admin;
 
 import java.util.UUID;
 
 /**
- * Created with IntelliJ IDEA.
- * User: yujianfu (mr.vencnet@gmail.com)
- * Date: 16/8/26
- * Time: 上午11:07
+ * @author xiaochong
+ * @create 2018/3/22 下午5:57
+ * @description
  */
-public class RequestLocalInfo{
-    private static final ThreadLocal<Admin> currentAdmin = new ThreadLocal<>();
+public class RequestLocalInfo {
+    private static final ThreadLocal<RequestUserInfo> currentAdmin = new ThreadLocal<>();
     private static final ThreadLocal<String> currentTraceId = new ThreadLocal<>();
 
-    public static void putCurrentAdmin(Admin user) {
-        if (user == null) {
-            throw new ApplicationException("Current user not exist");
+    public static void putCurrentAdmin(RequestUserInfo requestUserInfo) {
+        if (requestUserInfo == null) {
+            throw new ApplicationException("Current borrower not exist");
         }
         reset();
-        currentAdmin.set(user);
+        currentAdmin.set(requestUserInfo);
     }
 
-    public static Admin getCurrentAdmin() {
-        Admin user = currentAdmin.get();
-        if (user == null) {
-            throw new ApplicationException("Current user not exist");
+    public static RequestUserInfo getCurrentAdmin() {
+        RequestUserInfo requestUserInfo = currentAdmin.get();
+        if (requestUserInfo == null) {
+            throw new ApplicationException("Current borrower not exist");
         }
-        return user;
+        return requestUserInfo;
+    }
+
+    public static SaasBorrowerVo getCurrentBorrower() {
+        SaasBorrowerVo saasBorrowerVo;
+        try {
+            saasBorrowerVo = (SaasBorrowerVo) currentAdmin.get().getUser();
+        } catch (Exception e) {
+            throw new ApplicationException("illegal request");
+        }
+        if (saasBorrowerVo == null) {
+            throw new ApplicationException("Current borrower not exist");
+        }
+        return saasBorrowerVo;
     }
 
     public static String getCurrentTraceId() {
@@ -42,7 +54,6 @@ public class RequestLocalInfo{
 
         return traceId;
     }
-
 
     public static void reset() {
         currentAdmin.remove();
