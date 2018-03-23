@@ -13,4 +13,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class SaasConsumeDayStatDaoImpl extends AbstractBaseMapper<SaasConsumeDayStatEntity> implements SaasConsumeDayStatDao {
 
+    @Override
+    public SaasConsumeDayStatEntity getLastClearConsumeDayStat() {
+        return getSqlSession().selectOne(this.getStatement("getLastClearConsumeDayStat"));
+    }
 }

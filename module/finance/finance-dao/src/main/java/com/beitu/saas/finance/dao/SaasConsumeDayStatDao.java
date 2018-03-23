@@ -10,5 +10,5 @@ import com.fqgj.common.base.BaseMapper;
 */
 
 public interface SaasConsumeDayStatDao extends BaseMapper<SaasConsumeDayStatEntity> {
-
+    SaasConsumeDayStatEntity getLastClearConsumeDayStat();
 }
