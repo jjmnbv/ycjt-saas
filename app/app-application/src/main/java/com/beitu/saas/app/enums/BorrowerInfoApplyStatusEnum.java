@@ -4,16 +4,16 @@ import com.fqgj.common.api.enums.MsgCodeEnum;
 
 /**
  * @author linanjun
- * @create 2018/3/22 下午8:35
+ * @create 2018/3/23 下午2:30
  * @description
  */
-public enum BorrowerOrderApplyStatusEnum implements MsgCodeEnum {
+public enum BorrowerInfoApplyStatusEnum implements MsgCodeEnum {
 
-    NO_SUBMIT(1, "未提交"),
-    REVIEWING(2, "审核中"),
-    REFUSE(3, "驳回");
+    INCOMPLETE(1, "未填写"),
+    SAVED(2, "已保存"),
+    FINISHED(3, "已完成");
 
-    BorrowerOrderApplyStatusEnum(Integer code, String msg) {
+    BorrowerInfoApplyStatusEnum(Integer code, String msg) {
         this.code = code;
         this.msg = msg;
     }

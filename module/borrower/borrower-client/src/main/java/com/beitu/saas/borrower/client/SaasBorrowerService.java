@@ -1,6 +1,7 @@
 package com.beitu.saas.borrower.client;
 
 import com.beitu.saas.borrower.domain.SaasBorrowerVo;
+import com.beitu.saas.borrower.entity.SaasBorrower;
 import com.fqgj.common.base.BaseService;
 import com.fqgj.common.entity.BaseEntity;
 
@@ -12,5 +13,9 @@ import com.fqgj.common.entity.BaseEntity;
 public interface SaasBorrowerService<T extends BaseEntity> extends BaseService<T> {
 
     SaasBorrowerVo getByBorrowerCode(String borrowerCode);
+
+    SaasBorrowerVo getByMobileAndMerchantCode(String mobile,String merchantCode);
+
+    SaasBorrower create(SaasBorrowerVo saasBorrowerVo);
 
 }
