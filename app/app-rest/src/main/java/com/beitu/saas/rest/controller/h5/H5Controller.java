@@ -4,8 +4,8 @@ import com.beitu.saas.app.annotations.SignIgnore;
 import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.api.ApiResponse;
 import com.beitu.saas.app.api.DataApiResponse;
-import com.beitu.saas.app.application.SendApplication;
 import com.beitu.saas.app.application.borrower.BorrowerApplication;
+import com.beitu.saas.app.application.channel.SaasChannelApplication;
 import com.beitu.saas.app.application.credit.BorrowerBaseInfoApplication;
 import com.beitu.saas.app.application.credit.CreditApplication;
 import com.beitu.saas.app.application.credit.vo.BorrowerEmergentContactVo;
@@ -13,22 +13,37 @@ import com.beitu.saas.app.application.credit.vo.BorrowerIdentityInfoVo;
 import com.beitu.saas.app.application.credit.vo.BorrowerWorkInfoVo;
 import com.beitu.saas.app.application.order.OrderApplication;
 import com.beitu.saas.app.common.RequestLocalInfo;
-import com.beitu.saas.app.enums.BorrowerOrderApplyStatusEnum;
+import com.beitu.saas.borrower.client.SaasBorrowerEmergentContactService;
+import com.beitu.saas.borrower.client.SaasBorrowerIdentityInfoService;
+import com.beitu.saas.borrower.client.SaasBorrowerPersonalInfoService;
+import com.beitu.saas.borrower.client.SaasBorrowerWorkInfoService;
+import com.beitu.saas.borrower.domain.SaasBorrowerEmergentContactVo;
+import com.beitu.saas.borrower.domain.SaasBorrowerIdentityInfoVo;
+import com.beitu.saas.borrower.domain.SaasBorrowerPersonalInfoVo;
+import com.beitu.saas.borrower.domain.SaasBorrowerWorkInfoVo;
+import com.beitu.saas.borrower.entity.SaasBorrowerEmergentContact;
+import com.beitu.saas.borrower.entity.SaasBorrowerIdentityInfo;
+import com.beitu.saas.borrower.entity.SaasBorrowerPersonalInfo;
+import com.beitu.saas.borrower.entity.SaasBorrowerWorkInfo;
+import com.beitu.saas.borrower.enums.BorrowerErrorCodeEnum;
+import com.beitu.saas.channel.domain.SaasH5ChannelVo;
 import com.beitu.saas.channel.enums.ChannelErrorCodeEnum;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.RedisKeyConsts;
-import com.beitu.saas.common.consts.TimeConsts;
+import com.beitu.saas.common.utils.DateUtil;
+import com.beitu.saas.order.client.SaasOrderApplicationService;
+import com.beitu.saas.order.domain.SaasOrderApplicationVo;
+import com.beitu.saas.order.entity.SaasOrderApplication;
 import com.beitu.saas.rest.controller.h5.request.*;
 import com.beitu.saas.rest.controller.h5.response.*;
 import com.beitu.saas.sms.enums.SmsErrorCodeEnum;
-import com.beitu.saas.sms.enums.VerifyCodeTypeEnum;
 import com.fqgj.base.services.redis.RedisClient;
 import com.fqgj.common.api.annotations.ParamsValidate;
-import com.fqgj.common.utils.RandomUtil;
-import com.fqgj.common.utils.StrUtils;
 import com.fqgj.common.utils.StringUtils;
+import com.fqgj.exception.common.ApplicationException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,6 +52,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
+import java.util.Date;
 
 /**
  * @author linanjun
@@ -65,6 +81,24 @@ public class H5Controller {
 
     @Autowired
     private CreditApplication creditApplication;
+
+    @Autowired
+    private SaasOrderApplicationService saasOrderApplicationService;
+
+    @Autowired
+    private SaasChannelApplication saasChannelApplication;
+
+    @Autowired
+    private SaasBorrowerPersonalInfoService saasBorrowerPersonalInfoService;
+
+    @Autowired
+    private SaasBorrowerIdentityInfoService saasBorrowerIdentityInfoService;
+
+    @Autowired
+    private SaasBorrowerWorkInfoService saasBorrowerWorkInfoService;
+
+    @Autowired
+    private SaasBorrowerEmergentContactService saasBorrowerEmergentContactService;
 
     @VisitorAccessible
     @SignIgnore
@@ -122,81 +156,139 @@ public class H5Controller {
     @RequestMapping(value = "/credit/apply/info/get", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "获取风控模块申请表信息", response = CreditApplyInfoResponse.class)
-    public DataApiResponse<CreditApplyInfoResponse> getCreditApplyInfo() {
-        // TODO
-        return new DataApiResponse<>(new CreditApplyInfoResponse());
+    public DataApiResponse<CreditApplyInfoResponse> getCreditApplyInfo(@RequestBody QueryCreditInfoRequest req) {
+        String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
+        CreditApplyInfoResponse response = new CreditApplyInfoResponse();
+        final String orderNumb = req.getOrderNumb();
+        if (StringUtils.isNotEmpty(orderNumb)) {
+            response.setOrderNumb(orderNumb);
+            SaasOrderApplicationVo saasOrderApplicationVo = saasOrderApplicationService.getByOrderNumb(orderNumb);
+            if (saasOrderApplicationVo != null) {
+                response.setBorrowingDuration(DateUtil.countDays(saasOrderApplicationVo.getRepaymentDate(), new Date()));
+                response.setBorrowPurpose(saasOrderApplicationVo.getBorrowPurpose());
+                response.setRealCapital(saasOrderApplicationVo.getRealCapital());
+                response.setTotalInterestRatio(saasOrderApplicationVo.getTotalInterestRatio());
+            }
+        }
+        response.setNeedRealName(borrowerApplication.needRealName(borrowerCode));
+        return new DataApiResponse<>(response);
     }
 
     @RequestMapping(value = "/credit/apply/info/save", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "保存风控模块申请表信息", response = ApiResponse.class)
-    public ApiResponse saveCreditApplyInfo(@RequestBody @Valid CreditSaveApplyInfoRequest req) {
-        // TODO
-        return new ApiResponse();
+    public DataApiResponse<CreditApplyInfoSaveSuccessResponse> saveCreditApplyInfo(@RequestBody @Valid CreditSaveApplyInfoRequest req) {
+        String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
+        if (StringUtils.isEmpty(channelCode)) {
+            return new DataApiResponse<>(ChannelErrorCodeEnum.DISABLE_CHANNEL);
+        }
+        String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
+        if (StringUtils.isNotEmpty(req.getUserName()) && StringUtils.isNotEmpty(req.getIdentityCode())) {
+            if (!creditApplication.userRealNameAuth(borrowerCode, req.getUserName(), req.getIdentityCode())) {
+                return new DataApiResponse<>(BorrowerErrorCodeEnum.USER_PROFILE_REAL_NAME_FAILURE);
+            }
+        }
+        if (borrowerApplication.needRealName(borrowerCode)) {
+            return new DataApiResponse<>(BorrowerErrorCodeEnum.USER_PROFILE_NEED_REAL_NAME);
+        }
+        SaasH5ChannelVo saasH5ChannelVo = saasChannelApplication.getSaasChannelBychannelCode(channelCode);
+        if (saasH5ChannelVo == null) {
+            throw new ApplicationException(ChannelErrorCodeEnum.DISABLE_CHANNEL);
+        }
+        SaasOrderApplicationVo addOrderApplication = new SaasOrderApplicationVo();
+        addOrderApplication.setBorrowerCode(borrowerCode);
+        addOrderApplication.setChannelCode(saasH5ChannelVo.getChannelCode());
+        addOrderApplication.setMerchantCode(saasH5ChannelVo.getMerchantCode());
+        addOrderApplication.setRealCapital(req.getRealCapital());
+        addOrderApplication.setTotalInterestRatio(req.getTotalInterestRatio());
+        addOrderApplication.setRepaymentDate(DateUtil.addDate(new Date(), req.getBorrowingDuration()));
+        addOrderApplication.setBorrowPurpose(req.getBorrowPurpose());
+        SaasOrderApplication orderApplication = saasOrderApplicationService.create(addOrderApplication);
+        return new DataApiResponse<>(new CreditApplyInfoSaveSuccessResponse(orderApplication.getOrderNumb()));
     }
 
     @RequestMapping(value = "/credit/personal/info/get", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "获取风控模块个人信息", response = CreditPersonalInfoResponse.class)
-    public DataApiResponse<CreditPersonalInfoResponse> getCreditPersonalInfo() {
-        // TODO
-        return new DataApiResponse<>(new CreditPersonalInfoResponse());
+    public DataApiResponse<CreditPersonalInfoResponse> getCreditPersonalInfo(@RequestBody @Valid QueryCreditInfoRequest req) {
+        String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
+        SaasBorrowerPersonalInfoVo saasBorrowerPersonalInfoVo = saasBorrowerPersonalInfoService.getByBorrowerCodeAndOrderNumb(borrowerCode, req.getOrderNumb());
+        return new DataApiResponse<>(new CreditPersonalInfoResponse(req.getOrderNumb(), saasBorrowerPersonalInfoVo));
     }
 
     @RequestMapping(value = "/credit/personal/info/save", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "保存风控模块个人信息", response = ApiResponse.class)
     public ApiResponse saveCreditPersonalInfo(@RequestBody @Valid CreditSavePersonalInfoRequest req) {
-        // TODO
-        return new ApiResponse();
+        String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
+        SaasBorrowerPersonalInfo saasBorrowerPersonalInfo = new SaasBorrowerPersonalInfo();
+        BeanUtils.copyProperties(req, saasBorrowerPersonalInfo);
+        saasBorrowerPersonalInfo.setBorrowerCode(borrowerCode);
+        saasBorrowerPersonalInfoService.create(saasBorrowerPersonalInfo);
+        return new ApiResponse("保存成功");
     }
 
     @RequestMapping(value = "/credit/identity/info/get", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "获取风控模块身份证信息", response = BorrowerIdentityInfoVo.class)
-    public DataApiResponse<BorrowerIdentityInfoVo> getCreditIdentityInfo() {
-        // TODO
-        return new DataApiResponse<>(borrowerBaseInfoApplication.getUserIdentityInfoVo(""));
+    public DataApiResponse<CreditIdentityInfoResponse> getCreditIdentityInfo(@RequestBody @Valid QueryCreditInfoRequest req) {
+        String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
+        SaasBorrowerIdentityInfoVo saasBorrowerIdentityInfoVo = saasBorrowerIdentityInfoService.getByBorrowerCodeAndOrderNumb(borrowerCode, req.getOrderNumb());
+        return new DataApiResponse<>(new CreditIdentityInfoResponse(req.getOrderNumb(), saasBorrowerIdentityInfoVo));
     }
 
     @RequestMapping(value = "/credit/identity/info/save", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "保存风控模块身份证信息", response = ApiResponse.class)
     public ApiResponse saveCreditIdentityInfo(@RequestBody @Valid CreditSaveIdentityInfoRequest req) {
-        // TODO
-        return new ApiResponse();
+        String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
+        SaasBorrowerIdentityInfo saasBorrowerIdentityInfo = new SaasBorrowerIdentityInfo();
+        BeanUtils.copyProperties(req, saasBorrowerIdentityInfo);
+        saasBorrowerIdentityInfo.setBorrowerCode(borrowerCode);
+        saasBorrowerIdentityInfoService.create(saasBorrowerIdentityInfo);
+        return new ApiResponse("保存成功");
     }
 
     @RequestMapping(value = "/credit/work/info/get", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "获取风控模块工作信息", response = BorrowerWorkInfoVo.class)
-    public DataApiResponse<BorrowerWorkInfoVo> getCreditWorkInfo() {
-        // TODO
-        return new DataApiResponse<>(borrowerBaseInfoApplication.getUserWorkInfoVo(""));
+    public DataApiResponse<CreditWorkInfoResponse> getCreditWorkInfo(@RequestBody @Valid QueryCreditInfoRequest req) {
+        String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
+        SaasBorrowerWorkInfoVo saasBorrowerWorkInfoVo = saasBorrowerWorkInfoService.getByBorrowerCodeAndOrderNumb(borrowerCode, req.getOrderNumb());
+        return new DataApiResponse<>(new CreditWorkInfoResponse(req.getOrderNumb(), saasBorrowerWorkInfoVo));
     }
 
     @RequestMapping(value = "/credit/work/info/save", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "保存风控模块工作信息", response = ApiResponse.class)
     public ApiResponse saveCreditWorkInfo(@RequestBody @Valid CreditSaveWorkInfoRequest req) {
-        // TODO
-        return new ApiResponse();
+        String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
+        SaasBorrowerWorkInfo saasBorrowerWorkInfo = new SaasBorrowerWorkInfo();
+        BeanUtils.copyProperties(req, saasBorrowerWorkInfo);
+        saasBorrowerWorkInfo.setBorrowerCode(borrowerCode);
+        saasBorrowerWorkInfoService.create(saasBorrowerWorkInfo);
+        return new ApiResponse("保存成功");
     }
 
     @RequestMapping(value = "/credit/emergent/contact/get", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "获取风控模块紧急联系人信息", response = BorrowerEmergentContactVo.class)
-    public DataApiResponse<BorrowerEmergentContactVo> getCreditEmergentContact() {
-        // TODO'
-        return new DataApiResponse<>(borrowerBaseInfoApplication.getUserEmergentContactVo(""));
+    public DataApiResponse<CreditEmergentContactResponse> getCreditEmergentContact(@RequestBody @Valid QueryCreditInfoRequest req) {
+        String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
+        SaasBorrowerEmergentContactVo saasBorrowerEmergentContactVo = saasBorrowerEmergentContactService.getByBorrowerCodeAndOrderNumb(borrowerCode, req.getOrderNumb());
+        return new DataApiResponse<>(new CreditEmergentContactResponse(req.getOrderNumb(), saasBorrowerEmergentContactVo));
     }
 
     @RequestMapping(value = "/credit/emergent/contact/save", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "保存风控模块紧急联系人信息", response = ApiResponse.class)
     public ApiResponse saveCreditEmergentContact(@RequestBody @Valid CreditSaveEmergentContactRequest req) {
-        // TODO
-        return new ApiResponse();
+        String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
+        SaasBorrowerEmergentContact saasBorrowerEmergentContact = new SaasBorrowerEmergentContact();
+        BeanUtils.copyProperties(req, saasBorrowerEmergentContact);
+        saasBorrowerEmergentContact.setBorrowerCode(borrowerCode);
+        saasBorrowerEmergentContactService.create(saasBorrowerEmergentContact);
+        return new ApiResponse("保存成功");
     }
 
 

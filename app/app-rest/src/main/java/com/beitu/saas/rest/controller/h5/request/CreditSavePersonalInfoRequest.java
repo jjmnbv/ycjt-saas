@@ -1,9 +1,12 @@
 package com.beitu.saas.rest.controller.h5.request;
 
+import com.beitu.saas.app.application.credit.vo.BorrowerPersonalInfoVo;
 import com.fqgj.common.api.ParamsObject;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * @author linanjun
@@ -21,27 +24,40 @@ public class CreditSavePersonalInfoRequest extends ParamsObject {
      * QQ
      */
     @ApiModelProperty(value = "QQ")
+    @NotBlank(message = "QQ不能为空")
     private String qq;
     /**
      * 学历
      */
     @ApiModelProperty(value = "学历")
+    @NotNull(message = "学历不能为空")
     private Integer education;
     /**
      * 居住地址
      */
     @ApiModelProperty(value = "居住地址")
+    @NotBlank(message = "居住地址不能为空")
     private String address;
     /**
      * 居住时长
      */
     @ApiModelProperty(value = "居住时长")
+    @NotBlank(message = "居住时长不能为空")
     private String liveDuration;
     /**
      * 婚姻状况
      */
     @ApiModelProperty(value = "婚姻状况")
+    @NotNull(message = "婚姻状况不能为空")
     private Integer maritalStatus;
+
+    public String getOrderNumb() {
+        return orderNumb;
+    }
+
+    public void setOrderNumb(String orderNumb) {
+        this.orderNumb = orderNumb;
+    }
 
     public String getQq() {
         return qq;

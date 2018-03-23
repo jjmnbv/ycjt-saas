@@ -1,5 +1,6 @@
 package com.beitu.saas.rest.controller.h5.response;
 
+import com.beitu.saas.borrower.domain.SaasBorrowerPersonalInfoVo;
 import com.fqgj.common.api.ResponseData;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -11,6 +12,9 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @ApiModel(value = "风控模块个人信息")
 public class CreditPersonalInfoResponse implements ResponseData {
+
+    @ApiModelProperty(value = "订单号")
+    private String orderNumb;
 
     /**
      * QQ
@@ -37,6 +41,25 @@ public class CreditPersonalInfoResponse implements ResponseData {
      */
     @ApiModelProperty(value = "婚姻状况")
     private Integer maritalStatus;
+
+    public CreditPersonalInfoResponse(String orderNumb, SaasBorrowerPersonalInfoVo saasBorrowerPersonalInfoVo) {
+        this.orderNumb = orderNumb;
+        if (saasBorrowerPersonalInfoVo != null) {
+            this.qq = saasBorrowerPersonalInfoVo.getQq();
+            this.education = saasBorrowerPersonalInfoVo.getEducation();
+            this.address = saasBorrowerPersonalInfoVo.getAddress();
+            this.liveDuration = saasBorrowerPersonalInfoVo.getLiveDuration();
+            this.maritalStatus = saasBorrowerPersonalInfoVo.getMaritalStatus();
+        }
+    }
+
+    public String getOrderNumb() {
+        return orderNumb;
+    }
+
+    public void setOrderNumb(String orderNumb) {
+        this.orderNumb = orderNumb;
+    }
 
     public String getQq() {
         return qq;

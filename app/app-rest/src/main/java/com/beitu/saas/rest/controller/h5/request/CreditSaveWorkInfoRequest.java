@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * @author linanjun
  * @create 2018/3/22 下午2:12
@@ -17,35 +19,59 @@ public class CreditSaveWorkInfoRequest extends ParamsObject {
     @NotBlank(message = "订单号不能为空")
     private String orderNumb;
 
+    /**
+     * 职业
+     */
     @ApiModelProperty(value = "职业")
-    private String profession;
-
+    @NotNull(message = "职业不能为空")
+    private Integer careerType;
+    /**
+     * 月收入
+     */
     @ApiModelProperty(value = "月收入")
-    private String monthlyIncome;
-
+    @NotNull(message = "月收入不能为空")
+    private Integer salary;
+    /**
+     * 发薪日
+     */
     @ApiModelProperty(value = "发薪日")
+    @NotNull(message = "发薪日不能为空")
     private Integer payDay;
-
+    /**
+     * 公司名称
+     */
     @ApiModelProperty(value = "公司名称")
+    @NotBlank(message = "公司名称不能为空")
     private String companyName;
-
+    /**
+     * 公司详细地址
+     */
     @ApiModelProperty(value = "公司地址")
-    private String companyAddress;
+    @NotBlank(message = "公司地址不能为空")
+    private String companyDetailAddress;
 
-    public String getProfession() {
-        return profession;
+    public String getOrderNumb() {
+        return orderNumb;
     }
 
-    public void setProfession(String profession) {
-        this.profession = profession;
+    public void setOrderNumb(String orderNumb) {
+        this.orderNumb = orderNumb;
     }
 
-    public String getMonthlyIncome() {
-        return monthlyIncome;
+    public Integer getCareerType() {
+        return careerType;
     }
 
-    public void setMonthlyIncome(String monthlyIncome) {
-        this.monthlyIncome = monthlyIncome;
+    public void setCareerType(Integer careerType) {
+        this.careerType = careerType;
+    }
+
+    public Integer getSalary() {
+        return salary;
+    }
+
+    public void setSalary(Integer salary) {
+        this.salary = salary;
     }
 
     public Integer getPayDay() {
@@ -64,12 +90,12 @@ public class CreditSaveWorkInfoRequest extends ParamsObject {
         this.companyName = companyName;
     }
 
-    public String getCompanyAddress() {
-        return companyAddress;
+    public String getCompanyDetailAddress() {
+        return companyDetailAddress;
     }
 
-    public void setCompanyAddress(String companyAddress) {
-        this.companyAddress = companyAddress;
+    public void setCompanyDetailAddress(String companyDetailAddress) {
+        this.companyDetailAddress = companyDetailAddress;
     }
 
     @Override

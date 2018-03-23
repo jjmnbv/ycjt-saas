@@ -1,8 +1,10 @@
 package com.beitu.saas.rest.controller.h5.response;
 
+import com.beitu.saas.borrower.domain.SaasBorrowerIdentityInfoVo;
 import com.fqgj.common.api.ResponseData;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.beans.BeanUtils;
 
 /**
  * @author linanjun
@@ -11,6 +13,9 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @ApiModel(value = "风控模块身份证信息")
 public class CreditIdentityInfoResponse implements ResponseData {
+
+    @ApiModelProperty(value = "订单号")
+    private String orderNumb;
 
     /**
      * 身份证正面面图片URL
@@ -27,6 +32,23 @@ public class CreditIdentityInfoResponse implements ResponseData {
      */
     @ApiModelProperty(value = "手持身份证图片URL")
     private String holdUrl;
+
+    public CreditIdentityInfoResponse(String orderNumb, SaasBorrowerIdentityInfoVo saasBorrowerIdentityInfoVo) {
+        this.orderNumb = orderNumb;
+        if (saasBorrowerIdentityInfoVo != null) {
+            this.frontUrl = saasBorrowerIdentityInfoVo.getFrontUrl();
+            this.backUrl = saasBorrowerIdentityInfoVo.getBackUrl();
+            this.holdUrl = saasBorrowerIdentityInfoVo.getHoldUrl();
+        }
+    }
+
+    public String getOrderNumb() {
+        return orderNumb;
+    }
+
+    public void setOrderNumb(String orderNumb) {
+        this.orderNumb = orderNumb;
+    }
 
     public String getFrontUrl() {
         return frontUrl;

@@ -1,6 +1,7 @@
 package com.beitu.saas.app.application.borrower;
 
 import com.beitu.saas.app.application.channel.SaasChannelApplication;
+import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
 import com.beitu.saas.borrower.client.SaasBorrowerService;
 import com.beitu.saas.borrower.client.SaasBorrowerTokenService;
 import com.beitu.saas.borrower.domain.SaasBorrowerVo;
@@ -38,6 +39,9 @@ public class BorrowerApplication {
     @Autowired
     private RedisClient redisClient;
 
+    @Autowired
+    private SaasBorrowerRealInfoService saasBorrowerRealInfoService;
+
     public SaasBorrowerVo getBorrowerByAccessToken(String token) {
         String borrowerCode = saasBorrowerTokenService.getBorrowerCodeByToken(token);
         if (StringUtils.isEmpty(borrowerCode)) {
@@ -66,6 +70,10 @@ public class BorrowerApplication {
         }
         redisClient.set(RedisKeyConsts.SAAS_TOKEN_KEY, saasBorrowerVo, TimeConsts.TEN_MINUTES, token);
         return token;
+    }
+
+    public Boolean needRealName(String borrowerCode) {
+        return saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode) != null;
     }
 
 }
