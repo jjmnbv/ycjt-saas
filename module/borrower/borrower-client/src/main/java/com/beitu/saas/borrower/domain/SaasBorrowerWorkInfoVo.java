@@ -1,6 +1,8 @@
 package com.beitu.saas.borrower.domain;
 
+import com.beitu.saas.borrower.entity.SaasBorrowerWorkInfo;
 import com.fqgj.common.api.ResponseData;
+import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 
@@ -118,4 +120,25 @@ public class SaasBorrowerWorkInfoVo implements ResponseData, Serializable {
     public void setSuccess(Boolean success) {
         this.success = success;
     }
+
+    public static SaasBorrowerWorkInfoVo convertEntityToVO(SaasBorrowerWorkInfo saasBorrowerWorkInfo) {
+        if (saasBorrowerWorkInfo == null) {
+            return null;
+        }
+        SaasBorrowerWorkInfoVo saasBorrowerWorkInfoVo = new SaasBorrowerWorkInfoVo();
+        BeanUtils.copyProperties(saasBorrowerWorkInfo, saasBorrowerWorkInfoVo);
+        saasBorrowerWorkInfoVo.setSaasBorrowerWorkInfoId(saasBorrowerWorkInfo.getId());
+        return saasBorrowerWorkInfoVo;
+    }
+
+    public static SaasBorrowerWorkInfo convertVOToEntity(SaasBorrowerWorkInfoVo saasBorrowerWorkInfoVo) {
+        if (saasBorrowerWorkInfoVo == null) {
+            return null;
+        }
+        SaasBorrowerWorkInfo saasBorrowerWorkInfo = new SaasBorrowerWorkInfo();
+        BeanUtils.copyProperties(saasBorrowerWorkInfoVo, saasBorrowerWorkInfo);
+        saasBorrowerWorkInfo.setId(saasBorrowerWorkInfoVo.getSaasBorrowerWorkInfoId());
+        return saasBorrowerWorkInfo;
+    }
+
 }

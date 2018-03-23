@@ -1,6 +1,8 @@
 package com.beitu.saas.borrower.domain;
 
+import com.beitu.saas.borrower.entity.SaasBorrowerRealInfo;
 import com.fqgj.common.api.ResponseData;
+import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 
@@ -82,4 +84,25 @@ public class SaasBorrowerRealInfoVo implements ResponseData, Serializable {
     public void setNativePlace(String nativePlace) {
         this.nativePlace = nativePlace;
     }
+
+    public static SaasBorrowerRealInfoVo convertEntityToVO(SaasBorrowerRealInfo saasBorrowerRealInfo) {
+        if (saasBorrowerRealInfo == null) {
+            return null;
+        }
+        SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = new SaasBorrowerRealInfoVo();
+        BeanUtils.copyProperties(saasBorrowerRealInfo, saasBorrowerRealInfoVo);
+        saasBorrowerRealInfoVo.setSaasBorrowerRealInfoId(saasBorrowerRealInfo.getId());
+        return saasBorrowerRealInfoVo;
+    }
+
+    public static SaasBorrowerRealInfo convertVOToEntity(SaasBorrowerRealInfoVo saasBorrowerRealInfoVo) {
+        if (saasBorrowerRealInfoVo == null) {
+            return null;
+        }
+        SaasBorrowerRealInfo saasBorrowerRealInfo = new SaasBorrowerRealInfo();
+        BeanUtils.copyProperties(saasBorrowerRealInfoVo, saasBorrowerRealInfo);
+        saasBorrowerRealInfo.setId(saasBorrowerRealInfoVo.getSaasBorrowerRealInfoId());
+        return saasBorrowerRealInfo;
+    }
+
 }

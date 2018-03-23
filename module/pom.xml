@@ -17,6 +17,7 @@
         <module>channel</module>
         <module>collection</module>
         <module>finance</module>
+        <module>order</module>
         <module>risk</module>
         <module>sms</module>
     </modules>

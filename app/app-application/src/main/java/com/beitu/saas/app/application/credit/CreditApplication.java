@@ -3,6 +3,8 @@ package com.beitu.saas.app.application.credit;
 import com.beitu.saas.app.application.channel.SaasChannelApplication;
 import com.beitu.saas.app.application.credit.vo.CreditModuleListVo;
 import com.beitu.saas.app.enums.BorrowerInfoApplyStatusEnum;
+import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
+import com.beitu.saas.borrower.enums.BorrowerErrorCodeEnum;
 import com.beitu.saas.channel.domain.SaasChannelRiskSettingsVo;
 import com.beitu.saas.channel.enums.ChannelErrorCodeEnum;
 import com.beitu.saas.channel.enums.RiskModuleEnum;
@@ -25,6 +27,9 @@ public class CreditApplication {
 
     @Autowired
     private SaasChannelApplication saasChannelApplication;
+
+    @Autowired
+    private SaasBorrowerRealInfoService saasBorrowerRealInfoService;
 
     public List<CreditModuleListVo> listCreditModule(String channelCode, String borrowerCode, String orderNumb) {
         List<SaasChannelRiskSettingsVo> saasChannelRiskSettingsVoList = saasChannelApplication.getSaasChannelRiskSettingsByChannelCode(channelCode);
@@ -68,6 +73,34 @@ public class CreditApplication {
                 return BorrowerInfoApplyStatusEnum.INCOMPLETE;
         }
         return BorrowerInfoApplyStatusEnum.INCOMPLETE;
+    }
+
+    /**
+     * 用户实名认证
+     *
+     * @param borrowerCode 用户CODE
+     * @param name         用户姓名
+     * @param identityCode 用户身份证号码
+     * @return
+     */
+    public Boolean userRealNameAuth(String borrowerCode, String name, String identityCode) {
+        if (!realNameAuth(name, identityCode)) {
+            return Boolean.FALSE;
+        }
+        saasBorrowerRealInfoService.create(borrowerCode, name, identityCode);
+        return Boolean.TRUE;
+    }
+
+    /**
+     * 实名认证
+     *
+     * @param name         用户姓名
+     * @param identityCode 用户身份证号码
+     * @return
+     */
+    public Boolean realNameAuth(String name, String identityCode) {
+        // TODO
+        return Boolean.TRUE;
     }
 
 }

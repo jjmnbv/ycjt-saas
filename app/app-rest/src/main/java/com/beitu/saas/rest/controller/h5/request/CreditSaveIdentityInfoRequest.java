@@ -33,6 +33,14 @@ public class CreditSaveIdentityInfoRequest extends ParamsObject {
     @ApiModelProperty(value = "手持身份证图片URL")
     private String holdUrl;
 
+    public String getOrderNumb() {
+        return orderNumb;
+    }
+
+    public void setOrderNumb(String orderNumb) {
+        this.orderNumb = orderNumb;
+    }
+
     public String getFrontUrl() {
         return frontUrl;
     }

@@ -13,7 +13,9 @@ import org.springframework.http.HttpStatus;
  */
 public enum BorrowerErrorCodeEnum implements ErrorCodeEnum {
 
-    MOBILE_EXIST(20001, "该手机号已注册", HttpStatus.OK);
+    MOBILE_EXIST(20001, "该手机号已注册", HttpStatus.OK),
+    USER_PROFILE_REAL_NAME_FAILURE(20002, "用户实名信息认证失败", HttpStatus.OK),
+    USER_PROFILE_NEED_REAL_NAME(20003, "请先进行实名认证", HttpStatus.OK);
 
     private Integer code;
 

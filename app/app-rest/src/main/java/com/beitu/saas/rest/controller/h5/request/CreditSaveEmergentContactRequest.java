@@ -21,32 +21,46 @@ public class CreditSaveEmergentContactRequest extends ParamsObject {
      * 直系亲属联系人类型
      */
     @ApiModelProperty(value = "直系亲属")
+    @NotBlank(message = "直系亲属关系不能为空")
     private String familyType;
     /**
      * 直系亲属联系人输入姓名
      */
     @ApiModelProperty(value = "直系亲属姓名")
+    @NotBlank(message = "直系亲属姓名不能为空")
     private String familyName;
     /**
      * 直系亲属联系人手机号
      */
     @ApiModelProperty(value = "直系亲属手机号码")
+    @NotBlank(message = "直系亲属手机号码不能为空")
     private String familyMobile;
     /**
      * 同事朋友联系人类型
      */
-    @ApiModelProperty(value = "同事朋友")
+    @ApiModelProperty(value = "同事朋友关系")
+    @NotBlank(message = "同事朋友关系不能为空")
     private String friendType;
     /**
      * 同事朋友联系人输入姓名
      */
     @ApiModelProperty(value = "同事朋友姓名")
+    @NotBlank(message = "同事朋友姓名不能为空")
     private String friendName;
     /**
      * 同事朋友联系人手机号
      */
     @ApiModelProperty(value = "同事朋友手机号码")
+    @NotBlank(message = "同事朋友手机号码不能为空")
     private String friendMobile;
+
+    public String getOrderNumb() {
+        return orderNumb;
+    }
+
+    public void setOrderNumb(String orderNumb) {
+        this.orderNumb = orderNumb;
+    }
 
     public String getFamilyType() {
         return familyType;

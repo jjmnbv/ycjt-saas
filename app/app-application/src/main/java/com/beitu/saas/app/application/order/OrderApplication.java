@@ -1,6 +1,7 @@
 package com.beitu.saas.app.application.order;
 
 import com.beitu.saas.app.enums.BorrowerOrderApplyStatusEnum;
+import com.beitu.saas.order.domain.SaasOrderApplicationVo;
 import org.springframework.stereotype.Service;
 
 /**

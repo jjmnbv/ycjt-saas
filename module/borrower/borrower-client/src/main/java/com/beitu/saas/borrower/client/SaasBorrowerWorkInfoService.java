@@ -1,5 +1,6 @@
 package com.beitu.saas.borrower.client;
 
+import com.beitu.saas.borrower.domain.SaasBorrowerWorkInfoVo;
 import com.fqgj.common.base.BaseService;
 import com.fqgj.common.entity.BaseEntity;
 
@@ -9,5 +10,7 @@ import com.fqgj.common.entity.BaseEntity;
  * Time: 15:56:47.021
  */
 public interface SaasBorrowerWorkInfoService<T extends BaseEntity> extends BaseService<T> {
+
+    SaasBorrowerWorkInfoVo getByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb);
 
 }
