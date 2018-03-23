@@ -11,6 +11,7 @@ import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.app.common.RequestUserInfo;
 import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.auth.service.SaasAdminService;
+import com.beitu.saas.borrower.client.SaasBorrowerService;
 import com.beitu.saas.borrower.domain.SaasBorrowerVo;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.enums.RestCodeEnum;
@@ -52,6 +53,9 @@ public class UserAccessRightInterceptor implements HandlerInterceptor {
     @Autowired
     private BorrowerApplication borrowerApplication;
 
+    @Autowired
+    private SaasBorrowerService saasBorrowerService;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
         response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
@@ -60,19 +64,22 @@ public class UserAccessRightInterceptor implements HandlerInterceptor {
         response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type,Accept,X-Requested-With,remember-me,bid,basicParams");
 
-        String basicParams = request.getHeader("basicParams");
-        RequestBasicInfo basicVO = JSONUtils.json2pojo(basicParams, RequestBasicInfo.class);
-
         if (isWebResources(request)) {
             return true;
         }
-
+        HandlerMethod handlerMethod = (HandlerMethod) o;
+        SignIgnore signIgnoreAnnotation = handlerMethod.getMethodAnnotation(SignIgnore.class);
+        if (signIgnoreAnnotation != null) {
+            return true;
+        }
+        String basicParams = request.getHeader("basicParams");
+        RequestBasicInfo basicVO = JSONUtils.json2pojo(basicParams, RequestBasicInfo.class);
         if (StringUtils.isNotEmpty(basicVO.getToken())) {
             if (!verifyHeader(request)) {
                 throw new ApplicationException("无效的token");
             }
         } else {
-            HandlerMethod handlerMethod = (HandlerMethod) o;
+
             VisitorAccessible annotation = handlerMethod.getMethodAnnotation(VisitorAccessible.class);
             if (annotation != null) {
                 return true;
@@ -114,11 +121,12 @@ public class UserAccessRightInterceptor implements HandlerInterceptor {
                                 Object o, Exception e) throws Exception {
         if (o instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) o;
-            SignIgnore signIgnoreAnnotation = handlerMethod.getMethodAnnotation(SignIgnore.class);
-            if (signIgnoreAnnotation == null) {
+            VisitorAccessible visitorAccessibleAnnotation = handlerMethod.getMethodAnnotation(VisitorAccessible.class);
+            if (visitorAccessibleAnnotation == null) {
                 IgnoreRepeatRequest ignoreRepeatRequest = handlerMethod.getMethodAnnotation(IgnoreRepeatRequest.class);
-                String accessToken = httpServletRequest.getHeader("accessToken");
-                String key = MD5.md5(httpServletRequest.getRequestURI() + accessToken);
+                RequestBasicInfo basicVO = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo();
+                redisClient.expire(RedisKeyConsts.SAAS_TOKEN_KEY,TimeConsts.TEN_MINUTES,basicVO.getToken());
+                String key = MD5.md5(httpServletRequest.getRequestURI() + basicVO.getToken());
                 String value = redisClient.get(RedisKeyConsts.REPEAT_PREFIX, key);
                 if (ignoreRepeatRequest != null && StringUtils.isNotEmpty(value)) {
                     redisClient.del(RedisKeyConsts.REPEAT_PREFIX, key);
@@ -131,16 +139,13 @@ public class UserAccessRightInterceptor implements HandlerInterceptor {
         RequestUserInfo requestUserInfo = new RequestUserInfo();
         requestUserInfo.setRequestBasicInfo(basicVO);
         String userCode = redisClient.get(RedisKeyConsts.SAAS_TOKEN_KEY, basicVO.getToken());
+        if (StringUtils.isEmpty(userCode)) {
+            return false;
+        }
         if (basicVO.getPlatform().equals("h5")) {
-            SaasBorrowerVo saasBorrowerVo = borrowerApplication.getBorrowerByAccessToken(basicVO.getToken());
-            if (saasBorrowerVo == null) {
-                return false;
-            }
+            SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCode(userCode);
             requestUserInfo.setUser(saasBorrowerVo);
         } else if (basicVO.getPlatform().equals("web")) {
-            if (StringUtils.isEmpty(userCode)){
-                return false;
-            }
             SaasAdmin saasAdmin = saasAdminService.getSaasAdminByAdminCode(userCode);
             requestUserInfo.setUser(saasAdmin);
         } else {

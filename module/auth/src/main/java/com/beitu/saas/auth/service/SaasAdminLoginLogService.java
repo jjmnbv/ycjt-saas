@@ -2,6 +2,8 @@ package com.beitu.saas.auth.service;
 import com.fqgj.common.base.BaseService;
 import com.fqgj.common.entity.BaseEntity;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
 * User: xiaochong
 * Date: 2018-03-22
@@ -9,4 +11,5 @@ import com.fqgj.common.entity.BaseEntity;
 */
 public interface SaasAdminLoginLogService<T extends BaseEntity> extends BaseService<T> {
 
+    Boolean addAdminLoginLog(HttpServletRequest request, String adminCode);
 }
