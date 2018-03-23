@@ -45,13 +45,7 @@ public class UserAccessRightInterceptor implements HandlerInterceptor {
     private RedisClient redisClient;
 
     @Autowired
-    private AdminInfoApplication adminInfoApplication;
-
-    @Autowired
     private SaasAdminService saasAdminService;
-
-    @Autowired
-    private BorrowerApplication borrowerApplication;
 
     @Autowired
     private SaasBorrowerService saasBorrowerService;

@@ -1,7 +1,9 @@
-package com.beitu.saas.rest.controller.h5.request;
+package com.beitu.saas.rest.controller.sms.request;
 
 import com.beitu.saas.app.enums.VerifyCodeErrorCodeEnum;
 import com.beitu.saas.common.utils.MobileUtil;
+import com.beitu.saas.sms.enums.SmsErrorCodeEnum;
+import com.beitu.saas.sms.enums.VerifyCodeTypeEnum;
 import com.fqgj.common.api.ParamsObject;
 import com.fqgj.common.api.exception.ApiIllegalArgumentException;
 import io.swagger.annotations.ApiModel;
@@ -20,6 +22,9 @@ public class VerifyCodeSendRequest extends ParamsObject {
     @NotBlank(message = "手机号不能为空")
     private String mobile;
 
+    @NotBlank(message = "验证码类型不能为空")
+    private String type;
+
     public String getMobile() {
         return mobile;
     }
@@ -28,10 +33,21 @@ public class VerifyCodeSendRequest extends ParamsObject {
         this.mobile = mobile;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     public void validate() {
         if (!MobileUtil.isMobile(mobile)) {
             throw new ApiIllegalArgumentException(VerifyCodeErrorCodeEnum.NOT_MOBILE);
+        }
+        if (!VerifyCodeTypeEnum.getNameList().contains(type)) {
+            throw new ApiIllegalArgumentException(SmsErrorCodeEnum.VERIFYCODE_TYPE_NOT_EXIST);
         }
     }
 }
