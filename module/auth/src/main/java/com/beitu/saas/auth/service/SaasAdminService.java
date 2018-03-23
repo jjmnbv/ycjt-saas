@@ -10,7 +10,7 @@ import com.fqgj.common.entity.BaseEntity;
 */
 public interface SaasAdminService<T extends BaseEntity> extends BaseService<T> {
 
-    String login(String mobile, String paasword);
+    SaasAdmin login(String mobile, String paasword);
 
     SaasAdmin getSaasAdminByMoblie(String mobile);
 

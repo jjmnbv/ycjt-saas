@@ -1,4 +1,4 @@
-package com.beitu.saas.rest.controller.module.request;
+package com.beitu.saas.rest.controller.channel.request;
 
 import com.fqgj.common.api.ParamsObject;
 import io.swagger.annotations.ApiModel;
@@ -13,7 +13,7 @@ import org.hibernate.validator.constraints.NotBlank;
  * Time: 上午11:09
  */
 @ApiModel(description = "新增模块字段")
-public class SaasModuleItemRequestVo extends ParamsObject {
+public class SaasRiskModuleItemRequestVo extends ParamsObject {
 
     @NotBlank(message = "模块号不能为空")
     @ApiModelProperty(value = "模块号", required = true)
@@ -31,7 +31,7 @@ public class SaasModuleItemRequestVo extends ParamsObject {
         return moduleCode;
     }
 
-    public SaasModuleItemRequestVo setModuleCode(String moduleCode) {
+    public SaasRiskModuleItemRequestVo setModuleCode(String moduleCode) {
         this.moduleCode = moduleCode;
         return this;
     }
@@ -40,7 +40,7 @@ public class SaasModuleItemRequestVo extends ParamsObject {
         return itemCode;
     }
 
-    public SaasModuleItemRequestVo setItemCode(String itemCode) {
+    public SaasRiskModuleItemRequestVo setItemCode(String itemCode) {
         this.itemCode = itemCode;
         return this;
     }
@@ -49,7 +49,7 @@ public class SaasModuleItemRequestVo extends ParamsObject {
         return itemeDesc;
     }
 
-    public SaasModuleItemRequestVo setItemeDesc(String itemeDesc) {
+    public SaasRiskModuleItemRequestVo setItemeDesc(String itemeDesc) {
         this.itemeDesc = itemeDesc;
         return this;
     }
