@@ -7,15 +7,19 @@
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="link" jdbcType="VARCHAR" property="link"/>
         <result column="p_id" jdbcType="INTEGER" property="pId"/>
+        <result column="is_parent" jdbcType="BIT" property="isParent"/>
+        <result column="sort" jdbcType="BIGINT" property="sort"/>
         <result column="deleted" jdbcType="TINYINT" property="deleted"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
         <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
     </resultMap>
     <sql id="Base_Column_List">
         id,
-        name,
+        `name`,
         link,
         p_id,
+        is_parent,
+        sort,
         deleted,
         gmt_modified,
         gmt_create
@@ -32,13 +36,19 @@
         insert into saas_menu
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="name !=null">
-                name,
+                `name`,
             </if>
             <if test="link !=null">
                 link,
             </if>
             <if test="pId !=null">
                 p_id,
+            </if>
+            <if test="isParent !=null">
+                is_parent,
+            </if>
+            <if test="sort !=null">
+                sort,
             </if>
             <if test="deleted !=null">
                 deleted,
@@ -60,6 +70,12 @@
             <if test="pId != null">
                 #{pId,jdbcType=INTEGER},
             </if>
+            <if test="isParent != null">
+                #{isParent,jdbcType=BIT},
+            </if>
+            <if test="sort != null">
+                #{sort,jdbcType=BIGINT},
+            </if>
             <if test="deleted != null">
                 #{deleted,jdbcType=TINYINT},
             </if>
@@ -76,13 +92,19 @@
         update saas_menu
         <set>
             <if test="name !=null">
-                name = #{name,jdbcType=VARCHAR},
+                `name` = #{name,jdbcType=VARCHAR},
             </if>
             <if test="link !=null">
                 link = #{link,jdbcType=VARCHAR},
             </if>
             <if test="pId !=null">
                 p_id = #{pId,jdbcType=INTEGER},
+            </if>
+            <if test="isParent !=null">
+                is_parent = #{isParent,jdbcType=BIT},
+            </if>
+            <if test="sort !=null">
+                sort = #{sort,jdbcType=BIGINT},
             </if>
             <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=TINYINT},
@@ -121,13 +143,19 @@
                 and id = #{id,jdbcType=INTEGER}
             </if>
             <if test="name !=null">
-                and name = #{name,jdbcType=VARCHAR}
+                and `name` = #{name,jdbcType=VARCHAR}
             </if>
             <if test="link !=null">
                 and link = #{link,jdbcType=VARCHAR}
             </if>
             <if test="pId !=null">
                 and p_id = #{pId,jdbcType=INTEGER}
+            </if>
+            <if test="isParent !=null">
+                and is_parent = #{isParent,jdbcType=BIT}
+            </if>
+            <if test="sort !=null">
+                and sort = #{sort,jdbcType=BIGINT}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=TINYINT}
@@ -139,6 +167,7 @@
                 and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
             </if>
         </trim>
+        ORDER BY sort ASC
         <include refid="paging"/>
     </select>
     <select id="queryTotal" resultType="INTEGER">
@@ -148,13 +177,19 @@
                 and id = #{id,jdbcType=INTEGER}
             </if>
             <if test="name !=null">
-                and name = #{name,jdbcType=VARCHAR}
+                and `name` = #{name,jdbcType=VARCHAR}
             </if>
             <if test="link !=null">
                 and link = #{link,jdbcType=VARCHAR}
             </if>
             <if test="pId !=null">
                 and p_id = #{pId,jdbcType=INTEGER}
+            </if>
+            <if test="isParent !=null">
+                and is_parent = #{isParent,jdbcType=BIT}
+            </if>
+            <if test="sort !=null">
+                and sort = #{sort,jdbcType=BIGINT}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=TINYINT}

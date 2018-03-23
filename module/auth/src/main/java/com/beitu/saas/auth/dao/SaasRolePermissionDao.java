@@ -1,6 +1,5 @@
 package com.beitu.saas.auth.dao;
 
-import com.beitu.saas.auth.entity.SaasRolePermission;
 import com.fqgj.common.base.BaseMapper;
 
 /**
