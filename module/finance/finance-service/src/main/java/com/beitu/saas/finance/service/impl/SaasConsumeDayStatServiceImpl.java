@@ -24,8 +24,8 @@ public class SaasConsumeDayStatServiceImpl extends AbstractBaseService implement
     private SaasConsumeDayStatDao saasConsumeDayStatDao;
 
     @Override
-    public SaasConsumeDayStatEntity getLastConsumeDayStatEntity() {
-        return saasConsumeDayStatDao.getLastClearConsumeDayStat();
+    public SaasConsumeDayStatEntity getLastConsumeDayStatEntity(String merchantCode) {
+        return saasConsumeDayStatDao.getLastClearConsumeDayStat(merchantCode);
     }
 }
 

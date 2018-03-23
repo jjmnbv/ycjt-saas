@@ -11,5 +11,5 @@ import com.fqgj.common.entity.BaseEntity;
  */
 public interface SaasConsumeDayStatService<T extends BaseEntity> extends BaseService<T> {
 
-    SaasConsumeDayStatEntity getLastConsumeDayStatEntity();
+    SaasConsumeDayStatEntity getLastConsumeDayStatEntity(String merchantCode);
 }
