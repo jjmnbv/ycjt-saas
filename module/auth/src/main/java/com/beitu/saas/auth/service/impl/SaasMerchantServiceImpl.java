@@ -8,11 +8,13 @@ import com.fqgj.log.enhance.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
-* User: xiaochong
-* Date: 2018-03-22
-* Time: 15:36:13.656
-*/
+ * User: xiaochong
+ * Date: 2018-03-22
+ * Time: 15:36:13.656
+ */
 @Module(value = "机构表服务模块")
 @NameSpace("com.beitu.saas.dao.impl.SaasMerchantDaoImpl")
 @Service
@@ -21,6 +23,11 @@ public class SaasMerchantServiceImpl extends AbstractBaseService implements Saas
 
     @Autowired
     private SaasMerchantDao saasMerchantDao;
+
+    @Override
+    public List<String> getMerchantList() {
+        return saasMerchantDao.selectAllMerchantCode();
+    }
 }
 
 
