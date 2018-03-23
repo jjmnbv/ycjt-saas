@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.fqgj.demo.dao.impl.SaasCollectionOrderDaoImpl">
+<mapper namespace="com.beitu.saas.collection.dao.impl.SaasCollectionOrderDaoImpl">
 
+    <select id="selectSaasCollectionOrderEntity" parameterType="map" resultType="com.beitu.saas.collection.entity.SaasCollectionOrderEntity">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from saas_collection_order
+        <if test="channelCode !=null">
+            and order_no = #{orderNo,jdbcType=VARCHAR}
+        </if>
+        and deleted = 0
+    </select>
 </mapper>

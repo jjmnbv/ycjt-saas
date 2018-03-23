@@ -1,4 +1,5 @@
 package com.beitu.saas.channel.client;
+import com.beitu.saas.channel.domain.OrderInfoVo;
 import com.fqgj.common.base.BaseService;
 import com.fqgj.common.entity.BaseEntity;
 
@@ -8,5 +9,9 @@ import com.fqgj.common.entity.BaseEntity;
 * Time: 20:58:19.361
 */
 public interface SaasCollectionOrderService<T extends BaseEntity> extends BaseService<T> {
+
+    void createCollectionOrder(OrderInfoVo orderInfoVo);
+
+    void closeOrder(String orderNo);
 
 }
