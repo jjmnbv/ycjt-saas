@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.beitu.saas.finance.dao.impl.SaasConsumeDayStatDaoImpl">
-    <resultMap id="BaseResultMap" type="com.beitu.saas.finance.entity.SaasConsumeDayStatEntity">
+<mapper namespace="com.beitu.saas.finance.dao.impl.SaasSmsHistoryDaoImpl">
+    <resultMap id="BaseResultMap" type="com.beitu.saas.finance.entity.SaasSmsHistoryEntity">
         <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="dt" jdbcType="DATE" property="dt"/>
         <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode"/>
-        <result column="consume_credit" jdbcType="BIGINT" property="consumeCredit"/>
-        <result column="consume_sms" jdbcType="BIGINT" property="consumeSms"/>
-        <result column="last_clear_dt" jdbcType="DATE" property="lastClearDt"/>
+        <result column="op_type" jdbcType="TINYINT" property="opType"/>
+        <result column="sms" jdbcType="BIGINT" property="sms"/>
+        <result column="current_sms" jdbcType="BIGINT" property="currentSms"/>
+        <result column="comment" jdbcType="VARCHAR" property="comment"/>
+        <result column="send_phone" jdbcType="VARCHAR" property="sendPhone"/>
         <result column="deleted" jdbcType="BIT" property="deleted"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
         <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
@@ -16,11 +17,12 @@
 
     <sql id="Base_Column_List">
     id,
-    dt,
     merchant_code,
-    consume_credit,
-    consume_sms,
-    last_clear_dt,
+    op_type,
+    sms,
+    current_sms,
+    comment,
+    send_phone,
     deleted,
     gmt_modified,
     gmt_create
@@ -30,28 +32,31 @@
             resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from saas_consume_day_stat
+        from saas_sms_history
         where id = #{id,jdbcType=BIGINT}
     </select>
 
     <insert id="insert" keyColumn="id" keyProperty="id"
-            parameterType="com.beitu.saas.finance.entity.SaasConsumeDayStatEntity" useGeneratedKeys="true">
-        insert into saas_consume_day_stat
+            parameterType="com.beitu.saas.finance.entity.SaasSmsHistoryEntity" useGeneratedKeys="true">
+        insert into saas_sms_history
         <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="dt !=null">
-                dt,
-                </if>
                 <if test="merchantCode !=null">
                 merchant_code,
                 </if>
-                <if test="consumeCredit !=null">
-                consume_credit,
+                <if test="opType !=null">
+                op_type,
                 </if>
-                <if test="consumeSms !=null">
-                consume_sms,
+                <if test="sms !=null">
+                sms,
                 </if>
-                <if test="lastClearDt !=null">
-                last_clear_dt,
+                <if test="currentSms !=null">
+                current_sms,
+                </if>
+                <if test="comment !=null">
+                comment,
+                </if>
+                <if test="sendPhone !=null">
+                send_phone,
                 </if>
                 <if test="deleted !=null">
                 deleted,
@@ -64,20 +69,23 @@
                 </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-                <if test="dt != null">
-                    #{dt,jdbcType=DATE},
-                </if>
                 <if test="merchantCode != null">
                     #{merchantCode,jdbcType=VARCHAR},
                 </if>
-                <if test="consumeCredit != null">
-                    #{consumeCredit,jdbcType=BIGINT},
+                <if test="opType != null">
+                    #{opType,jdbcType=TINYINT},
                 </if>
-                <if test="consumeSms != null">
-                    #{consumeSms,jdbcType=BIGINT},
+                <if test="sms != null">
+                    #{sms,jdbcType=BIGINT},
                 </if>
-                <if test="lastClearDt != null">
-                    #{lastClearDt,jdbcType=DATE},
+                <if test="currentSms != null">
+                    #{currentSms,jdbcType=BIGINT},
+                </if>
+                <if test="comment != null">
+                    #{comment,jdbcType=VARCHAR},
+                </if>
+                <if test="sendPhone != null">
+                    #{sendPhone,jdbcType=VARCHAR},
                 </if>
                 <if test="deleted != null">
                     #{deleted,jdbcType=BIT},
@@ -91,23 +99,26 @@
         </trim>
     </insert>
 
-    <update id="updateByPrimaryKey" parameterType="com.beitu.saas.finance.entity.SaasConsumeDayStatEntity">
-        update saas_consume_day_stat
+    <update id="updateByPrimaryKey" parameterType="com.beitu.saas.finance.entity.SaasSmsHistoryEntity">
+        update saas_sms_history
         <set>
-                <if test="dt !=null">
-                dt = #{dt,jdbcType=DATE},
-                </if>
                 <if test="merchantCode !=null">
                 merchant_code = #{merchantCode,jdbcType=VARCHAR},
                 </if>
-                <if test="consumeCredit !=null">
-                consume_credit = #{consumeCredit,jdbcType=BIGINT},
+                <if test="opType !=null">
+                op_type = #{opType,jdbcType=TINYINT},
                 </if>
-                <if test="consumeSms !=null">
-                consume_sms = #{consumeSms,jdbcType=BIGINT},
+                <if test="sms !=null">
+                sms = #{sms,jdbcType=BIGINT},
                 </if>
-                <if test="lastClearDt !=null">
-                last_clear_dt = #{lastClearDt,jdbcType=DATE},
+                <if test="currentSms !=null">
+                current_sms = #{currentSms,jdbcType=BIGINT},
+                </if>
+                <if test="comment !=null">
+                comment = #{comment,jdbcType=VARCHAR},
+                </if>
+                <if test="sendPhone !=null">
+                send_phone = #{sendPhone,jdbcType=VARCHAR},
                 </if>
                 <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},
@@ -120,7 +131,7 @@
     </update>
 
     <update id="deleteByPrimaryKey">
-        update  saas_consume_day_stat
+        update  saas_sms_history
         set deleted = 1
         where id = #{id,jdbcType=BIGINT}
     </update>
@@ -140,25 +151,28 @@
     <select id="selectByParams" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from saas_consume_day_stat
+        from saas_sms_history
         <trim prefix="where" prefixOverrides="and|or">
             <if test="id !=null">
                 and id = #{id,jdbcType=BIGINT}
             </if>
-            <if test="dt !=null">
-                and dt = #{dt,jdbcType=DATE}
-            </if>
             <if test="merchantCode !=null">
                 and merchant_code = #{merchantCode,jdbcType=VARCHAR}
             </if>
-            <if test="consumeCredit !=null">
-                and consume_credit = #{consumeCredit,jdbcType=BIGINT}
+            <if test="opType !=null">
+                and op_type = #{opType,jdbcType=TINYINT}
             </if>
-            <if test="consumeSms !=null">
-                and consume_sms = #{consumeSms,jdbcType=BIGINT}
+            <if test="sms !=null">
+                and sms = #{sms,jdbcType=BIGINT}
             </if>
-            <if test="lastClearDt !=null">
-                and last_clear_dt = #{lastClearDt,jdbcType=DATE}
+            <if test="currentSms !=null">
+                and current_sms = #{currentSms,jdbcType=BIGINT}
+            </if>
+            <if test="comment !=null">
+                and comment = #{comment,jdbcType=VARCHAR}
+            </if>
+            <if test="sendPhone !=null">
+                and send_phone = #{sendPhone,jdbcType=VARCHAR}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}
@@ -173,25 +187,28 @@
         <include refid="paging"/>
     </select>
     <select id="queryTotal" resultType="INTEGER">
-        select count(*) from saas_consume_day_stat
+        select count(*) from saas_sms_history
         <trim prefix="where" prefixOverrides="and|or">
             <if test="id !=null">
                 and id = #{id,jdbcType=BIGINT}
             </if>
-            <if test="dt !=null">
-                and dt = #{dt,jdbcType=DATE}
-            </if>
             <if test="merchantCode !=null">
                 and merchant_code = #{merchantCode,jdbcType=VARCHAR}
             </if>
-            <if test="consumeCredit !=null">
-                and consume_credit = #{consumeCredit,jdbcType=BIGINT}
+            <if test="opType !=null">
+                and op_type = #{opType,jdbcType=TINYINT}
             </if>
-            <if test="consumeSms !=null">
-                and consume_sms = #{consumeSms,jdbcType=BIGINT}
+            <if test="sms !=null">
+                and sms = #{sms,jdbcType=BIGINT}
             </if>
-            <if test="lastClearDt !=null">
-                and last_clear_dt = #{lastClearDt,jdbcType=DATE}
+            <if test="currentSms !=null">
+                and current_sms = #{currentSms,jdbcType=BIGINT}
+            </if>
+            <if test="comment !=null">
+                and comment = #{comment,jdbcType=VARCHAR}
+            </if>
+            <if test="sendPhone !=null">
+                and send_phone = #{sendPhone,jdbcType=VARCHAR}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}

@@ -1,8 +1,10 @@
 package com.beitu.saas.app.application.finance;
 
-import com.beitu.saas.auth.dao.SaasMerchantDao;
-import com.beitu.saas.finance.client.SaasConsumeDayStatService;
+import com.beitu.saas.auth.service.SaasMerchantService;
+import com.beitu.saas.finance.client.*;
 import com.beitu.saas.finance.entity.SaasConsumeDayStatEntity;
+import com.beitu.saas.finance.entity.SaasMerchantCreditInfoEntity;
+import com.beitu.saas.finance.entity.SaasMerchantSmsInfoEntity;
 import com.fqgj.common.utils.DateUtil;
 import com.fqgj.log.factory.LogFactory;
 import com.fqgj.log.interfaces.Log;
@@ -28,15 +30,22 @@ public class SaasConsumeDayStatApplication {
     @Autowired
     private SaasConsumeDayStatService saasConsumeDayStatService;
     @Autowired
-    private SaasMerchantDao saasMerchantDao;
+    private SaasMerchantService saasMerchantService;
+    @Autowired
+    private SaasCreditHistoryService saasCreditHistoryService;
+    @Autowired
+    private SaasSmsHistoryService saasSmsHistoryService;
+    @Autowired
+    private SaasMerchantCreditInfoService saasMerchantCreditInfoService;
+    @Autowired
+    private SaasMerchantSmsInfoService saasMerchantSmsInfoService;
 
     /**
      * 每日点券/短信统计
      */
-
     public void creditAndMsgDayClear() {
         LOGGER.info("== 点券和短信日清算任务开始 ==");
-        List<String> merchantCodeList = saasMerchantDao.selectAllMerchantCode();
+        List<String> merchantCodeList = saasMerchantService.getMerchantList();
         merchantCodeList.stream().forEach(x -> {
             this.SyncMerchantConsumeDayStat(x);
         });
@@ -56,23 +65,23 @@ public class SaasConsumeDayStatApplication {
         List<Date> dates = this.getNeedStatDateList(merchantCode);
 
         dates.stream().forEach(x -> {
-            // TODO: 2018/3/23  根据机构号统计消费的点券记录表,统计短信消费记录表
+            Long totalConsumeCreditCount = saasCreditHistoryService.getYesterdayCreditStatCredit(merchantCode, this.getYesterday());
+            Long totalConsumeSmsCount = saasSmsHistoryService.getYesterdaySmsStatCredit(merchantCode, this.getYesterday());
 
             SaasConsumeDayStatEntity statEntity = new SaasConsumeDayStatEntity()
-                    //.setConsumeCredit()
-                    //.setConsumeMsg()
+                    .setConsumeCredit(totalConsumeCreditCount)
+                    .setConsumeSms(totalConsumeSmsCount)
                     .setDt(x)
                     .setLastClearDt(DateUtil.addDate(x, 1))
                     .setMerchantCode(merchantCode);
             saasConsumeDayStatService.create(statEntity);
 
-            // TODO: 2018/3/23 查询点券余额表扣除余额,余额不足为负数
-
-            // TODO: 2018/3/23 查询短信余额表扣除余额,余额不足为负数
-
-            // TODO: 2018/3/23 总余额扣除点券和短信统计数
-
-            // TODO: 2018/3/23 记录消费记录流水
+            SaasMerchantCreditInfoEntity creditEntity = saasMerchantCreditInfoService.getCreditInfoByMerchantCode(merchantCode);
+            SaasMerchantSmsInfoEntity smsEntity = saasMerchantSmsInfoService.getSmsInfoByMerchantCode(merchantCode);
+            Long clearCredit = creditEntity.getValue() - totalConsumeCreditCount;
+            Long clearSms = smsEntity.getValue() - totalConsumeSmsCount;
+            saasMerchantCreditInfoService.update(creditEntity.setValue(clearCredit));
+            saasMerchantSmsInfoService.update(smsEntity.setValue(clearSms));
         });
         LOGGER.info("== 机构号为: {}的日清算完成 ==", merchantCode);
     }

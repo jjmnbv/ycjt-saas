@@ -121,6 +121,11 @@
             <artifactId>finance-client</artifactId>
             <version>0.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.beitu.saas</groupId>
+            <artifactId>finance-service</artifactId>
+            <version>0.1</version>
+        </dependency>
     </dependencies>
 
 </project>
