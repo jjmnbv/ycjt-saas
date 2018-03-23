@@ -29,8 +29,8 @@ import java.util.List;
 @Api(description = "渠道相关接口")
 @RestController
 @RequestMapping("/module")
-public class SaasModuleController {
-    private static final Log LOGGER = LogFactory.getLog(SaasModuleController.class);
+public class SaasRiskModuleController {
+    private static final Log LOGGER = LogFactory.getLog(SaasRiskModuleController.class);
 
     @Autowired
     private SaasModuleApplication saasModuleApplication;

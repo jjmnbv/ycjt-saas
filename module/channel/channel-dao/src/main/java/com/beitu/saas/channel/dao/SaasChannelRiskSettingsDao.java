@@ -10,5 +10,5 @@ import com.fqgj.common.base.BaseMapper;
 */
 
 public interface SaasChannelRiskSettingsDao  extends BaseMapper<SaasChannelRiskSettingsEntity> {
-
+    SaasChannelRiskSettingsEntity selectSaasChannelRiskSettingsEntity(String channelCode);
 }

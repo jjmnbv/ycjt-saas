@@ -41,6 +41,6 @@ public class SaasChannelDaoImpl extends AbstractBaseMapper<SaasChannelEntity> im
     public SaasChannelEntity selectChannelEntityByChannelCode(String channelCode) {
         Map<String, Object> map = new HashMap<>();
         map.put("channelCode", channelCode);
-        return getSqlSession().selectOne(this.getStatement("selectChannelEntityList"), map);
+        return getSqlSession().selectOne(this.getStatement("selectChannelEntityByChannelCode"), map);
     }
 }

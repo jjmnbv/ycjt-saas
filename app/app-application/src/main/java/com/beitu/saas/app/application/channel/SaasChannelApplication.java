@@ -1,6 +1,7 @@
 package com.beitu.saas.app.application.channel;
 
 import com.beitu.saas.app.common.RequestLocalInfo;
+import com.beitu.saas.channel.domain.SaasH5ChannelVo;
 import com.beitu.saas.channel.param.SaasChannelParam;
 import com.beitu.saas.channel.client.SaasChannelRiskSettingsService;
 import com.beitu.saas.channel.client.SaasChannelService;
@@ -63,6 +64,13 @@ public class SaasChannelApplication {
         LOGGER.info("== 渠道创建成功! ==");
     }
 
+    /**
+     * 分页获取渠道列表
+     *
+     * @param param
+     * @param page
+     * @return
+     */
     public List<SaasChannelVo> getSaasChannelList(SaasChannelParam param, Page page) {
         List<SaasChannelVo> saasChannelVoList = new ArrayList<>();
         List<SaasChannelEntity> saasChannelList = saasChannelService.getSaasChannelList(param, page);
@@ -84,5 +92,35 @@ public class SaasChannelApplication {
         });
 
         return saasChannelVoList;
+    }
+
+    /**
+     * 根据渠道号获取渠道信息
+     *
+     * @param channelCode
+     * @return
+     */
+    public SaasH5ChannelVo getSaasChannelBychannelCode(String channelCode) {
+        SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelBychannelCode(channelCode);
+
+        if (saasChannelEntity.getChannelStatus() == ChannelStatusEnum.CLOSE.getType()) {
+            return null;
+        }
+        return new SaasH5ChannelVo().setChannelCode(saasChannelEntity.getChannelCode())
+                .setMerchantCode(saasChannelEntity.getMerchantCode())
+                .setChannelName(saasChannelEntity.getChannelName());
+    }
+
+
+    /**
+     * 根据渠道号获取风控配置信息
+     */
+    public SaasChannelRiskSettingsVo getSaasChannelRiskSettingsByChannelCode(String channelCode) {
+        SaasChannelRiskSettingsEntity entity = saasChannelRiskSettingsService.getSaasChannelRiskSettingsByChannelCode(channelCode);
+
+        return new SaasChannelRiskSettingsVo().setChannelCode(entity.getChannelCode())
+                .setModuleCode(entity.getModuleCode())
+                .setItemCode(entity.getItemCode())
+                .setRequired(entity.getRequired());
     }
 }

@@ -51,6 +51,4 @@
         </if>
         and deleted = 0
     </select>
-
-
 </mapper>
