@@ -101,7 +101,7 @@ public class SaasChannelApplication {
      * @return
      */
     public SaasH5ChannelVo getSaasChannelBychannelCode(String channelCode) {
-        SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelBychannelCode(channelCode);
+        SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(channelCode);
 
         if (saasChannelEntity.getChannelStatus() == ChannelStatusEnum.CLOSE.getType()) {
             return null;

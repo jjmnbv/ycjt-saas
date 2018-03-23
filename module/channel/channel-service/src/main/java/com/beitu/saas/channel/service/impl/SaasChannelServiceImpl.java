@@ -40,7 +40,7 @@ public class SaasChannelServiceImpl extends AbstractBaseService implements SaasC
     }
 
     @Override
-    public SaasChannelEntity getSaasChannelBychannelCode(String channelCode) {
+    public SaasChannelEntity getSaasChannelByChannelCode(String channelCode) {
         SaasChannelEntity channelEntity = saasChannelDao.selectChannelEntityByChannelCode(channelCode);
         return channelEntity;
     }

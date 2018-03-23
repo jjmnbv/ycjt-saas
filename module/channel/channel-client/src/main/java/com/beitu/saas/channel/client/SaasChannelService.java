@@ -29,5 +29,5 @@ public interface SaasChannelService<T extends BaseEntity> extends BaseService<T>
     /**
      * 根据渠道号渠道信息
      */
-    SaasChannelEntity getSaasChannelBychannelCode(String channelCode);
+    SaasChannelEntity getSaasChannelByChannelCode(String channelCode);
 }
