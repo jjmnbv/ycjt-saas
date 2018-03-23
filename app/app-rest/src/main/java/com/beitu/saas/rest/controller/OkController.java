@@ -27,4 +27,5 @@ public class OkController {
     public String ok() {
         return "ok";
     }
+
 }

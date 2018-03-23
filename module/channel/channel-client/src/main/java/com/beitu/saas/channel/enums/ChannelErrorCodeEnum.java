@@ -1,5 +1,6 @@
 package com.beitu.saas.channel.enums;
 
+import com.fqgj.common.api.enums.ErrorCodeEnum;
 import org.springframework.http.HttpStatus;
 
 /**
@@ -9,10 +10,12 @@ import org.springframework.http.HttpStatus;
  * Date: 2018/3/22
  * Time: 下午2:44
  */
-public enum ChannelErrorCodeEnum {
+public enum ChannelErrorCodeEnum implements ErrorCodeEnum {
     CHANNEL_PARAM_INVALID(10001, "创建渠道失败, 传入参数异常", HttpStatus.OK),
     MODULE_PARAM_INVALID(10002, "创建模块失败, 传入参数异常", HttpStatus.OK),
-    MODULE_ITEM_PARAM_INVALID(10003, "创建模块字段失败, 传入参数异常", HttpStatus.OK);
+    MODULE_ITEM_PARAM_INVALID(10003, "创建模块字段失败, 传入参数异常", HttpStatus.OK),
+    DISABLE_CHANNEL(10004, "渠道不可用", HttpStatus.OK),
+    CHANNEL_MODULE(10005, "渠道未进行风控配置", HttpStatus.OK);
 
     private Integer code;
 

@@ -7,7 +7,10 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class IdcardInfoExtractor {
-    
+
+    public static final String MALE = "男";
+    public static final String FEMALE = "女";
+
     // 省份
     private String province;
     // 城市
@@ -75,9 +78,9 @@ public class IdcardInfoExtractor {
     public IdcardInfoExtractor(String idcard) {
         try {
             validator = new IdentityNumberUtil();
-            if (validator.isValidatedAllIdcard(idcard)) {
+            if (IdentityNumberUtil.isValidatedAllIdcard(idcard)) {
                 if (idcard.length() == 15) {
-                    idcard = validator.convertIdcarBy15bit(idcard);
+                    idcard = IdentityNumberUtil.convertIdcarBy15bit(idcard);
                 }
                 // 获取省份
                 String provinceId = idcard.substring(0, 2);
@@ -92,9 +95,9 @@ public class IdcardInfoExtractor {
                 // 获取性别
                 String id17 = idcard.substring(16, 17);
                 if (Integer.parseInt(id17) % 2 != 0) {
-                    this.gender = "男";
+                    this.gender = MALE;
                 } else {
-                    this.gender = "女";
+                    this.gender = FEMALE;
                 }
                 
                 // 获取出生日期

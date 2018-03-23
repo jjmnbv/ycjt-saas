@@ -6,7 +6,7 @@ import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.domain.SaasChannelRiskSettingsVo;
 import com.beitu.saas.channel.domain.SaasChannelVo;
 import com.beitu.saas.channel.enums.ChannelErrorCodeEnum;
-import com.beitu.saas.common.consts.ConstantNum;
+import com.beitu.saas.common.consts.ContantNum;
 import com.beitu.saas.rest.controller.channel.request.SaasChannelQueryRequestVo;
 import com.beitu.saas.rest.controller.channel.request.SaasChannelRequestVo;
 import com.beitu.saas.rest.controller.channel.request.SaasOperateSaasChannelRequestVo;
@@ -111,7 +111,7 @@ public class SaasChannelController {
         List<SaasChannelVo> saasChannelList = saasChannelApplication.getSaasChannelList(saasChannelParam, page);
 
         Boolean hasNextPage = (page.getTotalCount() + page.getPageSize() - 1) / page.getPageSize() > page.getCurrentPage();
-        SaasChannelListResponse saasChannelListResponse = new SaasChannelListResponse(hasNextPage, pageNo + ConstantNum.ONE, saasChannelList);
+        SaasChannelListResponse saasChannelListResponse = new SaasChannelListResponse(hasNextPage, pageNo + ContantNum.ONE, saasChannelList);
 
         return Response.ok().putData(saasChannelListResponse);
     }

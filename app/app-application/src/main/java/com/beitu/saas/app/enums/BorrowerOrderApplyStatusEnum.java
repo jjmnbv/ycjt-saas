@@ -1,39 +1,42 @@
 package com.beitu.saas.app.enums;
 
+import com.fqgj.common.api.enums.MsgCodeEnum;
+
 /**
  * @author linanjun
  * @create 2018/3/22 下午8:35
  * @description
  */
-public enum BorrowerOrderApplyStatusEnum {
+public enum BorrowerOrderApplyStatusEnum implements MsgCodeEnum {
 
     NO_SUBMIT(1, "未提交"),
     REVIEWING(2, "审核中"),
-    REFUSE(3, "驳回"),
-    FINISHED(4, "完成借款");
+    REFUSE(3, "驳回");
 
-    BorrowerOrderApplyStatusEnum(Integer type, String value) {
-        this.type = type;
-        this.value = value;
+    BorrowerOrderApplyStatusEnum(Integer code, String msg) {
+        this.code = code;
+        this.msg = msg;
     }
 
-    private Integer type;
+    private Integer code;
 
-    private String value;
+    private String msg;
 
-    public Integer getType() {
-        return type;
+    @Override
+    public Integer getCode() {
+        return code;
     }
 
-    public void setType(Integer type) {
-        this.type = type;
+    public void setCode(Integer code) {
+        this.code = code;
     }
 
-    public String getValue() {
-        return value;
+    @Override
+    public String getMsg() {
+        return msg;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 }

@@ -1,6 +1,8 @@
 package com.beitu.saas.borrower.domain;
 
+import com.beitu.saas.borrower.entity.SaasBorrowerEmergentContact;
 import com.fqgj.common.api.ResponseData;
+import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 
@@ -130,4 +132,25 @@ public class SaasBorrowerEmergentContactVo implements ResponseData, Serializable
     public void setSuccess(Boolean success) {
         this.success = success;
     }
+
+    public static SaasBorrowerEmergentContactVo convertEntityToVO(SaasBorrowerEmergentContact saasBorrowerEmergentContact) {
+        if (saasBorrowerEmergentContact == null) {
+            return null;
+        }
+        SaasBorrowerEmergentContactVo saasBorrowerEmergentContactVo = new SaasBorrowerEmergentContactVo();
+        BeanUtils.copyProperties(saasBorrowerEmergentContact, saasBorrowerEmergentContactVo);
+        saasBorrowerEmergentContactVo.setSaasBorrowerEmergentContactId(saasBorrowerEmergentContact.getId());
+        return saasBorrowerEmergentContactVo;
+    }
+
+    public static SaasBorrowerEmergentContact convertVOToEntity(SaasBorrowerEmergentContactVo saasBorrowerEmergentContactVo) {
+        if (saasBorrowerEmergentContactVo == null) {
+            return null;
+        }
+        SaasBorrowerEmergentContact saasBorrowerEmergentContact = new SaasBorrowerEmergentContact();
+        BeanUtils.copyProperties(saasBorrowerEmergentContactVo, saasBorrowerEmergentContact);
+        saasBorrowerEmergentContact.setId(saasBorrowerEmergentContactVo.getSaasBorrowerEmergentContactId());
+        return saasBorrowerEmergentContact;
+    }
+
 }

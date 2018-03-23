@@ -10,5 +10,5 @@ import com.fqgj.common.base.BaseMapper;
 */
 
 public interface SaasCollectionOrderDao  extends BaseMapper<SaasCollectionOrderEntity> {
-
+    SaasCollectionOrderEntity selectSaasCollectionOrderEntity(String orderNo);
 }

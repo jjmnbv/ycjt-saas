@@ -10,7 +10,10 @@ import org.springframework.http.HttpStatus;
  */
 public enum SmsErrorCodeEnum implements ErrorCodeEnum {
 
-    REPEAT_REQUEST(70001, "请求过于频繁，请稍候再试", HttpStatus.OK);
+    REPEAT_REQUEST(70001, "请求过于频繁，请稍候再试", HttpStatus.OK),
+    VERIFY_CODE_FAILURE(70002, "验证码失效，请重试", HttpStatus.OK),
+    INPUT_WRONG_VERIFY_CODE(70003, "验证码输入错误", HttpStatus.OK),
+    VERIFYCODE_TYPE_NOT_EXIST(70004, "请求验证码类型不存在", HttpStatus.OK),;
 
 
     private Integer code;

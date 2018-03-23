@@ -1,6 +1,7 @@
 package com.beitu.saas.borrower.client;
 
 import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
+import com.beitu.saas.borrower.entity.SaasBorrowerRealInfo;
 import com.fqgj.common.base.BaseService;
 import com.fqgj.common.entity.BaseEntity;
 
@@ -12,5 +13,7 @@ import com.fqgj.common.entity.BaseEntity;
 public interface SaasBorrowerRealInfoService<T extends BaseEntity> extends BaseService<T> {
 
     SaasBorrowerRealInfoVo getBorrowerRealInfoByBorrowerCode(String borrowerCode);
+
+    SaasBorrowerRealInfo create(String borrowerCode, String name, String identityCode);
 
 }
