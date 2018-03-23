@@ -4,6 +4,8 @@ import com.beitu.saas.channel.entity.SaasChannelRiskSettingsEntity;
 import com.fqgj.common.base.BaseService;
 import com.fqgj.common.entity.BaseEntity;
 
+import java.util.List;
+
 /**
 * User: fenqiguanjia
 * Date: 2018-03-21
@@ -13,5 +15,5 @@ public interface SaasChannelRiskSettingsService<T extends BaseEntity> extends Ba
     /**
      * 根据渠道号渠道信息
      */
-    SaasChannelRiskSettingsEntity getSaasChannelRiskSettingsByChannelCode(String channelCode);
+    List<SaasChannelRiskSettingsEntity> getSaasChannelRiskSettingsByChannelCode(String channelCode);
 }

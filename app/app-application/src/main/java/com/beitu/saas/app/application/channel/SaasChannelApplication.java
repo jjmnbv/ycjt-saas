@@ -102,7 +102,6 @@ public class SaasChannelApplication {
      */
     public SaasH5ChannelVo getSaasChannelBychannelCode(String channelCode) {
         SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(channelCode);
-
         if (saasChannelEntity.getChannelStatus() == ChannelStatusEnum.CLOSE.getType()) {
             return null;
         }
@@ -115,12 +114,19 @@ public class SaasChannelApplication {
     /**
      * 根据渠道号获取风控配置信息
      */
-    public SaasChannelRiskSettingsVo getSaasChannelRiskSettingsByChannelCode(String channelCode) {
-        SaasChannelRiskSettingsEntity entity = saasChannelRiskSettingsService.getSaasChannelRiskSettingsByChannelCode(channelCode);
+    public List<SaasChannelRiskSettingsVo> getSaasChannelRiskSettingsByChannelCode(String channelCode) {
+        List<SaasChannelRiskSettingsEntity> entityList = saasChannelRiskSettingsService.getSaasChannelRiskSettingsByChannelCode(channelCode);
+        List<SaasChannelRiskSettingsVo> riskSettingsVos = new ArrayList<>();
 
-        return new SaasChannelRiskSettingsVo().setChannelCode(entity.getChannelCode())
-                .setModuleCode(entity.getModuleCode())
-                .setItemCode(entity.getItemCode())
-                .setRequired(entity.getRequired());
+        entityList.stream().forEach(x -> {
+            SaasChannelRiskSettingsVo vo = new SaasChannelRiskSettingsVo()
+                    .setChannelCode(x.getChannelCode())
+                    .setItemCode(x.getItemCode())
+                    .setModuleCode(x.getModuleCode())
+                    .setRequired(x.getRequired());
+            riskSettingsVos.add(vo);
+        });
+
+        return riskSettingsVos;
     }
 }

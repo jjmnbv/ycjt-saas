@@ -5,6 +5,7 @@ import com.fqgj.common.base.AbstractBaseMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,8 +18,8 @@ import java.util.Map;
 public class SaasChannelRiskSettingsDaoImpl extends AbstractBaseMapper<SaasChannelRiskSettingsEntity> implements SaasChannelRiskSettingsDao {
 
     @Override
-    public SaasChannelRiskSettingsEntity selectSaasChannelRiskSettingsEntity(String channelCode) {
+    public List<SaasChannelRiskSettingsEntity> selectSaasChannelRiskSettingsEntityList(String channelCode) {
         Map<String, Object> map = new HashMap<>();
         map.put("channelCode", channelCode);
-        return getSqlSession().selectOne(this.getStatement("selectSaasChannelRiskSettingsEntity"), map);    }
+        return getSqlSession().selectList(this.getStatement("selectSaasChannelRiskSettingsEntityList"), map);    }
 }

@@ -9,6 +9,8 @@ import com.fqgj.log.enhance.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * User: fenqiguanjia
  * Date: 2018-03-21
@@ -24,8 +26,8 @@ public class SaasChannelRiskSettingsServiceImpl extends AbstractBaseService impl
     private SaasChannelRiskSettingsDao saasChannelRiskSettingsDao;
 
     @Override
-    public SaasChannelRiskSettingsEntity getSaasChannelRiskSettingsByChannelCode(String channelCode) {
-        return saasChannelRiskSettingsDao.selectSaasChannelRiskSettingsEntity(channelCode);
+    public List<SaasChannelRiskSettingsEntity> getSaasChannelRiskSettingsByChannelCode(String channelCode) {
+        return saasChannelRiskSettingsDao.selectSaasChannelRiskSettingsEntityList(channelCode);
     }
 }
 
