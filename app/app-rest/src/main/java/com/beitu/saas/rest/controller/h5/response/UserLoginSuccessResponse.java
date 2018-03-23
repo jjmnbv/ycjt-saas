@@ -15,6 +15,10 @@ public class UserLoginSuccessResponse implements ResponseData {
     @ApiModelProperty(value = "用户TOKEN")
     private String token;
 
+    public UserLoginSuccessResponse(String token) {
+        this.token = token;
+    }
+
     public String getToken() {
         return token;
     }

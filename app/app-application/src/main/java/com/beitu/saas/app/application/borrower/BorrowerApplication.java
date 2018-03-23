@@ -4,11 +4,19 @@ import com.beitu.saas.app.application.channel.SaasChannelApplication;
 import com.beitu.saas.borrower.client.SaasBorrowerService;
 import com.beitu.saas.borrower.client.SaasBorrowerTokenService;
 import com.beitu.saas.borrower.domain.SaasBorrowerVo;
+import com.beitu.saas.borrower.entity.SaasBorrower;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.domain.SaasChannelVo;
+import com.beitu.saas.channel.domain.SaasH5ChannelVo;
+import com.beitu.saas.channel.enums.ChannelErrorCodeEnum;
+import com.beitu.saas.common.consts.RedisKeyConsts;
+import com.fqgj.base.services.redis.RedisClient;
+import com.fqgj.base.services.redis.TimeConsts;
 import com.fqgj.common.utils.StringUtils;
+import com.fqgj.exception.common.ApplicationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author linanjun
@@ -25,7 +33,10 @@ public class BorrowerApplication {
     private SaasBorrowerService saasBorrowerService;
 
     @Autowired
-    private SaasChannelService saasChannelService;
+    private SaasChannelApplication saasChannelApplication;
+
+    @Autowired
+    private RedisClient redisClient;
 
     public SaasBorrowerVo getBorrowerByAccessToken(String token) {
         String borrowerCode = saasBorrowerTokenService.getBorrowerCodeByToken(token);
@@ -35,9 +46,26 @@ public class BorrowerApplication {
         return saasBorrowerService.getByBorrowerCode(borrowerCode);
     }
 
+    @Transactional(rollbackFor = RuntimeException.class)
     public String login(String mobile, String channelCode) {
-        SaasChannelVo saasChannelVo = saasChannelService.getByChannelCode(channelCode);
-        return "";
+        SaasH5ChannelVo saasH5ChannelVo = saasChannelApplication.getSaasChannelBychannelCode(channelCode);
+        if (saasH5ChannelVo == null) {
+            throw new ApplicationException(ChannelErrorCodeEnum.DISABLE_CHANNEL);
+        }
+        SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByMobileAndMerchantCode(mobile, saasH5ChannelVo.getMerchantCode());
+        String token;
+        if (saasBorrowerVo != null) {
+            token = saasBorrowerTokenService.refreshToken(saasBorrowerVo.getBorrowerCode(), saasH5ChannelVo.getMerchantCode()).getToken();
+        } else {
+            saasBorrowerVo = new SaasBorrowerVo();
+            saasBorrowerVo.setMerchantCode(saasH5ChannelVo.getMerchantCode());
+            saasBorrowerVo.setChannelCode(saasH5ChannelVo.getChannelCode());
+            saasBorrowerVo.setMobile(mobile);
+            SaasBorrower saasBorrower = saasBorrowerService.create(saasBorrowerVo);
+            token = saasBorrowerTokenService.create(saasBorrower.getBorrowerCode(), saasH5ChannelVo.getMerchantCode()).getToken();
+        }
+        redisClient.set(RedisKeyConsts.SAAS_TOKEN_KEY, saasBorrowerVo, TimeConsts.TEN_MINUTES, token);
+        return token;
     }
 
 }

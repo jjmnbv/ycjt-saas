@@ -1,6 +1,10 @@
 package com.beitu.saas.borrower.domain;
 
+import com.beitu.saas.borrower.entity.SaasBorrower;
+import com.beitu.saas.common.utils.OrderNoUtil;
 import com.fqgj.common.api.ResponseData;
+import com.fqgj.log.util.UUID;
+import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 
@@ -70,4 +74,26 @@ public class SaasBorrowerVo implements ResponseData, Serializable {
     public void setMobile(String mobile) {
         this.mobile = mobile;
     }
+
+    public static SaasBorrowerVo convertEntityToVO(SaasBorrower saasBorrower) {
+        if (saasBorrower == null) {
+            return null;
+        }
+        SaasBorrowerVo saasBorrowerVo = new SaasBorrowerVo();
+        BeanUtils.copyProperties(saasBorrower, saasBorrowerVo);
+        saasBorrowerVo.setSaasBorrowerId(saasBorrower.getId());
+        return saasBorrowerVo;
+    }
+
+    public static SaasBorrower convertVOToEntity(SaasBorrowerVo saasBorrowerVo) {
+        if (saasBorrowerVo == null) {
+            return null;
+        }
+        SaasBorrower saasBorrower = new SaasBorrower();
+        BeanUtils.copyProperties(saasBorrowerVo, saasBorrower);
+        saasBorrower.setBorrowerCode(OrderNoUtil.makeOrderNum());
+        saasBorrower.setId(saasBorrowerVo.getSaasBorrowerId());
+        return saasBorrower;
+    }
+
 }

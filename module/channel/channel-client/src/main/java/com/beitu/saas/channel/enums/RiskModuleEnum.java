@@ -8,30 +8,31 @@ package com.beitu.saas.channel.enums;
  * Time: 下午2:22
  */
 public enum RiskModuleEnum {
-    APPLICATION(101, "申请表"),
-    PERSON_INFO(102, "个人信息"),
-    EMERGENT_CONTACT(103, "紧急联系人"),
-    WORK_INFO(104, "工作信息"),
-    CARRIER_AUTHENTIC(105, "运营商认证"),
-    ZM_CREDIT(106, "芝麻信用"),
-    ONLINE_AUTHENTIC(107, "电商认证"),
-    ROOF_BORROW_CREDIT(108, "多平台借贷信用"),
-    IDENTITY_CARD(109, "身份证");
 
-    private Integer moduleCode;
+    APPLICATION("101", "申请表"),
+    PERSONAL_INFO("102", "个人信息"),
+    EMERGENT_CONTACT("103", "紧急联系人"),
+    WORK_INFO("104", "工作信息"),
+    CARRIER_AUTHENTIC("105", "运营商认证"),
+    ZM_CREDIT("106", "芝麻信用"),
+    EB_INFO("107", "电商认证"),
+    PLATFORM_BORROW_CREDIT("108", "多平台借贷信用"),
+    IDENTITY_INFO("109", "身份证");
+
+    private String moduleCode;
 
     private String desc;
 
-    RiskModuleEnum(Integer moduleCode, String desc) {
+    RiskModuleEnum(String moduleCode, String desc) {
         this.moduleCode = moduleCode;
         this.desc = desc;
     }
 
-    public Integer getModuleCode() {
+    public String getModuleCode() {
         return moduleCode;
     }
 
-    public RiskModuleEnum setModuleCode(Integer moduleCode) {
+    public RiskModuleEnum setModuleCode(String moduleCode) {
         this.moduleCode = moduleCode;
         return this;
     }
@@ -45,7 +46,7 @@ public enum RiskModuleEnum {
         return this;
     }
 
-    public static RiskModuleEnum getRiskModuleEnumByModuleCode(Integer moduleCode) {
+    public static RiskModuleEnum getRiskModuleEnumByModuleCode(String moduleCode) {
         RiskModuleEnum moduleEnum = null;
         for (RiskModuleEnum e : RiskModuleEnum.values()) {
             if (e.getModuleCode().equals(moduleCode)) {

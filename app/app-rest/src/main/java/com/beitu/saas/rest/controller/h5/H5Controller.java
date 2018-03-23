@@ -5,12 +5,16 @@ import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.api.ApiResponse;
 import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.application.SendApplication;
+import com.beitu.saas.app.application.borrower.BorrowerApplication;
 import com.beitu.saas.app.application.credit.BorrowerBaseInfoApplication;
+import com.beitu.saas.app.application.credit.CreditApplication;
 import com.beitu.saas.app.application.credit.vo.BorrowerEmergentContactVo;
 import com.beitu.saas.app.application.credit.vo.BorrowerIdentityInfoVo;
 import com.beitu.saas.app.application.credit.vo.BorrowerWorkInfoVo;
+import com.beitu.saas.app.application.order.OrderApplication;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.app.enums.BorrowerOrderApplyStatusEnum;
+import com.beitu.saas.channel.enums.ChannelErrorCodeEnum;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.consts.TimeConsts;
@@ -53,6 +57,15 @@ public class H5Controller {
     @Autowired
     private ConfigUtil configUtil;
 
+    @Autowired
+    private BorrowerApplication borrowerApplication;
+
+    @Autowired
+    private OrderApplication orderApplication;
+
+    @Autowired
+    private CreditApplication creditApplication;
+
     @VisitorAccessible
     @SignIgnore
     @ParamsValidate
@@ -67,8 +80,11 @@ public class H5Controller {
         if (!verifyCode.equals(req.getVerifyCode())) {
             return new DataApiResponse<>(SmsErrorCodeEnum.INPUT_WRONG_VERIFY_CODE);
         }
-        //login 操作
-        return new DataApiResponse<>(new UserLoginSuccessResponse());
+        String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
+        if (StringUtils.isEmpty(channelCode)) {
+            return new DataApiResponse<>(ChannelErrorCodeEnum.DISABLE_CHANNEL);
+        }
+        return new DataApiResponse<>(new UserLoginSuccessResponse(borrowerApplication.login(req.getMobile(), channelCode)));
     }
 
     @RequestMapping(value = "/user/home", method = RequestMethod.POST)
@@ -76,25 +92,31 @@ public class H5Controller {
     @ApiOperation(value = "用户首页", response = UserHomeResponse.class)
     public DataApiResponse<UserHomeResponse> home() {
         String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
-
-        // TODO
-        return new DataApiResponse<>(new UserHomeResponse());
+        String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
+        if (StringUtils.isEmpty(channelCode)) {
+            return new DataApiResponse<>(ChannelErrorCodeEnum.DISABLE_CHANNEL);
+        }
+        return new DataApiResponse<>(new UserHomeResponse(orderApplication.getOrderApplyStatus(borrowerCode, channelCode).getCode()));
     }
 
-    @RequestMapping(value = "/user/apply/status", method = RequestMethod.POST)
-    @ResponseBody
-    @ApiOperation(value = "获取用户订单状态", response = UserOrderStatusResponse.class)
-    public DataApiResponse<UserOrderStatusResponse> getBorrowerStatus() {
-        // TODO
-        return new DataApiResponse<>(new UserOrderStatusResponse(BorrowerOrderApplyStatusEnum.NO_SUBMIT.getType()));
-    }
+//    @RequestMapping(value = "/user/apply/status", method = RequestMethod.POST)
+//    @ResponseBody
+//    @ApiOperation(value = "获取用户订单状态", response = UserOrderStatusResponse.class)
+//    public DataApiResponse<UserOrderStatusResponse> getBorrowerStatus() {
+//        // TODO
+//        return new DataApiResponse<>(new UserOrderStatusResponse(BorrowerOrderApplyStatusEnum.NO_SUBMIT.getType()));
+//    }
 
     @RequestMapping(value = "/credit/list", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "风控项列表获取", response = CreditModuleListResponse.class)
-    public DataApiResponse<CreditModuleListResponse> listCreditModule() {
-        // TODO
-        return new DataApiResponse<>(new CreditModuleListResponse());
+    public DataApiResponse<CreditModuleListResponse> listCreditModule(@RequestBody @Valid QueryCreditModuleListRequest req) {
+        String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
+        if (StringUtils.isEmpty(channelCode)) {
+            return new DataApiResponse<>(ChannelErrorCodeEnum.DISABLE_CHANNEL);
+        }
+        String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
+        return new DataApiResponse<>(new CreditModuleListResponse(creditApplication.listCreditModule(channelCode, borrowerCode, req.getOrderNumb())));
     }
 
     @RequestMapping(value = "/credit/apply/info/get", method = RequestMethod.POST)

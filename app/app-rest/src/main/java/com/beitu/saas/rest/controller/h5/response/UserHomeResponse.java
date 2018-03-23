@@ -13,13 +13,17 @@ import io.swagger.annotations.ApiModelProperty;
 public class UserHomeResponse implements ResponseData {
 
     @ApiModelProperty(value = "申请状态")
-    private String applyType;
+    private Integer applyType;
 
-    public String getApplyType() {
+    public UserHomeResponse(Integer applyType) {
+        this.applyType = applyType;
+    }
+
+    public Integer getApplyType() {
         return applyType;
     }
 
-    public void setApplyType(String applyType) {
+    public void setApplyType(Integer applyType) {
         this.applyType = applyType;
     }
 

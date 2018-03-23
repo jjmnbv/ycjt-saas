@@ -1,9 +1,15 @@
 package com.beitu.saas.borrower.domain;
 
+import com.beitu.saas.borrower.entity.SaasBorrowerToken;
+import com.beitu.saas.common.consts.TimeConsts;
 import com.fqgj.common.api.ResponseData;
+import com.fqgj.common.utils.MD5;
+import com.fqgj.common.utils.TimeUtils;
+import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * User: jungle
@@ -71,4 +77,27 @@ public class SaasBorrowerTokenVo implements ResponseData, Serializable {
     public void setExpireDate(Date expireDate) {
         this.expireDate = expireDate;
     }
+
+    public static SaasBorrowerTokenVo convertEntityToVO(SaasBorrowerToken saasBorrowerToken) {
+        if (saasBorrowerToken == null) {
+            return null;
+        }
+        SaasBorrowerTokenVo saasBorrowerTokenVo = new SaasBorrowerTokenVo();
+        BeanUtils.copyProperties(saasBorrowerToken, saasBorrowerTokenVo);
+        saasBorrowerTokenVo.setSaasBorrowerTokenId(saasBorrowerToken.getId());
+        return saasBorrowerTokenVo;
+    }
+
+    public static SaasBorrowerToken convertVOToEntity(SaasBorrowerTokenVo saasBorrowerTokenVo) {
+        if (saasBorrowerTokenVo == null) {
+            return null;
+        }
+        SaasBorrowerToken saasBorrowerToken = new SaasBorrowerToken();
+        BeanUtils.copyProperties(saasBorrowerTokenVo, saasBorrowerToken);
+        saasBorrowerToken.setId(saasBorrowerTokenVo.getSaasBorrowerTokenId());
+        saasBorrowerToken.setToken(saasBorrowerToken.createToken());
+        saasBorrowerToken.setExpireDate(saasBorrowerToken.createExpireDate());
+        return saasBorrowerToken;
+    }
+
 }
