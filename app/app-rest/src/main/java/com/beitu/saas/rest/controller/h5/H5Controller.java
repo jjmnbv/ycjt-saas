@@ -15,10 +15,7 @@ import com.beitu.saas.borrower.client.SaasBorrowerEmergentContactService;
 import com.beitu.saas.borrower.client.SaasBorrowerIdentityInfoService;
 import com.beitu.saas.borrower.client.SaasBorrowerPersonalInfoService;
 import com.beitu.saas.borrower.client.SaasBorrowerWorkInfoService;
-import com.beitu.saas.borrower.domain.SaasBorrowerEmergentContactVo;
-import com.beitu.saas.borrower.domain.SaasBorrowerIdentityInfoVo;
-import com.beitu.saas.borrower.domain.SaasBorrowerPersonalInfoVo;
-import com.beitu.saas.borrower.domain.SaasBorrowerWorkInfoVo;
+import com.beitu.saas.borrower.domain.*;
 import com.beitu.saas.borrower.entity.SaasBorrowerEmergentContact;
 import com.beitu.saas.borrower.entity.SaasBorrowerIdentityInfo;
 import com.beitu.saas.borrower.entity.SaasBorrowerPersonalInfo;
@@ -291,8 +288,11 @@ public class H5Controller {
         if (saasH5ChannelVo == null) {
             return new ApiResponse(ChannelErrorCodeEnum.DISABLE_CHANNEL);
         }
-        String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
-        return creditApplication.submitCreditInfo(borrowerCode, saasH5ChannelVo.getMerchantCode(), saasH5ChannelVo.getChannelCode());
+        SaasBorrowerVo saasBorrowerVo = RequestLocalInfo.getCurrentAdmin().getSaasBorrower();
+        if (!saasH5ChannelVo.getMerchantCode().equals(saasBorrowerVo.getMerchantCode())) {
+            return new ApiResponse(BorrowerErrorCodeEnum.NO_ACCESS_RIGHT);
+        }
+        return creditApplication.submitCreditInfo(saasBorrowerVo.getBorrowerCode(), saasH5ChannelVo.getChannelCode());
     }
 
 }

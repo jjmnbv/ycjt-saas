@@ -13,6 +13,10 @@ public interface SaasBorrowerIdentityInfoService<T extends BaseEntity> extends B
 
     SaasBorrowerIdentityInfoVo getByBorrowerCode(String borrowerCode);
 
+    int countByBorrowerCode(String borrowerCode);
+
     SaasBorrowerIdentityInfoVo getByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb);
+
+    Boolean updateOrderNumbByBorrowerCode(String orderNumb, String borrowerCode);
 
 }

@@ -13,6 +13,10 @@ public interface SaasBorrowerEmergentContactService<T extends BaseEntity> extend
 
     SaasBorrowerEmergentContactVo getByBorrowerCode(String borrowerCode);
 
+    int countByBorrowerCode(String borrowerCode);
+
     SaasBorrowerEmergentContactVo getByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb);
+
+    Boolean updateOrderNumbByBorrowerCode(String orderNumb, String borrowerCode);
 
 }

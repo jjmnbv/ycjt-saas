@@ -34,6 +34,11 @@ public class SaasBorrowerEmergentContactServiceImpl extends AbstractBaseService 
     }
 
     @Override
+    public int countByBorrowerCode(String borrowerCode) {
+        return saasBorrowerEmergentContactDao.countH5SaveInfoByBorrowerCode(borrowerCode);
+    }
+
+    @Override
     public SaasBorrowerEmergentContactVo getByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb) {
         List<SaasBorrowerEmergentContact> saasBorrowerEmergentContactList = saasBorrowerEmergentContactDao.selectByParams(new HashMap<String, Object>(4) {{
             put("borrowerCode", borrowerCode);
@@ -44,6 +49,11 @@ public class SaasBorrowerEmergentContactServiceImpl extends AbstractBaseService 
             return null;
         }
         return SaasBorrowerEmergentContactVo.convertEntityToVO(saasBorrowerEmergentContactList.get(0));
+    }
+
+    @Override
+    public Boolean updateOrderNumbByBorrowerCode(String orderNumb, String borrowerCode) {
+        return saasBorrowerEmergentContactDao.updateOrderNumbByBorrowerCode(orderNumb, borrowerCode) == 1;
     }
 
 }
