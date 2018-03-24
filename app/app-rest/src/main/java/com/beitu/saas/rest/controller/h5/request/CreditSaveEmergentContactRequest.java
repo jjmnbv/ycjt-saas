@@ -13,10 +13,6 @@ import org.hibernate.validator.constraints.NotBlank;
 @ApiModel(description = "保存风控模块紧急联系人信息")
 public class CreditSaveEmergentContactRequest extends ParamsObject {
 
-    @ApiModelProperty(value = "订单号")
-    @NotBlank(message = "订单号不能为空")
-    private String orderNumb;
-
     /**
      * 直系亲属联系人类型
      */
@@ -53,14 +49,6 @@ public class CreditSaveEmergentContactRequest extends ParamsObject {
     @ApiModelProperty(value = "同事朋友手机号码")
     @NotBlank(message = "同事朋友手机号码不能为空")
     private String friendMobile;
-
-    public String getOrderNumb() {
-        return orderNumb;
-    }
-
-    public void setOrderNumb(String orderNumb) {
-        this.orderNumb = orderNumb;
-    }
 
     public String getFamilyType() {
         return familyType;

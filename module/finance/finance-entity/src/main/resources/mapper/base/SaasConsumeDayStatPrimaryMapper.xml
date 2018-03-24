@@ -6,8 +6,8 @@
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="dt" jdbcType="DATE" property="dt"/>
         <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode"/>
-        <result column="consume_credit" jdbcType="INTEGER" property="consumeCredit"/>
-        <result column="consume_msg" jdbcType="INTEGER" property="consumeMsg"/>
+        <result column="consume_credit" jdbcType="BIGINT" property="consumeCredit"/>
+        <result column="consume_sms" jdbcType="BIGINT" property="consumeSms"/>
         <result column="last_clear_dt" jdbcType="DATE" property="lastClearDt"/>
         <result column="deleted" jdbcType="BIT" property="deleted"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
@@ -19,7 +19,7 @@
     dt,
     merchant_code,
     consume_credit,
-    consume_msg,
+    consume_sms,
     last_clear_dt,
     deleted,
     gmt_modified,
@@ -47,8 +47,8 @@
                 <if test="consumeCredit !=null">
                 consume_credit,
                 </if>
-                <if test="consumeMsg !=null">
-                consume_msg,
+                <if test="consumeSms !=null">
+                consume_sms,
                 </if>
                 <if test="lastClearDt !=null">
                 last_clear_dt,
@@ -71,10 +71,10 @@
                     #{merchantCode,jdbcType=VARCHAR},
                 </if>
                 <if test="consumeCredit != null">
-                    #{consumeCredit,jdbcType=INTEGER},
+                    #{consumeCredit,jdbcType=BIGINT},
                 </if>
-                <if test="consumeMsg != null">
-                    #{consumeMsg,jdbcType=INTEGER},
+                <if test="consumeSms != null">
+                    #{consumeSms,jdbcType=BIGINT},
                 </if>
                 <if test="lastClearDt != null">
                     #{lastClearDt,jdbcType=DATE},
@@ -101,10 +101,10 @@
                 merchant_code = #{merchantCode,jdbcType=VARCHAR},
                 </if>
                 <if test="consumeCredit !=null">
-                consume_credit = #{consumeCredit,jdbcType=INTEGER},
+                consume_credit = #{consumeCredit,jdbcType=BIGINT},
                 </if>
-                <if test="consumeMsg !=null">
-                consume_msg = #{consumeMsg,jdbcType=INTEGER},
+                <if test="consumeSms !=null">
+                consume_sms = #{consumeSms,jdbcType=BIGINT},
                 </if>
                 <if test="lastClearDt !=null">
                 last_clear_dt = #{lastClearDt,jdbcType=DATE},
@@ -152,10 +152,10 @@
                 and merchant_code = #{merchantCode,jdbcType=VARCHAR}
             </if>
             <if test="consumeCredit !=null">
-                and consume_credit = #{consumeCredit,jdbcType=INTEGER}
+                and consume_credit = #{consumeCredit,jdbcType=BIGINT}
             </if>
-            <if test="consumeMsg !=null">
-                and consume_msg = #{consumeMsg,jdbcType=INTEGER}
+            <if test="consumeSms !=null">
+                and consume_sms = #{consumeSms,jdbcType=BIGINT}
             </if>
             <if test="lastClearDt !=null">
                 and last_clear_dt = #{lastClearDt,jdbcType=DATE}
@@ -185,10 +185,10 @@
                 and merchant_code = #{merchantCode,jdbcType=VARCHAR}
             </if>
             <if test="consumeCredit !=null">
-                and consume_credit = #{consumeCredit,jdbcType=INTEGER}
+                and consume_credit = #{consumeCredit,jdbcType=BIGINT}
             </if>
-            <if test="consumeMsg !=null">
-                and consume_msg = #{consumeMsg,jdbcType=INTEGER}
+            <if test="consumeSms !=null">
+                and consume_sms = #{consumeSms,jdbcType=BIGINT}
             </if>
             <if test="lastClearDt !=null">
                 and last_clear_dt = #{lastClearDt,jdbcType=DATE}

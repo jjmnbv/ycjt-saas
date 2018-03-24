@@ -1,8 +1,12 @@
 package com.beitu.saas.channel.client;
 
-import com.beitu.saas.channel.domain.OrderInfoVo;
+import com.beitu.saas.channel.param.CollectionOrderQueryParam;
+import com.beitu.saas.collection.vo.CollectionOrderInfoDetailVo;
+import com.fqgj.common.api.Page;
 import com.fqgj.common.base.BaseService;
 import com.fqgj.common.entity.BaseEntity;
+
+import java.util.List;
 
 /**
  * User: fenqiguanjia
@@ -14,9 +18,9 @@ public interface SaasCollectionOrderService<T extends BaseEntity> extends BaseSe
     /**
      * 新增催收订单
      *
-     * @param orderInfoVo
+     * @param collectionOrderInfoDetailVo
      */
-    void createCollectionOrder(OrderInfoVo orderInfoVo);
+    void createCollectionOrder(CollectionOrderInfoDetailVo collectionOrderInfoDetailVo);
 
     /**
      * 核销订单
@@ -24,5 +28,15 @@ public interface SaasCollectionOrderService<T extends BaseEntity> extends BaseSe
      * @param orderNo
      */
     void closeOrder(String orderNo);
+
+
+    /**
+     * 查询催收订单列表
+     *
+     * @param collectionOrderQueryParam
+     * @return
+     */
+    List<CollectionOrderInfoDetailVo> getCollectionOrderListByPage(CollectionOrderQueryParam collectionOrderQueryParam, Page page);
+
 
 }

@@ -68,7 +68,7 @@ public class BorrowerApplication {
             SaasBorrower saasBorrower = saasBorrowerService.create(saasBorrowerVo);
             token = saasBorrowerTokenService.create(saasBorrower.getBorrowerCode(), saasH5ChannelVo.getMerchantCode()).getToken();
         }
-        redisClient.set(RedisKeyConsts.SAAS_TOKEN_KEY, saasBorrowerVo, TimeConsts.TEN_MINUTES, token);
+        redisClient.set(RedisKeyConsts.SAAS_TOKEN_KEY, saasBorrowerVo.getBorrowerCode(), TimeConsts.TEN_MINUTES, token);
         return token;
     }
 

@@ -14,9 +14,6 @@ import org.springframework.beans.BeanUtils;
 @ApiModel(value = "风控模块身份证信息")
 public class CreditIdentityInfoResponse implements ResponseData {
 
-    @ApiModelProperty(value = "订单号")
-    private String orderNumb;
-
     /**
      * 身份证正面面图片URL
      */
@@ -33,21 +30,12 @@ public class CreditIdentityInfoResponse implements ResponseData {
     @ApiModelProperty(value = "手持身份证图片URL")
     private String holdUrl;
 
-    public CreditIdentityInfoResponse(String orderNumb, SaasBorrowerIdentityInfoVo saasBorrowerIdentityInfoVo) {
-        this.orderNumb = orderNumb;
+    public CreditIdentityInfoResponse(SaasBorrowerIdentityInfoVo saasBorrowerIdentityInfoVo) {
         if (saasBorrowerIdentityInfoVo != null) {
             this.frontUrl = saasBorrowerIdentityInfoVo.getFrontUrl();
             this.backUrl = saasBorrowerIdentityInfoVo.getBackUrl();
             this.holdUrl = saasBorrowerIdentityInfoVo.getHoldUrl();
         }
-    }
-
-    public String getOrderNumb() {
-        return orderNumb;
-    }
-
-    public void setOrderNumb(String orderNumb) {
-        this.orderNumb = orderNumb;
     }
 
     public String getFrontUrl() {

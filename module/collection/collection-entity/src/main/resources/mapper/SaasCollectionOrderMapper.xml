@@ -3,7 +3,34 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.beitu.saas.collection.dao.impl.SaasCollectionOrderDaoImpl">
 
-    <select id="selectSaasCollectionOrderEntity" parameterType="map" resultType="com.beitu.saas.collection.entity.SaasCollectionOrderEntity">
+    <sql id="Param_collection_order_Where_Clause">
+        <where>
+            <trim prefixOverrides="and">
+                <if test="collectionOrderQueryParam.mobile != null">
+                    and sb.mobile = #{collectionOrderQueryParam.mobile,jdbcType=VARCHAR}
+                </if>
+                <if test="collectionOrderQueryParam.name != null">
+                    and sbri.name = #{collectionOrderQueryParam.name,jdbcType=VARCHAR}
+                </if>
+                <if test="collectionOrderQueryParam.identityCode != null">
+                    and sbri.identityCode = #{collectionOrderQueryParam.identityCode,jdbcType=VARCHAR}
+                </if>
+                <if test="collectionOrderQueryParam.channelCode != null">
+                    and so.channelCode = #{collectionOrderQueryParam.channelCode,jdbcType=VARCHAR}
+                </if>
+                <if test="collectionOrderQueryParam.overdueStartDate != null and collectionOrderQueryParam.overdueStartEndDate != null">
+                    and date_format(so.repayment_dt, '%Y-%m-%d') &gt;=
+                    #{collectionOrderQueryParam.overdueStartDate,jdbcType=VARCHAR}
+                    and date_format(so.repayment_dt, '%Y-%m-%d') &lt;
+                    #{collectionOrderQueryParam.overdueEndDate,jdbcType=VARCHAR}
+                </if>
+                and sco.status=0 AND sco.is_deleted = 0
+            </trim>
+        </where>
+    </sql>
+
+    <select id="selectSaasCollectionOrderEntity" parameterType="map"
+            resultType="com.beitu.saas.collection.entity.SaasCollectionOrderEntity">
         SELECT
         <include refid="Base_Column_List"/>
         from saas_collection_order
@@ -12,4 +39,33 @@
         </if>
         and deleted = 0
     </select>
+
+    <select id="selectCollectionOrderListByPage" parameterType="map"
+            resultType="com.beitu.saas.collection.vo.CollectionOrderInfoDetailVo">
+        select sbri.name,sb.mobile,sbri.gender,
+        sbri.identity_code identityCode,soa.real_capital realCapital,
+        datediff(so.repayment_dt,so.created_dt) applyDays,
+        so.channel_code channelCode ,sc.channel_name channelName
+        from saas_collection_order sco
+        left join saas_order_application soa on sco.order_no=soa.order_numb
+        left join saas_order so on soa.order_numb=so.order_numb
+        left join saas_borrower sb on soa.borrower_code=sb.borrower_code
+        left join saas_borrower_real_info sbri on soa.borrower_code=sbri.borrower_code
+        left join saas_channel sc on so.channel_code=sc.channel_code
+        <include refid="Param_collection_order_Where_Clause"/>
+        <include refid="paginationSql"/>
+    </select>
+
+
+    <select id="queryTotalCollectionOrderListCount" parameterType="map" resultType="INTEGER">
+        select count(*) from
+        from saas_collection_order sco
+        left join saas_order_application soa on sco.order_no=soa.order_numb
+        left join saas_order so on soa.order_numb=so.order_numb
+        left join saas_borrower sb on soa.borrower_code=sb.borrower_code
+        left join saas_borrower_real_info sbri on soa.borrower_code=sbri.borrower_code
+        <include refid="Param_collection_order_Where_Clause"/>
+    </select>
+
+
 </mapper>

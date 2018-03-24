@@ -6,8 +6,8 @@ import java.util.Date;
 
 /**
 * User: fenqiguanjia
-* Date: 2018-03-21
-* Time: 20:58:19.368
+* Date: 2018-03-23
+* Time: 20:49:30.610
 * TableDesc:消费日统计表
 */
 public class SaasConsumeDayStatEntity extends BaseEntity{
@@ -22,11 +22,11 @@ public class SaasConsumeDayStatEntity extends BaseEntity{
     /**
     *消耗点券
     */
-    private Integer consumeCredit;
+    private Long consumeCredit;
     /**
     *消耗点券
     */
-    private Integer consumeMsg;
+    private Long consumeSms;
     /**
     *上次清算日期
     */
@@ -51,21 +51,21 @@ public class SaasConsumeDayStatEntity extends BaseEntity{
         return this;
     }
 
-    public  Integer getConsumeCredit(){
+    public  Long getConsumeCredit(){
         return this.consumeCredit;
     }
 
-    public  SaasConsumeDayStatEntity setConsumeCredit(Integer consumeCredit){
+    public  SaasConsumeDayStatEntity setConsumeCredit(Long consumeCredit){
         this.consumeCredit = consumeCredit;
         return this;
     }
 
-    public  Integer getConsumeMsg(){
-        return this.consumeMsg;
+    public  Long getConsumeSms(){
+        return this.consumeSms;
     }
 
-    public  SaasConsumeDayStatEntity setConsumeMsg(Integer consumeMsg){
-        this.consumeMsg = consumeMsg;
+    public  SaasConsumeDayStatEntity setConsumeSms(Long consumeSms){
+        this.consumeSms = consumeSms;
         return this;
     }
 
