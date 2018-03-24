@@ -34,9 +34,21 @@ public class SaasAdminVo implements ResponseData,Serializable{
     */
     private String mobile;
     /**
+     *职位
+     */
+    private String job;
+    /**
     *
     */
     private Boolean enable;
+
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
+    }
 
     public Long getSaasAdminId() {
         return saasAdminId;

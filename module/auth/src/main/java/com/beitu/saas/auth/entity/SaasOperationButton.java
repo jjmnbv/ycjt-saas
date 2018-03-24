@@ -3,8 +3,8 @@ import com.fqgj.common.entity.BaseEntity;
 
 /**
 * User: xiaochong
-* Date: 2018-03-22
-* Time: 15:36:16.656
+* Date: 2018-03-23
+* Time: 12:13:48.048
 * TableDesc:
 */
 public class SaasOperationButton extends BaseEntity {
@@ -16,13 +16,21 @@ public class SaasOperationButton extends BaseEntity {
     *父菜单id
     */
     private Integer pId;
+    /**
+    *是否为父菜单
+    */
+    private Boolean isParent;
+    /**
+    *排序
+    */
+    private Long sort;
 
 
     public  String getName(){
         return this.name;
     }
 
-    public  SaasOperationButton setName(String name){
+    public SaasOperationButton setName(String name){
         this.name = name;
         return this;
     }
@@ -31,8 +39,26 @@ public class SaasOperationButton extends BaseEntity {
         return this.pId;
     }
 
-    public  SaasOperationButton setPId(Integer pId){
+    public SaasOperationButton setPId(Integer pId){
         this.pId = pId;
+        return this;
+    }
+
+    public  Boolean getIsParent(){
+        return this.isParent;
+    }
+
+    public SaasOperationButton setIsParent(Boolean isParent){
+        this.isParent = isParent;
+        return this;
+    }
+
+    public  Long getSort(){
+        return this.sort;
+    }
+
+    public SaasOperationButton setSort(Long sort){
+        this.sort = sort;
         return this;
     }
 }

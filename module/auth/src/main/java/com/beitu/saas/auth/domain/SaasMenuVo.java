@@ -6,8 +6,8 @@ import java.io.Serializable;
 
 /**
 * User: xiaochong
-* Date: 2018-03-22
-* Time: 15:36:13.645
+* Date: 2018-03-23
+* Time: 11:07:24.383
 */
 public class SaasMenuVo implements ResponseData,Serializable{
 
@@ -25,6 +25,14 @@ public class SaasMenuVo implements ResponseData,Serializable{
     *父菜单id
     */
     private Integer pId;
+    /**
+    *是否为父菜单
+    */
+    private Boolean isParent;
+    /**
+    *排序
+    */
+    private Long sort;
 
     public Long getSaasMenuId() {
         return saasMenuId;
@@ -58,5 +66,21 @@ public class SaasMenuVo implements ResponseData,Serializable{
 
     public  void setPId(Integer pId){
         this.pId = pId;
+    }
+
+    public  Boolean getIsParent(){
+        return this.isParent;
+    }
+
+    public  void setIsParent(Boolean isParent){
+        this.isParent = isParent;
+    }
+
+    public  Long getSort(){
+        return this.sort;
+    }
+
+    public  void setSort(Long sort){
+        this.sort = sort;
     }
 }

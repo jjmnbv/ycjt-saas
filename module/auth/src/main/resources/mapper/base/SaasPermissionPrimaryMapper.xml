@@ -14,10 +14,10 @@
     </resultMap>
     <sql id="Base_Column_List">
         id,
-        name,
+        `name`,
         permission,
         relation_id,
-        type,
+        `type`,
         deleted,
         gmt_modified,
         gmt_create
@@ -34,7 +34,7 @@
         insert into saas_permission
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="name !=null">
-                name,
+                `name`,
             </if>
             <if test="permission !=null">
                 permission,
@@ -43,7 +43,7 @@
                 relation_id,
             </if>
             <if test="type !=null">
-                type,
+                `type`,
             </if>
             <if test="deleted !=null">
                 deleted,
@@ -84,7 +84,7 @@
         update saas_permission
         <set>
             <if test="name !=null">
-                name = #{name,jdbcType=VARCHAR},
+                `name` = #{name,jdbcType=VARCHAR},
             </if>
             <if test="permission !=null">
                 permission = #{permission,jdbcType=VARCHAR},
@@ -93,7 +93,7 @@
                 relation_id = #{relationId,jdbcType=INTEGER},
             </if>
             <if test="type !=null">
-                type = #{type,jdbcType=INTEGER},
+                `type` = #{type,jdbcType=INTEGER},
             </if>
             <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=TINYINT},
@@ -132,7 +132,7 @@
                 and id = #{id,jdbcType=BIGINT}
             </if>
             <if test="name !=null">
-                and name = #{name,jdbcType=VARCHAR}
+                and `name` = #{name,jdbcType=VARCHAR}
             </if>
             <if test="permission !=null">
                 and permission = #{permission,jdbcType=VARCHAR}
@@ -141,7 +141,7 @@
                 and relation_id = #{relationId,jdbcType=INTEGER}
             </if>
             <if test="type !=null">
-                and type = #{type,jdbcType=INTEGER}
+                and `type` = #{type,jdbcType=INTEGER}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=TINYINT}
@@ -162,7 +162,7 @@
                 and id = #{id,jdbcType=BIGINT}
             </if>
             <if test="name !=null">
-                and name = #{name,jdbcType=VARCHAR}
+                and `name` = #{name,jdbcType=VARCHAR}
             </if>
             <if test="permission !=null">
                 and permission = #{permission,jdbcType=VARCHAR}
@@ -171,7 +171,7 @@
                 and relation_id = #{relationId,jdbcType=INTEGER}
             </if>
             <if test="type !=null">
-                and type = #{type,jdbcType=INTEGER}
+                and `type` = #{type,jdbcType=INTEGER}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=TINYINT}

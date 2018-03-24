@@ -3,8 +3,8 @@ import com.fqgj.common.entity.BaseEntity;
 
 /**
 * User: xiaochong
-* Date: 2018-03-22
-* Time: 15:36:16.665
+* Date: 2018-03-23
+* Time: 16:00:30.804
 * TableDesc:
 */
 public class SaasRolePermission extends BaseEntity {
@@ -20,13 +20,17 @@ public class SaasRolePermission extends BaseEntity {
     *1.菜单2.按钮
     */
     private Long permissionType;
+    /**
+    *所属菜单或按钮
+    */
+    private Integer relationId;
 
 
     public  Integer getRoleId(){
         return this.roleId;
     }
 
-    public  SaasRolePermission setRoleId(Integer roleId){
+    public SaasRolePermission setRoleId(Integer roleId){
         this.roleId = roleId;
         return this;
     }
@@ -35,7 +39,7 @@ public class SaasRolePermission extends BaseEntity {
         return this.permissionKey;
     }
 
-    public  SaasRolePermission setPermissionKey(Integer permissionKey){
+    public SaasRolePermission setPermissionKey(Integer permissionKey){
         this.permissionKey = permissionKey;
         return this;
     }
@@ -44,8 +48,17 @@ public class SaasRolePermission extends BaseEntity {
         return this.permissionType;
     }
 
-    public  SaasRolePermission setPermissionType(Long permissionType){
+    public SaasRolePermission setPermissionType(Long permissionType){
         this.permissionType = permissionType;
+        return this;
+    }
+
+    public  Integer getRelationId(){
+        return this.relationId;
+    }
+
+    public SaasRolePermission setRelationId(Integer relationId){
+        this.relationId = relationId;
         return this;
     }
 }
