@@ -7,15 +7,11 @@ import java.util.Date;
 
 /**
  * User: jungle
- * Date: 2018-03-23
- * Time: 15:18:54.765
+ * Date: 2018-03-24
+ * Time: 14:59:56.222
  * TableDesc:SAAS订单申请表
  */
 public class SaasOrderApplication extends BaseEntity {
-    /**
-     * 订单号
-     */
-    private String orderNumb;
     /**
      * 机构CODE
      */
@@ -37,10 +33,6 @@ public class SaasOrderApplication extends BaseEntity {
      */
     private BigDecimal totalInterestRatio;
     /**
-     * 逾期利率
-     */
-    private BigDecimal lateFeeRatio;
-    /**
      * 借款意图
      */
     private String borrowPurpose;
@@ -49,15 +41,6 @@ public class SaasOrderApplication extends BaseEntity {
      */
     private Date repaymentDate;
 
-
-    public String getOrderNumb() {
-        return this.orderNumb;
-    }
-
-    public SaasOrderApplication setOrderNumb(String orderNumb) {
-        this.orderNumb = orderNumb;
-        return this;
-    }
 
     public String getMerchantCode() {
         return this.merchantCode;
@@ -101,15 +84,6 @@ public class SaasOrderApplication extends BaseEntity {
 
     public SaasOrderApplication setTotalInterestRatio(BigDecimal totalInterestRatio) {
         this.totalInterestRatio = totalInterestRatio;
-        return this;
-    }
-
-    public BigDecimal getLateFeeRatio() {
-        return this.lateFeeRatio;
-    }
-
-    public SaasOrderApplication setLateFeeRatio(BigDecimal lateFeeRatio) {
-        this.lateFeeRatio = lateFeeRatio;
         return this;
     }
 

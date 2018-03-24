@@ -15,10 +15,6 @@ import javax.validation.constraints.NotNull;
 @ApiModel(description = "保存风控模块申请表信息")
 public class CreditSaveWorkInfoRequest extends ParamsObject {
 
-    @ApiModelProperty(value = "订单号")
-    @NotBlank(message = "订单号不能为空")
-    private String orderNumb;
-
     /**
      * 职业
      */
@@ -49,14 +45,6 @@ public class CreditSaveWorkInfoRequest extends ParamsObject {
     @ApiModelProperty(value = "公司地址")
     @NotBlank(message = "公司地址不能为空")
     private String companyDetailAddress;
-
-    public String getOrderNumb() {
-        return orderNumb;
-    }
-
-    public void setOrderNumb(String orderNumb) {
-        this.orderNumb = orderNumb;
-    }
 
     public Integer getCareerType() {
         return careerType;

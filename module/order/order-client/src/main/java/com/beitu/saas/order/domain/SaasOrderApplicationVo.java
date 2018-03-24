@@ -10,17 +10,13 @@ import java.util.Date;
 
 /**
  * User: jungle
- * Date: 2018-03-23
- * Time: 15:18:54.768
+ * Date: 2018-03-24
+ * Time: 14:59:56.228
  */
 public class SaasOrderApplicationVo implements ResponseData, Serializable {
 
     private Long saasOrderApplicationId;
 
-    /**
-     * 订单号
-     */
-    private String orderNumb;
     /**
      * 机构CODE
      */
@@ -42,10 +38,6 @@ public class SaasOrderApplicationVo implements ResponseData, Serializable {
      */
     private BigDecimal totalInterestRatio;
     /**
-     * 逾期利率
-     */
-    private BigDecimal lateFeeRatio;
-    /**
      * 借款意图
      */
     private String borrowPurpose;
@@ -62,14 +54,6 @@ public class SaasOrderApplicationVo implements ResponseData, Serializable {
         this.saasOrderApplicationId = saasOrderApplicationId;
     }
 
-
-    public String getOrderNumb() {
-        return this.orderNumb;
-    }
-
-    public void setOrderNumb(String orderNumb) {
-        this.orderNumb = orderNumb;
-    }
 
     public String getMerchantCode() {
         return this.merchantCode;
@@ -109,14 +93,6 @@ public class SaasOrderApplicationVo implements ResponseData, Serializable {
 
     public void setTotalInterestRatio(BigDecimal totalInterestRatio) {
         this.totalInterestRatio = totalInterestRatio;
-    }
-
-    public BigDecimal getLateFeeRatio() {
-        return this.lateFeeRatio;
-    }
-
-    public void setLateFeeRatio(BigDecimal lateFeeRatio) {
-        this.lateFeeRatio = lateFeeRatio;
     }
 
     public String getBorrowPurpose() {
