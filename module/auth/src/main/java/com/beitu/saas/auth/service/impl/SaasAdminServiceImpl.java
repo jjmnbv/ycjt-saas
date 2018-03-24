@@ -4,6 +4,7 @@ package com.beitu.saas.auth.service.impl;
 import com.beitu.saas.auth.dao.SaasAdminDao;
 import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.auth.service.SaasAdminService;
+import com.fqgj.common.api.Page;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
 import com.fqgj.common.utils.CollectionUtils;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: xiaochong
@@ -70,6 +72,18 @@ public class SaasAdminServiceImpl extends AbstractBaseService implements SaasAdm
             return saasAdminList.get(0);
         }
         return null;
+    }
+
+    @Override
+    public List<SaasAdmin> getAdminListByMerchantCode(String adminCode, Page page) {
+        Map map = new HashMap(4) {{
+            put("adminCode", adminCode);
+            put("deleted", false);
+            put("page", page);
+        }};
+        page.setTotalCount(this.queryTotal(map));
+        List list = this.selectByParams(map);
+        return list;
     }
 
 

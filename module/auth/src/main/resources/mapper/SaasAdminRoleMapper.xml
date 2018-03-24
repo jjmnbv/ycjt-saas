@@ -3,4 +3,19 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.beitu.saas.auth.dao.impl.SaasAdminRoleDaoImpl">
 
+    <update id="updateByAdminCode">
+        update saas_admin_role
+        <set>
+            <if test="roleId !=null">
+                role_id = #{roleId,jdbcType=BIGINT},
+            </if>
+            <if test="deleted !=null">
+                deleted = #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where admin_code = #{adminCode,jdbcType=VARCHAR}
+    </update>
 </mapper>

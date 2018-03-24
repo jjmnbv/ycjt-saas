@@ -1,7 +1,10 @@
 package com.beitu.saas.auth.service;
 import com.beitu.saas.auth.entity.SaasAdmin;
+import com.fqgj.common.api.Page;
 import com.fqgj.common.base.BaseService;
 import com.fqgj.common.entity.BaseEntity;
+
+import java.util.List;
 
 /**
 * User: xiaochong
@@ -15,4 +18,6 @@ public interface SaasAdminService<T extends BaseEntity> extends BaseService<T> {
     SaasAdmin getSaasAdminByMoblie(String mobile);
 
     SaasAdmin getSaasAdminByAdminCode(String adminCode);
+
+    List<SaasAdmin> getAdminListByMerchantCode(String adminCode, Page page);
 }

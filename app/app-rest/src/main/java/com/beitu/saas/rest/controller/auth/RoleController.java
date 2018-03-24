@@ -6,6 +6,7 @@ import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.auth.entity.SaasRole;
 import com.beitu.saas.auth.service.SaasRolePermissionService;
 import com.beitu.saas.auth.service.SaasRoleService;
+import com.beitu.saas.common.utils.DateUtil;
 import com.beitu.saas.rest.controller.auth.request.AddRoleRequest;
 import com.beitu.saas.rest.controller.auth.response.RoleListResponse;
 import com.fqgj.common.api.Page;
@@ -56,7 +57,7 @@ public class RoleController {
             RoleListResponse response = new RoleListResponse();
             BeanUtils.copyProperties(saasRole, response);
             response.setRoleId(saasRole.getId());
-            response.setCreateName(saasRole.getCreateName());
+            response.setCreateTime(DateUtil.convertDateToString(saasRole.getGmtCreate()));
         });
         return Response.ok().putData(new HashMap<String, Object>(2) {{
             put("roleList", listResponses);
@@ -64,7 +65,7 @@ public class RoleController {
         }});
     }
 
-    @RequestMapping(value = "/{roleId}/{enable}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/status/{roleId}/{enable}", method = RequestMethod.PUT)
     @ParamsValidate
     public Response enable(@PathVariable Long rolrId, Boolean enable) {
         SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
