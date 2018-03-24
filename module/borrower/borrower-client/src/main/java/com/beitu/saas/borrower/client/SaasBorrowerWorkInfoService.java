@@ -11,6 +11,8 @@ import com.fqgj.common.entity.BaseEntity;
  */
 public interface SaasBorrowerWorkInfoService<T extends BaseEntity> extends BaseService<T> {
 
+    SaasBorrowerWorkInfoVo getByBorrowerCode(String borrowerCode);
+
     SaasBorrowerWorkInfoVo getByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb);
 
 }

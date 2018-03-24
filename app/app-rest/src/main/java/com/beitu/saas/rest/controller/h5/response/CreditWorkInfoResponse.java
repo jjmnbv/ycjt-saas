@@ -13,8 +13,6 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "用户工作信息模块")
 public class CreditWorkInfoResponse implements ResponseData {
 
-    @ApiModelProperty(value = "订单号")
-    private String orderNumb;
     /**
      * 职业
      */
@@ -41,8 +39,7 @@ public class CreditWorkInfoResponse implements ResponseData {
     @ApiModelProperty(value = "公司地址")
     private String companyDetailAddress;
 
-    public CreditWorkInfoResponse(String orderNumb, SaasBorrowerWorkInfoVo saasBorrowerWorkInfoVo) {
-        this.orderNumb = orderNumb;
+    public CreditWorkInfoResponse(SaasBorrowerWorkInfoVo saasBorrowerWorkInfoVo) {
         if (saasBorrowerWorkInfoVo != null) {
             this.careerType = saasBorrowerWorkInfoVo.getCareerType();
             this.salary = saasBorrowerWorkInfoVo.getSalary();
@@ -50,14 +47,6 @@ public class CreditWorkInfoResponse implements ResponseData {
             this.companyName = saasBorrowerWorkInfoVo.getCompanyName();
             this.companyDetailAddress = saasBorrowerWorkInfoVo.getCompanyDetailAddress();
         }
-    }
-
-    public String getOrderNumb() {
-        return orderNumb;
-    }
-
-    public void setOrderNumb(String orderNumb) {
-        this.orderNumb = orderNumb;
     }
 
     public Integer getCareerType() {

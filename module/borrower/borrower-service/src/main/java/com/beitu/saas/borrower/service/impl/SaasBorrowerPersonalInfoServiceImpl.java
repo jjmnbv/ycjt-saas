@@ -7,7 +7,6 @@ import com.beitu.saas.borrower.entity.SaasBorrowerPersonalInfo;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
 import com.fqgj.common.utils.CollectionUtils;
-import com.fqgj.common.utils.StringUtils;
 import com.fqgj.log.enhance.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,18 +29,16 @@ public class SaasBorrowerPersonalInfoServiceImpl extends AbstractBaseService imp
     private SaasBorrowerPersonalInfoDao saasBorrowerPersonalInfoDao;
 
     @Override
+    public SaasBorrowerPersonalInfoVo getByBorrowerCode(String borrowerCode) {
+        SaasBorrowerPersonalInfo saasBorrowerPersonalInfo = saasBorrowerPersonalInfoDao.selectH5SaveInfoByBorrowerCode(borrowerCode);
+        return SaasBorrowerPersonalInfoVo.convertEntityToVO(saasBorrowerPersonalInfo);
+    }
+
+    @Override
     public SaasBorrowerPersonalInfoVo getByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb) {
-        if (StringUtils.isNotEmpty(orderNumb)) {
-            List<SaasBorrowerPersonalInfo> saasBorrowerPersonalInfoList = saasBorrowerPersonalInfoDao.selectByParams(new HashMap<String, Object>(4) {{
-                put("orderNumb", orderNumb);
-                put("deleted", Boolean.FALSE);
-            }});
-            if (CollectionUtils.isNotEmpty(saasBorrowerPersonalInfoList)) {
-                return SaasBorrowerPersonalInfoVo.convertEntityToVO(saasBorrowerPersonalInfoList.get(0));
-            }
-        }
         List<SaasBorrowerPersonalInfo> saasBorrowerPersonalInfoList = saasBorrowerPersonalInfoDao.selectByParams(new HashMap<String, Object>(4) {{
             put("borrowerCode", borrowerCode);
+            put("orderNumb", orderNumb);
             put("deleted", Boolean.FALSE);
         }});
         if (CollectionUtils.isEmpty(saasBorrowerPersonalInfoList)) {

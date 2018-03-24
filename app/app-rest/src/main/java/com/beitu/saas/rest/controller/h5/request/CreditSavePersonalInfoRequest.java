@@ -16,10 +16,6 @@ import javax.validation.constraints.NotNull;
 @ApiModel(description = "保存风控模块个人信息")
 public class CreditSavePersonalInfoRequest extends ParamsObject {
 
-    @ApiModelProperty(value = "订单号")
-    @NotBlank(message = "订单号不能为空")
-    private String orderNumb;
-
     /**
      * QQ
      */
@@ -50,14 +46,6 @@ public class CreditSavePersonalInfoRequest extends ParamsObject {
     @ApiModelProperty(value = "婚姻状况")
     @NotNull(message = "婚姻状况不能为空")
     private Integer maritalStatus;
-
-    public String getOrderNumb() {
-        return orderNumb;
-    }
-
-    public void setOrderNumb(String orderNumb) {
-        this.orderNumb = orderNumb;
-    }
 
     public String getQq() {
         return qq;
