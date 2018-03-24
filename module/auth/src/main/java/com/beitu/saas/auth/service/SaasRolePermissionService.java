@@ -1,6 +1,9 @@
 package com.beitu.saas.auth.service;
+import com.beitu.saas.auth.entity.SaasRolePermission;
 import com.fqgj.common.base.BaseService;
 import com.fqgj.common.entity.BaseEntity;
+
+import java.util.List;
 
 /**
 * User: xiaochong
@@ -9,4 +12,9 @@ import com.fqgj.common.entity.BaseEntity;
 */
 public interface SaasRolePermissionService<T extends BaseEntity> extends BaseService<T> {
 
+    List<SaasRolePermission> getMenuPermissionByRoleId(Integer roleId);
+
+    List<SaasRolePermission> getButtonPermissionByRoleId(Integer roleId);
+
+    Boolean addPermissionToRole(Integer roleId, List menuIds, List buttonIds);
 }

@@ -4,8 +4,8 @@
 <mapper namespace="com.beitu.saas.auth.dao.impl.SaasAdminRoleDaoImpl">
     <resultMap id="BaseResultMap" type="com.beitu.saas.auth.entity.SaasAdminRole">
         <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="admin_code" jdbcType="INTEGER" property="adminCode"/>
-        <result column="role_id" jdbcType="INTEGER" property="roleId"/>
+        <result column="admin_code" jdbcType="VARCHAR" property="adminCode"/>
+        <result column="role_id" jdbcType="BIGINT" property="roleId"/>
         <result column="deleted" jdbcType="BIT" property="deleted"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
         <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
@@ -47,10 +47,10 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="adminCode != null">
-                #{adminCode,jdbcType=INTEGER},
+                #{adminCode,jdbcType=VARCHAR},
             </if>
             <if test="roleId != null">
-                #{roleId,jdbcType=INTEGER},
+                #{roleId,jdbcType=BIGINT},
             </if>
             <if test="deleted != null">
                 #{deleted,jdbcType=BIT},
@@ -68,10 +68,10 @@
         update saas_admin_role
         <set>
             <if test="adminCode !=null">
-                admin_code = #{adminCode,jdbcType=INTEGER},
+                admin_code = #{adminCode,jdbcType=VARCHAR},
             </if>
             <if test="roleId !=null">
-                role_id = #{roleId,jdbcType=INTEGER},
+                role_id = #{roleId,jdbcType=BIGINT},
             </if>
             <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},
@@ -110,10 +110,10 @@
                 and id = #{id,jdbcType=BIGINT}
             </if>
             <if test="adminCode !=null">
-                and admin_code = #{adminCode,jdbcType=INTEGER}
+                and admin_code = #{adminCode,jdbcType=VARCHAR}
             </if>
             <if test="roleId !=null">
-                and role_id = #{roleId,jdbcType=INTEGER}
+                and role_id = #{roleId,jdbcType=BIGINT}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}
@@ -134,10 +134,10 @@
                 and id = #{id,jdbcType=BIGINT}
             </if>
             <if test="adminCode !=null">
-                and admin_code = #{adminCode,jdbcType=INTEGER}
+                and admin_code = #{adminCode,jdbcType=VARCHAR}
             </if>
             <if test="roleId !=null">
-                and role_id = #{roleId,jdbcType=INTEGER}
+                and role_id = #{roleId,jdbcType=BIGINT}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}

@@ -1,20 +1,25 @@
 package com.beitu.saas.rest.controller.auth;
 
 import com.beitu.saas.app.annotations.VisitorAccessible;
+import com.beitu.saas.app.application.auth.AdminInfoApplication;
 import com.beitu.saas.app.common.RequestBasicInfo;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.auth.entity.SaasAdmin;
+import com.beitu.saas.auth.entity.SaasAdminRole;
 import com.beitu.saas.auth.service.SaasAdminLoginLogService;
 import com.beitu.saas.auth.service.SaasAdminService;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.consts.TimeConsts;
+import com.beitu.saas.rest.controller.auth.request.AddAdminRequest;
 import com.beitu.saas.rest.controller.auth.request.AdminLoginRequest;
 import com.fqgj.base.services.redis.RedisClient;
 import com.fqgj.common.api.Response;
 import com.fqgj.common.api.annotations.ParamsValidate;
+import com.fqgj.common.utils.GenerOrderNoUtil;
 import com.fqgj.common.utils.MD5;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,6 +49,9 @@ public class AdminController {
 
     @Autowired
     private SaasAdminLoginLogService saasAdminLoginLogService;
+    
+    @Autowired
+    private AdminInfoApplication adminInfoApplication;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ParamsValidate
@@ -66,6 +74,23 @@ public class AdminController {
     public Response logout() throws IOException {
         RequestBasicInfo requestBasicInfo = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo();
         redisClient.del(RedisKeyConsts.SAAS_TOKEN_KEY, requestBasicInfo.getToken());
+        return Response.ok();
+    }
+
+    /**
+     * 新增管理员
+     *
+     * @return
+     */
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @ParamsValidate
+    @ApiOperation("新增用户")
+    public Response addAdmin(@RequestBody AddAdminRequest addAdminRequest) {
+        SaasAdmin saasAdmin = new SaasAdmin();
+        BeanUtils.copyProperties(addAdminRequest, saasAdmin);
+        saasAdmin.setPassword(MD5.md5(addAdminRequest.getPassword())).setMerchantCode(GenerOrderNoUtil.generateOrderNo());
+        saasAdmin.setEnable(true).setMerchantCode(RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode());
+        adminInfoApplication.addAdminAndRole(saasAdmin, addAdminRequest.getRoleId());
         return Response.ok();
     }
 }

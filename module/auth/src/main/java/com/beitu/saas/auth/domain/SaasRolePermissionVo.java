@@ -6,8 +6,8 @@ import java.io.Serializable;
 
 /**
 * User: xiaochong
-* Date: 2018-03-22
-* Time: 15:36:13.693
+* Date: 2018-03-23
+* Time: 16:00:29.735
 */
 public class SaasRolePermissionVo implements ResponseData,Serializable{
 
@@ -25,6 +25,10 @@ public class SaasRolePermissionVo implements ResponseData,Serializable{
     *1.菜单2.按钮
     */
     private Long permissionType;
+    /**
+    *所属菜单或按钮
+    */
+    private Integer relationId;
 
     public Long getSaasRolePermissionId() {
         return saasRolePermissionId;
@@ -58,5 +62,13 @@ public class SaasRolePermissionVo implements ResponseData,Serializable{
 
     public  void setPermissionType(Long permissionType){
         this.permissionType = permissionType;
+    }
+
+    public  Integer getRelationId(){
+        return this.relationId;
+    }
+
+    public  void setRelationId(Integer relationId){
+        this.relationId = relationId;
     }
 }

@@ -14,4 +14,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class SaasRolePermissionDaoImpl extends AbstractBaseMapper<SaasRolePermission> implements SaasRolePermissionDao {
 
+    @Override
+    public void deleteByRoleId(Integer roleId){
+        this.getSqlSession().update(this.getStatement("deleteByRoleId"),roleId);
+    }
 }
