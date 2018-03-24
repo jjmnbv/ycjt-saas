@@ -13,18 +13,42 @@ import io.swagger.annotations.ApiModelProperty;
 public class UserHomeResponse implements ResponseData {
 
     @ApiModelProperty(value = "申请状态")
-    private Integer applyType;
+    private String applyType;
 
-    public UserHomeResponse(Integer applyType) {
+    @ApiModelProperty(value = "头部提示")
+    private String headerTitle;
+
+    @ApiModelProperty(value = "图片提示")
+    private String picTitle;
+
+    public UserHomeResponse(String applyType, String headerTitle, String picTitle) {
         this.applyType = applyType;
+        this.headerTitle = headerTitle;
+        this.picTitle = picTitle;
     }
 
-    public Integer getApplyType() {
+    public String getApplyType() {
         return applyType;
     }
 
-    public void setApplyType(Integer applyType) {
+    public void setApplyType(String applyType) {
         this.applyType = applyType;
+    }
+
+    public String getHeaderTitle() {
+        return headerTitle;
+    }
+
+    public void setHeaderTitle(String headerTitle) {
+        this.headerTitle = headerTitle;
+    }
+
+    public String getPicTitle() {
+        return picTitle;
+    }
+
+    public void setPicTitle(String picTitle) {
+        this.picTitle = picTitle;
     }
 
 }

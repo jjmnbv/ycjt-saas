@@ -10,9 +10,11 @@ import com.beitu.saas.borrower.enums.BorrowerErrorCodeEnum;
 import com.beitu.saas.channel.domain.SaasChannelRiskSettingsVo;
 import com.beitu.saas.channel.enums.ChannelErrorCodeEnum;
 import com.beitu.saas.channel.enums.RiskModuleEnum;
+import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.utils.OrderNoUtil;
 import com.beitu.saas.order.client.SaasOrderApplicationService;
 import com.beitu.saas.order.domain.SaasOrderApplicationVo;
+import com.fqgj.base.services.redis.RedisClient;
 import com.fqgj.common.utils.CollectionUtils;
 import com.fqgj.exception.common.ApplicationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ import java.util.List;
  */
 @Service
 public class CreditApplication {
+
+    @Autowired
+    private RedisClient redisClient;
 
     @Autowired
     private SaasChannelApplication saasChannelApplication;
@@ -102,8 +107,14 @@ public class CreditApplication {
                 }
                 return BorrowerInfoApplyStatusEnum.FINISHED;
             case CARRIER_AUTHENTIC:
-
-                return BorrowerInfoApplyStatusEnum.INCOMPLETE;
+                if (saasBorrowerCarrierService.countByBorrowerCode(borrowerCode) == 0) {
+                    return BorrowerInfoApplyStatusEnum.INCOMPLETE;
+                }
+                String value = redisClient.get(RedisKeyConsts.H5_CARRIER_CRAWLING, borrowerCode);
+                if (value != null) {
+                    return BorrowerInfoApplyStatusEnum.AUTHENTICATING;
+                }
+                return BorrowerInfoApplyStatusEnum.FINISHED;
             case ZM_CREDIT:
                 return BorrowerInfoApplyStatusEnum.INCOMPLETE;
             case EB_INFO:

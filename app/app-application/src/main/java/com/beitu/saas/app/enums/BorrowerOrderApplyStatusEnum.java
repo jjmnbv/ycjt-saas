@@ -9,18 +9,21 @@ import com.fqgj.common.api.enums.MsgCodeEnum;
  */
 public enum BorrowerOrderApplyStatusEnum implements MsgCodeEnum {
 
-    NO_SUBMIT(1, "未提交"),
-    REVIEWING(2, "审核中"),
-    REFUSE(3, "驳回");
+    NO_SUBMIT(1, "", "未提交"),
+    REVIEWING(2, "正在申请", "审核中"),
+    REFUSE(3, "申请驳回", "申请驳回");
 
-    BorrowerOrderApplyStatusEnum(Integer code, String msg) {
+    BorrowerOrderApplyStatusEnum(Integer code, String msg, String remark) {
         this.code = code;
         this.msg = msg;
+        this.remark = remark;
     }
 
     private Integer code;
 
     private String msg;
+
+    private String remark;
 
     @Override
     public Integer getCode() {
