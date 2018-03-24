@@ -15,6 +15,7 @@ import com.beitu.saas.rest.controller.channel.response.SaasChannelListResponse;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.api.Response;
 import com.fqgj.common.utils.CollectionUtils;
+import com.fqgj.common.utils.StringUtils;
 import com.fqgj.log.factory.LogFactory;
 import com.fqgj.log.interfaces.Log;
 import io.swagger.annotations.Api;
@@ -60,8 +61,8 @@ public class SaasChannelController {
     @VisitorAccessible
     public Response addChannel(@RequestBody SaasChannelRequestVo saasChannelRequestVo) {
         List<SaasChannelRiskSettingsVo> settingsVos = new ArrayList<>();
-        boolean setModule = CollectionUtils.isNotEmpty(saasChannelRequestVo.getSaasModuleRequestVos()) && CollectionUtils.isEmpty(saasChannelRequestVo.getSaasModuleItemRequestVos());
-        boolean setModuleItem = CollectionUtils.isNotEmpty(saasChannelRequestVo.getSaasModuleItemRequestVos());
+        boolean setModule = CollectionUtils.isNotEmpty(saasChannelRequestVo.getSaasModuleRequestVos());
+        boolean setModuleItem = saasChannelRequestVo.getSaasModuleItemRequestVos().size() == 1 && !StringUtils.isEmpty(saasChannelRequestVo.getSaasModuleItemRequestVos().get(0).getItemCode());
 
         if (setModuleItem) {
             saasChannelRequestVo.getSaasModuleItemRequestVos().stream().forEach(x -> {

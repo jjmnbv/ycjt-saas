@@ -51,7 +51,7 @@ public class SaasChannelApplication {
         saasChannelEntity.setChannelCode(channelCode)
                 .setChannelStatus(ChannelStatusEnum.OPEN.getType())
                 .setLinkUrl("阿婆罗配置" + channelCode) // TODO: 2018/3/22
-                .setCreator(RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getName());
+                .setCreator("admin");// TODO: 2018/3/24 先写死
         saasChannelService.create(saasChannelEntity);
 
         saasChannelRiskSettingsVoList.stream().forEach(x -> {

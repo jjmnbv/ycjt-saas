@@ -19,10 +19,6 @@ public class SaasModuleItemRequestVo {
      * 字段号
      */
     private String itemCode;
-    /**
-     * 字段名称
-     */
-    private String itemDesc;
 
     /**
      * 是否必填 0 :必填 1:非必填
@@ -47,14 +43,6 @@ public class SaasModuleItemRequestVo {
         return this;
     }
 
-    public String getItemDesc() {
-        return itemDesc;
-    }
-
-    public SaasModuleItemRequestVo setItemDesc(String itemDesc) {
-        this.itemDesc = itemDesc;
-        return this;
-    }
 
     public Integer getRequired() {
         return required;

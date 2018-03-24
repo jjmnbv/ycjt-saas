@@ -15,10 +15,7 @@ public class SaasModuleRequestVo {
      * 模块号
      */
     private String moduleCode;
-    /**
-     * 模块名称
-     */
-    private String moduleDesc;
+
     /**
      * 是否必填 0 :必填 1:非必填
      */
@@ -33,14 +30,6 @@ public class SaasModuleRequestVo {
         return this;
     }
 
-    public String getModuleDesc() {
-        return moduleDesc;
-    }
-
-    public SaasModuleRequestVo setModuleDesc(String moduleDesc) {
-        this.moduleDesc = moduleDesc;
-        return this;
-    }
 
     public Integer getRequired() {
         return required;
