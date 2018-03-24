@@ -1,4 +1,4 @@
-package com.beitu.saas.channel.domain;
+package com.beitu.saas.collection.param;
 
 /**
  * Created with IntelliJ IDEA.
@@ -7,7 +7,7 @@ package com.beitu.saas.channel.domain;
  * Date: 2018/3/23
  * Time: 下午2:10
  */
-public class CollectionCommentVo {
+public class CollectionCommentParam {
     /**
      *订单号
      */
@@ -37,7 +37,7 @@ public class CollectionCommentVo {
         return orderNo;
     }
 
-    public CollectionCommentVo setOrderNo(String orderNo) {
+    public CollectionCommentParam setOrderNo(String orderNo) {
         this.orderNo = orderNo;
         return this;
     }
@@ -46,7 +46,7 @@ public class CollectionCommentVo {
         return name;
     }
 
-    public CollectionCommentVo setName(String name) {
+    public CollectionCommentParam setName(String name) {
         this.name = name;
         return this;
     }
@@ -55,7 +55,7 @@ public class CollectionCommentVo {
         return mobile;
     }
 
-    public CollectionCommentVo setMobile(String mobile) {
+    public CollectionCommentParam setMobile(String mobile) {
         this.mobile = mobile;
         return this;
     }
@@ -64,7 +64,7 @@ public class CollectionCommentVo {
         return content;
     }
 
-    public CollectionCommentVo setContent(String content) {
+    public CollectionCommentParam setContent(String content) {
         this.content = content;
         return this;
     }
@@ -73,7 +73,7 @@ public class CollectionCommentVo {
         return followId;
     }
 
-    public CollectionCommentVo setFollowId(Integer followId) {
+    public CollectionCommentParam setFollowId(Integer followId) {
         this.followId = followId;
         return this;
     }
@@ -82,7 +82,7 @@ public class CollectionCommentVo {
         return followUp;
     }
 
-    public CollectionCommentVo setFollowUp(String followUp) {
+    public CollectionCommentParam setFollowUp(String followUp) {
         this.followUp = followUp;
         return this;
     }

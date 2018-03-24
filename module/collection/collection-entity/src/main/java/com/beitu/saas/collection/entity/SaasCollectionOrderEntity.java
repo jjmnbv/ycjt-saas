@@ -1,4 +1,4 @@
-package com.beitu.saas.channel.entity;
+package com.beitu.saas.collection.entity;
 import com.fqgj.common.entity.BaseEntity;
 
 /**

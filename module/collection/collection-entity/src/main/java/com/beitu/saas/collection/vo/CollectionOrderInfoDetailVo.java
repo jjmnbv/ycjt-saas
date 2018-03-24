@@ -1,4 +1,4 @@
-package com.beitu.saas.channel.vo;
+package com.beitu.saas.collection.vo;
 
 import java.math.BigDecimal;
 

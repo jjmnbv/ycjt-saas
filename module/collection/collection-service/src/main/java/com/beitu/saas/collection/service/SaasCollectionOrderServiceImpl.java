@@ -1,12 +1,12 @@
-package com.beitu.saas.channel.service;
+package com.beitu.saas.collection.service;
 
-import com.beitu.saas.channel.client.SaasCollectionOrderService;
-import com.beitu.saas.channel.enums.CollectionOrderStatusEnum;
-import com.beitu.saas.channel.enums.OverdueTimeEnums;
-import com.beitu.saas.channel.param.CollectionOrderQueryParam;
-import com.beitu.saas.channel.dao.SaasCollectionOrderDao;
-import com.beitu.saas.channel.entity.SaasCollectionOrderEntity;
-import com.beitu.saas.channel.vo.CollectionOrderInfoDetailVo;
+import com.beitu.saas.collection.client.SaasCollectionOrderService;
+import com.beitu.saas.collection.enums.CollectionOrderStatusEnum;
+import com.beitu.saas.collection.enums.OverdueTimeEnums;
+import com.beitu.saas.collection.param.CollectionOrderQueryParam;
+import com.beitu.saas.collection.dao.SaasCollectionOrderDao;
+import com.beitu.saas.collection.entity.SaasCollectionOrderEntity;
+import com.beitu.saas.collection.vo.CollectionOrderInfoDetailVo;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
@@ -25,7 +25,7 @@ import java.util.List;
  * Time: 20:58:19.362
  */
 @Module(value = "订单表服务模块")
-@NameSpace("com.beitu.saas.channel.dao.impl.SaasCollectionOrderDaoImpl")
+@NameSpace("SaasCollectionOrderDaoImpl")
 @Service
 public class SaasCollectionOrderServiceImpl extends AbstractBaseService implements SaasCollectionOrderService {
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.beitu.saas.channel.dao.impl.SaasCollectionOrderDaoImpl">
-    <resultMap id="BaseResultMap" type="com.beitu.saas.channel.entity.SaasCollectionOrderEntity">
+<mapper namespace="com.beitu.saas.collection.dao.impl.SaasCollectionOrderDaoImpl">
+    <resultMap id="BaseResultMap" type="com.beitu.saas.collection.entity.SaasCollectionOrderEntity">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="order_no" jdbcType="VARCHAR" property="orderNo"/>
         <result column="status" jdbcType="TINYINT" property="status"/>
@@ -29,7 +29,7 @@
     </select>
 
     <insert id="insert" keyColumn="id" keyProperty="id"
-            parameterType="com.beitu.saas.channel.entity.SaasCollectionOrderEntity" useGeneratedKeys="true">
+            parameterType="com.beitu.saas.collection.entity.SaasCollectionOrderEntity" useGeneratedKeys="true">
         insert into saas_collection_order
         <trim prefix="(" suffix=")" suffixOverrides=",">
                 <if test="orderNo !=null">
@@ -67,7 +67,7 @@
         </trim>
     </insert>
 
-    <update id="updateByPrimaryKey" parameterType="com.beitu.saas.channel.entity.SaasCollectionOrderEntity">
+    <update id="updateByPrimaryKey" parameterType="com.beitu.saas.collection.entity.SaasCollectionOrderEntity">
         update saas_collection_order
         <set>
                 <if test="orderNo !=null">

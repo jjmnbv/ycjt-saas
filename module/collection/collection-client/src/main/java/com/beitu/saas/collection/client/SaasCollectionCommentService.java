@@ -1,6 +1,6 @@
-package com.beitu.saas.channel.client;
+package com.beitu.saas.collection.client;
 
-import com.beitu.saas.channel.param.CollectionCommentParam;
+import com.beitu.saas.collection.param.CollectionCommentParam;
 import com.fqgj.common.base.BaseService;
 import com.fqgj.common.entity.BaseEntity;
 

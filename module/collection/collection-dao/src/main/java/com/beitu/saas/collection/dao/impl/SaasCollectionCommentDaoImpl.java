@@ -1,6 +1,6 @@
-package com.beitu.saas.channel.dao.impl;
-import com.beitu.saas.channel.dao.SaasCollectionCommentDao;
-import com.beitu.saas.channel.entity.SaasCollectionCommentEntity;
+package com.beitu.saas.collection.dao.impl;
+import com.beitu.saas.collection.dao.SaasCollectionCommentDao;
+import com.beitu.saas.collection.entity.SaasCollectionCommentEntity;
 import com.fqgj.common.base.AbstractBaseMapper;
 import org.springframework.stereotype.Repository;
 

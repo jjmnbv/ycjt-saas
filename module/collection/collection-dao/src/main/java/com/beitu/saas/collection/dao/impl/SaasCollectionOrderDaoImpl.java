@@ -1,9 +1,9 @@
-package com.beitu.saas.channel.dao.impl;
+package com.beitu.saas.collection.dao.impl;
 
-import com.beitu.saas.channel.param.CollectionOrderQueryParam;
-import com.beitu.saas.channel.dao.SaasCollectionOrderDao;
-import com.beitu.saas.channel.entity.SaasCollectionOrderEntity;
-import com.beitu.saas.channel.vo.CollectionOrderInfoDetailVo;
+import com.beitu.saas.collection.dao.SaasCollectionOrderDao;
+import com.beitu.saas.collection.param.CollectionOrderQueryParam;
+import com.beitu.saas.collection.entity.SaasCollectionOrderEntity;
+import com.beitu.saas.collection.vo.CollectionOrderInfoDetailVo;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.base.AbstractBaseMapper;
 import org.springframework.stereotype.Repository;

@@ -1,9 +1,9 @@
-package com.beitu.saas.channel.service;
+package com.beitu.saas.collection.service;
 
-import com.beitu.saas.channel.client.SaasCollectionCommentService;
-import com.beitu.saas.channel.dao.SaasCollectionCommentDao;
-import com.beitu.saas.channel.entity.SaasCollectionCommentEntity;
-import com.beitu.saas.channel.param.CollectionCommentParam;
+import com.beitu.saas.collection.client.SaasCollectionCommentService;
+import com.beitu.saas.collection.dao.SaasCollectionCommentDao;
+import com.beitu.saas.collection.entity.SaasCollectionCommentEntity;
+import com.beitu.saas.collection.param.CollectionCommentParam;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
 import com.fqgj.log.enhance.Module;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 * Time: 20:58:19.353
 */
 @Module(value = "订单催收表服务模块")
-@NameSpace("com.beitu.saas.channel.dao.impl.SaasCollectionCommentDaoImpl")
+@NameSpace("SaasCollectionCommentDaoImpl")
 @Service
 public class SaasCollectionCommentServiceImpl extends AbstractBaseService implements SaasCollectionCommentService {
 

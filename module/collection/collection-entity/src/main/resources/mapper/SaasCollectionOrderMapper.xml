@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.beitu.saas.channel.dao.impl.SaasCollectionOrderDaoImpl">
+<mapper namespace="com.beitu.saas.collection.dao.impl.SaasCollectionOrderDaoImpl">
 
     <sql id="Param_collection_order_Where_Clause">
         <where>
@@ -30,7 +30,7 @@
     </sql>
 
     <select id="selectSaasCollectionOrderEntity" parameterType="map"
-            resultType="com.beitu.saas.channel.entity.SaasCollectionOrderEntity">
+            resultType="com.beitu.saas.collection.entity.SaasCollectionOrderEntity">
         SELECT
         <include refid="Base_Column_List"/>
         from saas_collection_order
@@ -41,7 +41,7 @@
     </select>
 
     <select id="selectCollectionOrderListByPage" parameterType="map"
-            resultType="com.beitu.saas.channel.vo.CollectionOrderInfoDetailVo">
+            resultType="com.beitu.saas.collection.vo.CollectionOrderInfoDetailVo">
         select sbri.name,sb.mobile,sbri.gender,
         sbri.identity_code identityCode,soa.real_capital realCapital,
         datediff(so.repayment_dt,so.created_dt) applyDays,

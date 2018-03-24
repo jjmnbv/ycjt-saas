@@ -1,6 +1,6 @@
 package com.beitu.saas.rest.controller.collection.response;
 
-import com.beitu.saas.channel.vo.CollectionOrderInfoDetailVo;
+import com.beitu.saas.collection.vo.CollectionOrderInfoDetailVo;
 import com.fqgj.common.api.ResponseData;
 import io.swagger.annotations.ApiModel;
 
