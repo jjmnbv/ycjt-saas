@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.beitu.saas.collection.dao.impl.SaasChannelRiskSettingsDaoImpl">
+<mapper namespace="com.beitu.saas.channel.dao.impl.SaasChannelRiskSettingsDaoImpl">
     <select id="selectSaasChannelRiskSettingsEntityList" parameterType="map" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>

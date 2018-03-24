@@ -1,15 +1,15 @@
 package com.beitu.saas.app.application.channel;
 
-import com.beitu.saas.collection.domain.SaasChannelRiskSettingsVo;
-import com.beitu.saas.collection.domain.SaasH5ChannelVo;
-import com.beitu.saas.collection.param.SaasChannelParam;
-import com.beitu.saas.collection.client.SaasChannelRiskSettingsService;
-import com.beitu.saas.collection.client.SaasChannelService;
-import com.beitu.saas.collection.domain.SaasChannelVo;
-import com.beitu.saas.collection.entity.SaasChannelEntity;
-import com.beitu.saas.collection.entity.SaasChannelRiskSettingsEntity;
-import com.beitu.saas.collection.enums.ChannelStatusEnum;
-import com.beitu.saas.collection.param.SaasChannelRiskSettingsParam;
+import com.beitu.saas.channel.domain.SaasChannelRiskSettingsVo;
+import com.beitu.saas.channel.domain.SaasH5ChannelVo;
+import com.beitu.saas.channel.param.SaasChannelParam;
+import com.beitu.saas.channel.client.SaasChannelRiskSettingsService;
+import com.beitu.saas.channel.client.SaasChannelService;
+import com.beitu.saas.channel.domain.SaasChannelVo;
+import com.beitu.saas.channel.entity.SaasChannelEntity;
+import com.beitu.saas.channel.entity.SaasChannelRiskSettingsEntity;
+import com.beitu.saas.channel.enums.ChannelStatusEnum;
+import com.beitu.saas.channel.param.SaasChannelRiskSettingsParam;
 import com.beitu.saas.common.utils.OrderNoUtil;
 import com.beitu.saas.common.utils.ShortUrlUtil;
 import com.fqgj.common.api.Page;
@@ -50,7 +50,7 @@ public class SaasChannelApplication {
         String channelCode = OrderNoUtil.makeOrderNum();
         saasChannelEntity.setChannelCode(channelCode)
                 .setChannelStatus(ChannelStatusEnum.OPEN.getType())
-                .setLinkUrl("collection/" + channelCode) // TODO: 2018/3/22
+                .setLinkUrl("channel/" + channelCode) // TODO: 2018/3/22
                 .setCreator("admin");// TODO: 2018/3/24 先写死
         saasChannelService.create(saasChannelEntity);
 

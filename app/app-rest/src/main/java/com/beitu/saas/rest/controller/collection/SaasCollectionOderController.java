@@ -1,8 +1,8 @@
 package com.beitu.saas.rest.controller.collection;
 
-import com.beitu.saas.collection.client.SaasCollectionOrderService;
-import com.beitu.saas.collection.param.CollectionOrderQueryParam;
-import com.beitu.saas.collection.vo.CollectionOrderInfoDetailVo;
+import com.beitu.saas.channel.client.SaasCollectionOrderService;
+import com.beitu.saas.channel.param.CollectionOrderQueryParam;
+import com.beitu.saas.channel.vo.CollectionOrderInfoDetailVo;
 import com.beitu.saas.rest.controller.collection.request.CollectionOrderQueryRequestParam;
 import com.beitu.saas.rest.controller.collection.response.CollectionOrderListResponse;
 import com.fqgj.common.api.Page;

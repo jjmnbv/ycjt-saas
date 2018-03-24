@@ -1,13 +1,13 @@
 package com.beitu.saas.app.application.channel;
 
-import com.beitu.saas.collection.client.SaasModuleItemService;
-import com.beitu.saas.collection.client.SaasModuleService;
-import com.beitu.saas.collection.domain.SaasModuleItemVo;
-import com.beitu.saas.collection.domain.SaasModuleVo;
-import com.beitu.saas.collection.entity.SaasModuleEntity;
-import com.beitu.saas.collection.entity.SaasModuleItemEntity;
-import com.beitu.saas.collection.param.SaasModuleItemParam;
-import com.beitu.saas.collection.param.SaasModuleParam;
+import com.beitu.saas.channel.client.SaasModuleItemService;
+import com.beitu.saas.channel.client.SaasModuleService;
+import com.beitu.saas.channel.domain.SaasModuleItemVo;
+import com.beitu.saas.channel.domain.SaasModuleVo;
+import com.beitu.saas.channel.entity.SaasModuleEntity;
+import com.beitu.saas.channel.entity.SaasModuleItemEntity;
+import com.beitu.saas.channel.param.SaasModuleItemParam;
+import com.beitu.saas.channel.param.SaasModuleParam;
 import com.fqgj.log.factory.LogFactory;
 import com.fqgj.log.interfaces.Log;
 import org.springframework.beans.BeanUtils;

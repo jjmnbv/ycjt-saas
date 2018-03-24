@@ -1,11 +1,11 @@
 package com.beitu.saas.rest.controller.channel;
 
 import com.beitu.saas.app.application.channel.SaasRiskModuleApplication;
-import com.beitu.saas.collection.domain.SaasModuleItemVo;
-import com.beitu.saas.collection.domain.SaasModuleVo;
-import com.beitu.saas.collection.enums.ChannelErrorCodeEnum;
-import com.beitu.saas.collection.param.SaasModuleItemParam;
-import com.beitu.saas.collection.param.SaasModuleParam;
+import com.beitu.saas.channel.domain.SaasModuleItemVo;
+import com.beitu.saas.channel.domain.SaasModuleVo;
+import com.beitu.saas.channel.enums.ChannelErrorCodeEnum;
+import com.beitu.saas.channel.param.SaasModuleItemParam;
+import com.beitu.saas.channel.param.SaasModuleParam;
 import com.beitu.saas.rest.controller.channel.request.SaasRiskModuleItemRequestParam;
 import com.beitu.saas.rest.controller.channel.request.SaasRiskModuleRequestParam;
 import com.beitu.saas.rest.controller.channel.response.SaasModuleItemResponse;
