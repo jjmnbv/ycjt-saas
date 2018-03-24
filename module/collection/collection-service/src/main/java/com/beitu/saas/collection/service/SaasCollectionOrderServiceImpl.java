@@ -1,9 +1,9 @@
 package com.beitu.saas.collection.service;
 
 import com.beitu.saas.channel.client.SaasCollectionOrderService;
+import com.beitu.saas.channel.domain.CollectionOrderQueryVo;
 import com.beitu.saas.channel.enums.CollectionOrderStatusEnum;
 import com.beitu.saas.channel.enums.OverdueTimeEnums;
-import com.beitu.saas.channel.param.CollectionOrderQueryParam;
 import com.beitu.saas.collection.dao.SaasCollectionOrderDao;
 import com.beitu.saas.collection.entity.SaasCollectionOrderEntity;
 import com.beitu.saas.collection.vo.CollectionOrderInfoDetailVo;
@@ -48,19 +48,19 @@ public class SaasCollectionOrderServiceImpl extends AbstractBaseService implemen
     }
 
     @Override
-    public List<CollectionOrderInfoDetailVo> getCollectionOrderListByPage(CollectionOrderQueryParam collectionOrderQueryParam, Page page) {
-        if (null != collectionOrderQueryParam.getOverdueDaysType()) {
-            OverdueTimeEnums timeEnums = OverdueTimeEnums.getEnum(collectionOrderQueryParam.getOverdueDaysType());
+    public List<CollectionOrderInfoDetailVo> getCollectionOrderListByPage(CollectionOrderQueryVo collectionOrderQueryVo, Page page) {
+        if (null != collectionOrderQueryVo.getOverdueDaysType()) {
+            OverdueTimeEnums timeEnums = OverdueTimeEnums.getEnum(collectionOrderQueryVo.getOverdueDaysType());
             if (null == timeEnums) {
-                collectionOrderQueryParam.setOverdueStartDate(null);
-                collectionOrderQueryParam.setOverdueEndDate(null);
+                collectionOrderQueryVo.setOverdueStartDate(null);
+                collectionOrderQueryVo.setOverdueEndDate(null);
             }
-            collectionOrderQueryParam.setOverdueStartDate(DateUtil.getDate(DateUtil.addDate(new Date(), -timeEnums.getStart()), "yyyy-MM-dd"));
-            collectionOrderQueryParam.setOverdueEndDate(DateUtil.getDate(DateUtil.addDate(new Date(), -timeEnums.getEnd()), "yyyy-MM-dd"));
+            collectionOrderQueryVo.setOverdueStartDate(DateUtil.getDate(DateUtil.addDate(new Date(), -timeEnums.getStart()), "yyyy-MM-dd"));
+            collectionOrderQueryVo.setOverdueEndDate(DateUtil.getDate(DateUtil.addDate(new Date(), -timeEnums.getEnd()), "yyyy-MM-dd"));
         }
 
         // TODO: 2018/3/24 转换年龄和 备注
-        return saasCollectionOrderDao.selectCollectionOrderListByPage(collectionOrderQueryParam, page);
+        return saasCollectionOrderDao.selectCollectionOrderListByPage(collectionOrderQueryVo, page);
     }
 }
 

@@ -1,4 +1,4 @@
-package com.beitu.saas.channel.param;
+package com.beitu.saas.channel.domain;
 
 /**
  * Created with IntelliJ IDEA.
@@ -7,7 +7,7 @@ package com.beitu.saas.channel.param;
  * Date: 2018/3/24
  * Time: 下午1:36
  */
-public class CollectionOrderQueryParam {
+public class CollectionOrderQueryVo {
     private String overdueStartDate;  //N天前
     private String overdueEndDate;  //当前天数
     private Integer overdueDaysType;
@@ -20,7 +20,7 @@ public class CollectionOrderQueryParam {
         return overdueDaysType;
     }
 
-    public CollectionOrderQueryParam setOverdueDaysType(Integer overdueDaysType) {
+    public CollectionOrderQueryVo setOverdueDaysType(Integer overdueDaysType) {
         this.overdueDaysType = overdueDaysType;
         return this;
     }
@@ -29,7 +29,7 @@ public class CollectionOrderQueryParam {
         return overdueStartDate;
     }
 
-    public CollectionOrderQueryParam setOverdueStartDate(String overdueStartDate) {
+    public CollectionOrderQueryVo setOverdueStartDate(String overdueStartDate) {
         this.overdueStartDate = overdueStartDate;
         return this;
     }
@@ -38,7 +38,7 @@ public class CollectionOrderQueryParam {
         return overdueEndDate;
     }
 
-    public CollectionOrderQueryParam setOverdueEndDate(String overdueEndDate) {
+    public CollectionOrderQueryVo setOverdueEndDate(String overdueEndDate) {
         this.overdueEndDate = overdueEndDate;
         return this;
     }
@@ -47,7 +47,7 @@ public class CollectionOrderQueryParam {
         return mobile;
     }
 
-    public CollectionOrderQueryParam setMobile(String mobile) {
+    public CollectionOrderQueryVo setMobile(String mobile) {
         this.mobile = mobile;
         return this;
     }
@@ -56,7 +56,7 @@ public class CollectionOrderQueryParam {
         return name;
     }
 
-    public CollectionOrderQueryParam setName(String name) {
+    public CollectionOrderQueryVo setName(String name) {
         this.name = name;
         return this;
     }
@@ -65,7 +65,7 @@ public class CollectionOrderQueryParam {
         return identityCode;
     }
 
-    public CollectionOrderQueryParam setIdentityCode(String identityCode) {
+    public CollectionOrderQueryVo setIdentityCode(String identityCode) {
         this.identityCode = identityCode;
         return this;
     }
@@ -74,7 +74,7 @@ public class CollectionOrderQueryParam {
         return channelCode;
     }
 
-    public CollectionOrderQueryParam setChannelCode(String channelCode) {
+    public CollectionOrderQueryVo setChannelCode(String channelCode) {
         this.channelCode = channelCode;
         return this;
     }

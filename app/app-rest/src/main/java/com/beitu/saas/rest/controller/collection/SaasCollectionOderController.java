@@ -1,12 +1,14 @@
 package com.beitu.saas.rest.controller.collection;
 
 import com.beitu.saas.channel.client.SaasCollectionOrderService;
-import com.beitu.saas.channel.param.CollectionOrderQueryParam;
+import com.beitu.saas.channel.domain.CollectionOrderQueryVo;
 import com.beitu.saas.collection.vo.CollectionOrderInfoDetailVo;
+import com.beitu.saas.rest.controller.collection.request.CollectionOrderQueryParam;
 import com.beitu.saas.rest.controller.collection.response.CollectionOrderListResponse;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.response.ModuleResponse;
 import io.swagger.annotations.Api;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,7 +39,9 @@ public class SaasCollectionOderController {
      */
     @RequestMapping("/collectionOrderGet/list")
     public ModuleResponse collectionDistributeGet(@RequestBody CollectionOrderQueryParam collectionOrderQueryParam, Page page) {
-        List<CollectionOrderInfoDetailVo> collectionOrderListByPage = saasCollectionOrderService.getCollectionOrderListByPage(collectionOrderQueryParam, page);
+        CollectionOrderQueryVo collectionOrderQueryVo=new CollectionOrderQueryVo();
+        BeanUtils.copyProperties(collectionOrderQueryParam,collectionOrderQueryVo);
+        List<CollectionOrderInfoDetailVo> collectionOrderListByPage = saasCollectionOrderService.getCollectionOrderListByPage(collectionOrderQueryVo, page);
         return new ModuleResponse<>(new CollectionOrderListResponse(collectionOrderListByPage), page);
     }
 }

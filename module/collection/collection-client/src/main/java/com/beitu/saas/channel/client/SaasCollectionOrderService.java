@@ -1,6 +1,6 @@
 package com.beitu.saas.channel.client;
 
-import com.beitu.saas.channel.param.CollectionOrderQueryParam;
+import com.beitu.saas.channel.domain.CollectionOrderQueryVo;
 import com.beitu.saas.collection.vo.CollectionOrderInfoDetailVo;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.base.BaseService;
@@ -36,7 +36,7 @@ public interface SaasCollectionOrderService<T extends BaseEntity> extends BaseSe
      * @param collectionOrderQueryParam
      * @return
      */
-    List<CollectionOrderInfoDetailVo> getCollectionOrderListByPage(CollectionOrderQueryParam collectionOrderQueryParam, Page page);
+    List<CollectionOrderInfoDetailVo> getCollectionOrderListByPage(CollectionOrderQueryVo collectionOrderQueryParam, Page page);
 
 
 }
