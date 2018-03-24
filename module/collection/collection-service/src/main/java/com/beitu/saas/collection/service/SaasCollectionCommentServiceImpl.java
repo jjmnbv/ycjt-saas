@@ -1,9 +1,9 @@
 package com.beitu.saas.collection.service;
 
 import com.beitu.saas.collection.client.SaasCollectionCommentService;
-import com.beitu.saas.collection.domain.CollectionCommentVo;
 import com.beitu.saas.collection.dao.SaasCollectionCommentDao;
 import com.beitu.saas.collection.entity.SaasCollectionCommentEntity;
+import com.beitu.saas.collection.param.CollectionCommentParam;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
 import com.fqgj.log.enhance.Module;
@@ -26,9 +26,9 @@ public class SaasCollectionCommentServiceImpl extends AbstractBaseService implem
     private SaasCollectionCommentDao saasCollectionCommentDao;
 
     @Override
-    public void createCollectionComment(CollectionCommentVo commentVo) {
+    public void createCollectionComment(CollectionCommentParam param) {
         SaasCollectionCommentEntity entity=new SaasCollectionCommentEntity();
-        BeanUtils.copyProperties(commentVo,entity);
+        BeanUtils.copyProperties(param,entity);
         saasCollectionCommentDao.insert(entity);
     }
 }
