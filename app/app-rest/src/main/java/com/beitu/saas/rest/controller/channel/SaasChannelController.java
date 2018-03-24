@@ -1,5 +1,6 @@
 package com.beitu.saas.rest.controller.channel;
 
+import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.application.channel.SaasChannelApplication;
 import com.beitu.saas.channel.param.SaasChannelParam;
 import com.beitu.saas.channel.client.SaasChannelService;
@@ -56,6 +57,7 @@ public class SaasChannelController {
      */
     @ApiOperation(value = "新建渠道", response = Response.class)
     @RequestMapping(value = "/addChannel", method = RequestMethod.POST)
+    @VisitorAccessible
     public Response addChannel(@RequestBody SaasChannelRequestVo saasChannelRequestVo) {
         List<SaasChannelRiskSettingsVo> settingsVos = new ArrayList<>();
         boolean setModule = CollectionUtils.isNotEmpty(saasChannelRequestVo.getSaasModuleRequestVos()) && CollectionUtils.isEmpty(saasChannelRequestVo.getSaasModuleItemRequestVos());

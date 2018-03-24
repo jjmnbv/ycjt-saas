@@ -26,7 +26,7 @@ import java.util.List;
  * Date: 2018/3/22
  * Time: 下午4:28
  */
-@Api(description = "渠道相关接口")
+@Api(description = "渠道风控配置相关接口")
 @RestController
 @RequestMapping("/module")
 public class SaasRiskModuleController {
