@@ -1,4 +1,4 @@
-package com.beitu.saas.channel.enums;
+package com.beitu.saas.collection.enums;
 
 /**
  * @ClassName:

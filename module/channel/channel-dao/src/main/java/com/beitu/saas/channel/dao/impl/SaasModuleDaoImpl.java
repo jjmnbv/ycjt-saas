@@ -1,13 +1,10 @@
 package com.beitu.saas.channel.dao.impl;
 import com.beitu.saas.channel.dao.SaasModuleDao;
 import com.beitu.saas.channel.entity.SaasModuleEntity;
-import com.beitu.saas.channel.entity.SaasModuleItemEntity;
 import com.fqgj.common.base.AbstractBaseMapper;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
 * User: fenqiguanjia

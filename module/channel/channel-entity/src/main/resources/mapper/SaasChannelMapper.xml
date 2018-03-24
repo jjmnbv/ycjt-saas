@@ -42,17 +42,13 @@
         <include refid="Param_Where_Clause"/>
     </select>
 
-    <select id="selectChannelEntityByChannelCode" parameterType="map" resultMap="BaseResultMap">
+    <select id="selectChannelEntityByChannelCode" parameterType="map" resultType="com.beitu.saas.channel.entity.SaasChannelEntity">
         SELECT
         <include refid="Base_Column_List"/>
         from saas_channel
-        <where>
-            <trim prefixOverrides="and">
-                <if test="channelCode !=null">
-                    and channel_code = #{channelCode,jdbcType=VARCHAR}
-                </if>
-                and deleted = 0
-            </trim>
-        </where>
+        <if test="channelCode !=null">
+            and channel_code = #{channelCode,jdbcType=VARCHAR}
+        </if>
+        and deleted = 0
     </select>
 </mapper>

@@ -1,12 +1,13 @@
 package com.beitu.saas.collection.dao;
 
-import com.beitu.saas.channel.param.CollectionOrderQueryParam;
+import com.beitu.saas.collection.param.CollectionOrderQueryParam;
 import com.beitu.saas.collection.entity.SaasCollectionOrderEntity;
 import com.beitu.saas.collection.vo.CollectionOrderInfoDetailVo;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.base.BaseMapper;
 
 import java.util.List;
+
 
 /**
  * User: fenqiguanjia

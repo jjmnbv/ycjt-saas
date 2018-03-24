@@ -1,6 +1,6 @@
-package com.beitu.saas.channel.client;
+package com.beitu.saas.collection.client;
 
-import com.beitu.saas.channel.domain.CollectionCommentVo;
+import com.beitu.saas.collection.param.CollectionCommentParam;
 import com.fqgj.common.base.BaseService;
 import com.fqgj.common.entity.BaseEntity;
 
@@ -13,7 +13,7 @@ public interface SaasCollectionCommentService<T extends BaseEntity> extends Base
     /**
      * 新增催记
      *
-     * @param commentVo
+     * @param param
      */
-    void createCollectionComment(CollectionCommentVo commentVo);
+    void createCollectionComment(CollectionCommentParam param);
 }

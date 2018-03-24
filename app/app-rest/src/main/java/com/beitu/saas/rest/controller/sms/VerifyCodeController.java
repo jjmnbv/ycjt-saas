@@ -13,6 +13,7 @@ import com.beitu.saas.sms.enums.VerifyCodeTypeEnum;
 import com.fqgj.base.services.redis.RedisClient;
 import com.fqgj.common.api.annotations.ParamsValidate;
 import com.fqgj.common.utils.RandomUtil;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,7 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/verifyCode")
+@Api(description = "验证码模块")
 public class VerifyCodeController {
 
     @Autowired

@@ -1,6 +1,6 @@
-package com.beitu.saas.channel.client;
+package com.beitu.saas.collection.client;
 
-import com.beitu.saas.channel.param.CollectionOrderQueryParam;
+import com.beitu.saas.collection.param.CollectionOrderQueryParam;
 import com.beitu.saas.collection.vo.CollectionOrderInfoDetailVo;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.base.BaseService;

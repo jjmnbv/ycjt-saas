@@ -1,15 +1,15 @@
 package com.beitu.saas.app.application.channel;
 
-import com.beitu.saas.app.common.RequestLocalInfo;
+import com.beitu.saas.channel.domain.SaasChannelRiskSettingsVo;
 import com.beitu.saas.channel.domain.SaasH5ChannelVo;
 import com.beitu.saas.channel.param.SaasChannelParam;
 import com.beitu.saas.channel.client.SaasChannelRiskSettingsService;
 import com.beitu.saas.channel.client.SaasChannelService;
-import com.beitu.saas.channel.domain.SaasChannelRiskSettingsVo;
 import com.beitu.saas.channel.domain.SaasChannelVo;
 import com.beitu.saas.channel.entity.SaasChannelEntity;
 import com.beitu.saas.channel.entity.SaasChannelRiskSettingsEntity;
 import com.beitu.saas.channel.enums.ChannelStatusEnum;
+import com.beitu.saas.channel.param.SaasChannelRiskSettingsParam;
 import com.beitu.saas.common.utils.OrderNoUtil;
 import com.beitu.saas.common.utils.ShortUrlUtil;
 import com.fqgj.common.api.Page;
@@ -43,9 +43,9 @@ public class SaasChannelApplication {
      * 创建渠道
      */
     @Transactional(rollbackFor = Exception.class)
-    public void createChannel(SaasChannelVo saasChannelVo, List<SaasChannelRiskSettingsVo> saasChannelRiskSettingsVoList) {
+    public void createChannel(SaasChannelParam saasChannelParam, List<SaasChannelRiskSettingsParam> saasChannelRiskSettingsVoList) {
         SaasChannelEntity saasChannelEntity = new SaasChannelEntity();
-        BeanUtils.copyProperties(saasChannelVo, saasChannelEntity);
+        BeanUtils.copyProperties(saasChannelParam, saasChannelEntity);
 
         String channelCode = OrderNoUtil.makeOrderNum();
         saasChannelEntity.setChannelCode(channelCode)

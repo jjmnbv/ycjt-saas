@@ -1,7 +1,6 @@
 package com.beitu.saas.channel.client;
 
 import com.beitu.saas.channel.entity.SaasModuleEntity;
-import com.beitu.saas.channel.entity.SaasModuleItemEntity;
 import com.fqgj.common.base.BaseService;
 import com.fqgj.common.entity.BaseEntity;
 

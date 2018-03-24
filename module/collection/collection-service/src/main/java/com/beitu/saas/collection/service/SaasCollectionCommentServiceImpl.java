@@ -1,9 +1,9 @@
 package com.beitu.saas.collection.service;
 
-import com.beitu.saas.channel.client.SaasCollectionCommentService;
-import com.beitu.saas.channel.domain.CollectionCommentVo;
+import com.beitu.saas.collection.client.SaasCollectionCommentService;
 import com.beitu.saas.collection.dao.SaasCollectionCommentDao;
 import com.beitu.saas.collection.entity.SaasCollectionCommentEntity;
+import com.beitu.saas.collection.param.CollectionCommentParam;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
 import com.fqgj.log.enhance.Module;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 * Time: 20:58:19.353
 */
 @Module(value = "订单催收表服务模块")
-@NameSpace("com.beitu.saas.collection.dao.impl.SaasCollectionCommentDaoImpl")
+@NameSpace("SaasCollectionCommentDaoImpl")
 @Service
 public class SaasCollectionCommentServiceImpl extends AbstractBaseService implements SaasCollectionCommentService {
 
@@ -26,9 +26,9 @@ public class SaasCollectionCommentServiceImpl extends AbstractBaseService implem
     private SaasCollectionCommentDao saasCollectionCommentDao;
 
     @Override
-    public void createCollectionComment(CollectionCommentVo commentVo) {
+    public void createCollectionComment(CollectionCommentParam param) {
         SaasCollectionCommentEntity entity=new SaasCollectionCommentEntity();
-        BeanUtils.copyProperties(commentVo,entity);
+        BeanUtils.copyProperties(param,entity);
         saasCollectionCommentDao.insert(entity);
     }
 }

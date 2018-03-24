@@ -4,8 +4,6 @@ import com.fqgj.common.api.ParamsObject;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.NotNull;
-
 /**
  * Created with IntelliJ IDEA.
  * Description:
@@ -14,13 +12,7 @@ import javax.validation.constraints.NotNull;
  * Time: 下午3:22
  */
 @ApiModel(description = "渠道列表查询请求参数")
-public class SaasChannelQueryRequestVo extends ParamsObject {
-    /**
-     * 页码
-     */
-    @ApiModelProperty(value = "页码")
-    @NotNull(message = "页码不得为空")
-    private Integer pageNo;
+public class SaasChannelQueryRequestParam extends ParamsObject {
 
     @ApiModelProperty(value = "机构号")
     private String merchantCode;
@@ -37,20 +29,11 @@ public class SaasChannelQueryRequestVo extends ParamsObject {
     @ApiModelProperty(value = "负责人")
     private String chargePerson;
 
-    public Integer getPageNo() {
-        return pageNo;
-    }
-
-    public SaasChannelQueryRequestVo setPageNo(Integer pageNo) {
-        this.pageNo = pageNo;
-        return this;
-    }
-
     public String getMerchantCode() {
         return merchantCode;
     }
 
-    public SaasChannelQueryRequestVo setMerchantCode(String merchantCode) {
+    public SaasChannelQueryRequestParam setMerchantCode(String merchantCode) {
         this.merchantCode = merchantCode;
         return this;
     }
@@ -59,7 +42,7 @@ public class SaasChannelQueryRequestVo extends ParamsObject {
         return channelName;
     }
 
-    public SaasChannelQueryRequestVo setChannelName(String channelName) {
+    public SaasChannelQueryRequestParam setChannelName(String channelName) {
         this.channelName = channelName;
         return this;
     }
@@ -68,7 +51,7 @@ public class SaasChannelQueryRequestVo extends ParamsObject {
         return channelCode;
     }
 
-    public SaasChannelQueryRequestVo setChannelCode(String channelCode) {
+    public SaasChannelQueryRequestParam setChannelCode(String channelCode) {
         this.channelCode = channelCode;
         return this;
     }
@@ -77,7 +60,7 @@ public class SaasChannelQueryRequestVo extends ParamsObject {
         return channelStatus;
     }
 
-    public SaasChannelQueryRequestVo setChannelStatus(Integer channelStatus) {
+    public SaasChannelQueryRequestParam setChannelStatus(Integer channelStatus) {
         this.channelStatus = channelStatus;
         return this;
     }
@@ -86,7 +69,7 @@ public class SaasChannelQueryRequestVo extends ParamsObject {
         return chargePerson;
     }
 
-    public SaasChannelQueryRequestVo setChargePerson(String chargePerson) {
+    public SaasChannelQueryRequestParam setChargePerson(String chargePerson) {
         this.chargePerson = chargePerson;
         return this;
     }

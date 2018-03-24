@@ -1,7 +1,6 @@
 package com.beitu.saas.channel.dao;
 
 import com.beitu.saas.channel.entity.SaasModuleEntity;
-import com.beitu.saas.channel.entity.SaasModuleItemEntity;
 import com.fqgj.common.base.BaseMapper;
 
 import java.util.List;
