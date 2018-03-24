@@ -1,6 +1,7 @@
 package com.beitu.saas.auth.service.impl;
 
 import com.beitu.saas.auth.dao.SaasMerchantDao;
+import com.beitu.saas.auth.domain.SaasMerchantVo;
 import com.beitu.saas.auth.service.SaasMerchantService;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
@@ -28,6 +29,12 @@ public class SaasMerchantServiceImpl extends AbstractBaseService implements Saas
     public List<String> getMerchantList() {
         return saasMerchantDao.selectAllMerchantCode();
     }
+
+    @Override
+    public SaasMerchantVo getByMerchantCode(String merchantCode) {
+        return null;
+    }
+
 }
 
 

@@ -7,7 +7,6 @@ import com.beitu.saas.borrower.entity.SaasBorrowerIdentityInfo;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
 import com.fqgj.common.utils.CollectionUtils;
-import com.fqgj.common.utils.StringUtils;
 import com.fqgj.log.enhance.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,24 +28,32 @@ public class SaasBorrowerIdentityInfoServiceImpl extends AbstractBaseService imp
     private SaasBorrowerIdentityInfoDao saasBorrowerIdentityInfoDao;
 
     @Override
+    public SaasBorrowerIdentityInfoVo getByBorrowerCode(String borrowerCode) {
+        SaasBorrowerIdentityInfo saasBorrowerIdentityInfo = saasBorrowerIdentityInfoDao.selectH5SaveInfoByBorrowerCode(borrowerCode);
+        return SaasBorrowerIdentityInfoVo.convertEntityToVO(saasBorrowerIdentityInfo);
+    }
+
+    @Override
+    public int countByBorrowerCode(String borrowerCode) {
+        return saasBorrowerIdentityInfoDao.countH5SaveInfoByBorrowerCode(borrowerCode);
+    }
+
+    @Override
     public SaasBorrowerIdentityInfoVo getByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb) {
-        if (StringUtils.isNotEmpty(orderNumb)) {
-            List<SaasBorrowerIdentityInfo> saasBorrowerIdentityInfoList = saasBorrowerIdentityInfoDao.selectByParams(new HashMap<String, Object>(4) {{
-                put("orderNumb", orderNumb);
-                put("deleted", Boolean.FALSE);
-            }});
-            if (CollectionUtils.isNotEmpty(saasBorrowerIdentityInfoList)) {
-                return SaasBorrowerIdentityInfoVo.convertEntityToVO(saasBorrowerIdentityInfoList.get(0));
-            }
-        }
         List<SaasBorrowerIdentityInfo> saasBorrowerIdentityInfoList = saasBorrowerIdentityInfoDao.selectByParams(new HashMap<String, Object>(4) {{
             put("borrowerCode", borrowerCode);
+            put("orderNumb", orderNumb);
             put("deleted", Boolean.FALSE);
         }});
         if (CollectionUtils.isEmpty(saasBorrowerIdentityInfoList)) {
             return null;
         }
         return SaasBorrowerIdentityInfoVo.convertEntityToVO(saasBorrowerIdentityInfoList.get(0));
+    }
+
+    @Override
+    public Boolean updateOrderNumbByBorrowerCode(String orderNumb, String borrowerCode) {
+        return saasBorrowerIdentityInfoDao.updateOrderNumbByBorrowerCode(orderNumb, borrowerCode) == 1;
     }
 
 }

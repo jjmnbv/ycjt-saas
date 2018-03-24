@@ -1,6 +1,8 @@
 package com.beitu.saas.borrower.domain;
 
+import com.beitu.saas.borrower.entity.SaasBorrowerCarrier;
 import com.fqgj.common.api.ResponseData;
+import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -83,4 +85,25 @@ public class SaasBorrowerCarrierVo implements ResponseData, Serializable {
     public void setSuccess(Boolean success) {
         this.success = success;
     }
+
+    public static SaasBorrowerCarrierVo convertEntityToVO(SaasBorrowerCarrier saasBorrowerCarrier) {
+        if (saasBorrowerCarrier == null) {
+            return null;
+        }
+        SaasBorrowerCarrierVo saasBorrowerCarrierVo = new SaasBorrowerCarrierVo();
+        BeanUtils.copyProperties(saasBorrowerCarrier, saasBorrowerCarrierVo);
+        saasBorrowerCarrierVo.setSaasBorrowerCarrierId(saasBorrowerCarrier.getId());
+        return saasBorrowerCarrierVo;
+    }
+
+    public static SaasBorrowerCarrier convertVOToEntity(SaasBorrowerCarrierVo saasBorrowerCarrierVo) {
+        if (saasBorrowerCarrierVo == null) {
+            return null;
+        }
+        SaasBorrowerCarrier saasBorrowerCarrier = new SaasBorrowerCarrier();
+        BeanUtils.copyProperties(saasBorrowerCarrierVo, saasBorrowerCarrier);
+        saasBorrowerCarrier.setId(saasBorrowerCarrierVo.getSaasBorrowerCarrierId());
+        return saasBorrowerCarrier;
+    }
+
 }

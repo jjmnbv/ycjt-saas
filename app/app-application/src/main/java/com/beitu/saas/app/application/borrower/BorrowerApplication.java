@@ -6,8 +6,8 @@ import com.beitu.saas.borrower.client.SaasBorrowerService;
 import com.beitu.saas.borrower.client.SaasBorrowerTokenService;
 import com.beitu.saas.borrower.domain.SaasBorrowerVo;
 import com.beitu.saas.borrower.entity.SaasBorrower;
-import com.beitu.saas.collection.domain.SaasH5ChannelVo;
-import com.beitu.saas.collection.enums.ChannelErrorCodeEnum;
+import com.beitu.saas.channel.domain.SaasH5ChannelVo;
+import com.beitu.saas.channel.enums.ChannelErrorCodeEnum;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.fqgj.base.services.redis.RedisClient;
 import com.fqgj.base.services.redis.TimeConsts;
@@ -66,7 +66,7 @@ public class BorrowerApplication {
             SaasBorrower saasBorrower = saasBorrowerService.create(saasBorrowerVo);
             token = saasBorrowerTokenService.create(saasBorrower.getBorrowerCode(), saasH5ChannelVo.getMerchantCode()).getToken();
         }
-        redisClient.set(RedisKeyConsts.SAAS_TOKEN_KEY, saasBorrowerVo, TimeConsts.TEN_MINUTES, token);
+        redisClient.set(RedisKeyConsts.SAAS_TOKEN_KEY, saasBorrowerVo.getBorrowerCode(), TimeConsts.AN_HOUR, token);
         return token;
     }
 

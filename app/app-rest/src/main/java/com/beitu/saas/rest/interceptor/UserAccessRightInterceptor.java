@@ -68,6 +68,11 @@ public class UserAccessRightInterceptor implements HandlerInterceptor {
         }
         String basicParams = request.getHeader("basicParams");
         RequestBasicInfo basicVO = JSONUtils.json2pojo(basicParams, RequestBasicInfo.class);
+        if (basicVO != null) {
+            RequestUserInfo requestUserInfo = new RequestUserInfo();
+            requestUserInfo.setRequestBasicInfo(basicVO);
+            RequestLocalInfo.putCurrentAdmin(requestUserInfo);
+        }
         if (StringUtils.isNotEmpty(basicVO.getToken())) {
             if (!verifyHeader(request)) {
                 throw new ApplicationException("无效的token");
@@ -119,7 +124,9 @@ public class UserAccessRightInterceptor implements HandlerInterceptor {
             if (visitorAccessibleAnnotation == null) {
                 IgnoreRepeatRequest ignoreRepeatRequest = handlerMethod.getMethodAnnotation(IgnoreRepeatRequest.class);
                 RequestBasicInfo basicVO = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo();
-                redisClient.expire(RedisKeyConsts.SAAS_TOKEN_KEY,TimeConsts.TEN_MINUTES,basicVO.getToken());
+//                redisClient.expire(RedisKeyConsts.SAAS_TOKEN_KEY, TimeConsts.TEN_MINUTES, basicVO.getToken());
+                // 为了方便测试联调，将token时效设置变长
+                redisClient.expire(RedisKeyConsts.SAAS_TOKEN_KEY, TimeConsts.AN_HOUR, basicVO.getToken());
                 String key = MD5.md5(httpServletRequest.getRequestURI() + basicVO.getToken());
                 String value = redisClient.get(RedisKeyConsts.REPEAT_PREFIX, key);
                 if (ignoreRepeatRequest != null && StringUtils.isNotEmpty(value)) {
@@ -130,8 +137,7 @@ public class UserAccessRightInterceptor implements HandlerInterceptor {
     }
 
     private Boolean hasPermission(RequestBasicInfo basicVO) {
-        RequestUserInfo requestUserInfo = new RequestUserInfo();
-        requestUserInfo.setRequestBasicInfo(basicVO);
+        RequestUserInfo requestUserInfo = RequestLocalInfo.getCurrentAdmin();
         String userCode = redisClient.get(RedisKeyConsts.SAAS_TOKEN_KEY, basicVO.getToken());
         if (StringUtils.isEmpty(userCode)) {
             return false;
@@ -145,7 +151,6 @@ public class UserAccessRightInterceptor implements HandlerInterceptor {
         } else {
             throw new ApplicationException("平台非法");
         }
-        RequestLocalInfo.putCurrentAdmin(requestUserInfo);
         return true;
     }
 

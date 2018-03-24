@@ -29,10 +29,21 @@ public class SaasAdmin extends BaseEntity {
     */
     private String mobile;
     /**
+     *职位
+     */
+    private String job;
+    /**
     *
     */
     private Boolean enable;
 
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
+    }
 
     public  String getCode(){
         return this.code;

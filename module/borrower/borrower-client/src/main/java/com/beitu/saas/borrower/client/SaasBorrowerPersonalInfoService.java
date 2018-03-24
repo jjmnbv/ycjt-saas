@@ -11,6 +11,12 @@ import com.fqgj.common.entity.BaseEntity;
  */
 public interface SaasBorrowerPersonalInfoService<T extends BaseEntity> extends BaseService<T> {
 
+    SaasBorrowerPersonalInfoVo getByBorrowerCode(String borrowerCode);
+
+    int countByBorrowerCode(String borrowerCode);
+
     SaasBorrowerPersonalInfoVo getByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb);
+
+    Boolean updateOrderNumbByBorrowerCode(String orderNumb, String borrowerCode);
 
 }

@@ -14,8 +14,6 @@ import org.springframework.beans.BeanUtils;
 @ApiModel(value = "用户紧急联系人信息模块")
 public class CreditEmergentContactResponse implements ResponseData {
 
-    @ApiModelProperty(value = "订单号")
-    private String orderNumb;
     /**
      * 直系亲属联系人类型
      */
@@ -47,19 +45,10 @@ public class CreditEmergentContactResponse implements ResponseData {
     @ApiModelProperty(value = "同事朋友手机号码")
     private String friendMobile;
 
-    public CreditEmergentContactResponse(String orderNumb, SaasBorrowerEmergentContactVo saasBorrowerEmergentContactVo) {
-        this.orderNumb = orderNumb;
+    public CreditEmergentContactResponse(SaasBorrowerEmergentContactVo saasBorrowerEmergentContactVo) {
         if (saasBorrowerEmergentContactVo != null) {
             BeanUtils.copyProperties(saasBorrowerEmergentContactVo, this);
         }
-    }
-
-    public String getOrderNumb() {
-        return orderNumb;
-    }
-
-    public void setOrderNumb(String orderNumb) {
-        this.orderNumb = orderNumb;
     }
 
     public String getFamilyType() {

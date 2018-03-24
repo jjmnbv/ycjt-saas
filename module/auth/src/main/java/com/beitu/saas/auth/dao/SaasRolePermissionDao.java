@@ -11,4 +11,5 @@ import com.fqgj.common.base.BaseMapper;
 
 public interface SaasRolePermissionDao  extends BaseMapper<SaasRolePermission> {
 
+    void deleteByRoleId(Integer roleId);
 }

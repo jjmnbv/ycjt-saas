@@ -8,6 +8,9 @@ package com.beitu.saas.collection.domain;
  * Time: 上午11:00
  */
 public class SaasChannelRiskSettingsVo {
+
+    public static final Integer DEFAULT_NEED_REQUIRED_VALUE = 1;
+
     /**
      *渠道号
      */

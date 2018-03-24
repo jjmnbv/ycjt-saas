@@ -6,9 +6,13 @@
         SELECT
         <include refid="Base_Column_List"/>
         from saas_channel_risk_settings
-        <if test="channelCode !=null">
-            and channel_code = #{channelCode,jdbcType=VARCHAR}
-        </if>
-        and deleted = 0
+        <where>
+            <trim prefixOverrides="and">
+                <if test="channelCode !=null">
+                    and channel_code = #{channelCode,jdbcType=VARCHAR}
+                </if>
+                and deleted = 0
+            </trim>
+        </where>
     </select>
 </mapper>

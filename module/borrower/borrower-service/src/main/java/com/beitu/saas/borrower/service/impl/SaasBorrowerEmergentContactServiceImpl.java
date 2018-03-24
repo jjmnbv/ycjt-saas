@@ -7,7 +7,6 @@ import com.beitu.saas.borrower.entity.SaasBorrowerEmergentContact;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
 import com.fqgj.common.utils.CollectionUtils;
-import com.fqgj.common.utils.StringUtils;
 import com.fqgj.log.enhance.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,24 +28,32 @@ public class SaasBorrowerEmergentContactServiceImpl extends AbstractBaseService 
     private SaasBorrowerEmergentContactDao saasBorrowerEmergentContactDao;
 
     @Override
+    public SaasBorrowerEmergentContactVo getByBorrowerCode(String borrowerCode) {
+        SaasBorrowerEmergentContact saasBorrowerEmergentContact = saasBorrowerEmergentContactDao.selectH5SaveInfoByBorrowerCode(borrowerCode);
+        return SaasBorrowerEmergentContactVo.convertEntityToVO(saasBorrowerEmergentContact);
+    }
+
+    @Override
+    public int countByBorrowerCode(String borrowerCode) {
+        return saasBorrowerEmergentContactDao.countH5SaveInfoByBorrowerCode(borrowerCode);
+    }
+
+    @Override
     public SaasBorrowerEmergentContactVo getByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb) {
-        if (StringUtils.isNotEmpty(orderNumb)) {
-            List<SaasBorrowerEmergentContact> saasBorrowerEmergentContactList = saasBorrowerEmergentContactDao.selectByParams(new HashMap<String, Object>(4) {{
-                put("orderNumb", orderNumb);
-                put("deleted", Boolean.FALSE);
-            }});
-            if (CollectionUtils.isNotEmpty(saasBorrowerEmergentContactList)) {
-                return SaasBorrowerEmergentContactVo.convertEntityToVO(saasBorrowerEmergentContactList.get(0));
-            }
-        }
         List<SaasBorrowerEmergentContact> saasBorrowerEmergentContactList = saasBorrowerEmergentContactDao.selectByParams(new HashMap<String, Object>(4) {{
             put("borrowerCode", borrowerCode);
+            put("orderNumb", orderNumb);
             put("deleted", Boolean.FALSE);
         }});
         if (CollectionUtils.isEmpty(saasBorrowerEmergentContactList)) {
             return null;
         }
         return SaasBorrowerEmergentContactVo.convertEntityToVO(saasBorrowerEmergentContactList.get(0));
+    }
+
+    @Override
+    public Boolean updateOrderNumbByBorrowerCode(String orderNumb, String borrowerCode) {
+        return saasBorrowerEmergentContactDao.updateOrderNumbByBorrowerCode(orderNumb, borrowerCode) == 1;
     }
 
 }
