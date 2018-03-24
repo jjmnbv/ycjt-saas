@@ -1,5 +1,6 @@
 package com.beitu.saas.app.application.credit;
 
+import com.beitu.saas.app.api.ApiResponse;
 import com.beitu.saas.app.application.channel.SaasChannelApplication;
 import com.beitu.saas.app.application.credit.vo.CreditModuleListVo;
 import com.beitu.saas.app.enums.BorrowerInfoApplyStatusEnum;
@@ -8,11 +9,14 @@ import com.beitu.saas.borrower.enums.BorrowerErrorCodeEnum;
 import com.beitu.saas.channel.domain.SaasChannelRiskSettingsVo;
 import com.beitu.saas.channel.enums.ChannelErrorCodeEnum;
 import com.beitu.saas.channel.enums.RiskModuleEnum;
+import com.beitu.saas.common.utils.OrderNoUtil;
+import com.beitu.saas.order.client.SaasOrderApplicationService;
 import com.fqgj.common.utils.CollectionUtils;
 import com.fqgj.common.utils.StringUtils;
 import com.fqgj.exception.common.ApplicationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +34,9 @@ public class CreditApplication {
 
     @Autowired
     private SaasBorrowerRealInfoService saasBorrowerRealInfoService;
+
+    @Autowired
+    private SaasOrderApplicationService saasOrderApplicationService;
 
     public List<CreditModuleListVo> listCreditModule(String channelCode, String borrowerCode, String orderNumb) {
         List<SaasChannelRiskSettingsVo> saasChannelRiskSettingsVoList = saasChannelApplication.getSaasChannelRiskSettingsByChannelCode(channelCode);
@@ -101,6 +108,27 @@ public class CreditApplication {
     public Boolean realNameAuth(String name, String identityCode) {
         // TODO
         return Boolean.TRUE;
+    }
+
+    /**
+     * 借款人提交资料
+     *
+     * @param borrowerCode 借款人CODE
+     * @param merchantCode 机构CODE
+     * @param channelCode  渠道CODE
+     * @return
+     */
+    @Transactional(rollbackFor = RuntimeException.class)
+    public ApiResponse submitCreditInfo(String borrowerCode, String merchantCode, String channelCode) {
+        List<SaasChannelRiskSettingsVo> saasChannelRiskSettingsVoList = saasChannelApplication.getSaasChannelRiskSettingsByChannelCode(channelCode);
+        if (CollectionUtils.isEmpty(saasChannelRiskSettingsVoList)) {
+            return new ApiResponse("提交手机号码成功");
+        }
+        String orderNumb = OrderNoUtil.makeOrderNum();
+        saasChannelRiskSettingsVoList.forEach(saasChannelRiskSettingsVo -> {
+
+        });
+        return new ApiResponse("提交成功");
     }
 
 }

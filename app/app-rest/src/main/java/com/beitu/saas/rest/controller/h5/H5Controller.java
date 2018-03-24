@@ -277,4 +277,20 @@ public class H5Controller {
         return new ApiResponse("保存成功");
     }
 
+    @RequestMapping(value = "/credit/submit", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "提交风控模块", response = ApiResponse.class)
+    public ApiResponse submitCreditInfo() {
+        String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
+        if (StringUtils.isEmpty(channelCode)) {
+            return new ApiResponse(ChannelErrorCodeEnum.DISABLE_CHANNEL);
+        }
+        SaasH5ChannelVo saasH5ChannelVo = saasChannelApplication.getSaasChannelBychannelCode(channelCode);
+        if (saasH5ChannelVo == null) {
+            return new ApiResponse(ChannelErrorCodeEnum.DISABLE_CHANNEL);
+        }
+        String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
+        return creditApplication.submitCreditInfo(borrowerCode, saasH5ChannelVo.getMerchantCode(), saasH5ChannelVo.getChannelCode());
+    }
+
 }
