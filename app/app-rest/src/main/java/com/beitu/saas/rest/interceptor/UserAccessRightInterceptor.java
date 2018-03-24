@@ -124,7 +124,9 @@ public class UserAccessRightInterceptor implements HandlerInterceptor {
             if (visitorAccessibleAnnotation == null) {
                 IgnoreRepeatRequest ignoreRepeatRequest = handlerMethod.getMethodAnnotation(IgnoreRepeatRequest.class);
                 RequestBasicInfo basicVO = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo();
-                redisClient.expire(RedisKeyConsts.SAAS_TOKEN_KEY, TimeConsts.TEN_MINUTES, basicVO.getToken());
+//                redisClient.expire(RedisKeyConsts.SAAS_TOKEN_KEY, TimeConsts.TEN_MINUTES, basicVO.getToken());
+                // 为了方便测试联调，将token时效设置变长
+                redisClient.expire(RedisKeyConsts.SAAS_TOKEN_KEY, TimeConsts.AN_HOUR, basicVO.getToken());
                 String key = MD5.md5(httpServletRequest.getRequestURI() + basicVO.getToken());
                 String value = redisClient.get(RedisKeyConsts.REPEAT_PREFIX, key);
                 if (ignoreRepeatRequest != null && StringUtils.isNotEmpty(value)) {
