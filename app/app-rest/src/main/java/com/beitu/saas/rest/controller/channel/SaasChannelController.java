@@ -83,11 +83,11 @@ public class SaasChannelController {
             });
         }
 
-        SaasChannelVo saasChannelVo = new SaasChannelVo();
-        BeanUtils.copyProperties(saasChannelRequestParam, saasChannelVo);
+        SaasChannelParam saasChannelParam = new SaasChannelParam();
+        BeanUtils.copyProperties(saasChannelRequestParam, saasChannelParam);
 
         try {
-            saasChannelApplication.createChannel(saasChannelVo, settingsVos);
+            saasChannelApplication.createChannel(saasChannelParam, settingsVos);
         } catch (Exception e) {
             LOGGER.error("==  创建渠道失败, 机构号:{}, 渠道名称:{} ,失败原因:{}  ==", saasChannelRequestParam.getMerchantCode(), saasChannelRequestParam.getChannelName(), e);
             return Response.error(null, ChannelErrorCodeEnum.CHANNEL_PARAM_INVALID.getMsg());

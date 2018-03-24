@@ -43,9 +43,9 @@ public class SaasChannelApplication {
      * 创建渠道
      */
     @Transactional(rollbackFor = Exception.class)
-    public void createChannel(SaasChannelVo saasChannelVo, List<SaasChannelRiskSettingsParam> saasChannelRiskSettingsVoList) {
+    public void createChannel(SaasChannelParam saasChannelParam, List<SaasChannelRiskSettingsParam> saasChannelRiskSettingsVoList) {
         SaasChannelEntity saasChannelEntity = new SaasChannelEntity();
-        BeanUtils.copyProperties(saasChannelVo, saasChannelEntity);
+        BeanUtils.copyProperties(saasChannelParam, saasChannelEntity);
 
         String channelCode = OrderNoUtil.makeOrderNum();
         saasChannelEntity.setChannelCode(channelCode)
