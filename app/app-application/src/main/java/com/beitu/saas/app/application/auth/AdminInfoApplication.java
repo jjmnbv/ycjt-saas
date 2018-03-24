@@ -8,6 +8,7 @@ import com.beitu.saas.auth.service.SaasAdminRoleService;
 import com.beitu.saas.auth.service.SaasAdminService;
 import com.beitu.saas.auth.service.SaasAdminTokenService;
 import com.beitu.saas.auth.service.SaasRolePermissionService;
+import com.fqgj.common.entity.BaseEntity;
 import com.fqgj.common.utils.CollectionUtils;
 import com.fqgj.common.utils.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,7 @@ public class AdminInfoApplication {
     @Autowired
     private SaasRolePermissionService saasRolePermissionService;
 
+
     public SaasAdmin getSaasAdminByAccessToken(String token) {
         List<SaasAdminToken> list = saasAdminTokenService.selectByParams(new HashMap<String, Object>(2) {{
             put("token", token);
@@ -59,7 +61,7 @@ public class AdminInfoApplication {
         if (CollectionUtils.isEmpty(list)) {
             return null;
         }
-        List<SaasRolePermission> saasRolePermissionList = saasRolePermissionService.getMenuPermissionByRoleId(list.get(0).getRoleId());
+        List<SaasRolePermission> saasRolePermissionList = saasRolePermissionService.getMenuPermissionByRoleId(list.get(0).getRoleId().intValue());
         return saasRolePermissionList.parallelStream().map(SaasRolePermission::getRelationId).collect(toList());
     }
 
@@ -71,7 +73,16 @@ public class AdminInfoApplication {
         if (CollectionUtils.isEmpty(list)) {
             return null;
         }
-        List<SaasRolePermission> saasRolePermissionList = saasRolePermissionService.getButtonPermissionByRoleId(list.get(0).getRoleId());
+        List<SaasRolePermission> saasRolePermissionList = saasRolePermissionService.getButtonPermissionByRoleId(list.get(0).getRoleId().intValue());
         return saasRolePermissionList.parallelStream().map(SaasRolePermission::getRelationId).collect(toList());
+    }
+
+    public void addAdminAndRole(SaasAdmin saasAdmin,Long roleId){
+        SaasAdmin entity = (SaasAdmin) saasAdminService.create(saasAdmin);
+        SaasAdminRole saasAdminRole = new SaasAdminRole();
+        saasAdminRole.setAdminCode(entity.getCode());
+        saasAdminRole.setRoleId(roleId);
+        saasAdminRoleService.create(saasAdminRole);
+
     }
 }

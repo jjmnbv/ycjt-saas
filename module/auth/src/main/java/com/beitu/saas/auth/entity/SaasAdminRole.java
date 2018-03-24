@@ -11,27 +11,27 @@ public class SaasAdminRole extends BaseEntity {
     /**
     *管理员code
     */
-    private Integer adminCode;
+    private String adminCode;
     /**
     *角色id
     */
-    private Integer roleId;
+    private Long roleId;
 
 
-    public  Integer getAdminCode(){
+    public  String getAdminCode(){
         return this.adminCode;
     }
 
-    public  SaasAdminRole setAdminCode(Integer adminCode){
+    public  SaasAdminRole setAdminCode(String adminCode){
         this.adminCode = adminCode;
         return this;
     }
 
-    public  Integer getRoleId(){
+    public  Long getRoleId(){
         return this.roleId;
     }
 
-    public  SaasAdminRole setRoleId(Integer roleId){
+    public  SaasAdminRole setRoleId(Long roleId){
         this.roleId = roleId;
         return this;
     }

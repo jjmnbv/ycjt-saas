@@ -16,11 +16,11 @@ public class SaasAdminRoleVo implements ResponseData,Serializable{
     /**
     *管理员code
     */
-    private Integer adminCode;
+    private String adminCode;
     /**
     *角色id
     */
-    private Integer roleId;
+    private Long roleId;
 
     public Long getSaasAdminRoleId() {
         return saasAdminRoleId;
@@ -32,19 +32,19 @@ public class SaasAdminRoleVo implements ResponseData,Serializable{
 
 
 
-    public  Integer getAdminCode(){
+    public  String getAdminCode(){
         return this.adminCode;
     }
 
-    public  void setAdminCode(Integer adminCode){
+    public  void setAdminCode(String adminCode){
         this.adminCode = adminCode;
     }
 
-    public  Integer getRoleId(){
+    public  Long getRoleId(){
         return this.roleId;
     }
 
-    public  void setRoleId(Integer roleId){
+    public  void setRoleId(Long roleId){
         this.roleId = roleId;
     }
 }

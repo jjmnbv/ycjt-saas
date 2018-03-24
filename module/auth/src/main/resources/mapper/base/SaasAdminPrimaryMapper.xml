@@ -9,6 +9,7 @@
         <result column="password" jdbcType="VARCHAR" property="password"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="job" jdbcType="VARCHAR" property="job"/>
         <result column="enable" jdbcType="BIT" property="enable"/>
         <result column="deleted" jdbcType="BIT" property="deleted"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
@@ -21,6 +22,7 @@
         password,
         `name`,
         mobile,
+        job,
         enable,
         deleted,
         gmt_modified,
@@ -52,6 +54,9 @@
             <if test="mobile !=null">
                 mobile,
             </if>
+            <if test="job !=null">
+                job,
+            </if>
             <if test="enable !=null">
                 enable,
             </if>
@@ -80,6 +85,9 @@
             </if>
             <if test="mobile != null">
                 #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="job != null">
+                #{job,jdbcType=VARCHAR},
             </if>
             <if test="enable != null">
                 #{enable,jdbcType=BIT},
@@ -113,6 +121,9 @@
             </if>
             <if test="mobile !=null">
                 mobile = #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="job !=null">
+                job = #{job,jdbcType=VARCHAR},
             </if>
             <if test="enable !=null">
                 enable = #{enable,jdbcType=BIT},
@@ -168,6 +179,9 @@
             <if test="mobile !=null">
                 and mobile = #{mobile,jdbcType=VARCHAR}
             </if>
+            <if test="job !=null">
+                and job = #{job,jdbcType=VARCHAR}
+            </if>
             <if test="enable !=null">
                 and enable = #{enable,jdbcType=BIT}
             </if>
@@ -203,6 +217,9 @@
             </if>
             <if test="mobile !=null">
                 and mobile = #{mobile,jdbcType=VARCHAR}
+            </if>
+            <if test="job !=null">
+                and job = #{job,jdbcType=VARCHAR}
             </if>
             <if test="enable !=null">
                 and enable = #{enable,jdbcType=BIT}

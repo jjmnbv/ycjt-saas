@@ -16,7 +16,7 @@
     <sql id="Base_Column_List">
         id,
         merchant_code,
-        name,
+        `name`,
         description,
         create_name,
         enabled,
@@ -39,7 +39,7 @@
                 merchant_code,
             </if>
             <if test="name !=null">
-                name,
+                `name`,
             </if>
             <if test="description !=null">
                 description,
@@ -95,7 +95,7 @@
                 merchant_code = #{merchantCode,jdbcType=VARCHAR},
             </if>
             <if test="name !=null">
-                name = #{name,jdbcType=VARCHAR},
+                `name` = #{name,jdbcType=VARCHAR},
             </if>
             <if test="description !=null">
                 description = #{description,jdbcType=VARCHAR},
@@ -146,7 +146,7 @@
                 and merchant_code = #{merchantCode,jdbcType=VARCHAR}
             </if>
             <if test="name !=null">
-                and name = #{name,jdbcType=VARCHAR}
+                and `name` = #{name,jdbcType=VARCHAR}
             </if>
             <if test="description !=null">
                 and description = #{description,jdbcType=VARCHAR}
@@ -167,6 +167,7 @@
                 and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
             </if>
         </trim>
+        <include refid="paginationSql"/>
         <include refid="paging"/>
     </select>
     <select id="queryTotal" resultType="INTEGER">
@@ -179,7 +180,7 @@
                 and merchant_code = #{merchantCode,jdbcType=VARCHAR}
             </if>
             <if test="name !=null">
-                and name = #{name,jdbcType=VARCHAR}
+                and `name` = #{name,jdbcType=VARCHAR}
             </if>
             <if test="description !=null">
                 and description = #{description,jdbcType=VARCHAR}
