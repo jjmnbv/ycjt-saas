@@ -1,6 +1,6 @@
 package com.beitu.saas.rest.controller.channel;
 
-import com.beitu.saas.app.application.module.SaasModuleApplication;
+import com.beitu.saas.app.application.channel.SaasRiskModuleApplication;
 import com.beitu.saas.channel.domain.SaasModuleItemVo;
 import com.beitu.saas.channel.domain.SaasModuleVo;
 import com.beitu.saas.channel.enums.ChannelErrorCodeEnum;
@@ -33,7 +33,7 @@ public class SaasRiskModuleController {
     private static final Log LOGGER = LogFactory.getLog(SaasRiskModuleController.class);
 
     @Autowired
-    private SaasModuleApplication saasModuleApplication;
+    private SaasRiskModuleApplication saasRiskModuleApplication;
 
 
     /**
@@ -44,7 +44,7 @@ public class SaasRiskModuleController {
     @RequestMapping(value = "/moduleList", method = RequestMethod.POST)
     @ApiOperation(value = "渠道列表", response = SaasModuleResponse.class)
     public Response getModuleList() {
-        List<SaasModuleVo> moduleList = saasModuleApplication.getModuleList();
+        List<SaasModuleVo> moduleList = saasRiskModuleApplication.getModuleList();
         return Response.ok().putData(new SaasModuleResponse(moduleList));
     }
 
@@ -55,7 +55,7 @@ public class SaasRiskModuleController {
     @RequestMapping(value = "/moduleItemlList/{moduleCode}", method = RequestMethod.POST)
     @ApiOperation(value = "渠道列表", response = SaasModuleItemResponse.class)
     public Response getModuleItemList(@PathVariable(value = "moduleCode") String moduleCode) {
-        List<SaasModuleItemVo> moduleItemVos = saasModuleApplication.getModuleItemList(moduleCode);
+        List<SaasModuleItemVo> moduleItemVos = saasRiskModuleApplication.getModuleItemList(moduleCode);
         return Response.ok().putData(new SaasModuleItemResponse(moduleItemVos));
     }
 
@@ -72,7 +72,7 @@ public class SaasRiskModuleController {
         SaasModuleVo moduleVo = new SaasModuleVo();
         BeanUtils.copyProperties(saasRiskModuleRequestVo, moduleVo);
         try {
-            saasModuleApplication.createModule(moduleVo);
+            saasRiskModuleApplication.createModule(moduleVo);
         } catch (Exception e) {
             LOGGER.error("==  创建风控模块失败, 模块号:{}, 失败原因:{}  ==", saasRiskModuleRequestVo.getModuleCode(), e);
             return Response.error(null, ChannelErrorCodeEnum.MODULE_PARAM_INVALID.getMsg());
@@ -93,7 +93,7 @@ public class SaasRiskModuleController {
         SaasModuleItemVo saasModuleItemVo = new SaasModuleItemVo();
         BeanUtils.copyProperties(saasRiskModuleItemRequestVo, saasModuleItemVo);
         try {
-            saasModuleApplication.createModuleItem(saasModuleItemVo);
+            saasRiskModuleApplication.createModuleItem(saasModuleItemVo);
         } catch (Exception e) {
             LOGGER.error("==  创建模块字段失败, 模块号:{},字段号:{} 失败原因:{}  ==", saasRiskModuleItemRequestVo.getModuleCode(), saasRiskModuleItemRequestVo.getItemCode(), e);
             return Response.error(null, ChannelErrorCodeEnum.MODULE_ITEM_PARAM_INVALID.getMsg());

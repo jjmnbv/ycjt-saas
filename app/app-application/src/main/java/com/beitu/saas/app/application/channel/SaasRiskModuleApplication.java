@@ -1,4 +1,4 @@
-package com.beitu.saas.app.application.module;
+package com.beitu.saas.app.application.channel;
 
 import com.beitu.saas.channel.client.SaasModuleItemService;
 import com.beitu.saas.channel.client.SaasModuleService;
@@ -23,8 +23,8 @@ import java.util.List;
  * Time: 下午4:39
  */
 @Component
-public class SaasModuleApplication {
-    private static final Log LOGGER = LogFactory.getLog(SaasModuleApplication.class);
+public class SaasRiskModuleApplication {
+    private static final Log LOGGER = LogFactory.getLog(SaasRiskModuleApplication.class);
 
     @Autowired
     private SaasModuleService saasModuleService;
