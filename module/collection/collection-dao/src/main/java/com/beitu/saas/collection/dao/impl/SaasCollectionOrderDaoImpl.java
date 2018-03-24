@@ -1,6 +1,6 @@
 package com.beitu.saas.collection.dao.impl;
 
-import com.beitu.saas.channel.domain.CollectionOrderQueryVo;
+import com.beitu.saas.collection.param.CollectionOrderQueryParam;
 import com.beitu.saas.collection.dao.SaasCollectionOrderDao;
 import com.beitu.saas.collection.entity.SaasCollectionOrderEntity;
 import com.beitu.saas.collection.vo.CollectionOrderInfoDetailVo;
@@ -29,7 +29,7 @@ public class SaasCollectionOrderDaoImpl extends AbstractBaseMapper<SaasCollectio
 
 
     @Override
-    public List<CollectionOrderInfoDetailVo> selectCollectionOrderListByPage(CollectionOrderQueryVo collectionOrderQueryParam, Page page) {
+    public List<CollectionOrderInfoDetailVo> selectCollectionOrderListByPage(CollectionOrderQueryParam collectionOrderQueryParam, Page page) {
         Map<String, Object> map = new HashMap<>();
         map.put("collectionOrderQueryParam", collectionOrderQueryParam);
         if (page != null) {
@@ -41,7 +41,7 @@ public class SaasCollectionOrderDaoImpl extends AbstractBaseMapper<SaasCollectio
 
 
     @Override
-    public Integer queryTotalCollectionOrderListCount(CollectionOrderQueryVo collectionOrderQueryParam) {
+    public Integer queryTotalCollectionOrderListCount(CollectionOrderQueryParam collectionOrderQueryParam) {
         Map<String, Object> paramMap = new HashMap();
         paramMap.put("collectionOrderQueryParam", collectionOrderQueryParam);
 

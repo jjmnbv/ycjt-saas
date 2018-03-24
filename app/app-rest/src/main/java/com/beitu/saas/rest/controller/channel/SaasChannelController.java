@@ -3,11 +3,11 @@ package com.beitu.saas.rest.controller.channel;
 import com.beitu.saas.app.annotations.SignIgnore;
 import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.application.channel.SaasChannelApplication;
-import com.beitu.saas.channel.param.SaasChannelParam;
-import com.beitu.saas.channel.client.SaasChannelService;
-import com.beitu.saas.channel.domain.SaasChannelRiskSettingsVo;
-import com.beitu.saas.channel.domain.SaasChannelVo;
-import com.beitu.saas.channel.enums.ChannelErrorCodeEnum;
+import com.beitu.saas.collection.param.SaasChannelParam;
+import com.beitu.saas.collection.client.SaasChannelService;
+import com.beitu.saas.collection.domain.SaasChannelVo;
+import com.beitu.saas.collection.enums.ChannelErrorCodeEnum;
+import com.beitu.saas.collection.param.SaasChannelRiskSettingsParam;
 import com.beitu.saas.rest.controller.channel.request.SaasChannelQueryRequestParam;
 import com.beitu.saas.rest.controller.channel.request.SaasChannelRequestParam;
 import com.beitu.saas.rest.controller.channel.request.SaasOperateChannelRequestParam;
@@ -62,13 +62,13 @@ public class SaasChannelController {
     @VisitorAccessible
     @SignIgnore
     public Response addChannel(@RequestBody SaasChannelRequestParam saasChannelRequestParam) {
-        List<SaasChannelRiskSettingsVo> settingsVos = new ArrayList<>();
+        List<SaasChannelRiskSettingsParam> settingsVos = new ArrayList<>();
         boolean setModule = CollectionUtils.isNotEmpty(saasChannelRequestParam.getSaasModuleRequestParams());
         boolean setModuleItem = saasChannelRequestParam.getSaasModuleItemRequestParams().size() == 1 && !StringUtils.isEmpty(saasChannelRequestParam.getSaasModuleItemRequestParams().get(0).getItemCode());
 
         if (setModuleItem) {
             saasChannelRequestParam.getSaasModuleItemRequestParams().stream().forEach(x -> {
-                SaasChannelRiskSettingsVo saasChannelRiskSettingsVo = new SaasChannelRiskSettingsVo();
+                SaasChannelRiskSettingsParam saasChannelRiskSettingsVo = new SaasChannelRiskSettingsParam();
                 saasChannelRiskSettingsVo.setModuleCode(x.getModuleCode())
                         .setItemCode(x.getItemCode())
                         .setRequired(x.getRequired());
@@ -76,7 +76,7 @@ public class SaasChannelController {
             });
         } else if (setModule) {
             saasChannelRequestParam.getSaasModuleRequestParams().stream().forEach(x -> {
-                SaasChannelRiskSettingsVo settingsVo = new SaasChannelRiskSettingsVo();
+                SaasChannelRiskSettingsParam settingsVo = new SaasChannelRiskSettingsParam();
                 settingsVo.setModuleCode(x.getModuleCode())
                         .setRequired(x.getRequired());
                 settingsVos.add(settingsVo);

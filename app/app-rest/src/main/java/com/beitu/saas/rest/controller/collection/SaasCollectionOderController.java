@@ -1,9 +1,9 @@
 package com.beitu.saas.rest.controller.collection;
 
-import com.beitu.saas.channel.client.SaasCollectionOrderService;
-import com.beitu.saas.channel.domain.CollectionOrderQueryVo;
+import com.beitu.saas.collection.client.SaasCollectionOrderService;
+import com.beitu.saas.collection.param.CollectionOrderQueryParam;
 import com.beitu.saas.collection.vo.CollectionOrderInfoDetailVo;
-import com.beitu.saas.rest.controller.collection.request.CollectionOrderQueryParam;
+import com.beitu.saas.rest.controller.collection.request.CollectionOrderQueryRequestParam;
 import com.beitu.saas.rest.controller.collection.response.CollectionOrderListResponse;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.response.ModuleResponse;
@@ -38,10 +38,10 @@ public class SaasCollectionOderController {
      * @return
      */
     @RequestMapping("/collectionOrderGet/list")
-    public ModuleResponse collectionDistributeGet(@RequestBody CollectionOrderQueryParam collectionOrderQueryParam, Page page) {
-        CollectionOrderQueryVo collectionOrderQueryVo=new CollectionOrderQueryVo();
-        BeanUtils.copyProperties(collectionOrderQueryParam,collectionOrderQueryVo);
-        List<CollectionOrderInfoDetailVo> collectionOrderListByPage = saasCollectionOrderService.getCollectionOrderListByPage(collectionOrderQueryVo, page);
+    public ModuleResponse collectionDistributeGet(@RequestBody CollectionOrderQueryRequestParam collectionOrderQueryParam, Page page) {
+        CollectionOrderQueryParam param = new CollectionOrderQueryParam();
+        BeanUtils.copyProperties(collectionOrderQueryParam, param);
+        List<CollectionOrderInfoDetailVo> collectionOrderListByPage = saasCollectionOrderService.getCollectionOrderListByPage(param, page);
         return new ModuleResponse<>(new CollectionOrderListResponse(collectionOrderListByPage), page);
     }
 }

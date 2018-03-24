@@ -1,12 +1,13 @@
 package com.beitu.saas.collection.dao;
 
-import com.beitu.saas.channel.domain.CollectionOrderQueryVo;
+import com.beitu.saas.collection.param.CollectionOrderQueryParam;
 import com.beitu.saas.collection.entity.SaasCollectionOrderEntity;
 import com.beitu.saas.collection.vo.CollectionOrderInfoDetailVo;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.base.BaseMapper;
 
 import java.util.List;
+
 
 /**
  * User: fenqiguanjia
@@ -17,8 +18,8 @@ import java.util.List;
 public interface SaasCollectionOrderDao extends BaseMapper<SaasCollectionOrderEntity> {
     SaasCollectionOrderEntity selectSaasCollectionOrderEntity(String orderNo);
 
-    List<CollectionOrderInfoDetailVo> selectCollectionOrderListByPage(CollectionOrderQueryVo collectionOrderQueryParam, Page page);
+    List<CollectionOrderInfoDetailVo> selectCollectionOrderListByPage(CollectionOrderQueryParam collectionOrderQueryParam, Page page);
 
-    Integer queryTotalCollectionOrderListCount(CollectionOrderQueryVo collectionOrderQueryParam);
+    Integer queryTotalCollectionOrderListCount(CollectionOrderQueryParam collectionOrderQueryParam);
 
 }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.beitu.saas.channel.dao.impl.SaasChannelDaoImpl">
-    <resultMap id="BaseResultMap" type="com.beitu.saas.channel.entity.SaasChannelEntity">
+<mapper namespace="com.beitu.saas.collection.dao.impl.SaasChannelDaoImpl">
+    <resultMap id="BaseResultMap" type="com.beitu.saas.collection.entity.SaasChannelEntity">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode"/>
         <result column="channel_code" jdbcType="VARCHAR" property="channelCode"/>
@@ -41,7 +41,7 @@
     </select>
 
     <insert id="insert" keyColumn="id" keyProperty="id"
-            parameterType="com.beitu.saas.channel.entity.SaasChannelEntity" useGeneratedKeys="true">
+            parameterType="com.beitu.saas.collection.entity.SaasChannelEntity" useGeneratedKeys="true">
         insert into saas_channel
         <trim prefix="(" suffix=")" suffixOverrides=",">
                 <if test="merchantCode !=null">
@@ -115,7 +115,7 @@
         </trim>
     </insert>
 
-    <update id="updateByPrimaryKey" parameterType="com.beitu.saas.channel.entity.SaasChannelEntity">
+    <update id="updateByPrimaryKey" parameterType="com.beitu.saas.collection.entity.SaasChannelEntity">
         update saas_channel
         <set>
                 <if test="merchantCode !=null">

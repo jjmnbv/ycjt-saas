@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.beitu.saas.channel.dao.impl.SaasChannelDaoImpl">
+<mapper namespace="com.beitu.saas.collection.dao.impl.SaasChannelDaoImpl">
 
     <sql id="Param_Where_Clause">
         <where>
@@ -42,7 +42,7 @@
         <include refid="Param_Where_Clause"/>
     </select>
 
-    <select id="selectChannelEntityByChannelCode" parameterType="map" resultType="com.beitu.saas.channel.entity.SaasChannelEntity">
+    <select id="selectChannelEntityByChannelCode" parameterType="map" resultType="com.beitu.saas.collection.entity.SaasChannelEntity">
         SELECT
         <include refid="Base_Column_List"/>
         from saas_channel

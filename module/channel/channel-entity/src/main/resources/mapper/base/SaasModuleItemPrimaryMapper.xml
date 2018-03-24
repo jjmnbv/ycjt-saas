@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.beitu.saas.channel.dao.impl.SaasModuleItemDaoImpl">
-    <resultMap id="BaseResultMap" type="com.beitu.saas.channel.entity.SaasModuleItemEntity">
+<mapper namespace="com.beitu.saas.collection.dao.impl.SaasModuleItemDaoImpl">
+    <resultMap id="BaseResultMap" type="com.beitu.saas.collection.entity.SaasModuleItemEntity">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="module_code" jdbcType="VARCHAR" property="moduleCode"/>
         <result column="item_code" jdbcType="VARCHAR" property="itemCode"/>
@@ -31,7 +31,7 @@
     </select>
 
     <insert id="insert" keyColumn="id" keyProperty="id"
-            parameterType="com.beitu.saas.channel.entity.SaasModuleItemEntity" useGeneratedKeys="true">
+            parameterType="com.beitu.saas.collection.entity.SaasModuleItemEntity" useGeneratedKeys="true">
         insert into saas_module_item
         <trim prefix="(" suffix=")" suffixOverrides=",">
                 <if test="moduleCode !=null">
@@ -75,7 +75,7 @@
         </trim>
     </insert>
 
-    <update id="updateByPrimaryKey" parameterType="com.beitu.saas.channel.entity.SaasModuleItemEntity">
+    <update id="updateByPrimaryKey" parameterType="com.beitu.saas.collection.entity.SaasModuleItemEntity">
         update saas_module_item
         <set>
                 <if test="moduleCode !=null">

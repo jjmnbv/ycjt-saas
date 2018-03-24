@@ -1,7 +1,7 @@
 package com.beitu.saas.collection.service;
 
-import com.beitu.saas.channel.client.SaasCollectionCommentService;
-import com.beitu.saas.channel.domain.CollectionCommentVo;
+import com.beitu.saas.collection.client.SaasCollectionCommentService;
+import com.beitu.saas.collection.domain.CollectionCommentVo;
 import com.beitu.saas.collection.dao.SaasCollectionCommentDao;
 import com.beitu.saas.collection.entity.SaasCollectionCommentEntity;
 import com.fqgj.common.base.AbstractBaseService;

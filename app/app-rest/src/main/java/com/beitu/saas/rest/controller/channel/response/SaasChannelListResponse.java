@@ -1,9 +1,8 @@
 package com.beitu.saas.rest.controller.channel.response;
 
-import com.beitu.saas.channel.domain.SaasChannelVo;
+import com.beitu.saas.collection.domain.SaasChannelVo;
 import com.fqgj.common.api.ResponseData;
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 
 import java.util.ArrayList;
 import java.util.List;

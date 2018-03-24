@@ -1,11 +1,13 @@
 package com.beitu.saas.app.application.channel;
 
-import com.beitu.saas.channel.client.SaasModuleItemService;
-import com.beitu.saas.channel.client.SaasModuleService;
-import com.beitu.saas.channel.domain.SaasModuleItemVo;
-import com.beitu.saas.channel.domain.SaasModuleVo;
-import com.beitu.saas.channel.entity.SaasModuleEntity;
-import com.beitu.saas.channel.entity.SaasModuleItemEntity;
+import com.beitu.saas.collection.client.SaasModuleItemService;
+import com.beitu.saas.collection.client.SaasModuleService;
+import com.beitu.saas.collection.domain.SaasModuleItemVo;
+import com.beitu.saas.collection.domain.SaasModuleVo;
+import com.beitu.saas.collection.entity.SaasModuleEntity;
+import com.beitu.saas.collection.entity.SaasModuleItemEntity;
+import com.beitu.saas.collection.param.SaasModuleItemParam;
+import com.beitu.saas.collection.param.SaasModuleParam;
 import com.fqgj.log.factory.LogFactory;
 import com.fqgj.log.interfaces.Log;
 import org.springframework.beans.BeanUtils;
@@ -71,9 +73,9 @@ public class SaasRiskModuleApplication {
     /**
      * 创建风控模块
      */
-    public void createModule(SaasModuleVo saasModuleVo) {
+    public void createModule(SaasModuleParam saasModuleParam) {
         SaasModuleEntity saasChannelEntity = new SaasModuleEntity();
-        BeanUtils.copyProperties(saasModuleVo, saasChannelEntity);
+        BeanUtils.copyProperties(saasModuleParam, saasChannelEntity);
 
         saasModuleService.create(saasChannelEntity);
         LOGGER.info("== 风控模块配置成功! ==");
@@ -82,9 +84,9 @@ public class SaasRiskModuleApplication {
     /**
      * 创建风控模块字段
      */
-    public void createModuleItem(SaasModuleItemVo saasModuleItemVo) {
+    public void createModuleItem(SaasModuleItemParam saasModuleItemParam) {
         SaasModuleItemEntity saasModuleItemEntity = new SaasModuleItemEntity();
-        BeanUtils.copyProperties(saasModuleItemVo, saasModuleItemEntity);
+        BeanUtils.copyProperties(saasModuleItemParam, saasModuleItemEntity);
 
         saasModuleItemService.create(saasModuleItemEntity);
         LOGGER.info("== 创建风控模块字段配置成功! ==");
