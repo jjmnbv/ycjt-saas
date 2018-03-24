@@ -67,12 +67,12 @@ public class RoleController {
 
     @RequestMapping(value = "/status/{roleId}/{enable}", method = RequestMethod.PUT)
     @ParamsValidate
-    public Response enable(@PathVariable Long rolrId, Boolean enable) {
+    public Response enable(@PathVariable Long roleId,  @PathVariable("enable") boolean enable) {
         SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
         SaasRole saasRole = new SaasRole();
         saasRole.setMerchantCode(saasAdmin.getCode());
         saasRole.setEnabled(enable);
-        saasRole.setId(rolrId);
+        saasRole.setId(roleId);
         boolean success = saasRoleService.updateById(saasRole) > 0;
         if (!success) {
             throw new ApplicationException("角色状态更新失败");

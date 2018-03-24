@@ -113,7 +113,7 @@ public class AdminController {
 
     @RequestMapping(value = "/status/{adminId}/{enable}", method = RequestMethod.PUT)
     @ApiOperation("禁用账户")
-    public Response enable(@PathVariable Long adminId, Boolean enable) {
+    public Response enable(@PathVariable Long adminId, @PathVariable("enable") Boolean enable) {
         SaasAdmin saasAdmin = new SaasAdmin();
         saasAdmin.setEnable(enable);
         saasAdmin.setId(adminId);
@@ -121,6 +121,7 @@ public class AdminController {
         if (!success) {
             throw new ApplicationException("账户状态更新失败");
         }
+
         return Response.ok();
     }
 
