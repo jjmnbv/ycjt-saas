@@ -42,7 +42,7 @@
         <include refid="Param_Where_Clause"/>
     </select>
 
-    <select id="selectChannelEntityByChannelCode" parameterType="map" resultType="com.beitu.saas.channel.entity.SaasChannelEntity">
+    <select id="selectChannelEntityByChannelCode" parameterType="map" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         from saas_channel

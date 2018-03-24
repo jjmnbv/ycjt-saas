@@ -38,7 +38,7 @@ public class CreditApplication {
     @Autowired
     private SaasOrderApplicationService saasOrderApplicationService;
 
-    public List<CreditModuleListVo> listCreditModule(String channelCode, String borrowerCode, String orderNumb) {
+    public List<CreditModuleListVo> listCreditModule(String channelCode, String borrowerCode) {
         List<SaasChannelRiskSettingsVo> saasChannelRiskSettingsVoList = saasChannelApplication.getSaasChannelRiskSettingsByChannelCode(channelCode);
         if (CollectionUtils.isEmpty(saasChannelRiskSettingsVoList)) {
             throw new ApplicationException(ChannelErrorCodeEnum.CHANNEL_MODULE);
@@ -48,16 +48,13 @@ public class CreditApplication {
             CreditModuleListVo creditModuleListVo = new CreditModuleListVo();
             creditModuleListVo.setModuleCode(saasChannelRiskSettingsVo.getModuleCode());
             creditModuleListVo.setRequired(saasChannelRiskSettingsVo.getRequired() == 1);
-            creditModuleListVo.setApplyStatus(getInfoApplyStatus(borrowerCode, orderNumb, saasChannelRiskSettingsVo.getModuleCode()).getCode());
+            creditModuleListVo.setApplyStatus(getInfoApplyStatus(borrowerCode, saasChannelRiskSettingsVo.getModuleCode()).getCode());
             creditModuleListVoList.add(creditModuleListVo);
         });
         return creditModuleListVoList;
     }
 
-    private BorrowerInfoApplyStatusEnum getInfoApplyStatus(String borrowerCode, String orderNumb, String moduleCode) {
-        if (StringUtils.isEmpty(orderNumb)) {
-            return BorrowerInfoApplyStatusEnum.INCOMPLETE;
-        }
+    private BorrowerInfoApplyStatusEnum getInfoApplyStatus(String borrowerCode, String moduleCode) {
         RiskModuleEnum riskModuleEnum = RiskModuleEnum.getRiskModuleEnumByModuleCode(moduleCode);
         switch (riskModuleEnum) {
             case APPLICATION:
@@ -126,9 +123,33 @@ public class CreditApplication {
         }
         String orderNumb = OrderNoUtil.makeOrderNum();
         saasChannelRiskSettingsVoList.forEach(saasChannelRiskSettingsVo -> {
-
+            RiskModuleEnum riskModuleEnum = RiskModuleEnum.getRiskModuleEnumByModuleCode(saasChannelRiskSettingsVo.getModuleCode());
+            switch (riskModuleEnum) {
+                case APPLICATION:
+                    break;
+                case PERSONAL_INFO:
+                    break;
+                case EMERGENT_CONTACT:
+                    break;
+                case WORK_INFO:
+                    break;
+                case CARRIER_AUTHENTIC:
+                    break;
+                case ZM_CREDIT:
+                    break;
+                case EB_INFO:
+                    break;
+                case PLATFORM_BORROW_CREDIT:
+                    break;
+                case IDENTITY_INFO:
+                    break;
+            }
         });
         return new ApiResponse("提交成功");
+    }
+
+    private void submitApplication() {
+
     }
 
 }
