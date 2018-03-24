@@ -1,6 +1,5 @@
 package com.beitu.saas.rest.controller.collection;
 
-import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.channel.client.SaasCollectionOrderService;
 import com.beitu.saas.channel.param.CollectionOrderQueryParam;
 import com.beitu.saas.collection.vo.CollectionOrderInfoDetailVo;
@@ -12,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.util.List;
 
 /**
@@ -19,13 +19,12 @@ import java.util.List;
  * Description:
  * User: WatsonQiu
  * Date: 2018/3/24
- * Time: 下午2:46
+ * Time: 下午3:43
  */
-@Api(description = "催收列表相关接口")
+@Api(description = "催收订单相关接口")
 @RestController
 @RequestMapping("/collection")
-public class CollectionOrderController {
-
+public class SaasCollectionOderController {
     @Autowired
     private SaasCollectionOrderService saasCollectionOrderService;
 
