@@ -8,8 +8,8 @@ import java.util.Date;
 
 /**
  * User: jungle
- * Date: 2018-03-23
- * Time: 15:18:54.753
+ * Date: 2018-03-24
+ * Time: 14:59:56.215
  */
 public class SaasOrderVo implements ResponseData, Serializable {
 

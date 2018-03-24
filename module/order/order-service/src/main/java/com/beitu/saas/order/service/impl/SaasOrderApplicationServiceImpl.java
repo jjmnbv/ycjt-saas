@@ -31,9 +31,9 @@ public class SaasOrderApplicationServiceImpl extends AbstractBaseService impleme
     private SaasOrderApplicationDao saasOrderApplicationDao;
 
     @Override
-    public SaasOrderApplicationVo getByOrderNumb(String orderNumb) {
+    public SaasOrderApplicationVo getByBorrowerCode(String borrowerCode) {
         List<SaasOrderApplication> saasOrderApplicationList = saasOrderApplicationDao.selectByParams(new HashMap<String, Object>(4) {{
-            put("orderNumb", orderNumb);
+            put("borrowerCode", borrowerCode);
             put("deleted", Boolean.FALSE);
         }});
         if (CollectionUtils.isEmpty(saasOrderApplicationList)) {
@@ -45,8 +45,6 @@ public class SaasOrderApplicationServiceImpl extends AbstractBaseService impleme
     @Override
     public SaasOrderApplication create(SaasOrderApplicationVo saasOrderApplicationVo) {
         SaasOrderApplication saasOrderApplication = SaasOrderApplicationVo.convertVOToEntity(saasOrderApplicationVo);
-        saasOrderApplication.setOrderNumb(OrderNoUtil.makeOrderNum());
-        saasOrderApplication.setLateFeeRatio(new BigDecimal("0.24"));
         return saasOrderApplicationDao.insert(saasOrderApplication);
     }
 

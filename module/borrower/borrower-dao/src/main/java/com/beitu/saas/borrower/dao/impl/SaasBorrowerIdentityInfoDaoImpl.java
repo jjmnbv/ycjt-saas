@@ -1,7 +1,8 @@
 package com.beitu.saas.borrower.dao.impl;
-import com.fqgj.common.base.AbstractBaseMapper;
+
 import com.beitu.saas.borrower.dao.SaasBorrowerIdentityInfoDao;
 import com.beitu.saas.borrower.entity.SaasBorrowerIdentityInfo;
+import com.fqgj.common.base.AbstractBaseMapper;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -12,5 +13,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class SaasBorrowerIdentityInfoDaoImpl extends AbstractBaseMapper<SaasBorrowerIdentityInfo> implements SaasBorrowerIdentityInfoDao {
+
+    @Override
+    public SaasBorrowerIdentityInfo selectH5SaveInfoByBorrowerCode(String borrowerCode) {
+        return this.getSqlSession().selectOne(this.getStatement(".selectH5SaveInfoByBorrowerCode"));
+    }
 
 }

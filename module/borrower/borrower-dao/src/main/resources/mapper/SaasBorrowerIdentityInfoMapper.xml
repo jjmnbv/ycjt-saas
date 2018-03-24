@@ -3,4 +3,13 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.beitu.saas.borrower.dao.impl.SaasBorrowerIdentityInfoDaoImpl">
 
+    <select id="selectH5SaveInfoByBorrowerCode" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_borrower_identity_info
+        where borrower_code = #{borrowerCode,jdbcType=VARCHAR}
+        and order_numb is null
+        and deleted = 0
+    </select>
+
 </mapper>

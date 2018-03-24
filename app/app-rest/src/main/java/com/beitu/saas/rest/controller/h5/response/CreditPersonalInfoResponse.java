@@ -13,9 +13,6 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "风控模块个人信息")
 public class CreditPersonalInfoResponse implements ResponseData {
 
-    @ApiModelProperty(value = "订单号")
-    private String orderNumb;
-
     /**
      * QQ
      */
@@ -42,8 +39,7 @@ public class CreditPersonalInfoResponse implements ResponseData {
     @ApiModelProperty(value = "婚姻状况")
     private Integer maritalStatus;
 
-    public CreditPersonalInfoResponse(String orderNumb, SaasBorrowerPersonalInfoVo saasBorrowerPersonalInfoVo) {
-        this.orderNumb = orderNumb;
+    public CreditPersonalInfoResponse(SaasBorrowerPersonalInfoVo saasBorrowerPersonalInfoVo) {
         if (saasBorrowerPersonalInfoVo != null) {
             this.qq = saasBorrowerPersonalInfoVo.getQq();
             this.education = saasBorrowerPersonalInfoVo.getEducation();
@@ -51,14 +47,6 @@ public class CreditPersonalInfoResponse implements ResponseData {
             this.liveDuration = saasBorrowerPersonalInfoVo.getLiveDuration();
             this.maritalStatus = saasBorrowerPersonalInfoVo.getMaritalStatus();
         }
-    }
-
-    public String getOrderNumb() {
-        return orderNumb;
-    }
-
-    public void setOrderNumb(String orderNumb) {
-        this.orderNumb = orderNumb;
     }
 
     public String getQq() {
