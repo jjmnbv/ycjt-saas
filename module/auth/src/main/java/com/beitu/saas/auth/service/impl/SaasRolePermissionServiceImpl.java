@@ -44,6 +44,27 @@ public class SaasRolePermissionServiceImpl extends AbstractBaseService implement
             put("deleted",false);
         }});
     }
+
+    @Override
+    public Boolean addPermissionToRole(Integer roleId, List menuIds, List buttonIds) {
+        saasRolePermissionDao.deleteByRoleId(roleId);
+        menuIds.forEach(menuId->{
+            SaasRolePermission saasRolePermission = new SaasRolePermission();
+            saasRolePermission.setRelationId((Integer)menuId);
+            saasRolePermission.setPermissionType(PermissionTypeEnum.MENU_PERMISSION.getKey().longValue());
+            saasRolePermission.setRoleId(roleId);
+            saasRolePermissionDao.insert(saasRolePermission);
+        });
+        buttonIds.forEach(buttonId->{
+            SaasRolePermission saasRolePermission = new SaasRolePermission();
+            saasRolePermission.setRelationId((Integer)buttonId);
+            saasRolePermission.setPermissionType(PermissionTypeEnum.BUTTON_PERMISSION.getKey().longValue());
+            saasRolePermission.setRoleId(roleId);
+            saasRolePermissionDao.insert(saasRolePermission);
+        });
+        return true;
+    }
+
 }
 
 

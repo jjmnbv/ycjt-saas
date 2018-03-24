@@ -1,5 +1,6 @@
 package com.beitu.saas.auth.dao;
 
+import com.beitu.saas.auth.entity.SaasRolePermission;
 import com.fqgj.common.base.BaseMapper;
 
 /**
@@ -10,4 +11,5 @@ import com.fqgj.common.base.BaseMapper;
 
 public interface SaasRolePermissionDao  extends BaseMapper<SaasRolePermission> {
 
+    void deleteByRoleId(Integer roleId);
 }

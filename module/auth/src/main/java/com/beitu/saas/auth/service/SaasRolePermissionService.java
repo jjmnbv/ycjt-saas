@@ -15,4 +15,6 @@ public interface SaasRolePermissionService<T extends BaseEntity> extends BaseSer
     List<SaasRolePermission> getMenuPermissionByRoleId(Integer roleId);
 
     List<SaasRolePermission> getButtonPermissionByRoleId(Integer roleId);
+
+    Boolean addPermissionToRole(Integer roleId, List menuIds, List buttonIds);
 }
