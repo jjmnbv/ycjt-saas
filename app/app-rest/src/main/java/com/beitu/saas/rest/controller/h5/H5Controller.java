@@ -108,7 +108,9 @@ public class H5Controller {
         if (StringUtils.isEmpty(channelCode)) {
             return new DataApiResponse<>(ChannelErrorCodeEnum.DISABLE_CHANNEL);
         }
-        return new DataApiResponse<>(new UserLoginSuccessResponse(borrowerApplication.login(req.getMobile(), channelCode)));
+        String token = borrowerApplication.login(req.getMobile(), channelCode);
+        redisClient.del(RedisKeyConsts.H5_SAVE_LOGIN_VERIFYCODE_KEY, req.getMobile());
+        return new DataApiResponse<>(new UserLoginSuccessResponse(token));
     }
 
     @RequestMapping(value = "/user/home", method = RequestMethod.POST)
@@ -134,13 +136,13 @@ public class H5Controller {
     @RequestMapping(value = "/credit/list", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "风控项列表获取", response = CreditModuleListResponse.class)
-    public DataApiResponse<CreditModuleListResponse> listCreditModule(@RequestBody @Valid QueryCreditModuleListRequest req) {
+    public DataApiResponse<CreditModuleListResponse> listCreditModule() {
         String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
         if (StringUtils.isEmpty(channelCode)) {
             return new DataApiResponse<>(ChannelErrorCodeEnum.DISABLE_CHANNEL);
         }
         String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
-        return new DataApiResponse<>(new CreditModuleListResponse(creditApplication.listCreditModule(channelCode, borrowerCode, req.getOrderNumb())));
+        return new DataApiResponse<>(new CreditModuleListResponse(creditApplication.listCreditModule(channelCode, borrowerCode)));
     }
 
     @RequestMapping(value = "/credit/apply/info/get", method = RequestMethod.POST)

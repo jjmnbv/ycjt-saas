@@ -22,6 +22,7 @@ public class VerifyCodeSendRequest extends ParamsObject {
     @NotBlank(message = "手机号不能为空")
     private String mobile;
 
+    @ApiModelProperty(value = "验证码类型（register,reset_password,bind_device,modify_mobile）")
     @NotBlank(message = "验证码类型不能为空")
     private String type;
 
