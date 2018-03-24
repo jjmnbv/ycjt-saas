@@ -34,6 +34,11 @@ public class SaasBorrowerIdentityInfoServiceImpl extends AbstractBaseService imp
     }
 
     @Override
+    public int countByBorrowerCode(String borrowerCode) {
+        return saasBorrowerIdentityInfoDao.countH5SaveInfoByBorrowerCode(borrowerCode);
+    }
+
+    @Override
     public SaasBorrowerIdentityInfoVo getByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb) {
         List<SaasBorrowerIdentityInfo> saasBorrowerIdentityInfoList = saasBorrowerIdentityInfoDao.selectByParams(new HashMap<String, Object>(4) {{
             put("borrowerCode", borrowerCode);
@@ -44,6 +49,11 @@ public class SaasBorrowerIdentityInfoServiceImpl extends AbstractBaseService imp
             return null;
         }
         return SaasBorrowerIdentityInfoVo.convertEntityToVO(saasBorrowerIdentityInfoList.get(0));
+    }
+
+    @Override
+    public Boolean updateOrderNumbByBorrowerCode(String orderNumb, String borrowerCode) {
+        return saasBorrowerIdentityInfoDao.updateOrderNumbByBorrowerCode(orderNumb, borrowerCode) == 1;
     }
 
 }

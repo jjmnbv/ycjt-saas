@@ -38,83 +38,83 @@
             parameterType="com.beitu.saas.borrower.entity.SaasBorrowerCarrier" useGeneratedKeys="true">
         insert into saas_borrower_carrier
         <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="borrowerCode !=null">
+            <if test="borrowerCode !=null">
                 borrower_code,
-                </if>
-                <if test="url !=null">
+            </if>
+            <if test="url !=null">
                 url,
-                </if>
-                <if test="mobile !=null">
+            </if>
+            <if test="mobile !=null">
                 mobile,
-                </if>
-                <if test="expireDate !=null">
+            </if>
+            <if test="expireDate !=null">
                 expire_date,
-                </if>
-                <if test="success !=null">
+            </if>
+            <if test="success !=null">
                 success,
-                </if>
-                <if test="deleted !=null">
+            </if>
+            <if test="deleted !=null">
                 deleted,
-                </if>
-                <if test="gmtModified !=null">
+            </if>
+            <if test="gmtModified !=null">
                 gmt_modified,
-                </if>
-                <if test="gmtCreate !=null">
+            </if>
+            <if test="gmtCreate !=null">
                 gmt_create,
-                </if>
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-                <if test="borrowerCode != null">
-                    #{borrowerCode,jdbcType=VARCHAR},
-                </if>
-                <if test="url != null">
-                    #{url,jdbcType=VARCHAR},
-                </if>
-                <if test="mobile != null">
-                    #{mobile,jdbcType=VARCHAR},
-                </if>
-                <if test="expireDate != null">
-                    #{expireDate,jdbcType=TIMESTAMP},
-                </if>
-                <if test="success != null">
-                    #{success,jdbcType=BIT},
-                </if>
-                <if test="deleted != null">
-                    #{deleted,jdbcType=BIT},
-                </if>
-                <if test="gmtModified != null">
-                    #{gmtModified,jdbcType=TIMESTAMP},
-                </if>
-                <if test="gmtCreate != null">
-                    #{gmtCreate,jdbcType=TIMESTAMP},
-                </if>
+            <if test="borrowerCode != null">
+                #{borrowerCode,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null">
+                #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="expireDate != null">
+                #{expireDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="success != null">
+                #{success,jdbcType=BIT},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
         </trim>
     </insert>
 
     <update id="updateByPrimaryKey" parameterType="com.beitu.saas.borrower.entity.SaasBorrowerCarrier">
         update saas_borrower_carrier
         <set>
-                <if test="borrowerCode !=null">
+            <if test="borrowerCode !=null">
                 borrower_code = #{borrowerCode,jdbcType=VARCHAR},
-                </if>
-                <if test="url !=null">
+            </if>
+            <if test="url !=null">
                 url = #{url,jdbcType=VARCHAR},
-                </if>
-                <if test="mobile !=null">
+            </if>
+            <if test="mobile !=null">
                 mobile = #{mobile,jdbcType=VARCHAR},
-                </if>
-                <if test="expireDate !=null">
+            </if>
+            <if test="expireDate !=null">
                 expire_date = #{expireDate,jdbcType=TIMESTAMP},
-                </if>
-                <if test="success !=null">
+            </if>
+            <if test="success !=null">
                 success = #{success,jdbcType=BIT},
-                </if>
-                <if test="deleted !=null">
+            </if>
+            <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},
-                </if>
-                <if test="gmtModified !=null">
+            </if>
+            <if test="gmtModified !=null">
                 gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-                </if>
+            </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
@@ -127,7 +127,7 @@
 
     <sql id="paginationSql">
         <if test="page != null">
-            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+            limit #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
         </if>
     </sql>
 
@@ -154,8 +154,8 @@
             <if test="mobile !=null">
                 and mobile = #{mobile,jdbcType=VARCHAR}
             </if>
-            <if test="expireDate !=null">
-                and expire_date = #{expireDate,jdbcType=TIMESTAMP}
+            <if test="date != null">
+                and expire_date > #{date,jdbcType=TIMESTAMP}
             </if>
             <if test="success !=null">
                 and success = #{success,jdbcType=BIT}
@@ -187,8 +187,8 @@
             <if test="mobile !=null">
                 and mobile = #{mobile,jdbcType=VARCHAR}
             </if>
-            <if test="expireDate !=null">
-                and expire_date = #{expireDate,jdbcType=TIMESTAMP}
+            <if test="date != null">
+                and expire_date > #{date,jdbcType=TIMESTAMP}
             </if>
             <if test="success !=null">
                 and success = #{success,jdbcType=BIT}

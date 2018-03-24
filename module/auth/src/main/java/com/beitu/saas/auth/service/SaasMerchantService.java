@@ -1,4 +1,5 @@
 package com.beitu.saas.auth.service;
+import com.beitu.saas.auth.domain.SaasMerchantVo;
 import com.fqgj.common.base.BaseService;
 import com.fqgj.common.entity.BaseEntity;
 
@@ -12,4 +13,7 @@ import java.util.List;
 public interface SaasMerchantService<T extends BaseEntity> extends BaseService<T> {
 
     List<String> getMerchantList();
+
+    SaasMerchantVo getByMerchantCode(String merchantCode);
+
 }

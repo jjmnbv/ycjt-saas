@@ -5,26 +5,27 @@ import com.beitu.saas.app.api.ApiResponse;
 import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.application.borrower.BorrowerApplication;
 import com.beitu.saas.app.application.channel.SaasChannelApplication;
+import com.beitu.saas.app.application.channel.SaasRiskModuleApplication;
 import com.beitu.saas.app.application.credit.CreditApplication;
 import com.beitu.saas.app.application.credit.vo.BorrowerEmergentContactVo;
 import com.beitu.saas.app.application.credit.vo.BorrowerIdentityInfoVo;
 import com.beitu.saas.app.application.credit.vo.BorrowerWorkInfoVo;
 import com.beitu.saas.app.application.order.OrderApplication;
 import com.beitu.saas.app.common.RequestLocalInfo;
+import com.beitu.saas.auth.domain.SaasMerchantVo;
+import com.beitu.saas.auth.service.SaasMerchantService;
 import com.beitu.saas.borrower.client.SaasBorrowerEmergentContactService;
 import com.beitu.saas.borrower.client.SaasBorrowerIdentityInfoService;
 import com.beitu.saas.borrower.client.SaasBorrowerPersonalInfoService;
 import com.beitu.saas.borrower.client.SaasBorrowerWorkInfoService;
-import com.beitu.saas.borrower.domain.SaasBorrowerEmergentContactVo;
-import com.beitu.saas.borrower.domain.SaasBorrowerIdentityInfoVo;
-import com.beitu.saas.borrower.domain.SaasBorrowerPersonalInfoVo;
-import com.beitu.saas.borrower.domain.SaasBorrowerWorkInfoVo;
+import com.beitu.saas.borrower.domain.*;
 import com.beitu.saas.borrower.entity.SaasBorrowerEmergentContact;
 import com.beitu.saas.borrower.entity.SaasBorrowerIdentityInfo;
 import com.beitu.saas.borrower.entity.SaasBorrowerPersonalInfo;
 import com.beitu.saas.borrower.entity.SaasBorrowerWorkInfo;
 import com.beitu.saas.borrower.enums.BorrowerErrorCodeEnum;
 import com.beitu.saas.channel.domain.SaasH5ChannelVo;
+import com.beitu.saas.channel.domain.SaasModuleVo;
 import com.beitu.saas.channel.enums.ChannelErrorCodeEnum;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.RedisKeyConsts;
@@ -80,6 +81,9 @@ public class H5Controller {
     private SaasChannelApplication saasChannelApplication;
 
     @Autowired
+    private SaasMerchantService saasMerchantService;
+
+    @Autowired
     private SaasBorrowerPersonalInfoService saasBorrowerPersonalInfoService;
 
     @Autowired
@@ -122,7 +126,18 @@ public class H5Controller {
         if (StringUtils.isEmpty(channelCode)) {
             return new DataApiResponse<>(ChannelErrorCodeEnum.DISABLE_CHANNEL);
         }
-        return new DataApiResponse<>(new UserHomeResponse(orderApplication.getOrderApplyStatus(borrowerCode, channelCode).getCode()));
+        SaasH5ChannelVo saasH5ChannelVo = saasChannelApplication.getSaasChannelBychannelCode(channelCode);
+        if (saasH5ChannelVo == null) {
+            throw new ApplicationException(ChannelErrorCodeEnum.DISABLE_CHANNEL);
+        }
+        SaasMerchantVo saasMerchantVo = saasMerchantService.getByMerchantCode(saasH5ChannelVo.getMerchantCode());
+        String applyType = orderApplication.getOrderApplyStatus(borrowerCode, channelCode).getMsg();
+        String headerTitle = "洋葱借条";
+        if (saasMerchantVo != null) {
+            headerTitle = saasMerchantVo.getCompanyName();
+        }
+        String picTitle = "已有20000人申请";
+        return new DataApiResponse<>(new UserHomeResponse(applyType, headerTitle, picTitle));
     }
 
 //    @RequestMapping(value = "/user/apply/status", method = RequestMethod.POST)
@@ -291,8 +306,11 @@ public class H5Controller {
         if (saasH5ChannelVo == null) {
             return new ApiResponse(ChannelErrorCodeEnum.DISABLE_CHANNEL);
         }
-        String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
-        return creditApplication.submitCreditInfo(borrowerCode, saasH5ChannelVo.getMerchantCode(), saasH5ChannelVo.getChannelCode());
+        SaasBorrowerVo saasBorrowerVo = RequestLocalInfo.getCurrentAdmin().getSaasBorrower();
+        if (!saasH5ChannelVo.getMerchantCode().equals(saasBorrowerVo.getMerchantCode())) {
+            return new ApiResponse(BorrowerErrorCodeEnum.NO_ACCESS_RIGHT);
+        }
+        return creditApplication.submitCreditInfo(saasBorrowerVo.getBorrowerCode(), saasH5ChannelVo.getChannelCode());
     }
 
 }

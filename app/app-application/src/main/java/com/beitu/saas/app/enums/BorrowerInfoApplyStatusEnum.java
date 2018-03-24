@@ -10,7 +10,7 @@ import com.fqgj.common.api.enums.MsgCodeEnum;
 public enum BorrowerInfoApplyStatusEnum implements MsgCodeEnum {
 
     INCOMPLETE(1, "未填写"),
-    SAVED(2, "已保存"),
+    AUTHENTICATING(2, "认证中"),
     FINISHED(3, "已完成");
 
     BorrowerInfoApplyStatusEnum(Integer code, String msg) {

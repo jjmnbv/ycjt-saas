@@ -13,4 +13,8 @@ public interface SaasBorrowerPersonalInfoDao extends BaseMapper<SaasBorrowerPers
 
     SaasBorrowerPersonalInfo selectH5SaveInfoByBorrowerCode(String borrowerCode);
 
+    int countH5SaveInfoByBorrowerCode(String borrowerCode);
+
+    int updateOrderNumbByBorrowerCode(String orderNumb, String borrowerCode);
+
 }
