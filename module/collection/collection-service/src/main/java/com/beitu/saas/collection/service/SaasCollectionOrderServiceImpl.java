@@ -1,16 +1,23 @@
 package com.beitu.saas.collection.service;
 
 import com.beitu.saas.channel.client.SaasCollectionOrderService;
-import com.beitu.saas.channel.domain.OrderInfoVo;
 import com.beitu.saas.channel.enums.CollectionOrderStatusEnum;
+import com.beitu.saas.channel.enums.OverdueTimeEnums;
+import com.beitu.saas.channel.param.CollectionOrderQueryParam;
 import com.beitu.saas.collection.dao.SaasCollectionOrderDao;
 import com.beitu.saas.collection.entity.SaasCollectionOrderEntity;
+import com.beitu.saas.collection.vo.CollectionOrderInfoDetailVo;
+import com.fqgj.common.api.Page;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
+import com.fqgj.common.utils.DateUtil;
 import com.fqgj.log.enhance.Module;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * User: fenqiguanjia
@@ -27,9 +34,9 @@ public class SaasCollectionOrderServiceImpl extends AbstractBaseService implemen
     private SaasCollectionOrderDao saasCollectionOrderDao;
 
     @Override
-    public void createCollectionOrder(OrderInfoVo orderInfoVo) {
+    public void createCollectionOrder(CollectionOrderInfoDetailVo collectionOrderInfoDetailVo) {
         SaasCollectionOrderEntity entity = new SaasCollectionOrderEntity();
-        BeanUtils.copyProperties(orderInfoVo, entity);
+        BeanUtils.copyProperties(collectionOrderInfoDetailVo, entity);
         saasCollectionOrderDao.insert(entity);
     }
 
@@ -38,6 +45,21 @@ public class SaasCollectionOrderServiceImpl extends AbstractBaseService implemen
         SaasCollectionOrderEntity entity = saasCollectionOrderDao.selectSaasCollectionOrderEntity(orderNo);
         entity.setStatus(CollectionOrderStatusEnum.CLOSE.getType());
         saasCollectionOrderDao.updateByPrimaryKey(entity);
+    }
+
+    @Override
+    public List<CollectionOrderInfoDetailVo> getCollectionOrderListByPage(CollectionOrderQueryParam collectionOrderQueryParam, Page page) {
+        if (null != collectionOrderQueryParam.getOverdueDaysType()) {
+            OverdueTimeEnums timeEnums = OverdueTimeEnums.getEnum(collectionOrderQueryParam.getOverdueDaysType());
+            if (null == timeEnums) {
+                collectionOrderQueryParam.setOverdueStartDate(null);
+                collectionOrderQueryParam.setOverdueEndDate(null);
+            }
+            collectionOrderQueryParam.setOverdueStartDate(DateUtil.getDate(DateUtil.addDate(new Date(), -timeEnums.getStart()), "yyyy-MM-dd"));
+            collectionOrderQueryParam.setOverdueEndDate(DateUtil.getDate(DateUtil.addDate(new Date(), -timeEnums.getEnd()), "yyyy-MM-dd"));
+        }
+
+        return saasCollectionOrderDao.selectCollectionOrderListByPage(collectionOrderQueryParam, page);
     }
 }
 
