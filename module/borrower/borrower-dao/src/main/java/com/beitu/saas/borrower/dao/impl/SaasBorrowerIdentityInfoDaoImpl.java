@@ -9,22 +9,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
-* User: jungle
-* Date: 2018-03-22
-* Time: 15:56:46.980
-*/
+ * User: jungle
+ * Date: 2018-03-22
+ * Time: 15:56:46.980
+ */
 
 @Repository
 public class SaasBorrowerIdentityInfoDaoImpl extends AbstractBaseMapper<SaasBorrowerIdentityInfo> implements SaasBorrowerIdentityInfoDao {
 
     @Override
     public SaasBorrowerIdentityInfo selectH5SaveInfoByBorrowerCode(String borrowerCode) {
-        return this.getSqlSession().selectOne(this.getStatement(".selectH5SaveInfoByBorrowerCode"));
+        return this.getSqlSession().selectOne(this.getStatement(".selectH5SaveInfoByBorrowerCode"), borrowerCode);
     }
 
     @Override
     public int countH5SaveInfoByBorrowerCode(String borrowerCode) {
-        return this.getSqlSession().selectOne(this.getStatement(".countH5SaveInfoByBorrowerCode"));
+        return this.getSqlSession().selectOne(this.getStatement(".countH5SaveInfoByBorrowerCode"), borrowerCode);
     }
 
     @Override

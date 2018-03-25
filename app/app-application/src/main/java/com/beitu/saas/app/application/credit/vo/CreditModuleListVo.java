@@ -17,7 +17,7 @@ public class CreditModuleListVo implements ResponseData {
     private Integer applyStatus;
 
     @ApiModelProperty(value = "是否必填")
-    private Boolean isRequired;
+    private Boolean required;
 
     public String getModuleCode() {
         return moduleCode;
@@ -36,10 +36,11 @@ public class CreditModuleListVo implements ResponseData {
     }
 
     public Boolean getRequired() {
-        return isRequired;
+        return required;
     }
 
     public void setRequired(Boolean required) {
-        isRequired = required;
+        this.required = required;
     }
+
 }

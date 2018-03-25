@@ -43,9 +43,20 @@ public class SaasOrderApplicationServiceImpl extends AbstractBaseService impleme
     }
 
     @Override
-    public SaasOrderApplication create(SaasOrderApplicationVo saasOrderApplicationVo) {
+    public SaasOrderApplication save(SaasOrderApplicationVo saasOrderApplicationVo) {
         SaasOrderApplication saasOrderApplication = SaasOrderApplicationVo.convertVOToEntity(saasOrderApplicationVo);
-        return saasOrderApplicationDao.insert(saasOrderApplication);
+        List<SaasOrderApplication> saasOrderApplicationList = saasOrderApplicationDao.selectByParams(new HashMap<String, Object>(4) {{
+            put("borrowerCode", saasOrderApplicationVo.getBorrowerCode());
+            put("merchantCode", saasOrderApplicationVo.getMerchantCode());
+            put("channelCode", saasOrderApplicationVo.getChannelCode());
+            put("deleted", Boolean.FALSE);
+        }});
+        if (CollectionUtils.isEmpty(saasOrderApplicationList)) {
+            return saasOrderApplicationDao.insert(saasOrderApplication);
+        }
+        saasOrderApplication.setId(saasOrderApplicationList.get(0).getId());
+        saasOrderApplicationDao.updateByPrimaryKey(saasOrderApplication);
+        return saasOrderApplication;
     }
 
 }

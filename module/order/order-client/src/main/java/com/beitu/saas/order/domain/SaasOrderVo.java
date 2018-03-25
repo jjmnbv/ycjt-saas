@@ -1,6 +1,9 @@
 package com.beitu.saas.order.domain;
 
+import com.beitu.saas.order.entity.SaasOrder;
+import com.beitu.saas.order.entity.SaasOrderApplication;
 import com.fqgj.common.api.ResponseData;
+import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -8,8 +11,8 @@ import java.util.Date;
 
 /**
  * User: jungle
- * Date: 2018-03-24
- * Time: 14:59:56.215
+ * Date: 2018-03-25
+ * Time: 21:55:45.840
  */
 public class SaasOrderVo implements ResponseData, Serializable {
 
@@ -264,4 +267,25 @@ public class SaasOrderVo implements ResponseData, Serializable {
     public void setVersion(Long version) {
         this.version = version;
     }
+
+    public static SaasOrderVo convertEntityToVO(SaasOrder saasOrder) {
+        if (saasOrder == null) {
+            return null;
+        }
+        SaasOrderVo saasOrderVo = new SaasOrderVo();
+        BeanUtils.copyProperties(saasOrder, saasOrderVo);
+        saasOrderVo.setSaasOrderId(saasOrder.getId());
+        return saasOrderVo;
+    }
+
+    public static SaasOrder convertVOToEntity(SaasOrderVo saasOrderVo) {
+        if (saasOrderVo == null) {
+            return null;
+        }
+        SaasOrder saasOrder = new SaasOrder();
+        BeanUtils.copyProperties(saasOrderVo, saasOrder);
+        saasOrder.setId(saasOrderVo.getSaasOrderId());
+        return saasOrder;
+    }
+
 }

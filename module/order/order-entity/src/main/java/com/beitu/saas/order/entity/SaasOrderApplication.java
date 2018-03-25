@@ -7,8 +7,8 @@ import java.util.Date;
 
 /**
  * User: jungle
- * Date: 2018-03-24
- * Time: 14:59:56.222
+ * Date: 2018-03-25
+ * Time: 21:55:45.847
  * TableDesc:SAAS订单申请表
  */
 public class SaasOrderApplication extends BaseEntity {

@@ -13,7 +13,7 @@ import io.swagger.annotations.ApiModelProperty;
 public class UserHomeResponse implements ResponseData {
 
     @ApiModelProperty(value = "申请状态")
-    private String applyType;
+    private Integer applyType;
 
     @ApiModelProperty(value = "头部提示")
     private String headerTitle;
@@ -21,17 +21,17 @@ public class UserHomeResponse implements ResponseData {
     @ApiModelProperty(value = "图片提示")
     private String picTitle;
 
-    public UserHomeResponse(String applyType, String headerTitle, String picTitle) {
+    public UserHomeResponse(Integer applyType, String headerTitle, String picTitle) {
         this.applyType = applyType;
         this.headerTitle = headerTitle;
         this.picTitle = picTitle;
     }
 
-    public String getApplyType() {
+    public Integer getApplyType() {
         return applyType;
     }
 
-    public void setApplyType(String applyType) {
+    public void setApplyType(Integer applyType) {
         this.applyType = applyType;
     }
 

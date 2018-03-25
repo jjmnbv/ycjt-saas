@@ -30,11 +30,11 @@ public class CreditIdentityInfoResponse implements ResponseData {
     @ApiModelProperty(value = "手持身份证图片URL")
     private String holdUrl;
 
-    public CreditIdentityInfoResponse(SaasBorrowerIdentityInfoVo saasBorrowerIdentityInfoVo) {
+    public CreditIdentityInfoResponse(SaasBorrowerIdentityInfoVo saasBorrowerIdentityInfoVo, String prefixUrl) {
         if (saasBorrowerIdentityInfoVo != null) {
-            this.frontUrl = saasBorrowerIdentityInfoVo.getFrontUrl();
-            this.backUrl = saasBorrowerIdentityInfoVo.getBackUrl();
-            this.holdUrl = saasBorrowerIdentityInfoVo.getHoldUrl();
+            this.frontUrl = prefixUrl + saasBorrowerIdentityInfoVo.getFrontUrl();
+            this.backUrl = prefixUrl + saasBorrowerIdentityInfoVo.getBackUrl();
+            this.holdUrl = prefixUrl + saasBorrowerIdentityInfoVo.getHoldUrl();
         }
     }
 

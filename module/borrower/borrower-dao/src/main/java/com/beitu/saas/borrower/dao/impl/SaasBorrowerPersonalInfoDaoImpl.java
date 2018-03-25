@@ -24,7 +24,7 @@ public class SaasBorrowerPersonalInfoDaoImpl extends AbstractBaseMapper<SaasBorr
 
     @Override
     public int countH5SaveInfoByBorrowerCode(String borrowerCode) {
-        return this.getSqlSession().selectOne(this.getStatement(".countH5SaveInfoByBorrowerCode"));
+        return this.getSqlSession().selectOne(this.getStatement(".countH5SaveInfoByBorrowerCode"), borrowerCode);
     }
 
     @Override
