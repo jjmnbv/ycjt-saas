@@ -1,5 +1,7 @@
 package com.beitu.saas.rest.controller.channel;
 
+import com.beitu.saas.app.annotations.SignIgnore;
+import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.application.channel.SaasRiskModuleApplication;
 import com.beitu.saas.channel.domain.SaasModuleItemVo;
 import com.beitu.saas.channel.domain.SaasModuleVo;
@@ -44,6 +46,8 @@ public class SaasRiskModuleController {
      * @return
      */
     @RequestMapping(value = "/moduleList", method = RequestMethod.POST)
+    @VisitorAccessible
+    @SignIgnore
     @ApiOperation(value = "渠道列表", response = SaasModuleResponse.class)
     public Response getModuleList() {
         List<SaasModuleVo> moduleList = saasRiskModuleApplication.getModuleList();
@@ -55,6 +59,8 @@ public class SaasRiskModuleController {
      * 风控模块详情表查询
      */
     @RequestMapping(value = "/moduleItemlList/{moduleCode}", method = RequestMethod.POST)
+    @VisitorAccessible
+    @SignIgnore
     @ApiOperation(value = "渠道列表", response = SaasModuleItemResponse.class)
     public Response getModuleItemList(@PathVariable(value = "moduleCode") String moduleCode) {
         List<SaasModuleItemVo> moduleItemVos = saasRiskModuleApplication.getModuleItemList(moduleCode);
@@ -70,6 +76,8 @@ public class SaasRiskModuleController {
      */
     @ApiOperation(value = "新建风控模块", response = Response.class)
     @RequestMapping(value = "/addModule", method = RequestMethod.POST)
+    @VisitorAccessible
+    @SignIgnore
     public Response addModule(@RequestBody SaasRiskModuleRequestParam saasRiskModuleRequestParam) {
         SaasModuleParam moduleParam = new SaasModuleParam();
         BeanUtils.copyProperties(saasRiskModuleRequestParam, moduleParam);
@@ -91,6 +99,8 @@ public class SaasRiskModuleController {
      */
     @ApiOperation(value = "新建风控模块字段", response = Response.class)
     @RequestMapping(value = "/addModuleItem", method = RequestMethod.POST)
+    @VisitorAccessible
+    @SignIgnore
     public Response addModuleItem(@RequestBody SaasRiskModuleItemRequestParam saasRiskModuleItemRequestParam) {
         SaasModuleItemParam saasModuleItemParam = new SaasModuleItemParam();
         BeanUtils.copyProperties(saasRiskModuleItemRequestParam, saasModuleItemParam);

@@ -25,7 +25,7 @@ public class SaasRiskModuleItemRequestParam extends ParamsObject {
 
     @NotBlank(message = "字段名称不能为空")
     @ApiModelProperty(value = "字段名称", required = true)
-    private String itemeDesc;
+    private String itemDesc;
 
     public String getModuleCode() {
         return moduleCode;
@@ -45,12 +45,12 @@ public class SaasRiskModuleItemRequestParam extends ParamsObject {
         return this;
     }
 
-    public String getItemeDesc() {
-        return itemeDesc;
+    public String getItemDesc() {
+        return itemDesc;
     }
 
-    public SaasRiskModuleItemRequestParam setItemeDesc(String itemeDesc) {
-        this.itemeDesc = itemeDesc;
+    public SaasRiskModuleItemRequestParam setItemDesc(String itemDesc) {
+        this.itemDesc = itemDesc;
         return this;
     }
 

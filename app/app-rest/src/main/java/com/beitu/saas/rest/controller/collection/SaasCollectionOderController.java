@@ -1,13 +1,17 @@
 package com.beitu.saas.rest.controller.collection;
 
+import com.beitu.saas.app.annotations.SignIgnore;
+import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.collection.client.SaasCollectionOrderService;
 import com.beitu.saas.collection.param.CollectionOrderQueryParam;
 import com.beitu.saas.collection.vo.CollectionOrderInfoDetailVo;
 import com.beitu.saas.rest.controller.collection.request.CollectionOrderQueryRequestParam;
 import com.beitu.saas.rest.controller.collection.response.CollectionOrderListResponse;
 import com.fqgj.common.api.Page;
+import com.fqgj.common.api.Response;
 import com.fqgj.common.response.ModuleResponse;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,6 +42,9 @@ public class SaasCollectionOderController {
      * @return
      */
     @RequestMapping("/collectionOrderGet/list")
+    @VisitorAccessible
+    @SignIgnore
+    @ApiOperation(value = "催收列表", response = ModuleResponse.class)
     public ModuleResponse collectionDistributeGet(@RequestBody CollectionOrderQueryRequestParam collectionOrderQueryParam, Page page) {
         CollectionOrderQueryParam param = new CollectionOrderQueryParam();
         BeanUtils.copyProperties(collectionOrderQueryParam, param);
