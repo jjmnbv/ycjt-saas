@@ -78,7 +78,6 @@ public class UserAccessRightInterceptor implements HandlerInterceptor {
                 throw new ApplicationException("无效的token");
             }
         } else {
-
             VisitorAccessible annotation = handlerMethod.getMethodAnnotation(VisitorAccessible.class);
             if (annotation != null) {
                 return true;

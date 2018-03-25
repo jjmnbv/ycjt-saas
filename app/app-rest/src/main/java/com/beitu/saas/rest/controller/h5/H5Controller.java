@@ -47,6 +47,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -128,7 +129,7 @@ public class H5Controller {
             throw new ApplicationException(ChannelErrorCodeEnum.DISABLE_CHANNEL);
         }
         SaasMerchantVo saasMerchantVo = saasMerchantService.getByMerchantCode(saasH5ChannelVo.getMerchantCode());
-        String applyType = orderApplication.getOrderApplyStatus(borrowerCode, channelCode).getMsg();
+        Integer applyType = orderApplication.getOrderApplyStatus(borrowerCode, channelCode).getCode();
         String headerTitle = "洋葱借条";
         if (saasMerchantVo != null) {
             headerTitle = saasMerchantVo.getCompanyName();
@@ -308,6 +309,33 @@ public class H5Controller {
             return new ApiResponse(BorrowerErrorCodeEnum.NO_ACCESS_RIGHT);
         }
         return creditApplication.submitCreditInfo(saasBorrowerVo.getBorrowerCode(), saasH5ChannelVo.getChannelCode());
+    }
+
+    @RequestMapping(value = "/order/list", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "用户账单列表", response = ApiResponse.class)
+    public DataApiResponse<H5OrderListResponse> listOrder() {
+        String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
+        if (StringUtils.isEmpty(channelCode)) {
+            return new DataApiResponse(ChannelErrorCodeEnum.DISABLE_CHANNEL);
+        }
+        SaasH5ChannelVo saasH5ChannelVo = saasChannelApplication.getSaasChannelBychannelCode(channelCode);
+        if (saasH5ChannelVo == null) {
+            return new DataApiResponse(ChannelErrorCodeEnum.DISABLE_CHANNEL);
+        }
+        SaasBorrowerVo saasBorrowerVo = RequestLocalInfo.getCurrentAdmin().getSaasBorrower();
+        if (!saasH5ChannelVo.getMerchantCode().equals(saasBorrowerVo.getMerchantCode())) {
+            return new DataApiResponse(BorrowerErrorCodeEnum.NO_ACCESS_RIGHT);
+        }
+        return new DataApiResponse(new H5OrderListResponse(orderApplication.listH5Order(saasBorrowerVo.getBorrowerCode(), saasH5ChannelVo.getMerchantCode())));
+    }
+
+    @RequestMapping(value = "/order/detail", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "用户订单详情", response = ApiResponse.class)
+    public DataApiResponse<H5OrderDetailResponse> getOrderDetail(@RequestBody @Valid QueryOrderDetailRequest req) {
+        String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
+        return new DataApiResponse(new H5OrderDetailResponse());
     }
 
 }
