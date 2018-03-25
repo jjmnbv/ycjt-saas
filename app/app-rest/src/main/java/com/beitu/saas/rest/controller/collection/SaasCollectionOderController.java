@@ -49,7 +49,7 @@ public class SaasCollectionOderController {
     public ModuleResponse collectionDistributeGet(@RequestBody CollectionOrderQueryRequestParam collectionOrderQueryParam, Page page) {
         CollectionOrderQueryParam param = new CollectionOrderQueryParam();
         BeanUtils.copyProperties(collectionOrderQueryParam, param);
-        List<CollectionOrderInfoDetailVo> collectionOrderListByPage = saasCollectionOrderService.getCollectionOrderListByPage(param, page);
-        return new ModuleResponse<>(new CollectionOrderListResponse(collectionOrderListByPage), page);
+        List<CollectionOrderInfoDetailVo> collectionOrderList = saasCollectionOrderService.getCollectionOrderListByPage(param, page);
+        return new ModuleResponse<>(new CollectionOrderListResponse(collectionOrderList), page);
     }
 }

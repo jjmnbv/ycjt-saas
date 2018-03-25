@@ -8,8 +8,6 @@ package com.beitu.saas.rest.controller.collection.request;
  * Time: 下午1:36
  */
 public class CollectionOrderQueryRequestParam {
-    private String overdueStartDate;  //N天前
-    private String overdueEndDate;  //当前天数
     private Integer overdueDaysType;
     private String mobile;
     private String name;
@@ -22,24 +20,6 @@ public class CollectionOrderQueryRequestParam {
 
     public CollectionOrderQueryRequestParam setOverdueDaysType(Integer overdueDaysType) {
         this.overdueDaysType = overdueDaysType;
-        return this;
-    }
-
-    public String getOverdueStartDate() {
-        return overdueStartDate;
-    }
-
-    public CollectionOrderQueryRequestParam setOverdueStartDate(String overdueStartDate) {
-        this.overdueStartDate = overdueStartDate;
-        return this;
-    }
-
-    public String getOverdueEndDate() {
-        return overdueEndDate;
-    }
-
-    public CollectionOrderQueryRequestParam setOverdueEndDate(String overdueEndDate) {
-        this.overdueEndDate = overdueEndDate;
         return this;
     }
 

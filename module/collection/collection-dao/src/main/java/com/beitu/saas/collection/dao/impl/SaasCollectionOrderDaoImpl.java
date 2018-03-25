@@ -45,6 +45,6 @@ public class SaasCollectionOrderDaoImpl extends AbstractBaseMapper<SaasCollectio
         Map<String, Object> paramMap = new HashMap();
         paramMap.put("collectionOrderQueryParam", collectionOrderQueryParam);
 
-        return getSqlSession().selectOne(this.getStatement("collectionOrderQueryParam"), paramMap);
+        return getSqlSession().selectOne(this.getStatement("queryTotalCollectionOrderListCount"), paramMap);
     }
 }

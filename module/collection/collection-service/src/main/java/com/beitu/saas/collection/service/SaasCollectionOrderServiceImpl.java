@@ -51,12 +51,11 @@ public class SaasCollectionOrderServiceImpl extends AbstractBaseService implemen
     public List<CollectionOrderInfoDetailVo> getCollectionOrderListByPage(CollectionOrderQueryParam collectionOrderQueryParam, Page page) {
         if (null != collectionOrderQueryParam.getOverdueDaysType()) {
             OverdueTimeEnums timeEnums = OverdueTimeEnums.getEnum(collectionOrderQueryParam.getOverdueDaysType());
-            if (null == timeEnums) {
-                collectionOrderQueryParam.setOverdueStartDate(null);
-                collectionOrderQueryParam.setOverdueEndDate(null);
+            if (null != timeEnums) {
+                collectionOrderQueryParam.setOverdueStartDate(DateUtil.getDate(DateUtil.addDate(new Date(), -timeEnums.getStart()), "yyyy-MM-dd"));
+                collectionOrderQueryParam.setOverdueEndDate(DateUtil.getDate(DateUtil.addDate(new Date(), -timeEnums.getEnd()), "yyyy-MM-dd"));
+
             }
-            collectionOrderQueryParam.setOverdueStartDate(DateUtil.getDate(DateUtil.addDate(new Date(), -timeEnums.getStart()), "yyyy-MM-dd"));
-            collectionOrderQueryParam.setOverdueEndDate(DateUtil.getDate(DateUtil.addDate(new Date(), -timeEnums.getEnd()), "yyyy-MM-dd"));
         }
 
         // TODO: 2018/3/24 转换年龄和 备注

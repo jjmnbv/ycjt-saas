@@ -24,7 +24,7 @@
                     and date_format(so.repayment_dt, '%Y-%m-%d') &lt;
                     #{collectionOrderQueryParam.overdueEndDate,jdbcType=VARCHAR}
                 </if>
-                and sco.status=0 AND sco.is_deleted = 0
+                and sco.status=0 AND sco.deleted = 0
             </trim>
         </where>
     </sql>
@@ -47,15 +47,14 @@
 
     <select id="selectCollectionOrderListByPage" parameterType="map"
             resultType="com.beitu.saas.collection.vo.CollectionOrderInfoDetailVo">
-        select sbri.name,sb.mobile,sbri.gender,
-        sbri.identity_code identityCode,soa.real_capital realCapital,
+        select sco.order_no orderNo,sbri.name,sb.mobile,sbri.gender,
+        sbri.identity_code identityCode,so.real_capital realCapital,
         datediff(so.repayment_dt,so.created_dt) applyDays,
         so.channel_code channelCode ,sc.channel_name channelName
         from saas_collection_order sco
-        left join saas_order_application soa on sco.order_no=soa.order_numb
-        left join saas_order so on soa.order_numb=so.order_numb
-        left join saas_borrower sb on soa.borrower_code=sb.borrower_code
-        left join saas_borrower_real_info sbri on soa.borrower_code=sbri.borrower_code
+        left join saas_order so on sco.order_no=so.order_numb
+        left join saas_borrower sb on so.borrower_code=sb.borrower_code
+        left join saas_borrower_real_info sbri on so.borrower_code=sbri.borrower_code
         left join saas_channel sc on so.channel_code=sc.channel_code
         <include refid="Param_collection_order_Where_Clause"/>
         <include refid="paginationSql"/>
@@ -63,12 +62,12 @@
 
 
     <select id="queryTotalCollectionOrderListCount" parameterType="map" resultType="INTEGER">
-        select count(*) from
+        select count(*)
         from saas_collection_order sco
-        left join saas_order_application soa on sco.order_no=soa.order_numb
-        left join saas_order so on soa.order_numb=so.order_numb
-        left join saas_borrower sb on soa.borrower_code=sb.borrower_code
-        left join saas_borrower_real_info sbri on soa.borrower_code=sbri.borrower_code
+        left join saas_order so on sco.order_no=so.order_numb
+        left join saas_borrower sb on so.borrower_code=sb.borrower_code
+        left join saas_borrower_real_info sbri on so.borrower_code=sbri.borrower_code
+        left join saas_channel sc on so.channel_code=sc.channel_code
         <include refid="Param_collection_order_Where_Clause"/>
     </select>
 
