@@ -7,10 +7,14 @@
         SELECT
         <include refid="Base_Column_List"/>
         from saas_merchant_credit_info
-        where 1=1
-        <if test="merchantCode !=null">
-            and merchant_code=#{merchantCode,jdbcType=VARCHAR}
-        </if>
-        and deleted=0
+        <where>
+            <trim prefixOverrides="and">
+                <if test="merchantCode !=null">
+                    and merchant_code=#{merchantCode,jdbcType=VARCHAR}
+                </if>
+                and deleted=0
+            </trim>
+        </where>
+
     </select>
 </mapper>

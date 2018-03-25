@@ -7,13 +7,17 @@
         SELECT
         sum(credit) creditSum
         from saas_credit_history
-        where 1=1
-        <if test="merchantCode !=null">
-            and merchant_code=#{merchantCode,jdbcType=VARCHAR}
-        </if>
-        <if test="yesterday !=null">
-            and gmt_create like CONCAT(#{yesterday,jdbcType=VARCHAR},'%')
-        </if>
-        and deleted=0
+        <where>
+            <trim prefixOverrides="and">
+                <if test="merchantCode !=null">
+                    and merchant_code=#{merchantCode,jdbcType=VARCHAR}
+                </if>
+                <if test="yesterday !=null">
+                    and gmt_create like CONCAT(#{yesterday,jdbcType=VARCHAR},'%')
+                </if>
+                and deleted=0
+            </trim>
+        </where>
+
     </select>
 </mapper>

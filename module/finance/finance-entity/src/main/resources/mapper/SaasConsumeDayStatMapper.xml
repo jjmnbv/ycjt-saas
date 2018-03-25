@@ -7,9 +7,15 @@
         SELECT
         <include refid="Base_Column_List"/>
         from saas_consume_day_stat
-        where
-        merchant_code=#{merchantCode,jdbcType=VARCHAR}
-        and deleted=0
-        order by dt desc limit 1
+        <where>
+            <trim prefixOverrides="and">
+                <if test="merchantCode !=null">
+                    merchant_code=#{merchantCode,jdbcType=VARCHAR}
+                </if>
+                and deleted=0
+                order by dt desc limit 1
+            </trim>
+        </where>
+
     </select>
 </mapper>
