@@ -25,6 +25,7 @@ import com.beitu.saas.borrower.entity.SaasBorrowerWorkInfo;
 import com.beitu.saas.borrower.enums.BorrowerErrorCodeEnum;
 import com.beitu.saas.channel.domain.SaasH5ChannelVo;
 import com.beitu.saas.channel.enums.ChannelErrorCodeEnum;
+import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.utils.DateUtil;
 import com.beitu.saas.order.client.SaasOrderApplicationService;
@@ -47,7 +48,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -59,6 +59,9 @@ import java.util.Date;
 @RequestMapping("/h5")
 @Api(description = "h5模块")
 public class H5Controller {
+
+    @Autowired
+    private ConfigUtil configUtil;
 
     @Autowired
     private RedisClient redisClient;
@@ -170,8 +173,8 @@ public class H5Controller {
             response.setBorrowPurpose(saasOrderApplicationVo.getBorrowPurpose());
             response.setRealCapital(saasOrderApplicationVo.getRealCapital());
             response.setTotalInterestRatio(saasOrderApplicationVo.getTotalInterestRatio());
-            response.setNeedRealName(borrowerApplication.needRealName(borrowerCode));
         }
+        response.setNeedRealName(borrowerApplication.needRealName(borrowerCode));
         return new DataApiResponse<>(response);
     }
 
@@ -204,7 +207,7 @@ public class H5Controller {
         addOrderApplication.setTotalInterestRatio(req.getTotalInterestRatio());
         addOrderApplication.setRepaymentDate(DateUtil.addDate(new Date(), req.getBorrowingDuration()));
         addOrderApplication.setBorrowPurpose(req.getBorrowPurpose());
-        saasOrderApplicationService.create(addOrderApplication);
+        saasOrderApplicationService.save(addOrderApplication);
         return new ApiResponse("保存成功");
     }
 
@@ -225,7 +228,13 @@ public class H5Controller {
         SaasBorrowerPersonalInfo saasBorrowerPersonalInfo = new SaasBorrowerPersonalInfo();
         BeanUtils.copyProperties(req, saasBorrowerPersonalInfo);
         saasBorrowerPersonalInfo.setBorrowerCode(borrowerCode);
-        saasBorrowerPersonalInfoService.create(saasBorrowerPersonalInfo);
+        SaasBorrowerPersonalInfoVo saasBorrowerPersonalInfoVo = saasBorrowerPersonalInfoService.getByBorrowerCode(borrowerCode);
+        if (saasBorrowerPersonalInfoVo == null) {
+            saasBorrowerPersonalInfoService.create(saasBorrowerPersonalInfo);
+        } else {
+            saasBorrowerPersonalInfo.setId(saasBorrowerPersonalInfoVo.getSaasBorrowerPersonalInfoId());
+            saasBorrowerPersonalInfoService.updateById(saasBorrowerPersonalInfo);
+        }
         return new ApiResponse("保存成功");
     }
 
@@ -235,7 +244,8 @@ public class H5Controller {
     public DataApiResponse<CreditIdentityInfoResponse> getCreditIdentityInfo() {
         String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
         SaasBorrowerIdentityInfoVo saasBorrowerIdentityInfoVo = saasBorrowerIdentityInfoService.getByBorrowerCode(borrowerCode);
-        return new DataApiResponse<>(new CreditIdentityInfoResponse(saasBorrowerIdentityInfoVo));
+        String prefixUrl = configUtil.getAddressURLPrefix();
+        return new DataApiResponse<>(new CreditIdentityInfoResponse(saasBorrowerIdentityInfoVo, prefixUrl));
     }
 
     @RequestMapping(value = "/credit/identity/info/save", method = RequestMethod.POST)
@@ -246,7 +256,13 @@ public class H5Controller {
         SaasBorrowerIdentityInfo saasBorrowerIdentityInfo = new SaasBorrowerIdentityInfo();
         BeanUtils.copyProperties(req, saasBorrowerIdentityInfo);
         saasBorrowerIdentityInfo.setBorrowerCode(borrowerCode);
-        saasBorrowerIdentityInfoService.create(saasBorrowerIdentityInfo);
+        SaasBorrowerIdentityInfoVo saasBorrowerIdentityInfoVo = saasBorrowerIdentityInfoService.getByBorrowerCode(borrowerCode);
+        if (saasBorrowerIdentityInfoVo == null) {
+            saasBorrowerIdentityInfoService.create(saasBorrowerIdentityInfo);
+        } else {
+            saasBorrowerIdentityInfo.setId(saasBorrowerIdentityInfoVo.getSaasBorrowerIdentityInfoId());
+            saasBorrowerIdentityInfoService.updateById(saasBorrowerIdentityInfo);
+        }
         return new ApiResponse("保存成功");
     }
 
@@ -267,7 +283,13 @@ public class H5Controller {
         SaasBorrowerWorkInfo saasBorrowerWorkInfo = new SaasBorrowerWorkInfo();
         BeanUtils.copyProperties(req, saasBorrowerWorkInfo);
         saasBorrowerWorkInfo.setBorrowerCode(borrowerCode);
-        saasBorrowerWorkInfoService.create(saasBorrowerWorkInfo);
+        SaasBorrowerWorkInfoVo saasBorrowerWorkInfoVo = saasBorrowerWorkInfoService.getByBorrowerCode(borrowerCode);
+        if (saasBorrowerWorkInfoVo == null) {
+            saasBorrowerWorkInfoService.create(saasBorrowerWorkInfo);
+        } else {
+            saasBorrowerWorkInfo.setId(saasBorrowerWorkInfoVo.getSaasBorrowerWorkInfoId());
+            saasBorrowerWorkInfoService.updateById(saasBorrowerWorkInfo);
+        }
         return new ApiResponse("保存成功");
     }
 
@@ -288,7 +310,13 @@ public class H5Controller {
         SaasBorrowerEmergentContact saasBorrowerEmergentContact = new SaasBorrowerEmergentContact();
         BeanUtils.copyProperties(req, saasBorrowerEmergentContact);
         saasBorrowerEmergentContact.setBorrowerCode(borrowerCode);
-        saasBorrowerEmergentContactService.create(saasBorrowerEmergentContact);
+        SaasBorrowerEmergentContactVo saasBorrowerEmergentContactVo = saasBorrowerEmergentContactService.getByBorrowerCode(borrowerCode);
+        if (saasBorrowerEmergentContactVo == null) {
+            saasBorrowerEmergentContactService.create(saasBorrowerEmergentContact);
+        } else {
+            saasBorrowerEmergentContact.setId(saasBorrowerEmergentContactVo.getSaasBorrowerEmergentContactId());
+            saasBorrowerEmergentContactService.updateById(saasBorrowerEmergentContact);
+        }
         return new ApiResponse("保存成功");
     }
 
@@ -313,7 +341,7 @@ public class H5Controller {
 
     @RequestMapping(value = "/order/list", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "用户账单列表", response = ApiResponse.class)
+    @ApiOperation(value = "用户账单列表", response = H5OrderListResponse.class)
     public DataApiResponse<H5OrderListResponse> listOrder() {
         String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
         if (StringUtils.isEmpty(channelCode)) {
@@ -332,7 +360,7 @@ public class H5Controller {
 
     @RequestMapping(value = "/order/detail", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "用户订单详情", response = ApiResponse.class)
+    @ApiOperation(value = "用户订单详情", response = H5OrderDetailResponse.class)
     public DataApiResponse<H5OrderDetailResponse> getOrderDetail(@RequestBody @Valid QueryOrderDetailRequest req) {
         String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
         return new DataApiResponse(new H5OrderDetailResponse());

@@ -14,6 +14,6 @@ public interface SaasOrderApplicationService<T extends BaseEntity> extends BaseS
 
     SaasOrderApplicationVo getByBorrowerCode(String borrowerCode);
 
-    SaasOrderApplication create(SaasOrderApplicationVo saasOrderApplicationVo);
+    SaasOrderApplication save(SaasOrderApplicationVo saasOrderApplicationVo);
 
 }

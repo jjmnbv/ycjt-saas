@@ -4,8 +4,6 @@ package com.beitu.saas.rest.interceptor;
 import com.beitu.saas.app.annotations.IgnoreRepeatRequest;
 import com.beitu.saas.app.annotations.SignIgnore;
 import com.beitu.saas.app.annotations.VisitorAccessible;
-import com.beitu.saas.app.application.auth.AdminInfoApplication;
-import com.beitu.saas.app.application.borrower.BorrowerApplication;
 import com.beitu.saas.app.common.RequestBasicInfo;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.app.common.RequestUserInfo;
@@ -20,8 +18,6 @@ import com.fqgj.base.services.redis.TimeConsts;
 import com.fqgj.common.utils.JSONUtils;
 import com.fqgj.common.utils.MD5;
 import com.fqgj.exception.common.ApplicationException;
-
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

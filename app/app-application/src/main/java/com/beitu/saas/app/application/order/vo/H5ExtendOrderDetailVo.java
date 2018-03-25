@@ -10,11 +10,11 @@ import com.fqgj.common.api.ResponseData;
 
 public class H5ExtendOrderDetailVo implements ResponseData {
 
-    private Integer extendDuration;
+    private Integer extendDuration = 7;
 
-    private String repaymentDt;
+    private String repaymentDt = "2018-09-08";
 
-    private String totalInterestRatio;
+    private String totalInterestRatio = "24%";
 
     public Integer getExtendDuration() {
         return extendDuration;

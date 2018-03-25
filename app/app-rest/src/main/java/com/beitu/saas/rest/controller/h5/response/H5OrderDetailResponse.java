@@ -5,6 +5,7 @@ import com.fqgj.common.api.ResponseData;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,49 +17,52 @@ import java.util.List;
 public class H5OrderDetailResponse implements ResponseData {
 
     @ApiModelProperty(value = "头部展示信息")
-    private String headerTitle;
+    private String headerTitle = "确认借款";
 
     @ApiModelProperty(value = "借款金额")
-    private String realCapital;
+    private String realCapital = "1000.00";
 
     @ApiModelProperty(value = "借款天数")
-    private Integer borrowingDuration;
+    private Integer borrowingDuration = 34;
 
     @ApiModelProperty(value = "借款年利率")
-    private String totalInterestRatio;
+    private String totalInterestRatio = "24%";
 
     @ApiModelProperty(value = "到期日期")
-    private String repaymentDt;
+    private String repaymentDt = "2018-03-89";
 
     @ApiModelProperty(value = "到期应还")
-    private String amount;
+    private String amount = "1234.00";
 
     @ApiModelProperty(value = "借款用途")
-    private String borrowPurpose;
+    private String borrowPurpose = "娶老婆";
 
     @ApiModelProperty(value = "借款人姓名")
-    private String borrowerName;
+    private String borrowerName = "陈傻逼";
 
     @ApiModelProperty(value = "借款人身份证号")
-    private String borrowerIdentityCode;
+    private String borrowerIdentityCode = "334434343434343";
 
     @ApiModelProperty(value = "展期信息")
-    private List<H5ExtendOrderDetailVo> extendOrderDetailVos;
+    private List<H5ExtendOrderDetailVo> extendOrderDetailVos = new ArrayList<H5ExtendOrderDetailVo>(2){{
+        add(new H5ExtendOrderDetailVo());
+        add(new H5ExtendOrderDetailVo());
+    }};
 
     @ApiModelProperty(value = "合同展示信息")
-    private String contractTitle;
+    private String contractTitle = "借款协议";
 
     @ApiModelProperty(value = "合同url")
-    private String contractUrl;
+    private String contractUrl = "http://www.baidu.com";
 
     @ApiModelProperty(value = "按钮是否展示")
-    private Boolean visible;
+    private Boolean visible = Boolean.TRUE;
 
     @ApiModelProperty(value = "按钮展示信息")
-    private String buttonTitle;
+    private String buttonTitle = "查看";
 
     @ApiModelProperty(value = "按钮点击跳转页面")
-    private String buttonUrl;
+    private String buttonUrl = "http://www.baidu.com";
 
     public String getHeaderTitle() {
         return headerTitle;
@@ -66,6 +70,78 @@ public class H5OrderDetailResponse implements ResponseData {
 
     public void setHeaderTitle(String headerTitle) {
         this.headerTitle = headerTitle;
+    }
+
+    public String getRealCapital() {
+        return realCapital;
+    }
+
+    public void setRealCapital(String realCapital) {
+        this.realCapital = realCapital;
+    }
+
+    public Integer getBorrowingDuration() {
+        return borrowingDuration;
+    }
+
+    public void setBorrowingDuration(Integer borrowingDuration) {
+        this.borrowingDuration = borrowingDuration;
+    }
+
+    public String getTotalInterestRatio() {
+        return totalInterestRatio;
+    }
+
+    public void setTotalInterestRatio(String totalInterestRatio) {
+        this.totalInterestRatio = totalInterestRatio;
+    }
+
+    public String getRepaymentDt() {
+        return repaymentDt;
+    }
+
+    public void setRepaymentDt(String repaymentDt) {
+        this.repaymentDt = repaymentDt;
+    }
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
+
+    public String getBorrowPurpose() {
+        return borrowPurpose;
+    }
+
+    public void setBorrowPurpose(String borrowPurpose) {
+        this.borrowPurpose = borrowPurpose;
+    }
+
+    public String getBorrowerName() {
+        return borrowerName;
+    }
+
+    public void setBorrowerName(String borrowerName) {
+        this.borrowerName = borrowerName;
+    }
+
+    public String getBorrowerIdentityCode() {
+        return borrowerIdentityCode;
+    }
+
+    public void setBorrowerIdentityCode(String borrowerIdentityCode) {
+        this.borrowerIdentityCode = borrowerIdentityCode;
+    }
+
+    public List<H5ExtendOrderDetailVo> getExtendOrderDetailVos() {
+        return extendOrderDetailVos;
+    }
+
+    public void setExtendOrderDetailVos(List<H5ExtendOrderDetailVo> extendOrderDetailVos) {
+        this.extendOrderDetailVos = extendOrderDetailVos;
     }
 
     public String getContractTitle() {

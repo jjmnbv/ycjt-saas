@@ -9,6 +9,8 @@ import com.fqgj.common.api.ResponseData;
  */
 public class H5OrderListVo implements ResponseData {
 
+    private String orderNumb;
+
     private String amount;
 
     private String repaymentDt;
@@ -16,6 +18,14 @@ public class H5OrderListVo implements ResponseData {
     private String orderStatus;
 
     private Integer viewType;
+
+    public String getOrderNumb() {
+        return orderNumb;
+    }
+
+    public void setOrderNumb(String orderNumb) {
+        this.orderNumb = orderNumb;
+    }
 
     public String getAmount() {
         return amount;

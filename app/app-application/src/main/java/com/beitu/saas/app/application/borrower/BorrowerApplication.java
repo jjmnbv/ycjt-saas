@@ -71,7 +71,7 @@ public class BorrowerApplication {
     }
 
     public Boolean needRealName(String borrowerCode) {
-        return saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode) != null;
+        return saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode) == null;
     }
 
 }
