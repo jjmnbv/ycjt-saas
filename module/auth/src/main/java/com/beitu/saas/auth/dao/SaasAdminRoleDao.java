@@ -11,4 +11,5 @@ import com.fqgj.common.base.BaseMapper;
 
 public interface SaasAdminRoleDao  extends BaseMapper<SaasAdminRole> {
 
+    Integer updateByAdminCode(SaasAdminRole record);
 }

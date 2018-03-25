@@ -1,12 +1,15 @@
 package com.beitu.saas.auth.service.impl;
 
 import com.beitu.saas.auth.dao.SaasAdminRoleDao;
+import com.beitu.saas.auth.entity.SaasAdminRole;
 import com.beitu.saas.auth.service.SaasAdminRoleService;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
 import com.fqgj.log.enhance.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 /**
 * User: xiaochong
@@ -21,6 +24,12 @@ public class SaasAdminRoleServiceImpl extends AbstractBaseService implements Saa
 
     @Autowired
     private SaasAdminRoleDao saasAdminRoleDao;
+
+
+    @Override
+    public Integer updateByAdminCode(SaasAdminRole record) {
+        return saasAdminRoleDao.updateByAdminCode(record);
+    }
 }
 
 
