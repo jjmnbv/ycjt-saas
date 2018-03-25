@@ -5,6 +5,6 @@
     <select id="selectModuleItemEntityList" parameterType="map" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
-        from saas_item
+        from saas_module_item
     </select>
 </mapper>

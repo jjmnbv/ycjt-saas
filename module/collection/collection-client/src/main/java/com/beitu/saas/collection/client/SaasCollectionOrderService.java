@@ -18,9 +18,9 @@ public interface SaasCollectionOrderService<T extends BaseEntity> extends BaseSe
     /**
      * 新增催收订单
      *
-     * @param collectionOrderInfoDetailVo
+     * @param orderNo
      */
-    void createCollectionOrder(CollectionOrderInfoDetailVo collectionOrderInfoDetailVo);
+    void createCollectionOrder(String  orderNo);
 
     /**
      * 核销订单

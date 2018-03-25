@@ -34,9 +34,9 @@ public class SaasCollectionOrderServiceImpl extends AbstractBaseService implemen
     private SaasCollectionOrderDao saasCollectionOrderDao;
 
     @Override
-    public void createCollectionOrder(CollectionOrderInfoDetailVo collectionOrderInfoDetailVo) {
-        SaasCollectionOrderEntity entity = new SaasCollectionOrderEntity();
-        BeanUtils.copyProperties(collectionOrderInfoDetailVo, entity);
+    public void createCollectionOrder(String orderNo) {
+        SaasCollectionOrderEntity entity = new SaasCollectionOrderEntity().setOrderNo(orderNo)
+                .setStatus(CollectionOrderStatusEnum.OPEN.getType());
         saasCollectionOrderDao.insert(entity);
     }
 
