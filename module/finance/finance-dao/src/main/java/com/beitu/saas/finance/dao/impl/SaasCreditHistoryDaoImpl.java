@@ -3,6 +3,7 @@ package com.beitu.saas.finance.dao.impl;
 import com.beitu.saas.finance.dao.SaasCreditHistoryDao;
 import com.beitu.saas.finance.entity.SaasCreditHistoryEntity;
 import com.fqgj.common.base.AbstractBaseMapper;
+import com.fqgj.common.utils.DateUtil;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -22,7 +23,7 @@ public class SaasCreditHistoryDaoImpl extends AbstractBaseMapper<SaasCreditHisto
     public Long selectYesterdayCreditStatCredit(String merchantCode, Date yesterday) {
         Map<String, Object> map = new HashMap<>();
         map.put("merchantCode", merchantCode);
-        map.put("yesterday", yesterday);
+        map.put("yesterday", DateUtil.getDate(yesterday,"yyyy-MM-dd"));
         return getSqlSession().selectOne(this.getStatement("selectYesterdayCreditStatCredit"), map);
     }
 }
