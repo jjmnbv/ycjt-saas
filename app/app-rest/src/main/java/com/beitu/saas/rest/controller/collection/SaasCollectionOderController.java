@@ -16,6 +16,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -41,7 +42,7 @@ public class SaasCollectionOderController {
      * @param page
      * @return
      */
-    @RequestMapping("/collectionOrderGet/list")
+    @RequestMapping(value = "/collectionOrderGet/list", method = RequestMethod.POST)
     @VisitorAccessible
     @SignIgnore
     @ApiOperation(value = "催收列表", response = ModuleResponse.class)
