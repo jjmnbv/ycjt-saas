@@ -26,7 +26,8 @@ public class SaasSmsHistoryServiceImpl extends AbstractBaseService implements Sa
 
     @Override
     public Long getYesterdaySmsStatCredit(String merchantCode, Date yesterday) {
-        return saasSmsHistoryDao.selectYesterdaySmsStatCredit(merchantCode, yesterday);
+        Long totalConsumeSmsCount = saasSmsHistoryDao.selectYesterdaySmsStatCredit(merchantCode, yesterday);
+        return totalConsumeSmsCount == null ? 0 : totalConsumeSmsCount;
     }
 }
 

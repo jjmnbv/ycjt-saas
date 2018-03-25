@@ -15,7 +15,7 @@ public class SaasMerchantCreditInfoEntity extends BaseEntity{
     /**
     *机构点券余额
     */
-    private Long value;
+    private Long value=0L;
     /**
     *机构点券加密结果
     */

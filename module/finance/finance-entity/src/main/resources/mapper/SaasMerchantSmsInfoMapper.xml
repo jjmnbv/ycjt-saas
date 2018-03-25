@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.beitu.saas.finance.dao.impl.SaasMerchantSmsInfoDaoImpl">
-    <select id="selectSmsByMerchantCode" parameterType="map" resultType="java.lang.Long">
+    <select id="selectSmsByMerchantCode" parameterType="map" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         from saas_merchant_sms_info

@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.beitu.saas.finance.dao.impl.SaasConsumeDayStatDaoImpl">
     <select id="getLastClearConsumeDayStat" parameterType="map"
-            resultType="com.beitu.saas.finance.entity.SaasConsumeDayStatEntity">
+            resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         from saas_consume_day_stat

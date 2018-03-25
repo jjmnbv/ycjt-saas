@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 
 /**
-* User: fenqiguanjia
-* Date: 2018-03-23
-* Time: 20:33:10.974
-*/
+ * User: fenqiguanjia
+ * Date: 2018-03-23
+ * Time: 20:33:10.974
+ */
 @Module(value = "账户点券流水表服务模块")
 @NameSpace("com.fqgj.demo.dao.impl.SaasCreditHistoryDaoImpl")
 @Service
@@ -26,7 +26,8 @@ public class SaasCreditHistoryServiceImpl extends AbstractBaseService implements
 
     @Override
     public Long getYesterdayCreditStatCredit(String merchantCode, Date yesterday) {
-        return saasCreditHistoryDao.selectYesterdayCreditStatCredit(merchantCode,yesterday);
+        Long totalConsumeCreditCount = saasCreditHistoryDao.selectYesterdayCreditStatCredit(merchantCode, yesterday);
+        return totalConsumeCreditCount == null ? 0 : totalConsumeCreditCount;
     }
 }
 
