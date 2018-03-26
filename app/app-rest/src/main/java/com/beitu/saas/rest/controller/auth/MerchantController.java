@@ -1,22 +1,25 @@
 package com.beitu.saas.rest.controller.auth;
 
+import com.beitu.saas.app.annotations.SignIgnore;
+import com.beitu.saas.app.annotations.VisitorAccessible;
+import com.beitu.saas.app.application.auth.MerchantApplication;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.auth.domain.SaasMerchantVo;
+import com.beitu.saas.auth.entity.SaasMerchant;
 import com.beitu.saas.auth.entity.SaasMerchantConfig;
 import com.beitu.saas.auth.entity.SaasSmsConfigDictionary;
 import com.beitu.saas.auth.service.SaasMerchantConfigService;
 import com.beitu.saas.auth.service.SaasMerchantService;
 import com.beitu.saas.auth.service.SaasSmsConfigDictionaryService;
+import com.beitu.saas.rest.controller.auth.request.AddMerchantRequest;
 import com.beitu.saas.rest.controller.auth.response.MerchantInfoResponse;
 import com.fqgj.common.api.Response;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -38,6 +41,9 @@ public class MerchantController {
 
     @Autowired
     private SaasMerchantConfigService saasMerchantConfigService;
+
+    @Autowired
+    private MerchantApplication merchantApplication;
 
     @RequestMapping(value = "/info", method = RequestMethod.GET)
     @ApiOperation(value = "机构信息", response = MerchantInfoResponse.class)
@@ -61,9 +67,25 @@ public class MerchantController {
 
     @RequestMapping(value = "/sms/{smsConfigId}/{enable}", method = RequestMethod.PUT)
     @ApiOperation(value = "短信配置")
-    public Response setSmsEnable(@ApiParam("短信id") @PathVariable("smsConfigId")Integer smsConfigId, @PathVariable("enable") Boolean enable) {
+    public Response setSmsEnable(@ApiParam("短信id") @PathVariable("smsConfigId") Integer smsConfigId, @PathVariable("enable") Boolean enable) {
         String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
         saasMerchantConfigService.updateSmsConfig(merchantCode, enable, smsConfigId);
+        return Response.ok();
+    }
+
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @ApiOperation(value = "添加机构")
+    @SignIgnore
+    @VisitorAccessible
+    public Response add(@RequestBody AddMerchantRequest request) {
+        SaasMerchant saasMerchant = new SaasMerchant();
+        if (request.getMerchantInfo()!=null){
+            BeanUtils.copyProperties(request.getMerchantInfo(),saasMerchant);
+        }
+        if (request.getLenderInfo()!=null){
+            BeanUtils.copyProperties(request.getLenderInfo(),saasMerchant);
+        }
+        merchantApplication.addMerchant(saasMerchant,request.getPassword());
         return Response.ok();
     }
 

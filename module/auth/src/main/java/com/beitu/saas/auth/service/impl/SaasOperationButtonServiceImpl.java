@@ -20,7 +20,7 @@ import java.util.Map;
 * Time: 15:36:13.674
 */
 @Module(value = "服务模块")
-@NameSpace("com.beitu.saas.dao.impl.SaasOperationButtonDaoImpl")
+@NameSpace("com.beitu.saas.auth.dao.impl.SaasOperationButtonDaoImpl")
 @Service
 public class SaasOperationButtonServiceImpl extends AbstractBaseService implements SaasOperationButtonService {
 
