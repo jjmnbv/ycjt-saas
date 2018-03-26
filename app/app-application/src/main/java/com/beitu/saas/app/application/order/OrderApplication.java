@@ -106,6 +106,9 @@ public class OrderApplication {
 
     public void getOrderDetailByOrderNumb(String orderNumb) {
         List<SaasOrderVo> saasOrderVoList = saasOrderService.listEffectiveOrderByOrderNumb(orderNumb);
+        if (CollectionUtils.isEmpty(saasOrderVoList)) {
+
+        }
 
     }
 
