@@ -9,18 +9,19 @@
         <result column="channel_code" jdbcType="VARCHAR" property="channelCode"/>
         <result column="borrower_code" jdbcType="VARCHAR" property="borrowerCode"/>
         <result column="real_capital" jdbcType="DECIMAL" property="realCapital"/>
-        <result column="repayment_dt" jdbcType="DATE" property="repaymentDt"/>
+        <result column="need_pay_interest" jdbcType="DECIMAL" property="needPayInterest"/>
+        <result column="total_interest_ratio" jdbcType="DECIMAL" property="totalInterestRatio"/>
         <result column="interest" jdbcType="DECIMAL" property="interest"/>
-        <result column="amount" jdbcType="DECIMAL" property="amount"/>
-        <result column="last_calculate_interest_dt" jdbcType="DATE" property="lastCalculateInterestDt"/>
-        <result column="current_interest_ratio" jdbcType="DECIMAL" property="currentInterestRatio"/>
-        <result column="is_extend" jdbcType="BIT" property="isExtend"/>
-        <result column="paid" jdbcType="BIT" property="paid"/>
-        <result column="paid_amount" jdbcType="DECIMAL" property="paidAmount"/>
-        <result column="deduct_amount" jdbcType="DECIMAL" property="deductAmount"/>
-        <result column="actual_repayment_date" jdbcType="TIMESTAMP" property="actualRepaymentDate"/>
-        <result column="actual_repayment_dt" jdbcType="DATE" property="actualRepaymentDt"/>
         <result column="created_dt" jdbcType="DATE" property="createdDt"/>
+        <result column="repayment_dt" jdbcType="DATE" property="repaymentDt"/>
+        <result column="late_interest_ratio" jdbcType="DECIMAL" property="lateInterestRatio"/>
+        <result column="late_interest" jdbcType="DECIMAL" property="lateInterest"/>
+        <result column="amount" jdbcType="DECIMAL" property="amount"/>
+        <result column="relation_order_bill_detail_id" jdbcType="VARCHAR" property="relationOrderBillDetailId"/>
+        <result column="visible" jdbcType="BIT" property="visible"/>
+        <result column="destroy" jdbcType="BIT" property="destroy"/>
+        <result column="actual_destroy_date" jdbcType="TIMESTAMP" property="actualDestroyDate"/>
+        <result column="actual_destroy_dt" jdbcType="DATE" property="actualDestroyDt"/>
         <result column="deleted" jdbcType="BIT" property="deleted"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
         <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
@@ -33,18 +34,19 @@
     channel_code,
     borrower_code,
     real_capital,
-    repayment_dt,
+    need_pay_interest,
+    total_interest_ratio,
     interest,
-    amount,
-    last_calculate_interest_dt,
-    current_interest_ratio,
-    is_extend,
-    paid,
-    paid_amount,
-    deduct_amount,
-    actual_repayment_date,
-    actual_repayment_dt,
     created_dt,
+    repayment_dt,
+    late_interest_ratio,
+    late_interest,
+    amount,
+    relation_order_bill_detail_id,
+    visible,
+    destroy,
+    actual_destroy_date,
+    actual_destroy_dt,
     deleted,
     gmt_modified,
     gmt_create
@@ -62,191 +64,200 @@
             parameterType="com.beitu.saas.order.entity.SaasOrderBillDetail" useGeneratedKeys="true">
         insert into saas_order_bill_detail
         <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="orderNumb !=null">
+            <if test="orderNumb !=null">
                 order_numb,
-                </if>
-                <if test="merchantCode !=null">
+            </if>
+            <if test="merchantCode !=null">
                 merchant_code,
-                </if>
-                <if test="channelCode !=null">
+            </if>
+            <if test="channelCode !=null">
                 channel_code,
-                </if>
-                <if test="borrowerCode !=null">
+            </if>
+            <if test="borrowerCode !=null">
                 borrower_code,
-                </if>
-                <if test="realCapital !=null">
+            </if>
+            <if test="realCapital !=null">
                 real_capital,
-                </if>
-                <if test="repaymentDt !=null">
-                repayment_dt,
-                </if>
-                <if test="interest !=null">
+            </if>
+            <if test="needPayInterest !=null">
+                need_pay_interest,
+            </if>
+            <if test="totalInterestRatio !=null">
+                total_interest_ratio,
+            </if>
+            <if test="interest !=null">
                 interest,
-                </if>
-                <if test="amount !=null">
-                amount,
-                </if>
-                <if test="lastCalculateInterestDt !=null">
-                last_calculate_interest_dt,
-                </if>
-                <if test="currentInterestRatio !=null">
-                current_interest_ratio,
-                </if>
-                <if test="isExtend !=null">
-                is_extend,
-                </if>
-                <if test="paid !=null">
-                paid,
-                </if>
-                <if test="paidAmount !=null">
-                paid_amount,
-                </if>
-                <if test="deductAmount !=null">
-                deduct_amount,
-                </if>
-                <if test="actualRepaymentDate !=null">
-                actual_repayment_date,
-                </if>
-                <if test="actualRepaymentDt !=null">
-                actual_repayment_dt,
-                </if>
-                <if test="createdDt !=null">
+            </if>
+            <if test="createdDt !=null">
                 created_dt,
-                </if>
-                <if test="deleted !=null">
+            </if>
+            <if test="repaymentDt !=null">
+                repayment_dt,
+            </if>
+            <if test="lateInterestRatio !=null">
+                late_interest_ratio,
+            </if>
+            <if test="lateInterest !=null">
+                late_interest,
+            </if>
+            <if test="amount !=null">
+                amount,
+            </if>
+            <if test="relationOrderBillDetailId !=null">
+                relation_order_bill_detail_id,
+            </if>
+            <if test="visible !=null">
+                visible,
+            </if>
+            <if test="destroy !=null">
+                destroy,
+            </if>
+            <if test="actualDestroyDate !=null">
+                actual_destroy_date,
+            </if>
+            <if test="actualDestroyDt !=null">
+                actual_destroy_dt,
+            </if>
+            <if test="deleted !=null">
                 deleted,
-                </if>
-                <if test="gmtModified !=null">
+            </if>
+            <if test="gmtModified !=null">
                 gmt_modified,
-                </if>
-                <if test="gmtCreate !=null">
+            </if>
+            <if test="gmtCreate !=null">
                 gmt_create,
-                </if>
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-                <if test="orderNumb != null">
-                    #{orderNumb,jdbcType=VARCHAR},
-                </if>
-                <if test="merchantCode != null">
-                    #{merchantCode,jdbcType=VARCHAR},
-                </if>
-                <if test="channelCode != null">
-                    #{channelCode,jdbcType=VARCHAR},
-                </if>
-                <if test="borrowerCode != null">
-                    #{borrowerCode,jdbcType=VARCHAR},
-                </if>
-                <if test="realCapital != null">
-                    #{realCapital,jdbcType=DECIMAL},
-                </if>
-                <if test="repaymentDt != null">
-                    #{repaymentDt,jdbcType=DATE},
-                </if>
-                <if test="interest != null">
-                    #{interest,jdbcType=DECIMAL},
-                </if>
-                <if test="amount != null">
-                    #{amount,jdbcType=DECIMAL},
-                </if>
-                <if test="lastCalculateInterestDt != null">
-                    #{lastCalculateInterestDt,jdbcType=DATE},
-                </if>
-                <if test="currentInterestRatio != null">
-                    #{currentInterestRatio,jdbcType=DECIMAL},
-                </if>
-                <if test="isExtend != null">
-                    #{isExtend,jdbcType=BIT},
-                </if>
-                <if test="paid != null">
-                    #{paid,jdbcType=BIT},
-                </if>
-                <if test="paidAmount != null">
-                    #{paidAmount,jdbcType=DECIMAL},
-                </if>
-                <if test="deductAmount != null">
-                    #{deductAmount,jdbcType=DECIMAL},
-                </if>
-                <if test="actualRepaymentDate != null">
-                    #{actualRepaymentDate,jdbcType=TIMESTAMP},
-                </if>
-                <if test="actualRepaymentDt != null">
-                    #{actualRepaymentDt,jdbcType=DATE},
-                </if>
-                <if test="createdDt != null">
-                    #{createdDt,jdbcType=DATE},
-                </if>
-                <if test="deleted != null">
-                    #{deleted,jdbcType=BIT},
-                </if>
-                <if test="gmtModified != null">
-                    #{gmtModified,jdbcType=TIMESTAMP},
-                </if>
-                <if test="gmtCreate != null">
-                    #{gmtCreate,jdbcType=TIMESTAMP},
-                </if>
+            <if test="orderNumb != null">
+                #{orderNumb,jdbcType=VARCHAR},
+            </if>
+            <if test="merchantCode != null">
+                #{merchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="channelCode != null">
+                #{channelCode,jdbcType=VARCHAR},
+            </if>
+            <if test="borrowerCode != null">
+                #{borrowerCode,jdbcType=VARCHAR},
+            </if>
+            <if test="realCapital != null">
+                #{realCapital,jdbcType=DECIMAL},
+            </if>
+            <if test="needPayInterest != null">
+                #{needPayInterest,jdbcType=DECIMAL},
+            </if>
+            <if test="totalInterestRatio != null">
+                #{totalInterestRatio,jdbcType=DECIMAL},
+            </if>
+            <if test="interest != null">
+                #{interest,jdbcType=DECIMAL},
+            </if>
+            <if test="createdDt != null">
+                #{createdDt,jdbcType=DATE},
+            </if>
+            <if test="repaymentDt != null">
+                #{repaymentDt,jdbcType=DATE},
+            </if>
+            <if test="lateInterestRatio != null">
+                #{lateInterestRatio,jdbcType=DECIMAL},
+            </if>
+            <if test="lateInterest != null">
+                #{lateInterest,jdbcType=DECIMAL},
+            </if>
+            <if test="amount != null">
+                #{amount,jdbcType=DECIMAL},
+            </if>
+            <if test="relationOrderBillDetailId != null">
+                #{relationOrderBillDetailId,jdbcType=VARCHAR},
+            </if>
+            <if test="visible != null">
+                #{visible,jdbcType=BIT},
+            </if>
+            <if test="destroy != null">
+                #{destroy,jdbcType=BIT},
+            </if>
+            <if test="actualDestroyDate != null">
+                #{actualDestroyDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="actualDestroyDt != null">
+                #{actualDestroyDt,jdbcType=DATE},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
         </trim>
     </insert>
 
     <update id="updateByPrimaryKey" parameterType="com.beitu.saas.order.entity.SaasOrderBillDetail">
         update saas_order_bill_detail
         <set>
-                <if test="orderNumb !=null">
+            <if test="orderNumb !=null">
                 order_numb = #{orderNumb,jdbcType=VARCHAR},
-                </if>
-                <if test="merchantCode !=null">
+            </if>
+            <if test="merchantCode !=null">
                 merchant_code = #{merchantCode,jdbcType=VARCHAR},
-                </if>
-                <if test="channelCode !=null">
+            </if>
+            <if test="channelCode !=null">
                 channel_code = #{channelCode,jdbcType=VARCHAR},
-                </if>
-                <if test="borrowerCode !=null">
+            </if>
+            <if test="borrowerCode !=null">
                 borrower_code = #{borrowerCode,jdbcType=VARCHAR},
-                </if>
-                <if test="realCapital !=null">
+            </if>
+            <if test="realCapital !=null">
                 real_capital = #{realCapital,jdbcType=DECIMAL},
-                </if>
-                <if test="repaymentDt !=null">
-                repayment_dt = #{repaymentDt,jdbcType=DATE},
-                </if>
-                <if test="interest !=null">
+            </if>
+            <if test="needPayInterest !=null">
+                need_pay_interest = #{needPayInterest,jdbcType=DECIMAL},
+            </if>
+            <if test="totalInterestRatio !=null">
+                total_interest_ratio = #{totalInterestRatio,jdbcType=DECIMAL},
+            </if>
+            <if test="interest !=null">
                 interest = #{interest,jdbcType=DECIMAL},
-                </if>
-                <if test="amount !=null">
-                amount = #{amount,jdbcType=DECIMAL},
-                </if>
-                <if test="lastCalculateInterestDt !=null">
-                last_calculate_interest_dt = #{lastCalculateInterestDt,jdbcType=DATE},
-                </if>
-                <if test="currentInterestRatio !=null">
-                current_interest_ratio = #{currentInterestRatio,jdbcType=DECIMAL},
-                </if>
-                <if test="isExtend !=null">
-                is_extend = #{isExtend,jdbcType=BIT},
-                </if>
-                <if test="paid !=null">
-                paid = #{paid,jdbcType=BIT},
-                </if>
-                <if test="paidAmount !=null">
-                paid_amount = #{paidAmount,jdbcType=DECIMAL},
-                </if>
-                <if test="deductAmount !=null">
-                deduct_amount = #{deductAmount,jdbcType=DECIMAL},
-                </if>
-                <if test="actualRepaymentDate !=null">
-                actual_repayment_date = #{actualRepaymentDate,jdbcType=TIMESTAMP},
-                </if>
-                <if test="actualRepaymentDt !=null">
-                actual_repayment_dt = #{actualRepaymentDt,jdbcType=DATE},
-                </if>
-                <if test="createdDt !=null">
+            </if>
+            <if test="createdDt !=null">
                 created_dt = #{createdDt,jdbcType=DATE},
-                </if>
-                <if test="deleted !=null">
+            </if>
+            <if test="repaymentDt !=null">
+                repayment_dt = #{repaymentDt,jdbcType=DATE},
+            </if>
+            <if test="lateInterestRatio !=null">
+                late_interest_ratio = #{lateInterestRatio,jdbcType=DECIMAL},
+            </if>
+            <if test="lateInterest !=null">
+                late_interest = #{lateInterest,jdbcType=DECIMAL},
+            </if>
+            <if test="amount !=null">
+                amount = #{amount,jdbcType=DECIMAL},
+            </if>
+            <if test="relationOrderBillDetailId !=null">
+                relation_order_bill_detail_id = #{relationOrderBillDetailId,jdbcType=VARCHAR},
+            </if>
+            <if test="visible !=null">
+                visible = #{visible,jdbcType=BIT},
+            </if>
+            <if test="destroy !=null">
+                destroy = #{destroy,jdbcType=BIT},
+            </if>
+            <if test="actualDestroyDate !=null">
+                actual_destroy_date = #{actualDestroyDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="actualDestroyDt !=null">
+                actual_destroy_dt = #{actualDestroyDt,jdbcType=DATE},
+            </if>
+            <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},
-                </if>
-                <if test="gmtModified !=null">
+            </if>
+            <if test="gmtModified !=null">
                 gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-                </if>
+            </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
@@ -259,7 +270,7 @@
 
     <sql id="paginationSql">
         <if test="page != null">
-            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+            limit #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
         </if>
     </sql>
 
@@ -292,41 +303,44 @@
             <if test="realCapital !=null">
                 and real_capital = #{realCapital,jdbcType=DECIMAL}
             </if>
-            <if test="repaymentDt !=null">
-                and repayment_dt = #{repaymentDt,jdbcType=DATE}
+            <if test="needPayInterest !=null">
+                and need_pay_interest = #{needPayInterest,jdbcType=DECIMAL}
+            </if>
+            <if test="totalInterestRatio !=null">
+                and total_interest_ratio = #{totalInterestRatio,jdbcType=DECIMAL}
             </if>
             <if test="interest !=null">
                 and interest = #{interest,jdbcType=DECIMAL}
             </if>
+            <if test="createdDt !=null">
+                and created_dt = #{createdDt,jdbcType=DATE}
+            </if>
+            <if test="repaymentDt !=null">
+                and repayment_dt = #{repaymentDt,jdbcType=DATE}
+            </if>
+            <if test="lateInterestRatio !=null">
+                and late_interest_ratio = #{lateInterestRatio,jdbcType=DECIMAL}
+            </if>
+            <if test="lateInterest !=null">
+                and late_interest = #{lateInterest,jdbcType=DECIMAL}
+            </if>
             <if test="amount !=null">
                 and amount = #{amount,jdbcType=DECIMAL}
             </if>
-            <if test="lastCalculateInterestDt !=null">
-                and last_calculate_interest_dt = #{lastCalculateInterestDt,jdbcType=DATE}
+            <if test="relationOrderBillDetailId !=null">
+                and relation_order_bill_detail_id = #{relationOrderBillDetailId,jdbcType=VARCHAR}
             </if>
-            <if test="currentInterestRatio !=null">
-                and current_interest_ratio = #{currentInterestRatio,jdbcType=DECIMAL}
+            <if test="visible !=null">
+                and visible = #{visible,jdbcType=BIT}
             </if>
-            <if test="isExtend !=null">
-                and is_extend = #{isExtend,jdbcType=BIT}
+            <if test="destroy !=null">
+                and destroy = #{destroy,jdbcType=BIT}
             </if>
-            <if test="paid !=null">
-                and paid = #{paid,jdbcType=BIT}
+            <if test="actualDestroyDate !=null">
+                and actual_destroy_date = #{actualDestroyDate,jdbcType=TIMESTAMP}
             </if>
-            <if test="paidAmount !=null">
-                and paid_amount = #{paidAmount,jdbcType=DECIMAL}
-            </if>
-            <if test="deductAmount !=null">
-                and deduct_amount = #{deductAmount,jdbcType=DECIMAL}
-            </if>
-            <if test="actualRepaymentDate !=null">
-                and actual_repayment_date = #{actualRepaymentDate,jdbcType=TIMESTAMP}
-            </if>
-            <if test="actualRepaymentDt !=null">
-                and actual_repayment_dt = #{actualRepaymentDt,jdbcType=DATE}
-            </if>
-            <if test="createdDt !=null">
-                and created_dt = #{createdDt,jdbcType=DATE}
+            <if test="actualDestroyDt !=null">
+                and actual_destroy_dt = #{actualDestroyDt,jdbcType=DATE}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}
@@ -361,41 +375,44 @@
             <if test="realCapital !=null">
                 and real_capital = #{realCapital,jdbcType=DECIMAL}
             </if>
-            <if test="repaymentDt !=null">
-                and repayment_dt = #{repaymentDt,jdbcType=DATE}
+            <if test="needPayInterest !=null">
+                and need_pay_interest = #{needPayInterest,jdbcType=DECIMAL}
+            </if>
+            <if test="totalInterestRatio !=null">
+                and total_interest_ratio = #{totalInterestRatio,jdbcType=DECIMAL}
             </if>
             <if test="interest !=null">
                 and interest = #{interest,jdbcType=DECIMAL}
             </if>
+            <if test="createdDt !=null">
+                and created_dt = #{createdDt,jdbcType=DATE}
+            </if>
+            <if test="repaymentDt !=null">
+                and repayment_dt = #{repaymentDt,jdbcType=DATE}
+            </if>
+            <if test="lateInterestRatio !=null">
+                and late_interest_ratio = #{lateInterestRatio,jdbcType=DECIMAL}
+            </if>
+            <if test="lateInterest !=null">
+                and late_interest = #{lateInterest,jdbcType=DECIMAL}
+            </if>
             <if test="amount !=null">
                 and amount = #{amount,jdbcType=DECIMAL}
             </if>
-            <if test="lastCalculateInterestDt !=null">
-                and last_calculate_interest_dt = #{lastCalculateInterestDt,jdbcType=DATE}
+            <if test="relationOrderBillDetailId !=null">
+                and relation_order_bill_detail_id = #{relationOrderBillDetailId,jdbcType=VARCHAR}
             </if>
-            <if test="currentInterestRatio !=null">
-                and current_interest_ratio = #{currentInterestRatio,jdbcType=DECIMAL}
+            <if test="visible !=null">
+                and visible = #{visible,jdbcType=BIT}
             </if>
-            <if test="isExtend !=null">
-                and is_extend = #{isExtend,jdbcType=BIT}
+            <if test="destroy !=null">
+                and destroy = #{destroy,jdbcType=BIT}
             </if>
-            <if test="paid !=null">
-                and paid = #{paid,jdbcType=BIT}
+            <if test="actualDestroyDate !=null">
+                and actual_destroy_date = #{actualDestroyDate,jdbcType=TIMESTAMP}
             </if>
-            <if test="paidAmount !=null">
-                and paid_amount = #{paidAmount,jdbcType=DECIMAL}
-            </if>
-            <if test="deductAmount !=null">
-                and deduct_amount = #{deductAmount,jdbcType=DECIMAL}
-            </if>
-            <if test="actualRepaymentDate !=null">
-                and actual_repayment_date = #{actualRepaymentDate,jdbcType=TIMESTAMP}
-            </if>
-            <if test="actualRepaymentDt !=null">
-                and actual_repayment_dt = #{actualRepaymentDt,jdbcType=DATE}
-            </if>
-            <if test="createdDt !=null">
-                and created_dt = #{createdDt,jdbcType=DATE}
+            <if test="actualDestroyDt !=null">
+                and actual_destroy_dt = #{actualDestroyDt,jdbcType=DATE}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}

@@ -9,8 +9,9 @@
         <result column="borrower_code" jdbcType="VARCHAR" property="borrowerCode"/>
         <result column="real_capital" jdbcType="DECIMAL" property="realCapital"/>
         <result column="total_interest_ratio" jdbcType="DECIMAL" property="totalInterestRatio"/>
+        <result column="late_interest_ratio" jdbcType="DECIMAL" property="lateInterestRatio"/>
         <result column="borrow_purpose" jdbcType="VARCHAR" property="borrowPurpose"/>
-        <result column="repayment_date" jdbcType="DATE" property="repaymentDate"/>
+        <result column="repayment_dt" jdbcType="DATE" property="repaymentDt"/>
         <result column="deleted" jdbcType="BIT" property="deleted"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
         <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
@@ -23,8 +24,9 @@
     borrower_code,
     real_capital,
     total_interest_ratio,
+    late_interest_ratio,
     borrow_purpose,
-    repayment_date,
+    repayment_dt,
     deleted,
     gmt_modified,
     gmt_create
@@ -57,11 +59,14 @@
             <if test="totalInterestRatio !=null">
                 total_interest_ratio,
             </if>
+            <if test="lateInterestRatio !=null">
+                late_interest_ratio,
+            </if>
             <if test="borrowPurpose !=null">
                 borrow_purpose,
             </if>
-            <if test="repaymentDate !=null">
-                repayment_date,
+            <if test="repaymentDt !=null">
+                repayment_dt,
             </if>
             <if test="deleted !=null">
                 deleted,
@@ -89,11 +94,14 @@
             <if test="totalInterestRatio != null">
                 #{totalInterestRatio,jdbcType=DECIMAL},
             </if>
+            <if test="lateInterestRatio != null">
+                #{lateInterestRatio,jdbcType=DECIMAL},
+            </if>
             <if test="borrowPurpose != null">
                 #{borrowPurpose,jdbcType=VARCHAR},
             </if>
-            <if test="repaymentDate != null">
-                #{repaymentDate,jdbcType=DATE},
+            <if test="repaymentDt != null">
+                #{repaymentDt,jdbcType=DATE},
             </if>
             <if test="deleted != null">
                 #{deleted,jdbcType=BIT},
@@ -125,11 +133,14 @@
             <if test="totalInterestRatio !=null">
                 total_interest_ratio = #{totalInterestRatio,jdbcType=DECIMAL},
             </if>
+            <if test="lateInterestRatio !=null">
+                late_interest_ratio = #{lateInterestRatio,jdbcType=DECIMAL},
+            </if>
             <if test="borrowPurpose !=null">
                 borrow_purpose = #{borrowPurpose,jdbcType=VARCHAR},
             </if>
-            <if test="repaymentDate !=null">
-                repayment_date = #{repaymentDate,jdbcType=DATE},
+            <if test="repaymentDt !=null">
+                repayment_dt = #{repaymentDt,jdbcType=DATE},
             </if>
             <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},
@@ -182,11 +193,14 @@
             <if test="totalInterestRatio !=null">
                 and total_interest_ratio = #{totalInterestRatio,jdbcType=DECIMAL}
             </if>
+            <if test="lateInterestRatio !=null">
+                and late_interest_ratio = #{lateInterestRatio,jdbcType=DECIMAL}
+            </if>
             <if test="borrowPurpose !=null">
                 and borrow_purpose = #{borrowPurpose,jdbcType=VARCHAR}
             </if>
-            <if test="repaymentDate !=null">
-                and repayment_date = #{repaymentDate,jdbcType=DATE}
+            <if test="repaymentDt !=null">
+                and repayment_dt = #{repaymentDt,jdbcType=DATE}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}
@@ -221,11 +235,14 @@
             <if test="totalInterestRatio !=null">
                 and total_interest_ratio = #{totalInterestRatio,jdbcType=DECIMAL}
             </if>
+            <if test="lateInterestRatio !=null">
+                and late_interest_ratio = #{lateInterestRatio,jdbcType=DECIMAL}
+            </if>
             <if test="borrowPurpose !=null">
                 and borrow_purpose = #{borrowPurpose,jdbcType=VARCHAR}
             </if>
-            <if test="repaymentDate !=null">
-                and repayment_date = #{repaymentDate,jdbcType=DATE}
+            <if test="repaymentDt !=null">
+                and repayment_dt = #{repaymentDt,jdbcType=DATE}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}

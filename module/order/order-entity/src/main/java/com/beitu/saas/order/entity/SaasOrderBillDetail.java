@@ -6,232 +6,245 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
-* User: jungle
-* Date: 2018-03-25
-* Time: 21:55:45.864
-* TableDesc:SAAS订单详情表
-*/
-public class SaasOrderBillDetail extends BaseEntity{
+ * User: jungle
+ * Date: 2018-03-26
+ * Time: 16:49:01.251
+ * TableDesc:SAAS账单表
+ */
+public class SaasOrderBillDetail extends BaseEntity {
     /**
-    *订单号
-    */
+     * 订单号
+     */
     private String orderNumb;
     /**
-    *机构CODE
-    */
+     * 机构CODE
+     */
     private String merchantCode;
     /**
-    *渠道CODE
-    */
+     * 渠道CODE
+     */
     private String channelCode;
     /**
-    *借款人CODE
-    */
+     * 借款人CODE
+     */
     private String borrowerCode;
     /**
-    *借款金额
-    */
+     * 借款金额
+     */
     private BigDecimal realCapital;
     /**
-    *账单应还日
-    */
-    private Date repaymentDt;
+     * 未结算利息
+     */
+    private BigDecimal needPayInterest;
     /**
-    *利息
-    */
+     * 借款年利率
+     */
+    private BigDecimal totalInterestRatio;
+    /**
+     * 利息
+     */
     private BigDecimal interest;
     /**
-    *应还金额
-    */
+     * 账单生成日
+     */
+    private Date createdDt;
+    /**
+     * 账单应还日
+     */
+    private Date repaymentDt;
+    /**
+     * 逾期利率
+     */
+    private BigDecimal lateInterestRatio;
+    /**
+     * 逾期利息
+     */
+    private BigDecimal lateInterest;
+    /**
+     * 应还金额
+     */
     private BigDecimal amount;
     /**
-    *上次计息时间
-    */
-    private Date lastCalculateInterestDt;
+     * 展期关联账单ID
+     */
+    private String relationOrderBillDetailId;
     /**
-    *当前借款年利率
-    */
-    private BigDecimal currentInterestRatio;
+     * 是否可见
+     */
+    private Boolean visible;
     /**
-    *是否是展期订单
-    */
-    private Boolean isExtend;
+     * 是否已核销
+     */
+    private Boolean destroy;
     /**
-    *是否已还款
-    */
-    private Boolean paid;
+     * 核销时间
+     */
+    private Date actualDestroyDate;
     /**
-    *实际还款金额
-    */
-    private BigDecimal paidAmount;
-    /**
-    *抵扣金额
-    */
-    private BigDecimal deductAmount;
-    /**
-    *实际还款时间
-    */
-    private Date actualRepaymentDate;
-    /**
-    *实际还款日期
-    */
-    private Date actualRepaymentDt;
-    /**
-    *订单生成日期
-    */
-    private Date createdDt;
+     * 核销日期
+     */
+    private Date actualDestroyDt;
 
 
-    public  String getOrderNumb(){
+    public String getOrderNumb() {
         return this.orderNumb;
     }
 
-    public  SaasOrderBillDetail setOrderNumb(String orderNumb){
+    public SaasOrderBillDetail setOrderNumb(String orderNumb) {
         this.orderNumb = orderNumb;
         return this;
     }
 
-    public  String getMerchantCode(){
+    public String getMerchantCode() {
         return this.merchantCode;
     }
 
-    public  SaasOrderBillDetail setMerchantCode(String merchantCode){
+    public SaasOrderBillDetail setMerchantCode(String merchantCode) {
         this.merchantCode = merchantCode;
         return this;
     }
 
-    public  String getChannelCode(){
+    public String getChannelCode() {
         return this.channelCode;
     }
 
-    public  SaasOrderBillDetail setChannelCode(String channelCode){
+    public SaasOrderBillDetail setChannelCode(String channelCode) {
         this.channelCode = channelCode;
         return this;
     }
 
-    public  String getBorrowerCode(){
+    public String getBorrowerCode() {
         return this.borrowerCode;
     }
 
-    public  SaasOrderBillDetail setBorrowerCode(String borrowerCode){
+    public SaasOrderBillDetail setBorrowerCode(String borrowerCode) {
         this.borrowerCode = borrowerCode;
         return this;
     }
 
-    public  BigDecimal getRealCapital(){
+    public BigDecimal getRealCapital() {
         return this.realCapital;
     }
 
-    public  SaasOrderBillDetail setRealCapital(BigDecimal realCapital){
+    public SaasOrderBillDetail setRealCapital(BigDecimal realCapital) {
         this.realCapital = realCapital;
         return this;
     }
 
-    public  Date getRepaymentDt(){
-        return this.repaymentDt;
+    public BigDecimal getNeedPayInterest() {
+        return this.needPayInterest;
     }
 
-    public  SaasOrderBillDetail setRepaymentDt(Date repaymentDt){
-        this.repaymentDt = repaymentDt;
+    public SaasOrderBillDetail setNeedPayInterest(BigDecimal needPayInterest) {
+        this.needPayInterest = needPayInterest;
         return this;
     }
 
-    public  BigDecimal getInterest(){
+    public BigDecimal getTotalInterestRatio() {
+        return this.totalInterestRatio;
+    }
+
+    public SaasOrderBillDetail setTotalInterestRatio(BigDecimal totalInterestRatio) {
+        this.totalInterestRatio = totalInterestRatio;
+        return this;
+    }
+
+    public BigDecimal getInterest() {
         return this.interest;
     }
 
-    public  SaasOrderBillDetail setInterest(BigDecimal interest){
+    public SaasOrderBillDetail setInterest(BigDecimal interest) {
         this.interest = interest;
         return this;
     }
 
-    public  BigDecimal getAmount(){
+    public Date getCreatedDt() {
+        return this.createdDt;
+    }
+
+    public SaasOrderBillDetail setCreatedDt(Date createdDt) {
+        this.createdDt = createdDt;
+        return this;
+    }
+
+    public Date getRepaymentDt() {
+        return this.repaymentDt;
+    }
+
+    public SaasOrderBillDetail setRepaymentDt(Date repaymentDt) {
+        this.repaymentDt = repaymentDt;
+        return this;
+    }
+
+    public BigDecimal getLateInterestRatio() {
+        return this.lateInterestRatio;
+    }
+
+    public SaasOrderBillDetail setLateInterestRatio(BigDecimal lateInterestRatio) {
+        this.lateInterestRatio = lateInterestRatio;
+        return this;
+    }
+
+    public BigDecimal getLateInterest() {
+        return this.lateInterest;
+    }
+
+    public SaasOrderBillDetail setLateInterest(BigDecimal lateInterest) {
+        this.lateInterest = lateInterest;
+        return this;
+    }
+
+    public BigDecimal getAmount() {
         return this.amount;
     }
 
-    public  SaasOrderBillDetail setAmount(BigDecimal amount){
+    public SaasOrderBillDetail setAmount(BigDecimal amount) {
         this.amount = amount;
         return this;
     }
 
-    public  Date getLastCalculateInterestDt(){
-        return this.lastCalculateInterestDt;
+    public String getRelationOrderBillDetailId() {
+        return this.relationOrderBillDetailId;
     }
 
-    public  SaasOrderBillDetail setLastCalculateInterestDt(Date lastCalculateInterestDt){
-        this.lastCalculateInterestDt = lastCalculateInterestDt;
+    public SaasOrderBillDetail setRelationOrderBillDetailId(String relationOrderBillDetailId) {
+        this.relationOrderBillDetailId = relationOrderBillDetailId;
         return this;
     }
 
-    public  BigDecimal getCurrentInterestRatio(){
-        return this.currentInterestRatio;
+    public Boolean getVisible() {
+        return this.visible;
     }
 
-    public  SaasOrderBillDetail setCurrentInterestRatio(BigDecimal currentInterestRatio){
-        this.currentInterestRatio = currentInterestRatio;
+    public SaasOrderBillDetail setVisible(Boolean visible) {
+        this.visible = visible;
         return this;
     }
 
-    public  Boolean getIsExtend(){
-        return this.isExtend;
+    public Boolean getDestroy() {
+        return this.destroy;
     }
 
-    public  SaasOrderBillDetail setIsExtend(Boolean isExtend){
-        this.isExtend = isExtend;
+    public SaasOrderBillDetail setDestroy(Boolean destroy) {
+        this.destroy = destroy;
         return this;
     }
 
-    public  Boolean getPaid(){
-        return this.paid;
+    public Date getActualDestroyDate() {
+        return this.actualDestroyDate;
     }
 
-    public  SaasOrderBillDetail setPaid(Boolean paid){
-        this.paid = paid;
+    public SaasOrderBillDetail setActualDestroyDate(Date actualDestroyDate) {
+        this.actualDestroyDate = actualDestroyDate;
         return this;
     }
 
-    public  BigDecimal getPaidAmount(){
-        return this.paidAmount;
+    public Date getActualDestroyDt() {
+        return this.actualDestroyDt;
     }
 
-    public  SaasOrderBillDetail setPaidAmount(BigDecimal paidAmount){
-        this.paidAmount = paidAmount;
-        return this;
-    }
-
-    public  BigDecimal getDeductAmount(){
-        return this.deductAmount;
-    }
-
-    public  SaasOrderBillDetail setDeductAmount(BigDecimal deductAmount){
-        this.deductAmount = deductAmount;
-        return this;
-    }
-
-    public  Date getActualRepaymentDate(){
-        return this.actualRepaymentDate;
-    }
-
-    public  SaasOrderBillDetail setActualRepaymentDate(Date actualRepaymentDate){
-        this.actualRepaymentDate = actualRepaymentDate;
-        return this;
-    }
-
-    public  Date getActualRepaymentDt(){
-        return this.actualRepaymentDt;
-    }
-
-    public  SaasOrderBillDetail setActualRepaymentDt(Date actualRepaymentDt){
-        this.actualRepaymentDt = actualRepaymentDt;
-        return this;
-    }
-
-    public  Date getCreatedDt(){
-        return this.createdDt;
-    }
-
-    public  SaasOrderBillDetail setCreatedDt(Date createdDt){
-        this.createdDt = createdDt;
+    public SaasOrderBillDetail setActualDestroyDt(Date actualDestroyDt) {
+        this.actualDestroyDt = actualDestroyDt;
         return this;
     }
 }

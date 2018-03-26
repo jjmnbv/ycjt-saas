@@ -15,7 +15,7 @@ public class H5OrderListVo implements ResponseData {
 
     private String repaymentDt;
 
-    private String orderStatus;
+    private Integer orderStatus;
 
     private Integer viewType;
 
@@ -43,11 +43,11 @@ public class H5OrderListVo implements ResponseData {
         this.repaymentDt = repaymentDt;
     }
 
-    public String getOrderStatus() {
+    public Integer getOrderStatus() {
         return orderStatus;
     }
 
-    public void setOrderStatus(String orderStatus) {
+    public void setOrderStatus(Integer orderStatus) {
         this.orderStatus = orderStatus;
     }
 

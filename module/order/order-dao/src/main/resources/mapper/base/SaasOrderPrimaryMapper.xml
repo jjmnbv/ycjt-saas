@@ -11,13 +11,13 @@
         <result column="real_capital" jdbcType="DECIMAL" property="realCapital"/>
         <result column="total_interest_ratio" jdbcType="DECIMAL" property="totalInterestRatio"/>
         <result column="total_interest_fee" jdbcType="DECIMAL" property="totalInterestFee"/>
-        <result column="late_fee_ratio" jdbcType="DECIMAL" property="lateFeeRatio"/>
+        <result column="late_interest_ratio" jdbcType="DECIMAL" property="lateInterestRatio"/>
         <result column="borrow_purpose" jdbcType="VARCHAR" property="borrowPurpose"/>
         <result column="repayment_dt" jdbcType="DATE" property="repaymentDt"/>
         <result column="created_dt" jdbcType="TIMESTAMP" property="createdDt"/>
+        <result column="expire_date" jdbcType="TIMESTAMP" property="expireDate"/>
         <result column="term_url" jdbcType="VARCHAR" property="termUrl"/>
-        <result column="is_extend" jdbcType="BIT" property="isExtend"/>
-        <result column="relation_order_code" jdbcType="VARCHAR" property="relationOrderCode"/>
+        <result column="relation_order_id" jdbcType="VARCHAR" property="relationOrderId"/>
         <result column="order_status" jdbcType="SMALLINT" property="orderStatus"/>
         <result column="primary_reviewer_code" jdbcType="VARCHAR" property="primaryReviewerCode"/>
         <result column="final_reviewer_code" jdbcType="VARCHAR" property="finalReviewerCode"/>
@@ -38,13 +38,13 @@
     real_capital,
     total_interest_ratio,
     total_interest_fee,
-    late_fee_ratio,
+    late_interest_ratio,
     borrow_purpose,
     repayment_dt,
     created_dt,
+    expire_date,
     term_url,
-    is_extend,
-    relation_order_code,
+    relation_order_id,
     order_status,
     primary_reviewer_code,
     final_reviewer_code,
@@ -89,8 +89,8 @@
             <if test="totalInterestFee !=null">
                 total_interest_fee,
             </if>
-            <if test="lateFeeRatio !=null">
-                late_fee_ratio,
+            <if test="lateInterestRatio !=null">
+                late_interest_ratio,
             </if>
             <if test="borrowPurpose !=null">
                 borrow_purpose,
@@ -101,14 +101,14 @@
             <if test="createdDt !=null">
                 created_dt,
             </if>
+            <if test="expireDate !=null">
+                expire_date,
+            </if>
             <if test="termUrl !=null">
                 term_url,
             </if>
-            <if test="isExtend !=null">
-                is_extend,
-            </if>
-            <if test="relationOrderCode !=null">
-                relation_order_code,
+            <if test="relationOrderId !=null">
+                relation_order_id,
             </if>
             <if test="orderStatus !=null">
                 order_status,
@@ -160,8 +160,8 @@
             <if test="totalInterestFee != null">
                 #{totalInterestFee,jdbcType=DECIMAL},
             </if>
-            <if test="lateFeeRatio != null">
-                #{lateFeeRatio,jdbcType=DECIMAL},
+            <if test="lateInterestRatio != null">
+                #{lateInterestRatio,jdbcType=DECIMAL},
             </if>
             <if test="borrowPurpose != null">
                 #{borrowPurpose,jdbcType=VARCHAR},
@@ -172,14 +172,14 @@
             <if test="createdDt != null">
                 #{createdDt,jdbcType=TIMESTAMP},
             </if>
+            <if test="expireDate != null">
+                #{expireDate,jdbcType=TIMESTAMP},
+            </if>
             <if test="termUrl != null">
                 #{termUrl,jdbcType=VARCHAR},
             </if>
-            <if test="isExtend != null">
-                #{isExtend,jdbcType=BIT},
-            </if>
-            <if test="relationOrderCode != null">
-                #{relationOrderCode,jdbcType=VARCHAR},
+            <if test="relationOrderId != null">
+                #{relationOrderId,jdbcType=VARCHAR},
             </if>
             <if test="orderStatus != null">
                 #{orderStatus,jdbcType=SMALLINT},
@@ -235,8 +235,8 @@
             <if test="totalInterestFee !=null">
                 total_interest_fee = #{totalInterestFee,jdbcType=DECIMAL},
             </if>
-            <if test="lateFeeRatio !=null">
-                late_fee_ratio = #{lateFeeRatio,jdbcType=DECIMAL},
+            <if test="lateInterestRatio !=null">
+                late_interest_ratio = #{lateInterestRatio,jdbcType=DECIMAL},
             </if>
             <if test="borrowPurpose !=null">
                 borrow_purpose = #{borrowPurpose,jdbcType=VARCHAR},
@@ -247,14 +247,14 @@
             <if test="createdDt !=null">
                 created_dt = #{createdDt,jdbcType=TIMESTAMP},
             </if>
+            <if test="expireDate !=null">
+                expire_date = #{expireDate,jdbcType=TIMESTAMP},
+            </if>
             <if test="termUrl !=null">
                 term_url = #{termUrl,jdbcType=VARCHAR},
             </if>
-            <if test="isExtend !=null">
-                is_extend = #{isExtend,jdbcType=BIT},
-            </if>
-            <if test="relationOrderCode !=null">
-                relation_order_code = #{relationOrderCode,jdbcType=VARCHAR},
+            <if test="relationOrderId !=null">
+                relation_order_id = #{relationOrderId,jdbcType=VARCHAR},
             </if>
             <if test="orderStatus !=null">
                 order_status = #{orderStatus,jdbcType=SMALLINT},
@@ -331,8 +331,8 @@
             <if test="totalInterestFee !=null">
                 and total_interest_fee = #{totalInterestFee,jdbcType=DECIMAL}
             </if>
-            <if test="lateFeeRatio !=null">
-                and late_fee_ratio = #{lateFeeRatio,jdbcType=DECIMAL}
+            <if test="lateInterestRatio !=null">
+                and late_interest_ratio = #{lateInterestRatio,jdbcType=DECIMAL}
             </if>
             <if test="borrowPurpose !=null">
                 and borrow_purpose = #{borrowPurpose,jdbcType=VARCHAR}
@@ -343,14 +343,14 @@
             <if test="createdDt !=null">
                 and created_dt = #{createdDt,jdbcType=TIMESTAMP}
             </if>
+            <if test="expireDate !=null">
+                and expire_date = #{expireDate,jdbcType=TIMESTAMP}
+            </if>
             <if test="termUrl !=null">
                 and term_url = #{termUrl,jdbcType=VARCHAR}
             </if>
-            <if test="isExtend !=null">
-                and is_extend = #{isExtend,jdbcType=BIT}
-            </if>
-            <if test="relationOrderCode !=null">
-                and relation_order_code = #{relationOrderCode,jdbcType=VARCHAR}
+            <if test="relationOrderId !=null">
+                and relation_order_id = #{relationOrderId,jdbcType=VARCHAR}
             </if>
             <if test="orderStatus !=null">
                 and order_status = #{orderStatus,jdbcType=SMALLINT}
@@ -409,8 +409,8 @@
             <if test="totalInterestFee !=null">
                 and total_interest_fee = #{totalInterestFee,jdbcType=DECIMAL}
             </if>
-            <if test="lateFeeRatio !=null">
-                and late_fee_ratio = #{lateFeeRatio,jdbcType=DECIMAL}
+            <if test="lateInterestRatio !=null">
+                and late_interest_ratio = #{lateInterestRatio,jdbcType=DECIMAL}
             </if>
             <if test="borrowPurpose !=null">
                 and borrow_purpose = #{borrowPurpose,jdbcType=VARCHAR}
@@ -421,14 +421,14 @@
             <if test="createdDt !=null">
                 and created_dt = #{createdDt,jdbcType=TIMESTAMP}
             </if>
+            <if test="expireDate !=null">
+                and expire_date = #{expireDate,jdbcType=TIMESTAMP}
+            </if>
             <if test="termUrl !=null">
                 and term_url = #{termUrl,jdbcType=VARCHAR}
             </if>
-            <if test="isExtend !=null">
-                and is_extend = #{isExtend,jdbcType=BIT}
-            </if>
-            <if test="relationOrderCode !=null">
-                and relation_order_code = #{relationOrderCode,jdbcType=VARCHAR}
+            <if test="relationOrderId !=null">
+                and relation_order_id = #{relationOrderId,jdbcType=VARCHAR}
             </if>
             <if test="orderStatus !=null">
                 and order_status = #{orderStatus,jdbcType=SMALLINT}

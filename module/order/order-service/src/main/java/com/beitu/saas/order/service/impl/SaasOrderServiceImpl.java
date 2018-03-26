@@ -3,6 +3,7 @@ package com.beitu.saas.order.service.impl;
 import com.beitu.saas.order.client.SaasOrderService;
 import com.beitu.saas.order.dao.SaasOrderDao;
 import com.beitu.saas.order.domain.SaasOrderVo;
+import com.beitu.saas.order.enums.OrderStatusEnum;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
 import com.fqgj.log.enhance.Module;
@@ -28,6 +29,20 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
     public List<SaasOrderVo> listByBorrowerCodeAndMerchantCode(String borrowerCode, String merchantCode) {
         return null;
     }
+
+    @Override
+    public OrderStatusEnum getOrderStatusByOrderNumb(String orderNumb) {
+        return null;
+    }
+
+    @Override
+    public List<SaasOrderVo> listEffectiveOrderByOrderNumb(String orderNumb) {
+        return null;
+    }
+
+    @Override
+    public Boolean isReviewRefuse(String borrowerCode, String channelCode) {
+        return Boolean.FALSE;
+    }
+
 }
-
-
