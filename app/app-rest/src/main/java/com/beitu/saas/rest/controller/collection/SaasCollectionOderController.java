@@ -43,8 +43,6 @@ public class SaasCollectionOderController {
      * @return
      */
     @RequestMapping(value = "/collectionOrderGet/list", method = RequestMethod.POST)
-    @VisitorAccessible
-    @SignIgnore
     @ApiOperation(value = "催收列表", response = ModuleResponse.class)
     public ModuleResponse collectionDistributeGet(@RequestBody CollectionOrderQueryRequestParam collectionOrderQueryParam, Page page) {
         CollectionOrderQueryParam param = new CollectionOrderQueryParam();
