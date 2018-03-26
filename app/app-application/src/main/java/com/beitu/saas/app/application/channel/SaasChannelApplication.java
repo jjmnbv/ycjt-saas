@@ -53,7 +53,7 @@ public class SaasChannelApplication {
             saasChannelEntity.setChannelCode(channelCode)
                     .setChannelStatus(ChannelStatusEnum.OPEN.getType())
                     .setLinkUrl("channel/" + channelCode) // TODO: 2018/3/22
-                    .setCreator("admin");// TODO: 2018/3/24 先写死
+                    .setCreatorCode("admin");// TODO: 2018/3/24 先写死-根据管理员code获取姓名
             saasChannelService.create(saasChannelEntity);
 
             saasChannelRiskSettingsVoList.stream().forEach(x -> {
@@ -104,8 +104,8 @@ public class SaasChannelApplication {
 
         return new SaasChannelDetailVo().setChannelName(saasChannel.getChannelName())
                 .setChannelCode(channelCode)
-                .setChargePerson(saasChannel.getChargePerson())
-                .setCreator(saasChannel.getCreator())
+                .setChargePerson(saasChannel.getChargePersonCode())
+                .setCreator(saasChannel.getCreatorCode())
                 .setRemark(saasChannel.getRemark())
                 .setSaasChannelRiskSettingsVos(riskSettingsVos);
     }
@@ -127,12 +127,12 @@ public class SaasChannelApplication {
                     .setChannelCode(x.getChannelCode())
                     .setChannelName(x.getChannelName())
                     .setChannelStatus(x.getChannelStatus())
-                    .setChargePerson(x.getChargePerson())
+                    .setChargePerson(x.getChargePersonCode())
                     .setLinkUrl(x.getLinkUrl())// TODO: 2018/3/22 加上阿波罗域名
                     .setLongLinkUrl(x.getLinkUrl())// TODO: 2018/3/22 加上域名
                     //.setShortLinkUrl(ShortUrlUtil.generateShortUrl(x.getLinkUrl()))// TODO: 2018/3/22 加上域名
                     .setShortLinkUrl(ShortUrlUtil.generateShortUrl("http://agent.yangcongjietiao.com/agentWebViews/agent/index.html"))
-                    .setCreator(x.getCreator())
+                    .setCreator(x.getCreatorCode())
                     .setGmtCreate(x.getGmtCreate())
                     .setRemark(x.getRemark());
 

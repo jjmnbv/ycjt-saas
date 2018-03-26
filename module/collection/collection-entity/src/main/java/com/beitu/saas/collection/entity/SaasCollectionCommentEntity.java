@@ -3,8 +3,8 @@ import com.fqgj.common.entity.BaseEntity;
 
 /**
 * User: fenqiguanjia
-* Date: 2018-03-21
-* Time: 20:58:19.350
+* Date: 2018-03-26
+* Time: 15:11:49.041
 * TableDesc:订单催收表
 */
 public class SaasCollectionCommentEntity extends BaseEntity{
@@ -25,9 +25,9 @@ public class SaasCollectionCommentEntity extends BaseEntity{
     */
     private String content;
     /**
-    *跟进人ID
+    *跟进人code
     */
-    private Integer followId;
+    private String followCode;
     /**
     *跟进人名字
     */
@@ -70,12 +70,12 @@ public class SaasCollectionCommentEntity extends BaseEntity{
         return this;
     }
 
-    public  Integer getFollowId(){
-        return this.followId;
+    public  String getFollowCode(){
+        return this.followCode;
     }
 
-    public  SaasCollectionCommentEntity setFollowId(Integer followId){
-        this.followId = followId;
+    public  SaasCollectionCommentEntity setFollowCode(String followCode){
+        this.followCode = followCode;
         return this;
     }
 
