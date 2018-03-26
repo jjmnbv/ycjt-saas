@@ -169,7 +169,7 @@ public class H5Controller {
         CreditApplyInfoResponse response = new CreditApplyInfoResponse();
         SaasOrderApplicationVo saasOrderApplicationVo = saasOrderApplicationService.getByBorrowerCode(borrowerCode);
         if (saasOrderApplicationVo != null) {
-            response.setBorrowingDuration(DateUtil.countDays(saasOrderApplicationVo.getRepaymentDate(), new Date()));
+            response.setBorrowingDuration(DateUtil.countDays(saasOrderApplicationVo.getRepaymentDt(), new Date()));
             response.setBorrowPurpose(saasOrderApplicationVo.getBorrowPurpose());
             response.setRealCapital(saasOrderApplicationVo.getRealCapital());
             response.setTotalInterestRatio(saasOrderApplicationVo.getTotalInterestRatio());
@@ -205,7 +205,7 @@ public class H5Controller {
         addOrderApplication.setMerchantCode(saasH5ChannelVo.getMerchantCode());
         addOrderApplication.setRealCapital(req.getRealCapital());
         addOrderApplication.setTotalInterestRatio(req.getTotalInterestRatio());
-        addOrderApplication.setRepaymentDate(DateUtil.addDate(new Date(), req.getBorrowingDuration()));
+        addOrderApplication.setRepaymentDt(DateUtil.addDate(new Date(), req.getBorrowingDuration()));
         addOrderApplication.setBorrowPurpose(req.getBorrowPurpose());
         saasOrderApplicationService.save(addOrderApplication);
         return new ApiResponse("保存成功");
