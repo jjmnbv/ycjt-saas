@@ -11,4 +11,5 @@ import com.fqgj.common.base.BaseMapper;
 
 public interface SaasMerchantConfigDao  extends BaseMapper<SaasMerchantConfig> {
 
+    Integer updateByMerchantCode(SaasMerchantConfig record);
 }
