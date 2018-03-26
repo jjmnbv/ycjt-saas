@@ -44,7 +44,7 @@ public class OrderCalculateApplication {
         BigDecimal interest = BigDecimal.ZERO;
         Integer lendDt = DateUtil.countDays(repaymentDt, createdDt);
         if (lendDt > 0) {
-            interest = realCapital.multiply(totalInterestRatio).multiply(new BigDecimal(lendDt)).divide(new BigDecimal(365), BigDecimal.ROUND_HALF_UP).setScale(2);
+            interest = realCapital.multiply(totalInterestRatio).multiply(new BigDecimal(lendDt)).divide(new BigDecimal(365), 2, BigDecimal.ROUND_HALF_UP);
         }
         return interest;
     }

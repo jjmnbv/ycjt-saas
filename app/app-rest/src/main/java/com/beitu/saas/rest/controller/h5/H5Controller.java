@@ -48,6 +48,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -204,7 +205,7 @@ public class H5Controller {
         addOrderApplication.setChannelCode(saasH5ChannelVo.getChannelCode());
         addOrderApplication.setMerchantCode(saasH5ChannelVo.getMerchantCode());
         addOrderApplication.setRealCapital(req.getRealCapital());
-        addOrderApplication.setTotalInterestRatio(req.getTotalInterestRatio());
+        addOrderApplication.setTotalInterestRatio(req.getTotalInterestRatio().divide(new BigDecimal(100)));
         addOrderApplication.setRepaymentDt(DateUtil.addDate(new Date(), req.getBorrowingDuration()));
         addOrderApplication.setBorrowPurpose(req.getBorrowPurpose());
         saasOrderApplicationService.save(addOrderApplication);
