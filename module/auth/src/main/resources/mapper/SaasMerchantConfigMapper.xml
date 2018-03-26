@@ -3,4 +3,25 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.beitu.saas.auth.dao.impl.SaasMerchantConfigDaoImpl">
 
+    <update id="updateByMerchantCode" parameterType="com.beitu.saas.auth.entity.SaasMerchantConfig">
+        update saas_merchant_config
+        <set>
+            <if test="merchantCode !=null">
+                merchant_code = #{merchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="configEnum !=null">
+                config_enum = #{configEnum,jdbcType=INTEGER},
+            </if>
+            <if test="configType !=null">
+                config_type = #{configType,jdbcType=BIGINT},
+            </if>
+            <if test="deleted !=null">
+                deleted = #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where merchant_code = #{merchantCode,jdbcType=VARCHAR}
+    </update>
 </mapper>
