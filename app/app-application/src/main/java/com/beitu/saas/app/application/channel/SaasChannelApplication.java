@@ -1,5 +1,6 @@
 package com.beitu.saas.app.application.channel;
 
+import com.beitu.saas.channel.domain.SaasChannelDetailVo;
 import com.beitu.saas.channel.domain.SaasChannelRiskSettingsVo;
 import com.beitu.saas.channel.domain.SaasH5ChannelVo;
 import com.beitu.saas.channel.param.SaasChannelParam;
@@ -62,6 +63,34 @@ public class SaasChannelApplication {
         });
 
         LOGGER.info("== 渠道创建成功! ==");
+    }
+
+    /**
+     * 获取渠道详情
+     *
+     * @param channelCode
+     * @return
+     */
+    public SaasChannelDetailVo getSaasChannelDetail(String channelCode) {
+        SaasChannelEntity saasChannel = saasChannelService.getSaasChannelByChannelCode(channelCode);
+        List<SaasChannelRiskSettingsEntity> saasChannelRiskSettings = saasChannelRiskSettingsService.getSaasChannelRiskSettingsByChannelCode(channelCode);
+
+        List<SaasChannelRiskSettingsVo> riskSettingsVos = new ArrayList<>();
+        saasChannelRiskSettings.stream().forEach(x -> {
+            SaasChannelRiskSettingsVo vo = new SaasChannelRiskSettingsVo()
+                    .setModuleCode(x.getModuleCode())
+                    .setChannelCode(x.getChannelCode())
+                    .setItemCode(x.getItemCode())
+                    .setRequired(x.getRequired());
+            riskSettingsVos.add(vo);
+        });
+
+        return new SaasChannelDetailVo().setChannelName(saasChannel.getChannelName())
+                .setChannelCode(channelCode)
+                .setChargePerson(saasChannel.getChargePerson())
+                .setCreator(saasChannel.getCreator())
+                .setRemark(saasChannel.getRemark())
+                .setSaasChannelRiskSettingsVos(riskSettingsVos);
     }
 
     /**

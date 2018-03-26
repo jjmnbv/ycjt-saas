@@ -3,6 +3,7 @@ package com.beitu.saas.rest.controller.channel;
 import com.beitu.saas.app.annotations.SignIgnore;
 import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.application.channel.SaasChannelApplication;
+import com.beitu.saas.channel.domain.SaasChannelDetailVo;
 import com.beitu.saas.channel.param.SaasChannelParam;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.domain.SaasChannelVo;
@@ -11,6 +12,7 @@ import com.beitu.saas.channel.param.SaasChannelRiskSettingsParam;
 import com.beitu.saas.rest.controller.channel.request.SaasChannelQueryRequestParam;
 import com.beitu.saas.rest.controller.channel.request.SaasChannelRequestParam;
 import com.beitu.saas.rest.controller.channel.request.SaasOperateChannelRequestParam;
+import com.beitu.saas.rest.controller.channel.response.SaasChannelDetailResponse;
 import com.beitu.saas.rest.controller.channel.response.SaasChannelListResponse;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.api.Response;
@@ -23,10 +25,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,6 +92,19 @@ public class SaasChannelController {
             return Response.error(null, ChannelErrorCodeEnum.CHANNEL_PARAM_INVALID.getMsg());
         }
         return Response.ok().putData("操作成功");
+    }
+
+
+    /**
+     * 获取单个渠道详情
+     */
+    @ApiOperation(value = "获取单个渠道详情", response = SaasChannelDetailResponse.class)
+    @RequestMapping(value = "/getChannel/{channelCode}", method = RequestMethod.POST)
+    @VisitorAccessible
+    @SignIgnore
+    public Response addChannel(@PathVariable(value = "channelCode") String channelCode) {
+        SaasChannelDetailVo saasChannelDetail = saasChannelApplication.getSaasChannelDetail(channelCode);
+        return Response.ok().putData(new SaasChannelDetailResponse(saasChannelDetail));
     }
 
 
