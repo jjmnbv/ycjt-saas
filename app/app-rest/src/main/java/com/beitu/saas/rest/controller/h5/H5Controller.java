@@ -364,6 +364,7 @@ public class H5Controller {
     @ApiOperation(value = "用户订单详情", response = H5OrderDetailResponse.class)
     public DataApiResponse<H5OrderDetailResponse> getOrderDetail(@RequestBody @Valid QueryOrderDetailRequest req) {
         String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
+
         return new DataApiResponse(new H5OrderDetailResponse());
     }
 
