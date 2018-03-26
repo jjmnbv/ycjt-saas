@@ -16,4 +16,6 @@ public interface SaasChannelRiskSettingsService<T extends BaseEntity> extends Ba
      * 根据渠道号渠道信息
      */
     List<SaasChannelRiskSettingsEntity> getSaasChannelRiskSettingsByChannelCode(String channelCode);
+
+    void deleteRiskSettingsByChannelCode(String channelCode);
 }

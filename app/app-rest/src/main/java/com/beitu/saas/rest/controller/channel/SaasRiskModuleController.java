@@ -48,7 +48,7 @@ public class SaasRiskModuleController {
     @RequestMapping(value = "/moduleList", method = RequestMethod.POST)
     @VisitorAccessible
     @SignIgnore
-    @ApiOperation(value = "渠道列表", response = SaasModuleResponse.class)
+    @ApiOperation(value = "风控模块列表", response = SaasModuleResponse.class)
     public Response getModuleList() {
         List<SaasModuleVo> moduleList = saasRiskModuleApplication.getModuleList();
         return Response.ok().putData(new SaasModuleResponse(moduleList));
@@ -61,7 +61,7 @@ public class SaasRiskModuleController {
     @RequestMapping(value = "/moduleItemlList/{moduleCode}", method = RequestMethod.POST)
     @VisitorAccessible
     @SignIgnore
-    @ApiOperation(value = "渠道列表", response = SaasModuleItemResponse.class)
+    @ApiOperation(value = "风控模块字段列表", response = SaasModuleItemResponse.class)
     public Response getModuleItemList(@PathVariable(value = "moduleCode") String moduleCode) {
         List<SaasModuleItemVo> moduleItemVos = saasRiskModuleApplication.getModuleItemList(moduleCode);
         return Response.ok().putData(new SaasModuleItemResponse(moduleItemVos));

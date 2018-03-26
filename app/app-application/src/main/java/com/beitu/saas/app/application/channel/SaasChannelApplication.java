@@ -1,7 +1,12 @@
 package com.beitu.saas.app.application.channel;
 
+import com.beitu.saas.app.common.RequestLocalInfo;
+import com.beitu.saas.auth.entity.SaasAdmin;
+import com.beitu.saas.auth.service.SaasAdminService;
+import com.beitu.saas.channel.domain.SaasChannelDetailVo;
 import com.beitu.saas.channel.domain.SaasChannelRiskSettingsVo;
 import com.beitu.saas.channel.domain.SaasH5ChannelVo;
+import com.beitu.saas.channel.enums.ChannelOperateTypeEnum;
 import com.beitu.saas.channel.param.SaasChannelParam;
 import com.beitu.saas.channel.client.SaasChannelRiskSettingsService;
 import com.beitu.saas.channel.client.SaasChannelService;
@@ -38,30 +43,87 @@ public class SaasChannelApplication {
     private SaasChannelService saasChannelService;
     @Autowired
     private SaasChannelRiskSettingsService saasChannelRiskSettingsService;
+    @Autowired
+    private SaasAdminService saasAdminService;
+
+    // TODO: 2018/3/26 根据机构号获取所有管理员列表 
+
 
     /**
-     * 创建渠道
+     * 获取机构下的所有管理员
+     */
+    public List<SaasAdmin> getSaasAdminListByMerchantCode(String merchantCode) {
+        return saasAdminService.getAdminListByMerchantCode(merchantCode, null);
+    }
+
+    /**
+     * 创建/编辑渠道
      */
     @Transactional(rollbackFor = Exception.class)
-    public void createChannel(SaasChannelParam saasChannelParam, List<SaasChannelRiskSettingsParam> saasChannelRiskSettingsVoList) {
-        SaasChannelEntity saasChannelEntity = new SaasChannelEntity();
-        BeanUtils.copyProperties(saasChannelParam, saasChannelEntity);
+    public void addOrUpdateChannel(SaasChannelParam saasChannelParam, List<SaasChannelRiskSettingsParam> saasChannelRiskSettingsVoList) {
+        if (saasChannelParam.getOpType() == ChannelOperateTypeEnum.ADD.getType()) {
+            SaasChannelEntity saasChannelEntity = new SaasChannelEntity();
+            BeanUtils.copyProperties(saasChannelParam, saasChannelEntity);
+            String channelCode = OrderNoUtil.makeOrderNum();
+            saasChannelEntity.setChannelCode(channelCode)
+                    .setChannelStatus(ChannelStatusEnum.OPEN.getType())
+                    .setLinkUrl("channel/" + channelCode) // TODO: 2018/3/22
+                    //.setCreatorCode(RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode());// TODO: 2018/3/26 登录人code 
+                    .setCreatorCode("abc001");
+            saasChannelService.create(saasChannelEntity);
 
-        String channelCode = OrderNoUtil.makeOrderNum();
-        saasChannelEntity.setChannelCode(channelCode)
-                .setChannelStatus(ChannelStatusEnum.OPEN.getType())
-                .setLinkUrl("channel/" + channelCode) // TODO: 2018/3/22
-                .setCreator("admin");// TODO: 2018/3/24 先写死
-        saasChannelService.create(saasChannelEntity);
+            saasChannelRiskSettingsVoList.stream().forEach(x -> {
+                SaasChannelRiskSettingsEntity entity = new SaasChannelRiskSettingsEntity();
+                BeanUtils.copyProperties(x, entity);
+                entity.setChannelCode(channelCode);
+                saasChannelRiskSettingsService.create(entity);
+            });
+            LOGGER.info("== 渠道创建成功! ==");
+        }
 
-        saasChannelRiskSettingsVoList.stream().forEach(x -> {
-            SaasChannelRiskSettingsEntity entity = new SaasChannelRiskSettingsEntity();
-            BeanUtils.copyProperties(x, entity);
-            entity.setChannelCode(channelCode);
-            saasChannelRiskSettingsService.create(entity);
+
+        if (saasChannelParam.getOpType() == ChannelOperateTypeEnum.UPDATE.getType()) {
+            SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(saasChannelParam.getChannelCode());
+            BeanUtils.copyProperties(saasChannelParam, saasChannelEntity);
+            saasChannelService.updateById(saasChannelEntity);
+
+            saasChannelRiskSettingsService.deleteRiskSettingsByChannelCode(saasChannelEntity.getChannelCode());
+            saasChannelRiskSettingsVoList.stream().forEach(x -> {
+                SaasChannelRiskSettingsEntity entity = new SaasChannelRiskSettingsEntity();
+                BeanUtils.copyProperties(x, entity);
+                entity.setChannelCode(saasChannelEntity.getChannelCode());
+                saasChannelRiskSettingsService.create(entity);
+            });
+            LOGGER.info("== 渠道修改成功! ==");
+        }
+    }
+
+    /**
+     * 获取渠道详情
+     *
+     * @param channelCode
+     * @return
+     */
+    public SaasChannelDetailVo getSaasChannelDetail(String channelCode) {
+        SaasChannelEntity saasChannel = saasChannelService.getSaasChannelByChannelCode(channelCode);
+        List<SaasChannelRiskSettingsEntity> saasChannelRiskSettings = saasChannelRiskSettingsService.getSaasChannelRiskSettingsByChannelCode(channelCode);
+
+        List<SaasChannelRiskSettingsVo> riskSettingsVos = new ArrayList<>();
+        saasChannelRiskSettings.stream().forEach(x -> {
+            SaasChannelRiskSettingsVo vo = new SaasChannelRiskSettingsVo()
+                    .setModuleCode(x.getModuleCode())
+                    .setChannelCode(x.getChannelCode())
+                    .setItemCode(x.getItemCode())
+                    .setRequired(x.getRequired());
+            riskSettingsVos.add(vo);
         });
 
-        LOGGER.info("== 渠道创建成功! ==");
+        return new SaasChannelDetailVo().setChannelName(saasChannel.getChannelName())
+                .setChannelCode(channelCode)
+                .setChargePersonName(this.getAdminNameByAdminCode(saasChannel.getChargePersonCode()))
+                .setCreatorName(this.getAdminNameByAdminCode(saasChannel.getCreatorCode()))
+                .setRemark(saasChannel.getRemark())
+                .setSaasChannelRiskSettingsVos(riskSettingsVos);
     }
 
     /**
@@ -81,10 +143,12 @@ public class SaasChannelApplication {
                     .setChannelCode(x.getChannelCode())
                     .setChannelName(x.getChannelName())
                     .setChannelStatus(x.getChannelStatus())
-                    .setChargePerson(x.getChargePerson())
+                    .setChargePersonName(this.getAdminNameByAdminCode(x.getChargePersonCode()))
+                    .setLinkUrl(x.getLinkUrl())// TODO: 2018/3/22 加上阿波罗域名
                     .setLongLinkUrl(x.getLinkUrl())// TODO: 2018/3/22 加上域名
-                    .setShortLinkUrl(ShortUrlUtil.generateShortUrl(x.getLinkUrl()))// TODO: 2018/3/22 加上域名
-                    .setCreator(x.getCreator())
+                    //.setShortLinkUrl(ShortUrlUtil.generateShortUrl(x.getLinkUrl()))// TODO: 2018/3/22 加上域名
+                    .setShortLinkUrl(ShortUrlUtil.generateShortUrl("http://agent.yangcongjietiao.com/agentWebViews/agent/index.html"))
+                    .setCreatorName(this.getAdminNameByAdminCode(x.getCreatorCode()))
                     .setGmtCreate(x.getGmtCreate())
                     .setRemark(x.getRemark());
 
@@ -128,5 +192,21 @@ public class SaasChannelApplication {
         });
 
         return riskSettingsVos;
+    }
+
+
+    /**
+     * 根据用户code获取管理员名称
+     *
+     * @param adminCode
+     * @return
+     */
+    private String getAdminNameByAdminCode(String adminCode) {
+        SaasAdmin saasAdminByAdminCode = saasAdminService.getSaasAdminByAdminCode(adminCode);
+
+        if (saasAdminByAdminCode != null) {
+            return saasAdminByAdminCode.getName();
+        }
+        return null;
     }
 }

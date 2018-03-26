@@ -8,7 +8,7 @@
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
         <result column="content" jdbcType="VARCHAR" property="content"/>
-        <result column="follow_id" jdbcType="INTEGER" property="followId"/>
+        <result column="follow_code" jdbcType="VARCHAR" property="followCode"/>
         <result column="follow_up" jdbcType="VARCHAR" property="followUp"/>
         <result column="deleted" jdbcType="BIT" property="deleted"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
@@ -21,7 +21,7 @@
     name,
     mobile,
     content,
-    follow_id,
+    follow_code,
     follow_up,
     deleted,
     gmt_modified,
@@ -52,8 +52,8 @@
                 <if test="content !=null">
                 content,
                 </if>
-                <if test="followId !=null">
-                follow_id,
+                <if test="followCode !=null">
+                follow_code,
                 </if>
                 <if test="followUp !=null">
                 follow_up,
@@ -81,8 +81,8 @@
                 <if test="content != null">
                     #{content,jdbcType=VARCHAR},
                 </if>
-                <if test="followId != null">
-                    #{followId,jdbcType=INTEGER},
+                <if test="followCode != null">
+                    #{followCode,jdbcType=VARCHAR},
                 </if>
                 <if test="followUp != null">
                     #{followUp,jdbcType=VARCHAR},
@@ -114,8 +114,8 @@
                 <if test="content !=null">
                 content = #{content,jdbcType=VARCHAR},
                 </if>
-                <if test="followId !=null">
-                follow_id = #{followId,jdbcType=INTEGER},
+                <if test="followCode !=null">
+                follow_code = #{followCode,jdbcType=VARCHAR},
                 </if>
                 <if test="followUp !=null">
                 follow_up = #{followUp,jdbcType=VARCHAR},
@@ -168,8 +168,8 @@
             <if test="content !=null">
                 and content = #{content,jdbcType=VARCHAR}
             </if>
-            <if test="followId !=null">
-                and follow_id = #{followId,jdbcType=INTEGER}
+            <if test="followCode !=null">
+                and follow_code = #{followCode,jdbcType=VARCHAR}
             </if>
             <if test="followUp !=null">
                 and follow_up = #{followUp,jdbcType=VARCHAR}
@@ -204,8 +204,8 @@
             <if test="content !=null">
                 and content = #{content,jdbcType=VARCHAR}
             </if>
-            <if test="followId !=null">
-                and follow_id = #{followId,jdbcType=INTEGER}
+            <if test="followCode !=null">
+                and follow_code = #{followCode,jdbcType=VARCHAR}
             </if>
             <if test="followUp !=null">
                 and follow_up = #{followUp,jdbcType=VARCHAR}
