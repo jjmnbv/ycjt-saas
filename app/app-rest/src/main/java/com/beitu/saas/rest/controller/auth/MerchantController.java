@@ -61,5 +61,13 @@ public class MerchantController {
         return Response.ok();
     }
 
+    @RequestMapping(value = "/sms/{smsConfigId}/{enable}", method = RequestMethod.PUT)
+    @ApiOperation(value = "合同设置")
+    public Response setSmsEnable(@PathVariable("smsConfigId") String smsConfigId, @PathVariable("enable") String enable) {
+        String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
+
+        return Response.ok();
+    }
+
 
 }

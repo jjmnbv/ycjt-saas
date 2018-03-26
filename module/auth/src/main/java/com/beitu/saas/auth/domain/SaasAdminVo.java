@@ -42,6 +42,16 @@ public class SaasAdminVo implements ResponseData,Serializable{
     */
     private Boolean enable;
 
+    private String createName;
+
+    public String getCreateName() {
+        return createName;
+    }
+
+    public void setCreateName(String createName) {
+        this.createName = createName;
+    }
+
     public String getJob() {
         return job;
     }
