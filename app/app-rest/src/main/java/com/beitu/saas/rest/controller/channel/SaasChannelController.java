@@ -3,7 +3,9 @@ package com.beitu.saas.rest.controller.channel;
 import com.beitu.saas.app.annotations.SignIgnore;
 import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.application.channel.SaasChannelApplication;
+import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.channel.domain.SaasChannelDetailVo;
+import com.beitu.saas.channel.domain.SaasModuleVo;
 import com.beitu.saas.channel.param.SaasChannelParam;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.domain.SaasChannelVo;
@@ -14,6 +16,8 @@ import com.beitu.saas.rest.controller.channel.request.SaasChannelRequestParam;
 import com.beitu.saas.rest.controller.channel.request.SaasOperateChannelRequestParam;
 import com.beitu.saas.rest.controller.channel.response.SaasChannelDetailResponse;
 import com.beitu.saas.rest.controller.channel.response.SaasChannelListResponse;
+import com.beitu.saas.rest.controller.channel.response.SaasMerchantAdminResponse;
+import com.beitu.saas.rest.controller.channel.response.SaasModuleResponse;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.api.Response;
 import com.fqgj.common.response.ModuleResponse;
@@ -94,6 +98,19 @@ public class SaasChannelController {
         return Response.ok().putData("操作成功");
     }
 
+    /**
+     * 机构下所有管理员查询
+     *
+     * @return
+     */
+    @RequestMapping(value = "/merchantAdminList", method = RequestMethod.POST)
+    @VisitorAccessible
+    @SignIgnore
+    @ApiOperation(value = "获取机构下所有管理员", response = SaasMerchantAdminResponse.class)
+    public Response getMerchantAdminList(String merchantCode) {
+        List<SaasAdmin> saasAdminList = saasChannelApplication.getSaasAdminListByMerchantCode(merchantCode);
+        return Response.ok().putData(new SaasMerchantAdminResponse(saasAdminList));
+    }
 
     /**
      * 获取单个渠道详情
