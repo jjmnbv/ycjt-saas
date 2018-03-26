@@ -283,6 +283,7 @@ public class H5Controller {
         SaasBorrowerWorkInfo saasBorrowerWorkInfo = new SaasBorrowerWorkInfo();
         BeanUtils.copyProperties(req, saasBorrowerWorkInfo);
         saasBorrowerWorkInfo.setBorrowerCode(borrowerCode);
+        saasBorrowerWorkInfo.setCareer(req.getCareerType());
         SaasBorrowerWorkInfoVo saasBorrowerWorkInfoVo = saasBorrowerWorkInfoService.getByBorrowerCode(borrowerCode);
         if (saasBorrowerWorkInfoVo == null) {
             saasBorrowerWorkInfoService.create(saasBorrowerWorkInfo);

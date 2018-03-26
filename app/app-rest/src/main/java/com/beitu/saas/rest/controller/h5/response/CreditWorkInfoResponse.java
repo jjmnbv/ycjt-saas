@@ -17,7 +17,7 @@ public class CreditWorkInfoResponse implements ResponseData {
      * 职业
      */
     @ApiModelProperty(value = "职业")
-    private Integer careerType;
+    private String careerType;
     /**
      * 月收入
      */
@@ -41,7 +41,7 @@ public class CreditWorkInfoResponse implements ResponseData {
 
     public CreditWorkInfoResponse(SaasBorrowerWorkInfoVo saasBorrowerWorkInfoVo) {
         if (saasBorrowerWorkInfoVo != null) {
-            this.careerType = saasBorrowerWorkInfoVo.getCareerType();
+            this.careerType = saasBorrowerWorkInfoVo.getCareer();
             this.salary = saasBorrowerWorkInfoVo.getSalary();
             this.payDay = saasBorrowerWorkInfoVo.getPayDay();
             this.companyName = saasBorrowerWorkInfoVo.getCompanyName();
@@ -49,11 +49,11 @@ public class CreditWorkInfoResponse implements ResponseData {
         }
     }
 
-    public Integer getCareerType() {
+    public String getCareerType() {
         return careerType;
     }
 
-    public void setCareerType(Integer careerType) {
+    public void setCareerType(String careerType) {
         this.careerType = careerType;
     }
 

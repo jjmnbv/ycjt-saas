@@ -6,7 +6,7 @@
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="borrower_code" jdbcType="VARCHAR" property="borrowerCode"/>
         <result column="order_numb" jdbcType="VARCHAR" property="orderNumb"/>
-        <result column="career_type" jdbcType="TINYINT" property="careerType"/>
+        <result column="career" jdbcType="VARCHAR" property="career"/>
         <result column="salary" jdbcType="SMALLINT" property="salary"/>
         <result column="pay_day" jdbcType="TINYINT" property="payDay"/>
         <result column="company_name" jdbcType="VARCHAR" property="companyName"/>
@@ -21,7 +21,7 @@
     id,
     borrower_code,
     order_numb,
-    career_type,
+    career,
     salary,
     pay_day,
     company_name,
@@ -44,110 +44,110 @@
             parameterType="com.beitu.saas.borrower.entity.SaasBorrowerWorkInfo" useGeneratedKeys="true">
         insert into saas_borrower_work_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="borrowerCode !=null">
+            <if test="borrowerCode !=null">
                 borrower_code,
-                </if>
-                <if test="orderNumb !=null">
+            </if>
+            <if test="orderNumb !=null">
                 order_numb,
-                </if>
-                <if test="careerType !=null">
-                career_type,
-                </if>
-                <if test="salary !=null">
+            </if>
+            <if test="career !=null">
+                career,
+            </if>
+            <if test="salary !=null">
                 salary,
-                </if>
-                <if test="payDay !=null">
+            </if>
+            <if test="payDay !=null">
                 pay_day,
-                </if>
-                <if test="companyName !=null">
+            </if>
+            <if test="companyName !=null">
                 company_name,
-                </if>
-                <if test="companyDetailAddress !=null">
+            </if>
+            <if test="companyDetailAddress !=null">
                 company_detail_address,
-                </if>
-                <if test="success !=null">
+            </if>
+            <if test="success !=null">
                 success,
-                </if>
-                <if test="deleted !=null">
+            </if>
+            <if test="deleted !=null">
                 deleted,
-                </if>
-                <if test="gmtModified !=null">
+            </if>
+            <if test="gmtModified !=null">
                 gmt_modified,
-                </if>
-                <if test="gmtCreate !=null">
+            </if>
+            <if test="gmtCreate !=null">
                 gmt_create,
-                </if>
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-                <if test="borrowerCode != null">
-                    #{borrowerCode,jdbcType=VARCHAR},
-                </if>
-                <if test="orderNumb != null">
-                    #{orderNumb,jdbcType=VARCHAR},
-                </if>
-                <if test="careerType != null">
-                    #{careerType,jdbcType=TINYINT},
-                </if>
-                <if test="salary != null">
-                    #{salary,jdbcType=SMALLINT},
-                </if>
-                <if test="payDay != null">
-                    #{payDay,jdbcType=TINYINT},
-                </if>
-                <if test="companyName != null">
-                    #{companyName,jdbcType=VARCHAR},
-                </if>
-                <if test="companyDetailAddress != null">
-                    #{companyDetailAddress,jdbcType=VARCHAR},
-                </if>
-                <if test="success != null">
-                    #{success,jdbcType=BIT},
-                </if>
-                <if test="deleted != null">
-                    #{deleted,jdbcType=BIT},
-                </if>
-                <if test="gmtModified != null">
-                    #{gmtModified,jdbcType=TIMESTAMP},
-                </if>
-                <if test="gmtCreate != null">
-                    #{gmtCreate,jdbcType=TIMESTAMP},
-                </if>
+            <if test="borrowerCode != null">
+                #{borrowerCode,jdbcType=VARCHAR},
+            </if>
+            <if test="orderNumb != null">
+                #{orderNumb,jdbcType=VARCHAR},
+            </if>
+            <if test="career != null">
+                #{career,jdbcType=VARCHAR},
+            </if>
+            <if test="salary != null">
+                #{salary,jdbcType=SMALLINT},
+            </if>
+            <if test="payDay != null">
+                #{payDay,jdbcType=TINYINT},
+            </if>
+            <if test="companyName != null">
+                #{companyName,jdbcType=VARCHAR},
+            </if>
+            <if test="companyDetailAddress != null">
+                #{companyDetailAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="success != null">
+                #{success,jdbcType=BIT},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
         </trim>
     </insert>
 
     <update id="updateByPrimaryKey" parameterType="com.beitu.saas.borrower.entity.SaasBorrowerWorkInfo">
         update saas_borrower_work_info
         <set>
-                <if test="borrowerCode !=null">
+            <if test="borrowerCode !=null">
                 borrower_code = #{borrowerCode,jdbcType=VARCHAR},
-                </if>
-                <if test="orderNumb !=null">
+            </if>
+            <if test="orderNumb !=null">
                 order_numb = #{orderNumb,jdbcType=VARCHAR},
-                </if>
-                <if test="careerType !=null">
-                career_type = #{careerType,jdbcType=TINYINT},
-                </if>
-                <if test="salary !=null">
+            </if>
+            <if test="career !=null">
+                career = #{career,jdbcType=VARCHAR},
+            </if>
+            <if test="salary !=null">
                 salary = #{salary,jdbcType=SMALLINT},
-                </if>
-                <if test="payDay !=null">
+            </if>
+            <if test="payDay !=null">
                 pay_day = #{payDay,jdbcType=TINYINT},
-                </if>
-                <if test="companyName !=null">
+            </if>
+            <if test="companyName !=null">
                 company_name = #{companyName,jdbcType=VARCHAR},
-                </if>
-                <if test="companyDetailAddress !=null">
+            </if>
+            <if test="companyDetailAddress !=null">
                 company_detail_address = #{companyDetailAddress,jdbcType=VARCHAR},
-                </if>
-                <if test="success !=null">
+            </if>
+            <if test="success !=null">
                 success = #{success,jdbcType=BIT},
-                </if>
-                <if test="deleted !=null">
+            </if>
+            <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},
-                </if>
-                <if test="gmtModified !=null">
+            </if>
+            <if test="gmtModified !=null">
                 gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-                </if>
+            </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
@@ -160,7 +160,7 @@
 
     <sql id="paginationSql">
         <if test="page != null">
-            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+            limit #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
         </if>
     </sql>
 
@@ -184,8 +184,8 @@
             <if test="orderNumb !=null">
                 and order_numb = #{orderNumb,jdbcType=VARCHAR}
             </if>
-            <if test="careerType !=null">
-                and career_type = #{careerType,jdbcType=TINYINT}
+            <if test="career !=null">
+                and career = #{career,jdbcType=VARCHAR}
             </if>
             <if test="salary !=null">
                 and salary = #{salary,jdbcType=SMALLINT}
@@ -226,8 +226,8 @@
             <if test="orderNumb !=null">
                 and order_numb = #{orderNumb,jdbcType=VARCHAR}
             </if>
-            <if test="careerType !=null">
-                and career_type = #{careerType,jdbcType=TINYINT}
+            <if test="career !=null">
+                and career = #{career,jdbcType=VARCHAR}
             </if>
             <if test="salary !=null">
                 and salary = #{salary,jdbcType=SMALLINT}

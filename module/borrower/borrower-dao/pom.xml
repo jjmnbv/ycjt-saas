@@ -43,7 +43,7 @@
                     <controller>controller</controller>
                     <!--#多个表逗号分割,all:全部表;borrower,article-->
                     <tables>
-                        saas_borrower,saas_borrower_carrier,saas_borrower_carrier_ext,saas_borrower_emergent_contact,saas_borrower_identity_info,saas_borrower_personal_info,saas_borrower_real_info,saas_borrower_token,saas_borrower_work_info
+                        <!--saas_borrower,saas_borrower_carrier,saas_borrower_carrier_ext,saas_borrower_emergent_contact,saas_borrower_identity_info,saas_borrower_personal_info,saas_borrower_real_info,saas_borrower_token,-->saas_borrower_work_info
                     </tables>
                     <!--#多个模块逗号分割,生成什么模块all:全部模块;controller,domain,bean,dao,daoImpl,com.beitu.saas.borrower.service,serviceImpl,baseMapper,mapper-->
                     <generatorModules>dao,daoImpl,mapper,baseMapper,bean,service,serviceImpl,domain</generatorModules>
