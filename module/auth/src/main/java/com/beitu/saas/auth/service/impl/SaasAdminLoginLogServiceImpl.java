@@ -23,7 +23,7 @@ import java.util.Map;
 * Time: 15:33:55.839
 */
 @Module(value = "管理员登录日志表服务模块")
-@NameSpace("com.beitu.saas.dao.impl.SaasAdminLoginLogDaoImpl")
+@NameSpace("com.beitu.saas.auth.dao.impl.SaasAdminLoginLogDaoImpl")
 @Service
 public class SaasAdminLoginLogServiceImpl extends AbstractBaseService implements SaasAdminLoginLogService {
 

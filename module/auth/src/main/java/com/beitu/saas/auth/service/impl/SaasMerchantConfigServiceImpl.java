@@ -25,7 +25,7 @@ import static java.util.stream.Collectors.toList;
  * Time: 15:36:13.668
  */
 @Module(value = "机构配置表服务模块")
-@NameSpace("com.beitu.saas.dao.impl.SaasMerchantConfigDaoImpl")
+@NameSpace("com.beitu.saas.auth.dao.impl.SaasMerchantConfigDaoImpl")
 @Service
 public class SaasMerchantConfigServiceImpl extends AbstractBaseService implements SaasMerchantConfigService {
 

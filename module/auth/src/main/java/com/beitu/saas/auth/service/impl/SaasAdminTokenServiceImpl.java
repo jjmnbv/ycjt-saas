@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 * Time: 15:36:13.640
 */
 @Module(value = "服务模块")
-@NameSpace("com.beitu.saas.dao.impl.SaasAdminTokenDaoImpl")
+@NameSpace("com.beitu.saas.auth.dao.impl.SaasAdminTokenDaoImpl")
 @Service
 public class SaasAdminTokenServiceImpl extends AbstractBaseService implements SaasAdminTokenService {
 
