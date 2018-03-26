@@ -102,7 +102,7 @@ public class SaasChannelController {
     @RequestMapping(value = "/getChannel/{channelCode}", method = RequestMethod.POST)
     @VisitorAccessible
     @SignIgnore
-    public Response addChannel(@PathVariable(value = "channelCode") String channelCode) {
+    public Response getChannel(@PathVariable(value = "channelCode") String channelCode) {
         SaasChannelDetailVo saasChannelDetail = saasChannelApplication.getSaasChannelDetail(channelCode);
         return Response.ok().putData(new SaasChannelDetailResponse(saasChannelDetail));
     }
