@@ -124,7 +124,7 @@ public class SaasChannelController {
         List<SaasChannelVo> saasChannelList = saasChannelApplication.getSaasChannelList(saasChannelParam, page);
 
         SaasChannelListResponse saasChannelListResponse = new SaasChannelListResponse(saasChannelList);
-        return new ModuleResponse<>(saasChannelListResponse);
+        return new ModuleResponse<>(saasChannelListResponse, page);
     }
 
 
