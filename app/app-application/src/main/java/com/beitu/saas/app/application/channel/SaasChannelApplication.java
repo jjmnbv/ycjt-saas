@@ -41,6 +41,10 @@ public class SaasChannelApplication {
     @Autowired
     private SaasChannelRiskSettingsService saasChannelRiskSettingsService;
 
+    // TODO: 2018/3/26 根据机构号获取所有管理员列表 
+
+    // TODO: 2018/3/26  根据机构号查询机构人名字
+
     /**
      * 创建/编辑渠道
      */
@@ -53,7 +57,7 @@ public class SaasChannelApplication {
             saasChannelEntity.setChannelCode(channelCode)
                     .setChannelStatus(ChannelStatusEnum.OPEN.getType())
                     .setLinkUrl("channel/" + channelCode) // TODO: 2018/3/22
-                    .setCreatorCode("admin");// TODO: 2018/3/24 先写死-根据管理员code获取姓名
+                    .setCreatorCode("admin");// TODO: 2018/3/24 根据管理员code获取姓名
             saasChannelService.create(saasChannelEntity);
 
             saasChannelRiskSettingsVoList.stream().forEach(x -> {
@@ -104,8 +108,8 @@ public class SaasChannelApplication {
 
         return new SaasChannelDetailVo().setChannelName(saasChannel.getChannelName())
                 .setChannelCode(channelCode)
-                .setChargePerson(saasChannel.getChargePersonCode())
-                .setCreator(saasChannel.getCreatorCode())
+                .setChargePersonName(saasChannel.getChargePersonCode())//TODO: 2018/3/24 根据管理员code获取姓名
+                .setCreatorName(saasChannel.getCreatorCode()) //TODO: 2018/3/24 根据管理员code获取姓名
                 .setRemark(saasChannel.getRemark())
                 .setSaasChannelRiskSettingsVos(riskSettingsVos);
     }
@@ -127,12 +131,12 @@ public class SaasChannelApplication {
                     .setChannelCode(x.getChannelCode())
                     .setChannelName(x.getChannelName())
                     .setChannelStatus(x.getChannelStatus())
-                    .setChargePerson(x.getChargePersonCode())
+                    .setChargePersonName(x.getChargePersonCode())//TODO: 2018/3/24 根据管理员code获取姓名
                     .setLinkUrl(x.getLinkUrl())// TODO: 2018/3/22 加上阿波罗域名
                     .setLongLinkUrl(x.getLinkUrl())// TODO: 2018/3/22 加上域名
                     //.setShortLinkUrl(ShortUrlUtil.generateShortUrl(x.getLinkUrl()))// TODO: 2018/3/22 加上域名
                     .setShortLinkUrl(ShortUrlUtil.generateShortUrl("http://agent.yangcongjietiao.com/agentWebViews/agent/index.html"))
-                    .setCreator(x.getCreatorCode())
+                    .setCreatorName(x.getCreatorCode())//TODO: 2018/3/24 根据管理员code获取姓名
                     .setGmtCreate(x.getGmtCreate())
                     .setRemark(x.getRemark());
 

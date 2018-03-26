@@ -34,7 +34,7 @@ public class SaasChannelRequestParam extends ParamsObject {
 
     @NotBlank(message = "负责人不能为空")
     @ApiModelProperty(value = "机负责人", required = true)
-    private String chargePerson;
+    private String chargePersonCode;
 
     /**
      * 备注
@@ -87,12 +87,12 @@ public class SaasChannelRequestParam extends ParamsObject {
         return this;
     }
 
-    public String getChargePerson() {
-        return chargePerson;
+    public String getChargePersonCode() {
+        return chargePersonCode;
     }
 
-    public SaasChannelRequestParam setChargePerson(String chargePerson) {
-        this.chargePerson = chargePerson;
+    public SaasChannelRequestParam setChargePersonCode(String chargePersonCode) {
+        this.chargePersonCode = chargePersonCode;
         return this;
     }
 

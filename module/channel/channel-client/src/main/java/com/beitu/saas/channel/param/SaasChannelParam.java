@@ -27,9 +27,9 @@ public class SaasChannelParam {
      */
     private Integer channelStatus;
     /**
-     * 负责人
+     * 负责人Code
      */
-    private String chargePerson;
+    private String chargePersonCode;
 
     public Integer getOpType() {
         return opType;
@@ -76,12 +76,12 @@ public class SaasChannelParam {
         return this;
     }
 
-    public String getChargePerson() {
-        return chargePerson;
+    public String getChargePersonCode() {
+        return chargePersonCode;
     }
 
-    public SaasChannelParam setChargePerson(String chargePerson) {
-        this.chargePerson = chargePerson;
+    public SaasChannelParam setChargePersonCode(String chargePersonCode) {
+        this.chargePersonCode = chargePersonCode;
         return this;
     }
 }
