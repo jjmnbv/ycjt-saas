@@ -21,7 +21,7 @@ import java.util.List;
  * Time: 15:36:13.656
  */
 @Module(value = "机构表服务模块")
-@NameSpace("com.beitu.saas.dao.impl.SaasMerchantDaoImpl")
+@NameSpace("com.beitu.saas.auth.dao.impl.SaasMerchantDaoImpl")
 @Service
 public class SaasMerchantServiceImpl extends AbstractBaseService implements SaasMerchantService {
 
