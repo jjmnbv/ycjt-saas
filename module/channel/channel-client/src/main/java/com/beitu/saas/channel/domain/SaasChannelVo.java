@@ -44,11 +44,11 @@ public class SaasChannelVo {
     /**
      *负责人
      */
-    private String chargePerson;
+    private String chargePersonName;
     /**
      *创建人
      */
-    private String creator;
+    private String creatorName;
     /**
      *备注
      */
@@ -131,21 +131,21 @@ public class SaasChannelVo {
         return this;
     }
 
-    public String getChargePerson() {
-        return chargePerson;
+    public String getChargePersonName() {
+        return chargePersonName;
     }
 
-    public SaasChannelVo setChargePerson(String chargePerson) {
-        this.chargePerson = chargePerson;
+    public SaasChannelVo setChargePersonName(String chargePersonName) {
+        this.chargePersonName = chargePersonName;
         return this;
     }
 
-    public String getCreator() {
-        return creator;
+    public String getCreatorName() {
+        return creatorName;
     }
 
-    public SaasChannelVo setCreator(String creator) {
-        this.creator = creator;
+    public SaasChannelVo setCreatorName(String creatorName) {
+        this.creatorName = creatorName;
         return this;
     }
 

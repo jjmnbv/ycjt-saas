@@ -9,8 +9,8 @@
         <result column="channel_name" jdbcType="VARCHAR" property="channelName"/>
         <result column="channel_status" jdbcType="TINYINT" property="channelStatus"/>
         <result column="link_url" jdbcType="VARCHAR" property="linkUrl"/>
-        <result column="charge_person" jdbcType="VARCHAR" property="chargePerson"/>
-        <result column="creator" jdbcType="VARCHAR" property="creator"/>
+        <result column="charge_person_code" jdbcType="VARCHAR" property="chargePersonCode"/>
+        <result column="creator_code" jdbcType="VARCHAR" property="creatorCode"/>
         <result column="remark" jdbcType="VARCHAR" property="remark"/>
         <result column="deleted" jdbcType="BIT" property="deleted"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
@@ -24,8 +24,8 @@
     channel_name,
     channel_status,
     link_url,
-    charge_person,
-    creator,
+    charge_person_code,
+    creator_code,
     remark,
     deleted,
     gmt_modified,
@@ -59,11 +59,11 @@
                 <if test="linkUrl !=null">
                 link_url,
                 </if>
-                <if test="chargePerson !=null">
-                charge_person,
+                <if test="chargePersonCode !=null">
+                charge_person_code,
                 </if>
-                <if test="creator !=null">
-                creator,
+                <if test="creatorCode !=null">
+                creator_code,
                 </if>
                 <if test="remark !=null">
                 remark,
@@ -92,13 +92,13 @@
                     #{channelStatus,jdbcType=TINYINT},
                 </if>
                 <if test="linkUrl != null">
-                    #{linkUrl,jdbcType=CHAR},
+                    #{linkUrl,jdbcType=VARCHAR},
                 </if>
-                <if test="chargePerson != null">
-                    #{chargePerson,jdbcType=VARCHAR},
+                <if test="chargePersonCode != null">
+                    #{chargePersonCode,jdbcType=VARCHAR},
                 </if>
-                <if test="creator != null">
-                    #{creator,jdbcType=VARCHAR},
+                <if test="creatorCode != null">
+                    #{creatorCode,jdbcType=VARCHAR},
                 </if>
                 <if test="remark != null">
                     #{remark,jdbcType=VARCHAR},
@@ -133,11 +133,11 @@
                 <if test="linkUrl !=null">
                 link_url = #{linkUrl,jdbcType=VARCHAR},
                 </if>
-                <if test="chargePerson !=null">
-                charge_person = #{chargePerson,jdbcType=VARCHAR},
+                <if test="chargePersonCode !=null">
+                charge_person_code = #{chargePersonCode,jdbcType=VARCHAR},
                 </if>
-                <if test="creator !=null">
-                creator = #{creator,jdbcType=VARCHAR},
+                <if test="creatorCode !=null">
+                creator_code = #{creatorCode,jdbcType=VARCHAR},
                 </if>
                 <if test="remark !=null">
                 remark = #{remark,jdbcType=VARCHAR},
@@ -193,11 +193,11 @@
             <if test="linkUrl !=null">
                 and link_url = #{linkUrl,jdbcType=VARCHAR}
             </if>
-            <if test="chargePerson !=null">
-                and charge_person = #{chargePerson,jdbcType=VARCHAR}
+            <if test="chargePersonCode !=null">
+                and charge_person_code = #{chargePersonCode,jdbcType=VARCHAR}
             </if>
-            <if test="creator !=null">
-                and creator = #{creator,jdbcType=VARCHAR}
+            <if test="creatorCode !=null">
+                and creator_code = #{creatorCode,jdbcType=VARCHAR}
             </if>
             <if test="remark !=null">
                 and remark = #{remark,jdbcType=VARCHAR}
@@ -235,11 +235,11 @@
             <if test="linkUrl !=null">
                 and link_url = #{linkUrl,jdbcType=VARCHAR}
             </if>
-            <if test="chargePerson !=null">
-                and charge_person = #{chargePerson,jdbcType=VARCHAR}
+            <if test="chargePersonCode !=null">
+                and charge_person_code = #{chargePersonCode,jdbcType=VARCHAR}
             </if>
-            <if test="creator !=null">
-                and creator = #{creator,jdbcType=VARCHAR}
+            <if test="creatorCode !=null">
+                and creator_code = #{creatorCode,jdbcType=VARCHAR}
             </if>
             <if test="remark !=null">
                 and remark = #{remark,jdbcType=VARCHAR}

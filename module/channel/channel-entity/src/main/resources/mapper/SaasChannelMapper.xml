@@ -19,8 +19,8 @@
                 <if test="saasChannelParam !=null and saasChannelParam.channelStatus != null">
                     and channel_status = #{saasChannelParam.channelStatus,jdbcType=INTEGER}
                 </if>
-                <if test="saasChannelParam !=null and saasChannelParam.chargePerson != null">
-                    and charge_person = #{saasChannelParam.chargePerson,jdbcType=VARCHAR}
+                <if test="saasChannelParam !=null and saasChannelParam.chargePersonCode != null">
+                    and charge_person_code = #{saasChannelParam.chargePersonCode,jdbcType=VARCHAR}
                 </if>
                 and deleted = 0
             </trim>

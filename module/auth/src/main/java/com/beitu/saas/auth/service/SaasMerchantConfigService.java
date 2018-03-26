@@ -1,6 +1,9 @@
 package com.beitu.saas.auth.service;
+import com.beitu.saas.auth.entity.SaasMerchantConfig;
 import com.fqgj.common.base.BaseService;
 import com.fqgj.common.entity.BaseEntity;
+
+import java.util.List;
 
 /**
 * User: xiaochong
@@ -9,4 +12,9 @@ import com.fqgj.common.entity.BaseEntity;
 */
 public interface SaasMerchantConfigService<T extends BaseEntity> extends BaseService<T> {
 
+    Boolean isCompanyContractByMerchantCode(String merchantCode);
+
+    List<Integer> getSmsConfigByMerchantCode(String merchantCode);
+
+    Boolean updateByMerchantCode(SaasMerchantConfig record);
 }

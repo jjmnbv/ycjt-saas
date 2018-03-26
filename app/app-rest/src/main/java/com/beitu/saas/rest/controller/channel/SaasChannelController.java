@@ -3,6 +3,9 @@ package com.beitu.saas.rest.controller.channel;
 import com.beitu.saas.app.annotations.SignIgnore;
 import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.application.channel.SaasChannelApplication;
+import com.beitu.saas.auth.entity.SaasAdmin;
+import com.beitu.saas.channel.domain.SaasChannelDetailVo;
+import com.beitu.saas.channel.domain.SaasModuleVo;
 import com.beitu.saas.channel.param.SaasChannelParam;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.domain.SaasChannelVo;
@@ -11,7 +14,10 @@ import com.beitu.saas.channel.param.SaasChannelRiskSettingsParam;
 import com.beitu.saas.rest.controller.channel.request.SaasChannelQueryRequestParam;
 import com.beitu.saas.rest.controller.channel.request.SaasChannelRequestParam;
 import com.beitu.saas.rest.controller.channel.request.SaasOperateChannelRequestParam;
+import com.beitu.saas.rest.controller.channel.response.SaasChannelDetailResponse;
 import com.beitu.saas.rest.controller.channel.response.SaasChannelListResponse;
+import com.beitu.saas.rest.controller.channel.response.SaasMerchantAdminResponse;
+import com.beitu.saas.rest.controller.channel.response.SaasModuleResponse;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.api.Response;
 import com.fqgj.common.response.ModuleResponse;
@@ -23,10 +29,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,11 +60,10 @@ public class SaasChannelController {
      * @param saasChannelRequestParam
      * @return
      */
-    @ApiOperation(value = "新建渠道", response = Response.class)
-    @RequestMapping(value = "/addChannel", method = RequestMethod.POST)
-    @VisitorAccessible
     @SignIgnore
-    public Response addChannel(@RequestBody SaasChannelRequestParam saasChannelRequestParam) {
+    @RequestMapping(value = "/addOrUpdateChannel", method = RequestMethod.POST)
+    @ApiOperation(value = "新建/编辑渠道", response = Response.class)
+    public Response addOrUpdateChannel(@RequestBody SaasChannelRequestParam saasChannelRequestParam) {
         List<SaasChannelRiskSettingsParam> settingsVos = new ArrayList<>();
         boolean setModule = CollectionUtils.isNotEmpty(saasChannelRequestParam.getSaasModuleRequestParams());
         boolean setModuleItem = saasChannelRequestParam.getSaasModuleItemRequestParams().size() == 1 && !StringUtils.isEmpty(saasChannelRequestParam.getSaasModuleItemRequestParams().get(0).getItemCode());
@@ -87,12 +89,36 @@ public class SaasChannelController {
         BeanUtils.copyProperties(saasChannelRequestParam, saasChannelParam);
 
         try {
-            saasChannelApplication.createChannel(saasChannelParam, settingsVos);
+            saasChannelApplication.addOrUpdateChannel(saasChannelParam, settingsVos);
         } catch (Exception e) {
             LOGGER.error("==  创建渠道失败, 机构号:{}, 渠道名称:{} ,失败原因:{}  ==", saasChannelRequestParam.getMerchantCode(), saasChannelRequestParam.getChannelName(), e);
             return Response.error(null, ChannelErrorCodeEnum.CHANNEL_PARAM_INVALID.getMsg());
         }
         return Response.ok().putData("操作成功");
+    }
+
+    /**
+     * 机构下所有管理员查询
+     *
+     * @return
+     */
+    @SignIgnore
+    @RequestMapping(value = "/merchantAdminList", method = RequestMethod.POST)
+    @ApiOperation(value = "获取机构下所有管理员", response = SaasMerchantAdminResponse.class)
+    public Response getMerchantAdminList(String merchantCode) {
+        List<SaasAdmin> saasAdminList = saasChannelApplication.getSaasAdminListByMerchantCode(merchantCode);
+        return Response.ok().putData(new SaasMerchantAdminResponse(saasAdminList));
+    }
+
+    /**
+     * 获取单个渠道详情
+     */
+    @SignIgnore
+    @RequestMapping(value = "/getChannel/{channelCode}", method = RequestMethod.POST)
+    @ApiOperation(value = "获取单个渠道详情", response = SaasChannelDetailResponse.class)
+    public Response getChannel(@PathVariable(value = "channelCode") String channelCode) {
+        SaasChannelDetailVo saasChannelDetail = saasChannelApplication.getSaasChannelDetail(channelCode);
+        return Response.ok().putData(new SaasChannelDetailResponse(saasChannelDetail));
     }
 
 
@@ -101,10 +127,9 @@ public class SaasChannelController {
      *
      * @return
      */
+    @SignIgnore
     @RequestMapping(value = "/saasChannelList", method = RequestMethod.POST)
     @ApiOperation(value = "渠道列表", response = SaasChannelListResponse.class)
-    @VisitorAccessible
-    @SignIgnore
     public ModuleResponse getSaasChannelList(@RequestBody SaasChannelQueryRequestParam saasChannelQueryRequestParam, Page page) {
 
         SaasChannelParam saasChannelParam = new SaasChannelParam();
@@ -112,17 +137,16 @@ public class SaasChannelController {
         List<SaasChannelVo> saasChannelList = saasChannelApplication.getSaasChannelList(saasChannelParam, page);
 
         SaasChannelListResponse saasChannelListResponse = new SaasChannelListResponse(saasChannelList);
-        return new ModuleResponse<>(saasChannelListResponse);
+        return new ModuleResponse<>(saasChannelListResponse, page);
     }
 
 
     /**
      * 禁用/启用 渠道操作
      */
-    @ApiOperation(value = "禁用/启用", response = Response.class)
-    @VisitorAccessible
     @SignIgnore
     @RequestMapping(value = "/operateSaasChannel", method = RequestMethod.POST)
+    @ApiOperation(value = "禁用/启用", response = Response.class)
     public Response operateSaasChannel(@RequestBody SaasOperateChannelRequestParam saasOperateChannelRequestParam) {
         saasChannelService.operateSaasChannel(saasOperateChannelRequestParam.getChannelCode(), saasOperateChannelRequestParam.getStatus());
         return Response.ok().putData("操作成功");

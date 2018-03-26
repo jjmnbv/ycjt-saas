@@ -22,4 +22,11 @@ public class SaasChannelRiskSettingsDaoImpl extends AbstractBaseMapper<SaasChann
         Map<String, Object> map = new HashMap<>();
         map.put("channelCode", channelCode);
         return getSqlSession().selectList(this.getStatement("selectSaasChannelRiskSettingsEntityList"), map);    }
+
+    @Override
+    public Integer deleteRiskSettingsByChannelCode(String channelCode) {
+        Map map = new HashMap(4);
+        map.put("channelCode", channelCode);
+        return this.getSqlSession().selectOne(this.getStatement("deleteRiskSettingsByChannelCode"), map);
+    }
 }

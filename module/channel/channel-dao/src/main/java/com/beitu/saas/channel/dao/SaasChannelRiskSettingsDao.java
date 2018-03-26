@@ -13,4 +13,6 @@ import java.util.List;
 
 public interface SaasChannelRiskSettingsDao  extends BaseMapper<SaasChannelRiskSettingsEntity> {
     List<SaasChannelRiskSettingsEntity> selectSaasChannelRiskSettingsEntityList(String channelCode);
+
+    Integer deleteRiskSettingsByChannelCode(String channelCode);
 }
