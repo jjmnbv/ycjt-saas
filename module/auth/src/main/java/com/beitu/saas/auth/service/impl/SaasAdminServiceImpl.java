@@ -81,7 +81,9 @@ public class SaasAdminServiceImpl extends AbstractBaseService implements SaasAdm
             put("deleted", false);
             put("page", page);
         }};
-        page.setTotalCount(this.queryTotal(map));
+        if (page!=null){
+            page.setTotalCount(this.queryTotal(map));
+        }
         List list = this.selectByParams(map);
         return list;
     }
