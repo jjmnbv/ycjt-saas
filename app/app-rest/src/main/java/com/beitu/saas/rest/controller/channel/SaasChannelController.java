@@ -60,10 +60,9 @@ public class SaasChannelController {
      * @param saasChannelRequestParam
      * @return
      */
-    @ApiOperation(value = "新建/编辑渠道", response = Response.class)
-    @RequestMapping(value = "/addOrUpdateChannel", method = RequestMethod.POST)
-    @VisitorAccessible
     @SignIgnore
+    @RequestMapping(value = "/addOrUpdateChannel", method = RequestMethod.POST)
+    @ApiOperation(value = "新建/编辑渠道", response = Response.class)
     public Response addOrUpdateChannel(@RequestBody SaasChannelRequestParam saasChannelRequestParam) {
         List<SaasChannelRiskSettingsParam> settingsVos = new ArrayList<>();
         boolean setModule = CollectionUtils.isNotEmpty(saasChannelRequestParam.getSaasModuleRequestParams());
@@ -103,9 +102,8 @@ public class SaasChannelController {
      *
      * @return
      */
-    @RequestMapping(value = "/merchantAdminList", method = RequestMethod.POST)
-    @VisitorAccessible
     @SignIgnore
+    @RequestMapping(value = "/merchantAdminList", method = RequestMethod.POST)
     @ApiOperation(value = "获取机构下所有管理员", response = SaasMerchantAdminResponse.class)
     public Response getMerchantAdminList(String merchantCode) {
         List<SaasAdmin> saasAdminList = saasChannelApplication.getSaasAdminListByMerchantCode(merchantCode);
@@ -115,10 +113,9 @@ public class SaasChannelController {
     /**
      * 获取单个渠道详情
      */
-    @ApiOperation(value = "获取单个渠道详情", response = SaasChannelDetailResponse.class)
-    @RequestMapping(value = "/getChannel/{channelCode}", method = RequestMethod.POST)
-    @VisitorAccessible
     @SignIgnore
+    @RequestMapping(value = "/getChannel/{channelCode}", method = RequestMethod.POST)
+    @ApiOperation(value = "获取单个渠道详情", response = SaasChannelDetailResponse.class)
     public Response getChannel(@PathVariable(value = "channelCode") String channelCode) {
         SaasChannelDetailVo saasChannelDetail = saasChannelApplication.getSaasChannelDetail(channelCode);
         return Response.ok().putData(new SaasChannelDetailResponse(saasChannelDetail));
@@ -130,10 +127,9 @@ public class SaasChannelController {
      *
      * @return
      */
+    @SignIgnore
     @RequestMapping(value = "/saasChannelList", method = RequestMethod.POST)
     @ApiOperation(value = "渠道列表", response = SaasChannelListResponse.class)
-    @VisitorAccessible
-    @SignIgnore
     public ModuleResponse getSaasChannelList(@RequestBody SaasChannelQueryRequestParam saasChannelQueryRequestParam, Page page) {
 
         SaasChannelParam saasChannelParam = new SaasChannelParam();
@@ -148,10 +144,9 @@ public class SaasChannelController {
     /**
      * 禁用/启用 渠道操作
      */
-    @ApiOperation(value = "禁用/启用", response = Response.class)
-    @VisitorAccessible
     @SignIgnore
     @RequestMapping(value = "/operateSaasChannel", method = RequestMethod.POST)
+    @ApiOperation(value = "禁用/启用", response = Response.class)
     public Response operateSaasChannel(@RequestBody SaasOperateChannelRequestParam saasOperateChannelRequestParam) {
         saasChannelService.operateSaasChannel(saasOperateChannelRequestParam.getChannelCode(), saasOperateChannelRequestParam.getStatus());
         return Response.ok().putData("操作成功");

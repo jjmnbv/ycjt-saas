@@ -17,7 +17,7 @@ public class SaasModuleRequestParam {
     private String moduleCode;
 
     /**
-     * 是否必填 0 :必填 1:非必填
+     * 是否必填 0 :非必填 1:必填
      */
     private Integer required;
 
