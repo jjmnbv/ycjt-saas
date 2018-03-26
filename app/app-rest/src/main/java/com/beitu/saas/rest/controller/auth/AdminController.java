@@ -77,9 +77,14 @@ public class AdminController {
     public Response login(@RequestBody AdminLoginRequest adminLoginRequest, HttpServletRequest request) throws IOException {
         //TODO 校验验证码
         SaasAdmin saasAdmin = saasAdminService.login(adminLoginRequest.getMobile(), adminLoginRequest.getPassword());
+        String oldToken = redisClient.get(RedisKeyConsts.SAAS_TOKEN_KEY, saasAdmin.getCode());
+        if (StringUtils.isNotEmpty(oldToken)){
+            redisClient.del(RedisKeyConsts.SAAS_TOKEN_KEY,oldToken);
+        }
         saasAdminLoginLogService.addAdminLoginLog(request, saasAdmin.getCode());
         String token = MD5.md5(UUID.randomUUID().toString());
         redisClient.set(RedisKeyConsts.SAAS_TOKEN_KEY, saasAdmin.getCode(), TimeConsts.TEN_SECONDS, token);
+        redisClient.set(RedisKeyConsts.SAAS_TOKEN_KEY,token, TimeConsts.TEN_SECONDS,saasAdmin.getCode());
         return Response.ok().putData(new HashMap<String, Object>(2) {{
             put("token", token);
         }});

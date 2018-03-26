@@ -71,7 +71,7 @@ public class UserAccessRightInterceptor implements HandlerInterceptor {
         }
         if (StringUtils.isNotEmpty(basicVO.getToken())) {
             if (!verifyHeader(request)) {
-                throw new ApplicationException("无效的token");
+                throw new ApplicationException(RestCodeEnum.TOKEN_NOT_AVAILABLE);
             }
         } else {
             VisitorAccessible annotation = handlerMethod.getMethodAnnotation(VisitorAccessible.class);
@@ -119,6 +119,14 @@ public class UserAccessRightInterceptor implements HandlerInterceptor {
             if (visitorAccessibleAnnotation == null) {
                 IgnoreRepeatRequest ignoreRepeatRequest = handlerMethod.getMethodAnnotation(IgnoreRepeatRequest.class);
                 RequestBasicInfo basicVO = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo();
+                if (basicVO.getPlatform().equals("h5")){
+                    String code = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
+                    redisClient.expire(RedisKeyConsts.SAAS_TOKEN_KEY, TimeConsts.TEN_MINUTES, code);
+                }
+                if (basicVO.getPlatform().equals("web")){
+                    String code = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
+                    redisClient.expire(RedisKeyConsts.SAAS_TOKEN_KEY, TimeConsts.TEN_MINUTES, code);
+                }
 //                redisClient.expire(RedisKeyConsts.SAAS_TOKEN_KEY, TimeConsts.TEN_MINUTES, basicVO.getToken());
                 // 为了方便测试联调，将token时效设置变长
                 redisClient.expire(RedisKeyConsts.SAAS_TOKEN_KEY, TimeConsts.AN_HOUR, basicVO.getToken());
