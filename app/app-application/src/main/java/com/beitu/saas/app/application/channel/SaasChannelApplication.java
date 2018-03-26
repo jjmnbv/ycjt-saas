@@ -85,7 +85,7 @@ public class SaasChannelApplication {
                     .setLinkUrl(x.getLinkUrl())// TODO: 2018/3/22 加上阿波罗域名
                     .setLongLinkUrl(x.getLinkUrl())// TODO: 2018/3/22 加上域名
                     //.setShortLinkUrl(ShortUrlUtil.generateShortUrl(x.getLinkUrl()))// TODO: 2018/3/22 加上域名
-                    .setShortLinkUrl("http://agent.yangcongjietiao.com/agentWebViews/agent/index.html")
+                    .setShortLinkUrl(ShortUrlUtil.generateShortUrl("http://agent.yangcongjietiao.com/agentWebViews/agent/index.html"))
                     .setCreator(x.getCreator())
                     .setGmtCreate(x.getGmtCreate())
                     .setRemark(x.getRemark());
