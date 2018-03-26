@@ -11,6 +11,7 @@ import com.beitu.saas.rest.controller.auth.response.MerchantInfoResponse;
 import com.fqgj.common.api.Response;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +27,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/merchant")
-@Api("机构接口")
+@Api(description = "机构接口")
 public class MerchantController {
 
     @Autowired
@@ -54,18 +55,15 @@ public class MerchantController {
     @ApiOperation(value = "合同设置")
     public Response setContractType(@PathVariable Integer type) {
         String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
-        SaasMerchantConfig saasMerchantConfig = new SaasMerchantConfig();
-        saasMerchantConfig.setMerchantCode(merchantCode);
-        saasMerchantConfig.setConfigEnum(type);
-        saasMerchantConfigService.updateByMerchantCode(saasMerchantConfig);
+        saasMerchantConfigService.updateContractConfig(merchantCode, type);
         return Response.ok();
     }
 
     @RequestMapping(value = "/sms/{smsConfigId}/{enable}", method = RequestMethod.PUT)
-    @ApiOperation(value = "合同设置")
-    public Response setSmsEnable(@PathVariable("smsConfigId") String smsConfigId, @PathVariable("enable") String enable) {
+    @ApiOperation(value = "短信配置")
+    public Response setSmsEnable(@ApiParam("短信id") @PathVariable("smsConfigId")Integer smsConfigId, @PathVariable("enable") Boolean enable) {
         String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
-
+        saasMerchantConfigService.updateSmsConfig(merchantCode, enable, smsConfigId);
         return Response.ok();
     }
 
