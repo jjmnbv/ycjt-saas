@@ -8,6 +8,8 @@ package com.beitu.saas.channel.param;
  * Time: 下午2:58
  */
 public class SaasChannelParam {
+    private Integer opType;
+
     /**
      * 机构号
      */
@@ -28,6 +30,15 @@ public class SaasChannelParam {
      * 负责人
      */
     private String chargePerson;
+
+    public Integer getOpType() {
+        return opType;
+    }
+
+    public SaasChannelParam setOpType(Integer opType) {
+        this.opType = opType;
+        return this;
+    }
 
     public String getMerchantCode() {
         return merchantCode;

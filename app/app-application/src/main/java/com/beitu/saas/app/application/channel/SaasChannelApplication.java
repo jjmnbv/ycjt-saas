@@ -3,6 +3,7 @@ package com.beitu.saas.app.application.channel;
 import com.beitu.saas.channel.domain.SaasChannelDetailVo;
 import com.beitu.saas.channel.domain.SaasChannelRiskSettingsVo;
 import com.beitu.saas.channel.domain.SaasH5ChannelVo;
+import com.beitu.saas.channel.enums.ChannelOperateTypeEnum;
 import com.beitu.saas.channel.param.SaasChannelParam;
 import com.beitu.saas.channel.client.SaasChannelRiskSettingsService;
 import com.beitu.saas.channel.client.SaasChannelService;
@@ -41,28 +42,44 @@ public class SaasChannelApplication {
     private SaasChannelRiskSettingsService saasChannelRiskSettingsService;
 
     /**
-     * 创建渠道
+     * 创建/编辑渠道
      */
     @Transactional(rollbackFor = Exception.class)
-    public void createChannel(SaasChannelParam saasChannelParam, List<SaasChannelRiskSettingsParam> saasChannelRiskSettingsVoList) {
-        SaasChannelEntity saasChannelEntity = new SaasChannelEntity();
-        BeanUtils.copyProperties(saasChannelParam, saasChannelEntity);
+    public void addOrUpdateChannel(SaasChannelParam saasChannelParam, List<SaasChannelRiskSettingsParam> saasChannelRiskSettingsVoList) {
+        if (saasChannelParam.getOpType() == ChannelOperateTypeEnum.ADD.getType()) {
+            SaasChannelEntity saasChannelEntity = new SaasChannelEntity();
+            BeanUtils.copyProperties(saasChannelParam, saasChannelEntity);
+            String channelCode = OrderNoUtil.makeOrderNum();
+            saasChannelEntity.setChannelCode(channelCode)
+                    .setChannelStatus(ChannelStatusEnum.OPEN.getType())
+                    .setLinkUrl("channel/" + channelCode) // TODO: 2018/3/22
+                    .setCreator("admin");// TODO: 2018/3/24 先写死
+            saasChannelService.create(saasChannelEntity);
 
-        String channelCode = OrderNoUtil.makeOrderNum();
-        saasChannelEntity.setChannelCode(channelCode)
-                .setChannelStatus(ChannelStatusEnum.OPEN.getType())
-                .setLinkUrl("channel/" + channelCode) // TODO: 2018/3/22
-                .setCreator("admin");// TODO: 2018/3/24 先写死
-        saasChannelService.create(saasChannelEntity);
+            saasChannelRiskSettingsVoList.stream().forEach(x -> {
+                SaasChannelRiskSettingsEntity entity = new SaasChannelRiskSettingsEntity();
+                BeanUtils.copyProperties(x, entity);
+                entity.setChannelCode(channelCode);
+                saasChannelRiskSettingsService.create(entity);
+            });
+            LOGGER.info("== 渠道创建成功! ==");
+        }
 
-        saasChannelRiskSettingsVoList.stream().forEach(x -> {
-            SaasChannelRiskSettingsEntity entity = new SaasChannelRiskSettingsEntity();
-            BeanUtils.copyProperties(x, entity);
-            entity.setChannelCode(channelCode);
-            saasChannelRiskSettingsService.create(entity);
-        });
 
-        LOGGER.info("== 渠道创建成功! ==");
+        if (saasChannelParam.getOpType() == ChannelOperateTypeEnum.UPDATE.getType()) {
+            SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(saasChannelParam.getChannelCode());
+            BeanUtils.copyProperties(saasChannelParam, saasChannelEntity);
+            saasChannelService.updateById(saasChannelEntity);
+
+            saasChannelRiskSettingsService.deleteRiskSettingsByChannelCode(saasChannelEntity.getChannelCode());
+            saasChannelRiskSettingsVoList.stream().forEach(x -> {
+                SaasChannelRiskSettingsEntity entity = new SaasChannelRiskSettingsEntity();
+                BeanUtils.copyProperties(x, entity);
+                entity.setChannelCode(saasChannelEntity.getChannelCode());
+                saasChannelRiskSettingsService.create(entity);
+            });
+            LOGGER.info("== 渠道修改成功! ==");
+        }
     }
 
     /**

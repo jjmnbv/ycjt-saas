@@ -15,4 +15,10 @@
             </trim>
         </where>
     </select>
+
+    <update id="deleteRiskSettingsByChannelCode">
+        update  saas_channel_risk_settings
+        set deleted = 1
+        where channel_code = #{channelCode,jdbcType=VARCHAR}
+    </update>
 </mapper>

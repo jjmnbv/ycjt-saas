@@ -56,11 +56,11 @@ public class SaasChannelController {
      * @param saasChannelRequestParam
      * @return
      */
-    @ApiOperation(value = "新建渠道", response = Response.class)
-    @RequestMapping(value = "/addChannel", method = RequestMethod.POST)
+    @ApiOperation(value = "新建/编辑渠道", response = Response.class)
+    @RequestMapping(value = "/addOrUpdateChannel", method = RequestMethod.POST)
     @VisitorAccessible
     @SignIgnore
-    public Response addChannel(@RequestBody SaasChannelRequestParam saasChannelRequestParam) {
+    public Response addOrUpdateChannel(@RequestBody SaasChannelRequestParam saasChannelRequestParam) {
         List<SaasChannelRiskSettingsParam> settingsVos = new ArrayList<>();
         boolean setModule = CollectionUtils.isNotEmpty(saasChannelRequestParam.getSaasModuleRequestParams());
         boolean setModuleItem = saasChannelRequestParam.getSaasModuleItemRequestParams().size() == 1 && !StringUtils.isEmpty(saasChannelRequestParam.getSaasModuleItemRequestParams().get(0).getItemCode());
@@ -86,7 +86,7 @@ public class SaasChannelController {
         BeanUtils.copyProperties(saasChannelRequestParam, saasChannelParam);
 
         try {
-            saasChannelApplication.createChannel(saasChannelParam, settingsVos);
+            saasChannelApplication.addOrUpdateChannel(saasChannelParam, settingsVos);
         } catch (Exception e) {
             LOGGER.error("==  创建渠道失败, 机构号:{}, 渠道名称:{} ,失败原因:{}  ==", saasChannelRequestParam.getMerchantCode(), saasChannelRequestParam.getChannelName(), e);
             return Response.error(null, ChannelErrorCodeEnum.CHANNEL_PARAM_INVALID.getMsg());
