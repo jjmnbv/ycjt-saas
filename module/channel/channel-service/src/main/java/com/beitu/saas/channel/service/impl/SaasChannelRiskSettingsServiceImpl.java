@@ -29,6 +29,11 @@ public class SaasChannelRiskSettingsServiceImpl extends AbstractBaseService impl
     public List<SaasChannelRiskSettingsEntity> getSaasChannelRiskSettingsByChannelCode(String channelCode) {
         return saasChannelRiskSettingsDao.selectSaasChannelRiskSettingsEntityList(channelCode);
     }
+
+    @Override
+    public void deleteRiskSettingsByChannelCode(String channelCode) {
+        saasChannelRiskSettingsDao.deleteRiskSettingsByChannelCode(channelCode);
+    }
 }
 
 

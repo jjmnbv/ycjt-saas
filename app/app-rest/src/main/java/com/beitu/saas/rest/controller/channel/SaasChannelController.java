@@ -3,6 +3,7 @@ package com.beitu.saas.rest.controller.channel;
 import com.beitu.saas.app.annotations.SignIgnore;
 import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.application.channel.SaasChannelApplication;
+import com.beitu.saas.channel.domain.SaasChannelDetailVo;
 import com.beitu.saas.channel.param.SaasChannelParam;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.domain.SaasChannelVo;
@@ -11,6 +12,7 @@ import com.beitu.saas.channel.param.SaasChannelRiskSettingsParam;
 import com.beitu.saas.rest.controller.channel.request.SaasChannelQueryRequestParam;
 import com.beitu.saas.rest.controller.channel.request.SaasChannelRequestParam;
 import com.beitu.saas.rest.controller.channel.request.SaasOperateChannelRequestParam;
+import com.beitu.saas.rest.controller.channel.response.SaasChannelDetailResponse;
 import com.beitu.saas.rest.controller.channel.response.SaasChannelListResponse;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.api.Response;
@@ -23,10 +25,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,11 +56,11 @@ public class SaasChannelController {
      * @param saasChannelRequestParam
      * @return
      */
-    @ApiOperation(value = "新建渠道", response = Response.class)
-    @RequestMapping(value = "/addChannel", method = RequestMethod.POST)
+    @ApiOperation(value = "新建/编辑渠道", response = Response.class)
+    @RequestMapping(value = "/addOrUpdateChannel", method = RequestMethod.POST)
     @VisitorAccessible
     @SignIgnore
-    public Response addChannel(@RequestBody SaasChannelRequestParam saasChannelRequestParam) {
+    public Response addOrUpdateChannel(@RequestBody SaasChannelRequestParam saasChannelRequestParam) {
         List<SaasChannelRiskSettingsParam> settingsVos = new ArrayList<>();
         boolean setModule = CollectionUtils.isNotEmpty(saasChannelRequestParam.getSaasModuleRequestParams());
         boolean setModuleItem = saasChannelRequestParam.getSaasModuleItemRequestParams().size() == 1 && !StringUtils.isEmpty(saasChannelRequestParam.getSaasModuleItemRequestParams().get(0).getItemCode());
@@ -87,12 +86,25 @@ public class SaasChannelController {
         BeanUtils.copyProperties(saasChannelRequestParam, saasChannelParam);
 
         try {
-            saasChannelApplication.createChannel(saasChannelParam, settingsVos);
+            saasChannelApplication.addOrUpdateChannel(saasChannelParam, settingsVos);
         } catch (Exception e) {
             LOGGER.error("==  创建渠道失败, 机构号:{}, 渠道名称:{} ,失败原因:{}  ==", saasChannelRequestParam.getMerchantCode(), saasChannelRequestParam.getChannelName(), e);
             return Response.error(null, ChannelErrorCodeEnum.CHANNEL_PARAM_INVALID.getMsg());
         }
         return Response.ok().putData("操作成功");
+    }
+
+
+    /**
+     * 获取单个渠道详情
+     */
+    @ApiOperation(value = "获取单个渠道详情", response = SaasChannelDetailResponse.class)
+    @RequestMapping(value = "/getChannel/{channelCode}", method = RequestMethod.POST)
+    @VisitorAccessible
+    @SignIgnore
+    public Response addChannel(@PathVariable(value = "channelCode") String channelCode) {
+        SaasChannelDetailVo saasChannelDetail = saasChannelApplication.getSaasChannelDetail(channelCode);
+        return Response.ok().putData(new SaasChannelDetailResponse(saasChannelDetail));
     }
 
 
@@ -112,7 +124,7 @@ public class SaasChannelController {
         List<SaasChannelVo> saasChannelList = saasChannelApplication.getSaasChannelList(saasChannelParam, page);
 
         SaasChannelListResponse saasChannelListResponse = new SaasChannelListResponse(saasChannelList);
-        return new ModuleResponse<>(saasChannelListResponse);
+        return new ModuleResponse<>(saasChannelListResponse, page);
     }
 
 

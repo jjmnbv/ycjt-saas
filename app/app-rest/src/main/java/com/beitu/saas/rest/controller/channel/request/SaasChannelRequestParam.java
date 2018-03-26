@@ -14,8 +14,15 @@ import java.util.List;
  * Date: 2018/3/22
  * Time: 上午11:09
  */
-@ApiModel(description = "新增渠道")
+@ApiModel(description = "新增/编辑渠道")
 public class SaasChannelRequestParam extends ParamsObject {
+
+    @NotBlank(message = "操作类型不能为空")
+    @ApiModelProperty(value = "操作类型: 0-新增 1-编辑", required = true)
+    private Integer opType;
+
+    @ApiModelProperty(value = "渠道号")
+    private String channelCode;
 
     @NotBlank(message = "机构号不能为空")
     @ApiModelProperty(value = "机构号", required = true)
@@ -38,6 +45,25 @@ public class SaasChannelRequestParam extends ParamsObject {
      * 风控模块选项
      */
     private List<SaasModuleRequestParam> saasModuleRequestParams;
+
+    public String getChannelCode() {
+        return channelCode;
+    }
+
+    public SaasChannelRequestParam setChannelCode(String channelCode) {
+        this.channelCode = channelCode;
+        return this;
+    }
+
+    public Integer getOpType() {
+        return opType;
+    }
+
+    public SaasChannelRequestParam setOpType(Integer opType) {
+        this.opType = opType;
+        return this;
+    }
+
     /**
      * 风控模块具体字段
      */
