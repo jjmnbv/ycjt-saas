@@ -21,7 +21,7 @@ import java.util.Map;
 * Time: 15:36:13.691
 */
 @Module(value = "服务模块")
-@NameSpace("com.beitu.saas.dao.impl.SaasRoleDaoImpl")
+@NameSpace("com.beitu.saas.auth.dao.impl.SaasRoleDaoImpl")
 @Service
 public class SaasRoleServiceImpl extends AbstractBaseService implements SaasRoleService {
 

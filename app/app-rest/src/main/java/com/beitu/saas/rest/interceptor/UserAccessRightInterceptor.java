@@ -64,11 +64,14 @@ public class UserAccessRightInterceptor implements HandlerInterceptor {
         }
         String basicParams = request.getHeader("basicParams");
         RequestBasicInfo basicVO = JSONUtils.json2pojo(basicParams, RequestBasicInfo.class);
-        if (basicVO != null) {
-            RequestUserInfo requestUserInfo = new RequestUserInfo();
-            requestUserInfo.setRequestBasicInfo(basicVO);
-            RequestLocalInfo.putCurrentAdmin(requestUserInfo);
+        if (StringUtils.isBlank(basicParams)) {
+            throw new ApplicationException(RestCodeEnum.SYSTEM_PARAMTER_ERROR);
         }
+
+        RequestUserInfo requestUserInfo = new RequestUserInfo();
+        requestUserInfo.setRequestBasicInfo(basicVO);
+        RequestLocalInfo.putCurrentAdmin(requestUserInfo);
+
         if (StringUtils.isNotEmpty(basicVO.getToken())) {
             if (!verifyHeader(request)) {
                 throw new ApplicationException(RestCodeEnum.TOKEN_NOT_AVAILABLE);
@@ -119,11 +122,11 @@ public class UserAccessRightInterceptor implements HandlerInterceptor {
             if (visitorAccessibleAnnotation == null) {
                 IgnoreRepeatRequest ignoreRepeatRequest = handlerMethod.getMethodAnnotation(IgnoreRepeatRequest.class);
                 RequestBasicInfo basicVO = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo();
-                if (basicVO.getPlatform().equals("h5")){
+                if (basicVO.getPlatform().equals("h5")) {
                     String code = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
                     redisClient.expire(RedisKeyConsts.SAAS_TOKEN_KEY, TimeConsts.TEN_MINUTES, code);
                 }
-                if (basicVO.getPlatform().equals("web")){
+                if (basicVO.getPlatform().equals("web")) {
                     String code = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
                     redisClient.expire(RedisKeyConsts.SAAS_TOKEN_KEY, TimeConsts.TEN_MINUTES, code);
                 }

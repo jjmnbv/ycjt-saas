@@ -25,7 +25,7 @@ import static java.util.stream.Collectors.toList;
  * Time: 15:36:13.668
  */
 @Module(value = "机构配置表服务模块")
-@NameSpace("com.beitu.saas.dao.impl.SaasMerchantConfigDaoImpl")
+@NameSpace("com.beitu.saas.auth.dao.impl.SaasMerchantConfigDaoImpl")
 @Service
 public class SaasMerchantConfigServiceImpl extends AbstractBaseService implements SaasMerchantConfigService {
 
@@ -64,6 +64,45 @@ public class SaasMerchantConfigServiceImpl extends AbstractBaseService implement
     @Override
     public Boolean updateByMerchantCode(SaasMerchantConfig record) {
         return saasMerchantConfigDao.updateByMerchantCode(record) > 0;
+    }
+
+    @Override
+    public Boolean updateContractConfig(String merchantCode, Integer type) {
+        SaasMerchantConfig saasMerchantConfig = new SaasMerchantConfig();
+        saasMerchantConfig.setMerchantCode(merchantCode);
+        saasMerchantConfig.setConfigEnum(type);
+        List list = this.selectByParams(new HashMap<String, Object>() {{
+            put("merchantCode", merchantCode);
+            put("configType", MerchantConfigTypeEnum.CONTRACT_CONFIG.getKey());
+
+        }});
+        if (CollectionUtils.isEmpty(list)) {
+            saasMerchantConfig.setConfigType(MerchantConfigTypeEnum.CONTRACT_CONFIG.getKey().longValue());
+            saasMerchantConfigDao.insert(saasMerchantConfig);
+            return true;
+        }
+
+        return saasMerchantConfigDao.updateByMerchantCode(saasMerchantConfig) > 0;
+    }
+
+    @Override
+    public Boolean updateSmsConfig(String merchantCode, Boolean enable, Integer smsConfigId) {
+        SaasMerchantConfig saasMerchantConfig = new SaasMerchantConfig();
+        saasMerchantConfig.setDeleted(enable);
+        List<SaasMerchantConfig> list = this.selectByParams(new HashMap<String, Object>(4) {{
+            put("merchantCode", merchantCode);
+            put("configEnum", smsConfigId);
+            put("configType", MerchantConfigTypeEnum.SMS_CONFIG.getKey());
+        }});
+        if (CollectionUtils.isEmpty(list)) {
+            saasMerchantConfig.setMerchantCode(merchantCode);
+            saasMerchantConfig.setConfigEnum(smsConfigId);
+            saasMerchantConfig.setConfigType(MerchantConfigTypeEnum.CONTRACT_CONFIG.getKey().longValue());
+            saasMerchantConfigDao.insert(saasMerchantConfig);
+            return true;
+        }
+        saasMerchantConfig.setId(list.get(0).getId());
+        return saasMerchantConfigDao.updateByPrimaryKey(saasMerchantConfig) > 0;
     }
 
 
