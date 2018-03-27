@@ -15,6 +15,7 @@ import com.beitu.saas.channel.entity.SaasChannelEntity;
 import com.beitu.saas.channel.entity.SaasChannelRiskSettingsEntity;
 import com.beitu.saas.channel.enums.ChannelStatusEnum;
 import com.beitu.saas.channel.param.SaasChannelRiskSettingsParam;
+import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.utils.OrderNoUtil;
 import com.beitu.saas.common.utils.ShortUrlUtil;
 import com.fqgj.common.api.Page;
@@ -25,8 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +47,8 @@ public class SaasChannelApplication {
     private SaasChannelRiskSettingsService saasChannelRiskSettingsService;
     @Autowired
     private SaasAdminService saasAdminService;
+    @Resource
+    private ConfigUtil configUtil;
 
 
     /**
@@ -146,9 +148,9 @@ public class SaasChannelApplication {
                     .setChannelStatus(x.getChannelStatus())
                     .setChargePersonCode(x.getChargePersonCode())
                     .setChargePersonName(this.getAdminNameByAdminCode(x.getChargePersonCode()))
-                    .setLinkUrl("" + x.getLinkUrl())// TODO: 2018/3/27 阿波罗获取域名 
-                    .setLongLinkUrl("" + x.getLinkUrl())
-                    .setShortLinkUrl(ShortUrlUtil.generateShortUrl("" + x.getLinkUrl()))
+                    .setLinkUrl(configUtil.getWebsiteDomainSName() + x.getLinkUrl())
+                    .setLongLinkUrl(configUtil.getWebsiteDomainSName() + x.getLinkUrl())
+                    .setShortLinkUrl(ShortUrlUtil.generateShortUrl(configUtil.getWebsiteDomainSName() + x.getLinkUrl()))
                     .setCreatorName(this.getAdminNameByAdminCode(x.getCreatorCode()))
                     .setCreatorCode(x.getCreatorCode())
                     .setGmtCreate(x.getGmtCreate())

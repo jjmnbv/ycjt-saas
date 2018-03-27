@@ -475,4 +475,11 @@ public class ConfigUtil {
     }
     /************* risk end *************/
 
+    /**
+     * 服务器域名
+     */
+    public String getWebsiteDomainSName() {
+        return config.getProperty("website.domain.name", "");
+    }
+
 }
