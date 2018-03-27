@@ -96,6 +96,7 @@ public class AdminController {
     public Response logout() throws IOException {
         RequestBasicInfo requestBasicInfo = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo();
         redisClient.del(RedisKeyConsts.SAAS_TOKEN_KEY, requestBasicInfo.getToken());
+        redisClient.del(RedisKeyConsts.SAAS_TOKEN_KEY, RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode());
         return Response.ok();
     }
 
@@ -112,6 +113,7 @@ public class AdminController {
         BeanUtils.copyProperties(addAdminRequest, saasAdmin);
         saasAdmin.setPassword(MD5.md5(addAdminRequest.getPassword())).setMerchantCode(GenerOrderNoUtil.generateOrderNo());
         saasAdmin.setEnable(true).setMerchantCode(RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode());
+        saasAdmin.setDefault(false);
         adminInfoApplication.addAdminAndRole(saasAdmin, addAdminRequest.getRoleId());
         return Response.ok();
     }
@@ -163,11 +165,14 @@ public class AdminController {
         return Response.ok();
     }
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/list/{currentPage}/{pageSize}", method = RequestMethod.GET)
     @ParamsValidate
-    public Response list(@RequestBody Page page) {
+    public Response list(@PathVariable(value = "currentPage") Integer currentPage, @PathVariable("pageSize") Integer pageSize) {
+        Page page = new Page();
+        page.setCurrentPage(currentPage);
+        page.setPageSize(pageSize);
         SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
-        List<SaasAdmin> list = saasAdminService.getAdminListByMerchantCode(saasAdmin.getCode(), page);
+        List<SaasAdmin> list = saasAdminService.getAdminListByMerchantCode(saasAdmin.getMerchantCode(), page);
         List<AdminListResponse> listResponses = new ArrayList<>();
         list.forEach(admin -> {
             AdminListResponse response = new AdminListResponse();
@@ -179,6 +184,7 @@ public class AdminController {
                 put("deleted", false);
             }}).get(0);
             response.setRoleName(((SaasRole) saasRoleService.selectById(saasAdminRole.getRoleId())).getName());
+            listResponses.add(response);
         });
         return Response.ok().putData(new HashMap<String, Object>(2) {{
             put("roleList", listResponses);

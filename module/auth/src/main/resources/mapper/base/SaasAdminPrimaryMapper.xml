@@ -12,6 +12,7 @@
         <result column="job" jdbcType="VARCHAR" property="job"/>
         <result column="enable" jdbcType="BIT" property="enable"/>
         <result column="create_name" jdbcType="VARCHAR" property="createName"/>
+        <result column="is_default" jdbcType="BIT" property="isDefault"/>
         <result column="deleted" jdbcType="BIT" property="deleted"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
         <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
@@ -27,6 +28,7 @@
         enable,
         create_name,
         deleted,
+        is_default,
         gmt_modified,
         gmt_create
     </sql>
@@ -74,6 +76,9 @@
             <if test="gmtCreate !=null">
                 gmt_create,
             </if>
+            <if test="isDefault !=null">
+                is_default,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="code != null">
@@ -108,6 +113,9 @@
             </if>
             <if test="gmtCreate != null">
                 #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDefault != null">
+                #{isDefault,jdbcType=BIT},
             </if>
         </trim>
     </insert>
@@ -144,6 +152,9 @@
             </if>
             <if test="gmtModified !=null">
                 gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDefault !=null">
+                is_default = #{isDefault,jdbcType=BIT},
             </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
@@ -208,7 +219,11 @@
             <if test="gmtCreate !=null">
                 and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
             </if>
+            <if test="isDefault !=null">
+                and is_default = #{isDefault,jdbcType=BIT}
+            </if>
         </trim>
+        <include refid="paginationSql"/>
         <include refid="paging"/>
     </select>
     <select id="queryTotal" resultType="INTEGER">
@@ -249,6 +264,9 @@
             </if>
             <if test="gmtCreate !=null">
                 and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="isDefault !=null">
+                and is_default = #{isDefault,jdbcType=BIT}
             </if>
         </trim>
     </select>

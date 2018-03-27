@@ -75,9 +75,10 @@ public class SaasAdminServiceImpl extends AbstractBaseService implements SaasAdm
     }
 
     @Override
-    public List<SaasAdmin> getAdminListByMerchantCode(String adminCode, Page page) {
+    public List<SaasAdmin> getAdminListByMerchantCode(String merchantCode, Page page) {
         Map map = new HashMap(4) {{
-            put("adminCode", adminCode);
+            put("merchantCode", merchantCode);
+            put("isDefault", false);
             put("deleted", false);
             put("page", page);
         }};

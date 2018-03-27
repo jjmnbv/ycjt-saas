@@ -44,6 +44,20 @@ public class SaasAdminVo implements ResponseData,Serializable{
 
     private String createName;
 
+    /**
+     *是否为系统默认账户
+     */
+    private Boolean isDefault;
+
+    public Boolean getDefault() {
+        return isDefault;
+    }
+
+    public void setDefault(Boolean aDefault) {
+        isDefault = aDefault;
+    }
+
+
     public String getCreateName() {
         return createName;
     }
