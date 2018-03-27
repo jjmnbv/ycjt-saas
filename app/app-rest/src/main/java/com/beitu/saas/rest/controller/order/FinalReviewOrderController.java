@@ -5,7 +5,6 @@ import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.api.ModuleApiResponse;
 import com.beitu.saas.app.application.order.OrderApplication;
 import com.beitu.saas.app.common.RequestLocalInfo;
-import com.beitu.saas.auth.domain.SaasAdminVo;
 import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
 import com.beitu.saas.borrower.client.SaasBorrowerService;
@@ -34,18 +33,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author linanjun
- * @create 2018/3/21 下午3:24
+ * @create 2018/3/27 下午2:51
  * @description
  */
 @Controller
-@RequestMapping("/order/preliminary/review")
-@Api(description = "订单初审模块")
-public class PreliminaryReviewOrderController {
+@RequestMapping("/order/final/review")
+@Api(description = "订单复审模块")
+public class FinalReviewOrderController {
 
     @Autowired
     private SaasOrderService saasOrderService;
