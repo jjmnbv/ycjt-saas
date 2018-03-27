@@ -482,4 +482,11 @@ public class ConfigUtil {
         return config.getProperty("website.domain.name", "");
     }
 
+    /**
+     * 点券和短信日清算开关
+     */
+    public String getClearDayStatSwith() {
+        return config.getProperty("clear.day.stat", "");
+    }
+
 }

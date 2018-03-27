@@ -44,12 +44,10 @@ public class SaasConsumeDayStatApplication {
      * 每日点券/短信统计
      */
     public void creditAndMsgDayClear() {
-        LOGGER.info("== 点券和短信日清算任务开始 ==");
         List<String> merchantCodeList = saasMerchantService.getMerchantList();
         merchantCodeList.stream().forEach(x -> {
             this.SyncMerchantConsumeDayStat(x);
         });
-        LOGGER.info("== 点券和短信日清算任务结束 ==");
     }
 
 

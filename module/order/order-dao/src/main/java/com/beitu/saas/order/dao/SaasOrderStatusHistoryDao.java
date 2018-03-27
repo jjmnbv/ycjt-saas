@@ -9,5 +9,6 @@ import com.beitu.saas.order.entity.SaasOrderStatusHistory;
 */
 
 public interface SaasOrderStatusHistoryDao  extends BaseMapper<SaasOrderStatusHistory> {
+    SaasOrderStatusHistory selectOrderStatusHistoryByOrderNumb(String orderNumb);
 
 }
