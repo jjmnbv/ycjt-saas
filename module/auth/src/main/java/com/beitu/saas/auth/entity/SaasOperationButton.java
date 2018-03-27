@@ -25,6 +25,15 @@ public class SaasOperationButton extends BaseEntity {
     */
     private Long sort;
 
+    private String key;
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
 
     public  String getName(){
         return this.name;
