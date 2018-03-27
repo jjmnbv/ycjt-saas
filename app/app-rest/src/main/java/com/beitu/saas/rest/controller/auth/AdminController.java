@@ -114,6 +114,7 @@ public class AdminController {
         saasAdmin.setPassword(MD5.md5(addAdminRequest.getPassword())).setMerchantCode(GenerOrderNoUtil.generateOrderNo());
         saasAdmin.setEnable(true).setMerchantCode(RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode());
         saasAdmin.setDefault(false);
+        saasAdmin.setCreateName(RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getName());
         adminInfoApplication.addAdminAndRole(saasAdmin, addAdminRequest.getRoleId());
         return Response.ok();
     }
@@ -152,7 +153,7 @@ public class AdminController {
         saasAdmin.setId(updateAdminRequest.getAdminId());
         if (StringUtils.isNotEmpty(updateAdminRequest.getJob()) || StringUtils.isNotEmpty(updateAdminRequest.getName())) {
             saasAdmin.setJob(updateAdminRequest.getJob());
-            saasAdmin.setJob(updateAdminRequest.getName());
+            saasAdmin.setName(updateAdminRequest.getName());
             saasAdminService.updateById(saasAdmin);
         }
         if (updateAdminRequest.getRoleId() != null) {
