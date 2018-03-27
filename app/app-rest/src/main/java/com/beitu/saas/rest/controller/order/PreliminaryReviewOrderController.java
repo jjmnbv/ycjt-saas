@@ -4,7 +4,7 @@ import com.beitu.saas.app.api.ApiResponse;
 import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.api.ModuleApiResponse;
 import com.beitu.saas.app.application.order.OrderApplication;
-import com.beitu.saas.app.application.order.vo.QuerySaasOrderVo;
+import com.beitu.saas.app.application.order.vo.QueryOrderVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.order.enums.OrderStatusEnum;
@@ -18,6 +18,7 @@ import com.beitu.saas.rest.controller.order.response.PreliminaryOrderListRespons
 import com.fqgj.common.api.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,10 +46,13 @@ public class PreliminaryReviewOrderController {
     @ApiOperation(value = "初审订单查询", response = PreliminaryOrderQueryRequest.class)
     public ModuleApiResponse<PreliminaryOrderListResponse> query(@RequestBody @Valid PreliminaryOrderQueryRequest req, Page page) {
         SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
-        QuerySaasOrderVo querySaasOrderVo = new QuerySaasOrderVo();
-        querySaasOrderVo.setReviewerCode(saasAdmin.getCode());
-        querySaasOrderVo.setMerchantCode(saasAdmin.getMerchantCode());
-        return new ModuleApiResponse(new FinalOrderListResponse(orderApplication.listPreliminaryReviewOrder(querySaasOrderVo, page)), page);
+        QueryOrderVo queryOrderVo = new QueryOrderVo();
+        queryOrderVo.setMerchantCode(saasAdmin.getMerchantCode());
+        if (req.getDealStatus() == 2) {
+            queryOrderVo.setReviewerCode(saasAdmin.getCode());
+        }
+        BeanUtils.copyProperties(req, queryOrderVo);
+        return new ModuleApiResponse(new FinalOrderListResponse(orderApplication.listPreliminaryReviewOrder(queryOrderVo, page)), page);
     }
 
     @RequestMapping(value = "/remark/save", method = RequestMethod.POST)

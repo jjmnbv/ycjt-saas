@@ -1,5 +1,6 @@
 package com.beitu.saas.order.client;
 
+import com.beitu.saas.order.domain.QuerySaasOrderVo;
 import com.beitu.saas.order.domain.SaasOrderVo;
 import com.beitu.saas.order.enums.OrderStatusEnum;
 import com.fqgj.common.api.Page;
@@ -36,9 +37,7 @@ public interface SaasOrderService<T extends BaseEntity> extends BaseService<T> {
      */
     Boolean isReviewRefuse(String borrowerCode, String channelCode);
 
-    List<SaasOrderVo> listPreliminaryReviewOrder(String merchantCode, String reviewerCode, Page page);
-
-    List<SaasOrderVo> listFinalReviewOrder(String merchantCode, String reviewerCode, Page page);
+    List<SaasOrderVo> listByQuerySaasOrderVoAndPage(QuerySaasOrderVo querySaasOrderVo, Page page);
 
     SaasOrderVo getByOrderNumb(String orderNumb);
 

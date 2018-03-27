@@ -2,6 +2,7 @@ package com.beitu.saas.order.service.impl;
 
 import com.beitu.saas.order.client.SaasOrderService;
 import com.beitu.saas.order.dao.SaasOrderDao;
+import com.beitu.saas.order.domain.QuerySaasOrderVo;
 import com.beitu.saas.order.domain.SaasOrderVo;
 import com.beitu.saas.order.entity.SaasOrder;
 import com.beitu.saas.order.enums.OrderStatusEnum;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: jungle
@@ -51,46 +53,35 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
     }
 
     @Override
-    public List<SaasOrderVo> listPreliminaryReviewOrder(String merchantCode, String reviewerCode, Page page) {
-        List<SaasOrder> saasOrderList = saasOrderDao.selectByParams(new HashMap<String, Object>(8) {{
-            put("merchantCode", merchantCode);
-            put("primaryReviewerCode", reviewerCode);
-            put("orderStatus", OrderStatusEnum.SUBMIT_PRELIMINARY_REVIEW.getCode());
-            put("page", page);
-            put("deleted", Boolean.FALSE);
-        }});
+    public List<SaasOrderVo> listByQuerySaasOrderVoAndPage(QuerySaasOrderVo querySaasOrderVo, Page page) {
+        Map<String, Object> conditions = new HashMap<>(16);
+        conditions.put("borrowerCodeArray", querySaasOrderVo.getBorrowerCodeArray());
+        conditions.put("merchantCode", querySaasOrderVo.getMerchantCode());
+        conditions.put("channelCode", querySaasOrderVo.getChannelCode());
+        conditions.put("orderStatusArray", querySaasOrderVo.getOrderStatusArray());
+        conditions.put("createdBeginDt", querySaasOrderVo.getCreatedBeginDt());
+        conditions.put("createdEndDt", querySaasOrderVo.getCreatedEndDt());
+        conditions.put("preliminaryReviewerCode", querySaasOrderVo.getPreliminaryReviewerCode());
+        conditions.put("finalReviewerCode", querySaasOrderVo.getFinalReviewerCode());
+        conditions.put("loanLenderCode", querySaasOrderVo.getLoanLenderCode());
+        Integer count = saasOrderDao.countByConditions(conditions);
+        page.setTotalCount(count);
+        if (count == 0) {
+            return null;
+        }
+        conditions.put("page", page);
+        List<SaasOrder> saasOrderList = saasOrderDao.selectByConditions(conditions);
         if (CollectionUtils.isEmpty(saasOrderList)) {
             return null;
         }
         List<SaasOrderVo> results = new ArrayList<>(saasOrderList.size());
-        saasOrderList.forEach(saasOrder -> {
-            results.add(SaasOrderVo.convertEntityToVO(saasOrder));
-        });
-        return results;
-    }
-
-    @Override
-    public List<SaasOrderVo> listFinalReviewOrder(String merchantCode, String reviewerCode, Page page) {
-        List<SaasOrder> saasOrderList = saasOrderDao.selectByParams(new HashMap<String, Object>(8) {{
-            put("merchantCode", merchantCode);
-            put("primaryReviewerCode", reviewerCode);
-            put("orderStatus", OrderStatusEnum.SUBMIT_FINAL_REVIEW.getCode());
-            put("page", page);
-            put("deleted", Boolean.FALSE);
-        }});
-        if (CollectionUtils.isEmpty(saasOrderList)) {
-            return null;
-        }
-        List<SaasOrderVo> results = new ArrayList<>(saasOrderList.size());
-        saasOrderList.forEach(saasOrder -> {
-            results.add(SaasOrderVo.convertEntityToVO(saasOrder));
-        });
+        saasOrderList.forEach(SaasOrder -> results.add(SaasOrderVo.convertEntityToVO(SaasOrder)));
         return results;
     }
 
     @Override
     public SaasOrderVo getByOrderNumb(String orderNumb) {
-        List<SaasOrder> saasOrderList = saasOrderDao.selectByParams(new HashMap<String, Object>(8) {{
+        List<SaasOrder> saasOrderList = saasOrderDao.selectByParams(new HashMap<String, Object>(4) {{
             put("orderNumb", orderNumb);
             put("deleted", Boolean.FALSE);
         }});
