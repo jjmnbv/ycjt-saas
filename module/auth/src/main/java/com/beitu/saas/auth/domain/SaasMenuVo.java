@@ -34,6 +34,19 @@ public class SaasMenuVo implements ResponseData,Serializable{
     */
     private Long sort;
 
+    /**
+     *菜单icon
+     */
+    private String iconUrl;
+
+    public String getIconUrl() {
+        return iconUrl;
+    }
+
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl;
+    }
+
     public Long getSaasMenuId() {
         return saasMenuId;
     }

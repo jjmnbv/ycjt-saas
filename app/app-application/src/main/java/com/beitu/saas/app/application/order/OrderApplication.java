@@ -37,6 +37,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -151,39 +152,14 @@ public class OrderApplication {
     @Transactional(rollbackFor = RuntimeException.class)
     public void updateOrderStatus(String operatorCode, String orderNumb, OrderStatusEnum updateOrderStatus, String remark) {
         SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
-        OrderStatusEnum currentOrderStatus = OrderStatusEnum.getByCode(saasOrderVo.getOrderStatus());
-        switch (updateOrderStatus) {
-            case IN_PRELIMINARY_REVIEWER:
-                if (OrderStatusEnum.SUBMIT_PRELIMINARY_REVIEW.equals(currentOrderStatus)) {
-                    updateOrderStatus(operatorCode, saasOrderVo.getSaasOrderId(), saasOrderVo.getOrderNumb(), currentOrderStatus, updateOrderStatus, remark);
-                }
-                return;
-            case PRELIMINARY_REVIEWER_GET_ORDER:
-                if (OrderStatusEnum.IN_PRELIMINARY_REVIEWER.equals(currentOrderStatus)
-                        || OrderStatusEnum.SUBMIT_PRELIMINARY_REVIEW.equals(currentOrderStatus)
-                        || OrderStatusEnum.PRELIMINARY_REVIEWER_REJECT.equals(currentOrderStatus)
-                        || OrderStatusEnum.PRELIMINARY_REVIEWER_REFUSE.equals(currentOrderStatus)) {
-                    updateOrderStatus(operatorCode, saasOrderVo.getSaasOrderId(), saasOrderVo.getOrderNumb(), currentOrderStatus, updateOrderStatus, remark);
-                }
-                break;
-            case PRELIMINARY_REVIEWER_REJECT:
-                if (OrderStatusEnum.IN_PRELIMINARY_REVIEWER.equals(currentOrderStatus)
-                        || OrderStatusEnum.PRELIMINARY_REVIEWER_GET_ORDER.equals(currentOrderStatus)) {
-                    updateOrderStatus(operatorCode, saasOrderVo.getSaasOrderId(), saasOrderVo.getOrderNumb(), currentOrderStatus, updateOrderStatus, remark);
-                }
-                break;
-            case PRELIMINARY_REVIEWER_REFUSE:
-                if (OrderStatusEnum.IN_PRELIMINARY_REVIEWER.equals(currentOrderStatus)
-                        || OrderStatusEnum.PRELIMINARY_REVIEWER_GET_ORDER.equals(currentOrderStatus)) {
-                    updateOrderStatus(operatorCode, saasOrderVo.getSaasOrderId(), saasOrderVo.getOrderNumb(), currentOrderStatus, updateOrderStatus, remark);
-                }
-                break;
-            case IN_FINAL_REVIEWER:
-                if (OrderStatusEnum.SUBMIT_FINAL_REVIEW.equals(currentOrderStatus)) {
-                    updateOrderStatus(operatorCode, saasOrderVo.getSaasOrderId(), saasOrderVo.getOrderNumb(), currentOrderStatus, updateOrderStatus, remark);
-                }
-                break;
+
+        OrderStatusEnum nextOrderStatus = OrderStatusEnum.getEnumByCode(updateOrderStatus.getCode());
+        OrderStatusEnum currentOrderStatus = OrderStatusEnum.getEnumByCode(saasOrderVo.getOrderStatus());
+
+        if (Arrays.binarySearch(nextOrderStatus.getCodeArray(), currentOrderStatus.getCode()) > 0) {
+            updateOrderStatus(operatorCode, saasOrderVo.getSaasOrderId(), saasOrderVo.getOrderNumb(), currentOrderStatus, updateOrderStatus, remark);
         }
+
         throw new ApplicationException(OrderErrorCodeEnum.ILLEGAL_OPERATION_ORDER_STATUS);
     }
 
@@ -368,7 +344,7 @@ public class OrderApplication {
         orderListVo.setOrderNumb(saasOrderVo.getOrderNumb());
         orderListVo.setApplyDate(DateUtil.getDate(saasOrderVo.getCreatedDt()));
         orderListVo.setCapital(saasOrderVo.getRealCapital().toString());
-        orderListVo.setOrderStatus(OrderStatusEnum.getByCode(saasOrderVo.getOrderStatus()).getMsg());
+        orderListVo.setOrderStatus(OrderStatusEnum.getEnumByCode(saasOrderVo.getOrderStatus()).getMsg());
         orderListVo.setRemark(saasOrderVo.getRemark());
         orderListVo.setBorrowingDuration(DateUtil.countDay(saasOrderVo.getRepaymentDt(), saasOrderVo.getCreatedDt()) + "天");
         SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(saasOrderVo.getBorrowerCode());

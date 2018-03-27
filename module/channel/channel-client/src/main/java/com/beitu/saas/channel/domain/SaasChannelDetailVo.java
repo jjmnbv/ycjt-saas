@@ -22,10 +22,19 @@ public class SaasChannelDetailVo {
      *负责人名字
      */
     private String chargePersonName;
+
+    /**
+     * 负责人code
+     */
+    private String chargePersonCode;
     /**
      *创建人名字
      */
     private String creatorName;
+    /**
+     *创建人code
+     */
+    private String creatorCode;
     /**
      *备注
      */
@@ -38,6 +47,25 @@ public class SaasChannelDetailVo {
 
     public String getChannelName() {
         return channelName;
+    }
+
+
+    public String getCreatorCode() {
+        return creatorCode;
+    }
+
+    public SaasChannelDetailVo setCreatorCode(String creatorCode) {
+        this.creatorCode = creatorCode;
+        return this;
+    }
+
+    public String getChargePersonCode() {
+        return chargePersonCode;
+    }
+
+    public SaasChannelDetailVo setChargePersonCode(String chargePersonCode) {
+        this.chargePersonCode = chargePersonCode;
+        return this;
     }
 
     public SaasChannelDetailVo setChannelName(String channelName) {

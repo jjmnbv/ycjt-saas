@@ -5,7 +5,7 @@
     <select id="selectListByIds" resultMap="BaseResultMap">
         SELECT * FROM saas_operation_button
         WHERE id IN
-        <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
             #{item}
         </foreach>
         ORDER BY sort ASC

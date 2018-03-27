@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,12 +44,12 @@ public class SaasOperationButtonServiceImpl extends AbstractBaseService implemen
 
     @Override
     public Map<String,Object> getParentButtonForMap(){
-        Map map = new HashMap(8);
+        Map map = new LinkedHashMap(8);
         List<SaasOperationButton> list = saasOperationButtonDao.selectByParams(new HashMap<String, Object>(2) {{
             put("isParent", true);
             put("deleted", false);
         }});
-        list.parallelStream().forEach(saasOperationButton -> map.put(saasOperationButton.getId(),saasOperationButton.getName()));
+        list.stream().forEach(saasOperationButton -> map.put(saasOperationButton.getId(),saasOperationButton.getName()));
         return map;
     }
 }
