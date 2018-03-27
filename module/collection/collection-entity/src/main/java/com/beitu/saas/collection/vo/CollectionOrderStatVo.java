@@ -10,6 +10,7 @@ import java.math.BigDecimal;
  * Time: 下午12:02
  */
 public class CollectionOrderStatVo {
+
     private String channelNo;
     private String channelName;
     private Integer intoPiecesNum;//进件数
