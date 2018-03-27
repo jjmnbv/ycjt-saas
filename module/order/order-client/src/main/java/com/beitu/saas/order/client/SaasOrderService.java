@@ -38,6 +38,8 @@ public interface SaasOrderService<T extends BaseEntity> extends BaseService<T> {
 
     List<SaasOrderVo> listPreliminaryReviewOrder(String merchantCode, String reviewerCode, Page page);
 
+    List<SaasOrderVo> listFinalReviewOrder(String merchantCode, String reviewerCode, Page page);
+
     SaasOrderVo getByOrderNumb(String orderNumb);
 
     Boolean updateOrderStatus(Long orderId, OrderStatusEnum currentOrderStatus, OrderStatusEnum updateOrderStatus);

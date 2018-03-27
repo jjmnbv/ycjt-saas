@@ -1,23 +1,21 @@
-package com.beitu.saas.rest.controller.order.request;
+package com.beitu.saas.app.application.order.vo;
 
-import com.fqgj.common.api.ParamsObject;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.hibernate.validator.constraints.NotBlank;
 
 import java.util.Date;
 
 /**
  * @author linanjun
- * @create 2018/3/21 下午3:28
+ * @create 2018/3/27 下午3:07
  * @description
  */
-@ApiModel(description = "初审列表查询参数")
-public class PreliminaryOrderQueryRequest extends ParamsObject {
+public class QuerySaasOrderVo {
 
-    @ApiModelProperty(value = "处理状态")
-    @NotBlank(message = "处理状态不能为空")
-    private String dealStatus;
+    @ApiModelProperty(value = "机构CODE")
+    private String merchantCode;
+
+    @ApiModelProperty(value = "审核员CODE")
+    private String reviewerCode;
 
     @ApiModelProperty(value = "手机号码")
     private String mobile;
@@ -40,12 +38,20 @@ public class PreliminaryOrderQueryRequest extends ParamsObject {
     @ApiModelProperty(value = "申请结束时间")
     private Date applyEndDate;
 
-    public String getDealStatus() {
-        return dealStatus;
+    public String getMerchantCode() {
+        return merchantCode;
     }
 
-    public void setDealStatus(String dealStatus) {
-        this.dealStatus = dealStatus;
+    public void setMerchantCode(String merchantCode) {
+        this.merchantCode = merchantCode;
+    }
+
+    public String getReviewerCode() {
+        return reviewerCode;
+    }
+
+    public void setReviewerCode(String reviewerCode) {
+        this.reviewerCode = reviewerCode;
     }
 
     public String getMobile() {
@@ -103,10 +109,4 @@ public class PreliminaryOrderQueryRequest extends ParamsObject {
     public void setApplyEndDate(Date applyEndDate) {
         this.applyEndDate = applyEndDate;
     }
-
-    @Override
-    public void validate() {
-
-    }
-
 }

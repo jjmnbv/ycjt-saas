@@ -2,10 +2,16 @@ package com.beitu.saas.app.application.order;
 
 import com.beitu.saas.app.application.order.vo.H5OrderListVo;
 import com.beitu.saas.app.application.order.vo.OrderDetailVo;
+import com.beitu.saas.app.application.order.vo.QuerySaasOrderVo;
+import com.beitu.saas.app.application.order.vo.SaasOrderListVo;
 import com.beitu.saas.app.enums.BorrowerOrderApplyStatusEnum;
 import com.beitu.saas.app.enums.H5OrderBillDetailViewTypeEnum;
 import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
+import com.beitu.saas.borrower.client.SaasBorrowerService;
 import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
+import com.beitu.saas.borrower.domain.SaasBorrowerVo;
+import com.beitu.saas.channel.client.SaasChannelService;
+import com.beitu.saas.common.utils.identityNumber.vo.IdcardInfoExtractor;
 import com.beitu.saas.order.client.SaasOrderApplicationService;
 import com.beitu.saas.order.client.SaasOrderBillDetailService;
 import com.beitu.saas.order.client.SaasOrderService;
@@ -57,6 +63,12 @@ public class OrderApplication {
 
     @Autowired
     private SaasOrderStatusHistoryService saasOrderStatusHistoryService;
+
+    @Autowired
+    private SaasBorrowerService saasBorrowerService;
+
+    @Autowired
+    private SaasChannelService saasChannelService;
 
     public BorrowerOrderApplyStatusEnum getOrderApplyStatus(String borrowerCode, String channelCode) {
         if (saasOrderApplicationService.getByBorrowerCode(borrowerCode) != null) {
@@ -181,6 +193,47 @@ public class OrderApplication {
         if (!saasOrderService.updateOrderStatus(orderId, currentOrderStatus, updateOrderStatus)) {
             throw new ApplicationException(OrderErrorCodeEnum.ORDER_STATUS_UPDATE_FAILURE);
         }
+    }
+
+    public List<SaasOrderListVo> listFinalReviewOrder(QuerySaasOrderVo querySaasOrderVo, Page page) {
+        List<SaasOrderVo> saasOrderVoList = saasOrderService.listFinalReviewOrder(querySaasOrderVo.getMerchantCode(), querySaasOrderVo.getReviewerCode(), page);
+        if (CollectionUtils.isEmpty(saasOrderVoList)) {
+            return null;
+        }
+        List<SaasOrderListVo> orderListVoList = new ArrayList<>(saasOrderVoList.size());
+        saasOrderVoList.forEach(saasOrderVo -> orderListVoList.add(convertSaasOrderVo2SaasOrderListVo(saasOrderVo)));
+        return orderListVoList;
+    }
+
+    public List<SaasOrderListVo> listPreliminaryReviewOrder(QuerySaasOrderVo querySaasOrderVo, Page page) {
+        List<SaasOrderVo> saasOrderVoList = saasOrderService.listPreliminaryReviewOrder(querySaasOrderVo.getMerchantCode(), querySaasOrderVo.getReviewerCode(), page);
+        if (CollectionUtils.isEmpty(saasOrderVoList)) {
+            return null;
+        }
+        List<SaasOrderListVo> orderListVoList = new ArrayList<>(saasOrderVoList.size());
+        saasOrderVoList.forEach(saasOrderVo -> orderListVoList.add(convertSaasOrderVo2SaasOrderListVo(saasOrderVo)));
+        return orderListVoList;
+    }
+
+    private SaasOrderListVo convertSaasOrderVo2SaasOrderListVo(SaasOrderVo saasOrderVo) {
+        SaasOrderListVo orderListVo = new SaasOrderListVo();
+        orderListVo.setOrderNumb(saasOrderVo.getOrderNumb());
+        orderListVo.setApplyDate(DateUtil.getDate(saasOrderVo.getCreatedDt()));
+        orderListVo.setCapital(saasOrderVo.getRealCapital().toString());
+        orderListVo.setOrderStatus(OrderStatusEnum.getByCode(saasOrderVo.getOrderStatus()).getMsg());
+        orderListVo.setRemark(saasOrderVo.getRemark());
+        orderListVo.setBorrowingDuration(DateUtil.countDay(saasOrderVo.getRepaymentDt(), saasOrderVo.getCreatedDt()) + "天");
+        SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(saasOrderVo.getBorrowerCode());
+        if (saasBorrowerRealInfoVo != null) {
+            orderListVo.setBorrowerName(saasBorrowerRealInfoVo.getName());
+            IdcardInfoExtractor idcardInfoExtractor = new IdcardInfoExtractor(saasBorrowerRealInfoVo.getIdentityCode());
+            orderListVo.setBorrowerAge(idcardInfoExtractor.getAge());
+            orderListVo.setBorrowerGender(idcardInfoExtractor.getGender());
+        }
+        SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCode(saasOrderVo.getBorrowerCode());
+        orderListVo.setBorrowerMobile(saasBorrowerVo.getMobile());
+        orderListVo.setChannelName(saasChannelService.getSaasChannelByChannelCode(saasOrderVo.getChannelCode()).getChannelName());
+        return orderListVo;
     }
 
 }

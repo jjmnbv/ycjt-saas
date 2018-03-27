@@ -70,6 +70,25 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
     }
 
     @Override
+    public List<SaasOrderVo> listFinalReviewOrder(String merchantCode, String reviewerCode, Page page) {
+        List<SaasOrder> saasOrderList = saasOrderDao.selectByParams(new HashMap<String, Object>(8) {{
+            put("merchantCode", merchantCode);
+            put("primaryReviewerCode", reviewerCode);
+            put("orderStatus", OrderStatusEnum.SUBMIT_FINAL_REVIEW.getCode());
+            put("page", page);
+            put("deleted", Boolean.FALSE);
+        }});
+        if (CollectionUtils.isEmpty(saasOrderList)) {
+            return null;
+        }
+        List<SaasOrderVo> results = new ArrayList<>(saasOrderList.size());
+        saasOrderList.forEach(saasOrder -> {
+            results.add(SaasOrderVo.convertEntityToVO(saasOrder));
+        });
+        return results;
+    }
+
+    @Override
     public SaasOrderVo getByOrderNumb(String orderNumb) {
         List<SaasOrder> saasOrderList = saasOrderDao.selectByParams(new HashMap<String, Object>(8) {{
             put("orderNumb", orderNumb);

@@ -9,11 +9,11 @@ import java.util.Date;
 
 /**
  * @author linanjun
- * @create 2018/3/21 下午3:28
+ * @create 2018/3/27 下午3:26
  * @description
  */
-@ApiModel(description = "初审列表查询参数")
-public class PreliminaryOrderQueryRequest extends ParamsObject {
+@ApiModel(description = "复审列表查询参数")
+public class FinalOrderQueryRequest extends ParamsObject {
 
     @ApiModelProperty(value = "处理状态")
     @NotBlank(message = "处理状态不能为空")

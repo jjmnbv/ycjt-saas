@@ -9,7 +9,7 @@ import io.swagger.annotations.ApiModel;
  * @description
  */
 @ApiModel(value = "订单风控信息")
-public class PreliminaryOrderDetailResponse implements ResponseData {
+public class FinalOrderDetailResponse implements ResponseData {
 
     private String orderNumb;
 

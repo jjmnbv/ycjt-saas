@@ -4,23 +4,17 @@ import com.beitu.saas.app.api.ApiResponse;
 import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.api.ModuleApiResponse;
 import com.beitu.saas.app.application.order.OrderApplication;
+import com.beitu.saas.app.application.order.vo.QuerySaasOrderVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
-import com.beitu.saas.auth.domain.SaasAdminVo;
 import com.beitu.saas.auth.entity.SaasAdmin;
-import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
-import com.beitu.saas.borrower.client.SaasBorrowerService;
-import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
-import com.beitu.saas.borrower.domain.SaasBorrowerVo;
-import com.beitu.saas.channel.client.SaasChannelService;
-import com.beitu.saas.common.utils.DateUtil;
-import com.beitu.saas.common.utils.identityNumber.vo.IdcardInfoExtractor;
-import com.beitu.saas.order.client.SaasOrderService;
-import com.beitu.saas.order.domain.SaasOrderVo;
 import com.beitu.saas.order.enums.OrderStatusEnum;
-import com.beitu.saas.rest.controller.order.request.*;
+import com.beitu.saas.rest.controller.order.request.PreliminaryOrderDetailRequest;
+import com.beitu.saas.rest.controller.order.request.PreliminaryOrderQueryRequest;
+import com.beitu.saas.rest.controller.order.request.PreliminaryOrderRemarkSaveRequest;
+import com.beitu.saas.rest.controller.order.request.PreliminaryProcessOrderRequest;
+import com.beitu.saas.rest.controller.order.response.FinalOrderListResponse;
 import com.beitu.saas.rest.controller.order.response.PreliminaryOrderDetailResponse;
 import com.beitu.saas.rest.controller.order.response.PreliminaryOrderListResponse;
-import com.beitu.saas.risk.helpers.CollectionUtils;
 import com.fqgj.common.api.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,10 +26,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author linanjun
@@ -48,50 +38,17 @@ import java.util.stream.Collectors;
 public class PreliminaryReviewOrderController {
 
     @Autowired
-    private SaasOrderService saasOrderService;
-
-    @Autowired
     private OrderApplication orderApplication;
-
-    @Autowired
-    private SaasBorrowerRealInfoService saasBorrowerRealInfoService;
-
-    @Autowired
-    private SaasBorrowerService saasBorrowerService;
-
-    @Autowired
-    private SaasChannelService saasChannelService;
 
     @RequestMapping(value = "/query", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "初审订单查询", response = PreliminaryOrderQueryRequest.class)
     public ModuleApiResponse<PreliminaryOrderListResponse> query(@RequestBody @Valid PreliminaryOrderQueryRequest req, Page page) {
         SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
-        List<SaasOrderVo> saasOrderVoList = saasOrderService.listPreliminaryReviewOrder(saasAdmin.getMerchantCode(), saasAdmin.getCode(), page);
-        if (CollectionUtils.isEmpty(saasOrderVoList)) {
-            return new ModuleApiResponse();
-        }
-        List<PreliminaryOrderListResponse.PreliminaryOrderListVo> orderListVoList = new ArrayList<>(saasOrderVoList.size());
-        saasOrderVoList.forEach(saasOrderVo -> {
-            PreliminaryOrderListResponse.PreliminaryOrderListVo orderListVo = new PreliminaryOrderListResponse.PreliminaryOrderListVo();
-            orderListVo.setOrderNumb(saasOrderVo.getOrderNumb());
-            orderListVo.setApplyDate(DateUtil.getDate(saasOrderVo.getCreatedDt()));
-            orderListVo.setCapital(saasOrderVo.getRealCapital().toString());
-            orderListVo.setOrderStatus(OrderStatusEnum.getByCode(saasOrderVo.getOrderStatus()).getMsg());
-            orderListVo.setRemark(saasOrderVo.getRemark());
-            orderListVo.setBorrowingDuration(DateUtil.countDay(saasOrderVo.getRepaymentDt(), saasOrderVo.getCreatedDt()) + "天");
-            SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(saasOrderVo.getBorrowerCode());
-            if (saasBorrowerRealInfoVo != null) {
-                orderListVo.setBorrowerName(saasBorrowerRealInfoVo.getName());
-                IdcardInfoExtractor idcardInfoExtractor = new IdcardInfoExtractor(saasBorrowerRealInfoVo.getIdentityCode());
-                orderListVo.setBorrowerAge(idcardInfoExtractor.getAge());
-                orderListVo.setBorrowerGender(idcardInfoExtractor.getGender());
-            }
-            SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCode(saasOrderVo.getBorrowerCode());
-            orderListVo.setBorrowerMobile(saasBorrowerVo.getMobile());
-            orderListVo.setChannelName(saasChannelService.getSaasChannelByChannelCode(saasOrderVo.getChannelCode()).getChannelName());
-        });
-        return new ModuleApiResponse(new PreliminaryOrderListResponse(orderListVoList), page);
+        QuerySaasOrderVo querySaasOrderVo = new QuerySaasOrderVo();
+        querySaasOrderVo.setReviewerCode(saasAdmin.getCode());
+        querySaasOrderVo.setMerchantCode(saasAdmin.getMerchantCode());
+        return new ModuleApiResponse(new FinalOrderListResponse(orderApplication.listPreliminaryReviewOrder(querySaasOrderVo, page)), page);
     }
 
     @RequestMapping(value = "/remark/save", method = RequestMethod.POST)
@@ -100,15 +57,6 @@ public class PreliminaryReviewOrderController {
     public ApiResponse saveRemark(@RequestBody @Valid PreliminaryOrderRemarkSaveRequest req) {
         // TODO
         return new ApiResponse();
-    }
-
-    @RequestMapping(value = "/collect", method = RequestMethod.POST)
-    @ResponseBody
-    @ApiOperation(value = "初审领单", response = ApiResponse.class)
-    public ApiResponse collect(@RequestBody @Valid PreliminaryOrderCollectRequest req) {
-        String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.updateOrderStatus(adminCode, req.getOrderNumb(), OrderStatusEnum.PRELIMINARY_REVIEWER_GET_ORDER, null);
-        return new ApiResponse("操作成功");
     }
 
     @RequestMapping(value = "/detail", method = RequestMethod.POST)
@@ -120,6 +68,15 @@ public class PreliminaryReviewOrderController {
         PreliminaryOrderDetailResponse response = new PreliminaryOrderDetailResponse();
         response.setOrderNumb(req.getOrderNumb());
         return new DataApiResponse<>(response);
+    }
+
+    @RequestMapping(value = "/order/get", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "初审领单", response = ApiResponse.class)
+    public ApiResponse getOrder(@RequestBody @Valid PreliminaryProcessOrderRequest req) {
+        String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
+        orderApplication.updateOrderStatus(adminCode, req.getOrderNumb(), OrderStatusEnum.PRELIMINARY_REVIEWER_GET_ORDER, null);
+        return new ApiResponse("操作成功");
     }
 
     @RequestMapping(value = "/agree", method = RequestMethod.POST)
