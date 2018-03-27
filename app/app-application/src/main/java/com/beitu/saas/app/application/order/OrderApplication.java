@@ -155,39 +155,6 @@ public class OrderApplication {
 
         if (restCodeList.size() > 0) {
             updateOrderStatus(operatorCode, saasOrderVo.getSaasOrderId(), saasOrderVo.getOrderNumb(), currentOrderStatus, updateOrderStatus, remark);
-
-        }
-        switch (updateOrderStatus) {
-            case IN_PRELIMINARY_REVIEWER:
-                if (OrderStatusEnum.SUBMIT_PRELIMINARY_REVIEW.equals(currentOrderStatus)) {
-                    updateOrderStatus(operatorCode, saasOrderVo.getSaasOrderId(), saasOrderVo.getOrderNumb(), currentOrderStatus, updateOrderStatus, remark);
-                }
-                break;
-            case PRELIMINARY_REVIEWER_GET_ORDER:
-                if (OrderStatusEnum.IN_PRELIMINARY_REVIEWER.equals(currentOrderStatus)
-                        || OrderStatusEnum.SUBMIT_PRELIMINARY_REVIEW.equals(currentOrderStatus)
-                        || OrderStatusEnum.PRELIMINARY_REVIEWER_REJECT.equals(currentOrderStatus)
-                        || OrderStatusEnum.PRELIMINARY_REVIEWER_REFUSE.equals(currentOrderStatus)) {
-                    updateOrderStatus(operatorCode, saasOrderVo.getSaasOrderId(), saasOrderVo.getOrderNumb(), currentOrderStatus, updateOrderStatus, remark);
-                }
-                break;
-            case PRELIMINARY_REVIEWER_REJECT:
-                if (OrderStatusEnum.IN_PRELIMINARY_REVIEWER.equals(currentOrderStatus)
-                        || OrderStatusEnum.PRELIMINARY_REVIEWER_GET_ORDER.equals(currentOrderStatus)) {
-                    updateOrderStatus(operatorCode, saasOrderVo.getSaasOrderId(), saasOrderVo.getOrderNumb(), currentOrderStatus, updateOrderStatus, remark);
-                }
-                break;
-            case PRELIMINARY_REVIEWER_REFUSE:
-                if (OrderStatusEnum.IN_PRELIMINARY_REVIEWER.equals(currentOrderStatus)
-                        || OrderStatusEnum.PRELIMINARY_REVIEWER_GET_ORDER.equals(currentOrderStatus)) {
-                    updateOrderStatus(operatorCode, saasOrderVo.getSaasOrderId(), saasOrderVo.getOrderNumb(), currentOrderStatus, updateOrderStatus, remark);
-                }
-                break;
-            case IN_FINAL_REVIEWER:
-                if (OrderStatusEnum.SUBMIT_FINAL_REVIEW.equals(currentOrderStatus)) {
-                    updateOrderStatus(operatorCode, saasOrderVo.getSaasOrderId(), saasOrderVo.getOrderNumb(), currentOrderStatus, updateOrderStatus, remark);
-                }
-                break;
         }
         throw new ApplicationException(OrderErrorCodeEnum.ILLEGAL_OPERATION_ORDER_STATUS);
     }

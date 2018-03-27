@@ -20,14 +20,14 @@ public enum OrderStatusEnum implements MsgCodeEnum {
     FINAL_REVIEWER_GET_ORDER(203, "复审已领单", new Integer[]{201, 202}),
     FINAL_REVIEWER_REJECT(204, "复审驳回", new Integer[]{201, 202, 203}),
     FINAL_REVIEWER_REFUSE(205, "复审拒绝", new Integer[]{201, 202, 203}),
-    SUBMIT_LOAN_LENDER(301, "待放款", new Integer[]{}),
-    LOAN_LENDER_REFUSE(302, "放款拒绝", new Integer[]{}),
+    SUBMIT_LOAN_LENDER(301, "待放款", new Integer[]{202, 203, 204}),
+    LOAN_LENDER_REFUSE(302, "放款拒绝", new Integer[]{202, 203, 204}),
     TO_CONFIRM_RECEIPT(303, "待确认收款", new Integer[]{}),
-    FOR_REIMBURSEMENT(401, "待还款", new Integer[]{}),
-    TO_CONFIRM_EXTEND(402, "展期待确认", new Integer[]{}),
-    IN_EXTEND(403, "展期中", new Integer[]{}),
+    FOR_REIMBURSEMENT(401, "待还款", new Integer[]{303}),
+    TO_CONFIRM_EXTEND(402, "展期待确认", new Integer[]{401}),
+    IN_EXTEND(403, "展期中", new Integer[]{402}),
     HAS_BEEN_PAYMENT(501, "已还款", new Integer[]{}),
-    HAS_BEEN_DESTROY(502, "已核销", new Integer[]{}),
+    HAS_BEEN_DESTROY(502, "已核销", new Integer[]{401}),
     OVERDUE(999, "已逾期", new Integer[]{});
 
 
