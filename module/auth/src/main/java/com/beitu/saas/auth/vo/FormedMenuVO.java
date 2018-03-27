@@ -41,6 +41,7 @@ public class FormedMenuVO {
                 parentMenu.setId(Menu.getId());
                 parentMenu.setParentName(Menu.getName());
                 parentMenu.setValue(Menu.getLink());
+                parentMenu.setIconUrl(Menu.getIconUrl());
                 parentMenu.setNavs(createChildrenVavs(menuIdMap.get(Menu.getId()), menuIdMap));
                 this.list.add(parentMenu);
             }
@@ -57,6 +58,7 @@ public class FormedMenuVO {
                 item.setId(entity.getId());
                 item.setKey(entity.getName());
                 item.setValue(entity.getLink());
+                item.setIconUrl(entity.getIconUrl());
                 item.setNavs(createChildrenVavs(menuIdMap.get(entity.getId()), menuIdMap));
                 childrenMenuList.add(item);
             }
@@ -70,7 +72,16 @@ public class FormedMenuVO {
         private Long id;
         private String parentName;
         private String value;
+        private String iconUrl;
         List<ChildrenMenu> navs = new ArrayList<>();
+
+        public String getIconUrl() {
+            return iconUrl;
+        }
+
+        public void setIconUrl(String iconUrl) {
+            this.iconUrl = iconUrl;
+        }
 
         public String getValue() {
             return value;
@@ -113,8 +124,16 @@ public class FormedMenuVO {
         private Long id;
         private String key;
         private String value;
-
+        private String iconUrl;
         List<ChildrenMenu> navs = new ArrayList<>();
+
+        public String getIconUrl() {
+            return iconUrl;
+        }
+
+        public void setIconUrl(String iconUrl) {
+            this.iconUrl = iconUrl;
+        }
 
         public Long getId() {
             return id;
