@@ -36,7 +36,7 @@
                 <if test="channelStatQueryParam.createStartDate != null and channelStatQueryParam.createEndDate != null">
                     and date_format(gmt_create, '%Y-%m-%d') &gt;=
                     #{channelStatQueryParam.createStartDate,jdbcType=VARCHAR}
-                    and date_format(so.gmt_create, '%Y-%m-%d') &lt;
+                    and date_format(gmt_create, '%Y-%m-%d') &lt;
                     #{channelStatQueryParam.createEndDate,jdbcType=VARCHAR}
                 </if>
                 group by channel_code
@@ -74,7 +74,7 @@
     </select>
 
     <select id="selectChannelStatList" parameterType="map"
-            resultType="com.beitu.saas.collection.vo.CollectionOrderStatVo">
+            resultType="com.beitu.saas.channel.vo.ChannelStatVo">
         SELECT
         channel_code channelCode,
         count(distinct(order_numb)) intoPiecesNum,
@@ -91,7 +91,7 @@
         SELECT count(1) FROM (
         SELECT channel_code FROM saas_order
         <include refid="Param_channel_order_stat_Where_Clause"/>
-        )
+        ) t
     </select>
 
 </mapper>
