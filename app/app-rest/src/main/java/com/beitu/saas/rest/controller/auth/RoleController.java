@@ -47,9 +47,12 @@ public class RoleController {
         return Response.ok();
     }
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/list/{currentPage}/{pageSize}", method = RequestMethod.GET)
     @ParamsValidate
-    public Response list(@RequestBody Page page) {
+    public Response list(@PathVariable(value = "currentPage") Integer currentPage, @PathVariable("pageSize") Integer pageSize) {
+        Page page = new Page();
+        page.setCurrentPage(currentPage);
+        page.setPageSize(pageSize);
         SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
         List<SaasRole> list = saasRoleService.getRoleListByMerchantCode(saasAdmin.getCode(), page);
         List<RoleListResponse> listResponses = new ArrayList<>();
@@ -58,6 +61,7 @@ public class RoleController {
             BeanUtils.copyProperties(saasRole, response);
             response.setRoleId(saasRole.getId());
             response.setCreateTime(DateUtil.convertDateToString(saasRole.getGmtCreate()));
+            listResponses.add(response);
         });
         return Response.ok().putData(new HashMap<String, Object>(2) {{
             put("roleList", listResponses);

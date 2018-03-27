@@ -13,6 +13,7 @@ import com.fqgj.common.utils.CollectionUtils;
 import com.fqgj.common.utils.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -77,6 +78,7 @@ public class AdminInfoApplication {
         return saasRolePermissionList.parallelStream().map(SaasRolePermission::getRelationId).collect(toList());
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void addAdminAndRole(SaasAdmin saasAdmin,Long roleId){
         SaasAdmin entity = (SaasAdmin) saasAdminService.create(saasAdmin);
         SaasAdminRole saasAdminRole = new SaasAdminRole();

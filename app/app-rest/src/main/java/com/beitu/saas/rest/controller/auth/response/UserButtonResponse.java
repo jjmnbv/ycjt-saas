@@ -1,6 +1,8 @@
 package com.beitu.saas.rest.controller.auth.response;
 
 import com.beitu.saas.auth.entity.SaasOperationButton;
+import com.timevale.tech.sdk.seal.IFontsLoader;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,27 +18,28 @@ public class UserButtonResponse {
 
     private List<OperationButton> list;
 
-    public UserButtonResponse(List<SaasOperationButton> buttonList,Map<Long,String> parentButton) {
+    public UserButtonResponse(List<SaasOperationButton> buttonList, Map<Long, String> parentButton) {
         list = new ArrayList<>();
+        parentButton.forEach((k, v) -> {
+            OperationButton operationButtonNew = new OperationButton();
+            operationButtonNew.setId(k);
+            operationButtonNew.setName(v);
+            List<OperationButtonItem> operationButtonItemList = new ArrayList<>();
+            operationButtonNew.setList(operationButtonItemList);
+            list.add(operationButtonNew);
+        });
+
         buttonList.forEach(saasOperationButton -> {
-            boolean anyMatch =false;
-            for (OperationButton operationButton :list){
-                if (parentButton.containsKey(operationButton.getId())){
-                    anyMatch=true;
-                    OperationButtonItem operationButtonItem = new OperationButtonItem(saasOperationButton.getId(),saasOperationButton.getName());
+            for (OperationButton operationButton : list) {
+                if (saasOperationButton.getId().equals(saasOperationButton.getPId().longValue())) {
+                    continue;
+                }
+                if (operationButton.getId().equals(saasOperationButton.getPId().longValue())) {
+                    OperationButtonItem operationButtonItem = new OperationButtonItem(saasOperationButton.getId(), saasOperationButton.getName());
                     operationButton.getList().add(operationButtonItem);
+                    continue;
                 }
             }
-            if (!anyMatch){
-                OperationButton operationButton = new OperationButton();
-                operationButton.setId(saasOperationButton.getPId().longValue());
-                operationButton.setName(parentButton.get(saasOperationButton.getPId()));
-                List <OperationButtonItem> operationButtonItemList = new ArrayList<>();
-                OperationButtonItem operationButtonItem = new OperationButtonItem(saasOperationButton.getId(),saasOperationButton.getName());
-                operationButtonItemList.add(operationButtonItem);
-                operationButton.setList(operationButtonItemList);
-            }
-
         });
     }
 
@@ -48,10 +51,10 @@ public class UserButtonResponse {
         this.list = list;
     }
 
-    class OperationButton{
+    class OperationButton {
         private Long id;
         private String name;
-        private List<OperationButtonItem> list ;
+        private List<OperationButtonItem> list;
 
         public Long getId() {
             return id;
@@ -68,6 +71,7 @@ public class UserButtonResponse {
         public void setName(String name) {
             this.name = name;
         }
+
         public List<OperationButtonItem> getList() {
             return list;
         }
@@ -77,7 +81,7 @@ public class UserButtonResponse {
         }
     }
 
-    class OperationButtonItem{
+    class OperationButtonItem {
         private Long id;
         private String name;
 

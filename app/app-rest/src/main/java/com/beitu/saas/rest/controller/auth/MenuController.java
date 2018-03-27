@@ -60,28 +60,28 @@ public class MenuController {
         return Response.ok().putData(new UserButtonResponse(buttonList,saasOperationButtonService.getParentButtonForMap()));
     }
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public Response allMenus() {
-        List<SaasMenu> menuList = saasMenuService.getAllMenu();
-        List<MenusResponse> responses = new ArrayList<>();
-        menuList.forEach(saasMenu -> {
-            MenusResponse menusResponse = new MenusResponse();
-            BeanUtils.copyProperties(saasMenu, menusResponse);
-            responses.add(menusResponse);
-        });
-        return Response.ok().putData(responses);
-    }
-
-    @RequestMapping(value = "/operation/list", method = RequestMethod.GET)
-    public Response allOperation() {
-        List<SaasOperationButton> menuList = saasOperationButtonService.getAllButton();
-        List<OperationButtonResponse> responses = new ArrayList<>();
-        menuList.forEach(saasOperationButton -> {
-            OperationButtonResponse operationButtonResponse = new OperationButtonResponse();
-            operationButtonResponse.setButtonId(saasOperationButton.getId());
-            BeanUtils.copyProperties(saasOperationButton, operationButtonResponse);
-            responses.add(operationButtonResponse);
-        });
-        return Response.ok().putData(responses);
-    }
+//    @RequestMapping(value = "/list", method = RequestMethod.GET)
+//    public Response allMenus() {
+//        List<SaasMenu> menuList = saasMenuService.getAllMenu();
+//        List<MenusResponse> responses = new ArrayList<>();
+//        menuList.forEach(saasMenu -> {
+//            MenusResponse menusResponse = new MenusResponse();
+//            BeanUtils.copyProperties(saasMenu, menusResponse);
+//            responses.add(menusResponse);
+//        });
+//        return Response.ok().putData(responses);
+//    }
+//
+//    @RequestMapping(value = "/operation/list", method = RequestMethod.GET)
+//    public Response allOperation() {
+//        List<SaasOperationButton> menuList = saasOperationButtonService.getAllButton();
+//        List<OperationButtonResponse> responses = new ArrayList<>();
+//        menuList.forEach(saasOperationButton -> {
+//            OperationButtonResponse operationButtonResponse = new OperationButtonResponse();
+//            operationButtonResponse.setButtonId(saasOperationButton.getId());
+//            BeanUtils.copyProperties(saasOperationButton, operationButtonResponse);
+//            responses.add(operationButtonResponse);
+//        });
+//        return Response.ok().putData(responses);
+//    }
 }
