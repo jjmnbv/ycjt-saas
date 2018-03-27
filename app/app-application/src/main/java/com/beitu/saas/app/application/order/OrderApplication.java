@@ -150,10 +150,10 @@ public class OrderApplication {
         OrderStatusEnum currentOrderStatus = OrderStatusEnum.getEnumByCode(saasOrderVo.getOrderStatus());
 
         Integer[] codeArray = currentOrderStatus.getCodeArray();
-        List<Integer> codeList = Arrays.asList(codeArray);
-        List<Integer> restuCodeList = codeList.stream().filter(x -> x != currentOrderStatus.getCode()).collect(Collectors.toList());
+        List<Integer> allCodeList = Arrays.asList(codeArray);
+        List<Integer> restCodeList = allCodeList.stream().filter(x -> x != currentOrderStatus.getCode()).collect(Collectors.toList());
 
-        if (restuCodeList.size() > 0) {
+        if (restCodeList.size() > 0) {
             updateOrderStatus(operatorCode, saasOrderVo.getSaasOrderId(), saasOrderVo.getOrderNumb(), currentOrderStatus, updateOrderStatus, remark);
 
         }
