@@ -6,6 +6,7 @@
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="link" jdbcType="VARCHAR" property="link"/>
+        <result column="icon_url" jdbcType="VARCHAR" property="iconUrl"/>
         <result column="p_id" jdbcType="INTEGER" property="pId"/>
         <result column="is_parent" jdbcType="BIT" property="isParent"/>
         <result column="sort" jdbcType="BIGINT" property="sort"/>
@@ -17,6 +18,7 @@
         id,
         `name`,
         link,
+        icon_url,
         p_id,
         is_parent,
         sort,
@@ -40,6 +42,9 @@
             </if>
             <if test="link !=null">
                 link,
+            </if>
+            <if test="iconUrl !=null">
+                icon_url,
             </if>
             <if test="pId !=null">
                 p_id,
@@ -66,6 +71,9 @@
             </if>
             <if test="link != null">
                 #{link,jdbcType=VARCHAR},
+            </if>
+            <if test="iconUrl != null">
+                #{iconUrl,jdbcType=VARCHAR},
             </if>
             <if test="pId != null">
                 #{pId,jdbcType=INTEGER},
@@ -96,6 +104,9 @@
             </if>
             <if test="link !=null">
                 link = #{link,jdbcType=VARCHAR},
+            </if>
+            <if test="iconUrl !=null">
+                icon_url = #{iconUrl,jdbcType=VARCHAR},
             </if>
             <if test="pId !=null">
                 p_id = #{pId,jdbcType=INTEGER},
@@ -148,6 +159,9 @@
             <if test="link !=null">
                 and link = #{link,jdbcType=VARCHAR}
             </if>
+            <if test="iconUrl !=null">
+                and icon_url = #{iconUrl,jdbcType=VARCHAR}
+            </if>
             <if test="pId !=null">
                 and p_id = #{pId,jdbcType=INTEGER}
             </if>
@@ -181,6 +195,9 @@
             </if>
             <if test="link !=null">
                 and link = #{link,jdbcType=VARCHAR}
+            </if>
+            <if test="iconUrl !=null">
+                and icon_url = #{iconUrl,jdbcType=VARCHAR}
             </if>
             <if test="pId !=null">
                 and p_id = #{pId,jdbcType=INTEGER}

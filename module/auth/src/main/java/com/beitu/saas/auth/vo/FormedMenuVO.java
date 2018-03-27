@@ -31,7 +31,7 @@ public class FormedMenuVO {
                 }
                 temp.add(entity);
                 menuIdMap.put(entity.getPId(), temp);
-                if (entity.getPId() == 0) {
+                if (entity.getPId() == entity.getId().longValue()) {
                     firstMenus.add(entity);
                 }
             }
@@ -41,7 +41,8 @@ public class FormedMenuVO {
                 parentMenu.setId(Menu.getId());
                 parentMenu.setParentName(Menu.getName());
                 parentMenu.setValue(Menu.getLink());
-                parentMenu.setNavs(createChildrenVavs(menuIdMap.get(Menu.getId()), menuIdMap));
+                parentMenu.setIconUrl(Menu.getIconUrl());
+                parentMenu.setNavs(createChildrenVavs(menuIdMap.get(Menu.getId().intValue()), menuIdMap));
                 this.list.add(parentMenu);
             }
         }
@@ -52,11 +53,15 @@ public class FormedMenuVO {
         List<ChildrenMenu> childrenMenuList = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(MenuList)) {
             for (SaasMenu entity : MenuList) {
+                if (entity.getId().equals(entity.getPId().longValue())){
+                    continue;
+                }
                 menuIds.add(entity.getId() + "");
                 ChildrenMenu item = new ChildrenMenu();
                 item.setId(entity.getId());
                 item.setKey(entity.getName());
                 item.setValue(entity.getLink());
+                item.setIconUrl(entity.getIconUrl());
                 item.setNavs(createChildrenVavs(menuIdMap.get(entity.getId()), menuIdMap));
                 childrenMenuList.add(item);
             }
@@ -70,7 +75,16 @@ public class FormedMenuVO {
         private Long id;
         private String parentName;
         private String value;
+        private String iconUrl;
         List<ChildrenMenu> navs = new ArrayList<>();
+
+        public String getIconUrl() {
+            return iconUrl;
+        }
+
+        public void setIconUrl(String iconUrl) {
+            this.iconUrl = iconUrl;
+        }
 
         public String getValue() {
             return value;
@@ -113,8 +127,16 @@ public class FormedMenuVO {
         private Long id;
         private String key;
         private String value;
-
+        private String iconUrl;
         List<ChildrenMenu> navs = new ArrayList<>();
+
+        public String getIconUrl() {
+            return iconUrl;
+        }
+
+        public void setIconUrl(String iconUrl) {
+            this.iconUrl = iconUrl;
+        }
 
         public Long getId() {
             return id;

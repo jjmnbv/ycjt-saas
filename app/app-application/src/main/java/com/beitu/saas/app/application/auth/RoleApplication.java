@@ -11,6 +11,7 @@ import com.beitu.saas.auth.service.SaasRoleService;
 import com.fqgj.common.utils.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +37,7 @@ public class RoleApplication {
     private SaasAdminRoleService saasAdminRoleService;
 
 
+    @Transactional(rollbackFor = Exception.class)
     public void addRoleAndEmpower(String roleName, String currentName, String merchantCode, List menuIds, List buttonIds) {
         SaasRole saasRole = new SaasRole();
         saasRole.setName(roleName);
