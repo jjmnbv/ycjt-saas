@@ -17,7 +17,9 @@
                          close=")">
                     #{borrowerCode}
                 </foreach>
-                AND
+            </if>
+            <if test="repaymentDt !=null">
+                and repayment_dt = #{repaymentDt,jdbcType=DATE}
             </if>
             <if test="createdBeginDt != null">
                 and created_dt <![CDATA[ >= ]]> #{createdBeginDt,jdbcType=TIMESTAMP}
@@ -31,7 +33,6 @@
                          close=")">
                     #{orderStatus}
                 </foreach>
-                AND
             </if>
             <if test="preliminaryReviewerCode !=null">
                 and preliminary_reviewer_code = #{preliminaryReviewerCode,jdbcType=VARCHAR}
@@ -42,6 +43,7 @@
             <if test="loanLenderCode !=null">
                 and loan_lender_code = #{loanLenderCode,jdbcType=VARCHAR}
             </if>
+            and expire_date <![CDATA[ < ]]> NOW()
         </trim>
     </sql>
 

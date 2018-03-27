@@ -11,7 +11,7 @@ import com.beitu.saas.order.enums.OrderStatusEnum;
 import com.beitu.saas.rest.controller.order.request.PreliminaryOrderDetailRequest;
 import com.beitu.saas.rest.controller.order.request.PreliminaryOrderQueryRequest;
 import com.beitu.saas.rest.controller.order.request.PreliminaryOrderRemarkSaveRequest;
-import com.beitu.saas.rest.controller.order.request.PreliminaryProcessOrderRequest;
+import com.beitu.saas.rest.controller.order.request.PreliminaryReviewerOperateOrderRequest;
 import com.beitu.saas.rest.controller.order.response.FinalOrderListResponse;
 import com.beitu.saas.rest.controller.order.response.PreliminaryOrderDetailResponse;
 import com.beitu.saas.rest.controller.order.response.PreliminaryOrderListResponse;
@@ -77,7 +77,7 @@ public class PreliminaryReviewOrderController {
     @RequestMapping(value = "/order/get", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "初审领单", response = ApiResponse.class)
-    public ApiResponse getOrder(@RequestBody @Valid PreliminaryProcessOrderRequest req) {
+    public ApiResponse getOrder(@RequestBody @Valid PreliminaryReviewerOperateOrderRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
         orderApplication.updateOrderStatus(adminCode, req.getOrderNumb(), OrderStatusEnum.PRELIMINARY_REVIEWER_GET_ORDER, null);
         return new ApiResponse("操作成功");
@@ -86,7 +86,7 @@ public class PreliminaryReviewOrderController {
     @RequestMapping(value = "/agree", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "通过初审", response = ApiResponse.class)
-    public ApiResponse agree(@RequestBody @Valid PreliminaryProcessOrderRequest req) {
+    public ApiResponse agree(@RequestBody @Valid PreliminaryReviewerOperateOrderRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
         orderApplication.updateOrderStatus(adminCode, req.getOrderNumb(), OrderStatusEnum.SUBMIT_FINAL_REVIEW, null);
         return new ApiResponse("操作成功");
@@ -95,7 +95,7 @@ public class PreliminaryReviewOrderController {
     @RequestMapping(value = "/reject", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "初审驳回", response = ApiResponse.class)
-    public ApiResponse reject(@RequestBody @Valid PreliminaryProcessOrderRequest req) {
+    public ApiResponse reject(@RequestBody @Valid PreliminaryReviewerOperateOrderRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
         orderApplication.updateOrderStatus(adminCode, req.getOrderNumb(), OrderStatusEnum.PRELIMINARY_REVIEWER_REJECT, null);
         return new ApiResponse("操作成功");
@@ -104,7 +104,7 @@ public class PreliminaryReviewOrderController {
     @RequestMapping(value = "/refuse", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "初审拒绝", response = ApiResponse.class)
-    public ApiResponse refuse(@RequestBody @Valid PreliminaryProcessOrderRequest req) {
+    public ApiResponse refuse(@RequestBody @Valid PreliminaryReviewerOperateOrderRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
         orderApplication.updateOrderStatus(adminCode, req.getOrderNumb(), OrderStatusEnum.PRELIMINARY_REVIEWER_REFUSE, null);
         return new ApiResponse("操作成功");

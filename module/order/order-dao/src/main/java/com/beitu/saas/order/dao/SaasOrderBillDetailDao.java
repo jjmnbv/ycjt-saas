@@ -4,6 +4,7 @@ import com.fqgj.common.base.BaseMapper;
 import com.beitu.saas.order.entity.SaasOrderBillDetail;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: jungle
@@ -16,5 +17,9 @@ public interface SaasOrderBillDetailDao extends BaseMapper<SaasOrderBillDetail> 
     List<SaasOrderBillDetail> selectByBorrowerCodeAndMerchantCode(String borrowerCode, String merchantCode);
 
     List<SaasOrderBillDetail> selectByOrderNumb(String orderNumb);
+
+    int countByConditions(Map<String, Object> conditions);
+
+    List<SaasOrderBillDetail> selectByConditions(Map<String, Object> conditions);
 
 }

@@ -2,7 +2,9 @@ package com.beitu.saas.order.service.impl;
 
 import com.beitu.saas.order.client.SaasOrderBillDetailService;
 import com.beitu.saas.order.dao.SaasOrderBillDetailDao;
+import com.beitu.saas.order.domain.QueryOrderBillDetailVo;
 import com.beitu.saas.order.domain.SaasOrderBillDetailVo;
+import com.fqgj.common.api.Page;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
 import com.fqgj.log.enhance.Module;
@@ -31,6 +33,11 @@ public class SaasOrderBillDetailServiceImpl extends AbstractBaseService implemen
 
     @Override
     public List<SaasOrderBillDetailVo> listByOrderNumb(String orderNumb) {
+        return null;
+    }
+
+    @Override
+    public List<SaasOrderBillDetailVo> listByQueryOrderBillDetailVoAndPage(QueryOrderBillDetailVo queryOrderBillDetailVo, Page page) {
         return null;
     }
 

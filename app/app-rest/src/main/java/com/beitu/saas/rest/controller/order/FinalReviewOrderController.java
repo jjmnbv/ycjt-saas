@@ -11,7 +11,7 @@ import com.beitu.saas.order.enums.OrderStatusEnum;
 import com.beitu.saas.rest.controller.order.request.FinalOrderDetailRequest;
 import com.beitu.saas.rest.controller.order.request.FinalOrderQueryRequest;
 import com.beitu.saas.rest.controller.order.request.FinalOrderRemarkSaveRequest;
-import com.beitu.saas.rest.controller.order.request.FinalProcessOrderRequest;
+import com.beitu.saas.rest.controller.order.request.FinalReviewerOperateOrderRequest;
 import com.beitu.saas.rest.controller.order.response.FinalOrderDetailResponse;
 import com.beitu.saas.rest.controller.order.response.FinalOrderListResponse;
 import com.fqgj.common.api.Page;
@@ -76,7 +76,7 @@ public class FinalReviewOrderController {
     @RequestMapping(value = "/order/get", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "复审领单", response = ApiResponse.class)
-    public ApiResponse getOrder(@RequestBody @Valid FinalProcessOrderRequest req) {
+    public ApiResponse getOrder(@RequestBody @Valid FinalReviewerOperateOrderRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
         orderApplication.updateOrderStatus(adminCode, req.getOrderNumb(), OrderStatusEnum.FINAL_REVIEWER_GET_ORDER, null);
         return new ApiResponse("操作成功");
@@ -85,7 +85,7 @@ public class FinalReviewOrderController {
     @RequestMapping(value = "/agree", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "通过复审", response = ApiResponse.class)
-    public ApiResponse agree(@RequestBody @Valid FinalProcessOrderRequest req) {
+    public ApiResponse agree(@RequestBody @Valid FinalReviewerOperateOrderRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
         orderApplication.updateOrderStatus(adminCode, req.getOrderNumb(), OrderStatusEnum.SUBMIT_LOAN_LENDER, null);
         return new ApiResponse("操作成功");
@@ -94,7 +94,7 @@ public class FinalReviewOrderController {
     @RequestMapping(value = "/reject", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "复审驳回", response = ApiResponse.class)
-    public ApiResponse reject(@RequestBody @Valid FinalProcessOrderRequest req) {
+    public ApiResponse reject(@RequestBody @Valid FinalReviewerOperateOrderRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
         orderApplication.updateOrderStatus(adminCode, req.getOrderNumb(), OrderStatusEnum.FINAL_REVIEWER_REJECT, null);
         return new ApiResponse("操作成功");
@@ -103,7 +103,7 @@ public class FinalReviewOrderController {
     @RequestMapping(value = "/refuse", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "复审拒绝", response = ApiResponse.class)
-    public ApiResponse refuse(@RequestBody @Valid FinalProcessOrderRequest req) {
+    public ApiResponse refuse(@RequestBody @Valid FinalReviewerOperateOrderRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
         orderApplication.updateOrderStatus(adminCode, req.getOrderNumb(), OrderStatusEnum.FINAL_REVIEWER_REFUSE, null);
         return new ApiResponse("操作成功");

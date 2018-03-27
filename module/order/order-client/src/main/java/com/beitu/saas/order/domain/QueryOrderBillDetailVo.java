@@ -4,10 +4,10 @@ import java.util.Date;
 
 /**
  * @author linanjun
- * @create 2018/3/27 下午5:14
+ * @create 2018/3/27 下午10:51
  * @description
  */
-public class QuerySaasOrderVo {
+public class QueryOrderBillDetailVo {
     /**
      * 借款人CODE
      */
@@ -32,18 +32,6 @@ public class QuerySaasOrderVo {
      * 申请查询结束时间
      */
     private Date createdEndDt;
-    /**
-     * 初审员
-     */
-    private String preliminaryReviewerCode;
-    /**
-     * 复审员
-     */
-    private String finalReviewerCode;
-    /**
-     * 放款人
-     */
-    private String loanLenderCode;
     /**
      * 账单应还日
      */
@@ -97,30 +85,6 @@ public class QuerySaasOrderVo {
         this.createdEndDt = createdEndDt;
     }
 
-    public String getPreliminaryReviewerCode() {
-        return preliminaryReviewerCode;
-    }
-
-    public void setPreliminaryReviewerCode(String preliminaryReviewerCode) {
-        this.preliminaryReviewerCode = preliminaryReviewerCode;
-    }
-
-    public String getFinalReviewerCode() {
-        return finalReviewerCode;
-    }
-
-    public void setFinalReviewerCode(String finalReviewerCode) {
-        this.finalReviewerCode = finalReviewerCode;
-    }
-
-    public String getLoanLenderCode() {
-        return loanLenderCode;
-    }
-
-    public void setLoanLenderCode(String loanLenderCode) {
-        this.loanLenderCode = loanLenderCode;
-    }
-
     public Date getRepaymentDt() {
         return repaymentDt;
     }
@@ -128,4 +92,5 @@ public class QuerySaasOrderVo {
     public void setRepaymentDt(Date repaymentDt) {
         this.repaymentDt = repaymentDt;
     }
+
 }

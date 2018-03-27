@@ -11,7 +11,7 @@ import org.hibernate.validator.constraints.NotBlank;
  * @description
  */
 @ApiModel(description = "初审订单操作")
-public class FinalProcessOrderRequest extends ParamsObject {
+public class AfterLendManagerOperateOrderRequest extends ParamsObject {
 
     @ApiModelProperty(value = "订单号", required = true)
     @NotBlank(message = "订单号不能为空")
