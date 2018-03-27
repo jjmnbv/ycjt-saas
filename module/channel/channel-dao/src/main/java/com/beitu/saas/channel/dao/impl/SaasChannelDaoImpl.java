@@ -1,8 +1,10 @@
 package com.beitu.saas.channel.dao.impl;
 
+import com.beitu.saas.channel.param.ChannelStatQueryParam;
 import com.beitu.saas.channel.param.SaasChannelParam;
 import com.beitu.saas.channel.dao.SaasChannelDao;
 import com.beitu.saas.channel.entity.SaasChannelEntity;
+import com.beitu.saas.channel.vo.ChannelStatVo;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.base.AbstractBaseMapper;
 import org.springframework.stereotype.Repository;
@@ -42,5 +44,23 @@ public class SaasChannelDaoImpl extends AbstractBaseMapper<SaasChannelEntity> im
         Map<String, Object> map = new HashMap<>();
         map.put("channelCode", channelCode);
         return getSqlSession().selectOne(this.getStatement("selectChannelEntityByChannelCode"), map);
+    }
+
+    @Override
+    public List<ChannelStatVo> selectChannelStatList(ChannelStatQueryParam channelStatQueryParam, Page page) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("channelStatQueryParam", channelStatQueryParam);
+        if (page != null) {
+            page.setTotalCount(this.queryTotalChannelStatCount(channelStatQueryParam));
+            map.put("page", page);
+        }
+        return getSqlSession().selectList(this.getStatement("selectChannelStatList"), map);
+    }
+
+    @Override
+    public Integer queryTotalChannelStatCount(ChannelStatQueryParam channelStatQueryParam) {
+        Map<String, Object> paramMap = new HashMap();
+        paramMap.put("channelStatQueryParam", channelStatQueryParam);
+        return getSqlSession().selectOne(this.getStatement("queryTotalChannelStatCount"), paramMap);
     }
 }

@@ -1,7 +1,9 @@
 package com.beitu.saas.channel.client;
 
+import com.beitu.saas.channel.param.ChannelStatQueryParam;
 import com.beitu.saas.channel.param.SaasChannelParam;
 import com.beitu.saas.channel.entity.SaasChannelEntity;
+import com.beitu.saas.channel.vo.ChannelStatVo;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.base.BaseService;
 import com.fqgj.common.entity.BaseEntity;
@@ -30,4 +32,13 @@ public interface SaasChannelService<T extends BaseEntity> extends BaseService<T>
      * 根据渠道号渠道信息
      */
     SaasChannelEntity getSaasChannelByChannelCode(String channelCode);
+
+    /**
+     * 渠道统计列表
+     *
+     * @param channelStatQueryParam
+     * @param page
+     * @return
+     */
+    List<ChannelStatVo> getChannelStatByPage(ChannelStatQueryParam channelStatQueryParam, Page page);
 }

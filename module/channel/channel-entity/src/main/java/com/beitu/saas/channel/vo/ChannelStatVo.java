@@ -1,4 +1,4 @@
-package com.beitu.saas.collection.vo;
+package com.beitu.saas.channel.vo;
 
 import java.math.BigDecimal;
 
@@ -9,9 +9,9 @@ import java.math.BigDecimal;
  * Date: 2018/3/27
  * Time: 下午12:02
  */
-public class CollectionOrderStatVo {
+public class ChannelStatVo {
 
-    private String channelNo;
+    private String channelCode;
     private String channelName;
     private Integer intoPiecesNum;//进件数
 
@@ -26,12 +26,12 @@ public class CollectionOrderStatVo {
     private BigDecimal loanLenderRatio;//放款通过数/复审通过数
     private BigDecimal loanLenderBaseRatio;//放款通过/进件数
 
-    public String getChannelNo() {
-        return channelNo;
+    public String getChannelCode() {
+        return channelCode;
     }
 
-    public CollectionOrderStatVo setChannelNo(String channelNo) {
-        this.channelNo = channelNo;
+    public ChannelStatVo setChannelCode(String channelCode) {
+        this.channelCode = channelCode;
         return this;
     }
 
@@ -39,7 +39,7 @@ public class CollectionOrderStatVo {
         return channelName;
     }
 
-    public CollectionOrderStatVo setChannelName(String channelName) {
+    public ChannelStatVo setChannelName(String channelName) {
         this.channelName = channelName;
         return this;
     }
@@ -48,7 +48,7 @@ public class CollectionOrderStatVo {
         return intoPiecesNum;
     }
 
-    public CollectionOrderStatVo setIntoPiecesNum(Integer intoPiecesNum) {
+    public ChannelStatVo setIntoPiecesNum(Integer intoPiecesNum) {
         this.intoPiecesNum = intoPiecesNum;
         return this;
     }
@@ -57,7 +57,7 @@ public class CollectionOrderStatVo {
         return primaryReviewerNum;
     }
 
-    public CollectionOrderStatVo setPrimaryReviewerNum(Integer primaryReviewerNum) {
+    public ChannelStatVo setPrimaryReviewerNum(Integer primaryReviewerNum) {
         this.primaryReviewerNum = primaryReviewerNum;
         return this;
     }
@@ -66,7 +66,7 @@ public class CollectionOrderStatVo {
         return primaryReviewerRatio;
     }
 
-    public CollectionOrderStatVo setPrimaryReviewerRatio(BigDecimal primaryReviewerRatio) {
+    public ChannelStatVo setPrimaryReviewerRatio(BigDecimal primaryReviewerRatio) {
         this.primaryReviewerRatio = primaryReviewerRatio;
         return this;
     }
@@ -75,7 +75,7 @@ public class CollectionOrderStatVo {
         return finalReviewerNum;
     }
 
-    public CollectionOrderStatVo setFinalReviewerNum(Integer finalReviewerNum) {
+    public ChannelStatVo setFinalReviewerNum(Integer finalReviewerNum) {
         this.finalReviewerNum = finalReviewerNum;
         return this;
     }
@@ -84,7 +84,7 @@ public class CollectionOrderStatVo {
         return finalReviewerRatio;
     }
 
-    public CollectionOrderStatVo setFinalReviewerRatio(BigDecimal finalReviewerRatio) {
+    public ChannelStatVo setFinalReviewerRatio(BigDecimal finalReviewerRatio) {
         this.finalReviewerRatio = finalReviewerRatio;
         return this;
     }
@@ -93,7 +93,7 @@ public class CollectionOrderStatVo {
         return finalReviewerBaseRatio;
     }
 
-    public CollectionOrderStatVo setFinalReviewerBaseRatio(BigDecimal finalReviewerBaseRatio) {
+    public ChannelStatVo setFinalReviewerBaseRatio(BigDecimal finalReviewerBaseRatio) {
         this.finalReviewerBaseRatio = finalReviewerBaseRatio;
         return this;
     }
@@ -102,7 +102,7 @@ public class CollectionOrderStatVo {
         return loanLenderNum;
     }
 
-    public CollectionOrderStatVo setLoanLenderNum(Integer loanLenderNum) {
+    public ChannelStatVo setLoanLenderNum(Integer loanLenderNum) {
         this.loanLenderNum = loanLenderNum;
         return this;
     }
@@ -111,7 +111,7 @@ public class CollectionOrderStatVo {
         return loanLenderRatio;
     }
 
-    public CollectionOrderStatVo setLoanLenderRatio(BigDecimal loanLenderRatio) {
+    public ChannelStatVo setLoanLenderRatio(BigDecimal loanLenderRatio) {
         this.loanLenderRatio = loanLenderRatio;
         return this;
     }
@@ -120,7 +120,7 @@ public class CollectionOrderStatVo {
         return loanLenderBaseRatio;
     }
 
-    public CollectionOrderStatVo setLoanLenderBaseRatio(BigDecimal loanLenderBaseRatio) {
+    public ChannelStatVo setLoanLenderBaseRatio(BigDecimal loanLenderBaseRatio) {
         this.loanLenderBaseRatio = loanLenderBaseRatio;
         return this;
     }

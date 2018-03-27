@@ -27,6 +27,23 @@
         </where>
     </sql>
 
+    <sql id="Param_channel_order_stat_Where_Clause">
+        <where>
+            <trim prefixOverrides="and">
+                <if test="channelStatQueryParam.merchantCode != null">
+                    and merchant_code = #{channelStatQueryParam.merchantCode,jdbcType=VARCHAR}
+                </if>
+                <if test="channelStatQueryParam.createStartDate != null and channelStatQueryParam.createEndDate != null">
+                    and date_format(gmt_create, '%Y-%m-%d') &gt;=
+                    #{channelStatQueryParam.createStartDate,jdbcType=VARCHAR}
+                    and date_format(so.gmt_create, '%Y-%m-%d') &lt;
+                    #{channelStatQueryParam.createEndDate,jdbcType=VARCHAR}
+                </if>
+                group by channel_code
+            </trim>
+        </where>
+    </sql>
+
 
     <select id="selectChannelEntityList" parameterType="map" resultMap="BaseResultMap">
         SELECT
@@ -54,6 +71,27 @@
                 and deleted = 0
             </trim>
         </where>
+    </select>
+
+    <select id="selectChannelStatList" parameterType="map"
+            resultType="com.beitu.saas.collection.vo.CollectionOrderStatVo">
+        SELECT
+        channel_code channelCode,
+        count(distinct(order_numb)) intoPiecesNum,
+        count(distinct(case when order_status>200 then order_numb else null end)) primaryReviewerNum,
+        count(distinct(case when order_status>300 then order_numb else null end)) finalReviewerNum,
+        count(distinct(case when order_status>400 then order_numb else null end)) loanLenderNum
+        FROM saas_order
+        <include refid="Param_channel_order_stat_Where_Clause"/>
+        <include refid="paginationSql"/>
+    </select>
+
+
+    <select id="queryTotalChannelStatCount" parameterType="map" resultType="INTEGER">
+        SELECT count(1) FROM (
+        SELECT channel_code FROM saas_order
+        <include refid="Param_channel_order_stat_Where_Clause"/>
+        )
     </select>
 
 </mapper>
