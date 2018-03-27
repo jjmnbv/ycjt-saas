@@ -49,6 +49,10 @@ public class SaasOrderApplicationVo implements ResponseData, Serializable {
      * 账单应还日
      */
     private Date repaymentDt;
+    /**
+     * 借款协议URL地址
+     */
+    private String termUrl;
 
     private Date gmtCreate;
 
@@ -123,6 +127,14 @@ public class SaasOrderApplicationVo implements ResponseData, Serializable {
 
     public void setRepaymentDt(Date repaymentDt) {
         this.repaymentDt = repaymentDt;
+    }
+
+    public String getTermUrl() {
+        return this.termUrl;
+    }
+
+    public void setTermUrl(String termUrl) {
+        this.termUrl = termUrl;
     }
 
     public Date getGmtCreate() {

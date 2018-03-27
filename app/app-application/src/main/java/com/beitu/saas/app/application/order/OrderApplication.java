@@ -1,19 +1,27 @@
 package com.beitu.saas.app.application.order;
 
 import com.beitu.saas.app.application.order.vo.H5OrderListVo;
+import com.beitu.saas.app.application.order.vo.OrderDetailVo;
 import com.beitu.saas.app.enums.BorrowerOrderApplyStatusEnum;
 import com.beitu.saas.app.enums.H5OrderBillDetailViewTypeEnum;
+import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
+import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
 import com.beitu.saas.order.client.SaasOrderApplicationService;
 import com.beitu.saas.order.client.SaasOrderBillDetailService;
 import com.beitu.saas.order.client.SaasOrderService;
+import com.beitu.saas.order.client.SaasOrderStatusHistoryService;
 import com.beitu.saas.order.domain.SaasOrderApplicationVo;
 import com.beitu.saas.order.domain.SaasOrderBillDetailVo;
 import com.beitu.saas.order.domain.SaasOrderVo;
 import com.beitu.saas.order.entity.SaasOrder;
 import com.beitu.saas.order.entity.SaasOrderBillDetail;
+import com.beitu.saas.order.entity.SaasOrderStatusHistory;
+import com.beitu.saas.order.enums.OrderErrorCodeEnum;
 import com.beitu.saas.order.enums.OrderStatusEnum;
+import com.fqgj.common.api.Page;
 import com.fqgj.common.utils.CollectionUtils;
 import com.fqgj.common.utils.DateUtil;
+import com.fqgj.exception.common.ApplicationException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,6 +52,12 @@ public class OrderApplication {
     @Autowired
     private OrderCalculateApplication orderCalculateApplication;
 
+    @Autowired
+    private SaasBorrowerRealInfoService saasBorrowerRealInfoService;
+
+    @Autowired
+    private SaasOrderStatusHistoryService saasOrderStatusHistoryService;
+
     public BorrowerOrderApplyStatusEnum getOrderApplyStatus(String borrowerCode, String channelCode) {
         if (saasOrderApplicationService.getByBorrowerCode(borrowerCode) != null) {
             return BorrowerOrderApplyStatusEnum.REVIEWING;
@@ -62,8 +76,6 @@ public class OrderApplication {
         saasOrder.setOrderStatus(OrderStatusEnum.SUBMIT_PRELIMINARY_REVIEW.getCode());
         saasOrder.setExpireDate(DateUtil.addDate(new Date(), 20));
         saasOrder.setTotalInterestFee(orderCalculateApplication.getInterest(saasOrder.getRealCapital(), saasOrder.getTotalInterestRatio(), saasOrder.getCreatedDt(), saasOrder.getRepaymentDt()));
-        //TODO 协议地址
-        saasOrder.setTermUrl("");
         saasOrderService.create(saasOrder);
         return saasOrder;
     }
@@ -91,7 +103,7 @@ public class OrderApplication {
     }
 
     private Integer getH5ViewTypeByOrderStatus(Integer orderStatus) {
-        if (OrderStatusEnum.HAS_BEEN_DESTORY.getCode().equals(orderStatus) ||
+        if (OrderStatusEnum.HAS_BEEN_DESTROY.getCode().equals(orderStatus) ||
                 OrderStatusEnum.HAS_BEEN_PAYMENT.getCode().equals(orderStatus)) {
             return H5OrderBillDetailViewTypeEnum.FINISHED.getCode();
         } else if (OrderStatusEnum.FOR_REIMBURSEMENT.getCode().equals(orderStatus)) {
@@ -104,12 +116,71 @@ public class OrderApplication {
         return H5OrderBillDetailViewTypeEnum.FOR_REIMBURSEMENT.getCode();
     }
 
-    public void getOrderDetailByOrderNumb(String orderNumb) {
+    public OrderDetailVo getOrderDetailVoByOrderNumb(String orderNumb) {
         List<SaasOrderVo> saasOrderVoList = saasOrderService.listEffectiveOrderByOrderNumb(orderNumb);
         if (CollectionUtils.isEmpty(saasOrderVoList)) {
-
+            return null;
         }
+        SaasOrderVo saasOrderVo = saasOrderVoList.get(0);
+        OrderDetailVo orderDetailVo = new OrderDetailVo();
+        BeanUtils.copyProperties(saasOrderVo, orderDetailVo);
+        SaasBorrowerRealInfoVo realInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(saasOrderVo.getBorrowerCode());
+        orderDetailVo.setBorrowerName(realInfoVo.getName());
+        orderDetailVo.setBorrowerIdentityCode(realInfoVo.getIdentityCode());
+        return orderDetailVo;
+    }
 
+    @Transactional(rollbackFor = RuntimeException.class)
+    public void updateOrderStatus(String operatorCode, String orderNumb, OrderStatusEnum updateOrderStatus, String remark) {
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
+        OrderStatusEnum currentOrderStatus = OrderStatusEnum.getByCode(saasOrderVo.getOrderStatus());
+        switch (updateOrderStatus) {
+            case IN_PRELIMINARY_REVIEWER:
+                if (OrderStatusEnum.SUBMIT_PRELIMINARY_REVIEW.equals(currentOrderStatus)) {
+                    updateOrderStatus(operatorCode, saasOrderVo.getSaasOrderId(), saasOrderVo.getOrderNumb(), currentOrderStatus, updateOrderStatus, remark);
+                }
+                break;
+            case PRELIMINARY_REVIEWER_GET_ORDER:
+                if (OrderStatusEnum.IN_PRELIMINARY_REVIEWER.equals(currentOrderStatus)
+                        || OrderStatusEnum.SUBMIT_PRELIMINARY_REVIEW.equals(currentOrderStatus)
+                        || OrderStatusEnum.PRELIMINARY_REVIEWER_REJECT.equals(currentOrderStatus)
+                        || OrderStatusEnum.PRELIMINARY_REVIEWER_REFUSE.equals(currentOrderStatus)) {
+                    updateOrderStatus(operatorCode, saasOrderVo.getSaasOrderId(), saasOrderVo.getOrderNumb(), currentOrderStatus, updateOrderStatus, remark);
+                }
+                break;
+            case PRELIMINARY_REVIEWER_REJECT:
+                if (OrderStatusEnum.IN_PRELIMINARY_REVIEWER.equals(currentOrderStatus)
+                        || OrderStatusEnum.PRELIMINARY_REVIEWER_GET_ORDER.equals(currentOrderStatus)) {
+                    updateOrderStatus(operatorCode, saasOrderVo.getSaasOrderId(), saasOrderVo.getOrderNumb(), currentOrderStatus, updateOrderStatus, remark);
+                }
+                break;
+            case PRELIMINARY_REVIEWER_REFUSE:
+                if (OrderStatusEnum.IN_PRELIMINARY_REVIEWER.equals(currentOrderStatus)
+                        || OrderStatusEnum.PRELIMINARY_REVIEWER_GET_ORDER.equals(currentOrderStatus)) {
+                    updateOrderStatus(operatorCode, saasOrderVo.getSaasOrderId(), saasOrderVo.getOrderNumb(), currentOrderStatus, updateOrderStatus, remark);
+                }
+                break;
+            case IN_FINAL_REVIEWER:
+                if (OrderStatusEnum.SUBMIT_FINAL_REVIEW.equals(currentOrderStatus)) {
+                    updateOrderStatus(operatorCode, saasOrderVo.getSaasOrderId(), saasOrderVo.getOrderNumb(), currentOrderStatus, updateOrderStatus, remark);
+                }
+                break;
+        }
+        throw new ApplicationException(OrderErrorCodeEnum.ILLEGAL_OPERATION_ORDER_STATUS);
+    }
+
+    private void updateOrderStatus(String operatorCode, Long orderId, String orderNumb, OrderStatusEnum currentOrderStatus, OrderStatusEnum updateOrderStatus, String remark) {
+        SaasOrderStatusHistory saasOrderStatusHistory = new SaasOrderStatusHistory();
+        saasOrderStatusHistory.setOrderId(orderId);
+        saasOrderStatusHistory.setOrderNumb(orderNumb);
+        saasOrderStatusHistory.setCurrentOrderStatus(currentOrderStatus.getCode());
+        saasOrderStatusHistory.setUpdateOrderStatus(updateOrderStatus.getCode());
+        saasOrderStatusHistory.setRemark(remark);
+        saasOrderStatusHistory.setOperatorCode(operatorCode);
+        saasOrderStatusHistoryService.create(saasOrderStatusHistory);
+        if (!saasOrderService.updateOrderStatus(orderId, currentOrderStatus, updateOrderStatus)) {
+            throw new ApplicationException(OrderErrorCodeEnum.ORDER_STATUS_UPDATE_FAILURE);
+        }
     }
 
 }

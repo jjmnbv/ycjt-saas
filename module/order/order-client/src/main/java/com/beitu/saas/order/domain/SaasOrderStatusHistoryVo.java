@@ -18,7 +18,7 @@ public class SaasOrderStatusHistoryVo implements ResponseData, Serializable {
     /**
      * 订单ID
      */
-    private String orderId;
+    private Long orderId;
     /**
      * 订单号
      */
@@ -49,11 +49,11 @@ public class SaasOrderStatusHistoryVo implements ResponseData, Serializable {
     }
 
 
-    public String getOrderId() {
+    public Long getOrderId() {
         return this.orderId;
     }
 
-    public void setOrderId(String orderId) {
+    public void setOrderId(Long orderId) {
         this.orderId = orderId;
     }
 

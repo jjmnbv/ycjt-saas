@@ -24,6 +24,9 @@ public class ExtendOrderDetailVo implements ResponseData {
     @ApiModelProperty(value = "展期利率")
     private String totalInterestRatio;
 
+    @ApiModelProperty(value = "订单状态")
+    private Integer orderStatus;
+
     @ApiModelProperty(value = "展期协议")
     private String extendTermUrl;
 
@@ -57,6 +60,14 @@ public class ExtendOrderDetailVo implements ResponseData {
 
     public void setTotalInterestRatio(String totalInterestRatio) {
         this.totalInterestRatio = totalInterestRatio;
+    }
+
+    public Integer getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(Integer orderStatus) {
+        this.orderStatus = orderStatus;
     }
 
     public String getExtendTermUrl() {

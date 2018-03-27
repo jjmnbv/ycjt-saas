@@ -4,7 +4,7 @@
 <mapper namespace="com.beitu.saas.order.dao.impl.SaasOrderStatusHistoryDaoImpl">
     <resultMap id="BaseResultMap" type="com.beitu.saas.order.entity.SaasOrderStatusHistory">
         <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="order_id" jdbcType="VARCHAR" property="orderId"/>
+        <result column="order_id" jdbcType="BIGINT" property="orderId"/>
         <result column="order_numb" jdbcType="VARCHAR" property="orderNumb"/>
         <result column="current_order_status" jdbcType="SMALLINT" property="currentOrderStatus"/>
         <result column="update_order_status" jdbcType="SMALLINT" property="updateOrderStatus"/>
@@ -40,92 +40,92 @@
             parameterType="com.beitu.saas.order.entity.SaasOrderStatusHistory" useGeneratedKeys="true">
         insert into saas_order_status_history
         <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="orderId !=null">
+            <if test="orderId !=null">
                 order_id,
-                </if>
-                <if test="orderNumb !=null">
+            </if>
+            <if test="orderNumb !=null">
                 order_numb,
-                </if>
-                <if test="currentOrderStatus !=null">
+            </if>
+            <if test="currentOrderStatus !=null">
                 current_order_status,
-                </if>
-                <if test="updateOrderStatus !=null">
+            </if>
+            <if test="updateOrderStatus !=null">
                 update_order_status,
-                </if>
-                <if test="operatorCode !=null">
+            </if>
+            <if test="operatorCode !=null">
                 operator_code,
-                </if>
-                <if test="remark !=null">
+            </if>
+            <if test="remark !=null">
                 remark,
-                </if>
-                <if test="deleted !=null">
+            </if>
+            <if test="deleted !=null">
                 deleted,
-                </if>
-                <if test="gmtModified !=null">
+            </if>
+            <if test="gmtModified !=null">
                 gmt_modified,
-                </if>
-                <if test="gmtCreate !=null">
+            </if>
+            <if test="gmtCreate !=null">
                 gmt_create,
-                </if>
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-                <if test="orderId != null">
-                    #{orderId,jdbcType=VARCHAR},
-                </if>
-                <if test="orderNumb != null">
-                    #{orderNumb,jdbcType=VARCHAR},
-                </if>
-                <if test="currentOrderStatus != null">
-                    #{currentOrderStatus,jdbcType=SMALLINT},
-                </if>
-                <if test="updateOrderStatus != null">
-                    #{updateOrderStatus,jdbcType=SMALLINT},
-                </if>
-                <if test="operatorCode != null">
-                    #{operatorCode,jdbcType=VARCHAR},
-                </if>
-                <if test="remark != null">
-                    #{remark,jdbcType=VARCHAR},
-                </if>
-                <if test="deleted != null">
-                    #{deleted,jdbcType=BIT},
-                </if>
-                <if test="gmtModified != null">
-                    #{gmtModified,jdbcType=TIMESTAMP},
-                </if>
-                <if test="gmtCreate != null">
-                    #{gmtCreate,jdbcType=TIMESTAMP},
-                </if>
+            <if test="orderId != null">
+                #{orderId,jdbcType=BIGINT},
+            </if>
+            <if test="orderNumb != null">
+                #{orderNumb,jdbcType=VARCHAR},
+            </if>
+            <if test="currentOrderStatus != null">
+                #{currentOrderStatus,jdbcType=SMALLINT},
+            </if>
+            <if test="updateOrderStatus != null">
+                #{updateOrderStatus,jdbcType=SMALLINT},
+            </if>
+            <if test="operatorCode != null">
+                #{operatorCode,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
         </trim>
     </insert>
 
     <update id="updateByPrimaryKey" parameterType="com.beitu.saas.order.entity.SaasOrderStatusHistory">
         update saas_order_status_history
         <set>
-                <if test="orderId !=null">
-                order_id = #{orderId,jdbcType=VARCHAR},
-                </if>
-                <if test="orderNumb !=null">
+            <if test="orderId !=null">
+                order_id = #{orderId,jdbcType=BIGINT},
+            </if>
+            <if test="orderNumb !=null">
                 order_numb = #{orderNumb,jdbcType=VARCHAR},
-                </if>
-                <if test="currentOrderStatus !=null">
+            </if>
+            <if test="currentOrderStatus !=null">
                 current_order_status = #{currentOrderStatus,jdbcType=SMALLINT},
-                </if>
-                <if test="updateOrderStatus !=null">
+            </if>
+            <if test="updateOrderStatus !=null">
                 update_order_status = #{updateOrderStatus,jdbcType=SMALLINT},
-                </if>
-                <if test="operatorCode !=null">
+            </if>
+            <if test="operatorCode !=null">
                 operator_code = #{operatorCode,jdbcType=VARCHAR},
-                </if>
-                <if test="remark !=null">
+            </if>
+            <if test="remark !=null">
                 remark = #{remark,jdbcType=VARCHAR},
-                </if>
-                <if test="deleted !=null">
+            </if>
+            <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},
-                </if>
-                <if test="gmtModified !=null">
+            </if>
+            <if test="gmtModified !=null">
                 gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-                </if>
+            </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
@@ -138,7 +138,7 @@
 
     <sql id="paginationSql">
         <if test="page != null">
-            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+            limit #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
         </if>
     </sql>
 
@@ -157,7 +157,7 @@
                 and id = #{id,jdbcType=BIGINT}
             </if>
             <if test="orderId !=null">
-                and order_id = #{orderId,jdbcType=VARCHAR}
+                and order_id = #{orderId,jdbcType=BIGINT}
             </if>
             <if test="orderNumb !=null">
                 and order_numb = #{orderNumb,jdbcType=VARCHAR}
@@ -193,7 +193,7 @@
                 and id = #{id,jdbcType=BIGINT}
             </if>
             <if test="orderId !=null">
-                and order_id = #{orderId,jdbcType=VARCHAR}
+                and order_id = #{orderId,jdbcType=BIGINT}
             </if>
             <if test="orderNumb !=null">
                 and order_numb = #{orderNumb,jdbcType=VARCHAR}

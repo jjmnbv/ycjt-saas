@@ -17,9 +17,9 @@
         <result column="created_dt" jdbcType="TIMESTAMP" property="createdDt"/>
         <result column="expire_date" jdbcType="TIMESTAMP" property="expireDate"/>
         <result column="term_url" jdbcType="VARCHAR" property="termUrl"/>
-        <result column="relation_order_id" jdbcType="VARCHAR" property="relationOrderId"/>
+        <result column="relation_order_id" jdbcType="BIGINT" property="relationOrderId"/>
         <result column="order_status" jdbcType="SMALLINT" property="orderStatus"/>
-        <result column="primary_reviewer_code" jdbcType="VARCHAR" property="primaryReviewerCode"/>
+        <result column="preliminary_reviewer_code" jdbcType="VARCHAR" property="preliminaryReviewerCode"/>
         <result column="final_reviewer_code" jdbcType="VARCHAR" property="finalReviewerCode"/>
         <result column="loan_lender_code" jdbcType="VARCHAR" property="loanLenderCode"/>
         <result column="remark" jdbcType="VARCHAR" property="remark"/>
@@ -46,7 +46,7 @@
     term_url,
     relation_order_id,
     order_status,
-    primary_reviewer_code,
+    preliminary_reviewer_code,
     final_reviewer_code,
     loan_lender_code,
     remark,
@@ -113,8 +113,8 @@
             <if test="orderStatus !=null">
                 order_status,
             </if>
-            <if test="primaryReviewerCode !=null">
-                primary_reviewer_code,
+            <if test="preliminaryReviewerCode !=null">
+                preliminary_reviewer_code,
             </if>
             <if test="finalReviewerCode !=null">
                 final_reviewer_code,
@@ -179,13 +179,13 @@
                 #{termUrl,jdbcType=VARCHAR},
             </if>
             <if test="relationOrderId != null">
-                #{relationOrderId,jdbcType=VARCHAR},
+                #{relationOrderId,jdbcType=BIGINT},
             </if>
             <if test="orderStatus != null">
                 #{orderStatus,jdbcType=SMALLINT},
             </if>
-            <if test="primaryReviewerCode != null">
-                #{primaryReviewerCode,jdbcType=VARCHAR},
+            <if test="preliminaryReviewerCode != null">
+                #{preliminaryReviewerCode,jdbcType=VARCHAR},
             </if>
             <if test="finalReviewerCode != null">
                 #{finalReviewerCode,jdbcType=VARCHAR},
@@ -254,13 +254,13 @@
                 term_url = #{termUrl,jdbcType=VARCHAR},
             </if>
             <if test="relationOrderId !=null">
-                relation_order_id = #{relationOrderId,jdbcType=VARCHAR},
+                relation_order_id = #{relationOrderId,jdbcType=BIGINT},
             </if>
             <if test="orderStatus !=null">
                 order_status = #{orderStatus,jdbcType=SMALLINT},
             </if>
-            <if test="primaryReviewerCode !=null">
-                primary_reviewer_code = #{primaryReviewerCode,jdbcType=VARCHAR},
+            <if test="preliminaryReviewerCode !=null">
+                preliminary_reviewer_code = #{preliminaryReviewerCode,jdbcType=VARCHAR},
             </if>
             <if test="finalReviewerCode !=null">
                 final_reviewer_code = #{finalReviewerCode,jdbcType=VARCHAR},
@@ -350,13 +350,13 @@
                 and term_url = #{termUrl,jdbcType=VARCHAR}
             </if>
             <if test="relationOrderId !=null">
-                and relation_order_id = #{relationOrderId,jdbcType=VARCHAR}
+                and relation_order_id = #{relationOrderId,jdbcType=BIGINT}
             </if>
             <if test="orderStatus !=null">
                 and order_status = #{orderStatus,jdbcType=SMALLINT}
             </if>
-            <if test="primaryReviewerCode !=null">
-                and primary_reviewer_code = #{primaryReviewerCode,jdbcType=VARCHAR}
+            <if test="preliminaryReviewerCode !=null">
+                and preliminary_reviewer_code = #{preliminaryReviewerCode,jdbcType=VARCHAR}
             </if>
             <if test="finalReviewerCode !=null">
                 and final_reviewer_code = #{finalReviewerCode,jdbcType=VARCHAR}
@@ -428,13 +428,13 @@
                 and term_url = #{termUrl,jdbcType=VARCHAR}
             </if>
             <if test="relationOrderId !=null">
-                and relation_order_id = #{relationOrderId,jdbcType=VARCHAR}
+                and relation_order_id = #{relationOrderId,jdbcType=BIGINT}
             </if>
             <if test="orderStatus !=null">
                 and order_status = #{orderStatus,jdbcType=SMALLINT}
             </if>
-            <if test="primaryReviewerCode !=null">
-                and primary_reviewer_code = #{primaryReviewerCode,jdbcType=VARCHAR}
+            <if test="preliminaryReviewerCode !=null">
+                and preliminary_reviewer_code = #{preliminaryReviewerCode,jdbcType=VARCHAR}
             </if>
             <if test="finalReviewerCode !=null">
                 and final_reviewer_code = #{finalReviewerCode,jdbcType=VARCHAR}

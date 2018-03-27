@@ -44,6 +44,9 @@ public class OrderDetailVo implements ResponseData {
     @ApiModelProperty(value = "借款合同")
     private String termUrl;
 
+    @ApiModelProperty(value = "订单状态")
+    private Integer orderStatus;
+
     @ApiModelProperty(value = "展期信息")
     private List<ExtendOrderDetailVo> extendOrderDetailVos;
 
@@ -117,6 +120,22 @@ public class OrderDetailVo implements ResponseData {
 
     public void setBorrowerIdentityCode(String borrowerIdentityCode) {
         this.borrowerIdentityCode = borrowerIdentityCode;
+    }
+
+    public String getTermUrl() {
+        return termUrl;
+    }
+
+    public void setTermUrl(String termUrl) {
+        this.termUrl = termUrl;
+    }
+
+    public Integer getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(Integer orderStatus) {
+        this.orderStatus = orderStatus;
     }
 
     public List<ExtendOrderDetailVo> getExtendOrderDetailVos() {

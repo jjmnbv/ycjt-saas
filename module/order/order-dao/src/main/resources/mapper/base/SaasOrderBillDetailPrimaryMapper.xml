@@ -17,7 +17,7 @@
         <result column="late_interest_ratio" jdbcType="DECIMAL" property="lateInterestRatio"/>
         <result column="late_interest" jdbcType="DECIMAL" property="lateInterest"/>
         <result column="amount" jdbcType="DECIMAL" property="amount"/>
-        <result column="relation_order_bill_detail_id" jdbcType="VARCHAR" property="relationOrderBillDetailId"/>
+        <result column="relation_order_bill_detail_id" jdbcType="BIGINT" property="relationOrderBillDetailId"/>
         <result column="visible" jdbcType="BIT" property="visible"/>
         <result column="destroy" jdbcType="BIT" property="destroy"/>
         <result column="actual_destroy_date" jdbcType="TIMESTAMP" property="actualDestroyDate"/>
@@ -169,7 +169,7 @@
                 #{amount,jdbcType=DECIMAL},
             </if>
             <if test="relationOrderBillDetailId != null">
-                #{relationOrderBillDetailId,jdbcType=VARCHAR},
+                #{relationOrderBillDetailId,jdbcType=BIGINT},
             </if>
             <if test="visible != null">
                 #{visible,jdbcType=BIT},
@@ -238,7 +238,7 @@
                 amount = #{amount,jdbcType=DECIMAL},
             </if>
             <if test="relationOrderBillDetailId !=null">
-                relation_order_bill_detail_id = #{relationOrderBillDetailId,jdbcType=VARCHAR},
+                relation_order_bill_detail_id = #{relationOrderBillDetailId,jdbcType=BIGINT},
             </if>
             <if test="visible !=null">
                 visible = #{visible,jdbcType=BIT},
@@ -328,7 +328,7 @@
                 and amount = #{amount,jdbcType=DECIMAL}
             </if>
             <if test="relationOrderBillDetailId !=null">
-                and relation_order_bill_detail_id = #{relationOrderBillDetailId,jdbcType=VARCHAR}
+                and relation_order_bill_detail_id = #{relationOrderBillDetailId,jdbcType=BIGINT}
             </if>
             <if test="visible !=null">
                 and visible = #{visible,jdbcType=BIT}
@@ -400,7 +400,7 @@
                 and amount = #{amount,jdbcType=DECIMAL}
             </if>
             <if test="relationOrderBillDetailId !=null">
-                and relation_order_bill_detail_id = #{relationOrderBillDetailId,jdbcType=VARCHAR}
+                and relation_order_bill_detail_id = #{relationOrderBillDetailId,jdbcType=BIGINT}
             </if>
             <if test="visible !=null">
                 and visible = #{visible,jdbcType=BIT}

@@ -7,8 +7,8 @@ import java.util.Date;
 
 /**
  * User: jungle
- * Date: 2018-03-26
- * Time: 18:14:09.728
+ * Date: 2018-03-27
+ * Time: 14:22:21.069
  * TableDesc:SAAS订单表
  */
 public class SaasOrder extends BaseEntity {
@@ -67,7 +67,7 @@ public class SaasOrder extends BaseEntity {
     /**
      * 展期关联订单ID
      */
-    private String relationOrderId;
+    private Long relationOrderId;
     /**
      * 订单状态
      */
@@ -75,7 +75,7 @@ public class SaasOrder extends BaseEntity {
     /**
      * 初审员
      */
-    private String primaryReviewerCode;
+    private String preliminaryReviewerCode;
     /**
      * 复审员
      */
@@ -211,11 +211,11 @@ public class SaasOrder extends BaseEntity {
         return this;
     }
 
-    public String getRelationOrderId() {
+    public Long getRelationOrderId() {
         return this.relationOrderId;
     }
 
-    public SaasOrder setRelationOrderId(String relationOrderId) {
+    public SaasOrder setRelationOrderId(Long relationOrderId) {
         this.relationOrderId = relationOrderId;
         return this;
     }
@@ -229,12 +229,12 @@ public class SaasOrder extends BaseEntity {
         return this;
     }
 
-    public String getPrimaryReviewerCode() {
-        return this.primaryReviewerCode;
+    public String getPreliminaryReviewerCode() {
+        return this.preliminaryReviewerCode;
     }
 
-    public SaasOrder setPrimaryReviewerCode(String primaryReviewerCode) {
-        this.primaryReviewerCode = primaryReviewerCode;
+    public SaasOrder setPreliminaryReviewerCode(String preliminaryReviewerCode) {
+        this.preliminaryReviewerCode = preliminaryReviewerCode;
         return this;
     }
 

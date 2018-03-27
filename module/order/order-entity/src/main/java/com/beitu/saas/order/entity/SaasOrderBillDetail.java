@@ -7,8 +7,8 @@ import java.util.Date;
 
 /**
  * User: jungle
- * Date: 2018-03-26
- * Time: 16:49:01.251
+ * Date: 2018-03-27
+ * Time: 14:22:21.109
  * TableDesc:SAAS账单表
  */
 public class SaasOrderBillDetail extends BaseEntity {
@@ -67,7 +67,7 @@ public class SaasOrderBillDetail extends BaseEntity {
     /**
      * 展期关联账单ID
      */
-    private String relationOrderBillDetailId;
+    private Long relationOrderBillDetailId;
     /**
      * 是否可见
      */
@@ -203,11 +203,11 @@ public class SaasOrderBillDetail extends BaseEntity {
         return this;
     }
 
-    public String getRelationOrderBillDetailId() {
+    public Long getRelationOrderBillDetailId() {
         return this.relationOrderBillDetailId;
     }
 
-    public SaasOrderBillDetail setRelationOrderBillDetailId(String relationOrderBillDetailId) {
+    public SaasOrderBillDetail setRelationOrderBillDetailId(Long relationOrderBillDetailId) {
         this.relationOrderBillDetailId = relationOrderBillDetailId;
         return this;
     }

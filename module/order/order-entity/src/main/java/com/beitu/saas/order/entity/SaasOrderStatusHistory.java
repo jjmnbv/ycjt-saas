@@ -4,15 +4,15 @@ import com.fqgj.common.entity.BaseEntity;
 
 /**
  * User: jungle
- * Date: 2018-03-26
- * Time: 16:49:01.261
+ * Date: 2018-03-27
+ * Time: 14:22:21.116
  * TableDesc:SAAS订单状态流水表
  */
 public class SaasOrderStatusHistory extends BaseEntity {
     /**
      * 订单ID
      */
-    private String orderId;
+    private Long orderId;
     /**
      * 订单号
      */
@@ -35,11 +35,11 @@ public class SaasOrderStatusHistory extends BaseEntity {
     private String remark;
 
 
-    public String getOrderId() {
+    public Long getOrderId() {
         return this.orderId;
     }
 
-    public SaasOrderStatusHistory setOrderId(String orderId) {
+    public SaasOrderStatusHistory setOrderId(Long orderId) {
         this.orderId = orderId;
         return this;
     }

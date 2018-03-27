@@ -11,18 +11,18 @@ import org.hibernate.validator.constraints.NotBlank;
  * @description
  */
 @ApiModel(description = "初审订单详情")
-public class PrimaryOrderDetailRequest  extends ParamsObject {
+public class PreliminaryOrderDetailRequest extends ParamsObject {
 
-    @ApiModelProperty(value = "订单CODE", required = true)
-    @NotBlank(message = "订单CODE不能为空")
-    private String orderCode;
+    @ApiModelProperty(value = "订单号", required = true)
+    @NotBlank(message = "订单号不能为空")
+    private String orderNumb;
 
-    public String getOrderCode() {
-        return orderCode;
+    public String getOrderNumb() {
+        return orderNumb;
     }
 
-    public void setOrderCode(String orderCode) {
-        this.orderCode = orderCode;
+    public void setOrderNumb(String orderNumb) {
+        this.orderNumb = orderNumb;
     }
 
     @Override

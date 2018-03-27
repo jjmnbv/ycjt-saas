@@ -72,7 +72,7 @@ public class SaasOrderBillDetailVo implements ResponseData, Serializable {
     /**
      * 展期关联账单ID
      */
-    private String relationOrderBillDetailId;
+    private Long relationOrderBillDetailId;
     /**
      * 是否可见
      */
@@ -203,11 +203,11 @@ public class SaasOrderBillDetailVo implements ResponseData, Serializable {
         this.amount = amount;
     }
 
-    public String getRelationOrderBillDetailId() {
+    public Long getRelationOrderBillDetailId() {
         return this.relationOrderBillDetailId;
     }
 
-    public void setRelationOrderBillDetailId(String relationOrderBillDetailId) {
+    public void setRelationOrderBillDetailId(Long relationOrderBillDetailId) {
         this.relationOrderBillDetailId = relationOrderBillDetailId;
     }
 

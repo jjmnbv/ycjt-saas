@@ -7,8 +7,8 @@ import java.util.Date;
 
 /**
  * User: jungle
- * Date: 2018-03-26
- * Time: 17:00:42.342
+ * Date: 2018-03-27
+ * Time: 14:22:21.099
  * TableDesc:SAAS订单申请表
  */
 public class SaasOrderApplication extends BaseEntity {
@@ -44,6 +44,10 @@ public class SaasOrderApplication extends BaseEntity {
      * 账单应还日
      */
     private Date repaymentDt;
+    /**
+     * 借款协议URL地址
+     */
+    private String termUrl;
 
 
     public String getMerchantCode() {
@@ -115,6 +119,15 @@ public class SaasOrderApplication extends BaseEntity {
 
     public SaasOrderApplication setRepaymentDt(Date repaymentDt) {
         this.repaymentDt = repaymentDt;
+        return this;
+    }
+
+    public String getTermUrl() {
+        return this.termUrl;
+    }
+
+    public SaasOrderApplication setTermUrl(String termUrl) {
+        this.termUrl = termUrl;
         return this;
     }
 }

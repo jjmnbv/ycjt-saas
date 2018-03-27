@@ -73,7 +73,7 @@ public class SaasOrderVo implements ResponseData, Serializable {
     /**
      * 展期关联订单ID
      */
-    private String relationOrderId;
+    private Long relationOrderId;
     /**
      * 订单状态
      */
@@ -81,7 +81,7 @@ public class SaasOrderVo implements ResponseData, Serializable {
     /**
      * 初审员
      */
-    private String primaryReviewerCode;
+    private String preliminaryReviewerCode;
     /**
      * 复审员
      */
@@ -212,11 +212,11 @@ public class SaasOrderVo implements ResponseData, Serializable {
         this.termUrl = termUrl;
     }
 
-    public String getRelationOrderId() {
+    public Long getRelationOrderId() {
         return this.relationOrderId;
     }
 
-    public void setRelationOrderId(String relationOrderId) {
+    public void setRelationOrderId(Long relationOrderId) {
         this.relationOrderId = relationOrderId;
     }
 
@@ -228,12 +228,12 @@ public class SaasOrderVo implements ResponseData, Serializable {
         this.orderStatus = orderStatus;
     }
 
-    public String getPrimaryReviewerCode() {
-        return this.primaryReviewerCode;
+    public String getPreliminaryReviewerCode() {
+        return this.preliminaryReviewerCode;
     }
 
-    public void setPrimaryReviewerCode(String primaryReviewerCode) {
-        this.primaryReviewerCode = primaryReviewerCode;
+    public void setPreliminaryReviewerCode(String preliminaryReviewerCode) {
+        this.preliminaryReviewerCode = preliminaryReviewerCode;
     }
 
     public String getFinalReviewerCode() {

@@ -12,6 +12,7 @@
         <result column="late_interest_ratio" jdbcType="DECIMAL" property="lateInterestRatio"/>
         <result column="borrow_purpose" jdbcType="VARCHAR" property="borrowPurpose"/>
         <result column="repayment_dt" jdbcType="DATE" property="repaymentDt"/>
+        <result column="term_url" jdbcType="VARCHAR" property="termUrl"/>
         <result column="deleted" jdbcType="BIT" property="deleted"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
         <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
@@ -27,6 +28,7 @@
     late_interest_ratio,
     borrow_purpose,
     repayment_dt,
+    term_url,
     deleted,
     gmt_modified,
     gmt_create
@@ -68,6 +70,9 @@
             <if test="repaymentDt !=null">
                 repayment_dt,
             </if>
+            <if test="termUrl !=null">
+                term_url,
+            </if>
             <if test="deleted !=null">
                 deleted,
             </if>
@@ -102,6 +107,9 @@
             </if>
             <if test="repaymentDt != null">
                 #{repaymentDt,jdbcType=DATE},
+            </if>
+            <if test="termUrl != null">
+                #{termUrl,jdbcType=VARCHAR},
             </if>
             <if test="deleted != null">
                 #{deleted,jdbcType=BIT},
@@ -141,6 +149,9 @@
             </if>
             <if test="repaymentDt !=null">
                 repayment_dt = #{repaymentDt,jdbcType=DATE},
+            </if>
+            <if test="termUrl !=null">
+                term_url = #{termUrl,jdbcType=VARCHAR},
             </if>
             <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},
@@ -202,6 +213,9 @@
             <if test="repaymentDt !=null">
                 and repayment_dt = #{repaymentDt,jdbcType=DATE}
             </if>
+            <if test="termUrl !=null">
+                and term_url = #{termUrl,jdbcType=VARCHAR}
+            </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}
             </if>
@@ -243,6 +257,9 @@
             </if>
             <if test="repaymentDt !=null">
                 and repayment_dt = #{repaymentDt,jdbcType=DATE}
+            </if>
+            <if test="termUrl !=null">
+                and term_url = #{termUrl,jdbcType=VARCHAR}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}

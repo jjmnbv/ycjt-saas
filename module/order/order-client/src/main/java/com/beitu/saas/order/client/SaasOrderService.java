@@ -2,6 +2,7 @@ package com.beitu.saas.order.client;
 
 import com.beitu.saas.order.domain.SaasOrderVo;
 import com.beitu.saas.order.enums.OrderStatusEnum;
+import com.fqgj.common.api.Page;
 import com.fqgj.common.base.BaseService;
 import com.fqgj.common.entity.BaseEntity;
 
@@ -34,5 +35,11 @@ public interface SaasOrderService<T extends BaseEntity> extends BaseService<T> {
      * @return
      */
     Boolean isReviewRefuse(String borrowerCode, String channelCode);
+
+    List<SaasOrderVo> listPreliminaryReviewOrder(String merchantCode, String reviewerCode, Page page);
+
+    SaasOrderVo getByOrderNumb(String orderNumb);
+
+    Boolean updateOrderStatus(Long orderId, OrderStatusEnum currentOrderStatus, OrderStatusEnum updateOrderStatus);
 
 }
