@@ -31,7 +31,7 @@ public class FormedMenuVO {
                 }
                 temp.add(entity);
                 menuIdMap.put(entity.getPId(), temp);
-                if (entity.getPId() == 0) {
+                if (entity.getPId() == entity.getId().longValue()) {
                     firstMenus.add(entity);
                 }
             }
@@ -42,7 +42,7 @@ public class FormedMenuVO {
                 parentMenu.setParentName(Menu.getName());
                 parentMenu.setValue(Menu.getLink());
                 parentMenu.setIconUrl(Menu.getIconUrl());
-                parentMenu.setNavs(createChildrenVavs(menuIdMap.get(Menu.getId()), menuIdMap));
+                parentMenu.setNavs(createChildrenVavs(menuIdMap.get(Menu.getId().intValue()), menuIdMap));
                 this.list.add(parentMenu);
             }
         }
@@ -53,6 +53,9 @@ public class FormedMenuVO {
         List<ChildrenMenu> childrenMenuList = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(MenuList)) {
             for (SaasMenu entity : MenuList) {
+                if (entity.getId().equals(entity.getPId().longValue())){
+                    continue;
+                }
                 menuIds.add(entity.getId() + "");
                 ChildrenMenu item = new ChildrenMenu();
                 item.setId(entity.getId());
