@@ -147,9 +147,10 @@ public class OrderApplication {
     @Transactional(rollbackFor = RuntimeException.class)
     public void updateOrderStatus(String operatorCode, String orderNumb, OrderStatusEnum updateOrderStatus, String remark) {
         SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
-        OrderStatusEnum currentOrderStatus = OrderStatusEnum.getEnumByCode(updateOrderStatus.getCode());
+        OrderStatusEnum nextOrderStatus = OrderStatusEnum.getEnumByCode(updateOrderStatus.getCode());
+        OrderStatusEnum currentOrderStatus = OrderStatusEnum.getEnumByCode(saasOrderVo.getOrderStatus());
 
-        Integer[] codeArray = currentOrderStatus.getCodeArray();
+        Integer[] codeArray = nextOrderStatus.getCodeArray();
         List<Integer> allCodeList = Arrays.asList(codeArray);
         List<Integer> restCodeList = allCodeList.stream().filter(x -> x != currentOrderStatus.getCode()).collect(Collectors.toList());
 
