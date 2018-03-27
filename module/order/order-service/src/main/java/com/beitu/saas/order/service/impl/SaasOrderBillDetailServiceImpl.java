@@ -28,6 +28,12 @@ public class SaasOrderBillDetailServiceImpl extends AbstractBaseService implemen
     public List<SaasOrderBillDetailVo> listByBorrowerCodeAndMerchantCode(String borrowerCode, String merchantCode) {
         return null;
     }
+
+    @Override
+    public List<SaasOrderBillDetailVo> listByOrderNumb(String orderNumb) {
+        return null;
+    }
+
 }
 
 

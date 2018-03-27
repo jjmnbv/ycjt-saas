@@ -11,7 +11,7 @@ import org.hibernate.validator.constraints.NotBlank;
  * @description
  */
 @ApiModel(description = "初审列表查询参数")
-public class PrimaryOrderQueryRequest extends ParamsObject {
+public class PreliminaryOrderQueryRequest extends ParamsObject {
 
     @ApiModelProperty(value = "处理状态")
     @NotBlank(message = "处理状态不能为空")

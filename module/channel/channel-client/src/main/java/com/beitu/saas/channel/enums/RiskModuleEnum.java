@@ -11,13 +11,13 @@ public enum RiskModuleEnum {
 
     APPLICATION("101", "申请表"),
     PERSONAL_INFO("102", "个人信息"),
-    EMERGENT_CONTACT("103", "紧急联系人"),
+    IDENTITY_INFO("103", "身份证"),
     WORK_INFO("104", "工作信息"),
-    CARRIER_AUTHENTIC("105", "运营商认证"),
+    EMERGENT_CONTACT("105", "紧急联系人"),
     ZM_CREDIT("106", "芝麻信用"),
-    EB_INFO("107", "电商认证"),
-    PLATFORM_BORROW_CREDIT("108", "多平台借贷信用"),
-    IDENTITY_INFO("109", "身份证");
+    CARRIER_AUTHENTIC("107", "运营商认证"),
+    EB_INFO("108", "电商认证"),
+    PLATFORM_BORROW_CREDIT("109", "多平台借贷信用");
 
     private String moduleCode;
 

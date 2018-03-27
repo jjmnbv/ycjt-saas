@@ -15,4 +15,6 @@ public interface SaasOrderBillDetailService<T extends BaseEntity> extends BaseSe
 
     List<SaasOrderBillDetailVo> listByBorrowerCodeAndMerchantCode(String borrowerCode, String merchantCode);
 
+    List<SaasOrderBillDetailVo> listByOrderNumb(String orderNumb);
+
 }

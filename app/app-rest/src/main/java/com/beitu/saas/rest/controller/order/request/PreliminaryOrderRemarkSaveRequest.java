@@ -11,21 +11,21 @@ import org.hibernate.validator.constraints.NotBlank;
  * @description
  */
 @ApiModel(description = "初审订单备注保存")
-public class PrimaryOrderRemarkSaveRequest extends ParamsObject {
+public class PreliminaryOrderRemarkSaveRequest extends ParamsObject {
 
-    @ApiModelProperty(value = "订单CODE", required = true)
-    @NotBlank(message = "订单CODE不能为空")
-    private String orderCode;
+    @ApiModelProperty(value = "订单号", required = true)
+    @NotBlank(message = "订单号不能为空")
+    private String orderNumb;
 
     @ApiModelProperty(value = "备注")
     private String remark;
 
-    public String getOrderCode() {
-        return orderCode;
+    public String getOrderNumb() {
+        return orderNumb;
     }
 
-    public void setOrderCode(String orderCode) {
-        this.orderCode = orderCode;
+    public void setOrderNumb(String orderNumb) {
+        this.orderNumb = orderNumb;
     }
 
     public String getRemark() {

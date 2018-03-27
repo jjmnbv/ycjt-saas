@@ -38,13 +38,23 @@ public class SaasOrderApplicationVo implements ResponseData, Serializable {
      */
     private BigDecimal totalInterestRatio;
     /**
+     * 逾期利率
+     */
+    private BigDecimal lateInterestRatio;
+    /**
      * 借款意图
      */
     private String borrowPurpose;
     /**
      * 账单应还日
      */
-    private Date repaymentDate;
+    private Date repaymentDt;
+    /**
+     * 借款协议URL地址
+     */
+    private String termUrl;
+
+    private Date gmtCreate;
 
     public Long getSaasOrderApplicationId() {
         return saasOrderApplicationId;
@@ -95,6 +105,14 @@ public class SaasOrderApplicationVo implements ResponseData, Serializable {
         this.totalInterestRatio = totalInterestRatio;
     }
 
+    public BigDecimal getLateInterestRatio() {
+        return this.lateInterestRatio;
+    }
+
+    public void setLateInterestRatio(BigDecimal lateInterestRatio) {
+        this.lateInterestRatio = lateInterestRatio;
+    }
+
     public String getBorrowPurpose() {
         return this.borrowPurpose;
     }
@@ -103,12 +121,28 @@ public class SaasOrderApplicationVo implements ResponseData, Serializable {
         this.borrowPurpose = borrowPurpose;
     }
 
-    public Date getRepaymentDate() {
-        return this.repaymentDate;
+    public Date getRepaymentDt() {
+        return this.repaymentDt;
     }
 
-    public void setRepaymentDate(Date repaymentDate) {
-        this.repaymentDate = repaymentDate;
+    public void setRepaymentDt(Date repaymentDt) {
+        this.repaymentDt = repaymentDt;
+    }
+
+    public String getTermUrl() {
+        return this.termUrl;
+    }
+
+    public void setTermUrl(String termUrl) {
+        this.termUrl = termUrl;
+    }
+
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
     }
 
     public static SaasOrderApplicationVo convertEntityToVO(SaasOrderApplication saasOrderApplication) {

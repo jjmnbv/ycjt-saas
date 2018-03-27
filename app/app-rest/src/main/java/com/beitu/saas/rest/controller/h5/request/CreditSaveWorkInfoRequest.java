@@ -19,8 +19,8 @@ public class CreditSaveWorkInfoRequest extends ParamsObject {
      * 职业
      */
     @ApiModelProperty(value = "职业")
-    @NotNull(message = "职业不能为空")
-    private Integer careerType;
+    @NotBlank(message = "职业不能为空")
+    private String careerType;
     /**
      * 月收入
      */
@@ -46,11 +46,11 @@ public class CreditSaveWorkInfoRequest extends ParamsObject {
     @NotBlank(message = "公司地址不能为空")
     private String companyDetailAddress;
 
-    public Integer getCareerType() {
+    public String getCareerType() {
         return careerType;
     }
 
-    public void setCareerType(Integer careerType) {
+    public void setCareerType(String careerType) {
         this.careerType = careerType;
     }
 

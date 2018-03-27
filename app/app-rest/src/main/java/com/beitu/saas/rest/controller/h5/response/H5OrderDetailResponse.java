@@ -1,6 +1,6 @@
 package com.beitu.saas.rest.controller.h5.response;
 
-import com.beitu.saas.app.application.order.vo.H5ExtendOrderDetailVo;
+import com.beitu.saas.app.application.order.vo.ExtendOrderDetailVo;
 import com.fqgj.common.api.ResponseData;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -44,9 +44,9 @@ public class H5OrderDetailResponse implements ResponseData {
     private String borrowerIdentityCode = "334434343434343";
 
     @ApiModelProperty(value = "展期信息")
-    private List<H5ExtendOrderDetailVo> extendOrderDetailVos = new ArrayList<H5ExtendOrderDetailVo>(2){{
-        add(new H5ExtendOrderDetailVo());
-        add(new H5ExtendOrderDetailVo());
+    private List<ExtendOrderDetailVo> extendOrderDetailVos = new ArrayList<ExtendOrderDetailVo>(2){{
+        add(new ExtendOrderDetailVo());
+        add(new ExtendOrderDetailVo());
     }};
 
     @ApiModelProperty(value = "合同展示信息")
@@ -136,11 +136,11 @@ public class H5OrderDetailResponse implements ResponseData {
         this.borrowerIdentityCode = borrowerIdentityCode;
     }
 
-    public List<H5ExtendOrderDetailVo> getExtendOrderDetailVos() {
+    public List<ExtendOrderDetailVo> getExtendOrderDetailVos() {
         return extendOrderDetailVos;
     }
 
-    public void setExtendOrderDetailVos(List<H5ExtendOrderDetailVo> extendOrderDetailVos) {
+    public void setExtendOrderDetailVos(List<ExtendOrderDetailVo> extendOrderDetailVos) {
         this.extendOrderDetailVos = extendOrderDetailVos;
     }
 
