@@ -36,7 +36,11 @@ public class CreditAndMsgDayClearTaksJob {
             return;
         }
 
-        saasConsumeDayStatApplication.creditAndMsgDayClear();
+        try {
+            saasConsumeDayStatApplication.creditAndMsgDayClear();
+        } catch (Exception e) {
+            LOGGER.info("== 点券和短信日清算任务异常,异常原因:{}  ==", e);
+        }
         LOGGER.info("== 点券和短信日清算任务结束 ==");
     }
 }
