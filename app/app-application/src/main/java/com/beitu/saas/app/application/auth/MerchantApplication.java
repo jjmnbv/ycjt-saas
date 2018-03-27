@@ -53,7 +53,7 @@ public class MerchantApplication {
         //超级管理员
         Arrays.asList(109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126);
         Arrays.asList(109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126);
-        roleApplication.addRoleAndEmpower("超级管理员","system",saasAdmin.getMerchantCode(),);
+        //roleApplication.addRoleAndEmpower("超级管理员","system",saasAdmin.getMerchantCode(),);
 
         //4.给用户赋权
         //5.添加默认机构配置
