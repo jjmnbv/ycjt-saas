@@ -121,7 +121,9 @@ public class SaasChannelApplication {
         return new SaasChannelDetailVo().setChannelName(saasChannel.getChannelName())
                 .setChannelCode(channelCode)
                 .setChargePersonName(this.getAdminNameByAdminCode(saasChannel.getChargePersonCode()))
+                .setChargePersonCode(saasChannel.getChargePersonCode())
                 .setCreatorName(this.getAdminNameByAdminCode(saasChannel.getCreatorCode()))
+                .setCreatorCode(saasChannel.getCreatorCode())
                 .setRemark(saasChannel.getRemark())
                 .setSaasChannelRiskSettingsVos(riskSettingsVos);
     }
@@ -143,12 +145,14 @@ public class SaasChannelApplication {
                     .setChannelCode(x.getChannelCode())
                     .setChannelName(x.getChannelName())
                     .setChannelStatus(x.getChannelStatus())
+                    .setChargePersonCode(x.getChargePersonCode())
                     .setChargePersonName(this.getAdminNameByAdminCode(x.getChargePersonCode()))
                     .setLinkUrl(x.getLinkUrl())// TODO: 2018/3/22 加上阿波罗域名
                     .setLongLinkUrl(x.getLinkUrl())// TODO: 2018/3/22 加上域名
                     //.setShortLinkUrl(ShortUrlUtil.generateShortUrl(x.getLinkUrl()))// TODO: 2018/3/22 加上域名
                     .setShortLinkUrl(ShortUrlUtil.generateShortUrl("http://agent.yangcongjietiao.com/agentWebViews/agent/index.html"))
                     .setCreatorName(this.getAdminNameByAdminCode(x.getCreatorCode()))
+                    .setCreatorCode(x.getCreatorCode())
                     .setGmtCreate(x.getGmtCreate())
                     .setRemark(x.getRemark());
 
