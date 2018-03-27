@@ -26,7 +26,7 @@ public class SaasBorrowerWorkInfoVo implements ResponseData, Serializable {
     /**
      * 职业
      */
-    private Integer careerType;
+    private String career;
     /**
      * 月收入
      */
@@ -73,12 +73,12 @@ public class SaasBorrowerWorkInfoVo implements ResponseData, Serializable {
         this.orderNumb = orderNumb;
     }
 
-    public Integer getCareerType() {
-        return this.careerType;
+    public String getCareer() {
+        return this.career;
     }
 
-    public void setCareerType(Integer careerType) {
-        this.careerType = careerType;
+    public void setCareer(String career) {
+        this.career = career;
     }
 
     public Integer getSalary() {

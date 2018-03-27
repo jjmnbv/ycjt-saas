@@ -3,4 +3,20 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.beitu.saas.order.dao.impl.SaasOrderBillDetailDaoImpl">
 
+    <select id="selectByBorrowerCodeAndMerchantCode" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_order_bill_detail
+        where borrowerCode = #{borrowerCode,jdbcType=VARCHAR} and merchantCode = #{merchantCode,jdbcType=VARCHAR}
+        and deleted = false and visible = true
+    </select>
+
+    <select id="selectByOrderNumb" parameterType="java.lang.String"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_order_bill_detail
+        where orderNumb = #{orderNumb,jdbcType=VARCHAR} and deleted = false
+    </select>
+
 </mapper>

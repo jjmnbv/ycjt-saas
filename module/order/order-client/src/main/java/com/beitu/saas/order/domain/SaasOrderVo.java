@@ -49,7 +49,7 @@ public class SaasOrderVo implements ResponseData, Serializable {
     /**
      * 逾期利率
      */
-    private BigDecimal lateFeeRatio;
+    private BigDecimal lateInterestRatio;
     /**
      * 借款意图
      */
@@ -63,17 +63,17 @@ public class SaasOrderVo implements ResponseData, Serializable {
      */
     private Date createdDt;
     /**
+     * 订单过期时间
+     */
+    private Date expireDate;
+    /**
      * 借款协议URL地址
      */
     private String termUrl;
     /**
-     * 是否是展期订单
+     * 展期关联订单ID
      */
-    private Boolean isExtend;
-    /**
-     * 展期关联订单CODE
-     */
-    private String relationOrderCode;
+    private Long relationOrderId;
     /**
      * 订单状态
      */
@@ -81,7 +81,7 @@ public class SaasOrderVo implements ResponseData, Serializable {
     /**
      * 初审员
      */
-    private String primaryReviewerCode;
+    private String preliminaryReviewerCode;
     /**
      * 复审员
      */
@@ -164,12 +164,12 @@ public class SaasOrderVo implements ResponseData, Serializable {
         this.totalInterestFee = totalInterestFee;
     }
 
-    public BigDecimal getLateFeeRatio() {
-        return this.lateFeeRatio;
+    public BigDecimal getLateInterestRatio() {
+        return this.lateInterestRatio;
     }
 
-    public void setLateFeeRatio(BigDecimal lateFeeRatio) {
-        this.lateFeeRatio = lateFeeRatio;
+    public void setLateInterestRatio(BigDecimal lateInterestRatio) {
+        this.lateInterestRatio = lateInterestRatio;
     }
 
     public String getBorrowPurpose() {
@@ -196,6 +196,14 @@ public class SaasOrderVo implements ResponseData, Serializable {
         this.createdDt = createdDt;
     }
 
+    public Date getExpireDate() {
+        return this.expireDate;
+    }
+
+    public void setExpireDate(Date expireDate) {
+        this.expireDate = expireDate;
+    }
+
     public String getTermUrl() {
         return this.termUrl;
     }
@@ -204,20 +212,12 @@ public class SaasOrderVo implements ResponseData, Serializable {
         this.termUrl = termUrl;
     }
 
-    public Boolean getIsExtend() {
-        return this.isExtend;
+    public Long getRelationOrderId() {
+        return this.relationOrderId;
     }
 
-    public void setIsExtend(Boolean isExtend) {
-        this.isExtend = isExtend;
-    }
-
-    public String getRelationOrderCode() {
-        return this.relationOrderCode;
-    }
-
-    public void setRelationOrderCode(String relationOrderCode) {
-        this.relationOrderCode = relationOrderCode;
+    public void setRelationOrderId(Long relationOrderId) {
+        this.relationOrderId = relationOrderId;
     }
 
     public Integer getOrderStatus() {
@@ -228,12 +228,12 @@ public class SaasOrderVo implements ResponseData, Serializable {
         this.orderStatus = orderStatus;
     }
 
-    public String getPrimaryReviewerCode() {
-        return this.primaryReviewerCode;
+    public String getPreliminaryReviewerCode() {
+        return this.preliminaryReviewerCode;
     }
 
-    public void setPrimaryReviewerCode(String primaryReviewerCode) {
-        this.primaryReviewerCode = primaryReviewerCode;
+    public void setPreliminaryReviewerCode(String preliminaryReviewerCode) {
+        this.preliminaryReviewerCode = preliminaryReviewerCode;
     }
 
     public String getFinalReviewerCode() {

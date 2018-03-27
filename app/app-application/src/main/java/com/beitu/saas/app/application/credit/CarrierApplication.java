@@ -7,7 +7,7 @@ import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
 import com.beitu.saas.borrower.consts.UserProfileConsts;
 import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
 import com.beitu.saas.borrower.entity.SaasBorrowerCarrier;
-import com.beitu.saas.borrower.enums.UserProfileErrorCodeEnum;
+import com.beitu.saas.borrower.enums.BorrowerErrorCodeEnum;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.enums.ProductTypeEnum;
@@ -69,7 +69,7 @@ public class CarrierApplication {
         }
         SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode);
         if (saasBorrowerRealInfoVo == null) {
-            throw new ApplicationException(UserProfileErrorCodeEnum.USER_PROFILE_REAL_NAME_INCOMPLETE);
+            throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_REAL_NAME);
         }
         CarrierRequestUrlInput carrierRequestUrlInput = new CarrierRequestUrlInput();
         carrierRequestUrlInput.setName(saasBorrowerRealInfoVo.getName());

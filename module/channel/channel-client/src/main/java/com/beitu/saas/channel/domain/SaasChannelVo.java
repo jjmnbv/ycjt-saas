@@ -42,9 +42,17 @@ public class SaasChannelVo {
      */
     private String shortLinkUrl;
     /**
+     *负责人code
+     */
+    private String chargePersonCode;
+    /**
      *负责人
      */
     private String chargePersonName;
+    /**
+     *创建人code
+     */
+    private String creatorCode;
     /**
      *创建人
      */
@@ -58,6 +66,25 @@ public class SaasChannelVo {
      * 创建时间
      */
     private Date gmtCreate;
+
+
+    public String getChargePersonCode() {
+        return chargePersonCode;
+    }
+
+    public SaasChannelVo setChargePersonCode(String chargePersonCode) {
+        this.chargePersonCode = chargePersonCode;
+        return this;
+    }
+
+    public String getCreatorCode() {
+        return creatorCode;
+    }
+
+    public SaasChannelVo setCreatorCode(String creatorCode) {
+        this.creatorCode = creatorCode;
+        return this;
+    }
 
     public String getLongLinkUrl() {
         return longLinkUrl;

@@ -7,8 +7,8 @@ import java.util.Date;
 
 /**
  * User: jungle
- * Date: 2018-03-25
- * Time: 21:55:45.847
+ * Date: 2018-03-27
+ * Time: 14:22:21.099
  * TableDesc:SAAS订单申请表
  */
 public class SaasOrderApplication extends BaseEntity {
@@ -33,13 +33,21 @@ public class SaasOrderApplication extends BaseEntity {
      */
     private BigDecimal totalInterestRatio;
     /**
+     * 逾期利率
+     */
+    private BigDecimal lateInterestRatio;
+    /**
      * 借款意图
      */
     private String borrowPurpose;
     /**
      * 账单应还日
      */
-    private Date repaymentDate;
+    private Date repaymentDt;
+    /**
+     * 借款协议URL地址
+     */
+    private String termUrl;
 
 
     public String getMerchantCode() {
@@ -87,6 +95,15 @@ public class SaasOrderApplication extends BaseEntity {
         return this;
     }
 
+    public BigDecimal getLateInterestRatio() {
+        return this.lateInterestRatio;
+    }
+
+    public SaasOrderApplication setLateInterestRatio(BigDecimal lateInterestRatio) {
+        this.lateInterestRatio = lateInterestRatio;
+        return this;
+    }
+
     public String getBorrowPurpose() {
         return this.borrowPurpose;
     }
@@ -96,12 +113,21 @@ public class SaasOrderApplication extends BaseEntity {
         return this;
     }
 
-    public Date getRepaymentDate() {
-        return this.repaymentDate;
+    public Date getRepaymentDt() {
+        return this.repaymentDt;
     }
 
-    public SaasOrderApplication setRepaymentDate(Date repaymentDate) {
-        this.repaymentDate = repaymentDate;
+    public SaasOrderApplication setRepaymentDt(Date repaymentDt) {
+        this.repaymentDt = repaymentDt;
+        return this;
+    }
+
+    public String getTermUrl() {
+        return this.termUrl;
+    }
+
+    public SaasOrderApplication setTermUrl(String termUrl) {
+        this.termUrl = termUrl;
         return this;
     }
 }

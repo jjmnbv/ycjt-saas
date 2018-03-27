@@ -5,13 +5,15 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
+import java.util.Date;
+
 /**
  * @author linanjun
- * @create 2018/3/21 下午3:28
+ * @create 2018/3/27 下午3:26
  * @description
  */
-@ApiModel(description = "初审列表查询参数")
-public class PrimaryOrderQueryRequest extends ParamsObject {
+@ApiModel(description = "复审列表查询参数")
+public class FinalOrderQueryRequest extends ParamsObject {
 
     @ApiModelProperty(value = "处理状态")
     @NotBlank(message = "处理状态不能为空")
@@ -32,8 +34,11 @@ public class PrimaryOrderQueryRequest extends ParamsObject {
     @ApiModelProperty(value = "状态")
     private String orderStatus;
 
-    @ApiModelProperty(value = "申请时间")
-    private String applyDate;
+    @ApiModelProperty(value = "申请时长")
+    private Integer applyDuration;
+
+    @ApiModelProperty(value = "申请结束时间")
+    private Date applyEndDate;
 
     public String getDealStatus() {
         return dealStatus;
@@ -83,12 +88,20 @@ public class PrimaryOrderQueryRequest extends ParamsObject {
         this.orderStatus = orderStatus;
     }
 
-    public String getApplyDate() {
-        return applyDate;
+    public Integer getApplyDuration() {
+        return applyDuration;
     }
 
-    public void setApplyDate(String applyDate) {
-        this.applyDate = applyDate;
+    public void setApplyDuration(Integer applyDuration) {
+        this.applyDuration = applyDuration;
+    }
+
+    public Date getApplyEndDate() {
+        return applyEndDate;
+    }
+
+    public void setApplyEndDate(Date applyEndDate) {
+        this.applyEndDate = applyEndDate;
     }
 
     @Override

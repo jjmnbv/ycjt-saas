@@ -15,6 +15,7 @@ import com.beitu.saas.channel.entity.SaasChannelEntity;
 import com.beitu.saas.channel.entity.SaasChannelRiskSettingsEntity;
 import com.beitu.saas.channel.enums.ChannelStatusEnum;
 import com.beitu.saas.channel.param.SaasChannelRiskSettingsParam;
+import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.utils.OrderNoUtil;
 import com.beitu.saas.common.utils.ShortUrlUtil;
 import com.fqgj.common.api.Page;
@@ -25,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,8 +47,8 @@ public class SaasChannelApplication {
     private SaasChannelRiskSettingsService saasChannelRiskSettingsService;
     @Autowired
     private SaasAdminService saasAdminService;
-
-    // TODO: 2018/3/26 根据机构号获取所有管理员列表 
+    @Resource
+    private ConfigUtil configUtil;
 
 
     /**
@@ -67,9 +69,8 @@ public class SaasChannelApplication {
             String channelCode = OrderNoUtil.makeOrderNum();
             saasChannelEntity.setChannelCode(channelCode)
                     .setChannelStatus(ChannelStatusEnum.OPEN.getType())
-                    .setLinkUrl("channel/" + channelCode) // TODO: 2018/3/22
-                    //.setCreatorCode(RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode());// TODO: 2018/3/26 登录人code 
-                    .setCreatorCode("abc001");
+                    .setLinkUrl("channel/" + channelCode)
+                    .setCreatorCode(RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode());
             saasChannelService.create(saasChannelEntity);
 
             saasChannelRiskSettingsVoList.stream().forEach(x -> {
@@ -121,7 +122,9 @@ public class SaasChannelApplication {
         return new SaasChannelDetailVo().setChannelName(saasChannel.getChannelName())
                 .setChannelCode(channelCode)
                 .setChargePersonName(this.getAdminNameByAdminCode(saasChannel.getChargePersonCode()))
+                .setChargePersonCode(saasChannel.getChargePersonCode())
                 .setCreatorName(this.getAdminNameByAdminCode(saasChannel.getCreatorCode()))
+                .setCreatorCode(saasChannel.getCreatorCode())
                 .setRemark(saasChannel.getRemark())
                 .setSaasChannelRiskSettingsVos(riskSettingsVos);
     }
@@ -143,12 +146,13 @@ public class SaasChannelApplication {
                     .setChannelCode(x.getChannelCode())
                     .setChannelName(x.getChannelName())
                     .setChannelStatus(x.getChannelStatus())
+                    .setChargePersonCode(x.getChargePersonCode())
                     .setChargePersonName(this.getAdminNameByAdminCode(x.getChargePersonCode()))
-                    .setLinkUrl(x.getLinkUrl())// TODO: 2018/3/22 加上阿波罗域名
-                    .setLongLinkUrl(x.getLinkUrl())// TODO: 2018/3/22 加上域名
-                    //.setShortLinkUrl(ShortUrlUtil.generateShortUrl(x.getLinkUrl()))// TODO: 2018/3/22 加上域名
-                    .setShortLinkUrl(ShortUrlUtil.generateShortUrl("http://agent.yangcongjietiao.com/agentWebViews/agent/index.html"))
+                    .setLinkUrl(configUtil.getWebsiteDomainSName() + x.getLinkUrl())
+                    .setLongLinkUrl(configUtil.getWebsiteDomainSName() + x.getLinkUrl())
+                    .setShortLinkUrl(ShortUrlUtil.generateShortUrl(configUtil.getWebsiteDomainSName() + x.getLinkUrl()))
                     .setCreatorName(this.getAdminNameByAdminCode(x.getCreatorCode()))
+                    .setCreatorCode(x.getCreatorCode())
                     .setGmtCreate(x.getGmtCreate())
                     .setRemark(x.getRemark());
 
@@ -209,4 +213,5 @@ public class SaasChannelApplication {
         }
         return null;
     }
+
 }
