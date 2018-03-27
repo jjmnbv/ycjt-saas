@@ -60,7 +60,7 @@ import java.util.Map;
  */
 public enum RestCodeEnum implements ErrorCodeEnum {
 
-    TOKEN_NOT_AVAILABLE(700, "Token失效", HttpStatus.OK),
+    TOKEN_NOT_AVAILABLE(700, "Token失效", HttpStatus.UNAUTHORIZED),
 
     USER_NOT_EXIST_ERROR(10000, "用户名不存在", HttpStatus.OK),
     PARAMTER_SIGN_ERROR(11001, "签名错误", HttpStatus.OK),

@@ -10,6 +10,7 @@ import com.beitu.saas.auth.service.SaasAdminTokenService;
 import com.beitu.saas.auth.service.SaasRolePermissionService;
 import com.fqgj.common.entity.BaseEntity;
 import com.fqgj.common.utils.CollectionUtils;
+import com.fqgj.common.utils.GenerOrderNoUtil;
 import com.fqgj.common.utils.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -80,6 +81,7 @@ public class AdminInfoApplication {
 
     @Transactional(rollbackFor = Exception.class)
     public void addAdminAndRole(SaasAdmin saasAdmin,Long roleId){
+        saasAdmin.setCode(GenerOrderNoUtil.generateOrderNo());
         SaasAdmin entity = (SaasAdmin) saasAdminService.create(saasAdmin);
         SaasAdminRole saasAdminRole = new SaasAdminRole();
         saasAdminRole.setAdminCode(entity.getCode());

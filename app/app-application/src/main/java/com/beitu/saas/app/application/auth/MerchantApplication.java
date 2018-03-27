@@ -9,6 +9,9 @@ import com.fqgj.common.utils.MD5;
 import com.fqgj.common.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Arrays;
 
 /**
  * @author xiaochong
@@ -24,6 +27,10 @@ public class MerchantApplication {
     @Autowired
     private SaasAdminService saasAdminService;
 
+    @Autowired
+    private RoleApplication roleApplication;
+
+    @Transactional
     public void addMerchant(SaasMerchant saasMerchant,String password){
 
         //1.保存机构信息
@@ -38,9 +45,15 @@ public class MerchantApplication {
         saasAdmin.setMobile(StringUtils.isNotEmpty(saasMerchant.getCompanyTel())?saasMerchant.getCompanyTel():saasMerchant.getLenderTel());
         saasAdmin.setPassword(MD5.md5(password));
         saasAdmin.setCreateName("system");
+        saasAdmin.setDefault(true);
         saasAdmin.setEnable(true);
         saasAdminService.create(saasAdmin);
         //3.添加机构默认角色
+
+        //超级管理员
+        Arrays.asList(109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126);
+        Arrays.asList(109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126);
+        roleApplication.addRoleAndEmpower("超级管理员","system",saasAdmin.getMerchantCode(),);
 
         //4.给用户赋权
         //5.添加默认机构配置
