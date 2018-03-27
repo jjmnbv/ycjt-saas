@@ -1,9 +1,11 @@
 package com.beitu.saas.rest.interceptor;
 
 
+import com.beitu.saas.app.annotations.HasPermission;
 import com.beitu.saas.app.annotations.IgnoreRepeatRequest;
 import com.beitu.saas.app.annotations.SignIgnore;
 import com.beitu.saas.app.annotations.VisitorAccessible;
+import com.beitu.saas.app.application.auth.RoleApplication;
 import com.beitu.saas.app.common.RequestBasicInfo;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.app.common.RequestUserInfo;
@@ -46,6 +48,9 @@ public class UserAccessRightInterceptor implements HandlerInterceptor {
     @Autowired
     private SaasBorrowerService saasBorrowerService;
 
+    @Autowired
+    private RoleApplication roleApplication;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
         response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
@@ -84,6 +89,15 @@ public class UserAccessRightInterceptor implements HandlerInterceptor {
             if (!request.getMethod().equals("OPTIONS")) {
                 if (!handlerMethod.getMethod().getName().toUpperCase().equals("LOGIN")) {
                     throw new ApplicationException("需要登陆才能访问");
+                }
+            }
+            HasPermission hasPermission = handlerMethod.getMethodAnnotation(HasPermission.class);
+            if (hasPermission != null) {
+                String permissionKey = hasPermission.permissionKey();
+                String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
+                Boolean hasButtonPermission = roleApplication.hasButtonPermission(permissionKey, adminCode);
+                if (!hasButtonPermission) {
+                    throw new ApplicationException("无权限操作");
                 }
             }
             IgnoreRepeatRequest ignoreRepeatRequest = handlerMethod.getMethodAnnotation(IgnoreRepeatRequest.class);
