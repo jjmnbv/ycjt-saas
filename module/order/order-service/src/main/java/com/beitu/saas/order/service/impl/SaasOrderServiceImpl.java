@@ -83,6 +83,18 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
     }
 
     @Override
+    public Boolean isReviewing(String borrowerCode, String channelCode) {
+        SaasOrder saasOrder = saasOrderDao.selectByBorrowerCodeAndChannelCode(borrowerCode, channelCode);
+        if (saasOrder == null) {
+            return Boolean.FALSE;
+        }
+        if (saasOrder.getOrderStatus() > 400) {
+            return Boolean.FALSE;
+        }
+        return Boolean.TRUE;
+    }
+
+    @Override
     public List<SaasOrderVo> listByQuerySaasOrderVoAndPage(QuerySaasOrderVo querySaasOrderVo, Page page) {
         Map<String, Object> conditions = new HashMap<>(16);
         conditions.put("borrowerCodeList", querySaasOrderVo.getBorrowerCodeList());

@@ -96,7 +96,7 @@ public class OrderApplication {
     private SaasMerchantBalanceInfoService saasMerchantBalanceInfoService;
 
     public BorrowerOrderApplyStatusEnum getOrderApplyStatus(String borrowerCode, String channelCode) {
-        if (saasOrderApplicationService.getByBorrowerCode(borrowerCode) != null) {
+        if (saasOrderService.isReviewing(borrowerCode, channelCode)) {
             return BorrowerOrderApplyStatusEnum.REVIEWING;
         } else if (saasOrderService.isReviewRefuse(borrowerCode, channelCode)) {
             return BorrowerOrderApplyStatusEnum.REFUSE;
