@@ -1,5 +1,6 @@
 package com.beitu.saas.order.client;
 
+import com.beitu.saas.order.domain.QuerySaasOrderBillDetailVo;
 import com.beitu.saas.order.domain.SaasOrderBillDetailVo;
 import com.beitu.saas.order.vo.LoanDataDetailVo;
 import com.beitu.saas.order.vo.NoRepayOrderVo;
@@ -21,9 +22,12 @@ public interface SaasOrderBillDetailService<T extends BaseEntity> extends BaseSe
 
     List<SaasOrderBillDetailVo> listByOrderNumb(String orderNumb);
 
+    List<SaasOrderBillDetailVo> listByQueryOrderBillDetailVoAndPage(QuerySaasOrderBillDetailVo querySaasOrderBillDetailVo, Page page);
+
     LoanDataDetailVo getLoanDataDetailVo(String merchantCode);
 
     List<NoRepayOrderVo> getNoRepayOrderListByPage(String merchantCode, Page page);
 
     List<OverdueOrderVo> getOverdueOrderListByPage(String merchantCode, Page page);
+
 }

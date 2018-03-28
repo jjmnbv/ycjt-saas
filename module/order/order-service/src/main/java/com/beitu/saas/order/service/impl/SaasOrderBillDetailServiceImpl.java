@@ -2,6 +2,7 @@ package com.beitu.saas.order.service.impl;
 
 import com.beitu.saas.order.client.SaasOrderBillDetailService;
 import com.beitu.saas.order.dao.SaasOrderBillDetailDao;
+import com.beitu.saas.order.domain.QuerySaasOrderBillDetailVo;
 import com.beitu.saas.order.domain.SaasOrderBillDetailVo;
 import com.beitu.saas.order.vo.LoanDataDetailVo;
 import com.beitu.saas.order.vo.NoRepayOrderVo;
@@ -39,6 +40,11 @@ public class SaasOrderBillDetailServiceImpl extends AbstractBaseService implemen
     }
 
     @Override
+    public List<SaasOrderBillDetailVo> listByQueryOrderBillDetailVoAndPage(QuerySaasOrderBillDetailVo querySaasOrderBillDetailVo, Page page) {
+        return null;
+    }
+
+    @Override
     public LoanDataDetailVo getLoanDataDetailVo(String merchantCode) {
         return saasOrderBillDetailDao.selectLoanDataDetail(merchantCode);
     }
@@ -52,6 +58,7 @@ public class SaasOrderBillDetailServiceImpl extends AbstractBaseService implemen
     public List<OverdueOrderVo> getOverdueOrderListByPage(String merchantCode, Page page) {
         return saasOrderBillDetailDao.selectOverdueOrder(merchantCode, page);
     }
+
 }
 
 

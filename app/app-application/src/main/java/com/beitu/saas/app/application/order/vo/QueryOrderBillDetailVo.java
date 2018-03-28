@@ -1,23 +1,18 @@
-package com.beitu.saas.rest.controller.order.request;
+package com.beitu.saas.app.application.order.vo;
 
-import com.fqgj.common.api.ParamsObject;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.hibernate.validator.constraints.NotBlank;
 
 import java.util.Date;
 
 /**
  * @author linanjun
- * @create 2018/3/27 下午3:26
+ * @create 2018/3/28 上午10:49
  * @description
  */
-@ApiModel(description = "复审列表查询参数")
-public class FinalOrderQueryRequest extends ParamsObject {
+public class QueryOrderBillDetailVo {
 
-    @ApiModelProperty(value = "处理状态(1为待处理，2为已领取)")
-    @NotBlank(message = "处理状态不能为空")
-    private Integer dealStatus;
+    @ApiModelProperty(value = "机构CODE")
+    private String merchantCode;
 
     @ApiModelProperty(value = "手机号码")
     private String mobile;
@@ -34,18 +29,21 @@ public class FinalOrderQueryRequest extends ParamsObject {
     @ApiModelProperty(value = "状态")
     private Integer orderStatus;
 
-    @ApiModelProperty(value = "申请时长")
-    private Integer applyDuration;
+    @ApiModelProperty(value = "还款时长")
+    private Integer repaymentDuration;
 
-    @ApiModelProperty(value = "申请结束时间")
-    private Date applyEndDate;
+    @ApiModelProperty(value = "还款结束时间")
+    private Date repaymentEndDate;
 
-    public Integer getDealStatus() {
-        return dealStatus;
+    @ApiModelProperty(value = "应还日期枚举")
+    private Integer queryRepaymentDtKey;
+
+    public String getMerchantCode() {
+        return merchantCode;
     }
 
-    public void setDealStatus(Integer dealStatus) {
-        this.dealStatus = dealStatus;
+    public void setMerchantCode(String merchantCode) {
+        this.merchantCode = merchantCode;
     }
 
     public String getMobile() {
@@ -88,25 +86,27 @@ public class FinalOrderQueryRequest extends ParamsObject {
         this.orderStatus = orderStatus;
     }
 
-    public Integer getApplyDuration() {
-        return applyDuration;
+    public Integer getRepaymentDuration() {
+        return repaymentDuration;
     }
 
-    public void setApplyDuration(Integer applyDuration) {
-        this.applyDuration = applyDuration;
+    public void setRepaymentDuration(Integer repaymentDuration) {
+        this.repaymentDuration = repaymentDuration;
     }
 
-    public Date getApplyEndDate() {
-        return applyEndDate;
+    public Date getRepaymentEndDate() {
+        return repaymentEndDate;
     }
 
-    public void setApplyEndDate(Date applyEndDate) {
-        this.applyEndDate = applyEndDate;
+    public void setRepaymentEndDate(Date repaymentEndDate) {
+        this.repaymentEndDate = repaymentEndDate;
     }
 
-    @Override
-    public void validate() {
-
+    public Integer getQueryRepaymentDtKey() {
+        return queryRepaymentDtKey;
     }
 
+    public void setQueryRepaymentDtKey(Integer queryRepaymentDtKey) {
+        this.queryRepaymentDtKey = queryRepaymentDtKey;
+    }
 }

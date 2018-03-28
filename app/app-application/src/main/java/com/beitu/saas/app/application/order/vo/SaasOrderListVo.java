@@ -31,6 +31,10 @@ public class SaasOrderListVo implements ResponseData {
 
     private String remark;
 
+    private String preliminaryReviewer;
+
+    private String finalReviewer;
+
     public String getOrderNumb() {
         return orderNumb;
     }
@@ -119,4 +123,19 @@ public class SaasOrderListVo implements ResponseData {
         this.remark = remark;
     }
 
+    public String getPreliminaryReviewer() {
+        return preliminaryReviewer;
+    }
+
+    public void setPreliminaryReviewer(String preliminaryReviewer) {
+        this.preliminaryReviewer = preliminaryReviewer;
+    }
+
+    public String getFinalReviewer() {
+        return finalReviewer;
+    }
+
+    public void setFinalReviewer(String finalReviewer) {
+        this.finalReviewer = finalReviewer;
+    }
 }

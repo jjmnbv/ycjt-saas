@@ -35,6 +35,16 @@ public class SaasOrderBillDetailDaoImpl extends AbstractBaseMapper<SaasOrderBill
         return this.getSqlSession().selectList(this.getStatement(".selectByOrderNumb"), orderNumb);
     }
 
+    @Override
+    public int countByConditions(Map<String, Object> conditions) {
+        return 0;
+    }
+
+    @Override
+    public List<SaasOrderBillDetail> selectByConditions(Map<String, Object> conditions) {
+        return null;
+    }
+
 
     @Override
     public LoanDataDetailVo selectLoanDataDetail(String merchantCode) {
@@ -78,4 +88,5 @@ public class SaasOrderBillDetailDaoImpl extends AbstractBaseMapper<SaasOrderBill
         map.put("merchantCode", merchantCode);
         return getSqlSession().selectOne(this.getStatement("countOverdueOrder"), map);
     }
+
 }

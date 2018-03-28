@@ -23,9 +23,15 @@ public class SaasOrderStatusHistoryServiceImpl extends AbstractBaseService imple
     private SaasOrderStatusHistoryDao saasOrderStatusHistoryDao;
 
     @Override
+    public String getLoanLendRemark(String orderNumb) {
+        return null;
+    }
+
+    @Override
     public SaasOrderStatusHistory getOrderStatusHistoryByOrderNumb(String orderNumb) {
         return saasOrderStatusHistoryDao.selectOrderStatusHistoryByOrderNumb(orderNumb);
     }
+
 }
 
 

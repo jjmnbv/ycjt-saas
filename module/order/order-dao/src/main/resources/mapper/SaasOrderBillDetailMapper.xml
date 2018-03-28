@@ -3,6 +3,64 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.beitu.saas.order.dao.impl.SaasOrderBillDetailDaoImpl">
 
+    <sql id="conditions">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="merchantCode !=null">
+                and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+            </if>
+            <if test="channelCode !=null">
+                and channel_code = #{channelCode,jdbcType=VARCHAR}
+            </if>
+            <if test="borrowerCodeList !=null and borrowerCodeList.size > 0">
+                and borrower_code IN
+                <foreach item="borrowerCode" index="index" collection="borrowerCodeList" open="(" separator=","
+                         close=")">
+                    #{borrowerCode}
+                </foreach>
+            </if>
+            <if test="repaymentDt !=null">
+                and repayment_dt = #{repaymentDt,jdbcType=DATE}
+            </if>
+            <if test="createdBeginDt != null">
+                and created_dt <![CDATA[ >= ]]> #{createdBeginDt,jdbcType=DATE}
+            </if>
+            <if test="createdEndDt != null">
+                and created_dt <![CDATA[ <= ]]> #{createdEndDt,jdbcType=DATE}
+            </if>
+            <if test="orderStatusList !=null and orderStatusList.size > 0">
+                and order_status IN
+                <foreach item="orderStatus" index="index" collection="orderStatusList" open="(" separator=","
+                         close=")">
+                    #{orderStatus}
+                </foreach>
+            </if>
+            <if test="preliminaryReviewerCode !=null">
+                and preliminary_reviewer_code = #{preliminaryReviewerCode,jdbcType=VARCHAR}
+            </if>
+            <if test="finalReviewerCode !=null">
+                and final_reviewer_code = #{finalReviewerCode,jdbcType=VARCHAR}
+            </if>
+            <if test="loanLenderCode !=null">
+                and loan_lender_code = #{loanLenderCode,jdbcType=VARCHAR}
+            </if>
+            and expire_date <![CDATA[ < ]]> NOW()
+        </trim>
+    </sql>
+
+    <select id="countByConditions" resultType="java.lang.Integer">
+        select COUNT(1)
+        from saas_order_bill_detail
+        <include refid="conditions"/>
+    </select>
+
+    <select id="selectByConditions" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_order_bill_detail
+        <include refid="conditions"/>
+        <include refid="paginationSql"/>
+    </select>
+
     <select id="selectByBorrowerCodeAndMerchantCode" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
