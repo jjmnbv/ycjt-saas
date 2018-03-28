@@ -25,7 +25,7 @@
                 and created_dt <![CDATA[ >= ]]> #{createdBeginDt,jdbcType=DATE}
             </if>
             <if test="createdEndDt != null">
-                and created_dt <![CDATA[ <= ]]> #{createdEndDt,jdbcType=DATE}
+                and created_dt <![CDATA[ < ]]> #{createdEndDt,jdbcType=DATE}
             </if>
             <if test="orderStatusList !=null and orderStatusList.size > 0">
                 and order_status IN
@@ -44,6 +44,7 @@
                 and loan_lender_code = #{loanLenderCode,jdbcType=VARCHAR}
             </if>
             and expire_date <![CDATA[ < ]]> NOW()
+            and deleted = false
         </trim>
     </sql>
 

@@ -17,7 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: jungle
@@ -56,7 +58,26 @@ public class SaasOrderBillDetailServiceImpl extends AbstractBaseService implemen
 
     @Override
     public List<SaasOrderBillDetailVo> listByQueryOrderBillDetailVoAndPage(QuerySaasOrderBillDetailVo querySaasOrderBillDetailVo, Page page) {
-        return null;
+        Map<String, Object> conditions = new HashMap<>(16);
+        conditions.put("borrowerCodeList", querySaasOrderBillDetailVo.getBorrowerCodeList());
+        conditions.put("merchantCode", querySaasOrderBillDetailVo.getMerchantCode());
+        conditions.put("channelCode", querySaasOrderBillDetailVo.getChannelCode());
+        conditions.put("orderStatusList", querySaasOrderBillDetailVo.getOrderStatusList());
+        conditions.put("repaymentBeginDt", querySaasOrderBillDetailVo.getRepaymentBeginDt());
+        conditions.put("repaymentEndDt", querySaasOrderBillDetailVo.getRepaymentEndDt());
+        Integer count = saasOrderBillDetailDao.countByConditions(conditions);
+        page.setTotalCount(count);
+        if (count == 0) {
+            return null;
+        }
+        conditions.put("page", page);
+        List<SaasOrderBillDetail> saasOrderBillDetailList = saasOrderBillDetailDao.selectByConditions(conditions);
+        if (CollectionUtils.isEmpty(saasOrderBillDetailList)) {
+            return null;
+        }
+        List<SaasOrderBillDetailVo> results = new ArrayList<>(saasOrderBillDetailList.size());
+        saasOrderBillDetailList.forEach(saasOrderBillDetail -> results.add(SaasOrderBillDetailVo.convertEntityToVO(saasOrderBillDetail)));
+        return results;
     }
 
     @Override
