@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-
-
 /**
  * @author xiaochong
  * @create 2017/11/6 下午4:24

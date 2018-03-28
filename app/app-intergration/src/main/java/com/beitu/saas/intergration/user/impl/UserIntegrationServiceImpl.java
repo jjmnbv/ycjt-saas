@@ -13,9 +13,11 @@ import com.beitu.saas.intergration.user.pojo.UserNameIdNoValidationPojo;
 import com.fqgj.common.utils.JSONUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
+@Service
 public class UserIntegrationServiceImpl implements UserIntegrationService {
     
     @Autowired
@@ -76,5 +78,4 @@ public class UserIntegrationServiceImpl implements UserIntegrationService {
         
         return new UserNameIdNoValidationDto(UserNameIdNoValidationCodeEnum.OTHER_ERROR, "接口未知错误");
     }
-    
 }
