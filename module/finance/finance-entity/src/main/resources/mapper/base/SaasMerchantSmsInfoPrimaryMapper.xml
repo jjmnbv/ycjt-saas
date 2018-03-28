@@ -16,7 +16,7 @@
     <sql id="Base_Column_List">
     id,
     merchant_code,
-    value,
+    `value`,
     encrypt_value,
     version,
     deleted,
@@ -40,7 +40,7 @@
                 merchant_code,
                 </if>
                 <if test="value !=null">
-                value,
+                `value`,
                 </if>
                 <if test="encryptValue !=null">
                 encrypt_value,
@@ -90,13 +90,13 @@
                 merchant_code = #{merchantCode,jdbcType=VARCHAR},
                 </if>
                 <if test="value !=null">
-                value = #{value,jdbcType=BIGINT},
+                `value` = #{value,jdbcType=BIGINT},
                 </if>
                 <if test="encryptValue !=null">
                 encrypt_value = #{encryptValue,jdbcType=VARCHAR},
                 </if>
                 <if test="version !=null">
-                version = #{version,jdbcType=BIGINT},
+                version = #{version,jdbcType=BIGINT} + 1,
                 </if>
                 <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},
@@ -105,7 +105,7 @@
                 gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
                 </if>
         </set>
-        where id = #{id,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT} AND version = #{version,jdbcType=BIGINT}
     </update>
 
     <update id="deleteByPrimaryKey">
@@ -138,7 +138,7 @@
                 and merchant_code = #{merchantCode,jdbcType=VARCHAR}
             </if>
             <if test="value !=null">
-                and value = #{value,jdbcType=BIGINT}
+                and `value` = #{value,jdbcType=BIGINT}
             </if>
             <if test="encryptValue !=null">
                 and encrypt_value = #{encryptValue,jdbcType=VARCHAR}
@@ -168,7 +168,7 @@
                 and merchant_code = #{merchantCode,jdbcType=VARCHAR}
             </if>
             <if test="value !=null">
-                and value = #{value,jdbcType=BIGINT}
+                and `value` = #{value,jdbcType=BIGINT}
             </if>
             <if test="encryptValue !=null">
                 and encrypt_value = #{encryptValue,jdbcType=VARCHAR}
