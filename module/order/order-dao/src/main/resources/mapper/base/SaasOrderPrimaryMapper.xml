@@ -344,7 +344,7 @@
                 and created_dt = #{createdDt,jdbcType=DATE}
             </if>
             <if test="expireDate !=null">
-                and expire_date <![CDATA[ < ]]> #{expireDate,jdbcType=TIMESTAMP}
+                and expire_date <![CDATA[ >= ]]> #{expireDate,jdbcType=TIMESTAMP}
             </if>
             <if test="termUrl !=null">
                 and term_url = #{termUrl,jdbcType=VARCHAR}
@@ -422,7 +422,7 @@
                 and created_dt = #{createdDt,jdbcType=DATE}
             </if>
             <if test="expireDate !=null">
-                and expire_date <![CDATA[ < ]]> #{expireDate,jdbcType=TIMESTAMP}
+                and expire_date <![CDATA[ >= ]]> #{expireDate,jdbcType=TIMESTAMP}
             </if>
             <if test="termUrl !=null">
                 and term_url = #{termUrl,jdbcType=VARCHAR}

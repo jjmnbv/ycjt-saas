@@ -99,6 +99,8 @@ public class SaasOrderVo implements ResponseData, Serializable {
      */
     private Long version;
 
+    private Date gmtCreate;
+
     public Long getSaasOrderId() {
         return saasOrderId;
     }
@@ -266,6 +268,14 @@ public class SaasOrderVo implements ResponseData, Serializable {
 
     public void setVersion(Long version) {
         this.version = version;
+    }
+
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
     }
 
     public static SaasOrderVo convertEntityToVO(SaasOrder saasOrder) {
