@@ -12,12 +12,8 @@ import java.util.Date;
  * @create 2018/3/27 下午3:26
  * @description
  */
-@ApiModel(description = "复审列表查询参数")
+@ApiModel(description = "贷后管理列表查询参数")
 public class AfterLendOrderQueryRequest extends ParamsObject {
-
-    @ApiModelProperty(value = "处理状态(1为待处理，2为已领取)")
-    @NotBlank(message = "处理状态不能为空")
-    private Integer dealStatus;
 
     @ApiModelProperty(value = "手机号码")
     private String mobile;
@@ -34,19 +30,11 @@ public class AfterLendOrderQueryRequest extends ParamsObject {
     @ApiModelProperty(value = "状态")
     private Integer orderStatus;
 
-    @ApiModelProperty(value = "申请时长")
-    private Integer applyDuration;
+    @ApiModelProperty(value = "还款时长")
+    private Integer repaymentDuration;
 
-    @ApiModelProperty(value = "申请结束时间")
-    private Date applyEndDate;
-
-    public Integer getDealStatus() {
-        return dealStatus;
-    }
-
-    public void setDealStatus(Integer dealStatus) {
-        this.dealStatus = dealStatus;
-    }
+    @ApiModelProperty(value = "还款结束时间")
+    private Date repaymentEndDate;
 
     public String getMobile() {
         return mobile;
@@ -88,20 +76,20 @@ public class AfterLendOrderQueryRequest extends ParamsObject {
         this.orderStatus = orderStatus;
     }
 
-    public Integer getApplyDuration() {
-        return applyDuration;
+    public Integer getRepaymentDuration() {
+        return repaymentDuration;
     }
 
-    public void setApplyDuration(Integer applyDuration) {
-        this.applyDuration = applyDuration;
+    public void setRepaymentDuration(Integer repaymentDuration) {
+        this.repaymentDuration = repaymentDuration;
     }
 
-    public Date getApplyEndDate() {
-        return applyEndDate;
+    public Date getRepaymentEndDate() {
+        return repaymentEndDate;
     }
 
-    public void setApplyEndDate(Date applyEndDate) {
-        this.applyEndDate = applyEndDate;
+    public void setRepaymentEndDate(Date repaymentEndDate) {
+        this.repaymentEndDate = repaymentEndDate;
     }
 
     @Override

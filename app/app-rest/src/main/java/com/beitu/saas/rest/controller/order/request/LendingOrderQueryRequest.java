@@ -11,7 +11,7 @@ import java.util.Date;
  * @create 2018/3/27 下午3:26
  * @description
  */
-@ApiModel(description = "复审列表查询参数")
+@ApiModel(description = "待放款列表查询参数")
 public class LendingOrderQueryRequest extends ParamsObject {
 
     @ApiModelProperty(value = "手机号码")

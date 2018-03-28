@@ -1,7 +1,6 @@
 package com.beitu.saas.rest.controller.order.response;
 
 import com.beitu.saas.app.application.order.vo.SaasOrderBillDetailListVo;
-import com.beitu.saas.app.application.order.vo.SaasOrderListVo;
 import com.fqgj.common.api.ResponseData;
 import io.swagger.annotations.ApiModel;
 
@@ -13,11 +12,11 @@ import java.util.List;
  * @description
  */
 @ApiModel(value = "初审列表信息")
-public class AfterLendOrderListResponse implements ResponseData {
+public class OverdueOrderListResponse implements ResponseData {
 
     private List<SaasOrderBillDetailListVo> orderListVoList;
 
-    public AfterLendOrderListResponse(List<SaasOrderBillDetailListVo> orderListVoList) {
+    public OverdueOrderListResponse(List<SaasOrderBillDetailListVo> orderListVoList) {
         this.orderListVoList = orderListVoList;
     }
 

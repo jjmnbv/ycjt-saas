@@ -1,6 +1,7 @@
 package com.beitu.saas.order.domain;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author linanjun
@@ -11,7 +12,7 @@ public class QuerySaasOrderVo {
     /**
      * 借款人CODE
      */
-    private String[] borrowerCodeArray;
+    private List<String> borrowerCodeList;
     /**
      * 机构CODE
      */
@@ -23,7 +24,7 @@ public class QuerySaasOrderVo {
     /**
      * 订单状态
      */
-    private Integer[] orderStatusArray;
+    private List<Integer> orderStatusList;
     /**
      * 申请查询开始时间
      */
@@ -49,12 +50,12 @@ public class QuerySaasOrderVo {
      */
     private Date repaymentDt;
 
-    public String[] getBorrowerCodeArray() {
-        return borrowerCodeArray;
+    public List<String> getBorrowerCodeList() {
+        return borrowerCodeList;
     }
 
-    public void setBorrowerCodeArray(String[] borrowerCodeArray) {
-        this.borrowerCodeArray = borrowerCodeArray;
+    public void setBorrowerCodeList(List<String> borrowerCodeList) {
+        this.borrowerCodeList = borrowerCodeList;
     }
 
     public String getMerchantCode() {
@@ -73,12 +74,12 @@ public class QuerySaasOrderVo {
         this.channelCode = channelCode;
     }
 
-    public Integer[] getOrderStatusArray() {
-        return orderStatusArray;
+    public List<Integer> getOrderStatusList() {
+        return orderStatusList;
     }
 
-    public void setOrderStatusArray(Integer[] orderStatusArray) {
-        this.orderStatusArray = orderStatusArray;
+    public void setOrderStatusList(List<Integer> orderStatusList) {
+        this.orderStatusList = orderStatusList;
     }
 
     public Date getCreatedBeginDt() {

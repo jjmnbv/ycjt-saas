@@ -11,9 +11,9 @@
             <if test="channelCode !=null">
                 and channel_code = #{channelCode,jdbcType=VARCHAR}
             </if>
-            <if test="borrowerCodeArray !=null and borrowerCodeArray.length > 0">
+            <if test="borrowerCodeList !=null and borrowerCodeList.size > 0">
                 and borrower_code IN
-                <foreach item="borrowerCode" index="index" collection="borrowerCodeArray" open="(" separator=","
+                <foreach item="borrowerCode" index="index" collection="borrowerCodeList" open="(" separator=","
                          close=")">
                     #{borrowerCode}
                 </foreach>
@@ -22,14 +22,14 @@
                 and repayment_dt = #{repaymentDt,jdbcType=DATE}
             </if>
             <if test="createdBeginDt != null">
-                and created_dt <![CDATA[ >= ]]> #{createdBeginDt,jdbcType=TIMESTAMP}
+                and created_dt <![CDATA[ >= ]]> #{createdBeginDt,jdbcType=DATE}
             </if>
             <if test="createdEndDt != null">
-                and created_dt <![CDATA[ <= ]]> #{createdEndDt,jdbcType=TIMESTAMP}
+                and created_dt <![CDATA[ <= ]]> #{createdEndDt,jdbcType=DATE}
             </if>
-            <if test="orderStatusArray !=null and orderStatusArray.length > 0">
+            <if test="orderStatusList !=null and orderStatusList.size > 0">
                 and order_status IN
-                <foreach item="orderStatus" index="index" collection="orderStatusArray" open="(" separator=","
+                <foreach item="orderStatus" index="index" collection="orderStatusList" open="(" separator=","
                          close=")">
                     #{orderStatus}
                 </foreach>

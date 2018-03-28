@@ -10,7 +10,7 @@ import org.hibernate.validator.constraints.NotBlank;
  * @create 2018/3/27 上午11:33
  * @description
  */
-@ApiModel(description = "初审订单操作")
+@ApiModel(description = "待放款订单操作")
 public class LenderOperateOrderRequest extends ParamsObject {
 
     @ApiModelProperty(value = "订单号", required = true)

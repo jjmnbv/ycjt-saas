@@ -55,10 +55,10 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
     @Override
     public List<SaasOrderVo> listByQuerySaasOrderVoAndPage(QuerySaasOrderVo querySaasOrderVo, Page page) {
         Map<String, Object> conditions = new HashMap<>(16);
-        conditions.put("borrowerCodeArray", querySaasOrderVo.getBorrowerCodeArray());
+        conditions.put("borrowerCodeList", querySaasOrderVo.getBorrowerCodeList());
         conditions.put("merchantCode", querySaasOrderVo.getMerchantCode());
         conditions.put("channelCode", querySaasOrderVo.getChannelCode());
-        conditions.put("orderStatusArray", querySaasOrderVo.getOrderStatusArray());
+        conditions.put("orderStatusList", querySaasOrderVo.getOrderStatusList());
         conditions.put("createdBeginDt", querySaasOrderVo.getCreatedBeginDt());
         conditions.put("createdEndDt", querySaasOrderVo.getCreatedEndDt());
         conditions.put("preliminaryReviewerCode", querySaasOrderVo.getPreliminaryReviewerCode());

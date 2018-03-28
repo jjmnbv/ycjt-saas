@@ -9,19 +9,22 @@ import com.fqgj.common.api.enums.MsgCodeEnum;
  */
 public enum H5OrderBillDetailViewTypeEnum implements MsgCodeEnum {
 
-    FINISHED(1, "账单已结清"),
-    FOR_REIMBURSEMENT(2, "待还款"),
-    TO_CONFIRM_EXTEND(3, "展期待确认"),
-    OVERDUE(4, "已逾期");
+    FINISHED(1, "账单已结清", new Integer[]{}),
+    FOR_REIMBURSEMENT(2, "待还款", new Integer[]{}),
+    TO_CONFIRM_EXTEND(3, "展期待确认", new Integer[]{}),
+    OVERDUE(4, "已逾期", new Integer[]{});
 
-    H5OrderBillDetailViewTypeEnum(Integer code, String msg) {
+    H5OrderBillDetailViewTypeEnum(Integer code, String msg, Integer[] orderStatusArray) {
         this.code = code;
         this.msg = msg;
+        this.orderStatusArray = orderStatusArray;
     }
 
     private Integer code;
 
     private String msg;
+
+    private Integer[] orderStatusArray;
 
     @Override
     public Integer getCode() {
@@ -41,4 +44,11 @@ public enum H5OrderBillDetailViewTypeEnum implements MsgCodeEnum {
         this.msg = msg;
     }
 
+    public Integer[] getOrderStatusArray() {
+        return orderStatusArray;
+    }
+
+    public void setOrderStatusArray(Integer[] orderStatusArray) {
+        this.orderStatusArray = orderStatusArray;
+    }
 }

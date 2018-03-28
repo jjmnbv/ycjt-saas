@@ -1,6 +1,6 @@
 package com.beitu.saas.order.client;
 
-import com.beitu.saas.order.domain.QueryOrderBillDetailVo;
+import com.beitu.saas.order.domain.QuerySaasOrderBillDetailVo;
 import com.beitu.saas.order.domain.SaasOrderBillDetailVo;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.base.BaseService;
@@ -19,6 +19,6 @@ public interface SaasOrderBillDetailService<T extends BaseEntity> extends BaseSe
 
     List<SaasOrderBillDetailVo> listByOrderNumb(String orderNumb);
 
-    List<SaasOrderBillDetailVo> listByQueryOrderBillDetailVoAndPage(QueryOrderBillDetailVo queryOrderBillDetailVo, Page page);
+    List<SaasOrderBillDetailVo> listByQueryOrderBillDetailVoAndPage(QuerySaasOrderBillDetailVo querySaasOrderBillDetailVo, Page page);
 
 }

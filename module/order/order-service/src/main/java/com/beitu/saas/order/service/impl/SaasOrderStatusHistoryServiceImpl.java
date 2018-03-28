@@ -21,8 +21,10 @@ public class SaasOrderStatusHistoryServiceImpl extends AbstractBaseService imple
     @Autowired
     private SaasOrderStatusHistoryDao saasOrderStatusHistoryDao;
 
-    
-
+    @Override
+    public String getLoanLendRemark(String orderNumb) {
+        return null;
+    }
 }
 
 
