@@ -233,8 +233,7 @@ public class OrderApplication {
                 .setMerchantCredit(creditInfoByMerchantCode.getValue())
                 .setMerchantSms(smsInfoByMerchantCode.getValue());
 
-        //浏览量走势
-
+        // TODO: 2018/3/28 BY李楠君 浏览量走势
 
         //待收的订单列表和逾期的订单列表
         List<NoRepayOrderVo> noRepayOrderVos = saasOrderBillDetailService.getNoRepayOrderListByPage(merchantCode, page);
