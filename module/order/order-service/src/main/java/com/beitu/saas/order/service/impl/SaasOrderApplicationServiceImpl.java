@@ -30,10 +30,12 @@ public class SaasOrderApplicationServiceImpl extends AbstractBaseService impleme
     @Autowired
     private SaasOrderApplicationDao saasOrderApplicationDao;
 
+
     @Override
-    public SaasOrderApplicationVo getByBorrowerCode(String borrowerCode) {
+    public SaasOrderApplicationVo getByBorrowerCodeAndChannelCode(String borrowerCode, String channelCode) {
         List<SaasOrderApplication> saasOrderApplicationList = saasOrderApplicationDao.selectByParams(new HashMap<String, Object>(4) {{
             put("borrowerCode", borrowerCode);
+            put("channelCode", channelCode);
             put("deleted", Boolean.FALSE);
         }});
         if (CollectionUtils.isEmpty(saasOrderApplicationList)) {
