@@ -3,6 +3,9 @@ package com.beitu.saas.order.dao.impl;
 import com.beitu.saas.order.dao.SaasOrderBillDetailDao;
 import com.beitu.saas.order.entity.SaasOrderBillDetail;
 import com.beitu.saas.order.vo.LoanDataDetailVo;
+import com.beitu.saas.order.vo.NoRepayOrderVo;
+import com.beitu.saas.order.vo.OverdueOrderVo;
+import com.fqgj.common.api.Page;
 import com.fqgj.common.base.AbstractBaseMapper;
 import org.springframework.stereotype.Repository;
 
@@ -37,5 +40,42 @@ public class SaasOrderBillDetailDaoImpl extends AbstractBaseMapper<SaasOrderBill
     public LoanDataDetailVo selectLoanDataDetail(String merchantCode) {
         Map<String, Object> params = new HashMap<>(4);
         params.put("merchantCode", merchantCode);
-        return this.getSqlSession().selectOne(this.getStatement(".selectLoanDataDetail"), params);    }
+        return this.getSqlSession().selectOne(this.getStatement(".selectLoanDataDetail"), params);
+    }
+
+    @Override
+    public List<NoRepayOrderVo> selectNoRepayOrder(String merchantCode, Page page) {
+        Map<String, Object> map = new HashMap<>(4);
+        map.put("merchantCode", merchantCode);
+        if (page != null) {
+            page.setTotalCount(this.countNoRepayOrder(merchantCode));
+            map.put("page", page);
+        }
+        return this.getSqlSession().selectList(this.getStatement(".selectNoRepayOrder"), map);
+    }
+
+    @Override
+    public Integer countNoRepayOrder(String merchantCode) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("merchantCode", merchantCode);
+        return getSqlSession().selectOne(this.getStatement("countNoRepayOrder"), map);
+    }
+
+    @Override
+    public List<OverdueOrderVo> selectOverdueOrder(String merchantCode, Page page) {
+        Map<String, Object> map = new HashMap<>(4);
+        map.put("merchantCode", merchantCode);
+        if (page != null) {
+            page.setTotalCount(this.countOverdueOrder(merchantCode));
+            map.put("page", page);
+        }
+        return this.getSqlSession().selectList(this.getStatement(".selectOverdueOrder"), map);
+    }
+
+    @Override
+    public Integer countOverdueOrder(String merchantCode) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("merchantCode", merchantCode);
+        return getSqlSession().selectOne(this.getStatement("countOverdueOrder"), map);
+    }
 }

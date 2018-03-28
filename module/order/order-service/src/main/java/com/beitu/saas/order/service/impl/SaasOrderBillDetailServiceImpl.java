@@ -4,6 +4,9 @@ import com.beitu.saas.order.client.SaasOrderBillDetailService;
 import com.beitu.saas.order.dao.SaasOrderBillDetailDao;
 import com.beitu.saas.order.domain.SaasOrderBillDetailVo;
 import com.beitu.saas.order.vo.LoanDataDetailVo;
+import com.beitu.saas.order.vo.NoRepayOrderVo;
+import com.beitu.saas.order.vo.OverdueOrderVo;
+import com.fqgj.common.api.Page;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
 import com.fqgj.log.enhance.Module;
@@ -38,6 +41,16 @@ public class SaasOrderBillDetailServiceImpl extends AbstractBaseService implemen
     @Override
     public LoanDataDetailVo getLoanDataDetailVo(String merchantCode) {
         return saasOrderBillDetailDao.selectLoanDataDetail(merchantCode);
+    }
+
+    @Override
+    public List<NoRepayOrderVo> getNoRepayOrderListByPage(String merchantCode, Page page) {
+        return saasOrderBillDetailDao.selectNoRepayOrder(merchantCode, page);
+    }
+
+    @Override
+    public List<OverdueOrderVo> getOverdueOrderListByPage(String merchantCode, Page page) {
+        return saasOrderBillDetailDao.selectOverdueOrder(merchantCode, page);
     }
 }
 
