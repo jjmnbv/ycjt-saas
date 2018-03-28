@@ -12,6 +12,7 @@ import com.beitu.saas.channel.enums.ChannelErrorCodeEnum;
 import com.beitu.saas.channel.enums.RiskModuleEnum;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.utils.OrderNoUtil;
+import com.beitu.saas.intergration.user.UserIntegrationService;
 import com.beitu.saas.order.client.SaasOrderApplicationService;
 import com.beitu.saas.order.domain.SaasOrderApplicationVo;
 import com.fqgj.base.services.redis.RedisClient;
@@ -61,6 +62,9 @@ public class CreditApplication {
 
     @Autowired
     private OrderApplication orderApplication;
+    
+    @Autowired
+    private UserIntegrationService userIntegrationService;
 
     public List<CreditModuleListVo> listCreditModule(String channelCode, String borrowerCode) {
         List<SaasChannelRiskSettingsVo> saasChannelRiskSettingsVoList = saasChannelApplication.getSaasChannelRiskSettingsByChannelCode(channelCode);
@@ -149,8 +153,7 @@ public class CreditApplication {
      * @return
      */
     public Boolean realNameAuth(String name, String identityCode) {
-        // TODO
-        return Boolean.TRUE;
+        return userIntegrationService.userNameMatchIdNo(name, identityCode);
     }
 
     /**
