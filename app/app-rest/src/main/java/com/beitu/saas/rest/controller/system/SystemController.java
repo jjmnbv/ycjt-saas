@@ -3,6 +3,7 @@ package com.beitu.saas.rest.controller.system;
 import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.enums.EducationMsgCodeEnum;
 import com.beitu.saas.app.enums.MaritalStatusMsgCodeEnum;
+import com.beitu.saas.app.enums.QueryRepaymentDtEnum;
 import com.beitu.saas.rest.controller.system.response.EnumResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,8 +32,15 @@ public class SystemController {
     @RequestMapping(value = "/enum/marital", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "婚姻枚举信息", response = EnumResponse.class)
-    public DataApiResponse<EnumResponse> login() {
+    public DataApiResponse<EnumResponse> getMaritalEnum() {
         return new DataApiResponse<>(new EnumResponse(MaritalStatusMsgCodeEnum.values()));
+    }
+
+    @RequestMapping(value = "/enum/query/repayment", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "婚姻枚举信息", response = EnumResponse.class)
+    public DataApiResponse<EnumResponse> getQueryRepaymentEnum() {
+        return new DataApiResponse<>(new EnumResponse(QueryRepaymentDtEnum.values()));
     }
 
 }

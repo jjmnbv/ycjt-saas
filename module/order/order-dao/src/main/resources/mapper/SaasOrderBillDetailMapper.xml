@@ -3,6 +3,53 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.beitu.saas.order.dao.impl.SaasOrderBillDetailDaoImpl">
 
+    <sql id="conditions">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="merchantCode !=null">
+                and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+            </if>
+            <if test="channelCode !=null">
+                and channel_code = #{channelCode,jdbcType=VARCHAR}
+            </if>
+            <if test="borrowerCodeList !=null and borrowerCodeList.size > 0">
+                and borrower_code IN
+                <foreach item="borrowerCode" index="index" collection="borrowerCodeList" open="(" separator=","
+                         close=")">
+                    #{borrowerCode}
+                </foreach>
+            </if>
+            <if test="repaymentBeginDt != null">
+                and repayment_dt <![CDATA[ >= ]]> #{repaymentBeginDt,jdbcType=DATE}
+            </if>
+            <if test="repaymentEndDt != null">
+                and repayment_dt <![CDATA[ < ]]> #{repaymentEndDt,jdbcType=DATE}
+            </if>
+            <if test="orderStatusList !=null and orderStatusList.size > 0">
+                and order_status IN
+                <foreach item="orderStatus" index="index" collection="orderStatusList" open="(" separator=","
+                         close=")">
+                    #{orderStatus}
+                </foreach>
+            </if>
+            and expire_date <![CDATA[ < ]]> NOW()
+            and deleted = false
+        </trim>
+    </sql>
+
+    <select id="countByConditions" resultType="java.lang.Integer">
+        select COUNT(1)
+        from saas_order_bill_detail
+        <include refid="conditions"/>
+    </select>
+
+    <select id="selectByConditions" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_order_bill_detail
+        <include refid="conditions"/>
+        <include refid="paginationSql"/>
+    </select>
+
     <select id="selectByBorrowerCodeAndMerchantCode" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -31,6 +78,43 @@
       sum(case when visible=1 and destroy=0  and datediff(DATE_SUB(curdate(),INTERVAL 0 DAY),repayment_dt)>0 then real_capital else null end) overdueTotalAmount
       from saas_order_bill_detail
       where merchant_code = #{merchantCode,jdbcType=VARCHAR} and deleted = false
+    </select>
+
+
+    <select id="selectNoRepayOrder" parameterType="java.lang.String"
+            resultType="com.beitu.saas.order.vo.NoRepayOrderVo">
+        select order_numb orderNumb,real_capital realCapital
+        from saas_order_bill_detail
+        where merchant_code = #{merchantCode,jdbcType=VARCHAR}
+        and visible=1 and destroy=0
+        and deleted = false
+    </select>
+
+    <select id="countNoRepayOrder" parameterType="map" resultType="INTEGER">
+        SELECT COUNT(*)
+        from saas_channel
+        where merchant_code = #{merchantCode,jdbcType=VARCHAR}
+        and visible=1 and destroy=0
+        and deleted = false
+    </select>
+
+    <select id="selectOverdueOrder" parameterType="java.lang.String"
+            resultType="com.beitu.saas.order.vo.OverdueOrderVo">
+        select order_numb orderNumb,real_capital realCapital
+        from saas_order_bill_detail
+        where merchant_code = #{merchantCode,jdbcType=VARCHAR}
+        and datediff(DATE_SUB(curdate(),INTERVAL 0 DAY),repayment_dt)>0
+        and visible=1 and destroy=0
+        and deleted = false
+    </select>
+
+    <select id="countOverdueOrder" parameterType="map" resultType="INTEGER">
+        SELECT COUNT(*)
+        from saas_channel
+        where merchant_code = #{merchantCode,jdbcType=VARCHAR}
+        and datediff(DATE_SUB(curdate(),INTERVAL 0 DAY),repayment_dt)>0
+        and visible=1 and destroy=0
+        and deleted = false
     </select>
 
 </mapper>
