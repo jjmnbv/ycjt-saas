@@ -36,7 +36,7 @@ public class UserIntegrationServiceImpl implements UserIntegrationService {
         String url = configUtil.getYoufenValidationApiUrl() + configUtil.getYoufenValidationNameIdcardPath();
         StringBuilder urlSb = new StringBuilder();
         urlSb.append(url + "?");
-        urlSb.append(configUtil.getYoufenAccount() + "&");
+        urlSb.append("account=" + configUtil.getYoufenAccount() + "&");
         urlSb.append("name=" + param.getName() + "&");
         urlSb.append("idcard=" + param.getIdentityNo() + "");
         String response = HttpClientUtil.doGet(urlSb.toString());

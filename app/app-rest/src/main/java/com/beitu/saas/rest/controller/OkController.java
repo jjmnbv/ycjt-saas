@@ -2,6 +2,7 @@ package com.beitu.saas.rest.controller;
 
 import com.beitu.saas.app.annotations.SignIgnore;
 import com.beitu.saas.app.annotations.VisitorAccessible;
+import com.beitu.saas.app.application.credit.CreditApplication;
 import com.beitu.saas.app.application.finance.SaasConsumeDayStatApplication;
 import com.fqgj.log.factory.LogFactory;
 import com.fqgj.log.interfaces.Log;
@@ -22,6 +23,9 @@ public class OkController {
 
     @Autowired
     private SaasConsumeDayStatApplication saasConsumeDayStatApplication;
+    
+    @Autowired
+    private CreditApplication creditApplication;
 
     @RequestMapping("/ok")
     @ResponseBody
@@ -36,7 +40,7 @@ public class OkController {
     @VisitorAccessible
     @SignIgnore
     public void stat() {
-         saasConsumeDayStatApplication.creditAndMsgDayClear();
+        creditApplication.realNameAuth("xxxxxx", "612422200612216622");
     }
 
 }
