@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.beitu.saas.auth.dao.impl.SaasRoleDaoImpl">
     <resultMap id="BaseResultMap" type="com.beitu.saas.auth.entity.SaasRole">
-        <id column="id" jdbcType="INTEGER" property="id"/>
+        <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="description" jdbcType="VARCHAR" property="description"/>
@@ -25,11 +25,11 @@
         gmt_create
     </sql>
 
-    <select id="selectByPrimaryKey" parameterType="Integer" resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey" parameterType="Long" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from saas_role
-        where id = #{id,jdbcType=INTEGER}
+        where id = #{id,jdbcType=BIGINT}
     </select>
 
     <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.beitu.saas.auth.entity.SaasRole"  useGeneratedKeys="true">
@@ -113,13 +113,13 @@
                 gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
             </if>
         </set>
-        where id = #{id,jdbcType=INTEGER}
+        where id = #{id,jdbcType=BIGINT}
     </update>
 
     <update id="deleteByPrimaryKey">
         update  saas_role
         set deleted = 1
-        where id = #{id,jdbcType=INTEGER}
+        where id = #{id,jdbcType=BIGINT}
     </update>
 
     <sql id="paginationSql">
@@ -140,7 +140,7 @@
         from saas_role
         <trim prefix="where" prefixOverrides="and|or">
             <if test="id !=null">
-                and id = #{id,jdbcType=INTEGER}
+                and id = #{id,jdbcType=BIGINT}
             </if>
             <if test="merchantCode !=null">
                 and merchant_code = #{merchantCode,jdbcType=VARCHAR}
@@ -174,7 +174,7 @@
         select count(*) from saas_role
         <trim prefix="where" prefixOverrides="and|or">
             <if test="id !=null">
-                and id = #{id,jdbcType=INTEGER}
+                and id = #{id,jdbcType=BIGINT}
             </if>
             <if test="merchantCode !=null">
                 and merchant_code = #{merchantCode,jdbcType=VARCHAR}

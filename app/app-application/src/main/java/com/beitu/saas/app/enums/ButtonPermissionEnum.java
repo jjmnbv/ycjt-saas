@@ -33,7 +33,10 @@ public enum ButtonPermissionEnum {
 
     ENTRUSTED_COLLECTION("6536825c103e0c23", "委托催收"),
 
-    add_collection_remarks("db66ddd9ce7f037f", "添加催收记录");
+    ADD_COLLECTION_REMARKS("db66ddd9ce7f037f", "添加催收记录"),
+
+    CONTRACT_SETTING("83a6259046d6a999", "合同设置"),
+    SMS_SETTING("6a13f16aa7e3ec7d", "短信配置");
     private String key;
     private String value;
 

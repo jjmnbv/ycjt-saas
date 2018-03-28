@@ -1,6 +1,7 @@
 package com.beitu.saas.rest.controller.auth;
 
 import com.beitu.saas.app.annotations.VisitorAccessible;
+import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.application.auth.AdminInfoApplication;
 import com.beitu.saas.app.common.RequestBasicInfo;
 import com.beitu.saas.app.common.RequestLocalInfo;
@@ -19,10 +20,12 @@ import com.beitu.saas.rest.controller.auth.request.ResetPasswordRequest;
 import com.beitu.saas.rest.controller.auth.request.UpdateAdminRequest;
 import com.beitu.saas.rest.controller.auth.response.AdminListResponse;
 import com.beitu.saas.rest.controller.auth.response.RoleListResponse;
+import com.beitu.saas.sms.enums.SmsErrorCodeEnum;
 import com.fqgj.base.services.redis.RedisClient;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.api.Response;
 import com.fqgj.common.api.annotations.ParamsValidate;
+import com.fqgj.common.api.exception.ApiErrorException;
 import com.fqgj.common.entity.BaseEntity;
 import com.fqgj.common.utils.DateUtil;
 import com.fqgj.common.utils.GenerOrderNoUtil;
@@ -33,6 +36,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -76,15 +80,22 @@ public class AdminController {
     @ApiOperation(value = "登录")
     public Response login(@RequestBody AdminLoginRequest adminLoginRequest, HttpServletRequest request) throws IOException {
         //TODO 校验验证码
+        String verifyCode = redisClient.get(RedisKeyConsts.H5_SAVE_LOGIN_VERIFYCODE_KEY, adminLoginRequest.getMobile());
+        if (StringUtils.isEmpty(verifyCode)) {
+            throw new ApiErrorException(SmsErrorCodeEnum.VERIFY_CODE_FAILURE);
+        }
+        if (!verifyCode.equals(adminLoginRequest.getVerifyCode())) {
+            throw new ApiErrorException(SmsErrorCodeEnum.INPUT_WRONG_VERIFY_CODE);
+        }
         SaasAdmin saasAdmin = saasAdminService.login(adminLoginRequest.getMobile(), adminLoginRequest.getPassword());
         String oldToken = redisClient.get(RedisKeyConsts.SAAS_TOKEN_KEY, saasAdmin.getCode());
-        if (StringUtils.isNotEmpty(oldToken)){
-            redisClient.del(RedisKeyConsts.SAAS_TOKEN_KEY,oldToken);
+        if (StringUtils.isNotEmpty(oldToken)) {
+            redisClient.del(RedisKeyConsts.SAAS_TOKEN_KEY, oldToken);
         }
         saasAdminLoginLogService.addAdminLoginLog(request, saasAdmin.getCode());
         String token = MD5.md5(UUID.randomUUID().toString());
         redisClient.set(RedisKeyConsts.SAAS_TOKEN_KEY, saasAdmin.getCode(), TimeConsts.TEN_MINUTES, token);
-        redisClient.set(RedisKeyConsts.SAAS_TOKEN_KEY,token, TimeConsts.TEN_MINUTES,saasAdmin.getCode());
+        redisClient.set(RedisKeyConsts.SAAS_TOKEN_KEY, token, TimeConsts.TEN_MINUTES, saasAdmin.getCode());
         return Response.ok().putData(new HashMap<String, Object>(2) {{
             put("token", token);
         }});
@@ -96,6 +107,7 @@ public class AdminController {
     public Response logout() throws IOException {
         RequestBasicInfo requestBasicInfo = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo();
         redisClient.del(RedisKeyConsts.SAAS_TOKEN_KEY, requestBasicInfo.getToken());
+        redisClient.del(RedisKeyConsts.SAAS_TOKEN_KEY, RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode());
         return Response.ok();
     }
 
@@ -112,6 +124,8 @@ public class AdminController {
         BeanUtils.copyProperties(addAdminRequest, saasAdmin);
         saasAdmin.setPassword(MD5.md5(addAdminRequest.getPassword())).setMerchantCode(GenerOrderNoUtil.generateOrderNo());
         saasAdmin.setEnable(true).setMerchantCode(RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode());
+        saasAdmin.setDefault(false);
+        saasAdmin.setCreateName(RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getName());
         adminInfoApplication.addAdminAndRole(saasAdmin, addAdminRequest.getRoleId());
         return Response.ok();
     }
@@ -144,13 +158,13 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
-    @ApiOperation("重置密码")
+    @ApiOperation("编辑子账户")
     public Response updateAdmin(@RequestBody UpdateAdminRequest updateAdminRequest) {
         SaasAdmin saasAdmin = new SaasAdmin();
         saasAdmin.setId(updateAdminRequest.getAdminId());
         if (StringUtils.isNotEmpty(updateAdminRequest.getJob()) || StringUtils.isNotEmpty(updateAdminRequest.getName())) {
             saasAdmin.setJob(updateAdminRequest.getJob());
-            saasAdmin.setJob(updateAdminRequest.getName());
+            saasAdmin.setName(updateAdminRequest.getName());
             saasAdminService.updateById(saasAdmin);
         }
         if (updateAdminRequest.getRoleId() != null) {
@@ -163,11 +177,14 @@ public class AdminController {
         return Response.ok();
     }
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/list/{currentPage}/{pageSize}", method = RequestMethod.GET)
     @ParamsValidate
-    public Response list(@RequestBody Page page) {
+    public Response list(@PathVariable(value = "currentPage") Integer currentPage, @PathVariable("pageSize") Integer pageSize) {
+        Page page = new Page();
+        page.setCurrentPage(currentPage);
+        page.setPageSize(pageSize);
         SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
-        List<SaasAdmin> list = saasAdminService.getAdminListByMerchantCode(saasAdmin.getCode(), page);
+        List<SaasAdmin> list = saasAdminService.getAdminListByMerchantCode(saasAdmin.getMerchantCode(), page);
         List<AdminListResponse> listResponses = new ArrayList<>();
         list.forEach(admin -> {
             AdminListResponse response = new AdminListResponse();
@@ -179,6 +196,7 @@ public class AdminController {
                 put("deleted", false);
             }}).get(0);
             response.setRoleName(((SaasRole) saasRoleService.selectById(saasAdminRole.getRoleId())).getName());
+            listResponses.add(response);
         });
         return Response.ok().putData(new HashMap<String, Object>(2) {{
             put("roleList", listResponses);

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beitu.saas.finance.dao.impl.SaasMerchantBalanceInfoDaoImpl">
+    <select id="selectMerchantBalanceInfoEntity" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from saas_merchant_balance_info
+        <where>
+            <trim prefixOverrides="and">
+                <if test="merchantCode !=null">
+                    and merchant_code=#{merchantCode,jdbcType=VARCHAR}
+                </if>
+                and deleted=0
+            </trim>
+        </where>
+
+    </select>
+</mapper>

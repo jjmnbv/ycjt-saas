@@ -15,6 +15,13 @@ import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
 import com.beitu.saas.borrower.domain.SaasBorrowerVo;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.common.utils.identityNumber.vo.IdcardInfoExtractor;
+import com.beitu.saas.finance.client.SaasMerchantBalanceInfoService;
+import com.beitu.saas.finance.client.SaasMerchantCreditInfoService;
+import com.beitu.saas.finance.client.SaasMerchantSmsInfoService;
+import com.beitu.saas.finance.client.domain.DataDashboardVo;
+import com.beitu.saas.finance.entity.SaasMerchantBalanceInfoEntity;
+import com.beitu.saas.finance.entity.SaasMerchantCreditInfoEntity;
+import com.beitu.saas.finance.entity.SaasMerchantSmsInfoEntity;
 import com.beitu.saas.order.client.SaasOrderApplicationService;
 import com.beitu.saas.order.client.SaasOrderBillDetailService;
 import com.beitu.saas.order.client.SaasOrderService;
@@ -28,6 +35,9 @@ import com.beitu.saas.order.entity.SaasOrderBillDetail;
 import com.beitu.saas.order.entity.SaasOrderStatusHistory;
 import com.beitu.saas.order.enums.OrderErrorCodeEnum;
 import com.beitu.saas.order.enums.OrderStatusEnum;
+import com.beitu.saas.order.vo.LoanDataDetailVo;
+import com.beitu.saas.order.vo.NoRepayOrderVo;
+import com.beitu.saas.order.vo.OverdueOrderVo;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.utils.CollectionUtils;
 import com.fqgj.common.utils.DateUtil;
@@ -78,6 +88,15 @@ public class OrderApplication {
 
     @Autowired
     private BorrowerApplication borrowerApplication;
+
+    @Autowired
+    private SaasMerchantCreditInfoService saasMerchantCreditInfoService;
+
+    @Autowired
+    private SaasMerchantSmsInfoService saasMerchantSmsInfoService;
+
+    @Autowired
+    private SaasMerchantBalanceInfoService saasMerchantBalanceInfoService;
 
     public BorrowerOrderApplyStatusEnum getOrderApplyStatus(String borrowerCode, String channelCode) {
         if (saasOrderApplicationService.getByBorrowerCode(borrowerCode) != null) {
@@ -299,6 +318,37 @@ public class OrderApplication {
         }
         querySaasOrderVo.setBorrowerCodeList(borrowerCodeList);
         return querySaasOrderVo;
+
+    /**
+     * 数据看板
+     *
+     * @param merchantCode
+     */
+    public DataDashboardVo getDataDashboardInfo(String merchantCode, Page page) {
+        //放款数据
+        LoanDataDetailVo loanDataDetailVo = saasOrderBillDetailService.getLoanDataDetailVo(merchantCode);
+
+        //账户信息
+        SaasMerchantCreditInfoEntity creditInfoByMerchantCode = saasMerchantCreditInfoService.getCreditInfoByMerchantCode(merchantCode);
+        SaasMerchantSmsInfoEntity smsInfoByMerchantCode = saasMerchantSmsInfoService.getSmsInfoByMerchantCode(merchantCode);
+        SaasMerchantBalanceInfoEntity balanceInfoEntity = saasMerchantBalanceInfoService.getMerchantBalanceInfoByMerchantCode(merchantCode);
+
+        DataDashboardVo dataDashboardVo = new DataDashboardVo()
+                .setLoanDataDetailVo(loanDataDetailVo)
+                .setMerchantBalance(balanceInfoEntity.getValue())
+                .setMerchantCredit(creditInfoByMerchantCode.getValue())
+                .setMerchantSms(smsInfoByMerchantCode.getValue());
+
+        // TODO: 2018/3/28 BY李楠君 浏览量走势
+
+        //待收的订单列表和逾期的订单列表
+        List<NoRepayOrderVo> noRepayOrderVos = saasOrderBillDetailService.getNoRepayOrderListByPage(merchantCode, page);
+        List<OverdueOrderVo> overdueOrderVos = saasOrderBillDetailService.getOverdueOrderListByPage(merchantCode, page);
+        dataDashboardVo.setNoRepayOrderVos(noRepayOrderVos)
+                .setOverdueOrderVos(overdueOrderVos);
+
+        return dataDashboardVo;
+
     }
 
     private SaasOrderListVo convertSaasOrderVo2SaasOrderListVo(SaasOrderVo saasOrderVo) {

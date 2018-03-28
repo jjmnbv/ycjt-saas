@@ -131,6 +131,16 @@
             <artifactId>order-client</artifactId>
             <version>0.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.beitu.saas</groupId>
+            <artifactId>collection-client</artifactId>
+            <version>0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.beitu.saas</groupId>
+            <artifactId>collection-service</artifactId>
+            <version>0.1</version>
+        </dependency>
     </dependencies>
 
 </project>
