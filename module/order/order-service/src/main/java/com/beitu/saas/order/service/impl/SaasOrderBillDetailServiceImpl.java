@@ -4,16 +4,19 @@ import com.beitu.saas.order.client.SaasOrderBillDetailService;
 import com.beitu.saas.order.dao.SaasOrderBillDetailDao;
 import com.beitu.saas.order.domain.QuerySaasOrderBillDetailVo;
 import com.beitu.saas.order.domain.SaasOrderBillDetailVo;
+import com.beitu.saas.order.entity.SaasOrderBillDetail;
 import com.beitu.saas.order.vo.LoanDataDetailVo;
 import com.beitu.saas.order.vo.NoRepayOrderVo;
 import com.beitu.saas.order.vo.OverdueOrderVo;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
+import com.fqgj.common.utils.CollectionUtils;
 import com.fqgj.log.enhance.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,12 +34,24 @@ public class SaasOrderBillDetailServiceImpl extends AbstractBaseService implemen
 
     @Override
     public List<SaasOrderBillDetailVo> listByBorrowerCodeAndMerchantCode(String borrowerCode, String merchantCode) {
-        return null;
+        List<SaasOrderBillDetail> saasOrderBillDetailList = saasOrderBillDetailDao.selectByBorrowerCodeAndMerchantCode(borrowerCode, merchantCode);
+        if (CollectionUtils.isEmpty(saasOrderBillDetailList)) {
+            return null;
+        }
+        List<SaasOrderBillDetailVo> results = new ArrayList<>(saasOrderBillDetailList.size());
+        saasOrderBillDetailList.forEach(saasOrderBillDetail -> results.add(SaasOrderBillDetailVo.convertEntityToVO(saasOrderBillDetail)));
+        return results;
     }
 
     @Override
     public List<SaasOrderBillDetailVo> listByOrderNumb(String orderNumb) {
-        return null;
+        List<SaasOrderBillDetail> saasOrderBillDetailList = saasOrderBillDetailDao.selectByOrderNumb(orderNumb);
+        if (CollectionUtils.isEmpty(saasOrderBillDetailList)) {
+            return null;
+        }
+        List<SaasOrderBillDetailVo> results = new ArrayList<>(saasOrderBillDetailList.size());
+        saasOrderBillDetailList.forEach(saasOrderBillDetail -> results.add(SaasOrderBillDetailVo.convertEntityToVO(saasOrderBillDetail)));
+        return results;
     }
 
     @Override

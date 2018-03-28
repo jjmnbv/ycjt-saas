@@ -37,12 +37,12 @@ public class SaasOrderBillDetailDaoImpl extends AbstractBaseMapper<SaasOrderBill
 
     @Override
     public int countByConditions(Map<String, Object> conditions) {
-        return 0;
+        return this.getSqlSession().selectOne(this.getStatement(".countByConditions"), conditions);
     }
 
     @Override
     public List<SaasOrderBillDetail> selectByConditions(Map<String, Object> conditions) {
-        return null;
+        return this.getSqlSession().selectList(this.getStatement(".selectByConditions"), conditions);
     }
 
 
