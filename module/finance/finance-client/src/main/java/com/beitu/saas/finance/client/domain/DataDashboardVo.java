@@ -1,5 +1,6 @@
 package com.beitu.saas.finance.client.domain;
 
+
 import com.beitu.saas.order.vo.LoanDataDetailVo;
 import com.beitu.saas.order.vo.NoRepayOrderVo;
 import com.beitu.saas.order.vo.OverdueOrderVo;
@@ -15,6 +16,7 @@ import java.util.List;
  * Time: 上午11:52
  */
 public class DataDashboardVo {
+
     private LoanDataDetailVo loanDataDetailVo;
 
     private BigDecimal merchantBalance;
