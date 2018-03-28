@@ -78,7 +78,6 @@ public class AdminController {
     @ParamsValidate
     @VisitorAccessible
     @ApiOperation(value = "登录")
-    @ResponseStatus(HttpStatus.MOVED_PERMANENTLY)
     public Response login(@RequestBody AdminLoginRequest adminLoginRequest, HttpServletRequest request) throws IOException {
         //TODO 校验验证码
         String verifyCode = redisClient.get(RedisKeyConsts.H5_SAVE_LOGIN_VERIFYCODE_KEY, adminLoginRequest.getMobile());

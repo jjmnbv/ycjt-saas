@@ -38,7 +38,7 @@ public class RoleApplication {
 
 
     @Transactional(rollbackFor = Exception.class)
-    public void addRoleAndEmpower(String roleName, String currentName, String merchantCode, List menuIds, List buttonIds) {
+    public Long addRoleAndEmpower(String roleName, String currentName, String merchantCode, List menuIds, List buttonIds) {
         SaasRole saasRole = new SaasRole();
         saasRole.setName(roleName);
         saasRole.setCreateName(currentName);
@@ -46,6 +46,7 @@ public class RoleApplication {
         saasRole.setMerchantCode(merchantCode);
         SaasRole entity = (SaasRole) saasRoleService.create(saasRole);
         saasRolePermissionService.addPermissionToRole(entity.getId().intValue(), menuIds, buttonIds);
+        return entity.getId();
     }
 
     public Boolean hasButtonPermission(String buttonKey, String adminCode) {
