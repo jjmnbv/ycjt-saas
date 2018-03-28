@@ -9,6 +9,9 @@ import com.fqgj.log.enhance.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * User: jungle
  * Date: 2018-03-25
@@ -24,6 +27,7 @@ public class SaasOrderStatusHistoryServiceImpl extends AbstractBaseService imple
 
     @Override
     public String getLoanLendRemark(String orderNumb) {
+        Map<String,Object> params = new HashMap<>(4);
         return null;
     }
 

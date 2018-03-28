@@ -82,7 +82,7 @@
         order by id desc limit 1
     </select>
 
-    <update id="updateOrderStatus" parameterMap="java.util.Map">
+    <update id="updateOrderStatus">
         update saas_order
         <set>
             order_status = #{updateOrderStatus,jdbcType=SMALLINT},
