@@ -30,13 +30,18 @@ public class UserIntegrationServiceImpl implements UserIntegrationService {
         if (StringUtils.isNotEmpty(paramValidateResult)) {
             return new UserNameIdNoValidationDto(UserNameIdNoValidationCodeEnum.OTHER_ERROR, paramValidateResult);
         }
-    
+        
         String url = configUtil.getYoufenValidationApiUrl() + configUtil.getYoufenValidationNameIdcardPath();
-        String response = HttpClientUtil.doGet(url + "?account=yangcongtest&name=尉世豪&idcard=140221199701272151");
+        StringBuilder urlSb = new StringBuilder();
+        urlSb.append(url + "?");
+        urlSb.append(configUtil.getYoufenAccount() + "&");
+        urlSb.append("name=" + param.getName() + "&");
+        urlSb.append("idcard=" + param.getIdentityNo() + "");
+        String response = HttpClientUtil.doGet(urlSb.toString());
         if (response.contains("<")) {
             return new UserNameIdNoValidationDto(UserNameIdNoValidationCodeEnum.OTHER_ERROR, "接口返回异常");
         }
-    
+        
         UserNameIdNoValidationPojo pojo = null;
         try {
             pojo = JSONUtils.json2pojoAndOffUnknownField(response, UserNameIdNoValidationPojo.class);
@@ -49,7 +54,7 @@ public class UserIntegrationServiceImpl implements UserIntegrationService {
         if (!Objects.equals(pojo.getResCode(), YoufenApiResCodeConst.SUCCESS)) {
             return new UserNameIdNoValidationDto(UserNameIdNoValidationCodeEnum.RES_ERROR, pojo.getResMsg());
         }
-    
+        
         UserNameIdNoValidationDataPojo dataPojo = pojo.getData();
         if (dataPojo == null) {
             return new UserNameIdNoValidationDto(UserNameIdNoValidationCodeEnum.OTHER_ERROR, "接口返回数据异常");
@@ -60,11 +65,11 @@ public class UserIntegrationServiceImpl implements UserIntegrationService {
                 Objects.equals(dataPojo.getStatusCode(), YoufenApiStatusCodeConst.SYSTEM_ERROR)) {
             return new UserNameIdNoValidationDto(UserNameIdNoValidationCodeEnum.OTHER_ERROR, msg);
         }
-    
+        
         if (Objects.equals(dataPojo.getStatusCode(), YoufenApiStatusCodeConst.RESULT_MISMATCH)) {
             return new UserNameIdNoValidationDto(UserNameIdNoValidationCodeEnum.MISMATCH, msg);
         }
-    
+        
         if (Objects.equals(dataPojo.getStatusCode(), YoufenApiStatusCodeConst.RESULT_MATCH)) {
             return new UserNameIdNoValidationDto(UserNameIdNoValidationCodeEnum.MATCH, msg);
         }
