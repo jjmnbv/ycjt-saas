@@ -13,6 +13,9 @@ import com.beitu.saas.channel.enums.RiskModuleEnum;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.utils.OrderNoUtil;
 import com.beitu.saas.intergration.user.UserIntegrationService;
+import com.beitu.saas.intergration.user.dto.UserNameIdNoValidationDto;
+import com.beitu.saas.intergration.user.enums.UserNameIdNoValidationCodeEnum;
+import com.beitu.saas.intergration.user.param.UserNameIdNoValidationParam;
 import com.beitu.saas.order.client.SaasOrderApplicationService;
 import com.beitu.saas.order.domain.SaasOrderApplicationVo;
 import com.fqgj.base.services.redis.RedisClient;
@@ -24,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author linanjun
@@ -153,7 +157,20 @@ public class CreditApplication {
      * @return
      */
     public Boolean realNameAuth(String name, String identityCode) {
-        return userIntegrationService.userNameMatchIdNo(name, identityCode);
+        // TODO: 2018/3/29 数据库查询既有数据直接返回结果
+        
+        UserNameIdNoValidationParam param = new UserNameIdNoValidationParam(name, identityCode);
+        UserNameIdNoValidationDto dto = userIntegrationService.userNameMatchIdNo(param);
+        if (Objects.equals(dto.getCode(), UserNameIdNoValidationCodeEnum.MATCH.getCode())) {
+            // TODO: 2018/3/29 数据库插入一致数据
+            
+            return Boolean.TRUE;
+        }
+        if (Objects.equals(dto.getCode(), UserNameIdNoValidationCodeEnum.MISMATCH.getCode())) {
+            // TODO: 2018/3/29 数据库插入不一致数据
+            
+        }
+        return Boolean.FALSE;
     }
 
     /**

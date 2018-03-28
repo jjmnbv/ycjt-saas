@@ -11,7 +11,11 @@
 
     <artifactId>app-intergration</artifactId>
     <dependencies>
-
+        <dependency>
+            <groupId>com.beitu.saas</groupId>
+            <artifactId>common</artifactId>
+            <version>0.1</version>
+        </dependency>
     </dependencies>
 
 </project>
