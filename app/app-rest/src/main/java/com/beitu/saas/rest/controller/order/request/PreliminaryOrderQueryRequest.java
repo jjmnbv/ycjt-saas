@@ -3,8 +3,8 @@ package com.beitu.saas.rest.controller.order.request;
 import com.fqgj.common.api.ParamsObject;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -16,7 +16,7 @@ import java.util.Date;
 public class PreliminaryOrderQueryRequest extends ParamsObject {
 
     @ApiModelProperty(value = "处理状态(1为待处理，2为已领取)")
-    @NotBlank(message = "处理状态不能为空")
+    @NotNull(message = "处理状态不能为空")
     private Integer dealStatus;
 
     @ApiModelProperty(value = "手机号码")

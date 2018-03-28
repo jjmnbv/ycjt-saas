@@ -8,7 +8,6 @@
     <Properties>
         <property name="log_pattern">%d{yyyy-MM-dd HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n</property>
         <property name="basePath">/data/www/logs/appLogs</property>
-        <property name="basePath">appLogs</property>
         <property name="project-name">saas-api</property>
     </Properties>
     <!--先定义所有的appender-->

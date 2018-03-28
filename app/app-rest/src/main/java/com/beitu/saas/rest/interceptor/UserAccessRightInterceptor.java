@@ -140,11 +140,11 @@ public class UserAccessRightInterceptor implements HandlerInterceptor {
                 IgnoreRepeatRequest ignoreRepeatRequest = handlerMethod.getMethodAnnotation(IgnoreRepeatRequest.class);
                 RequestBasicInfo basicVO = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo();
                 if (basicVO.getPlatform().equals("h5")) {
-                    String code = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
+                    String code = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
                     redisClient.expire(RedisKeyConsts.SAAS_TOKEN_KEY, TimeConsts.TEN_MINUTES, code);
                 }
                 if (basicVO.getPlatform().equals("web")) {
-                    String code = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
+                    String code = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
                     redisClient.expire(RedisKeyConsts.SAAS_TOKEN_KEY, TimeConsts.TEN_MINUTES, code);
                 }
 //                redisClient.expire(RedisKeyConsts.SAAS_TOKEN_KEY, TimeConsts.TEN_MINUTES, basicVO.getToken());
