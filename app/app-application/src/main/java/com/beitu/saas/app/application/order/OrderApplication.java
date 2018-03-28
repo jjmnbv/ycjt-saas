@@ -12,6 +12,13 @@ import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
 import com.beitu.saas.borrower.domain.SaasBorrowerVo;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.common.utils.identityNumber.vo.IdcardInfoExtractor;
+import com.beitu.saas.finance.client.SaasMerchantBalanceInfoService;
+import com.beitu.saas.finance.client.SaasMerchantCreditInfoService;
+import com.beitu.saas.finance.client.SaasMerchantSmsInfoService;
+import com.beitu.saas.finance.client.domain.DataDashboardVo;
+import com.beitu.saas.finance.entity.SaasMerchantBalanceInfoEntity;
+import com.beitu.saas.finance.entity.SaasMerchantCreditInfoEntity;
+import com.beitu.saas.finance.entity.SaasMerchantSmsInfoEntity;
 import com.beitu.saas.order.client.SaasOrderApplicationService;
 import com.beitu.saas.order.client.SaasOrderBillDetailService;
 import com.beitu.saas.order.client.SaasOrderService;
@@ -24,6 +31,7 @@ import com.beitu.saas.order.entity.SaasOrderBillDetail;
 import com.beitu.saas.order.entity.SaasOrderStatusHistory;
 import com.beitu.saas.order.enums.OrderErrorCodeEnum;
 import com.beitu.saas.order.enums.OrderStatusEnum;
+import com.beitu.saas.order.vo.LoanDataDetailVo;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.utils.CollectionUtils;
 import com.fqgj.common.utils.DateUtil;
@@ -33,7 +41,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -71,6 +78,15 @@ public class OrderApplication {
 
     @Autowired
     private SaasChannelService saasChannelService;
+
+    @Autowired
+    private SaasMerchantCreditInfoService saasMerchantCreditInfoService;
+
+    @Autowired
+    private SaasMerchantSmsInfoService saasMerchantSmsInfoService;
+
+    @Autowired
+    private SaasMerchantBalanceInfoService saasMerchantBalanceInfoService;
 
     public BorrowerOrderApplyStatusEnum getOrderApplyStatus(String borrowerCode, String channelCode) {
         if (saasOrderApplicationService.getByBorrowerCode(borrowerCode) != null) {
@@ -192,6 +208,32 @@ public class OrderApplication {
         List<SaasOrderListVo> orderListVoList = new ArrayList<>(saasOrderVoList.size());
         saasOrderVoList.forEach(saasOrderVo -> orderListVoList.add(convertSaasOrderVo2SaasOrderListVo(saasOrderVo)));
         return orderListVoList;
+    }
+
+
+    /**
+     * 数据看板
+     *
+     * @param merchantCode
+     */
+    public void getDataDashbordInfo(String merchantCode) {
+        //放款数据
+        LoanDataDetailVo loanDataDetailVo = saasOrderBillDetailService.getLoanDataDetailVo(merchantCode);
+
+        //账户信息
+        SaasMerchantCreditInfoEntity creditInfoByMerchantCode = saasMerchantCreditInfoService.getCreditInfoByMerchantCode(merchantCode);
+        SaasMerchantSmsInfoEntity smsInfoByMerchantCode = saasMerchantSmsInfoService.getSmsInfoByMerchantCode(merchantCode);
+        SaasMerchantBalanceInfoEntity balanceInfoEntity = saasMerchantBalanceInfoService.getMerchantBalanceInfoByMerchantCode(merchantCode);
+
+        DataDashboardVo dataDashboardVo = new DataDashboardVo()
+                .setLoanDataDetailVo(loanDataDetailVo)
+                .setMerchantBalance(balanceInfoEntity.getValue())
+                .setMerchantCredit(creditInfoByMerchantCode.getValue())
+                .setMerchantSms(smsInfoByMerchantCode.getValue());
+
+        //浏览量
+
+        //代收的订单列表和逾期的订单列表
     }
 
     private SaasOrderListVo convertSaasOrderVo2SaasOrderListVo(SaasOrderVo saasOrderVo) {

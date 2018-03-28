@@ -2,6 +2,7 @@ package com.beitu.saas.order.dao.impl;
 
 import com.beitu.saas.order.dao.SaasOrderBillDetailDao;
 import com.beitu.saas.order.entity.SaasOrderBillDetail;
+import com.beitu.saas.order.vo.LoanDataDetailVo;
 import com.fqgj.common.base.AbstractBaseMapper;
 import org.springframework.stereotype.Repository;
 
@@ -31,4 +32,10 @@ public class SaasOrderBillDetailDaoImpl extends AbstractBaseMapper<SaasOrderBill
         return this.getSqlSession().selectList(this.getStatement(".selectByOrderNumb"), orderNumb);
     }
 
+
+    @Override
+    public LoanDataDetailVo selectLoanDataDetail(String merchantCode) {
+        Map<String, Object> params = new HashMap<>(4);
+        params.put("merchantCode", merchantCode);
+        return this.getSqlSession().selectOne(this.getStatement(".selectLoanDataDetail"), params);    }
 }
