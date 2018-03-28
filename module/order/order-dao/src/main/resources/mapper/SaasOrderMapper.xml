@@ -61,4 +61,37 @@
         <include refid="paginationSql"/>
     </select>
 
+    <select id="selectByBorrowerCodeAndChannelCode" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_order
+        where channel_code = #{channelCode,jdbcType=VARCHAR}
+        and borrower_code = #{borrowerCode,jdbcType=VARCHAR}
+        and expire_date <![CDATA[ < ]]> NOW()
+        and deleted = false
+        order by id desc limit 1
+    </select>
+
+    <select id="selectByOrderNumb" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_order
+        where order_numb = #{orderNumb,jdbcType=VARCHAR}
+        and deleted = false
+        and expire_date <![CDATA[ < ]]> NOW()
+        order by id desc limit 1
+    </select>
+
+    <update id="updateOrderStatus" parameterMap="java.util.Map">
+        update saas_order
+        <set>
+            order_status = #{updateOrderStatus,jdbcType=SMALLINT},
+            version = #{version,jdbcType=BIGINT} + 1,
+            gmt_modified = NOW()
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+        and order_status = #{currentOrderStatus,jdbcType=SMALLINT}
+        AND version = #{version,jdbcType=BIGINT}
+    </update>
+
 </mapper>

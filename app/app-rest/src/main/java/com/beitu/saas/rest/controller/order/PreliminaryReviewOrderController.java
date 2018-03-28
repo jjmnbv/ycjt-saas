@@ -43,7 +43,7 @@ public class PreliminaryReviewOrderController {
 
     @RequestMapping(value = "/query", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "初审订单查询", response = PreliminaryOrderQueryRequest.class)
+    @ApiOperation(value = "初审订单查询", response = PreliminaryOrderListResponse.class)
     public ModuleApiResponse<PreliminaryOrderListResponse> query(@RequestBody @Valid PreliminaryOrderQueryRequest req, Page page) {
         SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
         QueryOrderVo queryOrderVo = new QueryOrderVo();
@@ -65,7 +65,7 @@ public class PreliminaryReviewOrderController {
 
     @RequestMapping(value = "/detail", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "初审订单详情查看", response = ApiResponse.class)
+    @ApiOperation(value = "初审订单详情查看", response = PreliminaryOrderDetailResponse.class)
     public DataApiResponse<PreliminaryOrderDetailResponse> detail(@RequestBody @Valid PreliminaryOrderDetailRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
         orderApplication.updateOrderStatus(adminCode, req.getOrderNumb(), OrderStatusEnum.IN_PRELIMINARY_REVIEWER, null);

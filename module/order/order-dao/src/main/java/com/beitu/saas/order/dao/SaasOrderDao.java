@@ -18,4 +18,10 @@ public interface SaasOrderDao extends BaseMapper<SaasOrder> {
 
     List<SaasOrder> selectByConditions(Map<String, Object> conditions);
 
+    SaasOrder selectByBorrowerCodeAndChannelCode(String borrowerCode, String channelCode);
+
+    SaasOrder selectByOrderNumb(String orderNumb);
+
+    int updateOrderStatus(Map<String, Object> params);
+
 }

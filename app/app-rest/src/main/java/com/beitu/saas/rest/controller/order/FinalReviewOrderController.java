@@ -64,7 +64,7 @@ public class FinalReviewOrderController {
 
     @RequestMapping(value = "/detail", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "复审订单详情查看", response = ApiResponse.class)
+    @ApiOperation(value = "复审订单详情查看", response = FinalOrderDetailResponse.class)
     public DataApiResponse<FinalOrderDetailResponse> detail(@RequestBody @Valid FinalOrderDetailRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
         orderApplication.updateOrderStatus(adminCode, req.getOrderNumb(), OrderStatusEnum.IN_FINAL_REVIEWER, null);

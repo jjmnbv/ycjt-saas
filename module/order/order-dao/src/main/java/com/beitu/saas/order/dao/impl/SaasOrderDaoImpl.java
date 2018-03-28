@@ -5,6 +5,7 @@ import com.beitu.saas.order.dao.SaasOrderDao;
 import com.beitu.saas.order.entity.SaasOrder;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,4 +28,21 @@ public class SaasOrderDaoImpl extends AbstractBaseMapper<SaasOrder> implements S
         return this.getSqlSession().selectList(this.getStatement(".selectByConditions"), conditions);
     }
 
+    @Override
+    public SaasOrder selectByBorrowerCodeAndChannelCode(String borrowerCode, String channelCode) {
+        Map<String, Object> params = new HashMap<>(4);
+        params.put("borrowerCode", borrowerCode);
+        params.put("channelCode", channelCode);
+        return this.getSqlSession().selectOne(this.getStatement(".selectByBorrowerCodeAndChannelCode"), params);
+    }
+
+    @Override
+    public SaasOrder selectByOrderNumb(String orderNumb) {
+        return this.getSqlSession().selectOne(this.getStatement(".selectByOrderNumb"), orderNumb);
+    }
+
+    @Override
+    public int updateOrderStatus(Map<String, Object> params) {
+        return this.getSqlSession().update(this.getStatement(".updateOrderStatus"), params);
+    }
 }

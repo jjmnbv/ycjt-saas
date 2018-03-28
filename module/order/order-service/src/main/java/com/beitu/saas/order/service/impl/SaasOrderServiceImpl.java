@@ -14,10 +14,7 @@ import com.fqgj.log.enhance.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: jungle
@@ -33,22 +30,50 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
     private SaasOrderDao saasOrderDao;
 
     @Override
-    public List<SaasOrderVo> listByBorrowerCodeAndMerchantCode(String borrowerCode, String merchantCode) {
-        return null;
-    }
-
-    @Override
     public OrderStatusEnum getOrderStatusByOrderNumb(String orderNumb) {
-        return null;
+        List<SaasOrder> saasOrderList = saasOrderDao.selectByParams(new HashMap<String, Object>(4) {{
+            put("orderNumb", orderNumb);
+            put("expireDate", new Date());
+            put("deleted", Boolean.FALSE);
+        }});
+        if (CollectionUtils.isEmpty(saasOrderList)) {
+            return null;
+        }
+        if (saasOrderList.size() == 1) {
+            return OrderStatusEnum.getEnumByCode(saasOrderList.get(0).getOrderStatus());
+        }
+        SaasOrder saasOrder = saasOrderList.get(saasOrderList.size() - 1);
+        if (OrderStatusEnum.FOR_REIMBURSEMENT.getCode().equals(saasOrder.getOrderStatus())) {
+            return OrderStatusEnum.IN_EXTEND;
+        }
+        return OrderStatusEnum.getEnumByCode(saasOrder.getOrderStatus());
     }
 
     @Override
     public List<SaasOrderVo> listEffectiveOrderByOrderNumb(String orderNumb) {
-        return null;
+        List<SaasOrder> saasOrderList = saasOrderDao.selectByParams(new HashMap<String, Object>(4) {{
+            put("orderNumb", orderNumb);
+            put("expireDate", new Date());
+            put("deleted", Boolean.FALSE);
+        }});
+        if (CollectionUtils.isEmpty(saasOrderList)) {
+            return null;
+        }
+        List<SaasOrderVo> results = new ArrayList<>(saasOrderList.size());
+        saasOrderList.forEach(saasOrder -> results.add(SaasOrderVo.convertEntityToVO(saasOrder)));
+        return results;
     }
 
     @Override
     public Boolean isReviewRefuse(String borrowerCode, String channelCode) {
+        SaasOrder saasOrder = saasOrderDao.selectByBorrowerCodeAndChannelCode(borrowerCode, channelCode);
+        if (saasOrder == null) {
+            return Boolean.FALSE;
+        }
+        if (OrderStatusEnum.PRELIMINARY_REVIEWER_REJECT.getCode().equals(saasOrder.getOrderStatus())
+                || OrderStatusEnum.FINAL_REVIEWER_REJECT.getCode().equals(saasOrder.getOrderStatus())) {
+            return Boolean.TRUE;
+        }
         return Boolean.FALSE;
     }
 
@@ -82,19 +107,17 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
 
     @Override
     public SaasOrderVo getByOrderNumb(String orderNumb) {
-        List<SaasOrder> saasOrderList = saasOrderDao.selectByParams(new HashMap<String, Object>(4) {{
-            put("orderNumb", orderNumb);
-            put("deleted", Boolean.FALSE);
-        }});
-        if (CollectionUtils.isEmpty(saasOrderList)) {
-            return null;
-        }
-        return SaasOrderVo.convertEntityToVO(saasOrderList.get(0));
+        return SaasOrderVo.convertEntityToVO(saasOrderDao.selectByOrderNumb(orderNumb));
     }
 
     @Override
-    public Boolean updateOrderStatus(Long orderId, OrderStatusEnum currentOrderStatus, OrderStatusEnum updateOrderStatus) {
-        return null;
+    public Boolean updateOrderStatus(Long orderId, Long version, OrderStatusEnum currentOrderStatus, OrderStatusEnum updateOrderStatus) {
+        Map<String, Object> params = new HashMap<>(4);
+        params.put("id", orderId);
+        params.put("version", version);
+        params.put("currentOrderStatus", currentOrderStatus.getCode());
+        params.put("updateOrderStatus", updateOrderStatus.getCode());
+        return saasOrderDao.updateOrderStatus(params) > 0;
     }
 
 }

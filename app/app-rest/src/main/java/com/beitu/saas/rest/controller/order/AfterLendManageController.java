@@ -55,7 +55,7 @@ public class AfterLendManageController {
 
     @RequestMapping(value = "/detail", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "待放款订单详情查看", response = ApiResponse.class)
+    @ApiOperation(value = "待放款订单详情查看", response = AfterLendOrderDetailResponse.class)
     public DataApiResponse<AfterLendOrderDetailResponse> detail(@RequestBody @Valid AfterLendOrderDetailRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
         orderApplication.updateOrderStatus(adminCode, req.getOrderNumb(), OrderStatusEnum.IN_FINAL_REVIEWER, null);

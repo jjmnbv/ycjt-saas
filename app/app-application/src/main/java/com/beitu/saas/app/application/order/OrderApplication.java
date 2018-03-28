@@ -161,10 +161,10 @@ public class OrderApplication {
         if (Arrays.binarySearch(nextOrderStatus.getCodeArray(), currentOrderStatus.getCode()) < 0) {
             throw new ApplicationException(OrderErrorCodeEnum.ILLEGAL_OPERATION_ORDER_STATUS);
         }
-        updateOrderStatus(operatorCode, saasOrderVo.getSaasOrderId(), saasOrderVo.getOrderNumb(), currentOrderStatus, updateOrderStatus, remark);
+        updateOrderStatus(operatorCode, saasOrderVo.getSaasOrderId(), saasOrderVo.getVersion(), saasOrderVo.getOrderNumb(), currentOrderStatus, updateOrderStatus, remark);
     }
 
-    private void updateOrderStatus(String operatorCode, Long orderId, String orderNumb, OrderStatusEnum currentOrderStatus, OrderStatusEnum updateOrderStatus, String remark) {
+    private void updateOrderStatus(String operatorCode, Long orderId, Long version, String orderNumb, OrderStatusEnum currentOrderStatus, OrderStatusEnum updateOrderStatus, String remark) {
         SaasOrderStatusHistory saasOrderStatusHistory = new SaasOrderStatusHistory();
         saasOrderStatusHistory.setOrderId(orderId);
         saasOrderStatusHistory.setOrderNumb(orderNumb);
@@ -173,7 +173,7 @@ public class OrderApplication {
         saasOrderStatusHistory.setRemark(remark);
         saasOrderStatusHistory.setOperatorCode(operatorCode);
         saasOrderStatusHistoryService.create(saasOrderStatusHistory);
-        if (!saasOrderService.updateOrderStatus(orderId, currentOrderStatus, updateOrderStatus)) {
+        if (!saasOrderService.updateOrderStatus(orderId, version, currentOrderStatus, updateOrderStatus)) {
             throw new ApplicationException(OrderErrorCodeEnum.ORDER_STATUS_UPDATE_FAILURE);
         }
     }
