@@ -1,5 +1,6 @@
 package com.beitu.saas.order.client;
 
+import com.beitu.saas.order.domain.QuerySaasOrderVo;
 import com.beitu.saas.order.domain.SaasOrderVo;
 import com.beitu.saas.order.enums.OrderStatusEnum;
 import com.fqgj.common.api.Page;
@@ -15,8 +16,12 @@ import java.util.List;
  */
 public interface SaasOrderService<T extends BaseEntity> extends BaseService<T> {
 
-    List<SaasOrderVo> listByBorrowerCodeAndMerchantCode(String borrowerCode, String merchantCode);
-
+    /**
+     * 得到订单状态
+     *
+     * @param orderNumb 订单号
+     * @return
+     */
     OrderStatusEnum getOrderStatusByOrderNumb(String orderNumb);
 
     /**
@@ -36,12 +41,10 @@ public interface SaasOrderService<T extends BaseEntity> extends BaseService<T> {
      */
     Boolean isReviewRefuse(String borrowerCode, String channelCode);
 
-    List<SaasOrderVo> listPreliminaryReviewOrder(String merchantCode, String reviewerCode, Page page);
-
-    List<SaasOrderVo> listFinalReviewOrder(String merchantCode, String reviewerCode, Page page);
+    List<SaasOrderVo> listByQuerySaasOrderVoAndPage(QuerySaasOrderVo querySaasOrderVo, Page page);
 
     SaasOrderVo getByOrderNumb(String orderNumb);
 
-    Boolean updateOrderStatus(Long orderId, OrderStatusEnum currentOrderStatus, OrderStatusEnum updateOrderStatus);
+    Boolean updateOrderStatus(Long orderId, Long version, OrderStatusEnum currentOrderStatus, OrderStatusEnum updateOrderStatus);
 
 }

@@ -9,7 +9,7 @@ import java.util.Date;
  * @create 2018/3/27 下午3:07
  * @description
  */
-public class QuerySaasOrderVo {
+public class QueryOrderVo {
 
     @ApiModelProperty(value = "机构CODE")
     private String merchantCode;
@@ -30,7 +30,7 @@ public class QuerySaasOrderVo {
     private String channelCode;
 
     @ApiModelProperty(value = "状态")
-    private String orderStatus;
+    private Integer orderStatus;
 
     @ApiModelProperty(value = "申请时长")
     private Integer applyDuration;
@@ -86,11 +86,11 @@ public class QuerySaasOrderVo {
         this.channelCode = channelCode;
     }
 
-    public String getOrderStatus() {
+    public Integer getOrderStatus() {
         return orderStatus;
     }
 
-    public void setOrderStatus(String orderStatus) {
+    public void setOrderStatus(Integer orderStatus) {
         this.orderStatus = orderStatus;
     }
 

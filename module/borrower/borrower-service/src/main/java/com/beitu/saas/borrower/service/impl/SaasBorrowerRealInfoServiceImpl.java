@@ -13,6 +13,7 @@ import com.fqgj.log.enhance.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -40,6 +41,34 @@ public class SaasBorrowerRealInfoServiceImpl extends AbstractBaseService impleme
             return null;
         }
         return SaasBorrowerRealInfoVo.convertEntityToVO(saasBorrowerRealInfoList.get(0));
+    }
+
+    @Override
+    public SaasBorrowerRealInfoVo getBorrowerRealInfoByIdentityCodeAndMerchantCode(String identityCode, String merchantCode) {
+        List<SaasBorrowerRealInfo> saasBorrowerRealInfoList = saasBorrowerRealInfoDao.selectByParams(new HashMap<String, Object>(4) {{
+            put("merchantCode", merchantCode);
+            put("identityCode", identityCode);
+            put("deleted", Boolean.FALSE);
+        }});
+        if (CollectionUtils.isEmpty(saasBorrowerRealInfoList)) {
+            return null;
+        }
+        return SaasBorrowerRealInfoVo.convertEntityToVO(saasBorrowerRealInfoList.get(0));
+    }
+
+    @Override
+    public List<SaasBorrowerRealInfoVo> listBorrowerRealInfoByNameAndMerchantCode(String name, String merchantCode) {
+        List<SaasBorrowerRealInfo> saasBorrowerRealInfoList = saasBorrowerRealInfoDao.selectByParams(new HashMap<String, Object>(4) {{
+            put("merchantCode", merchantCode);
+            put("name", name);
+            put("deleted", Boolean.FALSE);
+        }});
+        if (CollectionUtils.isEmpty(saasBorrowerRealInfoList)) {
+            return null;
+        }
+        List<SaasBorrowerRealInfoVo> results = new ArrayList<>(saasBorrowerRealInfoList.size());
+        saasBorrowerRealInfoList.forEach(saasBorrowerRealInfo -> results.add(SaasBorrowerRealInfoVo.convertEntityToVO(saasBorrowerRealInfo)));
+        return results;
     }
 
     @Override
