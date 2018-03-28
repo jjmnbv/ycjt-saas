@@ -1,8 +1,11 @@
 package com.beitu.saas.finance.client.domain;
 
 import com.beitu.saas.order.vo.LoanDataDetailVo;
+import com.beitu.saas.order.vo.NoRepayOrderVo;
+import com.beitu.saas.order.vo.OverdueOrderVo;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,6 +22,28 @@ public class DataDashboardVo {
     private  Long merchantCredit;
 
     private  Long merchantSms;
+
+    private List<NoRepayOrderVo> noRepayOrderVos;
+
+    private List<OverdueOrderVo> overdueOrderVos;
+
+    public List<NoRepayOrderVo> getNoRepayOrderVos() {
+        return noRepayOrderVos;
+    }
+
+    public DataDashboardVo setNoRepayOrderVos(List<NoRepayOrderVo> noRepayOrderVos) {
+        this.noRepayOrderVos = noRepayOrderVos;
+        return this;
+    }
+
+    public List<OverdueOrderVo> getOverdueOrderVos() {
+        return overdueOrderVos;
+    }
+
+    public DataDashboardVo setOverdueOrderVos(List<OverdueOrderVo> overdueOrderVos) {
+        this.overdueOrderVos = overdueOrderVos;
+        return this;
+    }
 
     public LoanDataDetailVo getLoanDataDetailVo() {
         return loanDataDetailVo;

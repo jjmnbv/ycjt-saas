@@ -32,6 +32,8 @@ import com.beitu.saas.order.entity.SaasOrderStatusHistory;
 import com.beitu.saas.order.enums.OrderErrorCodeEnum;
 import com.beitu.saas.order.enums.OrderStatusEnum;
 import com.beitu.saas.order.vo.LoanDataDetailVo;
+import com.beitu.saas.order.vo.NoRepayOrderVo;
+import com.beitu.saas.order.vo.OverdueOrderVo;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.utils.CollectionUtils;
 import com.fqgj.common.utils.DateUtil;
@@ -216,7 +218,7 @@ public class OrderApplication {
      *
      * @param merchantCode
      */
-    public void getDataDashbordInfo(String merchantCode) {
+    public DataDashboardVo getDataDashboardInfo(String merchantCode, Page page) {
         //放款数据
         LoanDataDetailVo loanDataDetailVo = saasOrderBillDetailService.getLoanDataDetailVo(merchantCode);
 
@@ -231,9 +233,17 @@ public class OrderApplication {
                 .setMerchantCredit(creditInfoByMerchantCode.getValue())
                 .setMerchantSms(smsInfoByMerchantCode.getValue());
 
-        //浏览量
+        //浏览量走势
 
-        //代收的订单列表和逾期的订单列表
+
+        //待收的订单列表和逾期的订单列表
+        List<NoRepayOrderVo> noRepayOrderVos = saasOrderBillDetailService.getNoRepayOrderListByPage(merchantCode, page);
+        List<OverdueOrderVo> overdueOrderVos = saasOrderBillDetailService.getOverdueOrderListByPage(merchantCode, page);
+        dataDashboardVo.setNoRepayOrderVos(noRepayOrderVos)
+                .setOverdueOrderVos(overdueOrderVos);
+
+        return dataDashboardVo;
+
     }
 
     private SaasOrderListVo convertSaasOrderVo2SaasOrderListVo(SaasOrderVo saasOrderVo) {

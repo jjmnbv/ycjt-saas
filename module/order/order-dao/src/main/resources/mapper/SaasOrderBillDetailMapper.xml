@@ -33,4 +33,41 @@
       where merchant_code = #{merchantCode,jdbcType=VARCHAR} and deleted = false
     </select>
 
+
+    <select id="selectNoRepayOrder" parameterType="java.lang.String"
+            resultType="com.beitu.saas.order.vo.NoRepayOrderVo">
+        select order_numb orderNumb,real_capital realCapital
+        from saas_order_bill_detail
+        where merchant_code = #{merchantCode,jdbcType=VARCHAR}
+        and visible=1 and destroy=0
+        and deleted = false
+    </select>
+
+    <select id="countNoRepayOrder" parameterType="map" resultType="INTEGER">
+        SELECT COUNT(*)
+        from saas_channel
+        where merchant_code = #{merchantCode,jdbcType=VARCHAR}
+        and visible=1 and destroy=0
+        and deleted = false
+    </select>
+
+    <select id="selectOverdueOrder" parameterType="java.lang.String"
+            resultType="com.beitu.saas.order.vo.OverdueOrderVo">
+        select order_numb orderNumb,real_capital realCapital
+        from saas_order_bill_detail
+        where merchant_code = #{merchantCode,jdbcType=VARCHAR}
+        and datediff(DATE_SUB(curdate(),INTERVAL 0 DAY),repayment_dt)>0
+        and visible=1 and destroy=0
+        and deleted = false
+    </select>
+
+    <select id="countOverdueOrder" parameterType="map" resultType="INTEGER">
+        SELECT COUNT(*)
+        from saas_channel
+        where merchant_code = #{merchantCode,jdbcType=VARCHAR}
+        and datediff(DATE_SUB(curdate(),INTERVAL 0 DAY),repayment_dt)>0
+        and visible=1 and destroy=0
+        and deleted = false
+    </select>
+
 </mapper>
