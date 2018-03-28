@@ -15,4 +15,9 @@ public interface SaasMerchantSmsInfoService<T extends BaseEntity> extends BaseSe
     void update(SaasMerchantSmsInfoEntity saasMerchantSmsInfoEntity);
 
 
+    Boolean increase(String merchantCode, Long value);
+
+    Boolean decrease(String merchantCode, Long value);
+
+    Long getSmsByMerchantCode(String merchantCode);
 }

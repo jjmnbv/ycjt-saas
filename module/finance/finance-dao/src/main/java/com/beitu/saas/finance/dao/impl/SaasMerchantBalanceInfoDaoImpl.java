@@ -22,4 +22,5 @@ public class SaasMerchantBalanceInfoDaoImpl extends AbstractBaseMapper<SaasMerch
         map.put("merchantCode", merchantCode);
         return getSqlSession().selectOne(this.getStatement("selectMerchantBalanceInfoEntity"), map);
     }
+
 }

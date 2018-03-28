@@ -1,5 +1,8 @@
 package com.beitu.saas.app.enums;
 
+
+import org.apache.ibatis.jdbc.Null;
+
 /**
  * @author xiaochong
  * @create 2018/3/27 上午10:42
@@ -59,5 +62,10 @@ public enum ButtonPermissionEnum {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public static String getKeyByEnum(ButtonPermissionEnum buttonPermissionEnum) {
+        final String str=buttonPermissionEnum.getKey();
+        return str;
     }
 }
