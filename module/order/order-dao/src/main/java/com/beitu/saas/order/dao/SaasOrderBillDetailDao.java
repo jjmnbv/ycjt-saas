@@ -1,5 +1,6 @@
 package com.beitu.saas.order.dao;
 
+import com.beitu.saas.order.vo.LoanDataDetailVo;
 import com.fqgj.common.base.BaseMapper;
 import com.beitu.saas.order.entity.SaasOrderBillDetail;
 
@@ -17,4 +18,5 @@ public interface SaasOrderBillDetailDao extends BaseMapper<SaasOrderBillDetail> 
 
     List<SaasOrderBillDetail> selectByOrderNumb(String orderNumb);
 
+    LoanDataDetailVo selectLoanDataDetail(String merchantCode);
 }

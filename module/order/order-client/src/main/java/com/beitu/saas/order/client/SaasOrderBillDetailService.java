@@ -1,6 +1,7 @@
 package com.beitu.saas.order.client;
 
 import com.beitu.saas.order.domain.SaasOrderBillDetailVo;
+import com.beitu.saas.order.vo.LoanDataDetailVo;
 import com.fqgj.common.base.BaseService;
 import com.fqgj.common.entity.BaseEntity;
 
@@ -16,5 +17,7 @@ public interface SaasOrderBillDetailService<T extends BaseEntity> extends BaseSe
     List<SaasOrderBillDetailVo> listByBorrowerCodeAndMerchantCode(String borrowerCode, String merchantCode);
 
     List<SaasOrderBillDetailVo> listByOrderNumb(String orderNumb);
+
+    LoanDataDetailVo getLoanDataDetailVo(String merchantCode);
 
 }

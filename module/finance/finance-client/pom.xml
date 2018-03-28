@@ -16,6 +16,11 @@
             <artifactId>finance-entity</artifactId>
             <version>0.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.beitu.saas</groupId>
+            <artifactId>order-entity</artifactId>
+            <version>0.1</version>
+        </dependency>
     </dependencies>
 
 

@@ -3,6 +3,7 @@ package com.beitu.saas.order.service.impl;
 import com.beitu.saas.order.client.SaasOrderBillDetailService;
 import com.beitu.saas.order.dao.SaasOrderBillDetailDao;
 import com.beitu.saas.order.domain.SaasOrderBillDetailVo;
+import com.beitu.saas.order.vo.LoanDataDetailVo;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
 import com.fqgj.log.enhance.Module;
@@ -12,10 +13,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
-* User: jungle
-* Date: 2018-03-25
-* Time: 21:55:45.870
-*/
+ * User: jungle
+ * Date: 2018-03-25
+ * Time: 21:55:45.870
+ */
 @Module(value = "SAAS订单详情表服务模块")
 @NameSpace("com.beitu.saas.order.dao.impl.SaasOrderBillDetailDaoImpl")
 @Service
@@ -34,6 +35,10 @@ public class SaasOrderBillDetailServiceImpl extends AbstractBaseService implemen
         return null;
     }
 
+    @Override
+    public LoanDataDetailVo getLoanDataDetailVo(String merchantCode) {
+        return saasOrderBillDetailDao.selectLoanDataDetail(merchantCode);
+    }
 }
 
 
