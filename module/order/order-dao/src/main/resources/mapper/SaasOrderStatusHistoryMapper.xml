@@ -2,19 +2,31 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.beitu.saas.order.dao.impl.SaasOrderStatusHistoryDaoImpl">
+
     <select id="selectOrderStatusHistoryByOrderNumb" parameterType="map"
-            resultType="com.beitu.saas.order.entity.SaasOrderStatusHistory">
+            resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         from saas_order_status_history
         <where>
             <trim prefixOverrides="and">
-                <if test="channelCode !=null">
-                    and order_no = #{orderNo,jdbcType=VARCHAR}
+                <if test="orderNumb !=null">
+                    and order_numb = #{orderNumb,jdbcType=VARCHAR}
                 </if>
-                and deleted = 0
+                and deleted = false
             </trim>
         </where>
-
     </select>
+
+    <select id="selectByCurrentOrderStatusAndOrderNumb" parameterType="map"
+            resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from saas_order_status_history
+        where current_order_status = #{currentOrderStatus,jdbcType=SMALLINT}
+        and order_numb = #{orderNumb,jdbcType=VARCHAR}
+        and deleted = false
+        order by id desc
+    </select>
+
 </mapper>
