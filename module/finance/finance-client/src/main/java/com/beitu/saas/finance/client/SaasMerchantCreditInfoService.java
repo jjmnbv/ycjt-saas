@@ -15,4 +15,10 @@ public interface SaasMerchantCreditInfoService<T extends BaseEntity> extends Bas
     SaasMerchantCreditInfoEntity getCreditInfoByMerchantCode(String merchantCode);
 
     void update(SaasMerchantCreditInfoEntity saasMerchantCreditInfoEntity);
+
+    Boolean increase(String merchantCode, Long value);
+
+    Boolean decrease(String merchantCode, Long value);
+
+    Long getCreditByMerchantCode(String merchantCode);
 }
