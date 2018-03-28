@@ -91,7 +91,7 @@ public class UserAccessRightInterceptor implements HandlerInterceptor {
             }
             if (!request.getMethod().equals("OPTIONS")) {
                 if (!handlerMethod.getMethod().getName().toUpperCase().equals("LOGIN")) {
-                    throw new ApplicationException("需要登陆才能访问");
+                    throw new ApplicationException(RestCodeEnum.TOKEN_NOT_AVAILABLE);
                 }
             }
             HasPermission hasPermission = handlerMethod.getMethodAnnotation(HasPermission.class);

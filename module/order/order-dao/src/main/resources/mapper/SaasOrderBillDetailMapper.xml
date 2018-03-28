@@ -54,7 +54,7 @@
         select
         <include refid="Base_Column_List"/>
         from saas_order_bill_detail
-        where borrowerCode = #{borrowerCode,jdbcType=VARCHAR} and merchantCode = #{merchantCode,jdbcType=VARCHAR}
+        where borrower_code = #{borrowerCode,jdbcType=VARCHAR} and merchant_code = #{merchantCode,jdbcType=VARCHAR}
         and deleted = false and visible = true
     </select>
 
@@ -63,7 +63,7 @@
         select
         <include refid="Base_Column_List"/>
         from saas_order_bill_detail
-        where orderNumb = #{orderNumb,jdbcType=VARCHAR} and deleted = false
+        where order_numb = #{orderNumb,jdbcType=VARCHAR} and deleted = false
     </select>
 
 

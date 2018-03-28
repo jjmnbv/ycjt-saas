@@ -10,6 +10,7 @@ import com.beitu.saas.app.application.credit.vo.BorrowerEmergentContactVo;
 import com.beitu.saas.app.application.credit.vo.BorrowerIdentityInfoVo;
 import com.beitu.saas.app.application.credit.vo.BorrowerWorkInfoVo;
 import com.beitu.saas.app.application.order.OrderApplication;
+import com.beitu.saas.app.application.order.vo.OrderDetailVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.auth.domain.SaasMerchantVo;
 import com.beitu.saas.auth.service.SaasMerchantService;
@@ -30,6 +31,7 @@ import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.utils.DateUtil;
 import com.beitu.saas.order.client.SaasOrderApplicationService;
 import com.beitu.saas.order.domain.SaasOrderApplicationVo;
+import com.beitu.saas.order.enums.OrderStatusEnum;
 import com.beitu.saas.rest.controller.h5.request.*;
 import com.beitu.saas.rest.controller.h5.response.*;
 import com.beitu.saas.sms.enums.SmsErrorCodeEnum;
@@ -41,6 +43,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -364,8 +367,29 @@ public class H5Controller {
     @ResponseBody
     @ApiOperation(value = "用户订单详情", response = H5OrderDetailResponse.class)
     public DataApiResponse<H5OrderDetailResponse> getOrderDetail(@RequestBody @Valid QueryOrderDetailRequest req) {
-        String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
-
+        OrderDetailVo orderDetailVo = orderApplication.getOrderDetailVoByOrderNumb(req.getOrderNumb());
+        H5OrderDetailResponse response = new H5OrderDetailResponse();
+        BeanUtils.copyProperties(orderDetailVo, response);
+        if (OrderStatusEnum.TO_CONFIRM_RECEIPT.getCode().equals(orderDetailVo.getOrderStatus())) {
+            response.setContractTitle1("《授权协议》");
+            response.setContractUrl1("");
+            response.setContractTitle2("《借款合同》");
+            response.setContractUrl2("");
+            response.setVisible(Boolean.TRUE);
+            response.setButtonTitle("查看并签署电子借款合同");
+            response.setButtonUrl("");
+            response.setHeaderTitle("确认借款");
+        } else if (OrderStatusEnum.IN_EXTEND.getCode().equals(orderDetailVo.getOrderStatus())) {
+            response.setContractTitle1("《展期合同》");
+            response.setContractUrl1("");
+            response.setVisible(Boolean.TRUE);
+            response.setButtonTitle("查看并签署电子展期合同");
+            response.setButtonUrl("");
+            response.setHeaderTitle("确认展期");
+        } else {
+            response.setVisible(Boolean.FALSE);
+            response.setHeaderTitle("订单详情");
+        }
         return new DataApiResponse(new H5OrderDetailResponse());
     }
 
