@@ -79,20 +79,13 @@ public class UserAccessRightInterceptor implements HandlerInterceptor {
         RequestUserInfo requestUserInfo = new RequestUserInfo();
         requestUserInfo.setRequestBasicInfo(basicVO);
         RequestLocalInfo.putCurrentAdmin(requestUserInfo);
-
+        VisitorAccessible annotation = handlerMethod.getMethodAnnotation(VisitorAccessible.class);
+        if (annotation != null) {
+            return true;
+        }
         if (StringUtils.isNotEmpty(basicVO.getToken())) {
             if (!verifyHeader(request)) {
                 throw new ApplicationException(RestCodeEnum.TOKEN_NOT_AVAILABLE);
-            }
-        } else {
-            VisitorAccessible annotation = handlerMethod.getMethodAnnotation(VisitorAccessible.class);
-            if (annotation != null) {
-                return true;
-            }
-            if (!request.getMethod().equals("OPTIONS")) {
-                if (!handlerMethod.getMethod().getName().toUpperCase().equals("LOGIN")) {
-                    throw new ApplicationException(RestCodeEnum.TOKEN_NOT_AVAILABLE);
-                }
             }
             HasPermission hasPermission = handlerMethod.getMethodAnnotation(HasPermission.class);
             if (hasPermission != null) {
@@ -109,6 +102,8 @@ public class UserAccessRightInterceptor implements HandlerInterceptor {
                     throw new ApplicationException(RestCodeEnum.REPEAT_REQUEST);
                 }
             }
+        } else {
+            throw new ApplicationException(RestCodeEnum.TOKEN_NOT_AVAILABLE);
         }
         return true;
     }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,5 +26,15 @@ public class SaasCreditHistoryDaoImpl extends AbstractBaseMapper<SaasCreditHisto
         map.put("merchantCode", merchantCode);
         map.put("yesterday", DateUtil.getDate(yesterday,"yyyy-MM-dd"));
         return getSqlSession().selectOne(this.getStatement("selectYesterdayCreditStatCredit"), map);
+    }
+
+    @Override
+    public List<SaasCreditHistoryEntity> selectCreditListByParam(Map map){
+        return getSqlSession().selectList(this.getStatement("selectCreditListByParam"), map);
+    }
+
+    @Override
+    public Integer queryTotalCreditListByParam(Map map){
+        return getSqlSession().selectOne(this.getStatement("queryTotalCreditListByParam"), map);
     }
 }

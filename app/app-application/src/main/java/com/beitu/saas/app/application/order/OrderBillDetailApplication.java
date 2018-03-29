@@ -12,12 +12,15 @@ import com.beitu.saas.order.client.SaasOrderService;
 import com.beitu.saas.order.client.SaasOrderStatusHistoryService;
 import com.beitu.saas.order.domain.QuerySaasOrderBillDetailVo;
 import com.beitu.saas.order.domain.SaasOrderBillDetailVo;
+import com.beitu.saas.order.domain.SaasOrderVo;
+import com.beitu.saas.order.entity.SaasOrderBillDetail;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.utils.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -127,6 +130,51 @@ public class OrderBillDetailApplication {
         saasOrderBillDetailListVo.setOrderStatus(saasOrderService.getOrderStatusByOrderNumb(saasOrderBillDetailVo.getOrderNumb()).getMsg());
 
         return saasOrderBillDetailListVo;
+    }
+
+    public void createOrderBillDetail(String orderNumb) {
+        SaasOrderBillDetailVo saasOrderBillDetailVo = saasOrderBillDetailService.getVisibleOrderBillDetailByOrderNumb(orderNumb);
+        SaasOrderBillDetail addSaasOrderBillDetail = new SaasOrderBillDetail();
+        if (saasOrderBillDetailVo != null) {
+            BigDecimal amount = orderCalculateApplication.getAmount(saasOrderBillDetailVo);
+
+            SaasOrderBillDetail updateSaasOrderBillDetail = new SaasOrderBillDetail();
+            updateSaasOrderBillDetail.setId(saasOrderBillDetailVo.getSaasOrderBillDetailId());
+            updateSaasOrderBillDetail.setVisible(Boolean.FALSE);
+            updateSaasOrderBillDetail.setAmount(amount);
+            BigDecimal lateInterest = amount.subtract(saasOrderBillDetailVo.getRealCapital()).subtract(saasOrderBillDetailVo.getInterest()).subtract(saasOrderBillDetailVo.getNeedPayInterest());
+            updateSaasOrderBillDetail.setLateInterest(lateInterest);
+            saasOrderBillDetailService.updateById(updateSaasOrderBillDetail);
+
+            addSaasOrderBillDetail.setCreatedDt(saasOrderBillDetailVo.getCreatedDt());
+            addSaasOrderBillDetail.setNeedPayInterest(amount.subtract(saasOrderBillDetailVo.getRealCapital()));
+            addSaasOrderBillDetail.setRelationOrderBillDetailId(saasOrderBillDetailVo.getSaasOrderBillDetailId());
+        }
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
+        addSaasOrderBillDetail.setRealCapital(saasOrderVo.getRealCapital());
+        addSaasOrderBillDetail.setTotalInterestRatio(saasOrderVo.getTotalInterestRatio());
+        addSaasOrderBillDetail.setLateInterestRatio(saasOrderVo.getLateInterestRatio());
+        if (addSaasOrderBillDetail.getCreatedDt() == null) {
+            addSaasOrderBillDetail.setCreatedDt(saasOrderVo.getCreatedDt());
+        }
+        addSaasOrderBillDetail.setRepaymentDt(saasOrderVo.getRepaymentDt());
+        addSaasOrderBillDetail.setInterest(saasOrderVo.getTotalInterestFee());
+        addSaasOrderBillDetail.setVisible(Boolean.TRUE);
+        saasOrderBillDetailService.create(addSaasOrderBillDetail);
+    }
+
+    public void destroyOrderBillDetail(String orderNumb) {
+        SaasOrderBillDetailVo saasOrderBillDetailVo = saasOrderBillDetailService.getVisibleOrderBillDetailByOrderNumb(orderNumb);
+        BigDecimal amount = orderCalculateApplication.getAmount(saasOrderBillDetailVo);
+        SaasOrderBillDetail updateSaasOrderBillDetail = new SaasOrderBillDetail();
+        updateSaasOrderBillDetail.setId(saasOrderBillDetailVo.getSaasOrderBillDetailId());
+        updateSaasOrderBillDetail.setDestroy(Boolean.TRUE);
+        updateSaasOrderBillDetail.setActualDestroyDate(new Date());
+        updateSaasOrderBillDetail.setActualDestroyDt(new Date());
+        updateSaasOrderBillDetail.setAmount(amount);
+        BigDecimal lateInterest = amount.subtract(saasOrderBillDetailVo.getRealCapital()).subtract(saasOrderBillDetailVo.getInterest()).subtract(saasOrderBillDetailVo.getNeedPayInterest());
+        updateSaasOrderBillDetail.setLateInterest(lateInterest);
+        saasOrderBillDetailService.updateById(updateSaasOrderBillDetail);
     }
 
 }

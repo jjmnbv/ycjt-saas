@@ -13,6 +13,9 @@ import com.fqgj.common.api.Page;
 import com.fqgj.common.api.Response;
 import com.fqgj.common.api.annotations.ParamsValidate;
 import com.fqgj.exception.common.ApplicationException;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +31,7 @@ import java.util.List;
  */
 @RequestMapping("/admin/role")
 @RestController
+@Api(description = "角色相关接口")
 public class RoleController {
 
     @Autowired
@@ -41,6 +45,7 @@ public class RoleController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ParamsValidate
+    @ApiOperation(value = "添加角色")
     public Response add(@RequestBody AddRoleRequest addRoleRequest) {
         SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
         roleApplication.addRoleAndEmpower(addRoleRequest.getRoleName(), saasAdmin.getName(), saasAdmin.getCode(), addRoleRequest.getMenusIds(), addRoleRequest.getButtonIds());
@@ -49,6 +54,7 @@ public class RoleController {
 
     @RequestMapping(value = "/list/{currentPage}/{pageSize}", method = RequestMethod.GET)
     @ParamsValidate
+    @ApiOperation(value = "角色列表",response = RoleListResponse.class)
     public Response list(@PathVariable(value = "currentPage") Integer currentPage, @PathVariable("pageSize") Integer pageSize) {
         Page page = new Page();
         page.setCurrentPage(currentPage);
@@ -71,6 +77,7 @@ public class RoleController {
 
     @RequestMapping(value = "/status/{roleId}/{enable}", method = RequestMethod.PUT)
     @ParamsValidate
+    @ApiOperation(value = "启动和禁用角色")
     public Response enable(@PathVariable Long roleId,  @PathVariable("enable") boolean enable) {
         SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
         SaasRole saasRole = new SaasRole();

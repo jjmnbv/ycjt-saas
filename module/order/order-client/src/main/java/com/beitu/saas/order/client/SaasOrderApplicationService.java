@@ -12,7 +12,7 @@ import com.fqgj.common.entity.BaseEntity;
  */
 public interface SaasOrderApplicationService<T extends BaseEntity> extends BaseService<T> {
 
-    SaasOrderApplicationVo getByBorrowerCodeAndChannelCode(String borrowerCode, String channelCode);
+    SaasOrderApplicationVo getByBorrowerCode(String borrowerCode);
 
     SaasOrderApplication save(SaasOrderApplicationVo saasOrderApplicationVo);
 
