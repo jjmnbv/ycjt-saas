@@ -123,7 +123,6 @@ public class H5Controller {
     }
 
     @VisitorAccessible
-    @ParamsValidate
     @RequestMapping(value = "/channel/info", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "渠道信息", response = UserLoginSuccessResponse.class)
