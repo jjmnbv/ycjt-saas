@@ -488,5 +488,22 @@ public class ConfigUtil {
     public String getClearDayStatSwith() {
         return config.getProperty("clear.day.stat", "");
     }
-
+    
+    
+    /**
+     * 第三方配置信息
+     */
+    public String getYoufenValidationApiUrl() {
+        return config.getProperty("integration.youfen.validation.api.base.url", "https://api.acedata.com.cn:2443");
+    }
+    
+    public String getYoufenValidationNameIdcardPath() {
+        return config.getProperty("integration.youfen.validation.name.idcard.path", "/oreo/personal/validation/name/idcard");
+    }
+    
+    public String getYoufenAccount() {
+        return config.getProperty("integration.youfen.account", "yangcongtest");
+    }
+    
+    
 }
