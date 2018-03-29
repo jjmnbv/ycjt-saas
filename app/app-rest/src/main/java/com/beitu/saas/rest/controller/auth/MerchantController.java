@@ -72,6 +72,7 @@ public class MerchantController {
 
     @RequestMapping(value = "/sms/{smsConfigId}/{enable}", method = RequestMethod.PUT)
     @ApiOperation(value = "短信配置")
+    @HasPermission(permissionKey = ButtonPermissionConsts.SMS_SETTING)
     public Response setSmsEnable(@ApiParam("短信id") @PathVariable("smsConfigId") Integer smsConfigId, @PathVariable("enable") Boolean enable) {
         String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
         saasMerchantConfigService.updateSmsConfig(merchantCode, enable, smsConfigId);

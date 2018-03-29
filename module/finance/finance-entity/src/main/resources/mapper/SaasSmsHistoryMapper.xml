@@ -2,6 +2,40 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.beitu.saas.finance.dao.impl.SaasSmsHistoryDaoImpl">
+
+    <sql id="Param_Sms_List_Where_Clause">
+        <where>
+            <trim prefixOverrides="and">
+                <if test="opType !=null">
+                    and op_type = #{opType,jdbcType=TINYINT}
+                </if>
+                <if test="merchantCode !=null">
+                    and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+                </if>
+                <if test="startDate !=null">
+                    and date_format(gmt_create, '%Y-%m-%d') &gt;=#{startDate,jdbcType=DATE}
+                </if>
+                <if test="endDate !=null">
+                    and date_format(gmt_create, '%Y-%m-%d') &lt;=#{endDate,jdbcType=DATE}
+                </if>
+                and deleted = 0
+            </trim>
+        </where>
+    </sql>
+
+    <select id="selectSmsListByParam" parameterType="map" resultMap="BaseResultMap">
+        SELECT * FROM saas_sms_history
+        <include refid="Param_Sms_List_Where_Clause"/>
+        ORDER BY gmt_create DESC
+        <include refid="paginationSql"/>
+    </select>
+
+    <select id="queryTotalSmsListByParam" resultType="INTEGER">
+        select count(*) from saas_sms_history
+        <include refid="Param_Sms_List_Where_Clause"/>
+    </select>
+
+
     <select id="selectYesterdaySmsStatCredit" parameterType="map" resultType="java.lang.Long">
         SELECT
         sum(sms) smsSum

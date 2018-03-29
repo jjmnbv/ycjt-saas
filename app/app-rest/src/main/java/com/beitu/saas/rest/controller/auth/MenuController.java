@@ -15,6 +15,7 @@ import com.beitu.saas.rest.controller.auth.response.UserMenuResponse;
 import com.fqgj.common.api.Response;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +33,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/menu")
-@Api("菜单接口")
+@Api(description = "菜单接口")
 public class MenuController {
 
     @Autowired
@@ -44,20 +45,20 @@ public class MenuController {
     @Autowired
     private AdminInfoApplication adminInfoApplication;
 
-    @RequestMapping(value ="/role/list",method = RequestMethod.GET)
-    @ApiModelProperty("获取用户菜单")
+    @RequestMapping(value = "/role/list", method = RequestMethod.GET)
+    @ApiOperation(value = "获取用户菜单", response = UserMenuResponse.class)
     public Response adminMenuList() {
         List<Integer> menuIds = adminInfoApplication.getMenuIdsByAdmin(RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode());
         List<SaasMenu> menuList = saasMenuService.getListByIds(menuIds);
         return Response.ok().putData(new UserMenuResponse(new FormedMenuVO(menuList)));
     }
 
-    @RequestMapping(value ="/role/button/list",method = RequestMethod.GET)
-    @ApiModelProperty("获取用户按钮")
+    @RequestMapping(value = "/role/button/list", method = RequestMethod.GET)
+    @ApiOperation(value = "获取用户按钮", response = SaasOperationButton.class)
     public Response adminButtonList() {
         List<Integer> buttonIds = adminInfoApplication.getButtonIdsByAdmin(RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode());
         List<SaasOperationButton> buttonList = saasOperationButtonService.getListByIds(buttonIds);
-        return Response.ok().putData(new UserButtonResponse(buttonList,saasOperationButtonService.getParentButtonForMap()));
+        return Response.ok().putData(new UserButtonResponse(buttonList, saasOperationButtonService.getParentButtonForMap()));
     }
 
 //    @RequestMapping(value = "/list", method = RequestMethod.GET)

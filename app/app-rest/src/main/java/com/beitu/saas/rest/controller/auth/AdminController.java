@@ -179,6 +179,7 @@ public class AdminController {
 
     @RequestMapping(value = "/list/{currentPage}/{pageSize}", method = RequestMethod.GET)
     @ParamsValidate
+    @ApiOperation(value = "子账户列表", response = AdminListResponse.class)
     public Response list(@PathVariable(value = "currentPage") Integer currentPage, @PathVariable("pageSize") Integer pageSize) {
         Page page = new Page();
         page.setCurrentPage(currentPage);
