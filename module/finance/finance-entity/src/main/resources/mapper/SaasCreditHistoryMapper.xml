@@ -3,6 +3,38 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.beitu.saas.finance.dao.impl.SaasCreditHistoryDaoImpl">
 
+    <sql id="Param_Credit_List_Where_Clause">
+        <where>
+            <trim prefixOverrides="and">
+                <if test="opType !=null">
+                    and op_type = #{opType,jdbcType=TINYINT}
+                </if>
+                <if test="merchantCode !=null">
+                    and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+                </if>
+                <if test="startDate !=null">
+                    and date_format(gmt_create, '%Y-%m-%d') &gt;=#{startDate,jdbcType=DATE}
+                </if>
+                <if test="endDate !=null">
+                    and date_format(gmt_create, '%Y-%m-%d') &lt;=#{endDate,jdbcType=DATE}
+                </if>
+                and deleted = 0
+            </trim>
+        </where>
+    </sql>
+
+    <select id="selectCreditListByParam" parameterType="map" resultMap="BaseResultMap">
+        SELECT * FROM saas_credit_history
+        <include refid="Param_Credit_List_Where_Clause"/>
+        ORDER BY gmt_create DESC
+        <include refid="paginationSql"/>
+    </select>
+
+    <select id="queryTotalCreditListByParam" resultType="INTEGER">
+        select count(*) from saas_credit_history
+        <include refid="Param_Credit_List_Where_Clause"/>
+    </select>
+
     <select id="selectYesterdayCreditStatCredit" parameterType="map" resultType="java.lang.Long">
         SELECT
         sum(credit) creditSum
@@ -20,4 +52,5 @@
         </where>
 
     </select>
+
 </mapper>

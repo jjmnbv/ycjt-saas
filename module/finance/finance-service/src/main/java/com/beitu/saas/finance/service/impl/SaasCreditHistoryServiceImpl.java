@@ -1,7 +1,11 @@
 package com.beitu.saas.finance.service.impl;
 
+import com.beitu.saas.common.utils.PojoUtil;
 import com.beitu.saas.finance.client.SaasCreditHistoryService;
+import com.beitu.saas.finance.client.param.CreditHistoryQueryParam;
 import com.beitu.saas.finance.dao.SaasCreditHistoryDao;
+import com.beitu.saas.finance.entity.SaasCreditHistoryEntity;
+import com.fqgj.common.api.Page;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
 import com.fqgj.log.enhance.Module;
@@ -9,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: fenqiguanjia
@@ -28,6 +34,16 @@ public class SaasCreditHistoryServiceImpl extends AbstractBaseService implements
     public Long getYesterdayCreditStatCredit(String merchantCode, Date yesterday) {
         Long totalConsumeCreditCount = saasCreditHistoryDao.selectYesterdayCreditStatCredit(merchantCode, yesterday);
         return totalConsumeCreditCount == null ? 0 : totalConsumeCreditCount;
+    }
+
+    @Override
+    public List<SaasCreditHistoryEntity> getCreditListByParam(CreditHistoryQueryParam param, Page page) {
+        Map map = PojoUtil.convert2Map(param);
+        map.put("page", page);
+        if (null != page) {
+            page.setTotalCount(saasCreditHistoryDao.queryTotalCreditListByParam(map));
+        }
+        return saasCreditHistoryDao.selectCreditListByParam(map);
     }
 }
 
