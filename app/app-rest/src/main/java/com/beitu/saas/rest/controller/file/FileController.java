@@ -38,7 +38,7 @@ public class FileController {
     @RequestMapping(value = "/upload", method = RequestMethod.POST, consumes = "multipart/form-data")
     @ResponseBody
     @ApiOperation(value = "文件上传", response = FileUploadSuccessResponse.class)
-    public DataApiResponse<FileUploadSuccessResponse> upload(@RequestParam MultipartFile uploadFile) {
+    public DataApiResponse<FileUploadSuccessResponse> upload(@RequestParam(value = "name") MultipartFile uploadFile) {
         if (uploadFile == null) {
             return new DataApiResponse<>(FileErrorCodeEnum.ERROR_FILE);
         }
