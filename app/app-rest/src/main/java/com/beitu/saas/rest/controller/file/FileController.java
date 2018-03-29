@@ -46,7 +46,7 @@ public class FileController {
         String fileName = getFileName(uploadFile.getOriginalFilename());
         InputStream inputStream = null;
         try {
-
+            inputStream =uploadFile.getInputStream();
             String url = ossService.uploadFile(inputStream, inputStream.available(), fileName);
             return new DataApiResponse<>(new FileUploadSuccessResponse(url));
         } catch (Exception e) {
