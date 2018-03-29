@@ -482,11 +482,32 @@ public class ConfigUtil {
         return config.getProperty("website.domain.name", "");
     }
 
+    public String getH5AddressURLPrefix() {
+        return config.getProperty("oss.h5.addressURLPrefix", "http://ycjt.oss-cn-hangzhou.aliyuncs.com/H5/Saas-channel/index.html");
+    }
+
     /**
      * 点券和短信日清算开关
      */
     public String getClearDayStatSwith() {
         return config.getProperty("clear.day.stat", "");
     }
-
+    
+    
+    /**
+     * 第三方配置信息
+     */
+    public String getYoufenValidationApiUrl() {
+        return config.getProperty("integration.youfen.validation.api.base.url", "https://api.acedata.com.cn:2443");
+    }
+    
+    public String getYoufenValidationNameIdcardPath() {
+        return config.getProperty("integration.youfen.validation.name.idcard.path", "/oreo/personal/validation/name/idcard");
+    }
+    
+    public String getYoufenAccount() {
+        return config.getProperty("integration.youfen.account", "yangcongtest");
+    }
+    
+    
 }

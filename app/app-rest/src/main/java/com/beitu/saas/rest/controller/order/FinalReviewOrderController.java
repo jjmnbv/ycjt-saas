@@ -78,7 +78,7 @@ public class FinalReviewOrderController {
     @ApiOperation(value = "复审领单", response = ApiResponse.class)
     public ApiResponse getOrder(@RequestBody @Valid FinalReviewerOperateOrderRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.updateOrderStatus(adminCode, req.getOrderNumb(), OrderStatusEnum.FINAL_REVIEWER_GET_ORDER, null);
+        orderApplication.finalReviewerGetOrder(adminCode, req.getOrderNumb());
         return new ApiResponse("操作成功");
     }
 
@@ -87,7 +87,7 @@ public class FinalReviewOrderController {
     @ApiOperation(value = "通过复审", response = ApiResponse.class)
     public ApiResponse agree(@RequestBody @Valid FinalReviewerOperateOrderRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.updateOrderStatus(adminCode, req.getOrderNumb(), OrderStatusEnum.SUBMIT_LOAN_LENDER, null);
+        orderApplication.finalReviewerAgree(adminCode, req.getOrderNumb());
         return new ApiResponse("操作成功");
     }
 
@@ -96,7 +96,7 @@ public class FinalReviewOrderController {
     @ApiOperation(value = "复审驳回", response = ApiResponse.class)
     public ApiResponse reject(@RequestBody @Valid FinalReviewerOperateOrderRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.updateOrderStatus(adminCode, req.getOrderNumb(), OrderStatusEnum.FINAL_REVIEWER_REJECT, null);
+        orderApplication.finalReviewerReject(adminCode, req.getOrderNumb());
         return new ApiResponse("操作成功");
     }
 
@@ -105,7 +105,7 @@ public class FinalReviewOrderController {
     @ApiOperation(value = "复审拒绝", response = ApiResponse.class)
     public ApiResponse refuse(@RequestBody @Valid FinalReviewerOperateOrderRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.updateOrderStatus(adminCode, req.getOrderNumb(), OrderStatusEnum.FINAL_REVIEWER_REFUSE, null);
+        orderApplication.finalReviewerRefuse(adminCode, req.getOrderNumb());
         return new ApiResponse("操作成功");
     }
 

@@ -25,7 +25,7 @@
                 and created_dt <![CDATA[ >= ]]> #{createdBeginDt,jdbcType=DATE}
             </if>
             <if test="createdEndDt != null">
-                and created_dt <![CDATA[ < ]]> #{createdEndDt,jdbcType=DATE}
+                and created_dt <![CDATA[ <= ]]> #{createdEndDt,jdbcType=DATE}
             </if>
             <if test="orderStatusList !=null and orderStatusList.size > 0">
                 and order_status IN

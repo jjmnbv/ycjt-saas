@@ -67,18 +67,18 @@ public class AfterLendManageController {
     @RequestMapping(value = "/extend", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "展期", response = ApiResponse.class)
-    public ApiResponse agree(@RequestBody @Valid AfterLendManagerOperateOrderRequest req) {
+    public ApiResponse extend(@RequestBody @Valid AfterLendManagerOperateOrderRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.updateOrderStatus(adminCode, req.getOrderNumb(), OrderStatusEnum.TO_CONFIRM_RECEIPT, null);
+        orderApplication.extendOrder(adminCode, req.getOrderNumb(), req.getRepaymentDt(), req.getExtendInterestRatio());
         return new ApiResponse("操作成功");
     }
 
     @RequestMapping(value = "/destroy", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "核销", response = ApiResponse.class)
-    public ApiResponse refuse(@RequestBody @Valid AfterLendManagerOperateOrderRequest req) {
+    public ApiResponse destroy(@RequestBody @Valid AfterLendManagerOperateOrderRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.updateOrderStatus(adminCode, req.getOrderNumb(), OrderStatusEnum.LOAN_LENDER_REFUSE, null);
+        orderApplication.destroyOrder(adminCode, req.getOrderNumb());
         return new ApiResponse("操作成功");
     }
 

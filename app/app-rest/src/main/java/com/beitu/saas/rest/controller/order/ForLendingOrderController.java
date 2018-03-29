@@ -75,7 +75,7 @@ public class ForLendingOrderController {
     @ApiOperation(value = "放款", response = ApiResponse.class)
     public ApiResponse agree(@RequestBody @Valid FinalReviewerOperateOrderRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.updateOrderStatus(adminCode, req.getOrderNumb(), OrderStatusEnum.TO_CONFIRM_RECEIPT, null);
+        orderApplication.lenderAgree(adminCode, req.getOrderNumb());
         return new ApiResponse("操作成功");
     }
 
@@ -84,7 +84,7 @@ public class ForLendingOrderController {
     @ApiOperation(value = "放款拒绝", response = ApiResponse.class)
     public ApiResponse refuse(@RequestBody @Valid FinalReviewerOperateOrderRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.updateOrderStatus(adminCode, req.getOrderNumb(), OrderStatusEnum.LOAN_LENDER_REFUSE, null);
+        orderApplication.lenderRefuse(adminCode, req.getOrderNumb());
         return new ApiResponse("操作成功");
     }
 

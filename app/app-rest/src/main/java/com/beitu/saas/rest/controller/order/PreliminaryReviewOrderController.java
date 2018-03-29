@@ -79,7 +79,7 @@ public class PreliminaryReviewOrderController {
     @ApiOperation(value = "初审领单", response = ApiResponse.class)
     public ApiResponse getOrder(@RequestBody @Valid PreliminaryReviewerOperateOrderRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.updateOrderStatus(adminCode, req.getOrderNumb(), OrderStatusEnum.PRELIMINARY_REVIEWER_GET_ORDER, null);
+        orderApplication.preliminaryReviewerGetOrder(adminCode, req.getOrderNumb());
         return new ApiResponse("操作成功");
     }
 
@@ -88,7 +88,7 @@ public class PreliminaryReviewOrderController {
     @ApiOperation(value = "通过初审", response = ApiResponse.class)
     public ApiResponse agree(@RequestBody @Valid PreliminaryReviewerOperateOrderRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.updateOrderStatus(adminCode, req.getOrderNumb(), OrderStatusEnum.SUBMIT_FINAL_REVIEW, null);
+        orderApplication.preliminaryReviewerAgree(adminCode, req.getOrderNumb());
         return new ApiResponse("操作成功");
     }
 
@@ -97,7 +97,7 @@ public class PreliminaryReviewOrderController {
     @ApiOperation(value = "初审驳回", response = ApiResponse.class)
     public ApiResponse reject(@RequestBody @Valid PreliminaryReviewerOperateOrderRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.updateOrderStatus(adminCode, req.getOrderNumb(), OrderStatusEnum.PRELIMINARY_REVIEWER_REJECT, null);
+        orderApplication.preliminaryReviewerReject(adminCode, req.getOrderNumb());
         return new ApiResponse("操作成功");
     }
 
@@ -106,7 +106,7 @@ public class PreliminaryReviewOrderController {
     @ApiOperation(value = "初审拒绝", response = ApiResponse.class)
     public ApiResponse refuse(@RequestBody @Valid PreliminaryReviewerOperateOrderRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.updateOrderStatus(adminCode, req.getOrderNumb(), OrderStatusEnum.PRELIMINARY_REVIEWER_REFUSE, null);
+        orderApplication.preliminaryReviewerRefuse(adminCode, req.getOrderNumb());
         return new ApiResponse("操作成功");
     }
 
