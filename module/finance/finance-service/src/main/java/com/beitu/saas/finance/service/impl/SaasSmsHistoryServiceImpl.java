@@ -1,7 +1,9 @@
 package com.beitu.saas.finance.service.impl;
 
 import com.beitu.saas.common.utils.PojoUtil;
+import com.beitu.saas.finance.client.SaasMerchantSmsInfoService;
 import com.beitu.saas.finance.client.SaasSmsHistoryService;
+import com.beitu.saas.finance.client.enums.OpTypeEnum;
 import com.beitu.saas.finance.client.param.CreditHistoryQueryParam;
 import com.beitu.saas.finance.client.param.SmsHistoryQueryParam;
 import com.beitu.saas.finance.dao.SaasSmsHistoryDao;
@@ -32,6 +34,9 @@ public class SaasSmsHistoryServiceImpl extends AbstractBaseService implements Sa
     @Autowired
     private SaasSmsHistoryDao saasSmsHistoryDao;
 
+    @Autowired
+    private SaasMerchantSmsInfoService saasMerchantSmsInfoService;
+
     @Override
     public Long getYesterdaySmsStatCredit(String merchantCode, Date yesterday) {
         Long totalConsumeSmsCount = saasSmsHistoryDao.selectYesterdaySmsStatCredit(merchantCode, yesterday);
@@ -46,6 +51,32 @@ public class SaasSmsHistoryServiceImpl extends AbstractBaseService implements Sa
             page.setTotalCount(saasSmsHistoryDao.queryTotalSmsListByParam(map));
         }
         return saasSmsHistoryDao.selectSmsListByParam(map);
+    }
+
+    @Override
+    public SaasSmsHistoryEntity addExpenditureSmsHistory(String merchantCode, Long sms, String phone, String comment) {
+        Long currentSms = saasMerchantSmsInfoService.getSmsByMerchantCode(merchantCode);
+        SaasSmsHistoryEntity saasSmsHistoryEntity = new SaasSmsHistoryEntity();
+        saasSmsHistoryEntity.setComment(comment);
+        saasSmsHistoryEntity.setMerchantCode(merchantCode);
+        saasSmsHistoryEntity.setCurrentSms(currentSms - sms);
+        saasSmsHistoryEntity.setSms(sms);
+        saasSmsHistoryEntity.setSendPhone(phone);
+        saasSmsHistoryEntity.setOpType(OpTypeEnum.EXPENDITURE.getKey());
+        return saasSmsHistoryDao.insert(saasSmsHistoryEntity);
+    }
+
+    @Override
+    public SaasSmsHistoryEntity addIncomeSmsHistory(String merchantCode, Long sms, String phone, String comment) {
+        Long currentSms = saasMerchantSmsInfoService.getSmsByMerchantCode(merchantCode);
+        SaasSmsHistoryEntity saasSmsHistoryEntity = new SaasSmsHistoryEntity();
+        saasSmsHistoryEntity.setComment(comment);
+        saasSmsHistoryEntity.setMerchantCode(merchantCode);
+        saasSmsHistoryEntity.setCurrentSms(currentSms - sms);
+        saasSmsHistoryEntity.setSms(sms);
+        saasSmsHistoryEntity.setSendPhone(phone);
+        saasSmsHistoryEntity.setOpType(OpTypeEnum.INCOME.getKey());
+        return saasSmsHistoryDao.insert(saasSmsHistoryEntity);
     }
 }
 

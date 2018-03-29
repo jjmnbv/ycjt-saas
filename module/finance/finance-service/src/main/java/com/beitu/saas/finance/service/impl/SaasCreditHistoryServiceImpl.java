@@ -2,6 +2,8 @@ package com.beitu.saas.finance.service.impl;
 
 import com.beitu.saas.common.utils.PojoUtil;
 import com.beitu.saas.finance.client.SaasCreditHistoryService;
+import com.beitu.saas.finance.client.SaasMerchantCreditInfoService;
+import com.beitu.saas.finance.client.enums.OpTypeEnum;
 import com.beitu.saas.finance.client.param.CreditHistoryQueryParam;
 import com.beitu.saas.finance.dao.SaasCreditHistoryDao;
 import com.beitu.saas.finance.entity.SaasCreditHistoryEntity;
@@ -30,6 +32,9 @@ public class SaasCreditHistoryServiceImpl extends AbstractBaseService implements
     @Autowired
     private SaasCreditHistoryDao saasCreditHistoryDao;
 
+    @Autowired
+    private SaasMerchantCreditInfoService saasMerchantCreditInfoService;
+
     @Override
     public Long getYesterdayCreditStatCredit(String merchantCode, Date yesterday) {
         Long totalConsumeCreditCount = saasCreditHistoryDao.selectYesterdayCreditStatCredit(merchantCode, yesterday);
@@ -44,6 +49,32 @@ public class SaasCreditHistoryServiceImpl extends AbstractBaseService implements
             page.setTotalCount(saasCreditHistoryDao.queryTotalCreditListByParam(map));
         }
         return saasCreditHistoryDao.selectCreditListByParam(map);
+    }
+
+    @Override
+    public SaasCreditHistoryEntity addExpenditureCreditHistory(String merchantCode, Long credit, String opName, String comment) {
+        Long currentCredit = saasMerchantCreditInfoService.getCreditByMerchantCode(merchantCode);
+        SaasCreditHistoryEntity saasCreditHistoryEntity = new SaasCreditHistoryEntity();
+        saasCreditHistoryEntity.setComment(comment);
+        saasCreditHistoryEntity.setMerchantCode(merchantCode);
+        saasCreditHistoryEntity.setCurrentCredit(currentCredit - credit);
+        saasCreditHistoryEntity.setCredit(credit);
+        saasCreditHistoryEntity.setOpName(opName);
+        saasCreditHistoryEntity.setOpType(OpTypeEnum.EXPENDITURE.getKey());
+        return saasCreditHistoryDao.insert(saasCreditHistoryEntity);
+    }
+
+    @Override
+    public SaasCreditHistoryEntity addIncomeCreditHistory(String merchantCode, Long credit, String opName, String comment) {
+        Long currentCredit = saasMerchantCreditInfoService.getCreditByMerchantCode(merchantCode);
+        SaasCreditHistoryEntity saasCreditHistoryEntity = new SaasCreditHistoryEntity();
+        saasCreditHistoryEntity.setComment(comment);
+        saasCreditHistoryEntity.setMerchantCode(merchantCode);
+        saasCreditHistoryEntity.setCurrentCredit(currentCredit + credit);
+        saasCreditHistoryEntity.setCredit(credit);
+        saasCreditHistoryEntity.setOpName(opName);
+        saasCreditHistoryEntity.setOpType(OpTypeEnum.INCOME.getKey());
+        return saasCreditHistoryDao.insert(saasCreditHistoryEntity);
     }
 }
 
