@@ -22,7 +22,7 @@
                 and repayment_dt <![CDATA[ >= ]]> #{repaymentBeginDt,jdbcType=DATE}
             </if>
             <if test="repaymentEndDt != null">
-                and repayment_dt <![CDATA[ < ]]> #{repaymentEndDt,jdbcType=DATE}
+                and repayment_dt <![CDATA[ <= ]]> #{repaymentEndDt,jdbcType=DATE}
             </if>
             <if test="orderStatusList !=null and orderStatusList.size > 0">
                 and order_status IN

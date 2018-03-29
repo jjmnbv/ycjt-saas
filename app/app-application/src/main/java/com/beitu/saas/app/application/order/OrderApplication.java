@@ -45,6 +45,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -60,10 +61,7 @@ import java.util.stream.Collectors;
 public class OrderApplication {
 
     @Autowired
-    private SaasOrderApplicationService saasOrderApplicationService;
-
-    @Autowired
-    private SaasOrderService saasOrderService;
+    private SaasOrderService<SaasOrder> saasOrderService;
 
     @Autowired
     private SaasOrderBillDetailService saasOrderBillDetailService;
@@ -94,6 +92,9 @@ public class OrderApplication {
 
     @Autowired
     private SaasMerchantBalanceInfoService saasMerchantBalanceInfoService;
+
+    @Autowired
+    private OrderBillDetailApplication orderBillDetailApplication;
 
     public BorrowerOrderApplyStatusEnum getOrderApplyStatus(String borrowerCode, String channelCode) {
         if (saasOrderService.isReviewing(borrowerCode, channelCode)) {
@@ -376,6 +377,202 @@ public class OrderApplication {
             orderListVo.setFinalReviewer(saasAdminService.getSaasAdminByAdminCode(saasOrderVo.getFinalReviewerCode()).getName());
         }
         return orderListVo;
+    }
+
+    @Transactional(rollbackFor = RuntimeException.class)
+    public void preliminaryReviewerGetOrder(String operatorCode, String orderNumb) {
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
+        if (StringUtils.isNotEmpty(saasOrderVo.getPreliminaryReviewerCode()) && !operatorCode.equals(saasOrderVo.getPreliminaryReviewerCode())) {
+            throw new ApplicationException(OrderErrorCodeEnum.ORDER_BEING_SINGLE);
+        }
+        updateOrderStatus(operatorCode, orderNumb, OrderStatusEnum.PRELIMINARY_REVIEWER_GET_ORDER, null);
+        SaasOrder updateSaasOrder = new SaasOrder();
+        updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
+        updateSaasOrder.setPreliminaryReviewerCode(operatorCode);
+        saasOrderService.updateById(updateSaasOrder);
+    }
+
+    @Transactional(rollbackFor = RuntimeException.class)
+    public void preliminaryReviewerRefuse(String operatorCode, String orderNumb) {
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
+        if (StringUtils.isNotEmpty(saasOrderVo.getPreliminaryReviewerCode()) && !operatorCode.equals(saasOrderVo.getPreliminaryReviewerCode())) {
+            throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
+        }
+        updateOrderStatus(operatorCode, orderNumb, OrderStatusEnum.PRELIMINARY_REVIEWER_REFUSE, null);
+        SaasOrder updateSaasOrder = new SaasOrder();
+        updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
+        updateSaasOrder.setPreliminaryReviewerCode(operatorCode);
+        saasOrderService.updateById(updateSaasOrder);
+    }
+
+    @Transactional(rollbackFor = RuntimeException.class)
+    public void preliminaryReviewerReject(String operatorCode, String orderNumb) {
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
+        if (StringUtils.isNotEmpty(saasOrderVo.getPreliminaryReviewerCode()) && !operatorCode.equals(saasOrderVo.getPreliminaryReviewerCode())) {
+            throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
+        }
+        updateOrderStatus(operatorCode, orderNumb, OrderStatusEnum.PRELIMINARY_REVIEWER_REJECT, null);
+        SaasOrder updateSaasOrder = new SaasOrder();
+        updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
+        updateSaasOrder.setPreliminaryReviewerCode(operatorCode);
+        saasOrderService.updateById(updateSaasOrder);
+    }
+
+    @Transactional(rollbackFor = RuntimeException.class)
+    public void preliminaryReviewerAgree(String operatorCode, String orderNumb) {
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
+        if (StringUtils.isNotEmpty(saasOrderVo.getPreliminaryReviewerCode()) && !operatorCode.equals(saasOrderVo.getPreliminaryReviewerCode())) {
+            throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
+        }
+        updateOrderStatus(operatorCode, orderNumb, OrderStatusEnum.SUBMIT_FINAL_REVIEW, null);
+        SaasOrder updateSaasOrder = new SaasOrder();
+        updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
+        updateSaasOrder.setPreliminaryReviewerCode(operatorCode);
+        saasOrderService.updateById(updateSaasOrder);
+    }
+
+    @Transactional(rollbackFor = RuntimeException.class)
+    public void finalReviewerGetOrder(String operatorCode, String orderNumb) {
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
+        if (StringUtils.isNotEmpty(saasOrderVo.getFinalReviewerCode()) && !operatorCode.equals(saasOrderVo.getFinalReviewerCode())) {
+            throw new ApplicationException(OrderErrorCodeEnum.ORDER_BEING_SINGLE);
+        }
+        updateOrderStatus(operatorCode, orderNumb, OrderStatusEnum.FINAL_REVIEWER_GET_ORDER, null);
+        SaasOrder updateSaasOrder = new SaasOrder();
+        updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
+        updateSaasOrder.setFinalReviewerCode(operatorCode);
+        saasOrderService.updateById(updateSaasOrder);
+    }
+
+    @Transactional(rollbackFor = RuntimeException.class)
+    public void finalReviewerRefuse(String operatorCode, String orderNumb) {
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
+        if (StringUtils.isNotEmpty(saasOrderVo.getFinalReviewerCode()) && !operatorCode.equals(saasOrderVo.getFinalReviewerCode())) {
+            throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
+        }
+        updateOrderStatus(operatorCode, orderNumb, OrderStatusEnum.FINAL_REVIEWER_REFUSE, null);
+        SaasOrder updateSaasOrder = new SaasOrder();
+        updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
+        updateSaasOrder.setFinalReviewerCode(operatorCode);
+        saasOrderService.updateById(updateSaasOrder);
+    }
+
+    @Transactional(rollbackFor = RuntimeException.class)
+    public void finalReviewerReject(String operatorCode, String orderNumb) {
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
+        if (StringUtils.isNotEmpty(saasOrderVo.getFinalReviewerCode()) && !operatorCode.equals(saasOrderVo.getFinalReviewerCode())) {
+            throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
+        }
+        updateOrderStatus(operatorCode, orderNumb, OrderStatusEnum.FINAL_REVIEWER_REJECT, null);
+        SaasOrder updateSaasOrder = new SaasOrder();
+        updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
+        updateSaasOrder.setFinalReviewerCode(operatorCode);
+        saasOrderService.updateById(updateSaasOrder);
+    }
+
+    @Transactional(rollbackFor = RuntimeException.class)
+    public void finalReviewerAgree(String operatorCode, String orderNumb) {
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
+        if (StringUtils.isNotEmpty(saasOrderVo.getFinalReviewerCode()) && !operatorCode.equals(saasOrderVo.getFinalReviewerCode())) {
+            throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
+        }
+        updateOrderStatus(operatorCode, orderNumb, OrderStatusEnum.SUBMIT_LOAN_LENDER, null);
+        SaasOrder updateSaasOrder = new SaasOrder();
+        updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
+        updateSaasOrder.setFinalReviewerCode(operatorCode);
+        saasOrderService.updateById(updateSaasOrder);
+    }
+
+    @Transactional(rollbackFor = RuntimeException.class)
+    public void lenderAgree(String operatorCode, String orderNumb) {
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
+        if (StringUtils.isNotEmpty(saasOrderVo.getLoanLenderCode()) && !operatorCode.equals(saasOrderVo.getLoanLenderCode())) {
+            throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
+        }
+        if (StringUtils.isNotEmpty(saasOrderVo.getTermUrl())) {
+            updateOrderStatus(operatorCode, orderNumb, OrderStatusEnum.FOR_REIMBURSEMENT, null);
+        } else {
+            updateOrderStatus(operatorCode, orderNumb, OrderStatusEnum.TO_CONFIRM_RECEIPT, null);
+        }
+        SaasOrder updateSaasOrder = new SaasOrder();
+        updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
+        updateSaasOrder.setLoanLenderCode(operatorCode);
+        saasOrderService.updateById(updateSaasOrder);
+    }
+
+    @Transactional(rollbackFor = RuntimeException.class)
+    public void lenderRefuse(String operatorCode, String orderNumb) {
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
+        if (StringUtils.isNotEmpty(saasOrderVo.getLoanLenderCode()) && !operatorCode.equals(saasOrderVo.getLoanLenderCode())) {
+            throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
+        }
+        updateOrderStatus(operatorCode, orderNumb, OrderStatusEnum.LOAN_LENDER_REFUSE, null);
+        SaasOrder updateSaasOrder = new SaasOrder();
+        updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
+        updateSaasOrder.setLoanLenderCode(operatorCode);
+        saasOrderService.updateById(updateSaasOrder);
+    }
+
+    @Transactional(rollbackFor = RuntimeException.class)
+    public void confirmReceipt(String operatorCode, String orderNumb) {
+        // TODO 签署借款协议
+
+        updateOrderStatus(operatorCode, orderNumb, OrderStatusEnum.FOR_REIMBURSEMENT, null);
+        orderBillDetailApplication.createOrderBillDetail(orderNumb);
+    }
+
+    @Transactional(rollbackFor = RuntimeException.class)
+    public void extendOrder(String operatorCode, String orderNumb, Date repaymentDt, BigDecimal extendInterestRatio) {
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
+
+        OrderStatusEnum nextOrderStatus = OrderStatusEnum.TO_CONFIRM_EXTEND;
+        OrderStatusEnum currentOrderStatus = OrderStatusEnum.getEnumByCode(saasOrderVo.getOrderStatus());
+
+        if (Arrays.binarySearch(nextOrderStatus.getCodeArray(), currentOrderStatus.getCode()) < 0) {
+            throw new ApplicationException(OrderErrorCodeEnum.ILLEGAL_OPERATION_ORDER_STATUS);
+        }
+
+        SaasOrder extendSaasOrder = new SaasOrder();
+        BeanUtils.copyProperties(saasOrderVo, extendSaasOrder);
+        extendSaasOrder.setTotalInterestRatio(extendInterestRatio);
+        extendSaasOrder.setTermUrl(null);
+        extendSaasOrder.setExpireDate(DateUtil.getTodayOverTime());
+        extendSaasOrder.setCreatedDt(new Date());
+        extendSaasOrder.setRepaymentDt(repaymentDt);
+        extendSaasOrder.setTotalInterestFee(orderCalculateApplication.getInterest(extendSaasOrder.getRealCapital(), extendSaasOrder.getTotalInterestRatio(), extendSaasOrder.getCreatedDt(), extendSaasOrder.getRepaymentDt()));
+        extendSaasOrder.setOrderStatus(nextOrderStatus.getCode());
+        extendSaasOrder.setRelationOrderId(saasOrderVo.getSaasOrderId());
+        saasOrderService.create(extendSaasOrder);
+
+        SaasOrderStatusHistory saasOrderStatusHistory = new SaasOrderStatusHistory();
+        saasOrderStatusHistory.setOrderId(extendSaasOrder.getId());
+        saasOrderStatusHistory.setOrderNumb(extendSaasOrder.getOrderNumb());
+        saasOrderStatusHistory.setUpdateOrderStatus(nextOrderStatus.getCode());
+        saasOrderStatusHistory.setOperatorCode(operatorCode);
+        saasOrderStatusHistoryService.create(saasOrderStatusHistory);
+
+    }
+
+    @Transactional(rollbackFor = RuntimeException.class)
+    public void confirmExtend(String operatorCode, String orderNumb) {
+        // TODO 签署展期协议
+
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
+        if (!OrderStatusEnum.TO_CONFIRM_EXTEND.getCode().equals(saasOrderVo.getOrderStatus())) {
+            throw new ApplicationException(OrderErrorCodeEnum.ILLEGAL_OPERATION_ORDER_STATUS);
+        }
+        updateOrderStatus(operatorCode, orderNumb, OrderStatusEnum.FOR_REIMBURSEMENT, null);
+
+        SaasOrder oldSaasOrder = saasOrderService.selectById(saasOrderVo.getSaasOrderId());
+        saasOrderService.updateOrderStatus(oldSaasOrder.getId(), oldSaasOrder.getVersion(), OrderStatusEnum.getEnumByCode(oldSaasOrder.getOrderStatus()), OrderStatusEnum.IN_EXTEND);
+
+        orderBillDetailApplication.createOrderBillDetail(orderNumb);
+    }
+
+    @Transactional(rollbackFor = RuntimeException.class)
+    public void destroyOrder(String operatorCode, String orderNumb) {
+        updateOrderStatus(operatorCode, orderNumb, OrderStatusEnum.HAS_BEEN_DESTROY, null);
+        orderBillDetailApplication.destroyOrderBillDetail(orderNumb);
     }
 
 }

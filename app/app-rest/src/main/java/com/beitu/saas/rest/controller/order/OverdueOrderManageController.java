@@ -68,7 +68,6 @@ public class OverdueOrderManageController {
     @ApiOperation(value = "委托催收", response = ApiResponse.class)
     public ApiResponse entrustedCollection(@RequestBody @Valid OverdueManagerOperateOrderRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.updateOrderStatus(adminCode, req.getOrderNumb(), OrderStatusEnum.TO_CONFIRM_RECEIPT, null);
         return new ApiResponse("操作成功");
     }
 
