@@ -95,6 +95,19 @@ public class SaasOrderBillDetailServiceImpl extends AbstractBaseService implemen
         return saasOrderBillDetailDao.selectOverdueOrder(merchantCode, page);
     }
 
+    @Override
+    public SaasOrderBillDetailVo getVisibleOrderBillDetailByOrderNumb(String orderNumb) {
+        List<SaasOrderBillDetail> saasOrderBillDetailList = saasOrderBillDetailDao.selectByParams(new HashMap<String, Object>(4) {{
+            put("orderNumb", orderNumb);
+            put("visible", Boolean.TRUE);
+            put("deleted", Boolean.FALSE);
+        }});
+        if (CollectionUtils.isEmpty(saasOrderBillDetailList)) {
+            return null;
+        }
+        return SaasOrderBillDetailVo.convertEntityToVO(saasOrderBillDetailList.get(0));
+    }
+
 }
 
 

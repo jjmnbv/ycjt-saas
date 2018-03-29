@@ -43,7 +43,7 @@
             <if test="loanLenderCode !=null">
                 and loan_lender_code = #{loanLenderCode,jdbcType=VARCHAR}
             </if>
-            and expire_date <![CDATA[ < ]]> NOW()
+            and expire_date <![CDATA[ >= ]]> NOW()
             and deleted = false
         </trim>
     </sql>
@@ -68,7 +68,7 @@
         from saas_order
         where channel_code = #{channelCode,jdbcType=VARCHAR}
         and borrower_code = #{borrowerCode,jdbcType=VARCHAR}
-        and expire_date <![CDATA[ < ]]> NOW()
+        and expire_date <![CDATA[ >= ]]> NOW()
         and deleted = false
         order by id desc limit 1
     </select>
@@ -79,7 +79,7 @@
         from saas_order
         where order_numb = #{orderNumb,jdbcType=VARCHAR}
         and deleted = false
-        and expire_date <![CDATA[ < ]]> NOW()
+        and expire_date <![CDATA[ >= ]]> NOW()
         order by id desc limit 1
     </select>
 

@@ -3,6 +3,7 @@ package com.beitu.saas.app.application.order;
 import com.beitu.saas.common.utils.DateUtil;
 import com.beitu.saas.common.utils.DecimalUtils;
 import com.beitu.saas.order.domain.SaasOrderBillDetailVo;
+import com.beitu.saas.order.domain.SaasOrderVo;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -26,9 +27,24 @@ public class OrderCalculateApplication {
         BigDecimal lateInterest = BigDecimal.ZERO;
         Integer lateDt = DateUtil.countDays(new Date(), saasOrderBillDetailVo.getRepaymentDt());
         if (lateDt > 0) {
-            lateInterest = saasOrderBillDetailVo.getRealCapital().multiply(saasOrderBillDetailVo.getLateInterestRatio()).multiply(new BigDecimal(lateDt)).divide(new BigDecimal(365), BigDecimal.ROUND_HALF_UP).setScale(2);
+            lateInterest = saasOrderBillDetailVo.getRealCapital().multiply(saasOrderBillDetailVo.getLateInterestRatio()).multiply(new BigDecimal(lateDt)).divide(new BigDecimal(365), 2, BigDecimal.ROUND_HALF_UP);
         }
         return saasOrderBillDetailVo.getRealCapital().add(saasOrderBillDetailVo.getNeedPayInterest()).add(saasOrderBillDetailVo.getInterest()).add(lateInterest);
+    }
+
+    /**
+     * 得到应还金额
+     *
+     * @param saasOrderVo 订单信息
+     * @return
+     */
+    public BigDecimal getAmount(SaasOrderVo saasOrderVo) {
+        BigDecimal lateInterest = BigDecimal.ZERO;
+        Integer lateDt = DateUtil.countDays(new Date(), saasOrderVo.getRepaymentDt());
+        if (lateDt > 0) {
+            lateInterest = saasOrderVo.getRealCapital().multiply(saasOrderVo.getLateInterestRatio()).multiply(new BigDecimal(lateDt)).divide(new BigDecimal(365), 2, BigDecimal.ROUND_HALF_UP);
+        }
+        return saasOrderVo.getRealCapital().add(saasOrderVo.getTotalInterestFee()).add(lateInterest);
     }
 
     /**

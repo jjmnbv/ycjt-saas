@@ -30,6 +30,7 @@ public class SaasOrderApplicationServiceImpl extends AbstractBaseService impleme
     @Autowired
     private SaasOrderApplicationDao saasOrderApplicationDao;
 
+
     @Override
     public SaasOrderApplicationVo getByBorrowerCode(String borrowerCode) {
         List<SaasOrderApplication> saasOrderApplicationList = saasOrderApplicationDao.selectByParams(new HashMap<String, Object>(4) {{

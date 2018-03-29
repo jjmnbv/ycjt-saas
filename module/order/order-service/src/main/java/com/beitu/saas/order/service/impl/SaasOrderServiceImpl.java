@@ -10,6 +10,7 @@ import com.fqgj.common.api.Page;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
 import com.fqgj.common.utils.CollectionUtils;
+import com.fqgj.common.utils.DateUtil;
 import com.fqgj.log.enhance.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,7 +45,11 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
         }
         SaasOrder saasOrder = saasOrderList.get(saasOrderList.size() - 1);
         if (OrderStatusEnum.FOR_REIMBURSEMENT.getCode().equals(saasOrder.getOrderStatus())) {
-            return OrderStatusEnum.IN_EXTEND;
+            if (DateUtil.countDay(new Date(), saasOrder.getRepaymentDt()) < 0) {
+                return OrderStatusEnum.OVERDUE;
+            } else {
+                return OrderStatusEnum.IN_EXTEND;
+            }
         }
         return OrderStatusEnum.getEnumByCode(saasOrder.getOrderStatus());
     }
@@ -75,6 +80,18 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
             return Boolean.TRUE;
         }
         return Boolean.FALSE;
+    }
+
+    @Override
+    public Boolean isReviewing(String borrowerCode, String channelCode) {
+        SaasOrder saasOrder = saasOrderDao.selectByBorrowerCodeAndChannelCode(borrowerCode, channelCode);
+        if (saasOrder == null) {
+            return Boolean.FALSE;
+        }
+        if (saasOrder.getOrderStatus() > 400) {
+            return Boolean.FALSE;
+        }
+        return Boolean.TRUE;
     }
 
     @Override

@@ -41,6 +41,8 @@ public interface SaasOrderService<T extends BaseEntity> extends BaseService<T> {
      */
     Boolean isReviewRefuse(String borrowerCode, String channelCode);
 
+    Boolean isReviewing(String borrowerCode, String channelCode);
+
     List<SaasOrderVo> listByQuerySaasOrderVoAndPage(QuerySaasOrderVo querySaasOrderVo, Page page);
 
     SaasOrderVo getByOrderNumb(String orderNumb);

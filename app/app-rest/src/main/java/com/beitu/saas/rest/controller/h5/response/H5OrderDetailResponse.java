@@ -17,52 +17,55 @@ import java.util.List;
 public class H5OrderDetailResponse implements ResponseData {
 
     @ApiModelProperty(value = "头部展示信息")
-    private String headerTitle = "确认借款";
+    private String headerTitle;
 
     @ApiModelProperty(value = "借款金额")
-    private String realCapital = "1000.00";
+    private String realCapital;
 
     @ApiModelProperty(value = "借款天数")
-    private Integer borrowingDuration = 34;
+    private Integer borrowingDuration;
 
     @ApiModelProperty(value = "借款年利率")
-    private String totalInterestRatio = "24%";
+    private String totalInterestRatio;
 
     @ApiModelProperty(value = "到期日期")
-    private String repaymentDt = "2018-03-89";
+    private String repaymentDt;
 
     @ApiModelProperty(value = "到期应还")
-    private String amount = "1234.00";
+    private String amount;
 
     @ApiModelProperty(value = "借款用途")
-    private String borrowPurpose = "娶老婆";
+    private String borrowPurpose;
 
     @ApiModelProperty(value = "借款人姓名")
-    private String borrowerName = "陈傻逼";
+    private String borrowerName;
 
     @ApiModelProperty(value = "借款人身份证号")
-    private String borrowerIdentityCode = "334434343434343";
+    private String borrowerIdentityCode;
 
     @ApiModelProperty(value = "展期信息")
-    private List<ExtendOrderDetailVo> extendOrderDetailVos = new ArrayList<ExtendOrderDetailVo>(2){{
-        add(new ExtendOrderDetailVo());
-        add(new ExtendOrderDetailVo());
-    }};
+    private List<ExtendOrderDetailVo> extendOrderDetailVos;
 
-    @ApiModelProperty(value = "合同展示信息")
-    private String contractTitle = "借款协议";
+    @ApiModelProperty(value = "合同1展示信息")
+    private String contractTitle1;
 
-    @ApiModelProperty(value = "合同url")
-    private String contractUrl = "http://www.baidu.com";
+    @ApiModelProperty(value = "合同1url")
+    private String contractUrl1;
+
+    @ApiModelProperty(value = "合同2展示信息")
+    private String contractTitle2;
+
+    @ApiModelProperty(value = "合同2url")
+    private String contractUrl2;
 
     @ApiModelProperty(value = "按钮是否展示")
-    private Boolean visible = Boolean.TRUE;
+    private Boolean visible;
 
     @ApiModelProperty(value = "按钮展示信息")
-    private String buttonTitle = "查看";
+    private String buttonTitle;
 
     @ApiModelProperty(value = "按钮点击跳转页面")
-    private String buttonUrl = "http://www.baidu.com";
+    private String buttonUrl;
 
     public String getHeaderTitle() {
         return headerTitle;
@@ -144,20 +147,36 @@ public class H5OrderDetailResponse implements ResponseData {
         this.extendOrderDetailVos = extendOrderDetailVos;
     }
 
-    public String getContractTitle() {
-        return contractTitle;
+    public String getContractTitle1() {
+        return contractTitle1;
     }
 
-    public void setContractTitle(String contractTitle) {
-        this.contractTitle = contractTitle;
+    public void setContractTitle1(String contractTitle1) {
+        this.contractTitle1 = contractTitle1;
     }
 
-    public String getContractUrl() {
-        return contractUrl;
+    public String getContractUrl1() {
+        return contractUrl1;
     }
 
-    public void setContractUrl(String contractUrl) {
-        this.contractUrl = contractUrl;
+    public void setContractUrl1(String contractUrl1) {
+        this.contractUrl1 = contractUrl1;
+    }
+
+    public String getContractTitle2() {
+        return contractTitle2;
+    }
+
+    public void setContractTitle2(String contractTitle2) {
+        this.contractTitle2 = contractTitle2;
+    }
+
+    public String getContractUrl2() {
+        return contractUrl2;
+    }
+
+    public void setContractUrl2(String contractUrl2) {
+        this.contractUrl2 = contractUrl2;
     }
 
     public Boolean getVisible() {

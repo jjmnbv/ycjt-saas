@@ -30,4 +30,6 @@ public interface SaasOrderBillDetailService<T extends BaseEntity> extends BaseSe
 
     List<OverdueOrderVo> getOverdueOrderListByPage(String merchantCode, Page page);
 
+    SaasOrderBillDetailVo getVisibleOrderBillDetailByOrderNumb(String orderNumb);
+
 }

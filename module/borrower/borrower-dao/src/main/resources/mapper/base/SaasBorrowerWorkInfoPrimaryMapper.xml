@@ -8,7 +8,7 @@
         <result column="order_numb" jdbcType="VARCHAR" property="orderNumb"/>
         <result column="career" jdbcType="VARCHAR" property="career"/>
         <result column="salary" jdbcType="SMALLINT" property="salary"/>
-        <result column="pay_day" jdbcType="TINYINT" property="payDay"/>
+        <result column="pay_day" jdbcType="SMALLINT" property="payDay"/>
         <result column="company_name" jdbcType="VARCHAR" property="companyName"/>
         <result column="company_detail_address" jdbcType="VARCHAR" property="companyDetailAddress"/>
         <result column="success" jdbcType="BIT" property="success"/>
@@ -92,7 +92,7 @@
                 #{salary,jdbcType=SMALLINT},
             </if>
             <if test="payDay != null">
-                #{payDay,jdbcType=TINYINT},
+                #{payDay,jdbcType=SMALLINT},
             </if>
             <if test="companyName != null">
                 #{companyName,jdbcType=VARCHAR},
@@ -131,7 +131,7 @@
                 salary = #{salary,jdbcType=SMALLINT},
             </if>
             <if test="payDay !=null">
-                pay_day = #{payDay,jdbcType=TINYINT},
+                pay_day = #{payDay,jdbcType=SMALLINT},
             </if>
             <if test="companyName !=null">
                 company_name = #{companyName,jdbcType=VARCHAR},
@@ -191,7 +191,7 @@
                 and salary = #{salary,jdbcType=SMALLINT}
             </if>
             <if test="payDay !=null">
-                and pay_day = #{payDay,jdbcType=TINYINT}
+                and pay_day = #{payDay,jdbcType=SMALLINT}
             </if>
             <if test="companyName !=null">
                 and company_name = #{companyName,jdbcType=VARCHAR}
@@ -233,7 +233,7 @@
                 and salary = #{salary,jdbcType=SMALLINT}
             </if>
             <if test="payDay !=null">
-                and pay_day = #{payDay,jdbcType=TINYINT}
+                and pay_day = #{payDay,jdbcType=SMALLINT}
             </if>
             <if test="companyName !=null">
                 and company_name = #{companyName,jdbcType=VARCHAR}
