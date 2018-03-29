@@ -482,6 +482,10 @@ public class ConfigUtil {
         return config.getProperty("website.domain.name", "");
     }
 
+    public String getH5AddressURLPrefix() {
+        return config.getProperty("oss.h5.addressURLPrefix", "http://ycjt.oss-cn-hangzhou.aliyuncs.com/H5/Saas-channel/index.html");
+    }
+
     /**
      * 点券和短信日清算开关
      */
