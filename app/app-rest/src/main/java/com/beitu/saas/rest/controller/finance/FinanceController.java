@@ -31,7 +31,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/finance")
-@Api("财务模块")
+@Api(description = "财务模块")
 public class FinanceController {
 
     @Autowired
