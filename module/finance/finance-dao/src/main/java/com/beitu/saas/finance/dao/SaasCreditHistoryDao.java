@@ -4,6 +4,8 @@ import com.beitu.saas.finance.entity.SaasCreditHistoryEntity;
 import com.fqgj.common.base.BaseMapper;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
 * User: fenqiguanjia
@@ -13,4 +15,8 @@ import java.util.Date;
 
 public interface SaasCreditHistoryDao  extends BaseMapper<SaasCreditHistoryEntity> {
         Long selectYesterdayCreditStatCredit(String merchantCode, Date yesterday);
+
+    List<SaasCreditHistoryEntity> selectCreditListByParam(Map map);
+
+    Integer queryTotalCreditListByParam(Map map);
 }

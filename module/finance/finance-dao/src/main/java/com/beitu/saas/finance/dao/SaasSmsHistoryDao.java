@@ -4,6 +4,8 @@ import com.beitu.saas.finance.entity.SaasSmsHistoryEntity;
 import com.fqgj.common.base.BaseMapper;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
 * User: fenqiguanjia
@@ -14,4 +16,7 @@ import java.util.Date;
 public interface SaasSmsHistoryDao  extends BaseMapper<SaasSmsHistoryEntity> {
     Long selectYesterdaySmsStatCredit(String merchantCode, Date yesterday);
 
+    List<SaasSmsHistoryEntity> selectSmsListByParam(Map map);
+
+    Integer queryTotalSmsListByParam(Map map);
 }
