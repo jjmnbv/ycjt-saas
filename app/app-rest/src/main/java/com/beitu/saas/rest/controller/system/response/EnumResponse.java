@@ -28,6 +28,10 @@ public class EnumResponse implements ResponseData {
         }
     }
 
+    public EnumResponse(List<EnumVo> enumVoList) {
+        this.enumVoList = enumVoList;
+    }
+
     public List<EnumVo> getEnumVoList() {
         return enumVoList;
     }
@@ -39,21 +43,24 @@ public class EnumResponse implements ResponseData {
     public static class EnumVo {
 
         @ApiModelProperty(value = "枚举KEY")
-        private Integer code;
+        private Object code;
 
         @ApiModelProperty(value = "枚举VALUE")
         private String msg;
+
+        public EnumVo() {
+        }
 
         public EnumVo(MsgCodeEnum msgCodeEnum) {
             this.code = msgCodeEnum.getCode();
             this.msg = msgCodeEnum.getMsg();
         }
 
-        public Integer getCode() {
+        public Object getCode() {
             return code;
         }
 
-        public void setCode(Integer code) {
+        public void setCode(Object code) {
             this.code = code;
         }
 
