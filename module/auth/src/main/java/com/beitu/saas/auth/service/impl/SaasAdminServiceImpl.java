@@ -82,11 +82,22 @@ public class SaasAdminServiceImpl extends AbstractBaseService implements SaasAdm
             put("deleted", false);
             put("page", page);
         }};
-        if (page!=null){
+        if (page != null) {
             page.setTotalCount(this.queryTotal(map));
         }
         List list = this.selectByParams(map);
         return list;
+    }
+
+    @Override
+    public Boolean hasRegisteredMobile(String mobile) {
+        List list = this.selectByParams(new HashMap<String, Object>(2) {{
+            put("mobile", mobile);
+        }});
+        if (CollectionUtils.isEmpty(list)) {
+            return false;
+        }
+        return true;
     }
 
 

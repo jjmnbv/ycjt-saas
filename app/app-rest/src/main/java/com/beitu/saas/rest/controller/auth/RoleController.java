@@ -60,7 +60,7 @@ public class RoleController {
         page.setCurrentPage(currentPage);
         page.setPageSize(pageSize);
         SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
-        List<SaasRole> list = saasRoleService.getRoleListByMerchantCode(saasAdmin.getCode(), page);
+        List<SaasRole> list = saasRoleService.getRoleListByMerchantCode(saasAdmin.getMerchantCode(), page);
         List<RoleListResponse> listResponses = new ArrayList<>();
         list.forEach(saasRole -> {
             RoleListResponse response = new RoleListResponse();
