@@ -15,16 +15,8 @@ public class UserHomeResponse implements ResponseData {
     @ApiModelProperty(value = "申请状态")
     private Integer applyType;
 
-    @ApiModelProperty(value = "头部提示")
-    private String headerTitle;
-
-    @ApiModelProperty(value = "图片提示")
-    private String picTitle;
-
-    public UserHomeResponse(Integer applyType, String headerTitle, String picTitle) {
+    public UserHomeResponse(Integer applyType) {
         this.applyType = applyType;
-        this.headerTitle = headerTitle;
-        this.picTitle = picTitle;
     }
 
     public Integer getApplyType() {
@@ -33,22 +25,6 @@ public class UserHomeResponse implements ResponseData {
 
     public void setApplyType(Integer applyType) {
         this.applyType = applyType;
-    }
-
-    public String getHeaderTitle() {
-        return headerTitle;
-    }
-
-    public void setHeaderTitle(String headerTitle) {
-        this.headerTitle = headerTitle;
-    }
-
-    public String getPicTitle() {
-        return picTitle;
-    }
-
-    public void setPicTitle(String picTitle) {
-        this.picTitle = picTitle;
     }
 
 }

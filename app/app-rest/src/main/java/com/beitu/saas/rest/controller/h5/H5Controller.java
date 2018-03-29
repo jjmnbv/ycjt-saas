@@ -122,11 +122,12 @@ public class H5Controller {
         return new DataApiResponse<>(new UserLoginSuccessResponse(token));
     }
 
-    @RequestMapping(value = "/user/home", method = RequestMethod.POST)
+    @VisitorAccessible
+    @ParamsValidate
+    @RequestMapping(value = "/channel/info", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "用户首页", response = UserHomeResponse.class)
-    public DataApiResponse<UserHomeResponse> home() {
-        String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
+    @ApiOperation(value = "渠道信息", response = UserLoginSuccessResponse.class)
+    public DataApiResponse<ChannelInfoResponse> getChannelInfo() {
         String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
         if (StringUtils.isEmpty(channelCode)) {
             return new DataApiResponse<>(ChannelErrorCodeEnum.DISABLE_CHANNEL);
@@ -136,13 +137,22 @@ public class H5Controller {
             throw new ApplicationException(ChannelErrorCodeEnum.DISABLE_CHANNEL);
         }
         SaasMerchantVo saasMerchantVo = saasMerchantService.getByMerchantCode(saasH5ChannelVo.getMerchantCode());
-        Integer applyType = orderApplication.getOrderApplyStatus(borrowerCode, channelCode).getCode();
         String headerTitle = "洋葱借条";
         if (saasMerchantVo != null) {
             headerTitle = saasMerchantVo.getCompanyName();
         }
         String picTitle = "已有20000人申请";
-        return new DataApiResponse<>(new UserHomeResponse(applyType, headerTitle, picTitle));
+        return new DataApiResponse<>(new ChannelInfoResponse(headerTitle, picTitle));
+    }
+
+    @RequestMapping(value = "/user/home", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "用户首页", response = UserHomeResponse.class)
+    public DataApiResponse<UserHomeResponse> home() {
+        String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
+        String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
+        Integer applyType = orderApplication.getOrderApplyStatus(borrowerCode, channelCode).getCode();
+        return new DataApiResponse<>(new UserHomeResponse(applyType));
     }
 
 //    @RequestMapping(value = "/user/apply/status", method = RequestMethod.POST)
