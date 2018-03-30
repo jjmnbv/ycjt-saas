@@ -1,12 +1,16 @@
 package com.beitu.saas.intergration.risk.impl;
 
 import com.beitu.saas.common.config.ConfigUtil;
+import com.beitu.saas.common.utils.HttpClientUtil;
 import com.beitu.saas.intergration.risk.RiskIntergrationService;
 import com.beitu.saas.intergration.risk.dto.LoanPlatformCrawlingDto;
 import com.beitu.saas.intergration.risk.dto.LoanPlatformQueryDto;
 import com.beitu.saas.intergration.risk.enums.LoanPlatformCrawlingCodeEnum;
+import com.beitu.saas.intergration.risk.enums.LoanPlatformQueryCodeEnum;
 import com.beitu.saas.intergration.risk.param.LoanPlatformCrawlingParam;
 import com.beitu.saas.intergration.risk.param.LoanPlatformQueryParam;
+import com.beitu.saas.intergration.risk.pojo.LoanPlatformQueryPojo;
+import com.fqgj.common.utils.JSONUtils;
 import com.fqgj.common.utils.MD5;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +41,9 @@ public class RiskIntergrationServiceImpl implements RiskIntergrationService {
         String apiKey = configUtil.getJuXinLiApiKey();
         String sign = MD5.md5(orgId + timeMark + website + param.getTaskId() + apiKey);
         
+        String url = configUtil.getJuXinLiApiUrl() + configUtil.getJuXinLiCrawlingPath();
         StringBuilder urlSb = new StringBuilder();
-        urlSb.append(configUtil.getJuXinLiApiUrl() + "/");
+        urlSb.append(url + "/");
         urlSb.append(orgId + "/");
         urlSb.append(sign + "/");
         urlSb.append(timeMark + "/");
@@ -51,7 +56,39 @@ public class RiskIntergrationServiceImpl implements RiskIntergrationService {
     
     @Override
     public LoanPlatformQueryDto loanPlatformQuery(LoanPlatformQueryParam param) {
-        return null;
+        if (param == null) {
+            return new LoanPlatformQueryDto(LoanPlatformQueryCodeEnum.PARAM_ERROR, "输入参数为空");
+        }
+        String paramValidateResult = param.validate();
+        if (StringUtils.isNotEmpty(paramValidateResult)) {
+            return new LoanPlatformQueryDto(LoanPlatformQueryCodeEnum.PARAM_ERROR, paramValidateResult);
+        }
+        
+        String orgId = configUtil.getJuXinLiOrgId();
+        String apiKey = configUtil.getJuXinLiApiKey();
+        String sign = MD5.md5(orgId + apiKey);
+    
+        String url = configUtil.getJuXinLiApiUrl() + configUtil.getJuXinLiQueryPath();
+        StringBuilder urlSb = new StringBuilder();
+        urlSb.append(url + "?");
+        urlSb.append("orgId=" + orgId + "&");
+        urlSb.append("sign=" + sign + "&");
+        urlSb.append("token=" + param.getToken());
+        String response = HttpClientUtil.doGet(urlSb.toString());
+        if (response.contains("<")) {
+            return new LoanPlatformQueryDto(LoanPlatformQueryCodeEnum.RESPONSE_ERROR, "接口返回异常");
+        }
+    
+        LoanPlatformQueryPojo pojo = null;
+        try {
+            pojo = JSONUtils.json2pojoAndOffUnknownField(response, LoanPlatformQueryPojo.class);
+        } catch (Exception e) {
+        }
+        if (pojo == null) {
+            return new LoanPlatformQueryDto(LoanPlatformQueryCodeEnum.RESPONSE_ERROR, "接口返回数据异常");
+        }
+        
+        return new LoanPlatformQueryDto(LoanPlatformQueryCodeEnum.SUCCESS).setData(response);
     }
     
 }
