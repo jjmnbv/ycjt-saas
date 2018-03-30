@@ -16,6 +16,22 @@
             <artifactId>common</artifactId>
             <version>0.1</version>
         </dependency>
+
+        <!--e签宝 start-->
+        <dependency>
+            <groupId>com.esign</groupId>
+            <artifactId>tech-sdk</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.esign</groupId>
+            <artifactId>tgtext</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.esign</groupId>
+            <artifactId>utils</artifactId>
+        </dependency>
+        <!--e签宝  end-->
+
     </dependencies>
 
 </project>
