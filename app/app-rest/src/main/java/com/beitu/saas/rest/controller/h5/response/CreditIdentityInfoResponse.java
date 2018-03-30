@@ -37,10 +37,10 @@ public class CreditIdentityInfoResponse implements ResponseData {
                 this.frontUrl = prefixUrl + saasBorrowerIdentityInfoVo.getFrontUrl();
             }
             if (StringUtils.isNotEmpty(saasBorrowerIdentityInfoVo.getBackUrl())) {
-                this.frontUrl = prefixUrl + saasBorrowerIdentityInfoVo.getBackUrl();
+                this.backUrl = prefixUrl + saasBorrowerIdentityInfoVo.getBackUrl();
             }
             if (StringUtils.isNotEmpty(saasBorrowerIdentityInfoVo.getHoldUrl())) {
-                this.frontUrl = prefixUrl + saasBorrowerIdentityInfoVo.getHoldUrl();
+                this.holdUrl = prefixUrl + saasBorrowerIdentityInfoVo.getHoldUrl();
             }
         }
     }
