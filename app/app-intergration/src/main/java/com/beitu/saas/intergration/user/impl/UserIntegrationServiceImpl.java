@@ -26,7 +26,7 @@ public class UserIntegrationServiceImpl implements UserIntegrationService {
     @Override
     public UserNameIdNoValidationDto userNameMatchIdNo(UserNameIdNoValidationParam param) {
         if (param == null) {
-            return new UserNameIdNoValidationDto(UserNameIdNoValidationCodeEnum.OTHER_ERROR, "校验输入参数为空");
+            return new UserNameIdNoValidationDto(UserNameIdNoValidationCodeEnum.OTHER_ERROR, "输入参数为空");
         }
         String paramValidateResult = param.validate();
         if (StringUtils.isNotEmpty(paramValidateResult)) {
