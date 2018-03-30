@@ -29,4 +29,5 @@ public class EsignIntegrationServiceImpl implements EsignIntegrationService {
     public InputStream doContractSign(String merchantCode, String borrowerCode, String srcPdf) {
         return null;
     }
+
 }

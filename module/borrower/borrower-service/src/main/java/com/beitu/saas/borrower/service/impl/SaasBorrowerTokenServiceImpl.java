@@ -34,10 +34,12 @@ public class SaasBorrowerTokenServiceImpl extends AbstractBaseService implements
 
     @Override
     public SaasBorrowerToken create(String borrowerCode, String merchantCode) {
-        SaasBorrowerTokenVo saasBorrowerTokenVo = new SaasBorrowerTokenVo();
-        saasBorrowerTokenVo.setBorrowerCode(borrowerCode);
-        saasBorrowerTokenVo.setMerchantCode(merchantCode);
-        return saasBorrowerTokenDao.insert(SaasBorrowerTokenVo.convertVOToEntity(saasBorrowerTokenVo));
+        SaasBorrowerToken saasBorrowerToken = new SaasBorrowerToken();
+        saasBorrowerToken.setBorrowerCode(borrowerCode);
+        saasBorrowerToken.setMerchantCode(merchantCode);
+        saasBorrowerToken.setToken(saasBorrowerToken.createToken());
+        saasBorrowerToken.setExpireDate(saasBorrowerToken.createExpireDate());
+        return saasBorrowerTokenDao.insert(saasBorrowerToken);
     }
 
     @Override
