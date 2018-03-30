@@ -6,12 +6,14 @@ import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.application.borrower.BorrowerApplication;
 import com.beitu.saas.app.application.channel.SaasChannelApplication;
 import com.beitu.saas.app.application.credit.CreditApplication;
+import com.beitu.saas.app.application.credit.LoanPlatformApplication;
 import com.beitu.saas.app.application.credit.vo.BorrowerEmergentContactVo;
 import com.beitu.saas.app.application.credit.vo.BorrowerIdentityInfoVo;
 import com.beitu.saas.app.application.credit.vo.BorrowerWorkInfoVo;
 import com.beitu.saas.app.application.order.OrderApplication;
 import com.beitu.saas.app.application.order.vo.OrderDetailVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
+import com.beitu.saas.app.enums.SaasLoanPlatformEnum;
 import com.beitu.saas.auth.domain.SaasMerchantVo;
 import com.beitu.saas.auth.service.SaasMerchantService;
 import com.beitu.saas.borrower.client.SaasBorrowerEmergentContactService;
@@ -43,7 +45,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -78,6 +79,9 @@ public class H5Controller {
 
     @Autowired
     private CreditApplication creditApplication;
+
+    @Autowired
+    private LoanPlatformApplication loanPlatformApplication;
 
     @Autowired
     private SaasOrderApplicationService saasOrderApplicationService;
@@ -333,6 +337,15 @@ public class H5Controller {
             saasBorrowerEmergentContactService.updateById(saasBorrowerEmergentContact);
         }
         return new ApiResponse("保存成功");
+    }
+
+    @RequestMapping(value = "/credit/loan/platform/get/url", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "获取多平台借贷URL", response = LoanPlatformUrlResponse.class)
+    public DataApiResponse<LoanPlatformUrlResponse> getLoanPlatformUrl(@RequestBody @Valid GetLoanPlatformUrlRequest req) {
+        String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
+        String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
+        return new DataApiResponse<>(new LoanPlatformUrlResponse(loanPlatformApplication.getLoanPlatformUrl(borrowerCode, channelCode, SaasLoanPlatformEnum.getByCode(req.getLoanPlatformType()))));
     }
 
     @RequestMapping(value = "/credit/submit", method = RequestMethod.POST)
