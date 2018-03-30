@@ -45,7 +45,7 @@ public class CreditSaveIdentityInfoRequest extends ParamsObject {
     }
 
     public void setBackUrl(String backUrl) {
-        if (StringUtils.isNotEmpty(frontUrl)) {
+        if (StringUtils.isNotEmpty(backUrl)) {
             this.backUrl = backUrl;
         }
     }
@@ -55,7 +55,7 @@ public class CreditSaveIdentityInfoRequest extends ParamsObject {
     }
 
     public void setHoldUrl(String holdUrl) {
-        if (StringUtils.isNotEmpty(frontUrl)) {
+        if (StringUtils.isNotEmpty(holdUrl)) {
             this.holdUrl = holdUrl;
         }
     }
