@@ -339,15 +339,6 @@ public class H5Controller {
         return new ApiResponse("保存成功");
     }
 
-    @RequestMapping(value = "/credit/loan/platform/get/url", method = RequestMethod.POST)
-    @ResponseBody
-    @ApiOperation(value = "获取多平台借贷URL", response = LoanPlatformUrlResponse.class)
-    public DataApiResponse<LoanPlatformUrlResponse> getLoanPlatformUrl(@RequestBody @Valid GetLoanPlatformUrlRequest req) {
-        String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
-        String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
-        return new DataApiResponse<>(new LoanPlatformUrlResponse(loanPlatformApplication.getLoanPlatformUrl(borrowerCode, channelCode, SaasLoanPlatformEnum.getByCode(req.getLoanPlatformType()))));
-    }
-
     @RequestMapping(value = "/credit/submit", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "提交风控模块", response = ApiResponse.class)

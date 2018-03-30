@@ -1,5 +1,6 @@
 package com.beitu.saas.rest.controller.credit;
 
+import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.api.ApiResponse;
 import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.application.credit.LoanPlatformApplication;
@@ -39,6 +40,7 @@ public class LoanPlatformController {
         return new DataApiResponse<>(new LoanPlatformUrlResponse(loanPlatformApplication.getLoanPlatformUrl(borrowerCode, channelCode, SaasLoanPlatformEnum.getByCode(req.getLoanPlatformType()))));
     }
 
+    @VisitorAccessible
     @RequestMapping(value = "/callback", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "H5运营商认证地址获取接口", response = CarrierH5Response.class)
