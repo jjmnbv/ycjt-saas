@@ -3,21 +3,21 @@ package com.beitu.saas.rest.controller.file;
 import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.enums.FileErrorCodeEnum;
 import com.beitu.saas.common.config.ConfigUtil;
-import com.beitu.saas.common.handle.oss.OSSHandler;
 import com.beitu.saas.common.handle.oss.OSSService;
 import com.beitu.saas.common.utils.OrderNoUtil;
 import com.beitu.saas.rest.controller.file.response.FileUploadSuccessResponse;
-import com.beitu.saas.rest.controller.h5.response.UserHomeResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
+
 
 /**
  * @author linanjun
@@ -35,21 +35,22 @@ public class FileController {
     @Autowired
     private ConfigUtil configUtil;
 
-    @RequestMapping(value = "/upload")
+    @RequestMapping(value = "/upload", method = RequestMethod.POST, consumes = "multipart/form-data")
     @ResponseBody
-    @ApiOperation(value = "文件上传", response = UserHomeResponse.class)
-    public DataApiResponse<FileUploadSuccessResponse> upload(@RequestParam("name") MultipartFile uploadFile) {
+    @ApiOperation(value = "文件上传", response = FileUploadSuccessResponse.class)
+    public DataApiResponse<FileUploadSuccessResponse> upload(@RequestParam(value = "name") MultipartFile uploadFile) {
         if (uploadFile == null) {
             return new DataApiResponse<>(FileErrorCodeEnum.ERROR_FILE);
         }
+
         String fileName = getFileName(uploadFile.getOriginalFilename());
         InputStream inputStream = null;
         try {
-            inputStream = uploadFile.getInputStream();
+            inputStream =uploadFile.getInputStream();
             String url = ossService.uploadFile(inputStream, inputStream.available(), fileName);
             return new DataApiResponse<>(new FileUploadSuccessResponse(url));
         } catch (Exception e) {
-
+            e.printStackTrace();
         } finally {
             if (inputStream != null) {
                 try {

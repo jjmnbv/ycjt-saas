@@ -17,4 +17,8 @@ public interface SaasSmsHistoryService<T extends BaseEntity> extends BaseService
     Long getYesterdaySmsStatCredit(String merchantCode, Date yesterday);
 
     List<SaasSmsHistoryEntity> getSmsListByParam(SmsHistoryQueryParam param, Page page);
+
+    SaasSmsHistoryEntity addExpenditureSmsHistory(String merchantCode, Long sms, String phone, String comment);
+
+    SaasSmsHistoryEntity addIncomeSmsHistory(String merchantCode, Long sms, String phone, String comment);
 }

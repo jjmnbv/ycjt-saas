@@ -20,4 +20,6 @@ public interface SaasAdminService<T extends BaseEntity> extends BaseService<T> {
     SaasAdmin getSaasAdminByAdminCode(String adminCode);
 
     List<SaasAdmin> getAdminListByMerchantCode(String adminCode, Page page);
+
+    Boolean hasRegisteredMobile(String mobile);
 }

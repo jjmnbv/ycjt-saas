@@ -39,10 +39,10 @@ public class FormedMenuVO {
                 menuIds.add(Menu.getId() + "");
                 ParentMenu parentMenu = new ParentMenu();
                 parentMenu.setId(Menu.getId());
-                parentMenu.setParentName(Menu.getName());
-                parentMenu.setValue(Menu.getLink());
-                parentMenu.setIconUrl(Menu.getIconUrl());
-                parentMenu.setNavs(createChildrenVavs(menuIdMap.get(Menu.getId().intValue()), menuIdMap));
+                parentMenu.setName(Menu.getName());
+                parentMenu.setPath(Menu.getLink());
+                parentMenu.setIcon(Menu.getIconUrl());
+                parentMenu.setChildren(createChildrenVavs(menuIdMap.get(Menu.getId().intValue()), menuIdMap));
                 this.list.add(parentMenu);
             }
         }
@@ -59,10 +59,10 @@ public class FormedMenuVO {
                 menuIds.add(entity.getId() + "");
                 ChildrenMenu item = new ChildrenMenu();
                 item.setId(entity.getId());
-                item.setKey(entity.getName());
-                item.setValue(entity.getLink());
-                item.setIconUrl(entity.getIconUrl());
-                item.setNavs(createChildrenVavs(menuIdMap.get(entity.getId()), menuIdMap));
+                item.setName(entity.getName());
+                item.setPath(entity.getLink());
+                item.setIcon(entity.getIconUrl());
+                item.setChildren(createChildrenVavs(menuIdMap.get(entity.getId()), menuIdMap));
                 childrenMenuList.add(item);
             }
         }
@@ -73,104 +73,98 @@ public class FormedMenuVO {
 
     public class ParentMenu {
         private Long id;
-        private String parentName;
-        private String value;
-        private String iconUrl;
-        List<ChildrenMenu> navs = new ArrayList<>();
-
-        public String getIconUrl() {
-            return iconUrl;
-        }
-
-        public void setIconUrl(String iconUrl) {
-            this.iconUrl = iconUrl;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        public void setValue(String value) {
-            this.value = value;
-        }
+        private String name;
+        private String path;
+        private String icon;
+        List<ChildrenMenu> children = new ArrayList<>();
 
         public Long getId() {
             return id;
         }
 
-        public ParentMenu setId(Long id) {
+        public void setId(Long id) {
             this.id = id;
-            return this;
         }
 
-        public String getParentName() {
-            return parentName;
+        public String getName() {
+            return name;
         }
 
-        public ParentMenu setParentName(String parentName) {
-            this.parentName = parentName;
-            return this;
+        public void setName(String name) {
+            this.name = name;
         }
 
-        public List<ChildrenMenu> getNavs() {
-            return navs;
+        public String getPath() {
+            return path;
         }
 
-        public ParentMenu setNavs(List<ChildrenMenu> navs) {
-            this.navs = navs;
-            return this;
+        public void setPath(String path) {
+            this.path = path;
+        }
+
+        public String getIcon() {
+            return icon;
+        }
+
+        public void setIcon(String icon) {
+            this.icon = icon;
+        }
+
+        public List<ChildrenMenu> getChildren() {
+            return children;
+        }
+
+        public void setChildren(List<ChildrenMenu> children) {
+            this.children = children;
         }
     }
 
 
     private class ChildrenMenu {
         private Long id;
-        private String key;
-        private String value;
-        private String iconUrl;
-        List<ChildrenMenu> navs = new ArrayList<>();
-
-        public String getIconUrl() {
-            return iconUrl;
-        }
-
-        public void setIconUrl(String iconUrl) {
-            this.iconUrl = iconUrl;
-        }
+        private String name;
+        private String path;
+        private String icon;
+        List<ChildrenMenu> children = new ArrayList<>();
 
         public Long getId() {
             return id;
         }
 
-        public ChildrenMenu setId(Long id) {
+        public void setId(Long id) {
             this.id = id;
-            return this;
         }
 
-        public String getKey() {
-            return key;
+        public String getName() {
+            return name;
         }
 
-        public ChildrenMenu setKey(String key) {
-            this.key = key;
-            return this;
+        public void setName(String name) {
+            this.name = name;
         }
 
-        public String getValue() {
-            return value;
+        public String getPath() {
+            return path;
         }
 
-        public ChildrenMenu setValue(String value) {
-            this.value = value;
-            return this;
+        public void setPath(String path) {
+            this.path = path;
         }
 
-        public List<ChildrenMenu> getNavs() {
-            return navs;
+        public String getIcon() {
+            return icon;
         }
 
-        public void setNavs(List<ChildrenMenu> navs) {
-            this.navs = navs;
+        public void setIcon(String icon) {
+            this.icon = icon;
+        }
+
+        public List<ChildrenMenu> getChildren() {
+            return children;
+        }
+
+        public void setChildren(List<ChildrenMenu> children) {
+            this.children = children;
         }
     }
 

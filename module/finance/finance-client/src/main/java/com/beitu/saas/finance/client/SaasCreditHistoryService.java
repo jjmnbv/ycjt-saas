@@ -18,4 +18,8 @@ public interface SaasCreditHistoryService<T extends BaseEntity> extends BaseServ
     Long getYesterdayCreditStatCredit(String merchantCode, Date yesterday);
 
     List<SaasCreditHistoryEntity> getCreditListByParam(CreditHistoryQueryParam param, Page page);
+
+    SaasCreditHistoryEntity addExpenditureCreditHistory(String merchantCode, Long credit, String opName, String comment);
+
+    SaasCreditHistoryEntity addIncomeCreditHistory(String merchantCode, Long credit, String opName, String comment);
 }

@@ -224,6 +224,7 @@ public class CreditApplication {
         if (saasOrderApplicationVo == null && SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
             throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_APPLICATION_INFO);
         }
+        saasOrderApplicationService.deleteById(saasOrderApplicationVo.getSaasOrderApplicationId());
         orderApplication.createOrder(saasOrderApplicationVo, orderNumb, channelCode);
     }
 

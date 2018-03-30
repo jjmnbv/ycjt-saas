@@ -8,10 +8,7 @@ import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.auth.entity.SaasAdminRole;
 import com.beitu.saas.auth.entity.SaasRole;
-import com.beitu.saas.auth.service.SaasAdminLoginLogService;
-import com.beitu.saas.auth.service.SaasAdminRoleService;
-import com.beitu.saas.auth.service.SaasAdminService;
-import com.beitu.saas.auth.service.SaasRoleService;
+import com.beitu.saas.auth.service.*;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.consts.TimeConsts;
 import com.beitu.saas.rest.controller.auth.request.AddAdminRequest;
@@ -19,6 +16,7 @@ import com.beitu.saas.rest.controller.auth.request.AdminLoginRequest;
 import com.beitu.saas.rest.controller.auth.request.ResetPasswordRequest;
 import com.beitu.saas.rest.controller.auth.request.UpdateAdminRequest;
 import com.beitu.saas.rest.controller.auth.response.AdminListResponse;
+import com.beitu.saas.rest.controller.auth.response.AdminLoginResponse;
 import com.beitu.saas.rest.controller.auth.response.RoleListResponse;
 import com.beitu.saas.sms.enums.SmsErrorCodeEnum;
 import com.fqgj.base.services.redis.RedisClient;
@@ -74,6 +72,9 @@ public class AdminController {
     @Autowired
     private SaasRoleService saasRoleService;
 
+    @Autowired
+    private SaasMerchantService saasMerchantService;
+
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ParamsValidate
     @VisitorAccessible
@@ -96,9 +97,11 @@ public class AdminController {
         String token = MD5.md5(UUID.randomUUID().toString());
         redisClient.set(RedisKeyConsts.SAAS_TOKEN_KEY, saasAdmin.getCode(), TimeConsts.TEN_MINUTES, token);
         redisClient.set(RedisKeyConsts.SAAS_TOKEN_KEY, token, TimeConsts.TEN_MINUTES, saasAdmin.getCode());
-        return Response.ok().putData(new HashMap<String, Object>(2) {{
-            put("token", token);
-        }});
+        AdminLoginResponse response = new AdminLoginResponse();
+        response.setToken(token);
+        response.setAdminName(saasAdmin.getName());
+        response.setMerchantName(saasMerchantService.getByMerchantCode(saasAdmin.getMerchantCode()).getCompanyName());
+        return Response.ok().putData(response);
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.DELETE)

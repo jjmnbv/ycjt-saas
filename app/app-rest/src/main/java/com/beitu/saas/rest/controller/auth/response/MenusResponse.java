@@ -1,5 +1,6 @@
 package com.beitu.saas.rest.controller.auth.response;
 
+import com.fqgj.common.api.ResponseData;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -9,7 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @description
  */
 @ApiModel("菜单")
-public class MenusResponse {
+public class MenusResponse implements ResponseData {
 
     @ApiModelProperty("菜单名")
     private String name;
