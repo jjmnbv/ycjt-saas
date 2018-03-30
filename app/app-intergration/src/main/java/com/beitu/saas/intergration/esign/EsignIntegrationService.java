@@ -1,5 +1,9 @@
 package com.beitu.saas.intergration.esign;
 
+import com.beitu.saas.intergration.esign.dto.AddOrganizeAccountSuccessDto;
+import com.beitu.saas.intergration.esign.dto.AddPersonAccountSuccessDto;
+import com.beitu.saas.intergration.esign.param.LicenseContractSignParam;
+import com.beitu.saas.intergration.esign.param.LoanContractSignParam;
 import com.beitu.saas.intergration.esign.param.OrganizeAccountParam;
 import com.beitu.saas.intergration.esign.param.PersonAccountParam;
 
@@ -12,10 +16,12 @@ import java.io.InputStream;
  */
 public interface EsignIntegrationService {
 
-    Boolean addPersonAccount(PersonAccountParam personAccountParam);
+    AddPersonAccountSuccessDto addPersonAccount(PersonAccountParam personAccountParam);
 
-    Boolean addOrganizeAccount(OrganizeAccountParam organizeAccountParam);
+    AddOrganizeAccountSuccessDto addOrganizeAccount(OrganizeAccountParam organizeAccountParam);
 
-    InputStream doContractSign(String merchantCode, String borrowerCode, String srcPdf);
+    InputStream doLoanContractSign(LoanContractSignParam loanContractSignParam);
+
+    InputStream doLicenseContractSign(LicenseContractSignParam licenseContractSignParam);
 
 }

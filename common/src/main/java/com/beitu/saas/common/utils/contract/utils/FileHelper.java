@@ -1,4 +1,4 @@
-package com.beitu.saas.app.application.contract.utils;
+package com.beitu.saas.common.utils.contract.utils;
 
 import com.fqgj.log.factory.LogFactory;
 import com.fqgj.log.interfaces.Log;

@@ -1,7 +1,7 @@
-package com.beitu.saas.app.application.contract.consts;
+package com.beitu.saas.common.consts;
 
 /**
- * @Author linanjun
+ * @Author xiaochong
  * @Create 2017/7/11 上午9:40
  * @Description
  */
