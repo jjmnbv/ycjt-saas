@@ -510,7 +510,15 @@ public class ConfigUtil {
     }
     
     public String getJuXinLiApiUrl() {
-        return config.getProperty("integration.juxinli.api.base.url", "https://yx.juxinli.com/#/apiui");
+        return config.getProperty("integration.juxinli.api.base.url", "https://yx.juxinli.com");
+    }
+    
+    public String getJuXinLiCrawlingPath() {
+        return config.getProperty("integration.juxinli.platform.crawling.path", "/#/apiui");
+    }
+    
+    public String getJuXinLiQueryPath() {
+        return config.getProperty("integration.juxinli.platform.query.path", "/api/user/data");
     }
     
     public String getJuXinLiOrgId() {
