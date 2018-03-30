@@ -6,9 +6,9 @@ import org.apache.commons.lang3.StringUtils;
 public class LoanPlatformCrawlingParam {
     
     /**
-     * 内部用户ID
+     * 任务标识，确保唯一性
      */
-    private Long userId;
+    private String taskId;
     
     /**
      * 登录成功后跳转URL
@@ -20,12 +20,12 @@ public class LoanPlatformCrawlingParam {
      */
     private LoanPlatformEnum platformEnum;
     
-    public Long getUserId() {
-        return userId;
+    public String getTaskId() {
+        return taskId;
     }
     
-    public LoanPlatformCrawlingParam setUserId(Long userId) {
-        this.userId = userId;
+    public LoanPlatformCrawlingParam setTaskId(String taskId) {
+        this.taskId = taskId;
         return this;
     }
     
@@ -49,8 +49,8 @@ public class LoanPlatformCrawlingParam {
     
     public String validate() {
         
-        if (null == this.userId) {
-            return "用户ID为空";
+        if (StringUtils.isEmpty(this.taskId)) {
+            return "任务标识为空";
         }
         
         if (StringUtils.isEmpty(this.jumpUrl)) {

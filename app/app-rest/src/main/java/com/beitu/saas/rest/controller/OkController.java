@@ -41,13 +41,8 @@ public class OkController {
     @ResponseBody
     @VisitorAccessible
     @SignIgnore
-    public void stat() {
-        LoanPlatformCrawlingParam param = new LoanPlatformCrawlingParam();
-        param.setUserId(101000101L);
-        param.setJumpUrl("https://www.baidu.com");
-        param.setPlatformEnum(LoanPlatformEnum.MI_FANG);
-        LoanPlatformCrawlingDto dto = riskIntergrationService.loanPlatformCrawlingUrl(param);
-        System.out.println(JSON.toJSONString(dto));
+    public String stat() {
+        return "stat";
     }
 
 }

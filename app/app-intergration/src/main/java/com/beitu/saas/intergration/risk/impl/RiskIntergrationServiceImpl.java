@@ -34,9 +34,8 @@ public class RiskIntergrationServiceImpl implements RiskIntergrationService {
         String orgId = configUtil.getJuXinLiOrgId();
         String timeMark = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
         String website = param.getPlatformEnum().getWebsite();
-        String taskId = timeMark + "_" + param.getUserId();
         String apiKey = configUtil.getJuXinLiApiKey();
-        String sign = MD5.md5(orgId + timeMark + website + taskId + apiKey);
+        String sign = MD5.md5(orgId + timeMark + website + param.getTaskId() + apiKey);
         
         StringBuilder urlSb = new StringBuilder();
         urlSb.append(configUtil.getJuXinLiApiUrl() + "/");
@@ -44,7 +43,7 @@ public class RiskIntergrationServiceImpl implements RiskIntergrationService {
         urlSb.append(sign + "/");
         urlSb.append(timeMark + "/");
         urlSb.append(website + "/");
-        urlSb.append(taskId + "?");
+        urlSb.append(param.getTaskId() + "?");
         urlSb.append("jumpUrl=" + param.getJumpUrl());
         
         return new LoanPlatformCrawlingDto(LoanPlatformCrawlingCodeEnum.SUCCESS).setUrl(urlSb.toString());
