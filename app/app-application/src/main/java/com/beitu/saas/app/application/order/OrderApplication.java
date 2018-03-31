@@ -106,10 +106,11 @@ public class OrderApplication {
     }
 
     @Transactional
-    public SaasOrder createOrder(SaasOrderApplicationVo saasOrderApplicationVo, String orderNumb) {
+    public SaasOrder createOrder(SaasOrderApplicationVo saasOrderApplicationVo, String orderNumb, String channelCode) {
         SaasOrder saasOrder = new SaasOrder();
         BeanUtils.copyProperties(saasOrderApplicationVo, saasOrder);
         saasOrder.setOrderNumb(orderNumb);
+        saasOrder.setChannelCode(channelCode);
         saasOrder.setCreatedDt(saasOrderApplicationVo.getGmtCreate());
         saasOrder.setOrderStatus(OrderStatusEnum.SUBMIT_PRELIMINARY_REVIEW.getCode());
         saasOrder.setExpireDate(DateUtil.addDate(new Date(), 20));
@@ -184,7 +185,7 @@ public class OrderApplication {
         OrderStatusEnum nextOrderStatus = OrderStatusEnum.getEnumByCode(updateOrderStatus.getCode());
         OrderStatusEnum currentOrderStatus = OrderStatusEnum.getEnumByCode(saasOrderVo.getOrderStatus());
 
-        if (Arrays.binarySearch(nextOrderStatus.getCodeArray(), currentOrderStatus.getCode()) < 0) {
+        if (Arrays.binarySearch(nextOrderStatus.getCodeArray(), currentOrderStatus.getCode()) < 0 && nextOrderStatus.getNeedForcedToUpdate()) {
             throw new ApplicationException(OrderErrorCodeEnum.ILLEGAL_OPERATION_ORDER_STATUS);
         }
         updateOrderStatus(operatorCode, saasOrderVo.getSaasOrderId(), saasOrderVo.getVersion(), saasOrderVo.getOrderNumb(), currentOrderStatus, updateOrderStatus, remark);
@@ -528,7 +529,7 @@ public class OrderApplication {
         OrderStatusEnum nextOrderStatus = OrderStatusEnum.TO_CONFIRM_EXTEND;
         OrderStatusEnum currentOrderStatus = OrderStatusEnum.getEnumByCode(saasOrderVo.getOrderStatus());
 
-        if (Arrays.binarySearch(nextOrderStatus.getCodeArray(), currentOrderStatus.getCode()) < 0) {
+        if (Arrays.binarySearch(nextOrderStatus.getCodeArray(), currentOrderStatus.getCode()) < 0 && nextOrderStatus.getNeedForcedToUpdate()) {
             throw new ApplicationException(OrderErrorCodeEnum.ILLEGAL_OPERATION_ORDER_STATUS);
         }
 

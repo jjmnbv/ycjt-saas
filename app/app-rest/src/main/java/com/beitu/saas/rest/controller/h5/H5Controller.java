@@ -6,12 +6,14 @@ import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.application.borrower.BorrowerApplication;
 import com.beitu.saas.app.application.channel.SaasChannelApplication;
 import com.beitu.saas.app.application.credit.CreditApplication;
+import com.beitu.saas.app.application.credit.LoanPlatformApplication;
 import com.beitu.saas.app.application.credit.vo.BorrowerEmergentContactVo;
 import com.beitu.saas.app.application.credit.vo.BorrowerIdentityInfoVo;
 import com.beitu.saas.app.application.credit.vo.BorrowerWorkInfoVo;
 import com.beitu.saas.app.application.order.OrderApplication;
 import com.beitu.saas.app.application.order.vo.OrderDetailVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
+import com.beitu.saas.app.enums.SaasLoanPlatformEnum;
 import com.beitu.saas.auth.domain.SaasMerchantVo;
 import com.beitu.saas.auth.service.SaasMerchantService;
 import com.beitu.saas.borrower.client.SaasBorrowerEmergentContactService;
@@ -43,7 +45,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -78,6 +79,9 @@ public class H5Controller {
 
     @Autowired
     private CreditApplication creditApplication;
+
+    @Autowired
+    private LoanPlatformApplication loanPlatformApplication;
 
     @Autowired
     private SaasOrderApplicationService saasOrderApplicationService;
@@ -122,11 +126,11 @@ public class H5Controller {
         return new DataApiResponse<>(new UserLoginSuccessResponse(token));
     }
 
-    @RequestMapping(value = "/user/home", method = RequestMethod.POST)
+    @VisitorAccessible
+    @RequestMapping(value = "/channel/info", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "用户首页", response = UserHomeResponse.class)
-    public DataApiResponse<UserHomeResponse> home() {
-        String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
+    @ApiOperation(value = "渠道信息", response = UserLoginSuccessResponse.class)
+    public DataApiResponse<ChannelInfoResponse> getChannelInfo() {
         String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
         if (StringUtils.isEmpty(channelCode)) {
             return new DataApiResponse<>(ChannelErrorCodeEnum.DISABLE_CHANNEL);
@@ -136,13 +140,22 @@ public class H5Controller {
             throw new ApplicationException(ChannelErrorCodeEnum.DISABLE_CHANNEL);
         }
         SaasMerchantVo saasMerchantVo = saasMerchantService.getByMerchantCode(saasH5ChannelVo.getMerchantCode());
-        Integer applyType = orderApplication.getOrderApplyStatus(borrowerCode, channelCode).getCode();
         String headerTitle = "洋葱借条";
         if (saasMerchantVo != null) {
             headerTitle = saasMerchantVo.getCompanyName();
         }
         String picTitle = "已有20000人申请";
-        return new DataApiResponse<>(new UserHomeResponse(applyType, headerTitle, picTitle));
+        return new DataApiResponse<>(new ChannelInfoResponse(headerTitle, picTitle));
+    }
+
+    @RequestMapping(value = "/user/home", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "用户首页", response = UserHomeResponse.class)
+    public DataApiResponse<UserHomeResponse> home() {
+        String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
+        String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
+        Integer applyType = orderApplication.getOrderApplyStatus(borrowerCode, channelCode).getCode();
+        return new DataApiResponse<>(new UserHomeResponse(applyType));
     }
 
 //    @RequestMapping(value = "/user/apply/status", method = RequestMethod.POST)

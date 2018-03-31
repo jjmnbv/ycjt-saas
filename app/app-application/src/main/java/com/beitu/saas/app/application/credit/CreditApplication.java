@@ -191,7 +191,7 @@ public class CreditApplication {
             RiskModuleEnum riskModuleEnum = RiskModuleEnum.getRiskModuleEnumByModuleCode(saasChannelRiskSettingsVo.getModuleCode());
             switch (riskModuleEnum) {
                 case APPLICATION:
-                    submitApplication(borrowerCode, orderNumb, saasChannelRiskSettingsVo.getRequired());
+                    submitApplication(borrowerCode, orderNumb, channelCode, saasChannelRiskSettingsVo.getRequired());
                     break;
                 case PERSONAL_INFO:
                     submitPersonalInfo(borrowerCode, orderNumb, saasChannelRiskSettingsVo.getRequired());
@@ -219,13 +219,13 @@ public class CreditApplication {
         return new ApiResponse("提交成功");
     }
 
-    private void submitApplication(String borrowerCode, String orderNumb, Integer required) {
+    private void submitApplication(String borrowerCode, String orderNumb, String channelCode, Integer required) {
         SaasOrderApplicationVo saasOrderApplicationVo = saasOrderApplicationService.getByBorrowerCode(borrowerCode);
         if (saasOrderApplicationVo == null && SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
             throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_APPLICATION_INFO);
         }
         saasOrderApplicationService.deleteById(saasOrderApplicationVo.getSaasOrderApplicationId());
-        orderApplication.createOrder(saasOrderApplicationVo, orderNumb);
+        orderApplication.createOrder(saasOrderApplicationVo, orderNumb, channelCode);
     }
 
     private void submitPersonalInfo(String borrowerCode, String orderNumb, Integer required) {

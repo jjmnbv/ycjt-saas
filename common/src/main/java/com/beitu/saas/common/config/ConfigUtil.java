@@ -509,5 +509,25 @@ public class ConfigUtil {
         return config.getProperty("integration.youfen.account", "yangcongtest");
     }
     
+    public String getJuXinLiApiUrl() {
+        return config.getProperty("integration.juxinli.api.base.url", "https://yx.juxinli.com");
+    }
+    
+    public String getJuXinLiCrawlingPath() {
+        return config.getProperty("integration.juxinli.platform.crawling.path", "/#/apiui");
+    }
+    
+    public String getJuXinLiQueryPath() {
+        return config.getProperty("integration.juxinli.platform.query.path", "/api/user/data");
+    }
+    
+    public String getJuXinLiOrgId() {
+        return config.getProperty("integration.juxinli.org.id", "hsy2018");
+    }
+    
+    public String getJuXinLiApiKey() {
+        return config.getProperty("integration.juxinli.api.key", "1a63efd927e04f18a2e7a15b0391dc98");
+    }
+    
     
 }

@@ -5,6 +5,7 @@ import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.app.enums.EducationMsgCodeEnum;
 import com.beitu.saas.app.enums.MaritalStatusMsgCodeEnum;
 import com.beitu.saas.app.enums.QueryRepaymentDtEnum;
+import com.beitu.saas.app.enums.SaasLoanPlatformEnum;
 import com.beitu.saas.auth.domain.SaasAdminVo;
 import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.channel.client.SaasChannelService;
@@ -55,6 +56,13 @@ public class SystemController {
     @ApiOperation(value = "应还日期枚举信息", response = EnumResponse.class)
     public DataApiResponse<EnumResponse> getQueryRepaymentEnum() {
         return new DataApiResponse<>(new EnumResponse(QueryRepaymentDtEnum.values()));
+    }
+
+    @RequestMapping(value = "/enum/loan/platform", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "多借贷平台枚举信息", response = EnumResponse.class)
+    public DataApiResponse<EnumResponse> getSaasLoanPlatformEnum() {
+        return new DataApiResponse<>(new EnumResponse(SaasLoanPlatformEnum.values()));
     }
 
     @RequestMapping(value = "/enum/channel", method = RequestMethod.POST)
