@@ -14,9 +14,6 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(description = "渠道列表查询请求参数")
 public class SaasChannelQueryRequestParam extends ParamsObject {
 
-    @ApiModelProperty(value = "机构号")
-    private String merchantCode;
-
     @ApiModelProperty(value = "渠道名称")
     private String channelName;
 
@@ -29,14 +26,6 @@ public class SaasChannelQueryRequestParam extends ParamsObject {
     @ApiModelProperty(value = "负责人")
     private String chargePerson;
 
-    public String getMerchantCode() {
-        return merchantCode;
-    }
-
-    public SaasChannelQueryRequestParam setMerchantCode(String merchantCode) {
-        this.merchantCode = merchantCode;
-        return this;
-    }
 
     public String getChannelName() {
         return channelName;
