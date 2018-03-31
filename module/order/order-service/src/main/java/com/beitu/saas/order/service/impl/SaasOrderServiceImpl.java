@@ -91,6 +91,12 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
         if (saasOrder.getOrderStatus() > 400) {
             return Boolean.FALSE;
         }
+        if (OrderStatusEnum.PRELIMINARY_REVIEWER_REJECT.getCode().equals(saasOrder.getOrderStatus())
+                || OrderStatusEnum.PRELIMINARY_REVIEWER_REFUSE.getCode().equals(saasOrder.getOrderStatus())
+                || OrderStatusEnum.FINAL_REVIEWER_REJECT.getCode().equals(saasOrder.getOrderStatus())
+                || OrderStatusEnum.FINAL_REVIEWER_REFUSE.getCode().equals(saasOrder.getOrderStatus())) {
+            return Boolean.FALSE;
+        }
         return Boolean.TRUE;
     }
 
