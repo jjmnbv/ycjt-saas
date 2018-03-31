@@ -7,11 +7,8 @@ import com.beitu.saas.app.enums.BorrowerOrderApplyStatusEnum;
 import com.beitu.saas.app.enums.H5OrderBillDetailViewTypeEnum;
 import com.beitu.saas.auth.service.SaasAdminService;
 import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
-import com.beitu.saas.borrower.client.SaasBorrowerService;
 import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
-import com.beitu.saas.borrower.domain.SaasBorrowerVo;
 import com.beitu.saas.channel.client.SaasChannelService;
-import com.beitu.saas.common.utils.identityNumber.vo.IdcardInfoExtractor;
 import com.beitu.saas.finance.client.SaasMerchantBalanceInfoService;
 import com.beitu.saas.finance.client.SaasMerchantCreditInfoService;
 import com.beitu.saas.finance.client.SaasMerchantSmsInfoService;
@@ -19,7 +16,6 @@ import com.beitu.saas.finance.client.domain.DataDashboardVo;
 import com.beitu.saas.finance.entity.SaasMerchantBalanceInfoEntity;
 import com.beitu.saas.finance.entity.SaasMerchantCreditInfoEntity;
 import com.beitu.saas.finance.entity.SaasMerchantSmsInfoEntity;
-import com.beitu.saas.order.client.SaasOrderApplicationService;
 import com.beitu.saas.order.client.SaasOrderBillDetailService;
 import com.beitu.saas.order.client.SaasOrderService;
 import com.beitu.saas.order.client.SaasOrderStatusHistoryService;
@@ -50,7 +46,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author linanjun
@@ -97,10 +92,10 @@ public class OrderApplication {
     private OrderBillDetailApplication orderBillDetailApplication;
 
     public BorrowerOrderApplyStatusEnum getOrderApplyStatus(String borrowerCode, String channelCode) {
-        if (saasOrderService.isReviewing(borrowerCode, channelCode)) {
-            return BorrowerOrderApplyStatusEnum.REVIEWING;
-        } else if (saasOrderService.isReviewRefuse(borrowerCode, channelCode)) {
+        if (saasOrderService.isReviewRefuse(borrowerCode, channelCode)) {
             return BorrowerOrderApplyStatusEnum.REFUSE;
+        } else if (saasOrderService.isReviewing(borrowerCode, channelCode)) {
+            return BorrowerOrderApplyStatusEnum.REVIEWING;
         }
         return BorrowerOrderApplyStatusEnum.NO_SUBMIT;
     }
@@ -210,7 +205,7 @@ public class OrderApplication {
         OrderStatusEnum nextOrderStatus = OrderStatusEnum.getEnumByCode(updateOrderStatus.getCode());
         OrderStatusEnum currentOrderStatus = OrderStatusEnum.getEnumByCode(saasOrderVo.getOrderStatus());
 
-        if (Arrays.binarySearch(nextOrderStatus.getCodeArray(), currentOrderStatus.getCode()) < 0 && nextOrderStatus.getNeedForcedToUpdate()) {
+        if ((nextOrderStatus.getCodeArray() == null || Arrays.binarySearch(nextOrderStatus.getCodeArray(), currentOrderStatus.getCode()) < 0) && nextOrderStatus.getNeedForcedToUpdate()) {
             throw new ApplicationException(OrderErrorCodeEnum.ILLEGAL_OPERATION_ORDER_STATUS);
         }
         updateOrderStatus(operatorCode, saasOrderVo.getSaasOrderId(), saasOrderVo.getVersion(), saasOrderVo.getOrderNumb(), currentOrderStatus, updateOrderStatus, remark);

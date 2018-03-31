@@ -49,7 +49,7 @@ public class CreditPersonalInfoResponse implements ResponseData {
             this.address = saasBorrowerPersonalInfoVo.getAddress();
             this.liveDuration = saasBorrowerPersonalInfoVo.getLiveDuration();
             this.maritalStatus = saasBorrowerPersonalInfoVo.getMaritalStatus();
-            this.zmCreditScore = 800;
+            this.zmCreditScore = saasBorrowerPersonalInfoVo.getZmCreditScore();
         }
     }
 
