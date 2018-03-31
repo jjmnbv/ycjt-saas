@@ -414,7 +414,7 @@ public class H5Controller {
             response.setVisible(Boolean.FALSE);
             response.setHeaderTitle("订单详情");
         }
-        return new DataApiResponse(new H5OrderDetailResponse());
+        return new DataApiResponse(response);
     }
 
     @RequestMapping(value = "/order/confirm/{buttonType}", method = RequestMethod.POST)
