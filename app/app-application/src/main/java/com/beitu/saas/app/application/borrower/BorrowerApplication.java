@@ -64,7 +64,9 @@ public class BorrowerApplication {
         }
         SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByMobileAndMerchantCode(mobile, saasH5ChannelVo.getMerchantCode());
         String token;
+        String borrowerCode;
         if (saasBorrowerVo != null) {
+            borrowerCode = saasBorrowerVo.getBorrowerCode();
             token = saasBorrowerTokenService.refreshToken(saasBorrowerVo.getBorrowerCode(), saasH5ChannelVo.getMerchantCode()).getToken();
         } else {
             saasBorrowerVo = new SaasBorrowerVo();
@@ -72,9 +74,10 @@ public class BorrowerApplication {
             saasBorrowerVo.setChannelCode(saasH5ChannelVo.getChannelCode());
             saasBorrowerVo.setMobile(mobile);
             SaasBorrower saasBorrower = saasBorrowerService.create(saasBorrowerVo);
+            borrowerCode = saasBorrower.getBorrowerCode();
             token = saasBorrowerTokenService.create(saasBorrower.getBorrowerCode(), saasH5ChannelVo.getMerchantCode()).getToken();
         }
-        redisClient.set(RedisKeyConsts.SAAS_TOKEN_KEY, saasBorrowerVo.getBorrowerCode(), TimeConsts.AN_HOUR, token);
+        redisClient.set(RedisKeyConsts.SAAS_TOKEN_KEY, borrowerCode, TimeConsts.AN_HOUR, token);
         return token;
     }
 

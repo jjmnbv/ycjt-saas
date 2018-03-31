@@ -13,7 +13,7 @@ public enum H5OrderBillDetailViewTypeEnum implements MsgCodeEnum {
 
     FINISHED(1, "账单已结清", new Integer[]{501, 502}),
     FOR_REIMBURSEMENT(2, "待还款", new Integer[]{401}),
-    TO_CONFIRM_EXTEND(3, "展期待确认", new Integer[]{402, 303}),
+    TO_CONFIRM_EXTEND(3, "展期待确认", new Integer[]{303, 402}),
     OVERDUE(4, "已逾期", new Integer[]{999});
 
     H5OrderBillDetailViewTypeEnum(Integer code, String msg, Integer[] orderStatusArray) {
