@@ -157,6 +157,7 @@ CREATE TABLE `saas_borrower_personal_info` (
   `address` varchar(64) DEFAULT NULL COMMENT '居住地址',
   `live_duration` varchar(32) DEFAULT NULL COMMENT '居住时长',
   `marital_status` tinyint(4) DEFAULT NULL COMMENT '婚姻状况',
+  `zm_credit_score` smallint(8) DEFAULT NULL COMMENT '芝麻分',
   `success` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否成功',
   `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后修改时间',

@@ -47,6 +47,10 @@ public class CreditSavePersonalInfoRequest extends ParamsObject {
     @NotNull(message = "婚姻状况不能为空")
     private Integer maritalStatus;
 
+    @ApiModelProperty(value = "芝麻分")
+    @NotNull(message = "芝麻分不能为空")
+    private Integer zmCreditScore;
+
     public String getQq() {
         return qq;
     }
@@ -85,6 +89,14 @@ public class CreditSavePersonalInfoRequest extends ParamsObject {
 
     public void setMaritalStatus(Integer maritalStatus) {
         this.maritalStatus = maritalStatus;
+    }
+
+    public Integer getZmCreditScore() {
+        return zmCreditScore;
+    }
+
+    public void setZmCreditScore(Integer zmCreditScore) {
+        this.zmCreditScore = zmCreditScore;
     }
 
     @Override

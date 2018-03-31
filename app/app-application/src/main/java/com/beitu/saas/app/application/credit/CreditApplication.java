@@ -79,7 +79,7 @@ public class CreditApplication {
         saasChannelRiskSettingsVoList.forEach(saasChannelRiskSettingsVo -> {
             CreditModuleListVo creditModuleListVo = new CreditModuleListVo();
             creditModuleListVo.setModuleCode(saasChannelRiskSettingsVo.getModuleCode());
-            creditModuleListVo.setRequired(saasChannelRiskSettingsVo.getRequired() == 1);
+            creditModuleListVo.setRequired(SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(saasChannelRiskSettingsVo.getRequired()));
             creditModuleListVo.setApplyStatus(getInfoApplyStatus(borrowerCode, saasChannelRiskSettingsVo.getModuleCode()).getCode());
             creditModuleListVoList.add(creditModuleListVo);
         });
@@ -266,7 +266,7 @@ public class CreditApplication {
 
     private void submitCarrierAuthentic(String borrowerCode, Integer required) {
         if (saasBorrowerCarrierService.countByBorrowerCode(borrowerCode) == 0 && SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
-            throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_IDENTITY_INFO);
+            throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_CARRIER_AUTHENTIC);
         }
     }
 

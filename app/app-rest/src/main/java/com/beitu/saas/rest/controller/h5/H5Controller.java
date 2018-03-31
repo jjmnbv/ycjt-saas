@@ -15,6 +15,7 @@ import com.beitu.saas.app.application.order.OrderApplication;
 import com.beitu.saas.app.application.order.vo.OrderDetailVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.app.enums.H5OrderDetailButtonTypeEnum;
+import com.beitu.saas.app.enums.SaasContractEnum;
 import com.beitu.saas.app.enums.SaasLoanPlatformEnum;
 import com.beitu.saas.auth.domain.SaasMerchantVo;
 import com.beitu.saas.auth.service.SaasMerchantService;
@@ -194,6 +195,12 @@ public class H5Controller {
             response.setTotalInterestRatio(saasOrderApplicationVo.getTotalInterestRatio());
         }
         response.setNeedRealName(borrowerApplication.needRealName(borrowerCode));
+        response.setContractTitle1(SaasContractEnum.LOAN_CONTRACT.getMsg());
+        response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LOAN_CONTRACT.getUrl());
+        if (contractApplication.needDoLicenseContractSign(borrowerCode)) {
+            response.setContractTitle2(SaasContractEnum.LICENSE_CONTRACT.getMsg());
+            response.setContractUrl2(configUtil.getAddressURLPrefix() + SaasContractEnum.LICENSE_CONTRACT.getUrl());
+        }
         return new DataApiResponse<>(response);
     }
 
@@ -387,19 +394,19 @@ public class H5Controller {
         BeanUtils.copyProperties(orderDetailVo, response);
         if (OrderStatusEnum.TO_CONFIRM_RECEIPT.getCode().equals(orderDetailVo.getOrderStatus())) {
             response.setHeaderTitle("确认借款");
-            response.setContractTitle1("《借款合同》");
-            response.setContractUrl1("http://beitu-saas.oss-cn-hangzhou.aliyuncs.com/h5/contract/extendTerm.html");
+            response.setContractTitle1(SaasContractEnum.LOAN_CONTRACT.getMsg());
+            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LOAN_CONTRACT.getUrl());
             if (contractApplication.needDoLicenseContractSign(orderDetailVo.getBorrowerCode())) {
-                response.setContractTitle2("《授权协议》");
-                response.setContractUrl2("http://beitu-saas.oss-cn-hangzhou.aliyuncs.com/h5/contract/authorization.html");
+                response.setContractTitle2(SaasContractEnum.LICENSE_CONTRACT.getMsg());
+                response.setContractUrl2(configUtil.getAddressURLPrefix() + SaasContractEnum.LICENSE_CONTRACT.getUrl());
             }
             response.setVisible(Boolean.TRUE);
             response.setButtonTitle(H5OrderDetailButtonTypeEnum.CONFIRM_RECEIPT_BUTTON_TYPE.getMsg());
             response.setButtonType(H5OrderDetailButtonTypeEnum.CONFIRM_RECEIPT_BUTTON_TYPE.getCode());
         } else if (OrderStatusEnum.IN_EXTEND.getCode().equals(orderDetailVo.getOrderStatus())) {
             response.setHeaderTitle("确认展期");
-            response.setContractTitle1("《展期合同》");
-            response.setContractUrl1("http://beitu-saas.oss-cn-hangzhou.aliyuncs.com/h5/contract/extendTerm.html");
+            response.setContractTitle1(SaasContractEnum.EXTEND_CONTRACT.getMsg());
+            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.EXTEND_CONTRACT.getUrl());
             response.setVisible(Boolean.TRUE);
             response.setButtonTitle(H5OrderDetailButtonTypeEnum.CONFIRM_EXTEND_BUTTON_TYPE.getMsg());
             response.setButtonType(H5OrderDetailButtonTypeEnum.CONFIRM_EXTEND_BUTTON_TYPE.getCode());
