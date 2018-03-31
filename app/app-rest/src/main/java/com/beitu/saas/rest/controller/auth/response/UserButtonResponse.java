@@ -1,6 +1,7 @@
 package com.beitu.saas.rest.controller.auth.response;
 
 import com.beitu.saas.auth.entity.SaasOperationButton;
+import com.fqgj.common.api.ResponseData;
 import com.timevale.tech.sdk.seal.IFontsLoader;
 import org.springframework.validation.annotation.Validated;
 
@@ -14,7 +15,7 @@ import java.util.Map;
  * @create 2018/3/23 下午5:32
  * @description
  */
-public class UserButtonResponse {
+public class UserButtonResponse implements ResponseData {
 
     private List<OperationButton> list;
 

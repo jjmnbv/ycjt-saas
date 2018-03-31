@@ -262,6 +262,8 @@ public class SmsMsgDataServiceImpl implements SmsMsgDataService {
             if (null != dataMap.get("msgId")) {
                 result = dataMap.get("msgId").toString();
             }
+        }else if (ServicerEnum.CHUANGLAN.getCode().equals(info.getServicerCode())){
+            result = ChuangLanPluginUtils.send(linkInfo, msgInfo.getReceiver(), content);
         }
         return result;
     }
