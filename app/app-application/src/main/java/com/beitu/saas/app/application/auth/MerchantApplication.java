@@ -60,7 +60,7 @@ public class MerchantApplication {
         saasAdmin.setCreateName("system");
         saasAdmin.setDefault(true);
         saasAdmin.setEnable(true);
-        if (saasAdminService.hasRegisteredMobile(saasAdmin.getMobile())){
+        if (saasAdminService.hasRegisteredMobile(saasAdmin.getMobile())) {
             throw new ApplicationException(AdminErrorEnum.MOBILE_EXIST);
         }
         saasAdminService.create(saasAdmin);
@@ -99,7 +99,7 @@ public class MerchantApplication {
         //5.添加默认机构配置
         SaasMerchantConfig saasMerchantConfig = new SaasMerchantConfig();
         saasMerchantConfig.setMerchantCode(saasAdmin.getMerchantCode());
-        saasMerchantConfig.setConfigEnum(ContractConfigTypeEnum.COMPANY_CONTRACT.getKey());
+        saasMerchantConfig.setConfigEnum(ContractConfigTypeEnum.COMPANY_CONTRACT.getKey().toString());
         saasMerchantConfig.setConfigType(MerchantConfigTypeEnum.CONTRACT_CONFIG.getKey().longValue());
         saasMerchantConfigService.create(saasMerchantConfig);
 
@@ -107,7 +107,7 @@ public class MerchantApplication {
         smsConfig.forEach(saasSmsConfigDictionary -> {
             SaasMerchantConfig entity = new SaasMerchantConfig();
             saasMerchantConfig.setMerchantCode(saasAdmin.getMerchantCode());
-            saasMerchantConfig.setConfigEnum(saasSmsConfigDictionary.getId().intValue());
+            saasMerchantConfig.setConfigEnum(saasSmsConfigDictionary.getBizCode());
             saasMerchantConfig.setConfigType(MerchantConfigTypeEnum.SMS_CONFIG.getKey().longValue());
             saasMerchantConfigService.create(entity);
         });

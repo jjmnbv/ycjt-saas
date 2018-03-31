@@ -8,10 +8,7 @@ import java.util.List;
  */
 public enum VerifyCodeTypeEnum {
     
-    REGISTER("YCJT_0014", "register", "您的验证码是：{0}，您正在用手机注册，请及时验证。"),
-    RESET_PASSWORD("YCJT_0015", "reset_password", "您的验证码是：{0}，该验证码用于密码找回，请勿泄露验证码。"),
-    BIND_DEVICE("YCJT_0016", "bind_device", "您的验证码是：{0}，您正在使用新设备进行登陆，如非本人操作，请忽略。"),
-    MODIFY_MOBILE("YCJT_0017", "modify_mobile", "您的验证码是：{0}，您正在绑定当前手机号，如非本人操作，请忽略。");
+    REGISTER("SAAS_0001", "register", "您本次登入的短信验证码为{##VERIFY_CODE##}，请及时进行登入");
     
     private String type;
     

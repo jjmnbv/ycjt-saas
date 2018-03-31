@@ -1,34 +1,32 @@
 package com.beitu.saas.auth.domain;
-
 import com.fqgj.common.api.ResponseData;
-
 import java.io.Serializable;
-
+import java.util.Date;
 /**
-* User: xiaochong
-* Date: 2018-03-26
-* Time: 11:27:29.243
-*/
+ * User: xiaochong
+ * Date: 2018-03-31
+ * Time: 21:05:29.320
+ */
 public class SaasSmsConfigDictionaryVo implements ResponseData,Serializable{
 
     private Long saasSmsConfigDictionaryId;
 
     /**
-    *短信类型
-    */
+     *短信类型
+     */
     private String smsType;
     /**
-    *
-    */
+     *
+     */
     private String smsReceiver;
     /**
-    *短信内容
-    */
+     *短信内容
+     */
     private String smsContent;
     /**
-    *cms关联id
-    */
-    private Long cmsId;
+     *短信业务码
+     */
+    private String bizCode;
 
     public Long getSaasSmsConfigDictionaryId() {
         return saasSmsConfigDictionaryId;
@@ -64,11 +62,11 @@ public class SaasSmsConfigDictionaryVo implements ResponseData,Serializable{
         this.smsContent = smsContent;
     }
 
-    public  Long getCmsId(){
-        return this.cmsId;
+    public  String getBizCode(){
+        return this.bizCode;
     }
 
-    public  void setCmsId(Long cmsId){
-        this.cmsId = cmsId;
+    public  void setBizCode(String bizCode){
+        this.bizCode = bizCode;
     }
 }

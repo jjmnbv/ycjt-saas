@@ -10,7 +10,7 @@
                 merchant_code = #{merchantCode,jdbcType=VARCHAR},
             </if>
             <if test="configEnum !=null">
-                config_enum = #{configEnum,jdbcType=INTEGER},
+                config_enum = #{configEnum,jdbcType=VARCHAR},
             </if>
             <if test="configType !=null">
                 config_type = #{configType,jdbcType=BIGINT},

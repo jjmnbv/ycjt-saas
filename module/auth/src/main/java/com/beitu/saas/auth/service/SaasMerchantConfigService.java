@@ -14,11 +14,13 @@ public interface SaasMerchantConfigService<T extends BaseEntity> extends BaseSer
 
     Boolean isCompanyContractByMerchantCode(String merchantCode);
 
-    List<Integer> getSmsConfigByMerchantCode(String merchantCode);
+    List<String> getSmsConfigByMerchantCode(String merchantCode);
 
     Boolean updateByMerchantCode(SaasMerchantConfig record);
 
     Boolean updateContractConfig(String merchantCode, Integer type);
 
-    Boolean updateSmsConfig(String merchantCode, Boolean enable, Integer smsConfigId);
+    Boolean updateSmsConfig(String merchantCode, Boolean enable, String bizCode);
+
+    Boolean hasSmsConfig(String merchantCode, String bizCode);
 }

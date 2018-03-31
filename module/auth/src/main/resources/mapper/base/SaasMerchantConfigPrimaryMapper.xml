@@ -5,7 +5,7 @@
     <resultMap id="BaseResultMap" type="com.beitu.saas.auth.entity.SaasMerchantConfig">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode"/>
-        <result column="config_enum" jdbcType="INTEGER" property="configEnum"/>
+        <result column="config_enum" jdbcType="VARCHAR" property="configEnum"/>
         <result column="config_type" jdbcType="BIGINT" property="configType"/>
         <result column="deleted" jdbcType="BIT" property="deleted"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
@@ -55,7 +55,7 @@
                 #{merchantCode,jdbcType=VARCHAR},
             </if>
             <if test="configEnum != null">
-                #{configEnum,jdbcType=INTEGER},
+                #{configEnum,jdbcType=VARCHAR},
             </if>
             <if test="configType != null">
                 #{configType,jdbcType=BIGINT},
@@ -79,7 +79,7 @@
                 merchant_code = #{merchantCode,jdbcType=VARCHAR},
             </if>
             <if test="configEnum !=null">
-                config_enum = #{configEnum,jdbcType=INTEGER},
+                config_enum = #{configEnum,jdbcType=VARCHAR},
             </if>
             <if test="configType !=null">
                 config_type = #{configType,jdbcType=BIGINT},
@@ -124,7 +124,7 @@
                 and merchant_code = #{merchantCode,jdbcType=VARCHAR}
             </if>
             <if test="configEnum !=null">
-                and config_enum = #{configEnum,jdbcType=INTEGER}
+                and config_enum = #{configEnum,jdbcType=VARCHAR}
             </if>
             <if test="configType !=null">
                 and config_type = #{configType,jdbcType=BIGINT}
@@ -151,7 +151,7 @@
                 and merchant_code = #{merchantCode,jdbcType=VARCHAR}
             </if>
             <if test="configEnum !=null">
-                and config_enum = #{configEnum,jdbcType=INTEGER}
+                and config_enum = #{configEnum,jdbcType=VARCHAR}
             </if>
             <if test="configType !=null">
                 and config_type = #{configType,jdbcType=BIGINT}
