@@ -35,6 +35,9 @@ public class OrderDetailVo implements ResponseData {
     @ApiModelProperty(value = "借款用途")
     private String borrowPurpose;
 
+    @ApiModelProperty(value = "借款人CODE")
+    private String borrowerCode;
+
     @ApiModelProperty(value = "借款人姓名")
     private String borrowerName;
 
@@ -104,6 +107,14 @@ public class OrderDetailVo implements ResponseData {
 
     public void setBorrowPurpose(String borrowPurpose) {
         this.borrowPurpose = borrowPurpose;
+    }
+
+    public String getBorrowerCode() {
+        return borrowerCode;
+    }
+
+    public void setBorrowerCode(String borrowerCode) {
+        this.borrowerCode = borrowerCode;
     }
 
     public String getBorrowerName() {

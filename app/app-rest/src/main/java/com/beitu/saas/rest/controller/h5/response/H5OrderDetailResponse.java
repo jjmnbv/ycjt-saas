@@ -64,8 +64,8 @@ public class H5OrderDetailResponse implements ResponseData {
     @ApiModelProperty(value = "按钮展示信息")
     private String buttonTitle;
 
-    @ApiModelProperty(value = "按钮点击跳转页面")
-    private String buttonUrl;
+    @ApiModelProperty(value = "按钮类型")
+    private Integer buttonType;
 
     public String getHeaderTitle() {
         return headerTitle;
@@ -195,11 +195,11 @@ public class H5OrderDetailResponse implements ResponseData {
         this.buttonTitle = buttonTitle;
     }
 
-    public String getButtonUrl() {
-        return buttonUrl;
+    public Integer getButtonType() {
+        return buttonType;
     }
 
-    public void setButtonUrl(String buttonUrl) {
-        this.buttonUrl = buttonUrl;
+    public void setButtonType(Integer buttonType) {
+        this.buttonType = buttonType;
     }
 }

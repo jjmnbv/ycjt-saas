@@ -5,6 +5,7 @@ import com.beitu.saas.app.api.ApiResponse;
 import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.application.borrower.BorrowerApplication;
 import com.beitu.saas.app.application.channel.SaasChannelApplication;
+import com.beitu.saas.app.application.contract.ContractApplication;
 import com.beitu.saas.app.application.credit.CreditApplication;
 import com.beitu.saas.app.application.credit.LoanPlatformApplication;
 import com.beitu.saas.app.application.credit.vo.BorrowerEmergentContactVo;
@@ -13,6 +14,7 @@ import com.beitu.saas.app.application.credit.vo.BorrowerWorkInfoVo;
 import com.beitu.saas.app.application.order.OrderApplication;
 import com.beitu.saas.app.application.order.vo.OrderDetailVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
+import com.beitu.saas.app.enums.H5OrderDetailButtonTypeEnum;
 import com.beitu.saas.app.enums.SaasLoanPlatformEnum;
 import com.beitu.saas.auth.domain.SaasMerchantVo;
 import com.beitu.saas.auth.service.SaasMerchantService;
@@ -46,10 +48,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
@@ -103,6 +102,9 @@ public class H5Controller {
 
     @Autowired
     private SaasBorrowerEmergentContactService saasBorrowerEmergentContactService;
+
+    @Autowired
+    private ContractApplication contractApplication;
 
     @VisitorAccessible
     @ParamsValidate
@@ -384,26 +386,45 @@ public class H5Controller {
         H5OrderDetailResponse response = new H5OrderDetailResponse();
         BeanUtils.copyProperties(orderDetailVo, response);
         if (OrderStatusEnum.TO_CONFIRM_RECEIPT.getCode().equals(orderDetailVo.getOrderStatus())) {
-            response.setContractTitle1("《授权协议》");
-            response.setContractUrl1("");
-            response.setContractTitle2("《借款合同》");
-            response.setContractUrl2("");
-            response.setVisible(Boolean.TRUE);
-            response.setButtonTitle("查看并签署电子借款合同");
-            response.setButtonUrl("");
             response.setHeaderTitle("确认借款");
-        } else if (OrderStatusEnum.IN_EXTEND.getCode().equals(orderDetailVo.getOrderStatus())) {
-            response.setContractTitle1("《展期合同》");
-            response.setContractUrl1("");
+            response.setContractTitle1("《借款合同》");
+            response.setContractUrl1("http://beitu-saas.oss-cn-hangzhou.aliyuncs.com/h5/contract/extendTerm.html");
+            if (contractApplication.needDoLicenseContractSign(orderDetailVo.getBorrowerCode())) {
+                response.setContractTitle2("《授权协议》");
+                response.setContractUrl2("http://beitu-saas.oss-cn-hangzhou.aliyuncs.com/h5/contract/authorization.html");
+            }
             response.setVisible(Boolean.TRUE);
-            response.setButtonTitle("查看并签署电子展期合同");
-            response.setButtonUrl("");
+            response.setButtonTitle(H5OrderDetailButtonTypeEnum.CONFIRM_RECEIPT_BUTTON_TYPE.getMsg());
+            response.setButtonType(H5OrderDetailButtonTypeEnum.CONFIRM_RECEIPT_BUTTON_TYPE.getCode());
+        } else if (OrderStatusEnum.IN_EXTEND.getCode().equals(orderDetailVo.getOrderStatus())) {
             response.setHeaderTitle("确认展期");
+            response.setContractTitle1("《展期合同》");
+            response.setContractUrl1("http://beitu-saas.oss-cn-hangzhou.aliyuncs.com/h5/contract/extendTerm.html");
+            response.setVisible(Boolean.TRUE);
+            response.setButtonTitle(H5OrderDetailButtonTypeEnum.CONFIRM_EXTEND_BUTTON_TYPE.getMsg());
+            response.setButtonType(H5OrderDetailButtonTypeEnum.CONFIRM_EXTEND_BUTTON_TYPE.getCode());
         } else {
             response.setVisible(Boolean.FALSE);
             response.setHeaderTitle("订单详情");
         }
         return new DataApiResponse(new H5OrderDetailResponse());
+    }
+
+    @RequestMapping(value = "/order/confirm/{buttonType}", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "用户订单详情按钮操作", response = H5OrderDetailResponse.class)
+    public ApiResponse getOrderDetail(@PathVariable(value = "buttonType") Integer buttonType) {
+        H5OrderDetailButtonTypeEnum h5OrderDetailButtonTypeEnum = H5OrderDetailButtonTypeEnum.getByCode(buttonType);
+        if (h5OrderDetailButtonTypeEnum == null) {
+
+        }
+        switch (h5OrderDetailButtonTypeEnum) {
+            case CONFIRM_EXTEND_BUTTON_TYPE:
+                break;
+            case CONFIRM_RECEIPT_BUTTON_TYPE:
+                break;
+        }
+        return new ApiResponse("操作成功");
     }
 
 }
