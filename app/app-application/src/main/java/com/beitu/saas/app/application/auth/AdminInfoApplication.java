@@ -69,6 +69,11 @@ public class AdminInfoApplication {
         return saasRolePermissionList.parallelStream().map(SaasRolePermission::getRelationId).collect(toList());
     }
 
+    public List<Integer> getMenuIdsByRoleId(Long roleId) {
+        List<SaasRolePermission> saasRolePermissionList = saasRolePermissionService.getMenuPermissionByRoleId(roleId.intValue());
+        return saasRolePermissionList.parallelStream().map(SaasRolePermission::getRelationId).collect(toList());
+    }
+
     public List<Integer> getButtonIdsByAdmin(String adminCode) {
         List<SaasAdminRole> list = saasAdminRoleService.selectByParams(new HashMap<String, Object>(2) {{
             put("adminCode", adminCode);
@@ -81,9 +86,14 @@ public class AdminInfoApplication {
         return saasRolePermissionList.parallelStream().map(SaasRolePermission::getRelationId).collect(toList());
     }
 
+    public List<Integer> getButtonIdsByRoleId(Long roleId) {
+        List<SaasRolePermission> saasRolePermissionList = saasRolePermissionService.getButtonPermissionByRoleId(roleId.intValue());
+        return saasRolePermissionList.parallelStream().map(SaasRolePermission::getRelationId).collect(toList());
+    }
+
     @Transactional(rollbackFor = Exception.class)
-    public void addAdminAndRole(SaasAdmin saasAdmin,Long roleId){
-        if (saasAdminService.hasRegisteredMobile(saasAdmin.getMobile())){
+    public void addAdminAndRole(SaasAdmin saasAdmin, Long roleId) {
+        if (saasAdminService.hasRegisteredMobile(saasAdmin.getMobile())) {
             throw new ApplicationException(AdminErrorEnum.MOBILE_EXIST);
         }
         saasAdmin.setCode(GenerOrderNoUtil.generateOrderNo());
