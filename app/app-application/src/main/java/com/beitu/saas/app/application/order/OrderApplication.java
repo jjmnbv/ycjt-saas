@@ -179,6 +179,31 @@ public class OrderApplication {
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
+    public void saveOrderRemark(String operatorCode, String orderNumb, String remark) {
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
+        if (StringUtils.isEmpty(remark)) {
+            if (StringUtils.isEmpty(saasOrderVo.getRemark())) {
+                return;
+            }
+        } else {
+            remark = remark.trim();
+            if (remark.equals(saasOrderVo.getRemark())) {
+                return;
+            }
+        }
+        if (!saasOrderService.updateOrderRemark(saasOrderVo.getSaasOrderId(), remark)) {
+            return;
+        }
+        SaasOrderStatusHistory saasOrderStatusHistory = new SaasOrderStatusHistory();
+        saasOrderStatusHistory.setOrderId(saasOrderVo.getSaasOrderId());
+        saasOrderStatusHistory.setOrderNumb(orderNumb);
+        saasOrderStatusHistory.setCurrentOrderStatus(saasOrderVo.getOrderStatus());
+        saasOrderStatusHistory.setRemark(remark);
+        saasOrderStatusHistory.setOperatorCode(operatorCode);
+        saasOrderStatusHistoryService.create(saasOrderStatusHistory);
+    }
+
+    @Transactional(rollbackFor = RuntimeException.class)
     public void updateOrderStatus(String operatorCode, String orderNumb, OrderStatusEnum updateOrderStatus, String remark) {
         SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
 

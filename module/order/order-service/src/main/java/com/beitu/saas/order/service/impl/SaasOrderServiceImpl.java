@@ -137,4 +137,12 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
         return saasOrderDao.updateOrderStatus(params) > 0;
     }
 
+    @Override
+    public Boolean updateOrderRemark(Long orderId, String remark) {
+        Map<String, Object> params = new HashMap<>(4);
+        params.put("id", orderId);
+        params.put("remark", remark);
+        return saasOrderDao.updateOrderRemark(params) > 0;
+    }
+
 }

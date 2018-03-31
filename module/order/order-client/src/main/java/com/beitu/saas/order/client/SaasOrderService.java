@@ -49,4 +49,6 @@ public interface SaasOrderService<T extends BaseEntity> extends BaseService<T> {
 
     Boolean updateOrderStatus(Long orderId, Long version, OrderStatusEnum currentOrderStatus, OrderStatusEnum updateOrderStatus);
 
+    Boolean updateOrderRemark(Long orderId, String remark);
+
 }

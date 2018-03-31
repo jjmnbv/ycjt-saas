@@ -54,8 +54,9 @@ public class RefusedOrderController {
     @ResponseBody
     @ApiOperation(value = "已拒订单备注保存", response = ApiResponse.class)
     public ApiResponse saveRemark(@RequestBody @Valid RefusedOrderRemarkSaveRequest req) {
-        // TODO
-        return new ApiResponse();
+        String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
+        orderApplication.saveOrderRemark(adminCode, req.getOrderNumb(), req.getRemark());
+        return new ApiResponse("保存成功");
     }
 
     @RequestMapping(value = "/detail", method = RequestMethod.POST)

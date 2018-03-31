@@ -24,4 +24,6 @@ public interface SaasOrderDao extends BaseMapper<SaasOrder> {
 
     int updateOrderStatus(Map<String, Object> params);
 
+    int updateOrderRemark(Map<String, Object> params);
+
 }
