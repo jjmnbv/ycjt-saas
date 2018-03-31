@@ -88,6 +88,7 @@ public class SaasChannelController {
         }
 
         SaasChannelParam saasChannelParam = new SaasChannelParam();
+        saasChannelParam.setMerchantCode(merchantCode);
         BeanUtils.copyProperties(saasChannelRequestParam, saasChannelParam);
 
         try {
