@@ -8,6 +8,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * @author linanjun
  * @create 2018/3/30 下午4:36
@@ -17,7 +19,7 @@ import org.hibernate.validator.constraints.NotBlank;
 public class GetLoanPlatformUrlRequest extends ParamsObject {
 
     @ApiModelProperty(value = "借贷平台类型")
-    @NotBlank(message = "借贷平台类型不能为空")
+    @NotNull(message = "借贷平台类型不能为空")
     private Integer loanPlatformType;
 
     public Integer getLoanPlatformType() {
