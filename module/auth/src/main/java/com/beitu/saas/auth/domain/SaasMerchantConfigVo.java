@@ -20,7 +20,7 @@ public class SaasMerchantConfigVo implements ResponseData,Serializable{
     /**
     *设置内容的枚举
     */
-    private Integer configEnum;
+    private String configEnum;
     /**
     *设置类型1.合同2.短信3.支付密码
     */
@@ -44,11 +44,11 @@ public class SaasMerchantConfigVo implements ResponseData,Serializable{
         this.merchantCode = merchantCode;
     }
 
-    public  Integer getConfigEnum(){
+    public  String getConfigEnum(){
         return this.configEnum;
     }
 
-    public  void setConfigEnum(Integer configEnum){
+    public  void setConfigEnum(String configEnum){
         this.configEnum = configEnum;
     }
 

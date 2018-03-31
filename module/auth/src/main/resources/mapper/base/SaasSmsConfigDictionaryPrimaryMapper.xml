@@ -7,7 +7,7 @@
         <result column="sms_type" jdbcType="VARCHAR" property="smsType"/>
         <result column="sms_receiver" jdbcType="VARCHAR" property="smsReceiver"/>
         <result column="sms_content" jdbcType="VARCHAR" property="smsContent"/>
-        <result column="cms_id" jdbcType="BIGINT" property="cmsId"/>
+        <result column="biz_code" jdbcType="VARCHAR" property="bizCode"/>
         <result column="deleted" jdbcType="BIT" property="deleted"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
         <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
@@ -17,7 +17,7 @@
         sms_type,
         sms_receiver,
         sms_content,
-        cms_id,
+        biz_code,
         deleted,
         gmt_modified,
         gmt_create
@@ -42,8 +42,8 @@
             <if test="smsContent !=null">
                 sms_content,
             </if>
-            <if test="cmsId !=null">
-                cms_id,
+            <if test="bizCode !=null">
+                biz_code,
             </if>
             <if test="deleted !=null">
                 deleted,
@@ -65,8 +65,8 @@
             <if test="smsContent != null">
                 #{smsContent,jdbcType=VARCHAR},
             </if>
-            <if test="cmsId != null">
-                #{cmsId,jdbcType=BIGINT},
+            <if test="bizCode != null">
+                #{bizCode,jdbcType=VARCHAR},
             </if>
             <if test="deleted != null">
                 #{deleted,jdbcType=BIT},
@@ -92,8 +92,8 @@
             <if test="smsContent !=null">
                 sms_content = #{smsContent,jdbcType=VARCHAR},
             </if>
-            <if test="cmsId !=null">
-                cms_id = #{cmsId,jdbcType=BIGINT},
+            <if test="bizCode !=null">
+                biz_code = #{bizCode,jdbcType=VARCHAR},
             </if>
             <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},
@@ -140,8 +140,8 @@
             <if test="smsContent !=null">
                 and sms_content = #{smsContent,jdbcType=VARCHAR}
             </if>
-            <if test="cmsId !=null">
-                and cms_id = #{cmsId,jdbcType=BIGINT}
+            <if test="bizCode !=null">
+                and biz_code = #{bizCode,jdbcType=VARCHAR}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}
@@ -170,8 +170,8 @@
             <if test="smsContent !=null">
                 and sms_content = #{smsContent,jdbcType=VARCHAR}
             </if>
-            <if test="cmsId !=null">
-                and cms_id = #{cmsId,jdbcType=BIGINT}
+            <if test="bizCode !=null">
+                and biz_code = #{bizCode,jdbcType=VARCHAR}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}

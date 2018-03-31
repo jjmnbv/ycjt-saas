@@ -58,7 +58,7 @@ public class VerifyCodeController {
             verifyCode = configUtil.getVerifyCodeReviewCode();
         }
         VerifyCodeTypeEnum type = VerifyCodeTypeEnum.getEnumByName(req.getType());
-        sendApplication.sendCodeAndNotifyMessage(mobile, verifyCode, type);
+        sendApplication.sendVerifyCode(mobile, verifyCode, type);
         redisClient.set(RedisKeyConsts.H5_SAVE_LOGIN_VERIFYCODE_KEY, verifyCode, TimeConsts.TWO_MINUTE, mobile);
         return new ApiResponse();
     }
