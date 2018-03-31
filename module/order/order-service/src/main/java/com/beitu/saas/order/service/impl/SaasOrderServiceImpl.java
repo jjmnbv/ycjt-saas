@@ -151,4 +151,16 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
         return saasOrderDao.updateOrderRemark(params) > 0;
     }
 
+    @Override
+    public List<SaasOrderVo> listAllConfirmReceiptOrderByBorrowerCode(String borrowerCode) {
+        List<SaasOrder> saasOrderList = saasOrderDao.selectByBorrowerCodeAndOrderStatusList(borrowerCode,
+                Arrays.asList(OrderStatusEnum.TO_CONFIRM_RECEIPT.getCode()));
+        if (CollectionUtils.isEmpty(saasOrderList)) {
+            return null;
+        }
+        List<SaasOrderVo> results = new ArrayList<>(saasOrderList.size());
+        saasOrderList.forEach(saasOrder -> results.add(SaasOrderVo.convertEntityToVO(saasOrder)));
+        return results;
+    }
+
 }

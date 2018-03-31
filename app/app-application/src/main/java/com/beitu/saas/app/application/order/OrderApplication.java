@@ -120,19 +120,29 @@ public class OrderApplication {
     }
 
     public List<H5OrderListVo> listH5Order(String borrowerCode, String merchantCode) {
-        List<SaasOrderBillDetailVo> saasOrderBillDetailVoList = saasOrderBillDetailService.listByBorrowerCodeAndMerchantCode(borrowerCode, merchantCode);
-        if (CollectionUtils.isEmpty(saasOrderBillDetailVoList)) {
-            return null;
+        List<SaasOrderVo> saasOrderVoList = saasOrderService.listAllConfirmReceiptOrderByBorrowerCode(borrowerCode);
+        List<H5OrderListVo> results = new ArrayList<>(20);
+        if (CollectionUtils.isNotEmpty(saasOrderVoList)) {
+            saasOrderVoList.forEach(saasOrderVo -> {
+                H5OrderListVo h5OrderListVo = new H5OrderListVo();
+                h5OrderListVo.setAmount(orderCalculateApplication.getAmount(saasOrderVo).toString());
+                h5OrderListVo.setRepaymentDt(DateUtil.getDate(saasOrderVo.getRepaymentDt()));
+                h5OrderListVo.setOrderStatus(saasOrderService.getOrderStatusByOrderNumb(saasOrderVo.getOrderNumb()).getCode());
+                h5OrderListVo.setViewType(H5OrderBillDetailViewTypeEnum.getByOrderStatus(h5OrderListVo.getOrderStatus()).getCode());
+                results.add(h5OrderListVo);
+            });
         }
-        List<H5OrderListVo> results = new ArrayList<>(saasOrderBillDetailVoList.size());
-        saasOrderBillDetailVoList.forEach(saasOrderBillDetailVo -> {
-            H5OrderListVo h5OrderListVo = new H5OrderListVo();
-            h5OrderListVo.setAmount(orderCalculateApplication.getAmount(saasOrderBillDetailVo).toString());
-            h5OrderListVo.setRepaymentDt(DateUtil.getDate(saasOrderBillDetailVo.getRepaymentDt()));
-            h5OrderListVo.setOrderStatus(saasOrderService.getOrderStatusByOrderNumb(saasOrderBillDetailVo.getOrderNumb()).getCode());
-            h5OrderListVo.setViewType(H5OrderBillDetailViewTypeEnum.getByOrderStatus(h5OrderListVo.getOrderStatus()).getCode());
-            results.add(h5OrderListVo);
-        });
+        List<SaasOrderBillDetailVo> saasOrderBillDetailVoList = saasOrderBillDetailService.listByBorrowerCodeAndMerchantCode(borrowerCode, merchantCode);
+        if (CollectionUtils.isNotEmpty(saasOrderBillDetailVoList)) {
+            saasOrderBillDetailVoList.forEach(saasOrderBillDetailVo -> {
+                H5OrderListVo h5OrderListVo = new H5OrderListVo();
+                h5OrderListVo.setAmount(orderCalculateApplication.getAmount(saasOrderBillDetailVo).toString());
+                h5OrderListVo.setRepaymentDt(DateUtil.getDate(saasOrderBillDetailVo.getRepaymentDt()));
+                h5OrderListVo.setOrderStatus(saasOrderService.getOrderStatusByOrderNumb(saasOrderBillDetailVo.getOrderNumb()).getCode());
+                h5OrderListVo.setViewType(H5OrderBillDetailViewTypeEnum.getByOrderStatus(h5OrderListVo.getOrderStatus()).getCode());
+                results.add(h5OrderListVo);
+            });
+        }
         return results;
     }
 

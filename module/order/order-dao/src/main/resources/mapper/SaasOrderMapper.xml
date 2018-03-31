@@ -101,4 +101,20 @@
         where id = #{id,jdbcType=BIGINT}
     </update>
 
+    <select id="selectByBorrowerCodeAndOrderStatusList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_order
+        where borrower_code = #{borrowerCode,jdbcType=VARCHAR}
+        <if test="orderStatusList !=null and orderStatusList.size > 0">
+            and order_status IN
+            <foreach item="orderStatus" index="index" collection="orderStatusList" open="(" separator=","
+                     close=")">
+                #{orderStatus}
+            </foreach>
+        </if>
+        and deleted = false
+        and expire_date <![CDATA[ >= ]]> NOW()
+    </select>
+
 </mapper>
