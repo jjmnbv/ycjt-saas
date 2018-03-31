@@ -55,7 +55,7 @@ public class SaasChannelApplication {
      * 获取机构下的所有管理员
      */
     public List<SaasAdmin> getSaasAdminListByMerchantCode(String merchantCode) {
-        return saasAdminService.getAdminListByMerchantCode(merchantCode, null);
+        return saasAdminService.getAllAdminListByMerchantCode(merchantCode);
     }
 
     /**
