@@ -90,6 +90,16 @@ public class SaasAdminServiceImpl extends AbstractBaseService implements SaasAdm
     }
 
     @Override
+    public List<SaasAdmin> getAllAdminListByMerchantCode(String merchantCode) {
+        Map map = new HashMap(4) {{
+            put("merchantCode", merchantCode);
+            put("deleted", false);
+        }};
+        List list = this.selectByParams(map);
+        return list;
+    }
+
+    @Override
     public Boolean hasRegisteredMobile(String mobile) {
         List list = this.selectByParams(new HashMap<String, Object>(2) {{
             put("mobile", mobile);
