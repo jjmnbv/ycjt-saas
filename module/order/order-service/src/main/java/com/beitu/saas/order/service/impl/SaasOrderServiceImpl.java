@@ -113,6 +113,8 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
         conditions.put("finalReviewerCode", querySaasOrderVo.getFinalReviewerCode());
         conditions.put("loanLenderCode", querySaasOrderVo.getLoanLenderCode());
         conditions.put("repaymentDt", querySaasOrderVo.getRepaymentDt());
+        conditions.put("repaymentBeginDt", querySaasOrderVo.getRepaymentBeginDt());
+        conditions.put("repaymentEndDt", querySaasOrderVo.getRepaymentEndDt());
         Integer count = saasOrderDao.countByConditions(conditions);
         page.setTotalCount(count);
         if (count == 0) {

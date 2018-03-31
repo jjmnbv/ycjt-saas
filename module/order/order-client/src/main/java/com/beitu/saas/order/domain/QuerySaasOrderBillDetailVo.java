@@ -24,7 +24,7 @@ public class QuerySaasOrderBillDetailVo {
     /**
      * 订单状态
      */
-    private List<Integer> orderStatusList;
+    private Integer queryOrderStatus;
     /**
      * 账单应还日查询开始时间
      */
@@ -58,12 +58,12 @@ public class QuerySaasOrderBillDetailVo {
         this.channelCode = channelCode;
     }
 
-    public List<Integer> getOrderStatusList() {
-        return orderStatusList;
+    public Integer getQueryOrderStatus() {
+        return queryOrderStatus;
     }
 
-    public void setOrderStatusList(List<Integer> orderStatusList) {
-        this.orderStatusList = orderStatusList;
+    public void setQueryOrderStatus(Integer queryOrderStatus) {
+        this.queryOrderStatus = queryOrderStatus;
     }
 
     public Date getRepaymentBeginDt() {
