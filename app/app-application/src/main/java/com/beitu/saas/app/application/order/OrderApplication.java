@@ -125,6 +125,7 @@ public class OrderApplication {
         if (CollectionUtils.isNotEmpty(saasOrderVoList)) {
             saasOrderVoList.forEach(saasOrderVo -> {
                 H5OrderListVo h5OrderListVo = new H5OrderListVo();
+                h5OrderListVo.setOrderNumb(saasOrderVo.getOrderNumb());
                 h5OrderListVo.setAmount(orderCalculateApplication.getAmount(saasOrderVo).toString());
                 h5OrderListVo.setRepaymentDt(DateUtil.getDate(saasOrderVo.getRepaymentDt()));
                 h5OrderListVo.setOrderStatus(saasOrderService.getOrderStatusByOrderNumb(saasOrderVo.getOrderNumb()).getCode());
@@ -136,6 +137,7 @@ public class OrderApplication {
         if (CollectionUtils.isNotEmpty(saasOrderBillDetailVoList)) {
             saasOrderBillDetailVoList.forEach(saasOrderBillDetailVo -> {
                 H5OrderListVo h5OrderListVo = new H5OrderListVo();
+                h5OrderListVo.setOrderNumb(saasOrderBillDetailVo.getOrderNumb());
                 h5OrderListVo.setAmount(orderCalculateApplication.getAmount(saasOrderBillDetailVo).toString());
                 h5OrderListVo.setRepaymentDt(DateUtil.getDate(saasOrderBillDetailVo.getRepaymentDt()));
                 h5OrderListVo.setOrderStatus(saasOrderService.getOrderStatusByOrderNumb(saasOrderBillDetailVo.getOrderNumb()).getCode());
