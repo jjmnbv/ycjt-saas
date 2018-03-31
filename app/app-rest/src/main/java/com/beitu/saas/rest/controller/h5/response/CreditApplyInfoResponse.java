@@ -44,6 +44,18 @@ public class CreditApplyInfoResponse implements ResponseData {
     @ApiModelProperty(value = "是否需要实名")
     private Boolean needRealName;
 
+    @ApiModelProperty(value = "合同1展示信息")
+    private String contractTitle1;
+
+    @ApiModelProperty(value = "合同1url")
+    private String contractUrl1;
+
+    @ApiModelProperty(value = "合同2展示信息")
+    private String contractTitle2;
+
+    @ApiModelProperty(value = "合同2url")
+    private String contractUrl2;
+
     public String getOrderNumb() {
         return orderNumb;
     }
@@ -90,5 +102,37 @@ public class CreditApplyInfoResponse implements ResponseData {
 
     public void setNeedRealName(Boolean needRealName) {
         this.needRealName = needRealName;
+    }
+
+    public String getContractTitle1() {
+        return contractTitle1;
+    }
+
+    public void setContractTitle1(String contractTitle1) {
+        this.contractTitle1 = contractTitle1;
+    }
+
+    public String getContractUrl1() {
+        return contractUrl1;
+    }
+
+    public void setContractUrl1(String contractUrl1) {
+        this.contractUrl1 = contractUrl1;
+    }
+
+    public String getContractTitle2() {
+        return contractTitle2;
+    }
+
+    public void setContractTitle2(String contractTitle2) {
+        this.contractTitle2 = contractTitle2;
+    }
+
+    public String getContractUrl2() {
+        return contractUrl2;
+    }
+
+    public void setContractUrl2(String contractUrl2) {
+        this.contractUrl2 = contractUrl2;
     }
 }

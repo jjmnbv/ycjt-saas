@@ -10,6 +10,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class ContractApplication {
 
+
+    public Boolean needDoLicenseContractSign(String userCode) {
+        return Boolean.TRUE;
+    }
+
     public void doLicenseContractSign(String userCode) {
 
     }

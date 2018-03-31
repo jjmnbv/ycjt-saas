@@ -1,6 +1,7 @@
 package com.beitu.saas.rest.controller.h5.request;
 
 import com.fqgj.common.api.ParamsObject;
+import com.fqgj.common.api.exception.ApiIllegalArgumentException;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
@@ -103,7 +104,15 @@ public class CreditSaveApplyInfoRequest extends ParamsObject {
 
     @Override
     public void validate() {
-
+        if (this.borrowingDuration < 0 || this.borrowingDuration > 366) {
+            throw new ApiIllegalArgumentException("借款天数不正确");
+        }
+        if (this.realCapital.compareTo(new BigDecimal("100")) < 0 || this.realCapital.compareTo(new BigDecimal("100000")) > 0) {
+            throw new ApiIllegalArgumentException("借款金额不正确");
+        }
+        if (this.totalInterestRatio.compareTo(new BigDecimal("0")) < 0 || this.totalInterestRatio.compareTo(new BigDecimal("24")) > 0) {
+            throw new ApiIllegalArgumentException("借款年利率不正确");
+        }
     }
 
 }
