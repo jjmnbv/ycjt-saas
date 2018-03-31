@@ -84,11 +84,11 @@ public class ConfigUtil {
     }
 
     public String getPictureURLPrefix() {
-        return config.getProperty("oss.pictureURLPrefix", "http://yangcongjietiao.oss-cn-shanghai-finance-1-pub.aliyuncs.com/");
+        return config.getProperty("oss.pictureURLPrefix", "");
     }
 
     public String getAddressURLPrefix() {
-        return config.getProperty("oss.addressURLPrefix", "http://yangcongjietiao.oss-cn-shanghai-finance-1-pub.aliyuncs.com/");
+        return config.getProperty("oss.addressURLPrefix", "");
     }
 
     public String getAppId() {
@@ -385,7 +385,7 @@ public class ConfigUtil {
         return config.getIntProperty("received.alert.countdown", 0);
     }
 
-    public int getMaxDailyReceiveCompensation(){
+    public int getMaxDailyReceiveCompensation() {
         return config.getIntProperty("received.max.daily.compensation", 10);
     }
 
@@ -399,6 +399,7 @@ public class ConfigUtil {
 
     /**
      * sms
+     *
      * @return
      */
     public int getMessageSwitchTime() {
@@ -407,6 +408,7 @@ public class ConfigUtil {
 
     /**
      * sms 测试白名单
+     *
      * @return
      */
     public String getTestWhiteList() {
@@ -492,42 +494,42 @@ public class ConfigUtil {
     public String getClearDayStatSwith() {
         return config.getProperty("clear.day.stat", "");
     }
-    
-    
+
+
     /**
      * 第三方配置信息
      */
     public String getYoufenValidationApiUrl() {
         return config.getProperty("integration.youfen.validation.api.base.url", "https://api.acedata.com.cn:2443");
     }
-    
+
     public String getYoufenValidationNameIdcardPath() {
         return config.getProperty("integration.youfen.validation.name.idcard.path", "/oreo/personal/validation/name/idcard");
     }
-    
+
     public String getYoufenAccount() {
         return config.getProperty("integration.youfen.account", "yangcongtest");
     }
-    
+
     public String getJuXinLiApiUrl() {
         return config.getProperty("integration.juxinli.api.base.url", "https://yx.juxinli.com");
     }
-    
+
     public String getJuXinLiCrawlingPath() {
         return config.getProperty("integration.juxinli.platform.crawling.path", "/#/apiui");
     }
-    
+
     public String getJuXinLiQueryPath() {
         return config.getProperty("integration.juxinli.platform.query.path", "/api/user/data");
     }
-    
+
     public String getJuXinLiOrgId() {
         return config.getProperty("integration.juxinli.org.id", "hsy2018");
     }
-    
+
     public String getJuXinLiApiKey() {
         return config.getProperty("integration.juxinli.api.key", "1a63efd927e04f18a2e7a15b0391dc98");
     }
-    
-    
+
+
 }

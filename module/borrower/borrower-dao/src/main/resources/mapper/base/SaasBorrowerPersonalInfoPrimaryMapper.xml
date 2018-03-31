@@ -11,6 +11,7 @@
         <result column="address" jdbcType="VARCHAR" property="address"/>
         <result column="live_duration" jdbcType="VARCHAR" property="liveDuration"/>
         <result column="marital_status" jdbcType="TINYINT" property="maritalStatus"/>
+        <result column="zm_credit_score" jdbcType="SMALLINT" property="zmCreditScore"/>
         <result column="success" jdbcType="BIT" property="success"/>
         <result column="deleted" jdbcType="BIT" property="deleted"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
@@ -26,6 +27,7 @@
     address,
     live_duration,
     marital_status,
+    zm_credit_score,
     success,
     deleted,
     gmt_modified,
@@ -44,110 +46,119 @@
             parameterType="com.beitu.saas.borrower.entity.SaasBorrowerPersonalInfo" useGeneratedKeys="true">
         insert into saas_borrower_personal_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="borrowerCode !=null">
+            <if test="borrowerCode !=null">
                 borrower_code,
-                </if>
-                <if test="orderNumb !=null">
+            </if>
+            <if test="orderNumb !=null">
                 order_numb,
-                </if>
-                <if test="qq !=null">
+            </if>
+            <if test="qq !=null">
                 qq,
-                </if>
-                <if test="education !=null">
+            </if>
+            <if test="education !=null">
                 education,
-                </if>
-                <if test="address !=null">
+            </if>
+            <if test="address !=null">
                 address,
-                </if>
-                <if test="liveDuration !=null">
+            </if>
+            <if test="liveDuration !=null">
                 live_duration,
-                </if>
-                <if test="maritalStatus !=null">
+            </if>
+            <if test="maritalStatus !=null">
                 marital_status,
-                </if>
-                <if test="success !=null">
+            </if>
+            <if test="zmCreditScore !=null">
+                zm_credit_score,
+            </if>
+            <if test="success !=null">
                 success,
-                </if>
-                <if test="deleted !=null">
+            </if>
+            <if test="deleted !=null">
                 deleted,
-                </if>
-                <if test="gmtModified !=null">
+            </if>
+            <if test="gmtModified !=null">
                 gmt_modified,
-                </if>
-                <if test="gmtCreate !=null">
+            </if>
+            <if test="gmtCreate !=null">
                 gmt_create,
-                </if>
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-                <if test="borrowerCode != null">
-                    #{borrowerCode,jdbcType=VARCHAR},
-                </if>
-                <if test="orderNumb != null">
-                    #{orderNumb,jdbcType=VARCHAR},
-                </if>
-                <if test="qq != null">
-                    #{qq,jdbcType=VARCHAR},
-                </if>
-                <if test="education != null">
-                    #{education,jdbcType=TINYINT},
-                </if>
-                <if test="address != null">
-                    #{address,jdbcType=VARCHAR},
-                </if>
-                <if test="liveDuration != null">
-                    #{liveDuration,jdbcType=VARCHAR},
-                </if>
-                <if test="maritalStatus != null">
-                    #{maritalStatus,jdbcType=TINYINT},
-                </if>
-                <if test="success != null">
-                    #{success,jdbcType=BIT},
-                </if>
-                <if test="deleted != null">
-                    #{deleted,jdbcType=BIT},
-                </if>
-                <if test="gmtModified != null">
-                    #{gmtModified,jdbcType=TIMESTAMP},
-                </if>
-                <if test="gmtCreate != null">
-                    #{gmtCreate,jdbcType=TIMESTAMP},
-                </if>
+            <if test="borrowerCode != null">
+                #{borrowerCode,jdbcType=VARCHAR},
+            </if>
+            <if test="orderNumb != null">
+                #{orderNumb,jdbcType=VARCHAR},
+            </if>
+            <if test="qq != null">
+                #{qq,jdbcType=VARCHAR},
+            </if>
+            <if test="education != null">
+                #{education,jdbcType=TINYINT},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="liveDuration != null">
+                #{liveDuration,jdbcType=VARCHAR},
+            </if>
+            <if test="maritalStatus != null">
+                #{maritalStatus,jdbcType=TINYINT},
+            </if>
+            <if test="zmCreditScore != null">
+                #{zmCreditScore,jdbcType=SMALLINT},
+            </if>
+            <if test="success != null">
+                #{success,jdbcType=BIT},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
         </trim>
     </insert>
 
     <update id="updateByPrimaryKey" parameterType="com.beitu.saas.borrower.entity.SaasBorrowerPersonalInfo">
         update saas_borrower_personal_info
         <set>
-                <if test="borrowerCode !=null">
+            <if test="borrowerCode !=null">
                 borrower_code = #{borrowerCode,jdbcType=VARCHAR},
-                </if>
-                <if test="orderNumb !=null">
+            </if>
+            <if test="orderNumb !=null">
                 order_numb = #{orderNumb,jdbcType=VARCHAR},
-                </if>
-                <if test="qq !=null">
+            </if>
+            <if test="qq !=null">
                 qq = #{qq,jdbcType=VARCHAR},
-                </if>
-                <if test="education !=null">
+            </if>
+            <if test="education !=null">
                 education = #{education,jdbcType=TINYINT},
-                </if>
-                <if test="address !=null">
+            </if>
+            <if test="address !=null">
                 address = #{address,jdbcType=VARCHAR},
-                </if>
-                <if test="liveDuration !=null">
+            </if>
+            <if test="liveDuration !=null">
                 live_duration = #{liveDuration,jdbcType=VARCHAR},
-                </if>
-                <if test="maritalStatus !=null">
+            </if>
+            <if test="maritalStatus !=null">
                 marital_status = #{maritalStatus,jdbcType=TINYINT},
-                </if>
-                <if test="success !=null">
+            </if>
+            <if test="zmCreditScore !=null">
+                zm_credit_score = #{zmCreditScore,jdbcType=SMALLINT},
+            </if>
+            <if test="success !=null">
                 success = #{success,jdbcType=BIT},
-                </if>
-                <if test="deleted !=null">
+            </if>
+            <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},
-                </if>
-                <if test="gmtModified !=null">
+            </if>
+            <if test="gmtModified !=null">
                 gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-                </if>
+            </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
@@ -160,7 +171,7 @@
 
     <sql id="paginationSql">
         <if test="page != null">
-            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+            limit #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
         </if>
     </sql>
 
@@ -198,6 +209,9 @@
             </if>
             <if test="maritalStatus !=null">
                 and marital_status = #{maritalStatus,jdbcType=TINYINT}
+            </if>
+            <if test="zmCreditScore !=null">
+                and zm_credit_score = #{zmCreditScore,jdbcType=SMALLINT}
             </if>
             <if test="success !=null">
                 and success = #{success,jdbcType=BIT}
@@ -240,6 +254,9 @@
             </if>
             <if test="maritalStatus !=null">
                 and marital_status = #{maritalStatus,jdbcType=TINYINT}
+            </if>
+            <if test="zmCreditScore !=null">
+                and zm_credit_score = #{zmCreditScore,jdbcType=SMALLINT}
             </if>
             <if test="success !=null">
                 and success = #{success,jdbcType=BIT}

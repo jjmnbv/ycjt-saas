@@ -79,7 +79,7 @@ public class CreditApplication {
         saasChannelRiskSettingsVoList.forEach(saasChannelRiskSettingsVo -> {
             CreditModuleListVo creditModuleListVo = new CreditModuleListVo();
             creditModuleListVo.setModuleCode(saasChannelRiskSettingsVo.getModuleCode());
-            creditModuleListVo.setRequired(saasChannelRiskSettingsVo.getRequired() == 1);
+            creditModuleListVo.setRequired(SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(saasChannelRiskSettingsVo.getRequired()));
             creditModuleListVo.setApplyStatus(getInfoApplyStatus(borrowerCode, saasChannelRiskSettingsVo.getModuleCode()).getCode());
             creditModuleListVoList.add(creditModuleListVo);
         });
@@ -221,16 +221,22 @@ public class CreditApplication {
 
     private void submitApplication(String borrowerCode, String orderNumb, String channelCode, Integer required) {
         SaasOrderApplicationVo saasOrderApplicationVo = saasOrderApplicationService.getByBorrowerCode(borrowerCode);
-        if (saasOrderApplicationVo == null && SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
-            throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_APPLICATION_INFO);
+        if (saasOrderApplicationVo == null) {
+            if (SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
+                throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_APPLICATION_INFO);
+            }
+            return;
         }
         saasOrderApplicationService.deleteById(saasOrderApplicationVo.getSaasOrderApplicationId());
         orderApplication.createOrder(saasOrderApplicationVo, orderNumb, channelCode);
     }
 
     private void submitPersonalInfo(String borrowerCode, String orderNumb, Integer required) {
-        if (saasBorrowerPersonalInfoService.countByBorrowerCode(borrowerCode) == 0 && SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
-            throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_PERSONAL_INFO);
+        if (saasBorrowerPersonalInfoService.countByBorrowerCode(borrowerCode) == 0) {
+            if (SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
+                throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_PERSONAL_INFO);
+            }
+            return;
         }
         if (!saasBorrowerPersonalInfoService.updateOrderNumbByBorrowerCode(orderNumb, borrowerCode)) {
             throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_PERSONAL_INFO);
@@ -238,8 +244,11 @@ public class CreditApplication {
     }
 
     private void submitEmergentContact(String borrowerCode, String orderNumb, Integer required) {
-        if (saasBorrowerEmergentContactService.countByBorrowerCode(borrowerCode) == 0 && SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
-            throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_EMERGENT_CONTACT);
+        if (saasBorrowerEmergentContactService.countByBorrowerCode(borrowerCode) == 0) {
+            if (SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
+                throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_EMERGENT_CONTACT);
+            }
+            return;
         }
         if (!saasBorrowerEmergentContactService.updateOrderNumbByBorrowerCode(orderNumb, borrowerCode)) {
             throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_EMERGENT_CONTACT);
@@ -247,8 +256,11 @@ public class CreditApplication {
     }
 
     private void submitWorkInfo(String borrowerCode, String orderNumb, Integer required) {
-        if (saasBorrowerWorkInfoService.countByBorrowerCode(borrowerCode) == 0 && SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
-            throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_WORK_INFO);
+        if (saasBorrowerWorkInfoService.countByBorrowerCode(borrowerCode) == 0) {
+            if (SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
+                throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_WORK_INFO);
+            }
+            return;
         }
         if (!saasBorrowerWorkInfoService.updateOrderNumbByBorrowerCode(orderNumb, borrowerCode)) {
             throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_WORK_INFO);
@@ -256,8 +268,11 @@ public class CreditApplication {
     }
 
     private void submitIdentityInfo(String borrowerCode, String orderNumb, Integer required) {
-        if (saasBorrowerIdentityInfoService.countByBorrowerCode(borrowerCode) == 0 && SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
-            throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_IDENTITY_INFO);
+        if (saasBorrowerIdentityInfoService.countByBorrowerCode(borrowerCode) == 0) {
+            if (SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
+                throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_IDENTITY_INFO);
+            }
+            return;
         }
         if (!saasBorrowerIdentityInfoService.updateOrderNumbByBorrowerCode(orderNumb, borrowerCode)) {
             throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_IDENTITY_INFO);
@@ -265,8 +280,11 @@ public class CreditApplication {
     }
 
     private void submitCarrierAuthentic(String borrowerCode, Integer required) {
-        if (saasBorrowerCarrierService.countByBorrowerCode(borrowerCode) == 0 && SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
-            throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_IDENTITY_INFO);
+        if (saasBorrowerCarrierService.countByBorrowerCode(borrowerCode) == 0) {
+            if (SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
+                throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_CARRIER_AUTHENTIC);
+            }
+            return;
         }
     }
 

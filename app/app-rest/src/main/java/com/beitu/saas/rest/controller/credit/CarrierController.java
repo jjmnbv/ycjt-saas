@@ -1,6 +1,7 @@
 package com.beitu.saas.rest.controller.credit;
 
 import com.alibaba.fastjson.JSON;
+import com.beitu.saas.app.annotations.SignIgnore;
 import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.application.credit.CarrierApplication;
@@ -75,7 +76,7 @@ public class CarrierController {
         return new DataApiResponse<>(new CarrierH5Response(url));
     }
 
-    @VisitorAccessible
+    @SignIgnore
     @RequestMapping(value = "/h5/crawling", method = RequestMethod.GET)
     public String crawlingNotify(HttpServletRequest request) {
         String userId = request.getParameter("userId");
@@ -93,7 +94,7 @@ public class CarrierController {
         return "redirect:" + configUtil.getAddressURLPrefix() + UserProfileConsts.H5_CARRIER_RESULT_URL + "?success=" + success;
     }
 
-    @VisitorAccessible
+    @SignIgnore
     @ResponseBody
     @RequestMapping(value = "/callback/{carrierType}", consumes = "multipart/form-data", method = RequestMethod.POST)
     public String carrierCallback(@PathVariable(value = "carrierType") Integer carrierType,

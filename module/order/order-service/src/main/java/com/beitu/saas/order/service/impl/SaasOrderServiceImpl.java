@@ -91,6 +91,12 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
         if (saasOrder.getOrderStatus() > 400) {
             return Boolean.FALSE;
         }
+        if (OrderStatusEnum.PRELIMINARY_REVIEWER_REJECT.getCode().equals(saasOrder.getOrderStatus())
+                || OrderStatusEnum.PRELIMINARY_REVIEWER_REFUSE.getCode().equals(saasOrder.getOrderStatus())
+                || OrderStatusEnum.FINAL_REVIEWER_REJECT.getCode().equals(saasOrder.getOrderStatus())
+                || OrderStatusEnum.FINAL_REVIEWER_REFUSE.getCode().equals(saasOrder.getOrderStatus())) {
+            return Boolean.FALSE;
+        }
         return Boolean.TRUE;
     }
 
@@ -107,6 +113,8 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
         conditions.put("finalReviewerCode", querySaasOrderVo.getFinalReviewerCode());
         conditions.put("loanLenderCode", querySaasOrderVo.getLoanLenderCode());
         conditions.put("repaymentDt", querySaasOrderVo.getRepaymentDt());
+        conditions.put("repaymentBeginDt", querySaasOrderVo.getRepaymentBeginDt());
+        conditions.put("repaymentEndDt", querySaasOrderVo.getRepaymentEndDt());
         Integer count = saasOrderDao.countByConditions(conditions);
         page.setTotalCount(count);
         if (count == 0) {
@@ -143,6 +151,18 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
         params.put("id", orderId);
         params.put("remark", remark);
         return saasOrderDao.updateOrderRemark(params) > 0;
+    }
+
+    @Override
+    public List<SaasOrderVo> listAllConfirmReceiptOrderByBorrowerCode(String borrowerCode) {
+        List<SaasOrder> saasOrderList = saasOrderDao.selectByBorrowerCodeAndOrderStatusList(borrowerCode,
+                Arrays.asList(OrderStatusEnum.TO_CONFIRM_RECEIPT.getCode()));
+        if (CollectionUtils.isEmpty(saasOrderList)) {
+            return null;
+        }
+        List<SaasOrderVo> results = new ArrayList<>(saasOrderList.size());
+        saasOrderList.forEach(saasOrder -> results.add(SaasOrderVo.convertEntityToVO(saasOrder)));
+        return results;
     }
 
 }

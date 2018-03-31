@@ -50,6 +50,16 @@ public class QuerySaasOrderVo {
      */
     private Date repaymentDt;
 
+    /**
+     * 账单应还 查询开始日
+     */
+    private Date repaymentBeginDt;
+
+    /**
+     * 账单应还 查询结束日
+     */
+    private Date repaymentEndDt;
+
     public List<String> getBorrowerCodeList() {
         return borrowerCodeList;
     }
@@ -128,5 +138,21 @@ public class QuerySaasOrderVo {
 
     public void setRepaymentDt(Date repaymentDt) {
         this.repaymentDt = repaymentDt;
+    }
+
+    public Date getRepaymentBeginDt() {
+        return repaymentBeginDt;
+    }
+
+    public void setRepaymentBeginDt(Date repaymentBeginDt) {
+        this.repaymentBeginDt = repaymentBeginDt;
+    }
+
+    public Date getRepaymentEndDt() {
+        return repaymentEndDt;
+    }
+
+    public void setRepaymentEndDt(Date repaymentEndDt) {
+        this.repaymentEndDt = repaymentEndDt;
     }
 }

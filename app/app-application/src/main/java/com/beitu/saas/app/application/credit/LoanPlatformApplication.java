@@ -32,7 +32,7 @@ public class LoanPlatformApplication {
     public String getLoanPlatformUrl(String borrowerCode, String channelCode, SaasLoanPlatformEnum saasLoanPlatformEnum) {
         LoanPlatformCrawlingParam param = new LoanPlatformCrawlingParam();
         param.setPlatformEnum(LoanPlatformEnum.getByCode(saasLoanPlatformEnum.getCode()));
-        param.setJumpUrl(configUtil.getH5AddressURLPrefix() + "?channel=" + channelCode + "/formList");
+        param.setJumpUrl(configUtil.getAddressURLPrefix() + configUtil.getH5AddressURLPrefix() + "?channel=" + channelCode + "/formList");
         String taskId = System.currentTimeMillis() + borrowerCode;
         param.setTaskId(taskId);
         LOGGER.info("得到{}借贷平台地址......taskId:{};borrowerCode:{}", saasLoanPlatformEnum.getMsg(), taskId, borrowerCode);

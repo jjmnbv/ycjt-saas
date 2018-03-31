@@ -48,8 +48,6 @@ public class SaasOrderApplicationServiceImpl extends AbstractBaseService impleme
         SaasOrderApplication saasOrderApplication = SaasOrderApplicationVo.convertVOToEntity(saasOrderApplicationVo);
         List<SaasOrderApplication> saasOrderApplicationList = saasOrderApplicationDao.selectByParams(new HashMap<String, Object>(4) {{
             put("borrowerCode", saasOrderApplicationVo.getBorrowerCode());
-            put("merchantCode", saasOrderApplicationVo.getMerchantCode());
-            put("channelCode", saasOrderApplicationVo.getChannelCode());
             put("deleted", Boolean.FALSE);
         }});
         if (CollectionUtils.isEmpty(saasOrderApplicationList)) {

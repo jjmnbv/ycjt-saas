@@ -44,6 +44,10 @@ public class SaasBorrowerPersonalInfoVo implements ResponseData, Serializable {
      */
     private Integer maritalStatus;
     /**
+     * 芝麻分
+     */
+    private Integer zmCreditScore;
+    /**
      * 是否成功
      */
     private Boolean success;
@@ -111,6 +115,14 @@ public class SaasBorrowerPersonalInfoVo implements ResponseData, Serializable {
 
     public void setMaritalStatus(Integer maritalStatus) {
         this.maritalStatus = maritalStatus;
+    }
+
+    public Integer getZmCreditScore() {
+        return this.zmCreditScore;
+    }
+
+    public void setZmCreditScore(Integer zmCreditScore) {
+        this.zmCreditScore = zmCreditScore;
     }
 
     public Boolean getSuccess() {

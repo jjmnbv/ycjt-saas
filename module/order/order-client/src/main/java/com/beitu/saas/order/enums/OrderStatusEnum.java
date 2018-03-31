@@ -26,7 +26,7 @@ public enum OrderStatusEnum implements MsgCodeEnum {
     FOR_REIMBURSEMENT(401, "待还款", new Integer[]{301, 303, 402}, Boolean.TRUE),
     TO_CONFIRM_EXTEND(402, "展期待确认", new Integer[]{401}, Boolean.TRUE),
     IN_EXTEND(403, "展期中", new Integer[]{401}, Boolean.TRUE),
-    HAS_BEEN_PAYMENT(501, "已还款", new Integer[]{}, Boolean.TRUE),
+    HAS_BEEN_PAYMENT(501, "已还款", new Integer[]{401}, Boolean.TRUE),
     HAS_BEEN_DESTROY(502, "已核销", new Integer[]{401}, Boolean.TRUE),
     OVERDUE(999, "已逾期", null, Boolean.FALSE);
 

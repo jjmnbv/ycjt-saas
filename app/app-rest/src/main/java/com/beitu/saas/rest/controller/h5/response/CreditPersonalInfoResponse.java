@@ -39,6 +39,9 @@ public class CreditPersonalInfoResponse implements ResponseData {
     @ApiModelProperty(value = "婚姻状况")
     private Integer maritalStatus;
 
+    @ApiModelProperty(value = "芝麻分")
+    private Integer zmCreditScore;
+
     public CreditPersonalInfoResponse(SaasBorrowerPersonalInfoVo saasBorrowerPersonalInfoVo) {
         if (saasBorrowerPersonalInfoVo != null) {
             this.qq = saasBorrowerPersonalInfoVo.getQq();
@@ -46,6 +49,7 @@ public class CreditPersonalInfoResponse implements ResponseData {
             this.address = saasBorrowerPersonalInfoVo.getAddress();
             this.liveDuration = saasBorrowerPersonalInfoVo.getLiveDuration();
             this.maritalStatus = saasBorrowerPersonalInfoVo.getMaritalStatus();
+            this.zmCreditScore = saasBorrowerPersonalInfoVo.getZmCreditScore();
         }
     }
 
@@ -89,4 +93,11 @@ public class CreditPersonalInfoResponse implements ResponseData {
         this.maritalStatus = maritalStatus;
     }
 
+    public Integer getZmCreditScore() {
+        return zmCreditScore;
+    }
+
+    public void setZmCreditScore(Integer zmCreditScore) {
+        this.zmCreditScore = zmCreditScore;
+    }
 }
