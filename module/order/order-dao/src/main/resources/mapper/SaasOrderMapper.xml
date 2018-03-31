@@ -95,4 +95,10 @@
         AND version = #{version,jdbcType=BIGINT}
     </update>
 
+    <update id="updateOrderRemark">
+        update saas_order
+        set remark = #{remark,jdbcType=VARCHAR},gmt_modified = NOW()
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
 </mapper>

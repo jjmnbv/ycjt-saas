@@ -45,4 +45,10 @@ public class SaasOrderDaoImpl extends AbstractBaseMapper<SaasOrder> implements S
     public int updateOrderStatus(Map<String, Object> params) {
         return this.getSqlSession().update(this.getStatement(".updateOrderStatus"), params);
     }
+
+    @Override
+    public int updateOrderRemark(Map<String, Object> params) {
+        return this.getSqlSession().update(this.getStatement(".updateOrderRemark"), params);
+    }
+
 }

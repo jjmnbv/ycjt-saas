@@ -59,8 +59,9 @@ public class PreliminaryReviewOrderController {
     @ResponseBody
     @ApiOperation(value = "初审订单备注保存", response = ApiResponse.class)
     public ApiResponse saveRemark(@RequestBody @Valid PreliminaryOrderRemarkSaveRequest req) {
-        // TODO
-        return new ApiResponse();
+        String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
+        orderApplication.saveOrderRemark(adminCode, req.getOrderNumb(), req.getRemark());
+        return new ApiResponse("保存成功");
     }
 
     @RequestMapping(value = "/detail", method = RequestMethod.POST)
