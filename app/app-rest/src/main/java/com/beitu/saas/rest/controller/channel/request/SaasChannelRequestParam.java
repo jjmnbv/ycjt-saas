@@ -24,9 +24,9 @@ public class SaasChannelRequestParam extends ParamsObject {
     @ApiModelProperty(value = "渠道号")
     private String channelCode;
 
-    @NotBlank(message = "机构号不能为空")
-    @ApiModelProperty(value = "机构号", required = true)
-    private String merchantCode;
+//    @NotBlank(message = "机构号不能为空")
+//    @ApiModelProperty(value = "机构号", required = true)
+//    private String merchantCode;
 
     @NotBlank(message = "渠道名称不能为空")
     @ApiModelProperty(value = "渠道号名称", required = true)
@@ -69,14 +69,6 @@ public class SaasChannelRequestParam extends ParamsObject {
      */
     private List<SaasModuleItemRequestParam> saasModuleItemRequestParams;
 
-    public String getMerchantCode() {
-        return merchantCode;
-    }
-
-    public SaasChannelRequestParam setMerchantCode(String merchantCode) {
-        this.merchantCode = merchantCode;
-        return this;
-    }
 
     public String getChannelName() {
         return channelName;

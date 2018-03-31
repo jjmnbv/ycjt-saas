@@ -14,6 +14,7 @@ import com.beitu.saas.auth.service.SaasRoleService;
 import com.beitu.saas.auth.vo.FormedMenuVO;
 import com.beitu.saas.common.utils.DateUtil;
 import com.beitu.saas.rest.controller.auth.request.AddRoleRequest;
+import com.beitu.saas.rest.controller.auth.request.UpdateRoleRequest;
 import com.beitu.saas.rest.controller.auth.response.RoleDetailResponse;
 import com.beitu.saas.rest.controller.auth.response.RoleListResponse;
 import com.beitu.saas.rest.controller.auth.response.RoleMapResponse;
@@ -59,6 +60,9 @@ public class RoleController {
 
     @Autowired
     private AdminInfoApplication adminInfoApplication;
+
+    @Autowired
+    private SaasRolePermissionService saasRolePermissionService;
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ParamsValidate
@@ -146,6 +150,15 @@ public class RoleController {
         List<RoleMapResponse> list = new ArrayList<>();
         saasRoleList.forEach(saasRole -> list.add(new RoleMapResponse(saasRole.getId(), saasRole.getName())));
         return Response.ok().putData(list);
+    }
+
+
+    @RequestMapping(value = "/update", method = RequestMethod.PUT)
+    @ParamsValidate
+    @ApiOperation(value = "更新角色")
+    public Response update(@RequestBody UpdateRoleRequest updateRoleRequest) {
+        roleApplication.updateRole(updateRoleRequest.getRoleName(), updateRoleRequest.getRoleId(), updateRoleRequest.getMenusIds(), updateRoleRequest.getButtonIds());
+        return Response.ok();
     }
 
 }

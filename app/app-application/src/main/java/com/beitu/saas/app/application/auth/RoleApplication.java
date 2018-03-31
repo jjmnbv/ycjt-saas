@@ -76,4 +76,15 @@ public class RoleApplication {
         return true;
 
     }
+
+
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean updateRole(String roleName, Long roleId,List menuIds, List buttonIds) {
+        SaasRole saasRole = new SaasRole();
+        saasRole.setName(roleName);
+        saasRole.setId(roleId);
+        saasRoleService.updateById(saasRole);
+       return saasRolePermissionService.replacePermissionToRole(roleId.intValue(), menuIds, buttonIds);
+
+    }
 }

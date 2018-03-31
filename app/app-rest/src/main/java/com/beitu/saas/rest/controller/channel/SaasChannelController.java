@@ -3,6 +3,7 @@ package com.beitu.saas.rest.controller.channel;
 import com.beitu.saas.app.annotations.SignIgnore;
 import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.application.channel.SaasChannelApplication;
+import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.channel.domain.SaasChannelDetailVo;
 import com.beitu.saas.channel.domain.SaasModuleVo;
@@ -64,6 +65,8 @@ public class SaasChannelController {
     @RequestMapping(value = "/addOrUpdateChannel", method = RequestMethod.POST)
     @ApiOperation(value = "新建/编辑渠道", response = Response.class)
     public Response addOrUpdateChannel(@RequestBody SaasChannelRequestParam saasChannelRequestParam) {
+
+        String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
         List<SaasChannelRiskSettingsParam> settingsVos = new ArrayList<>();
         boolean setModule = CollectionUtils.isNotEmpty(saasChannelRequestParam.getSaasModuleRequestParams());
         boolean setModuleItem = saasChannelRequestParam.getSaasModuleItemRequestParams().size() == 1 && !StringUtils.isEmpty(saasChannelRequestParam.getSaasModuleItemRequestParams().get(0).getItemCode());
@@ -91,7 +94,7 @@ public class SaasChannelController {
         try {
             saasChannelApplication.addOrUpdateChannel(saasChannelParam, settingsVos);
         } catch (Exception e) {
-            LOGGER.error("==  创建渠道失败, 机构号:{}, 渠道名称:{} ,失败原因:{}  ==", saasChannelRequestParam.getMerchantCode(), saasChannelRequestParam.getChannelName(), e);
+            LOGGER.error("==  创建渠道失败, 机构号:{}, 渠道名称:{} ,失败原因:{}  ==", merchantCode, saasChannelRequestParam.getChannelName(), e);
             return Response.error(null, ChannelErrorCodeEnum.CHANNEL_PARAM_INVALID.getMsg());
         }
         return Response.ok().putData("操作成功");
@@ -105,7 +108,8 @@ public class SaasChannelController {
     @SignIgnore
     @RequestMapping(value = "/merchantAdminList", method = RequestMethod.POST)
     @ApiOperation(value = "获取机构下所有管理员", response = SaasMerchantAdminResponse.class)
-    public Response getMerchantAdminList(String merchantCode) {
+    public Response getMerchantAdminList() {
+        String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
         List<SaasAdmin> saasAdminList = saasChannelApplication.getSaasAdminListByMerchantCode(merchantCode);
         return Response.ok().putData(new SaasMerchantAdminResponse(saasAdminList));
     }

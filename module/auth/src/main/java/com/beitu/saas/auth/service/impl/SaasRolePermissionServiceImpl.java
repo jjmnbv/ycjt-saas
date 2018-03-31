@@ -9,7 +9,9 @@ import com.fqgj.common.base.NameSpace;
 import com.fqgj.log.enhance.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -46,6 +48,12 @@ public class SaasRolePermissionServiceImpl extends AbstractBaseService implement
     }
 
     @Override
+    public SaasRolePermission replace(SaasRolePermission record) {
+        return saasRolePermissionDao.replace(record);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
     public Boolean addPermissionToRole(Integer roleId, List menuIds, List buttonIds) {
         saasRolePermissionDao.deleteByRoleId(roleId);
         menuIds.forEach(menuId->{
@@ -61,6 +69,30 @@ public class SaasRolePermissionServiceImpl extends AbstractBaseService implement
             saasRolePermission.setPermissionType(PermissionTypeEnum.BUTTON_PERMISSION.getKey().longValue());
             saasRolePermission.setRoleId(roleId);
             saasRolePermissionDao.insert(saasRolePermission);
+        });
+        return true;
+    }
+
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean replacePermissionToRole(Integer roleId, List menuIds, List buttonIds) {
+        saasRolePermissionDao.deleteByRoleId(roleId);
+        menuIds.forEach(menuId->{
+            SaasRolePermission saasRolePermission = new SaasRolePermission();
+            saasRolePermission.setRelationId((Integer)menuId);
+            saasRolePermission.setPermissionType(PermissionTypeEnum.MENU_PERMISSION.getKey().longValue());
+            saasRolePermission.setRoleId(roleId);
+            saasRolePermission.setDeleted(false);
+            saasRolePermissionDao.replace(saasRolePermission);
+        });
+        buttonIds.forEach(buttonId->{
+            SaasRolePermission saasRolePermission = new SaasRolePermission();
+            saasRolePermission.setRelationId((Integer)buttonId);
+            saasRolePermission.setPermissionType(PermissionTypeEnum.BUTTON_PERMISSION.getKey().longValue());
+            saasRolePermission.setRoleId(roleId);
+            saasRolePermission.setDeleted(false);
+            saasRolePermissionDao.replace(saasRolePermission);
         });
         return true;
     }
