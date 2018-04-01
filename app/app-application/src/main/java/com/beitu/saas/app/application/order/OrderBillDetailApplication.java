@@ -63,20 +63,7 @@ public class OrderBillDetailApplication {
         if (queryVo.getOrderStatus() != null) {
             querySaasOrderBillDetailVo.setQueryOrderStatus(queryVo.getOrderStatus());
             if (OrderStatusEnum.TO_CONFIRM_EXTEND.getCode().equals(queryVo.getOrderStatus())) {
-                QuerySaasOrderVo querySaasOrderVo = new QuerySaasOrderVo();
-                querySaasOrderVo.setMerchantCode(querySaasOrderBillDetailVo.getMerchantCode());
-                querySaasOrderVo.setChannelCode(querySaasOrderBillDetailVo.getChannelCode());
-                querySaasOrderVo.setBorrowerCodeList(querySaasOrderBillDetailVo.getBorrowerCodeList());
-                querySaasOrderVo.setOrderStatusList(Arrays.asList(OrderStatusEnum.TO_CONFIRM_EXTEND.getCode()));
-                querySaasOrderVo.setRepaymentBeginDt(querySaasOrderBillDetailVo.getRepaymentBeginDt());
-                querySaasOrderVo.setRepaymentEndDt(querySaasOrderBillDetailVo.getRepaymentEndDt());
-                List<SaasOrderVo> saasOrderVoList = saasOrderService.listByQuerySaasOrderVoAndPage(querySaasOrderVo, page);
-                if (CollectionUtils.isEmpty(saasOrderVoList)) {
-                    return null;
-                }
-                List<SaasOrderBillDetailListVo> results = new ArrayList<>(saasOrderVoList.size());
-                saasOrderVoList.forEach(saasOrderVo -> results.add(convertSaasOrderVo2SaasOrderBillDetailListVo(saasOrderVo)));
-                return results;
+                querySaasOrderBillDetailVo.setOrderNumbList(saasOrderService.listAllConfirmReceiptOrderNumbByMerchantCode(queryVo.getMerchantCode()));
             }
         }
         List<SaasOrderBillDetailVo> saasOrderBillDetailVoList = saasOrderBillDetailService.listByQueryOrderBillDetailVoAndPage(querySaasOrderBillDetailVo, page);

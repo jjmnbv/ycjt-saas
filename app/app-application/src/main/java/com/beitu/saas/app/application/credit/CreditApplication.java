@@ -228,6 +228,8 @@ public class CreditApplication {
             return;
         }
         saasOrderApplicationService.deleteById(saasOrderApplicationVo.getSaasOrderApplicationId());
+        // TODO 借款人签署借款合同
+
         orderApplication.createOrder(saasOrderApplicationVo, orderNumb, channelCode);
     }
 

@@ -9,8 +9,13 @@ import java.util.List;
  * @description
  */
 public class QuerySaasOrderBillDetailVo {
+
     /**
-     * 借款人CODE
+     * 订单CODE 列表
+     */
+    private List<String> orderNumbList;
+    /**
+     * 借款人CODE 列表
      */
     private List<String> borrowerCodeList;
     /**
@@ -33,6 +38,14 @@ public class QuerySaasOrderBillDetailVo {
      * 账单应还日查询结束时间
      */
     private Date repaymentEndDt;
+
+    public List<String> getOrderNumbList() {
+        return orderNumbList;
+    }
+
+    public void setOrderNumbList(List<String> orderNumbList) {
+        this.orderNumbList = orderNumbList;
+    }
 
     public List<String> getBorrowerCodeList() {
         return borrowerCodeList;

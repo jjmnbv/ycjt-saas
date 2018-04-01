@@ -195,11 +195,14 @@ public class H5Controller {
             response.setTotalInterestRatio(saasOrderApplicationVo.getTotalInterestRatio());
         }
         response.setNeedRealName(borrowerApplication.needRealName(borrowerCode));
-        response.setContractTitle1(SaasContractEnum.LOAN_CONTRACT.getMsg());
-        response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LOAN_CONTRACT.getUrl());
         if (contractApplication.needDoLicenseContractSign(borrowerCode)) {
-            response.setContractTitle2(SaasContractEnum.LICENSE_CONTRACT.getMsg());
-            response.setContractUrl2(configUtil.getAddressURLPrefix() + SaasContractEnum.LICENSE_CONTRACT.getUrl());
+            response.setContractTitle1(SaasContractEnum.LICENSE_CONTRACT.getMsg());
+            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LICENSE_CONTRACT.getUrl());
+            response.setContractTitle2(SaasContractEnum.LOAN_CONTRACT.getMsg());
+            response.setContractUrl2(configUtil.getAddressURLPrefix() + SaasContractEnum.LOAN_CONTRACT.getUrl());
+        } else {
+            response.setContractTitle1(SaasContractEnum.LOAN_CONTRACT.getMsg());
+            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LOAN_CONTRACT.getUrl());
         }
         return new DataApiResponse<>(response);
     }
@@ -390,16 +393,24 @@ public class H5Controller {
     @ApiOperation(value = "用户订单详情", response = H5OrderDetailResponse.class)
     public DataApiResponse<H5OrderDetailResponse> getOrderDetail(@RequestBody @Valid QueryOrderDetailRequest req) {
         OrderDetailVo orderDetailVo = orderApplication.getOrderDetailVoByOrderNumb(req.getOrderNumb());
+        if (orderDetailVo == null) {
+            return new DataApiResponse();
+        }
         H5OrderDetailResponse response = new H5OrderDetailResponse();
         BeanUtils.copyProperties(orderDetailVo, response);
+        response.setOrderNumb(req.getOrderNumb());
         if (OrderStatusEnum.TO_CONFIRM_RECEIPT.getCode().equals(orderDetailVo.getOrderStatus())) {
             response.setHeaderTitle("确认借款");
-            response.setContractTitle1(SaasContractEnum.LOAN_CONTRACT.getMsg());
-//            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LOAN_CONTRACT.getUrl());
-            response.setContractUrl1(orderDetailVo.getTermUrl());
             if (contractApplication.needDoLicenseContractSign(orderDetailVo.getBorrowerCode())) {
-                response.setContractTitle2(SaasContractEnum.LICENSE_CONTRACT.getMsg());
-                response.setContractUrl2(configUtil.getAddressURLPrefix() + SaasContractEnum.LICENSE_CONTRACT.getUrl());
+                response.setContractTitle1(SaasContractEnum.LICENSE_CONTRACT.getMsg());
+                response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LICENSE_CONTRACT.getUrl());
+                response.setContractTitle2(SaasContractEnum.LOAN_CONTRACT.getMsg());
+//            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LOAN_CONTRACT.getUrl());
+                response.setContractUrl2(orderDetailVo.getTermUrl());
+            } else {
+                response.setContractTitle1(SaasContractEnum.LOAN_CONTRACT.getMsg());
+//            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LOAN_CONTRACT.getUrl());
+                response.setContractUrl1(orderDetailVo.getTermUrl());
             }
             response.setVisible(Boolean.TRUE);
             response.setButtonTitle(H5OrderDetailButtonTypeEnum.CONFIRM_RECEIPT_BUTTON_TYPE.getMsg());
@@ -421,15 +432,15 @@ public class H5Controller {
         return new DataApiResponse(response);
     }
 
-    @RequestMapping(value = "/order/confirm/{buttonType}", method = RequestMethod.POST)
+    @RequestMapping(value = "/order/confirm/{orderNumb}/{buttonType}", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "用户订单详情按钮操作", response = H5OrderDetailResponse.class)
-    public ApiResponse getOrderDetail(@PathVariable(value = "buttonType") Integer buttonType) {
+    public ApiResponse getOrderDetail(@PathVariable(value = "orderNumb") String orderNumb,
+                                      @PathVariable(value = "buttonType") Integer buttonType) {
         H5OrderDetailButtonTypeEnum h5OrderDetailButtonTypeEnum = H5OrderDetailButtonTypeEnum.getByCode(buttonType);
         if (h5OrderDetailButtonTypeEnum == null) {
             return new ApiResponse("非法操作参数");
         }
-        String orderNumb = "20180401175915663004";
         SaasBorrowerVo saasBorrowerVo = RequestLocalInfo.getCurrentAdmin().getSaasBorrower();
         switch (h5OrderDetailButtonTypeEnum) {
             case CONFIRM_EXTEND_BUTTON_TYPE:

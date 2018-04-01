@@ -59,4 +59,11 @@ public interface SaasOrderService<T extends BaseEntity> extends BaseService<T> {
      */
     List<SaasOrderVo> listAllConfirmReceiptOrderByBorrowerCode(String borrowerCode);
 
+    /**
+     * 得到 待确认收款 的订单列表
+     *
+     * @return
+     */
+    List<String> listAllConfirmReceiptOrderNumbByMerchantCode(String merchantCode);
+
 }

@@ -16,6 +16,9 @@ import java.util.List;
 @ApiModel(value = "用户订单详细信息")
 public class H5OrderDetailResponse implements ResponseData {
 
+    @ApiModelProperty(value = "订单CODE")
+    private String orderNumb;
+
     @ApiModelProperty(value = "头部展示信息")
     private String headerTitle;
 
@@ -66,6 +69,14 @@ public class H5OrderDetailResponse implements ResponseData {
 
     @ApiModelProperty(value = "按钮类型")
     private Integer buttonType;
+
+    public String getOrderNumb() {
+        return orderNumb;
+    }
+
+    public void setOrderNumb(String orderNumb) {
+        this.orderNumb = orderNumb;
+    }
 
     public String getHeaderTitle() {
         return headerTitle;

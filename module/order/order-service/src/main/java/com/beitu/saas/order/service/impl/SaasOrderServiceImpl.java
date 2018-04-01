@@ -165,4 +165,8 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
         return results;
     }
 
+    @Override
+    public List<String> listAllConfirmReceiptOrderNumbByMerchantCode(String merchantCode) {
+        return null;
+    }
 }
