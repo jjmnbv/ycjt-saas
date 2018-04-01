@@ -395,10 +395,12 @@ public class H5Controller {
         if (OrderStatusEnum.TO_CONFIRM_RECEIPT.getCode().equals(orderDetailVo.getOrderStatus())) {
             response.setHeaderTitle("确认借款");
             response.setContractTitle1(SaasContractEnum.LOAN_CONTRACT.getMsg());
-            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LOAN_CONTRACT.getUrl());
+//            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LOAN_CONTRACT.getUrl());
+            response.setContractUrl1("http://ycjt.oss-cn-hangzhou.aliyuncs.com/contract/20170715004158769001_753a5c94b2b8c5437778986c25baf22d.pdf");
             if (contractApplication.needDoLicenseContractSign(orderDetailVo.getBorrowerCode())) {
                 response.setContractTitle2(SaasContractEnum.LICENSE_CONTRACT.getMsg());
-                response.setContractUrl2(configUtil.getAddressURLPrefix() + SaasContractEnum.LICENSE_CONTRACT.getUrl());
+//                response.setContractUrl2(configUtil.getAddressURLPrefix() + SaasContractEnum.LICENSE_CONTRACT.getUrl());
+                response.setContractUrl1("http://ycjt.oss-cn-hangzhou.aliyuncs.com/contract/20170715004158769001_753a5c94b2b8c5437778986c25baf22d.pdf");
             }
             response.setVisible(Boolean.TRUE);
             response.setButtonTitle(H5OrderDetailButtonTypeEnum.CONFIRM_RECEIPT_BUTTON_TYPE.getMsg());
@@ -406,7 +408,8 @@ public class H5Controller {
         } else if (OrderStatusEnum.IN_EXTEND.getCode().equals(orderDetailVo.getOrderStatus())) {
             response.setHeaderTitle("确认展期");
             response.setContractTitle1(SaasContractEnum.EXTEND_CONTRACT.getMsg());
-            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.EXTEND_CONTRACT.getUrl());
+//            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.EXTEND_CONTRACT.getUrl());
+            response.setContractUrl1("http://ycjt.oss-cn-hangzhou.aliyuncs.com/contract/20170715004158769001_753a5c94b2b8c5437778986c25baf22d.pdf");
             response.setVisible(Boolean.TRUE);
             response.setButtonTitle(H5OrderDetailButtonTypeEnum.CONFIRM_EXTEND_BUTTON_TYPE.getMsg());
             response.setButtonType(H5OrderDetailButtonTypeEnum.CONFIRM_EXTEND_BUTTON_TYPE.getCode());
@@ -423,15 +426,17 @@ public class H5Controller {
     public ApiResponse getOrderDetail(@PathVariable(value = "buttonType") Integer buttonType) {
         H5OrderDetailButtonTypeEnum h5OrderDetailButtonTypeEnum = H5OrderDetailButtonTypeEnum.getByCode(buttonType);
         if (h5OrderDetailButtonTypeEnum == null) {
-
+            return new ApiResponse("非法操作参数");
         }
         switch (h5OrderDetailButtonTypeEnum) {
             case CONFIRM_EXTEND_BUTTON_TYPE:
-                break;
+                return new ApiResponse("签署展期合同成功");
             case CONFIRM_RECEIPT_BUTTON_TYPE:
-                break;
+                return new ApiResponse("签署借款合同成功");
+            default:
+                return new ApiResponse("操作成功");
         }
-        return new ApiResponse("操作成功");
+
     }
 
 }

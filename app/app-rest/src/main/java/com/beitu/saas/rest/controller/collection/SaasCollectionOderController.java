@@ -42,8 +42,8 @@ public class SaasCollectionOderController {
      */
     @SignIgnore
     @RequestMapping(value = "/collectionOrderGet/list", method = RequestMethod.POST)
-    @ApiOperation(value = "催收列表", response = ModuleResponse.class)
-    public ModuleResponse collectionDistributeGet(@RequestBody CollectionOrderQueryRequestParam collectionOrderQueryParam, Page page) {
+    @ApiOperation(value = "催收列表", response = CollectionOrderListResponse.class)
+    public ModuleResponse<CollectionOrderListResponse> collectionDistributeGet(@RequestBody CollectionOrderQueryRequestParam collectionOrderQueryParam, Page page) {
         CollectionOrderQueryParam param = new CollectionOrderQueryParam();
         BeanUtils.copyProperties(collectionOrderQueryParam, param);
         List<CollectionOrderInfoDetailVo> collectionOrderList = collectionApplication.getCollectionOrderListByPage(param, page);

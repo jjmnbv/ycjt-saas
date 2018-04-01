@@ -16,6 +16,7 @@ import java.util.List;
  */
 @ApiModel(value = "催收列表")
 public class CollectionOrderListResponse implements ResponseData {
+
     private List<CollectionOrderInfoDetailVo> collectionOrderInfoDetailVos=new ArrayList<>();
 
     public CollectionOrderListResponse(List<CollectionOrderInfoDetailVo> collectionOrderInfoDetailVos) {

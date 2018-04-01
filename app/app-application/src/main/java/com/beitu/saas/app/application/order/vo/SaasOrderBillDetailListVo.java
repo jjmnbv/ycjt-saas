@@ -1,36 +1,51 @@
 package com.beitu.saas.app.application.order.vo;
 
 import com.fqgj.common.api.ResponseData;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author linanjun
  * @create 2018/3/28 上午11:38
  * @description
  */
+@ApiModel(value = "SAAS账单列表展示信息")
 public class SaasOrderBillDetailListVo implements ResponseData {
 
+    @ApiModelProperty(value = "订单号")
     private String orderNumb;
 
+    @ApiModelProperty(value = "借款人姓名")
     private String borrowerName;
 
+    @ApiModelProperty(value = "借款人手机号")
     private String borrowerMobile;
 
+    @ApiModelProperty(value = "金额")
     private String capital;
 
+    @ApiModelProperty(value = "应还金额")
     private String amount;
 
+    @ApiModelProperty(value = "申请日期")
     private String createdDate;
 
+    @ApiModelProperty(value = "应还日期")
     private String repaymentDate;
 
+    @ApiModelProperty(value = "是否展期订单")
     private Boolean extend;
 
+    @ApiModelProperty(value = "逾期天数")
     private Integer overdueDuration;
 
+    @ApiModelProperty(value = "放款备注")
     private String loanLendRemark;
 
+    @ApiModelProperty(value = "渠道名称")
     private String channelName;
 
+    @ApiModelProperty(value = "订单状态")
     private String orderStatus;
 
     public String getOrderNumb() {
