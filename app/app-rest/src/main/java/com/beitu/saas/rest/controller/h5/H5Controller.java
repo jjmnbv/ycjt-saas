@@ -404,13 +404,16 @@ public class H5Controller {
             if (contractApplication.needDoLicenseContractSign(orderDetailVo.getBorrowerCode())) {
                 response.setContractTitle1(SaasContractEnum.LICENSE_CONTRACT.getMsg());
                 response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LICENSE_CONTRACT.getUrl());
+                response.setContract1DownloadUrl("");
                 response.setContractTitle2(SaasContractEnum.LOAN_CONTRACT.getMsg());
 //            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LOAN_CONTRACT.getUrl());
                 response.setContractUrl2(orderDetailVo.getTermUrl());
+                response.setContract2DownloadUrl("");
             } else {
                 response.setContractTitle1(SaasContractEnum.LOAN_CONTRACT.getMsg());
 //            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LOAN_CONTRACT.getUrl());
                 response.setContractUrl1(orderDetailVo.getTermUrl());
+                response.setContract1DownloadUrl("");
             }
             response.setVisible(Boolean.TRUE);
             response.setButtonTitle(H5OrderDetailButtonTypeEnum.CONFIRM_RECEIPT_BUTTON_TYPE.getMsg());

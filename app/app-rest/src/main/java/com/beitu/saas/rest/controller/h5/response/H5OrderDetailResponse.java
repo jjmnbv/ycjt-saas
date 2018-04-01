@@ -55,11 +55,17 @@ public class H5OrderDetailResponse implements ResponseData {
     @ApiModelProperty(value = "合同1url")
     private String contractUrl1;
 
+    @ApiModelProperty(value = "合同1下载url")
+    private String contract1DownloadUrl;
+
     @ApiModelProperty(value = "合同2展示信息")
     private String contractTitle2;
 
     @ApiModelProperty(value = "合同2url")
     private String contractUrl2;
+
+    @ApiModelProperty(value = "合同2下载url")
+    private String contract2DownloadUrl;
 
     @ApiModelProperty(value = "按钮是否展示")
     private Boolean visible;
@@ -213,4 +219,21 @@ public class H5OrderDetailResponse implements ResponseData {
     public void setButtonType(Integer buttonType) {
         this.buttonType = buttonType;
     }
+
+    public String getContract1DownloadUrl() {
+        return contract1DownloadUrl;
+    }
+
+    public void setContract1DownloadUrl(String contract1DownloadUrl) {
+        this.contract1DownloadUrl = contract1DownloadUrl;
+    }
+
+    public String getContract2DownloadUrl() {
+        return contract2DownloadUrl;
+    }
+
+    public void setContract2DownloadUrl(String contract2DownloadUrl) {
+        this.contract2DownloadUrl = contract2DownloadUrl;
+    }
+
 }
