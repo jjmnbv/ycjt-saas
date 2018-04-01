@@ -41,10 +41,13 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
             return null;
         }
         if (saasOrderList.size() == 1) {
-            if (DateUtil.countDay(new Date(), saasOrderList.get(0).getRepaymentDt()) < 0) {
-                return OrderStatusEnum.OVERDUE;
+            SaasOrder saasOrder = saasOrderList.get(0);
+            if (OrderStatusEnum.FOR_REIMBURSEMENT.getCode().equals(saasOrder.getOrderStatus())) {
+                if (DateUtil.countDay(new Date(), saasOrder.getRepaymentDt()) < 0) {
+                    return OrderStatusEnum.OVERDUE;
+                }
             }
-            return OrderStatusEnum.getEnumByCode(saasOrderList.get(0).getOrderStatus());
+            return OrderStatusEnum.getEnumByCode(saasOrder.getOrderStatus());
         }
         SaasOrder saasOrder = saasOrderList.get(saasOrderList.size() - 1);
         if (OrderStatusEnum.FOR_REIMBURSEMENT.getCode().equals(saasOrder.getOrderStatus())) {

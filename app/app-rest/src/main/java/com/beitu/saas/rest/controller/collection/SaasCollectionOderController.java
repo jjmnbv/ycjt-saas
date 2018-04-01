@@ -56,7 +56,7 @@ public class SaasCollectionOderController {
 
     @SignIgnore
     @RequestMapping(value = "/collectionOrderGet/note", method = RequestMethod.POST)
-    @ApiOperation(value = "新增催收记录", response = CollectionOrderListResponse.class)
+    @ApiOperation(value = "新增催收记录", response = ApiResponse.class)
     public ApiResponse addNote(@RequestBody AddCollectionOrderNoteRequest req) {
         return new ApiResponse("新增催记成功");
     }

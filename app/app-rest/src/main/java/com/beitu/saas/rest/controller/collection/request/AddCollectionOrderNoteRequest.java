@@ -10,11 +10,21 @@ import io.swagger.annotations.ApiModel;
 @ApiModel(value = "新增催收记录")
 public class AddCollectionOrderNoteRequest {
 
+    private String orderNo;
+
     private String name;
 
     private String mobile;
 
     private String remark;
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
+    }
 
     public String getName() {
         return name;
