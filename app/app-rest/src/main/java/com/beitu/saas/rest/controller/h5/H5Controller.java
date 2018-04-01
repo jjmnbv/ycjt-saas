@@ -418,7 +418,7 @@ public class H5Controller {
             response.setVisible(Boolean.TRUE);
             response.setButtonTitle(H5OrderDetailButtonTypeEnum.CONFIRM_RECEIPT_BUTTON_TYPE.getMsg());
             response.setButtonType(H5OrderDetailButtonTypeEnum.CONFIRM_RECEIPT_BUTTON_TYPE.getCode());
-        } else if (OrderStatusEnum.IN_EXTEND.getCode().equals(orderDetailVo.getOrderStatus())) {
+        } else if (OrderStatusEnum.TO_CONFIRM_EXTEND.getCode().equals(orderDetailVo.getOrderStatus())) {
             response.setHeaderTitle("确认展期");
             response.setContractTitle1(SaasContractEnum.EXTEND_CONTRACT.getMsg());
 //            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.EXTEND_CONTRACT.getUrl());
