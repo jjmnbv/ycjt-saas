@@ -9,7 +9,6 @@ import io.swagger.annotations.ApiModelProperty;
  * @create 2018/3/28 上午11:38
  * @description
  */
-@ApiModel(value = "SAAS账单列表展示信息")
 public class SaasOrderBillDetailListVo implements ResponseData {
 
     @ApiModelProperty(value = "订单号")
