@@ -1,19 +1,16 @@
 package com.beitu.saas.rest.controller.collection;
 
 import com.beitu.saas.app.annotations.SignIgnore;
+import com.beitu.saas.app.api.ApiResponse;
 import com.beitu.saas.app.application.collection.CollectionApplication;
 import com.beitu.saas.app.application.collection.vo.CollectionOrderListVo;
-import com.beitu.saas.collection.param.CollectionOrderQueryParam;
-import com.beitu.saas.collection.vo.CollectionOrderInfoDetailVo;
 import com.beitu.saas.rest.controller.collection.request.AddCollectionOrderNoteRequest;
 import com.beitu.saas.rest.controller.collection.request.CollectionOrderQueryRequestParam;
 import com.beitu.saas.rest.controller.collection.response.CollectionOrderListResponse;
-import com.fqgj.common.api.ApiResponse;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.response.ModuleResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
