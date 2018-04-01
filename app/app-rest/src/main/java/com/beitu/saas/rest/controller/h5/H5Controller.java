@@ -407,13 +407,13 @@ public class H5Controller {
                 response.setContract1DownloadUrl("");
                 response.setContractTitle2(SaasContractEnum.LOAN_CONTRACT.getMsg());
 //            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LOAN_CONTRACT.getUrl());
-                response.setContractUrl2(orderDetailVo.getTermUrl());
-                response.setContract2DownloadUrl("");
+                response.setContractUrl2("http://ycjt.oss-cn-hangzhou.aliyuncs.com/contract/20170715004158769001_753a5c94b2b8c5437778986c25baf22d.pdf");
+                response.setContract2DownloadUrl("http://ycjt.oss-cn-hangzhou.aliyuncs.com/contract/20170715004158769001_753a5c94b2b8c5437778986c25baf22d.pdf");
             } else {
                 response.setContractTitle1(SaasContractEnum.LOAN_CONTRACT.getMsg());
 //            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LOAN_CONTRACT.getUrl());
-                response.setContractUrl1(orderDetailVo.getTermUrl());
-                response.setContract1DownloadUrl("");
+                response.setContractUrl1("http://ycjt.oss-cn-hangzhou.aliyuncs.com/contract/20170715004158769001_753a5c94b2b8c5437778986c25baf22d.pdf");
+                response.setContract1DownloadUrl("http://ycjt.oss-cn-hangzhou.aliyuncs.com/contract/20170715004158769001_753a5c94b2b8c5437778986c25baf22d.pdf");
             }
             response.setVisible(Boolean.TRUE);
             response.setButtonTitle(H5OrderDetailButtonTypeEnum.CONFIRM_RECEIPT_BUTTON_TYPE.getMsg());
@@ -429,7 +429,9 @@ public class H5Controller {
         } else {
             response.setVisible(Boolean.FALSE);
             response.setContractTitle1(SaasContractEnum.LOAN_CONTRACT.getMsg());
-            response.setContractUrl1(orderDetailVo.getTermUrl());
+            response.setContractUrl1("http://ycjt.oss-cn-hangzhou.aliyuncs.com/H5/pdfview/web/viewer.html?file=/contract/20170715004158769001_753a5c94b2b8c5437778986c25baf22d.pdf");
+            response.setContract1DownloadUrl("http://ycjt.oss-cn-hangzhou.aliyuncs.com/contract/20170715004158769001_753a5c94b2b8c5437778986c25baf22d.pdf");
+
             response.setHeaderTitle("订单详情");
         }
         return new DataApiResponse(response);

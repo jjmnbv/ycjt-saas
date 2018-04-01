@@ -11,7 +11,7 @@ import io.swagger.annotations.ApiModel;
 @ApiModel(value = "催收列表展示信息")
 public class CollectionOrderListVo implements ResponseData {
 
-    private String orderNo;
+    private String orderNo = "20180331174940417004";
     private String name;
     private String mobile;
     private String realCapital;
