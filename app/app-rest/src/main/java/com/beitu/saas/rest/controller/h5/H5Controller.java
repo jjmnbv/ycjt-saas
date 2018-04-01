@@ -421,15 +421,15 @@ public class H5Controller {
         return new DataApiResponse(response);
     }
 
-    @RequestMapping(value = "/order/confirm/{buttonType}/{orderNumb}", method = RequestMethod.POST)
+    @RequestMapping(value = "/order/confirm/{buttonType}", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "用户订单详情按钮操作", response = H5OrderDetailResponse.class)
-    public ApiResponse getOrderDetail(@PathVariable(value = "buttonType") Integer buttonType,
-                                      @PathVariable(value = "orderNumb") String orderNumb) {
+    public ApiResponse getOrderDetail(@PathVariable(value = "buttonType") Integer buttonType) {
         H5OrderDetailButtonTypeEnum h5OrderDetailButtonTypeEnum = H5OrderDetailButtonTypeEnum.getByCode(buttonType);
         if (h5OrderDetailButtonTypeEnum == null) {
             return new ApiResponse("非法操作参数");
         }
+        String orderNumb = "20180401175915663004";
         SaasBorrowerVo saasBorrowerVo = RequestLocalInfo.getCurrentAdmin().getSaasBorrower();
         switch (h5OrderDetailButtonTypeEnum) {
             case CONFIRM_EXTEND_BUTTON_TYPE:
