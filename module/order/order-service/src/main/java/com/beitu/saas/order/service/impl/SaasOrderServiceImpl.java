@@ -45,7 +45,7 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
         }
         SaasOrder saasOrder = saasOrderList.get(saasOrderList.size() - 1);
         if (OrderStatusEnum.FOR_REIMBURSEMENT.getCode().equals(saasOrder.getOrderStatus())) {
-            if (DateUtil.countDay(new Date(), saasOrder.getRepaymentDt()) < 0) {
+            if (DateUtil.countDay(new Date(), saasOrder.getRepaymentDt()) > 0) {
                 return OrderStatusEnum.OVERDUE;
             } else {
                 return OrderStatusEnum.IN_EXTEND;
