@@ -55,8 +55,16 @@ public class UserButtonResponse implements ResponseData {
     class OperationButton {
         private Long id;
         private String name;
+        private Boolean checked;
         private List<OperationButtonItem> list;
 
+        public Boolean getChecked() {
+            return checked;
+        }
+
+        public void setChecked(Boolean checked) {
+            this.checked = checked;
+        }
         public Long getId() {
             return id;
         }
@@ -85,10 +93,19 @@ public class UserButtonResponse implements ResponseData {
     class OperationButtonItem {
         private Long id;
         private String name;
+        private Boolean checked;
 
         public OperationButtonItem(Long id, String name) {
             this.id = id;
             this.name = name;
+        }
+
+        public Boolean getChecked() {
+            return checked;
+        }
+
+        public void setChecked(Boolean checked) {
+            this.checked = checked;
         }
 
         public Long getId() {
