@@ -396,11 +396,10 @@ public class H5Controller {
             response.setHeaderTitle("确认借款");
             response.setContractTitle1(SaasContractEnum.LOAN_CONTRACT.getMsg());
 //            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LOAN_CONTRACT.getUrl());
-            response.setContractUrl1("http://ycjt.oss-cn-hangzhou.aliyuncs.com/contract/20170715004158769001_753a5c94b2b8c5437778986c25baf22d.pdf");
+            response.setContractUrl1(orderDetailVo.getTermUrl());
             if (contractApplication.needDoLicenseContractSign(orderDetailVo.getBorrowerCode())) {
                 response.setContractTitle2(SaasContractEnum.LICENSE_CONTRACT.getMsg());
-//                response.setContractUrl2(configUtil.getAddressURLPrefix() + SaasContractEnum.LICENSE_CONTRACT.getUrl());
-                response.setContractUrl1("http://ycjt.oss-cn-hangzhou.aliyuncs.com/contract/20170715004158769001_753a5c94b2b8c5437778986c25baf22d.pdf");
+                response.setContractUrl2(configUtil.getAddressURLPrefix() + SaasContractEnum.LICENSE_CONTRACT.getUrl());
             }
             response.setVisible(Boolean.TRUE);
             response.setButtonTitle(H5OrderDetailButtonTypeEnum.CONFIRM_RECEIPT_BUTTON_TYPE.getMsg());
@@ -409,29 +408,35 @@ public class H5Controller {
             response.setHeaderTitle("确认展期");
             response.setContractTitle1(SaasContractEnum.EXTEND_CONTRACT.getMsg());
 //            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.EXTEND_CONTRACT.getUrl());
-            response.setContractUrl1("http://ycjt.oss-cn-hangzhou.aliyuncs.com/contract/20170715004158769001_753a5c94b2b8c5437778986c25baf22d.pdf");
+            response.setContractUrl1(orderDetailVo.getTermUrl());
             response.setVisible(Boolean.TRUE);
             response.setButtonTitle(H5OrderDetailButtonTypeEnum.CONFIRM_EXTEND_BUTTON_TYPE.getMsg());
             response.setButtonType(H5OrderDetailButtonTypeEnum.CONFIRM_EXTEND_BUTTON_TYPE.getCode());
         } else {
             response.setVisible(Boolean.FALSE);
+            response.setContractTitle1(SaasContractEnum.LOAN_CONTRACT.getMsg());
+            response.setContractUrl1(orderDetailVo.getTermUrl());
             response.setHeaderTitle("订单详情");
         }
         return new DataApiResponse(response);
     }
 
-    @RequestMapping(value = "/order/confirm/{buttonType}", method = RequestMethod.POST)
+    @RequestMapping(value = "/order/confirm/{buttonType}/{orderNumb}", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "用户订单详情按钮操作", response = H5OrderDetailResponse.class)
-    public ApiResponse getOrderDetail(@PathVariable(value = "buttonType") Integer buttonType) {
+    public ApiResponse getOrderDetail(@PathVariable(value = "buttonType") Integer buttonType,
+                                      @PathVariable(value = "orderNumb") String orderNumb) {
         H5OrderDetailButtonTypeEnum h5OrderDetailButtonTypeEnum = H5OrderDetailButtonTypeEnum.getByCode(buttonType);
         if (h5OrderDetailButtonTypeEnum == null) {
             return new ApiResponse("非法操作参数");
         }
+        SaasBorrowerVo saasBorrowerVo = RequestLocalInfo.getCurrentAdmin().getSaasBorrower();
         switch (h5OrderDetailButtonTypeEnum) {
             case CONFIRM_EXTEND_BUTTON_TYPE:
+                orderApplication.confirmExtend(saasBorrowerVo.getBorrowerCode(), orderNumb);
                 return new ApiResponse("签署展期合同成功");
             case CONFIRM_RECEIPT_BUTTON_TYPE:
+                orderApplication.confirmReceipt(saasBorrowerVo.getBorrowerCode(), orderNumb);
                 return new ApiResponse("签署借款合同成功");
             default:
                 return new ApiResponse("操作成功");

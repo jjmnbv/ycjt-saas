@@ -75,8 +75,8 @@ public class ForLendingOrderController {
     @ResponseBody
     @ApiOperation(value = "放款", response = ApiResponse.class)
     public ApiResponse agree(@RequestBody @Valid FinalReviewerOperateOrderRequest req) {
-        String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.lenderAgree(adminCode, req.getOrderNumb());
+        SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
+        orderApplication.lenderAgree(saasAdmin.getMerchantCode(), saasAdmin.getCode(), req.getOrderNumb());
         return new ApiResponse("操作成功");
     }
 

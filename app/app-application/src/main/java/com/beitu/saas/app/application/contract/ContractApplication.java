@@ -1,5 +1,7 @@
 package com.beitu.saas.app.application.contract;
 
+import com.beitu.saas.intergration.esign.EsignIntegrationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class ContractApplication {
 
+    @Autowired
+    private EsignIntegrationService esignIntegrationService;
 
     public Boolean needDoLicenseContractSign(String userCode) {
         return Boolean.TRUE;
@@ -19,11 +23,15 @@ public class ContractApplication {
 
     }
 
-    public void doLoanContractSign(String merchantCode, String borrowerCode, String orderId) {
+    public void borrowerDoLoanContractSign(String borrowerCode, String orderNumb) {
 
     }
 
-    public void doExtendContractSign(String merchantCode, String borrowerCode, String orderId) {
+    public void lenderDoLoanContractSign(String merchantCode, String orderNumb) {
+
+    }
+
+    public void doExtendContractSign(String merchantCode, String borrowerCode, String orderNumb) {
 
     }
 
