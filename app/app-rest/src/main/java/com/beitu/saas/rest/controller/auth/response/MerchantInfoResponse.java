@@ -39,9 +39,10 @@ public class MerchantInfoResponse {
         this.contractType = isCompanyContract ? ContractConfigTypeEnum.COMPANY_CONTRACT.getKey() : ContractConfigTypeEnum.PERSONAL_CONTRACT.getKey();
         smsConfigInfo = new ArrayList<>();
         saasSmsConfigDictionaryList.forEach(saasSmsConfigDictionary -> {
-            SmsConfigInfo smsConfigInfo = new SmsConfigInfo();
-            BeanUtils.copyProperties(saasSmsConfigDictionary, smsConfigInfo);
-            smsConfigInfo.setEnable(smsConfig.contains(saasSmsConfigDictionary.getBizCode()));
+            SmsConfigInfo config = new SmsConfigInfo();
+            BeanUtils.copyProperties(saasSmsConfigDictionary, config);
+            config.setEnable(smsConfig.contains(saasSmsConfigDictionary.getBizCode()));
+            smsConfigInfo.add(config);
         });
     }
 
