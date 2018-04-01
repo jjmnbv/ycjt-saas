@@ -100,9 +100,7 @@ public class RoleController {
     @ParamsValidate
     @ApiOperation(value = "启动和禁用角色")
     public Response enable(@PathVariable Long roleId, @PathVariable("enable") boolean enable) {
-        SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
         SaasRole saasRole = new SaasRole();
-        saasRole.setMerchantCode(saasAdmin.getCode());
         saasRole.setEnabled(enable);
         saasRole.setId(roleId);
         boolean success = saasRoleService.updateById(saasRole) > 0;
