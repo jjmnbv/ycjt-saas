@@ -191,6 +191,9 @@ public class OrderBillDetailApplication {
         }
         SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
         addSaasOrderBillDetail.setOrderNumb(orderNumb);
+        addSaasOrderBillDetail.setMerchantCode(saasOrderVo.getMerchantCode());
+        addSaasOrderBillDetail.setChannelCode(saasOrderVo.getChannelCode());
+        addSaasOrderBillDetail.setBorrowerCode(saasOrderVo.getBorrowerCode());
         addSaasOrderBillDetail.setRealCapital(saasOrderVo.getRealCapital());
         addSaasOrderBillDetail.setTotalInterestRatio(saasOrderVo.getTotalInterestRatio());
         addSaasOrderBillDetail.setLateInterestRatio(saasOrderVo.getLateInterestRatio());
