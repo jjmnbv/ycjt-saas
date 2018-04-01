@@ -1,6 +1,7 @@
 package com.beitu.saas.rest.controller.auth.response;
 
 import com.beitu.saas.auth.vo.FormedMenuVO;
+import com.beitu.saas.risk.helpers.CollectionUtils;
 import com.fqgj.common.api.ResponseData;
 import io.swagger.annotations.ApiModel;
 
@@ -21,10 +22,23 @@ public class RoleDetailResponse implements ResponseData {
     private List<UserButtonResponse.OperationButton> buttonList;
 
 
-    public RoleDetailResponse(String roleName, FormedMenuVO formedMenuVO, List<UserButtonResponse.OperationButton> buttonList) {
+    public RoleDetailResponse(String roleName, FormedMenuVO formedMenuVO, List<UserButtonResponse.OperationButton> buttonList, List<Integer> buttonIds, List<Integer> menuIds) {
+
         this.roleName = roleName;
         this.menuList = formedMenuVO.getList();
         this.buttonList = buttonList;
+        this.buttonList.forEach(operationButton -> {
+            operationButton.setChecked(buttonIds.contains(operationButton.getId().intValue()));
+            if (CollectionUtils.isNotEmpty(operationButton.getList())) {
+                operationButton.getList().forEach(operationButtonItem -> operationButtonItem.setChecked(buttonIds.contains(operationButtonItem.getId().intValue())));
+            }
+        });
+        this.menuList.forEach((FormedMenuVO.ParentMenu parentMenu) -> {
+            parentMenu.setChecked(menuIds.contains(parentMenu.getId().intValue()));
+            if (CollectionUtils.isNotEmpty(parentMenu.getChildren())) {
+                parentMenu.getChildren().forEach(childrenMenu -> childrenMenu.setChecked(menuIds.contains(childrenMenu.getId().intValue())));
+            }
+        });
     }
 
     public String getRoleName() {

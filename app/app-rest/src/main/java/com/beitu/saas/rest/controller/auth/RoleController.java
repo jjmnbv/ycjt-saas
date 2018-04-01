@@ -114,27 +114,39 @@ public class RoleController {
     @ApiOperation(value = "角色详情", response = RoleDetailResponse.class)
     public Response detail(@RequestParam(value = "roleId", required = false) Long roleId) {
         String roleName = null;
-        List<Integer> menuIds;
-        List<Integer> buttonIds;
         SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
         String code = saasAdmin.getCode();
+        List<Integer> menuIds = adminInfoApplication.getMenuIdsByAdmin(code);
+        List<Integer> buttonIds = adminInfoApplication.getButtonIdsByAdmin(code);
+        List<Integer> menuCheckedIds = new ArrayList<>();
+        List<Integer> buttonCheckedIds = new ArrayList<>();
         if (null != roleId) {
             SaasRole saasRole = (SaasRole) saasRoleService.selectById(roleId);
             if (!saasRole.getMerchantCode().equals(saasAdmin.getMerchantCode())) {
                 throw new ApiErrorException("请求角色非法");
             }
             roleName = saasRole.getName();
-            menuIds = adminInfoApplication.getMenuIdsByRoleId(roleId);
-            buttonIds = adminInfoApplication.getButtonIdsByRoleId(roleId);
-        } else {
-            menuIds = adminInfoApplication.getMenuIdsByAdmin(code);
-            buttonIds = adminInfoApplication.getButtonIdsByAdmin(code);
+            menuCheckedIds = adminInfoApplication.getMenuIdsByRoleId(roleId);
+            buttonCheckedIds = adminInfoApplication.getButtonIdsByRoleId(roleId);
         }
-        List<SaasMenu> menuList = saasMenuService.getListByIds(menuIds);
+//        if (null != roleId) {
+//            SaasRole saasRole = (SaasRole) saasRoleService.selectById(roleId);
+//            if (!saasRole.getMerchantCode().equals(saasAdmin.getMerchantCode())) {
+//                throw new ApiErrorException("请求角色非法");
+//            }
+//            roleName = saasRole.getName();
+//            menuIds = adminInfoApplication.getMenuIdsByRoleId(roleId);
+//            buttonIds = adminInfoApplication.getButtonIdsByRoleId(roleId);
+//        } else {
+//            menuIds = adminInfoApplication.getMenuIdsByAdmin(code);
+//            buttonIds = adminInfoApplication.getButtonIdsByAdmin(code);
+//        }
 
+        List<SaasMenu> menuList = saasMenuService.getListByIds(menuIds);
         List<SaasOperationButton> buttonList = saasOperationButtonService.getListByIds(buttonIds);
 
-        RoleDetailResponse roleDetailResponse = new RoleDetailResponse(roleName, new FormedMenuVO(menuList), new UserButtonResponse(buttonList, saasOperationButtonService.getParentButtonForMap()).getList());
+        RoleDetailResponse roleDetailResponse = new RoleDetailResponse(roleName, new FormedMenuVO(menuList),
+                new UserButtonResponse(buttonList, saasOperationButtonService.getParentButtonForMap()).getList(), buttonCheckedIds, menuCheckedIds);
         return Response.ok().putData(roleDetailResponse);
     }
 

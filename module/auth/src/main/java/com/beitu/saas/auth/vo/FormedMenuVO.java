@@ -76,7 +76,16 @@ public class FormedMenuVO {
         private String name;
         private String path;
         private String icon;
+        private Boolean checked;
         List<ChildrenMenu> children = new ArrayList<>();
+
+        public Boolean getChecked() {
+            return checked;
+        }
+
+        public void setChecked(Boolean checked) {
+            this.checked = checked;
+        }
 
         public Long getId() {
             return id;
@@ -120,12 +129,22 @@ public class FormedMenuVO {
     }
 
 
-    private class ChildrenMenu {
+     public class ChildrenMenu {
         private Long id;
         private String name;
         private String path;
         private String icon;
+        private Boolean checked;
         List<ChildrenMenu> children = new ArrayList<>();
+
+
+        public Boolean getChecked() {
+            return checked;
+        }
+
+        public void setChecked(Boolean checked) {
+            this.checked = checked;
+        }
 
         public Long getId() {
             return id;
