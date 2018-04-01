@@ -41,7 +41,7 @@ public class SaasMerchantConfigServiceImpl extends AbstractBaseService implement
             put("deleted", false);
         }});
         if (CollectionUtils.isNotEmpty(list)) {
-            if (ContractConfigTypeEnum.COMPANY_CONTRACT.getKey().equals(list.get(0).getConfigEnum())) {
+            if (ContractConfigTypeEnum.COMPANY_CONTRACT.getKey().toString().equals(list.get(0).getConfigEnum())) {
                 return true;
             }
         }
