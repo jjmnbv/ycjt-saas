@@ -15,7 +15,7 @@ public class CollectionOrderListVo implements ResponseData {
     private String name;
     private String mobile;
     private String realCapital;
-    private String totalRealCapital;
+    private String shouldRepayCapital;
     private String createDt;
     private String repaymentDt;
     private Boolean extend;
@@ -54,12 +54,13 @@ public class CollectionOrderListVo implements ResponseData {
         this.realCapital = realCapital;
     }
 
-    public String getTotalRealCapital() {
-        return totalRealCapital;
+    public String getShouldRepayCapital() {
+        return shouldRepayCapital;
     }
 
-    public void setTotalRealCapital(String totalRealCapital) {
-        this.totalRealCapital = totalRealCapital;
+    public CollectionOrderListVo setShouldRepayCapital(String shouldRepayCapital) {
+        this.shouldRepayCapital = shouldRepayCapital;
+        return this;
     }
 
     public String getCreateDt() {

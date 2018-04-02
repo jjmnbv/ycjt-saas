@@ -23,11 +23,11 @@ public class CollectionCommentParam {
     /**
      *内容
      */
-    private String content;
+    private String remark;
     /**
      *跟进人ID
      */
-    private Integer followId;
+    private Integer followCode;
     /**
      *跟进人名字
      */
@@ -60,21 +60,21 @@ public class CollectionCommentParam {
         return this;
     }
 
-    public String getContent() {
-        return content;
+    public String getRemark() {
+        return remark;
     }
 
-    public CollectionCommentParam setContent(String content) {
-        this.content = content;
+    public CollectionCommentParam setRemark(String remark) {
+        this.remark = remark;
         return this;
     }
 
-    public Integer getFollowId() {
-        return followId;
+    public Integer getFollowCode() {
+        return followCode;
     }
 
-    public CollectionCommentParam setFollowId(Integer followId) {
-        this.followId = followId;
+    public CollectionCommentParam setFollowCode(Integer followCode) {
+        this.followCode = followCode;
         return this;
     }
 
