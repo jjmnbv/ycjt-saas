@@ -2,8 +2,8 @@ package com.beitu.saas.intergration.risk.enums;
 
 public enum LoanPlatformCrawlingCodeEnum {
     
-    SUCCESS(0000, "成功"),
-    PARAM_ERROR(1000, "输入参数有误");
+    SUCCESS(1000, "成功"),
+    PARAM_ERROR(1001, "输入参数有误");
     
     private Integer code;
     

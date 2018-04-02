@@ -1,6 +1,7 @@
 package com.beitu.saas.intergration.risk.dto;
 
 import com.beitu.saas.intergration.risk.enums.LoanPlatformQueryCodeEnum;
+import com.beitu.saas.intergration.risk.pojo.LoanPlatformQueryDetailPojo;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
@@ -14,6 +15,8 @@ public class LoanPlatformQueryDto implements Serializable {
     private String msg;
     
     private String data;
+    
+    private LoanPlatformQueryDetailPojo detailInfo;
     
     public LoanPlatformQueryDto(LoanPlatformQueryCodeEnum codeEnum) {
         this.code = codeEnum.getCode();
@@ -52,6 +55,15 @@ public class LoanPlatformQueryDto implements Serializable {
     
     public LoanPlatformQueryDto setData(String data) {
         this.data = data;
+        return this;
+    }
+    
+    public LoanPlatformQueryDetailPojo getDetailInfo() {
+        return detailInfo;
+    }
+    
+    public LoanPlatformQueryDto setDetailInfo(LoanPlatformQueryDetailPojo detailInfo) {
+        this.detailInfo = detailInfo;
         return this;
     }
 }
