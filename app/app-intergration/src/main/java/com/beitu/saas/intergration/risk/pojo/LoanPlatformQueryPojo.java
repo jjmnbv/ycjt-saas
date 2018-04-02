@@ -17,4 +17,24 @@ public class LoanPlatformQueryPojo {
      */
     private String msg;
     
+    /**
+     * 具体信息
+     */
+    private LoanPlatformQueryDetailPojo detail;
+    
+    public Boolean getSuccess() {
+        return success;
+    }
+    
+    public String getCode() {
+        return code;
+    }
+    
+    public String getMsg() {
+        return msg;
+    }
+    
+    public LoanPlatformQueryDetailPojo getDetail() {
+        return detail;
+    }
 }

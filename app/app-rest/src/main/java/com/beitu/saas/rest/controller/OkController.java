@@ -7,8 +7,10 @@ import com.beitu.saas.app.application.credit.CreditApplication;
 import com.beitu.saas.app.application.finance.SaasConsumeDayStatApplication;
 import com.beitu.saas.intergration.risk.RiskIntergrationService;
 import com.beitu.saas.intergration.risk.dto.LoanPlatformCrawlingDto;
+import com.beitu.saas.intergration.risk.dto.LoanPlatformQueryDto;
 import com.beitu.saas.intergration.risk.enums.LoanPlatformEnum;
 import com.beitu.saas.intergration.risk.param.LoanPlatformCrawlingParam;
+import com.beitu.saas.intergration.risk.param.LoanPlatformQueryParam;
 import com.fqgj.log.factory.LogFactory;
 import com.fqgj.log.interfaces.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +44,17 @@ public class OkController {
     @VisitorAccessible
     @SignIgnore
     public String stat() {
-        return "stat";
+//        LoanPlatformCrawlingParam param = new LoanPlatformCrawlingParam();
+//        param.setTaskId("jdfsklajkfjalsjfadslfksdj");
+//        param.setJumpUrl("https://www.baidu.com");
+//        param.setPlatformEnum(LoanPlatformEnum.WU_YOU_JIE_TIAO);
+//        LoanPlatformCrawlingDto dto = riskIntergrationService.loanPlatformCrawlingUrl(param);
+//        return JSON.toJSONString(dto);
+        
+        LoanPlatformQueryParam param = new LoanPlatformQueryParam();
+        param.setToken("964e45dd5f984d6ea2a2f4546973f8e9");
+        LoanPlatformQueryDto dto = riskIntergrationService.loanPlatformQuery(param);
+        return JSON.toJSONString(dto);
     }
 
 }

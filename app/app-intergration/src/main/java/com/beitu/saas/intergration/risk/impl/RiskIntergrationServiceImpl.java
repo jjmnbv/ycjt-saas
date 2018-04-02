@@ -3,6 +3,7 @@ package com.beitu.saas.intergration.risk.impl;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.utils.HttpClientUtil;
 import com.beitu.saas.intergration.risk.RiskIntergrationService;
+import com.beitu.saas.intergration.risk.consts.JuxinliApiCodeConst;
 import com.beitu.saas.intergration.risk.dto.LoanPlatformCrawlingDto;
 import com.beitu.saas.intergration.risk.dto.LoanPlatformQueryDto;
 import com.beitu.saas.intergration.risk.enums.LoanPlatformCrawlingCodeEnum;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 @Service
 public class RiskIntergrationServiceImpl implements RiskIntergrationService {
@@ -88,7 +90,16 @@ public class RiskIntergrationServiceImpl implements RiskIntergrationService {
             return new LoanPlatformQueryDto(LoanPlatformQueryCodeEnum.RESPONSE_ERROR, "接口返回数据异常");
         }
         
-        return new LoanPlatformQueryDto(LoanPlatformQueryCodeEnum.SUCCESS).setData(response);
+        if (!pojo.getSuccess() || !Objects.equals(JuxinliApiCodeConst.SUCCESS, pojo.getCode())) {
+            return new LoanPlatformQueryDto(LoanPlatformQueryCodeEnum.RESULT_ERROR, pojo.getMsg());
+        }
+        if (pojo.getDetail() == null) {
+            return new LoanPlatformQueryDto(LoanPlatformQueryCodeEnum.RESULT_ERROR, "接口返回数据为空");
+        }
+        
+        return new LoanPlatformQueryDto(LoanPlatformQueryCodeEnum.SUCCESS)
+                .setData(response)
+                .setDetailInfo(pojo.getDetail());
     }
     
 }
