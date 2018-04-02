@@ -438,10 +438,6 @@ public class OrderApplication {
             throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
         }
         updateOrderStatus(operatorCode, orderNumb, OrderStatusEnum.PRELIMINARY_REVIEWER_REJECT, null);
-        SaasOrder updateSaasOrder = new SaasOrder();
-        updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
-        updateSaasOrder.setPreliminaryReviewerCode(operatorCode);
-        saasOrderService.updateById(updateSaasOrder);
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
@@ -488,10 +484,6 @@ public class OrderApplication {
             throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
         }
         updateOrderStatus(operatorCode, orderNumb, OrderStatusEnum.FINAL_REVIEWER_REJECT, null);
-        SaasOrder updateSaasOrder = new SaasOrder();
-        updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
-        updateSaasOrder.setFinalReviewerCode(operatorCode);
-        saasOrderService.updateById(updateSaasOrder);
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
