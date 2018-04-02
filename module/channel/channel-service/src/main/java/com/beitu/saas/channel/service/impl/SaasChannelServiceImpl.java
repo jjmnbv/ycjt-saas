@@ -1,11 +1,14 @@
 package com.beitu.saas.channel.service.impl;
 
+import com.beitu.saas.channel.consts.ChannelConsts;
+import com.beitu.saas.channel.enums.ChannelStatusEnum;
 import com.beitu.saas.channel.param.ChannelStatQueryParam;
 import com.beitu.saas.channel.param.SaasChannelParam;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.dao.SaasChannelDao;
 import com.beitu.saas.channel.entity.SaasChannelEntity;
 import com.beitu.saas.channel.vo.ChannelStatVo;
+import com.beitu.saas.common.utils.OrderNoUtil;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
@@ -79,7 +82,22 @@ public class SaasChannelServiceImpl extends AbstractBaseService implements SaasC
 
     @Override
     public SaasChannelEntity getDefaultSaasChannelByMerchantCode(String merchantCode) {
-        return null;
+        return saasChannelDao.selectChannelEntityByMerchantCodeAndCreatorCode(merchantCode, ChannelConsts.DEFAULT_CHANNEL_CREATOR_CODE);
+    }
+
+    @Override
+    public SaasChannelEntity createMerchantDefaultChannel(String merchantCode) {
+        SaasChannelEntity saasChannelEntity = new SaasChannelEntity();
+        String channelCode = ChannelConsts.DEFAULT_CHANNEL_CREATOR_CODE;
+        saasChannelEntity.setMerchantCode(merchantCode)
+                .setChannelCode(channelCode)
+                .setChannelName("SAAS进件渠道")
+                .setChannelStatus(ChannelStatusEnum.OPEN.getType())
+                .setLinkUrl("?channelCode=" + channelCode)
+                .setChargePersonCode(ChannelConsts.DEFAULT_CHANNEL_CREATOR_CODE)
+                .setCreatorCode(ChannelConsts.DEFAULT_CHANNEL_CREATOR_CODE);
+        saasChannelDao.insert(saasChannelEntity);
+        return saasChannelEntity;
     }
 
 }
