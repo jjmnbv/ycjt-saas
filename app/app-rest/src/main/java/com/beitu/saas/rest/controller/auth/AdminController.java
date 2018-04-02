@@ -2,16 +2,20 @@ package com.beitu.saas.rest.controller.auth;
 
 import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.api.DataApiResponse;
+import com.beitu.saas.app.application.SendApplication;
 import com.beitu.saas.app.application.auth.AdminInfoApplication;
 import com.beitu.saas.app.application.auth.RoleApplication;
 import com.beitu.saas.app.common.RequestBasicInfo;
 import com.beitu.saas.app.common.RequestLocalInfo;
+import com.beitu.saas.app.enums.SaasSmsTypeEnum;
 import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.auth.entity.SaasAdminRole;
 import com.beitu.saas.auth.entity.SaasRole;
+import com.beitu.saas.auth.enums.AdminErrorEnum;
 import com.beitu.saas.auth.service.*;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.consts.TimeConsts;
+import com.beitu.saas.common.utils.NetworkUtil;
 import com.beitu.saas.rest.controller.auth.request.AddAdminRequest;
 import com.beitu.saas.rest.controller.auth.request.AdminLoginRequest;
 import com.beitu.saas.rest.controller.auth.request.ResetPasswordRequest;
@@ -41,10 +45,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author xiaochong
@@ -80,23 +81,32 @@ public class AdminController {
     @Autowired
     private RoleApplication roleApplication;
 
+    @Autowired
+    private SendApplication sendApplication;
+
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ParamsValidate
     @VisitorAccessible
     @ApiOperation(value = "登录")
     public Response login(@RequestBody AdminLoginRequest adminLoginRequest, HttpServletRequest request) throws IOException {
         //TODO 校验验证码
-        String verifyCode = redisClient.get(RedisKeyConsts.H5_SAVE_LOGIN_VERIFYCODE_KEY, adminLoginRequest.getMobile());
-        if (StringUtils.isEmpty(verifyCode)) {
-            throw new ApiErrorException(SmsErrorCodeEnum.VERIFY_CODE_FAILURE);
-        }
-        if (!verifyCode.equals(adminLoginRequest.getVerifyCode())) {
-            throw new ApiErrorException(SmsErrorCodeEnum.INPUT_WRONG_VERIFY_CODE);
-        }
         SaasAdmin saasAdmin = saasAdminService.login(adminLoginRequest.getMobile(), adminLoginRequest.getPassword());
+        if (!saasAdminLoginLogService.equalLoginIp(saasAdmin.getCode(), NetworkUtil.getIpAddress(request))) {
+            throw new ApiErrorException(AdminErrorEnum.SHOW_VERIFYCODE);
+        }
         String oldToken = redisClient.get(RedisKeyConsts.SAAS_TOKEN_KEY, saasAdmin.getCode());
         if (StringUtils.isNotEmpty(oldToken)) {
+            Map map = new HashMap(2) {{
+                put("account_phone", saasAdmin.getMobile());
+            }};
+            sendApplication.sendNotifyMessage(saasAdmin.getMerchantCode(), saasAdmin.getMobile(), map, SaasSmsTypeEnum.SAAS_0019);
             redisClient.del(RedisKeyConsts.SAAS_TOKEN_KEY, oldToken);
+        }
+        String verifyCode = redisClient.get(RedisKeyConsts.H5_SAVE_LOGIN_VERIFYCODE_KEY, adminLoginRequest.getMobile());
+        if (StringUtils.isNotEmpty(verifyCode)) {
+            if (!verifyCode.equals(adminLoginRequest.getVerifyCode())) {
+                throw new ApiErrorException(SmsErrorCodeEnum.INPUT_WRONG_VERIFY_CODE);
+            }
         }
         saasAdminLoginLogService.addAdminLoginLog(request, saasAdmin.getCode());
         String token = MD5.md5(UUID.randomUUID().toString());
@@ -214,18 +224,17 @@ public class AdminController {
     }
 
 
-
     @RequestMapping(value = "/detail/{adminId}", method = RequestMethod.GET)
     @ParamsValidate
     @ApiOperation(value = "账户详情", response = AdminDetailResponse.class)
     public Response list(@PathVariable("adminId") Long adminId) {
         String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
         AdminDetailResponse response = new AdminDetailResponse();
-        SaasAdmin saasAdmin = (SaasAdmin)saasAdminService.selectById(adminId);
-        if (!merchantCode.equals(saasAdmin.getMerchantCode())){
+        SaasAdmin saasAdmin = (SaasAdmin) saasAdminService.selectById(adminId);
+        if (!merchantCode.equals(saasAdmin.getMerchantCode())) {
             throw new ApiErrorException("请求账户详情非法");
         }
-        BeanUtils.copyProperties(saasAdmin,response);
+        BeanUtils.copyProperties(saasAdmin, response);
         response.setAdminId(saasAdmin.getId());
         SaasRole saasRole = roleApplication.getRoleByAdminCode(saasAdmin.getCode());
         response.setRoleId(saasRole.getId());

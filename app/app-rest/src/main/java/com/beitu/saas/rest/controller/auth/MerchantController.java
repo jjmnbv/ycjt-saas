@@ -64,7 +64,6 @@ public class MerchantController {
     @ApiOperation(value = "合同设置")
     @HasPermission(permissionKey = ButtonPermissionConsts.CONTRACT_SETTING)
     public Response setContractType(@PathVariable Integer type) {
-        ;
         String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
         saasMerchantConfigService.updateContractConfig(merchantCode, type);
         return Response.ok();
