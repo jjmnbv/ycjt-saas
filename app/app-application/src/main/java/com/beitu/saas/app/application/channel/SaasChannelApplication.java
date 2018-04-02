@@ -150,7 +150,7 @@ public class SaasChannelApplication {
                     .setChargePersonName(this.getAdminNameByAdminCode(x.getChargePersonCode()))
                     .setLinkUrl(configUtil.getAddressURLPrefix() + configUtil.getH5AddressURLPrefix() + x.getLinkUrl())
                     .setLongLinkUrl(configUtil.getAddressURLPrefix() + configUtil.getH5AddressURLPrefix() + x.getLinkUrl())
-                    .setShortLinkUrl(ShortUrlUtil.generateShortUrl(configUtil.getAddressURLPrefix() + x.getLinkUrl()))
+                    .setShortLinkUrl(ShortUrlUtil.generateShortUrl(configUtil.getAddressURLPrefix() + configUtil.getH5AddressURLPrefix() + x.getLinkUrl()))
                     .setCreatorName(this.getAdminNameByAdminCode(x.getCreatorCode()))
                     .setCreatorCode(x.getCreatorCode())
                     .setGmtCreate(x.getGmtCreate())
