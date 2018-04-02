@@ -1,9 +1,12 @@
 package com.beitu.saas.rest.controller.credit;
 
 import com.beitu.saas.app.annotations.SignIgnore;
+import com.beitu.saas.intergration.risk.RiskIntergrationService;
+import com.beitu.saas.intergration.risk.param.LoanPlatformQueryParam;
 import com.fqgj.log.factory.LogFactory;
 import com.fqgj.log.interfaces.Log;
 import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,6 +21,9 @@ public class LoanPlatformController {
     
     private static final Log LOGGER = LogFactory.getLog(LoanPlatformController.class);
     
+    @Autowired
+    private RiskIntergrationService riskIntergrationService;
+    
     @SignIgnore
     @ResponseBody
     @RequestMapping(value = "/juxinli/callback", consumes = "application/json", method = RequestMethod.POST)
@@ -30,7 +36,10 @@ public class LoanPlatformController {
     
     
         // TODO: 2018/4/2 查询token 入库
-        
+    
+        LoanPlatformQueryParam param = new LoanPlatformQueryParam();
+        param.setToken("");
+        riskIntergrationService.loanPlatformQuery(param);
         
         LOGGER.info("************************* 聚信立回调结束 *************************");
     }
