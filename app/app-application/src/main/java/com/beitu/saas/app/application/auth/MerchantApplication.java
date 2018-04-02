@@ -1,5 +1,7 @@
 package com.beitu.saas.app.application.auth;
 
+import com.beitu.saas.auth.domain.MerchantContractInfoVo;
+import com.beitu.saas.auth.domain.SaasMerchantVo;
 import com.beitu.saas.auth.entity.*;
 import com.beitu.saas.auth.enums.AdminErrorEnum;
 import com.beitu.saas.auth.enums.ContractConfigTypeEnum;
@@ -116,5 +118,21 @@ public class MerchantApplication {
 
         //6.添加默认渠道
 
+    }
+
+    public MerchantContractInfoVo getMerchantContractInfo(String merchantCode){
+        MerchantContractInfoVo merchantContractInfoVo = new MerchantContractInfoVo();
+        SaasMerchantVo saasMerchantVo = saasMerchantService.getByMerchantCode(merchantCode);
+        merchantContractInfoVo.setName(saasMerchantVo.getLenderName());
+        merchantContractInfoVo.setCode(saasMerchantVo.getLenderIdcard());
+        merchantContractInfoVo.setContractType(ContractConfigTypeEnum.PERSONAL_CONTRACT.getKey());
+        if (saasMerchantConfigService.isCompanyContractByMerchantCode(merchantCode)){
+            merchantContractInfoVo.setContractType(ContractConfigTypeEnum.COMPANY_CONTRACT.getKey());
+            merchantContractInfoVo.setName(saasMerchantVo.getCompanyName());
+            merchantContractInfoVo.setName(saasMerchantVo.getJurisdicalPersonIdcard());
+            merchantContractInfoVo.setCode(saasMerchantVo.getLenderIdcard());
+            merchantContractInfoVo.setContractUrl(saasMerchantVo.getContractSealUrl());
+        }
+        return merchantContractInfoVo;
     }
 }
