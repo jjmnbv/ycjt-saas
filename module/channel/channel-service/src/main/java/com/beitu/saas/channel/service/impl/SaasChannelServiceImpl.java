@@ -70,11 +70,11 @@ public class SaasChannelServiceImpl extends AbstractBaseService implements SaasC
         BigDecimal finalReviewerNum = new BigDecimal(channelStatVo.getFinalReviewerNum());
         BigDecimal loanLenderNum = new BigDecimal(channelStatVo.getLoanLenderNum());
 
-        channelStatVo.setPrimaryReviewerRatio(primaryReviewerNum.divide(intoPiecesNum, 2, BigDecimal.ROUND_HALF_UP));
-        channelStatVo.setFinalReviewerRatio(finalReviewerNum.divide(primaryReviewerNum, 2, BigDecimal.ROUND_HALF_UP));
-        channelStatVo.setFinalReviewerBaseRatio(finalReviewerNum.divide(intoPiecesNum, 2, BigDecimal.ROUND_HALF_UP));
-        channelStatVo.setLoanLenderRatio(loanLenderNum.divide(finalReviewerNum, 2, BigDecimal.ROUND_HALF_UP));
-        channelStatVo.setLoanLenderBaseRatio(loanLenderNum.divide(intoPiecesNum, 2, BigDecimal.ROUND_HALF_UP));
+        channelStatVo.setPrimaryReviewerRatio(intoPiecesNum.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : primaryReviewerNum.divide(intoPiecesNum, 2, BigDecimal.ROUND_HALF_UP));
+        channelStatVo.setFinalReviewerRatio(primaryReviewerNum.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : finalReviewerNum.divide(primaryReviewerNum, 2, BigDecimal.ROUND_HALF_UP));
+        channelStatVo.setFinalReviewerBaseRatio(intoPiecesNum.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : finalReviewerNum.divide(intoPiecesNum, 2, BigDecimal.ROUND_HALF_UP));
+        channelStatVo.setLoanLenderRatio(finalReviewerNum.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : loanLenderNum.divide(finalReviewerNum, 2, BigDecimal.ROUND_HALF_UP));
+        channelStatVo.setLoanLenderBaseRatio(intoPiecesNum.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : loanLenderNum.divide(intoPiecesNum, 2, BigDecimal.ROUND_HALF_UP));
     }
 }
 
