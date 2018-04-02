@@ -7,13 +7,13 @@ package com.beitu.saas.intergration.esign.param;
  */
 public class LoanContractSignParam {
 
-    private Long merchantId;
+    private String merchantCode;
 
     private String merchantAccountId;
 
     private String merchantSealData;
 
-    private Long borrowerId;
+    private String borrowerCode;
 
     private String borrowerAccountId;
 
@@ -21,12 +21,12 @@ public class LoanContractSignParam {
 
     private String srcPdf;
 
-    public Long getMerchantId() {
-        return merchantId;
+    public String getMerchantCode() {
+        return merchantCode;
     }
 
-    public void setMerchantId(Long merchantId) {
-        this.merchantId = merchantId;
+    public void setMerchantCode(String merchantCode) {
+        this.merchantCode = merchantCode;
     }
 
     public String getMerchantAccountId() {
@@ -45,12 +45,12 @@ public class LoanContractSignParam {
         this.merchantSealData = merchantSealData;
     }
 
-    public Long getBorrowerId() {
-        return borrowerId;
+    public String getBorrowerCode() {
+        return borrowerCode;
     }
 
-    public void setBorrowerId(Long borrowerId) {
-        this.borrowerId = borrowerId;
+    public void setBorrowerCode(String borrowerCode) {
+        this.borrowerCode = borrowerCode;
     }
 
     public String getBorrowerAccountId() {

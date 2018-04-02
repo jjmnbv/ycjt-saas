@@ -133,12 +133,12 @@ public class EsignIntegrationServiceImpl implements EsignIntegrationService {
         UserSignService userSignService = UserSignServiceFactory.instance();
         FileDigestSignResult borrowerResult = userSignService.localSignPDF(loanContractSignParam.getBorrowerAccountId(), loanContractSignParam.getBorrowerSealData(), signPDFStreamBean, posBean, signType);
         if (0 != borrowerResult.getErrCode()) {
-            throw new ApplicationException("借款协议借款方签章失败" + (borrowerResult.isErrShow() ? (":" + borrowerResult.getMsg()) : "") + " --- userId:" + loanContractSignParam.getBorrowerId());
+            throw new ApplicationException("借款协议借款方签章失败" + (borrowerResult.isErrShow() ? (":" + borrowerResult.getMsg()) : "") + " --- borrowerCode:" + loanContractSignParam.getMerchantCode());
         }
         posBean = setKeyPosBean("甲方：", 200, 5, 60);
         FileDigestSignResult finalResult = userSignService.localSignPDF(loanContractSignParam.getMerchantAccountId(), loanContractSignParam.getMerchantSealData(), signPDFStreamBean, posBean, signType);
         if (0 != finalResult.getErrCode()) {
-            throw new ApplicationException("借款协议出借方签章失败" + (finalResult.isErrShow() ? (":" + finalResult.getMsg()) : "") + " --- userId:" + loanContractSignParam.getMerchantId());
+            throw new ApplicationException("借款协议出借方签章失败" + (finalResult.isErrShow() ? (":" + finalResult.getMsg()) : "") + " --- merchantCode:" + loanContractSignParam.getMerchantCode());
         }
         return new ByteArrayInputStream(finalResult.getStream());
     }
@@ -165,7 +165,7 @@ public class EsignIntegrationServiceImpl implements EsignIntegrationService {
         UserSignService userSignService = UserSignServiceFactory.instance();
         FileDigestSignResult finalResult = userSignService.localSignPDF(licenseContractSignParam.getUserAccountId(), licenseContractSignParam.getUserSealData(), signPDFStreamBean, posBean, signType);
         if (0 != finalResult.getErrCode()) {
-            throw new ApplicationException("授权协议授权方签章失败" + (finalResult.isErrShow() ? (":" + finalResult.getMsg()) : "") + " --- userId:" + licenseContractSignParam.getUserId());
+            throw new ApplicationException("授权协议授权方签章失败" + (finalResult.isErrShow() ? (":" + finalResult.getMsg()) : "") + " --- userCode:" + licenseContractSignParam.getUserCode());
         }
         return new ByteArrayInputStream(finalResult.getStream());
     }
@@ -186,5 +186,5 @@ public class EsignIntegrationServiceImpl implements EsignIntegrationService {
         posBean.setWidth(width);
         return posBean;
     }
-    
+
 }

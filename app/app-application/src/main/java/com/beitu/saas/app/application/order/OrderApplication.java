@@ -413,7 +413,7 @@ public class OrderApplication {
         if (StringUtils.isNotEmpty(saasOrderVo.getPreliminaryReviewerCode()) && !operatorCode.equals(saasOrderVo.getPreliminaryReviewerCode())) {
             throw new ApplicationException(OrderErrorCodeEnum.ORDER_BEING_SINGLE);
         }
-        if (saasOrderService.updatePreliminaryReviewerCode(saasOrderVo.getSaasOrderId(), operatorCode)) {
+        if (!saasOrderService.updatePreliminaryReviewerCode(saasOrderVo.getSaasOrderId(), operatorCode)) {
             throw new ApplicationException(OrderErrorCodeEnum.ORDER_BEING_SINGLE);
         }
     }
