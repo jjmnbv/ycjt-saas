@@ -15,17 +15,14 @@ public class CollectionOrderInfoDetailVo {
 
     private String orderNo;
     private String name;
-    private String gender;
-    private String identityCode;
+    private String mobile;
     private BigDecimal realCapital;
-    private BigDecimal totalRealCapital;
-    private String applyDays;
-    private String channelCode;
-    private String remark;
-
+    private BigDecimal shouldRepayCapital;
+    private String createDt;
+    private String repaymentDt;
+    private Boolean extend;
+    private String overdueDuration;
     private String channelName;
-    private Integer status;
-    private Integer age;
 
     public String getOrderNo() {
         return orderNo;
@@ -45,21 +42,12 @@ public class CollectionOrderInfoDetailVo {
         return this;
     }
 
-    public String getGender() {
-        return gender;
+    public String getMobile() {
+        return mobile;
     }
 
-    public CollectionOrderInfoDetailVo setGender(String gender) {
-        this.gender = gender;
-        return this;
-    }
-
-    public String getIdentityCode() {
-        return identityCode;
-    }
-
-    public CollectionOrderInfoDetailVo setIdentityCode(String identityCode) {
-        this.identityCode = identityCode;
+    public CollectionOrderInfoDetailVo setMobile(String mobile) {
+        this.mobile = mobile;
         return this;
     }
 
@@ -72,39 +60,48 @@ public class CollectionOrderInfoDetailVo {
         return this;
     }
 
-    public BigDecimal getTotalRealCapital() {
-        return totalRealCapital;
+    public BigDecimal getShouldRepayCapital() {
+        return shouldRepayCapital;
     }
 
-    public CollectionOrderInfoDetailVo setTotalRealCapital(BigDecimal totalRealCapital) {
-        this.totalRealCapital = totalRealCapital;
+    public CollectionOrderInfoDetailVo setShouldRepayCapital(BigDecimal shouldRepayCapital) {
+        this.shouldRepayCapital = shouldRepayCapital;
         return this;
     }
 
-    public String getApplyDays() {
-        return applyDays;
+    public String getCreateDt() {
+        return createDt;
     }
 
-    public CollectionOrderInfoDetailVo setApplyDays(String applyDays) {
-        this.applyDays = applyDays;
+    public CollectionOrderInfoDetailVo setCreateDt(String createDt) {
+        this.createDt = createDt;
         return this;
     }
 
-    public String getChannelCode() {
-        return channelCode;
+    public String getRepaymentDt() {
+        return repaymentDt;
     }
 
-    public CollectionOrderInfoDetailVo setChannelCode(String channelCode) {
-        this.channelCode = channelCode;
+    public CollectionOrderInfoDetailVo setRepaymentDt(String repaymentDt) {
+        this.repaymentDt = repaymentDt;
         return this;
     }
 
-    public String getRemark() {
-        return remark;
+    public Boolean getExtend() {
+        return extend;
     }
 
-    public CollectionOrderInfoDetailVo setRemark(String remark) {
-        this.remark = remark;
+    public CollectionOrderInfoDetailVo setExtend(Boolean extend) {
+        this.extend = extend;
+        return this;
+    }
+
+    public String getOverdueDuration() {
+        return overdueDuration;
+    }
+
+    public CollectionOrderInfoDetailVo setOverdueDuration(String overdueDuration) {
+        this.overdueDuration = overdueDuration;
         return this;
     }
 
@@ -114,24 +111,6 @@ public class CollectionOrderInfoDetailVo {
 
     public CollectionOrderInfoDetailVo setChannelName(String channelName) {
         this.channelName = channelName;
-        return this;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public CollectionOrderInfoDetailVo setStatus(Integer status) {
-        this.status = status;
-        return this;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public CollectionOrderInfoDetailVo setAge(Integer age) {
-        this.age = age;
         return this;
     }
 }

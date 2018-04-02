@@ -3,6 +3,8 @@ package com.beitu.saas.app.application.collection.vo;
 import com.fqgj.common.api.ResponseData;
 import io.swagger.annotations.ApiModel;
 
+import java.math.BigDecimal;
+
 /**
  * @author linanjun
  * @create 2018/4/1 下午8:39
@@ -11,11 +13,11 @@ import io.swagger.annotations.ApiModel;
 @ApiModel(value = "催收列表展示信息")
 public class CollectionOrderListVo implements ResponseData {
 
-    private String orderNo = "20180331174940417004";
+    private String orderNo;
     private String name;
     private String mobile;
-    private String realCapital;
-    private String shouldRepayCapital;
+    private BigDecimal realCapital;
+    private BigDecimal shouldRepayCapital;
     private String createDt;
     private String repaymentDt;
     private Boolean extend;
@@ -46,19 +48,20 @@ public class CollectionOrderListVo implements ResponseData {
         this.mobile = mobile;
     }
 
-    public String getRealCapital() {
+    public BigDecimal getRealCapital() {
         return realCapital;
     }
 
-    public void setRealCapital(String realCapital) {
+    public CollectionOrderListVo setRealCapital(BigDecimal realCapital) {
         this.realCapital = realCapital;
+        return this;
     }
 
-    public String getShouldRepayCapital() {
+    public BigDecimal getShouldRepayCapital() {
         return shouldRepayCapital;
     }
 
-    public CollectionOrderListVo setShouldRepayCapital(String shouldRepayCapital) {
+    public CollectionOrderListVo setShouldRepayCapital(BigDecimal shouldRepayCapital) {
         this.shouldRepayCapital = shouldRepayCapital;
         return this;
     }
