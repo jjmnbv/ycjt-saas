@@ -69,7 +69,7 @@ public class RoleController {
     @ApiOperation(value = "添加角色")
     public Response add(@RequestBody AddRoleRequest addRoleRequest) {
         SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
-        roleApplication.addRoleAndEmpower(addRoleRequest.getRoleName(), saasAdmin.getName(), saasAdmin.getCode(), addRoleRequest.getMenusIds(), addRoleRequest.getButtonIds());
+        roleApplication.addRoleAndEmpower(addRoleRequest.getRoleName(), saasAdmin.getName(), saasAdmin.getMerchantCode(), addRoleRequest.getMenusIds(), addRoleRequest.getButtonIds());
         return Response.ok();
     }
 
