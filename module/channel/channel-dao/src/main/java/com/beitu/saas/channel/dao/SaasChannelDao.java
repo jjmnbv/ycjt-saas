@@ -10,12 +10,12 @@ import com.fqgj.common.base.BaseMapper;
 import java.util.List;
 
 /**
-* User: fenqiguanjia
-* Date: 2018-03-21
-* Time: 20:58:19.262
-*/
+ * User: fenqiguanjia
+ * Date: 2018-03-21
+ * Time: 20:58:19.262
+ */
 
-public interface SaasChannelDao  extends BaseMapper<SaasChannelEntity> {
+public interface SaasChannelDao extends BaseMapper<SaasChannelEntity> {
 
     List<SaasChannelEntity> selectChannelEntityList(SaasChannelParam saasChannelParam, Page page);
 
@@ -27,5 +27,6 @@ public interface SaasChannelDao  extends BaseMapper<SaasChannelEntity> {
 
     Integer queryTotalChannelStatCount(ChannelStatQueryParam channelStatQueryParam);
 
+    SaasChannelEntity selectChannelEntityByMerchantCodeAndCreatorCode(String merchantCode, String creatorCode);
 
 }

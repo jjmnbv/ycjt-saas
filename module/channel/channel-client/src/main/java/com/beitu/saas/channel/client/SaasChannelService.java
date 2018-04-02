@@ -47,4 +47,12 @@ public interface SaasChannelService<T extends BaseEntity> extends BaseService<T>
      */
     SaasChannelEntity getDefaultSaasChannelByMerchantCode(String merchantCode);
 
+    /**
+     * 创建 机构默认SAAS进件渠道
+     *
+     * @param merchantCode 机构CODE
+     * @return
+     */
+    SaasChannelEntity createMerchantDefaultChannel(String merchantCode);
+
 }
