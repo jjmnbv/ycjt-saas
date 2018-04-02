@@ -529,4 +529,8 @@ public class ConfigUtil {
 
     }
 
+    public int allowAccountNum(){
+        return config.getIntProperty("allow.account.num",20);
+    }
+
 }

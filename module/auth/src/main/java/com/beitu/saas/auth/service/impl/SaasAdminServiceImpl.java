@@ -110,6 +110,13 @@ public class SaasAdminServiceImpl extends AbstractBaseService implements SaasAdm
         return true;
     }
 
+    @Override
+    public Integer countAdminByMerchantCode(String merchantCode) {
+        return this.queryTotal(new HashMap<String, Object>(2) {{
+            put("merchantCode", merchantCode);
+        }});
+    }
+
 
 }
 

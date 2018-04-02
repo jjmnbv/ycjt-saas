@@ -4,6 +4,7 @@ import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.application.SendApplication;
 import com.beitu.saas.app.application.auth.AdminInfoApplication;
+import com.beitu.saas.app.application.auth.MerchantApplication;
 import com.beitu.saas.app.application.auth.RoleApplication;
 import com.beitu.saas.app.common.RequestBasicInfo;
 import com.beitu.saas.app.common.RequestLocalInfo;
@@ -84,6 +85,9 @@ public class AdminController {
     @Autowired
     private SendApplication sendApplication;
 
+    @Autowired
+    private MerchantApplication merchantApplication;
+
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ParamsValidate
     @VisitorAccessible
@@ -140,10 +144,14 @@ public class AdminController {
     @ParamsValidate
     @ApiOperation("新增用户")
     public Response addAdmin(@RequestBody AddAdminRequest addAdminRequest) {
+        String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
+        if (!merchantApplication.canAddAccount(merchantCode)) {
+            throw new ApiErrorException("创建账户个数到底上限,请联系软件服务商");
+        }
         SaasAdmin saasAdmin = new SaasAdmin();
         BeanUtils.copyProperties(addAdminRequest, saasAdmin);
         saasAdmin.setPassword(MD5.md5(addAdminRequest.getPassword())).setMerchantCode(GenerOrderNoUtil.generateOrderNo());
-        saasAdmin.setEnable(true).setMerchantCode(RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode());
+        saasAdmin.setEnable(true).setMerchantCode(merchantCode);
         saasAdmin.setDefault(false);
         saasAdmin.setCreateName(RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getName());
         adminInfoApplication.addAdminAndRole(saasAdmin, addAdminRequest.getRoleId());

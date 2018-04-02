@@ -48,6 +48,15 @@ public class SaasMerchantServiceImpl extends AbstractBaseService implements Saas
         return null;
     }
 
+    @Override
+    public Integer getMerchantAllowAccountNum(String merchantCode) {
+        SaasMerchantVo saasMerchantVo = getByMerchantCode(merchantCode);
+        if (null != saasMerchantVo) {
+            return saasMerchantVo.getAllowAccountNum();
+        }
+        return 0;
+    }
+
 }
 
 
