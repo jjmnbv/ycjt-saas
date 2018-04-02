@@ -2,6 +2,7 @@ package com.beitu.saas.user.service.impl;
 
 import com.beitu.saas.user.client.SaasUserEsignAuthorizationService;
 import com.beitu.saas.user.dao.SaasUserEsignAuthorizationDao;
+import com.beitu.saas.user.domain.SaasUserEsignAuthorizationVo;
 import com.beitu.saas.user.entity.SaasUserEsignAuthorization;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
@@ -45,7 +46,8 @@ public class SaasUserEsignAuthorizationServiceImpl extends AbstractBaseService i
     }
 
     @Override
-    public void create() {
-
+    public SaasUserEsignAuthorization create(SaasUserEsignAuthorizationVo saasUserEsignAuthorizationVo) {
+        return null;
     }
+
 }
