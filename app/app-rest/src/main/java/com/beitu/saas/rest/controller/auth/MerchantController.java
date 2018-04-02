@@ -84,13 +84,14 @@ public class MerchantController {
     @VisitorAccessible
     public Response add(@RequestBody AddMerchantRequest request) {
         SaasMerchant saasMerchant = new SaasMerchant();
-        if (request.getMerchantInfo()!=null){
-            BeanUtils.copyProperties(request.getMerchantInfo(),saasMerchant);
+        if (request.getMerchantInfo() != null) {
+            BeanUtils.copyProperties(request.getMerchantInfo(), saasMerchant);
         }
-        if (request.getLenderInfo()!=null){
-            BeanUtils.copyProperties(request.getLenderInfo(),saasMerchant);
+        if (request.getLenderInfo() != null) {
+            BeanUtils.copyProperties(request.getLenderInfo(), saasMerchant);
         }
-        merchantApplication.addMerchant(saasMerchant,request.getPassword());
+        AddMerchantRequest.AdminInfo adminInfo = request.getAdminInfo();
+        merchantApplication.addMerchant(saasMerchant, adminInfo.getPassword(), adminInfo.getAccountPhone(), adminInfo.getAccountName());
         return Response.ok();
     }
 

@@ -58,7 +58,7 @@ public class SaasMerchantCreditInfoServiceImpl extends AbstractBaseService imple
     }
 
     private Boolean creditValueOp(String merchantCode, Long value, Boolean add) {
-        SaasMerchantCreditInfoEntity userBalanceInfo = getCreditInfoByMerchantCode(merchantCode);
+        SaasMerchantCreditInfoEntity userBalanceInfo = getOrInitUserCreditInfoByMerchantCode(merchantCode);
         Long balanceValue = getDecryptValue(userBalanceInfo.getEncryptValue());
         if (add) {
             balanceValue = balanceValue + value;
