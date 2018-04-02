@@ -524,5 +524,9 @@ public class ConfigUtil {
         return config.getProperty("integration.juxinli.api.key", "1a63efd927e04f18a2e7a15b0391dc98");
     }
 
+    public Boolean enableAddMerchant(){
+        return config.getBooleanProperty("enable.add.merchant",false);
+
+    }
 
 }

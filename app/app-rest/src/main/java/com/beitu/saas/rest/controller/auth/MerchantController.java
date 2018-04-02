@@ -13,6 +13,7 @@ import com.beitu.saas.auth.entity.SaasSmsConfigDictionary;
 import com.beitu.saas.auth.service.SaasMerchantConfigService;
 import com.beitu.saas.auth.service.SaasMerchantService;
 import com.beitu.saas.auth.service.SaasSmsConfigDictionaryService;
+import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.ButtonPermissionConsts;
 import com.beitu.saas.rest.controller.auth.request.AddMerchantRequest;
 import com.beitu.saas.rest.controller.auth.response.MerchantInfoResponse;
@@ -47,6 +48,9 @@ public class MerchantController {
 
     @Autowired
     private MerchantApplication merchantApplication;
+
+    @Autowired
+    private ConfigUtil configUtil;
 
     @RequestMapping(value = "/info", method = RequestMethod.GET)
     @ApiOperation(value = "机构信息", response = MerchantInfoResponse.class)
@@ -83,6 +87,9 @@ public class MerchantController {
     @SignIgnore
     @VisitorAccessible
     public Response add(@RequestBody AddMerchantRequest request) {
+        if (!configUtil.enableAddMerchant()){
+            return Response.ok("添加机构不可用,请联系管理员");
+        }
         SaasMerchant saasMerchant = new SaasMerchant();
         if (request.getMerchantInfo() != null) {
             BeanUtils.copyProperties(request.getMerchantInfo(), saasMerchant);

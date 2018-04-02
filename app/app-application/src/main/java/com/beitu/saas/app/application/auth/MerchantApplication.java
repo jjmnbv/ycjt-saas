@@ -9,8 +9,10 @@ import com.beitu.saas.auth.enums.MerchantConfigTypeEnum;
 import com.beitu.saas.auth.service.*;
 import com.beitu.saas.channel.client.SaasChannelRiskSettingsService;
 import com.beitu.saas.channel.client.SaasChannelService;
+import com.beitu.saas.finance.client.SaasCreditHistoryService;
 import com.beitu.saas.finance.client.SaasMerchantCreditInfoService;
 import com.beitu.saas.finance.client.SaasMerchantSmsInfoService;
+import com.beitu.saas.finance.client.SaasSmsHistoryService;
 import com.fqgj.common.utils.GenerOrderNoUtil;
 import com.fqgj.common.utils.MD5;
 import com.fqgj.common.utils.StringUtils;
@@ -59,6 +61,12 @@ public class MerchantApplication {
 
     @Autowired
     private SaasMerchantCreditInfoService saasMerchantCreditInfoService;
+
+    @Autowired
+    private SaasSmsHistoryService saasSmsHistoryService;
+
+    @Autowired
+    private SaasCreditHistoryService saasCreditHistoryService;
 
     @Transactional(rollbackFor = Exception.class)
     public void addMerchant(SaasMerchant saasMerchant, String password,String accountPhone,String accountName) {
@@ -136,7 +144,9 @@ public class MerchantApplication {
 
         //7 初始化点券和短信余额
         saasMerchantSmsInfoService.increase(merchantCode,10L);
+        saasSmsHistoryService.addIncomeSmsHistory(merchantCode,10L,null,"充值");
         saasMerchantCreditInfoService.increase(merchantCode,10L);
+        saasCreditHistoryService.addIncomeCreditHistory(merchantCode,10L,"system","充值");
 
     }
 
