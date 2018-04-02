@@ -18,9 +18,9 @@ public class CollectionOrderInfoDetailVo {
     private String mobile;
     private BigDecimal realCapital;
     private BigDecimal shouldRepayCapital;
-    private String createDt;
+    private String createdDt;
     private String repaymentDt;
-    private Boolean extend;
+    private String extend;
     private String overdueDuration;
     private String channelName;
 
@@ -69,12 +69,12 @@ public class CollectionOrderInfoDetailVo {
         return this;
     }
 
-    public String getCreateDt() {
-        return createDt;
+    public String getCreatedDt() {
+        return createdDt;
     }
 
-    public CollectionOrderInfoDetailVo setCreateDt(String createDt) {
-        this.createDt = createDt;
+    public CollectionOrderInfoDetailVo setCreatedDt(String createdDt) {
+        this.createdDt = createdDt;
         return this;
     }
 
@@ -87,11 +87,11 @@ public class CollectionOrderInfoDetailVo {
         return this;
     }
 
-    public Boolean getExtend() {
+    public String getExtend() {
         return extend;
     }
 
-    public CollectionOrderInfoDetailVo setExtend(Boolean extend) {
+    public CollectionOrderInfoDetailVo setExtend(String extend) {
         this.extend = extend;
         return this;
     }
