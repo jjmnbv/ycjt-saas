@@ -65,4 +65,8 @@ public class OrderCalculateApplication {
         return interest;
     }
 
+    public String getInterestRatio(BigDecimal interestRatio) {
+        return interestRatio.multiply(new BigDecimal("100")).setScale(0) + "%";
+    }
+
 }

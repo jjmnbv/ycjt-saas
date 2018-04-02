@@ -4,6 +4,7 @@ import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.auth.entity.SaasAdminRole;
 import com.beitu.saas.auth.entity.SaasAdminToken;
 import com.beitu.saas.auth.entity.SaasRolePermission;
+import com.beitu.saas.auth.enums.AdminErrorEnum;
 import com.beitu.saas.auth.service.SaasAdminRoleService;
 import com.beitu.saas.auth.service.SaasAdminService;
 import com.beitu.saas.auth.service.SaasAdminTokenService;
@@ -12,6 +13,7 @@ import com.fqgj.common.entity.BaseEntity;
 import com.fqgj.common.utils.CollectionUtils;
 import com.fqgj.common.utils.GenerOrderNoUtil;
 import com.fqgj.common.utils.TimeUtils;
+import com.fqgj.exception.common.ApplicationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,6 +69,11 @@ public class AdminInfoApplication {
         return saasRolePermissionList.parallelStream().map(SaasRolePermission::getRelationId).collect(toList());
     }
 
+    public List<Integer> getMenuIdsByRoleId(Long roleId) {
+        List<SaasRolePermission> saasRolePermissionList = saasRolePermissionService.getMenuPermissionByRoleId(roleId.intValue());
+        return saasRolePermissionList.parallelStream().map(SaasRolePermission::getRelationId).collect(toList());
+    }
+
     public List<Integer> getButtonIdsByAdmin(String adminCode) {
         List<SaasAdminRole> list = saasAdminRoleService.selectByParams(new HashMap<String, Object>(2) {{
             put("adminCode", adminCode);
@@ -79,8 +86,16 @@ public class AdminInfoApplication {
         return saasRolePermissionList.parallelStream().map(SaasRolePermission::getRelationId).collect(toList());
     }
 
+    public List<Integer> getButtonIdsByRoleId(Long roleId) {
+        List<SaasRolePermission> saasRolePermissionList = saasRolePermissionService.getButtonPermissionByRoleId(roleId.intValue());
+        return saasRolePermissionList.parallelStream().map(SaasRolePermission::getRelationId).collect(toList());
+    }
+
     @Transactional(rollbackFor = Exception.class)
-    public void addAdminAndRole(SaasAdmin saasAdmin,Long roleId){
+    public void addAdminAndRole(SaasAdmin saasAdmin, Long roleId) {
+        if (saasAdminService.hasRegisteredMobile(saasAdmin.getMobile())) {
+            throw new ApplicationException(AdminErrorEnum.MOBILE_EXIST);
+        }
         saasAdmin.setCode(GenerOrderNoUtil.generateOrderNo());
         SaasAdmin entity = (SaasAdmin) saasAdminService.create(saasAdmin);
         SaasAdminRole saasAdminRole = new SaasAdminRole();

@@ -16,6 +16,7 @@
                 and deleted = false
             </trim>
         </where>
+        order by id desc limit 1
     </select>
 
     <select id="selectByCurrentOrderStatusAndOrderNumb" parameterType="map"

@@ -54,7 +54,7 @@ public class MerchantController {
         String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
         SaasMerchantVo saasMerchantVo = saasMerchantService.getByMerchantCode(merchantCode);
         List<SaasSmsConfigDictionary> saasSmsConfigDictionary = saasSmsConfigDictionaryService.getAllSmsConfig();
-        List<Integer> smsConfig = saasMerchantConfigService.getSmsConfigByMerchantCode(merchantCode);
+        List<String> smsConfig = saasMerchantConfigService.getSmsConfigByMerchantCode(merchantCode);
         Boolean isCompanyContract = saasMerchantConfigService.isCompanyContractByMerchantCode(merchantCode);
         MerchantInfoResponse merchantInfoResponse = new MerchantInfoResponse(saasMerchantVo, saasSmsConfigDictionary, smsConfig, isCompanyContract);
         return Response.ok().putData(merchantInfoResponse);
@@ -70,12 +70,12 @@ public class MerchantController {
         return Response.ok();
     }
 
-    @RequestMapping(value = "/sms/{smsConfigId}/{enable}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/sms/{bizCode}/{enable}", method = RequestMethod.PUT)
     @ApiOperation(value = "短信配置")
     @HasPermission(permissionKey = ButtonPermissionConsts.SMS_SETTING)
-    public Response setSmsEnable(@ApiParam("短信id") @PathVariable("smsConfigId") Integer smsConfigId, @PathVariable("enable") Boolean enable) {
+    public Response setSmsEnable(@ApiParam("短信id") @PathVariable("bizCode") String bizCode, @PathVariable("enable") Boolean enable) {
         String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
-        saasMerchantConfigService.updateSmsConfig(merchantCode, enable, smsConfigId);
+        saasMerchantConfigService.updateSmsConfig(merchantCode, enable, bizCode);
         return Response.ok();
     }
 

@@ -55,7 +55,7 @@ public class SaasChannelApplication {
      * 获取机构下的所有管理员
      */
     public List<SaasAdmin> getSaasAdminListByMerchantCode(String merchantCode) {
-        return saasAdminService.getAdminListByMerchantCode(merchantCode, null);
+        return saasAdminService.getAllAdminListByMerchantCode(merchantCode);
     }
 
     /**
@@ -148,9 +148,9 @@ public class SaasChannelApplication {
                     .setChannelStatus(x.getChannelStatus())
                     .setChargePersonCode(x.getChargePersonCode())
                     .setChargePersonName(this.getAdminNameByAdminCode(x.getChargePersonCode()))
-                    .setLinkUrl(configUtil.getWebsiteDomainSName() + x.getLinkUrl())
-                    .setLongLinkUrl(configUtil.getWebsiteDomainSName() + x.getLinkUrl())
-                    .setShortLinkUrl(ShortUrlUtil.generateShortUrl(configUtil.getWebsiteDomainSName() + x.getLinkUrl()))
+                    .setLinkUrl(configUtil.getAddressURLPrefix() + configUtil.getH5AddressURLPrefix() + x.getLinkUrl())
+                    .setLongLinkUrl(configUtil.getAddressURLPrefix() + configUtil.getH5AddressURLPrefix() + x.getLinkUrl())
+                    .setShortLinkUrl(ShortUrlUtil.generateShortUrl(configUtil.getAddressURLPrefix() + x.getLinkUrl()))
                     .setCreatorName(this.getAdminNameByAdminCode(x.getCreatorCode()))
                     .setCreatorCode(x.getCreatorCode())
                     .setGmtCreate(x.getGmtCreate())

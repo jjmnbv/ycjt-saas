@@ -5,13 +5,18 @@ import com.beitu.saas.app.api.ApiResponse;
 import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.application.borrower.BorrowerApplication;
 import com.beitu.saas.app.application.channel.SaasChannelApplication;
+import com.beitu.saas.app.application.contract.ContractApplication;
 import com.beitu.saas.app.application.credit.CreditApplication;
+import com.beitu.saas.app.application.credit.LoanPlatformApplication;
 import com.beitu.saas.app.application.credit.vo.BorrowerEmergentContactVo;
 import com.beitu.saas.app.application.credit.vo.BorrowerIdentityInfoVo;
 import com.beitu.saas.app.application.credit.vo.BorrowerWorkInfoVo;
 import com.beitu.saas.app.application.order.OrderApplication;
 import com.beitu.saas.app.application.order.vo.OrderDetailVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
+import com.beitu.saas.app.enums.H5OrderDetailButtonTypeEnum;
+import com.beitu.saas.app.enums.SaasContractEnum;
+import com.beitu.saas.app.enums.SaasLoanPlatformEnum;
 import com.beitu.saas.auth.domain.SaasMerchantVo;
 import com.beitu.saas.auth.service.SaasMerchantService;
 import com.beitu.saas.borrower.client.SaasBorrowerEmergentContactService;
@@ -43,12 +48,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
@@ -80,6 +81,9 @@ public class H5Controller {
     private CreditApplication creditApplication;
 
     @Autowired
+    private LoanPlatformApplication loanPlatformApplication;
+
+    @Autowired
     private SaasOrderApplicationService saasOrderApplicationService;
 
     @Autowired
@@ -99,6 +103,9 @@ public class H5Controller {
 
     @Autowired
     private SaasBorrowerEmergentContactService saasBorrowerEmergentContactService;
+
+    @Autowired
+    private ContractApplication contractApplication;
 
     @VisitorAccessible
     @ParamsValidate
@@ -122,11 +129,11 @@ public class H5Controller {
         return new DataApiResponse<>(new UserLoginSuccessResponse(token));
     }
 
-    @RequestMapping(value = "/user/home", method = RequestMethod.POST)
+    @VisitorAccessible
+    @RequestMapping(value = "/channel/info", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "用户首页", response = UserHomeResponse.class)
-    public DataApiResponse<UserHomeResponse> home() {
-        String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
+    @ApiOperation(value = "渠道信息", response = UserLoginSuccessResponse.class)
+    public DataApiResponse<ChannelInfoResponse> getChannelInfo() {
         String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
         if (StringUtils.isEmpty(channelCode)) {
             return new DataApiResponse<>(ChannelErrorCodeEnum.DISABLE_CHANNEL);
@@ -136,13 +143,22 @@ public class H5Controller {
             throw new ApplicationException(ChannelErrorCodeEnum.DISABLE_CHANNEL);
         }
         SaasMerchantVo saasMerchantVo = saasMerchantService.getByMerchantCode(saasH5ChannelVo.getMerchantCode());
-        Integer applyType = orderApplication.getOrderApplyStatus(borrowerCode, channelCode).getCode();
         String headerTitle = "洋葱借条";
         if (saasMerchantVo != null) {
             headerTitle = saasMerchantVo.getCompanyName();
         }
         String picTitle = "已有20000人申请";
-        return new DataApiResponse<>(new UserHomeResponse(applyType, headerTitle, picTitle));
+        return new DataApiResponse<>(new ChannelInfoResponse(headerTitle, picTitle));
+    }
+
+    @RequestMapping(value = "/user/home", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "用户首页", response = UserHomeResponse.class)
+    public DataApiResponse<UserHomeResponse> home() {
+        String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
+        String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
+        Integer applyType = orderApplication.getOrderApplyStatus(borrowerCode, channelCode).getCode();
+        return new DataApiResponse<>(new UserHomeResponse(applyType));
     }
 
 //    @RequestMapping(value = "/user/apply/status", method = RequestMethod.POST)
@@ -179,6 +195,15 @@ public class H5Controller {
             response.setTotalInterestRatio(saasOrderApplicationVo.getTotalInterestRatio());
         }
         response.setNeedRealName(borrowerApplication.needRealName(borrowerCode));
+        if (contractApplication.needDoLicenseContractSign(borrowerCode)) {
+            response.setContractTitle1(SaasContractEnum.LICENSE_CONTRACT.getMsg());
+            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LICENSE_CONTRACT.getUrl());
+            response.setContractTitle2(SaasContractEnum.LOAN_CONTRACT.getMsg());
+            response.setContractUrl2(configUtil.getAddressURLPrefix() + SaasContractEnum.LOAN_CONTRACT.getUrl());
+        } else {
+            response.setContractTitle1(SaasContractEnum.LOAN_CONTRACT.getMsg());
+            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LOAN_CONTRACT.getUrl());
+        }
         return new DataApiResponse<>(response);
     }
 
@@ -368,29 +393,71 @@ public class H5Controller {
     @ApiOperation(value = "用户订单详情", response = H5OrderDetailResponse.class)
     public DataApiResponse<H5OrderDetailResponse> getOrderDetail(@RequestBody @Valid QueryOrderDetailRequest req) {
         OrderDetailVo orderDetailVo = orderApplication.getOrderDetailVoByOrderNumb(req.getOrderNumb());
+        if (orderDetailVo == null) {
+            return new DataApiResponse();
+        }
         H5OrderDetailResponse response = new H5OrderDetailResponse();
         BeanUtils.copyProperties(orderDetailVo, response);
+        response.setOrderNumb(req.getOrderNumb());
         if (OrderStatusEnum.TO_CONFIRM_RECEIPT.getCode().equals(orderDetailVo.getOrderStatus())) {
-            response.setContractTitle1("《授权协议》");
-            response.setContractUrl1("");
-            response.setContractTitle2("《借款合同》");
-            response.setContractUrl2("");
-            response.setVisible(Boolean.TRUE);
-            response.setButtonTitle("查看并签署电子借款合同");
-            response.setButtonUrl("");
             response.setHeaderTitle("确认借款");
-        } else if (OrderStatusEnum.IN_EXTEND.getCode().equals(orderDetailVo.getOrderStatus())) {
-            response.setContractTitle1("《展期合同》");
-            response.setContractUrl1("");
+            if (contractApplication.needDoLicenseContractSign(orderDetailVo.getBorrowerCode())) {
+                response.setContractTitle1(SaasContractEnum.LICENSE_CONTRACT.getMsg());
+                response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LICENSE_CONTRACT.getUrl());
+                response.setContract1DownloadUrl("");
+                response.setContractTitle2(SaasContractEnum.LOAN_CONTRACT.getMsg());
+//            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LOAN_CONTRACT.getUrl());
+                response.setContractUrl2("http://ycjt.oss-cn-hangzhou.aliyuncs.com/contract/20170715004158769001_753a5c94b2b8c5437778986c25baf22d.pdf");
+                response.setContract2DownloadUrl("http://ycjt.oss-cn-hangzhou.aliyuncs.com/contract/20170715004158769001_753a5c94b2b8c5437778986c25baf22d.pdf");
+            } else {
+                response.setContractTitle1(SaasContractEnum.LOAN_CONTRACT.getMsg());
+//            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LOAN_CONTRACT.getUrl());
+                response.setContractUrl1("http://ycjt.oss-cn-hangzhou.aliyuncs.com/contract/20170715004158769001_753a5c94b2b8c5437778986c25baf22d.pdf");
+                response.setContract1DownloadUrl("http://ycjt.oss-cn-hangzhou.aliyuncs.com/contract/20170715004158769001_753a5c94b2b8c5437778986c25baf22d.pdf");
+            }
             response.setVisible(Boolean.TRUE);
-            response.setButtonTitle("查看并签署电子展期合同");
-            response.setButtonUrl("");
+            response.setButtonTitle(H5OrderDetailButtonTypeEnum.CONFIRM_RECEIPT_BUTTON_TYPE.getMsg());
+            response.setButtonType(H5OrderDetailButtonTypeEnum.CONFIRM_RECEIPT_BUTTON_TYPE.getCode());
+        } else if (OrderStatusEnum.TO_CONFIRM_EXTEND.getCode().equals(orderDetailVo.getOrderStatus())) {
             response.setHeaderTitle("确认展期");
+            response.setContractTitle1(SaasContractEnum.EXTEND_CONTRACT.getMsg());
+//            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.EXTEND_CONTRACT.getUrl());
+            response.setContractUrl1(orderDetailVo.getTermUrl());
+            response.setVisible(Boolean.TRUE);
+            response.setButtonTitle(H5OrderDetailButtonTypeEnum.CONFIRM_EXTEND_BUTTON_TYPE.getMsg());
+            response.setButtonType(H5OrderDetailButtonTypeEnum.CONFIRM_EXTEND_BUTTON_TYPE.getCode());
         } else {
             response.setVisible(Boolean.FALSE);
+            response.setContractTitle1(SaasContractEnum.LOAN_CONTRACT.getMsg());
+            response.setContractUrl1("http://ycjt.oss-cn-hangzhou.aliyuncs.com/H5/pdfview/web/viewer.html?file=/contract/20170715004158769001_753a5c94b2b8c5437778986c25baf22d.pdf");
+            response.setContract1DownloadUrl("http://ycjt.oss-cn-hangzhou.aliyuncs.com/contract/20170715004158769001_753a5c94b2b8c5437778986c25baf22d.pdf");
+
             response.setHeaderTitle("订单详情");
         }
-        return new DataApiResponse(new H5OrderDetailResponse());
+        return new DataApiResponse(response);
+    }
+
+    @RequestMapping(value = "/order/confirm/{orderNumb}/{buttonType}", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "用户订单详情按钮操作", response = H5OrderDetailResponse.class)
+    public ApiResponse getOrderDetail(@PathVariable(value = "orderNumb") String orderNumb,
+                                      @PathVariable(value = "buttonType") Integer buttonType) {
+        H5OrderDetailButtonTypeEnum h5OrderDetailButtonTypeEnum = H5OrderDetailButtonTypeEnum.getByCode(buttonType);
+        if (h5OrderDetailButtonTypeEnum == null) {
+            return new ApiResponse("非法操作参数");
+        }
+        SaasBorrowerVo saasBorrowerVo = RequestLocalInfo.getCurrentAdmin().getSaasBorrower();
+        switch (h5OrderDetailButtonTypeEnum) {
+            case CONFIRM_EXTEND_BUTTON_TYPE:
+                orderApplication.confirmExtend(saasBorrowerVo.getBorrowerCode(), orderNumb);
+                return new ApiResponse("签署展期合同成功");
+            case CONFIRM_RECEIPT_BUTTON_TYPE:
+                orderApplication.confirmReceipt(saasBorrowerVo.getBorrowerCode(), orderNumb);
+                return new ApiResponse("签署借款合同成功");
+            default:
+                return new ApiResponse("操作成功");
+        }
+
     }
 
 }

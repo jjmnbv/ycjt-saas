@@ -5,6 +5,7 @@ import com.beitu.saas.order.dao.SaasOrderBillDetailDao;
 import com.beitu.saas.order.domain.QuerySaasOrderBillDetailVo;
 import com.beitu.saas.order.domain.SaasOrderBillDetailVo;
 import com.beitu.saas.order.entity.SaasOrderBillDetail;
+import com.beitu.saas.order.enums.OrderStatusEnum;
 import com.beitu.saas.order.vo.LoanDataDetailVo;
 import com.beitu.saas.order.vo.NoRepayOrderVo;
 import com.beitu.saas.order.vo.OverdueOrderVo;
@@ -16,10 +17,7 @@ import com.fqgj.log.enhance.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: jungle
@@ -62,9 +60,19 @@ public class SaasOrderBillDetailServiceImpl extends AbstractBaseService implemen
         conditions.put("borrowerCodeList", querySaasOrderBillDetailVo.getBorrowerCodeList());
         conditions.put("merchantCode", querySaasOrderBillDetailVo.getMerchantCode());
         conditions.put("channelCode", querySaasOrderBillDetailVo.getChannelCode());
-        conditions.put("orderStatusList", querySaasOrderBillDetailVo.getOrderStatusList());
         conditions.put("repaymentBeginDt", querySaasOrderBillDetailVo.getRepaymentBeginDt());
         conditions.put("repaymentEndDt", querySaasOrderBillDetailVo.getRepaymentEndDt());
+        Integer queryOrderStatus = querySaasOrderBillDetailVo.getQueryOrderStatus();
+        if (queryOrderStatus != null) {
+            conditions.put("destroy", Boolean.FALSE);
+            if (OrderStatusEnum.FOR_REIMBURSEMENT.getCode().equals(queryOrderStatus)) {
+                conditions.put("repaymentEndDt", new Date());
+            } else if (OrderStatusEnum.OVERDUE.getCode().equals(queryOrderStatus)) {
+                conditions.put("repaymentBeginDt", new Date());
+            } else if (OrderStatusEnum.HAS_BEEN_DESTROY.getCode().equals(queryOrderStatus)) {
+                conditions.put("destroy", Boolean.FALSE);
+            }
+        }
         Integer count = saasOrderBillDetailDao.countByConditions(conditions);
         page.setTotalCount(count);
         if (count == 0) {

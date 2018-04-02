@@ -49,4 +49,21 @@ public interface SaasOrderService<T extends BaseEntity> extends BaseService<T> {
 
     Boolean updateOrderStatus(Long orderId, Long version, OrderStatusEnum currentOrderStatus, OrderStatusEnum updateOrderStatus);
 
+    Boolean updateOrderRemark(Long orderId, String remark);
+
+    /**
+     * 得到 待确认收款 的订单列表
+     *
+     * @param borrowerCode
+     * @return
+     */
+    List<SaasOrderVo> listAllConfirmReceiptOrderByBorrowerCode(String borrowerCode);
+
+    /**
+     * 得到 待确认收款 的订单列表
+     *
+     * @return
+     */
+    List<String> listAllConfirmReceiptOrderNumbByMerchantCode(String merchantCode);
+
 }

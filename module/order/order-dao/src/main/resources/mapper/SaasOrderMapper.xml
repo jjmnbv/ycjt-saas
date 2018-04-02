@@ -18,15 +18,6 @@
                     #{borrowerCode}
                 </foreach>
             </if>
-            <if test="repaymentDt !=null">
-                and repayment_dt = #{repaymentDt,jdbcType=DATE}
-            </if>
-            <if test="createdBeginDt != null">
-                and created_dt <![CDATA[ >= ]]> #{createdBeginDt,jdbcType=DATE}
-            </if>
-            <if test="createdEndDt != null">
-                and created_dt <![CDATA[ <= ]]> #{createdEndDt,jdbcType=DATE}
-            </if>
             <if test="orderStatusList !=null and orderStatusList.size > 0">
                 and order_status IN
                 <foreach item="orderStatus" index="index" collection="orderStatusList" open="(" separator=","
@@ -42,6 +33,21 @@
             </if>
             <if test="loanLenderCode !=null">
                 and loan_lender_code = #{loanLenderCode,jdbcType=VARCHAR}
+            </if>
+            <if test="createdBeginDt != null">
+                and created_dt <![CDATA[ >= ]]> #{createdBeginDt,jdbcType=DATE}
+            </if>
+            <if test="createdEndDt != null">
+                and created_dt <![CDATA[ <= ]]> #{createdEndDt,jdbcType=DATE}
+            </if>
+            <if test="repaymentDt !=null">
+                and repayment_dt <![CDATA[ >= ]]> #{repaymentDt,jdbcType=DATE}
+            </if>
+            <if test="repaymentBeginDt !=null">
+                and repayment_dt <![CDATA[ >= ]]> #{repaymentBeginDt,jdbcType=DATE}
+            </if>
+            <if test="repaymentEndDt !=null">
+                and repayment_dt <![CDATA[ >= ]]> #{repaymentEndDt,jdbcType=DATE}
             </if>
             and expire_date <![CDATA[ >= ]]> NOW()
             and deleted = false
@@ -94,5 +100,27 @@
         and order_status = #{currentOrderStatus,jdbcType=SMALLINT}
         AND version = #{version,jdbcType=BIGINT}
     </update>
+
+    <update id="updateOrderRemark">
+        update saas_order
+        set remark = #{remark,jdbcType=VARCHAR},gmt_modified = NOW()
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="selectByBorrowerCodeAndOrderStatusList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_order
+        where borrower_code = #{borrowerCode,jdbcType=VARCHAR}
+        <if test="orderStatusList !=null and orderStatusList.size > 0">
+            and order_status IN
+            <foreach item="orderStatus" index="index" collection="orderStatusList" open="(" separator=","
+                     close=")">
+                #{orderStatus}
+            </foreach>
+        </if>
+        and deleted = false
+        and expire_date <![CDATA[ >= ]]> NOW()
+    </select>
 
 </mapper>

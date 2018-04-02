@@ -16,6 +16,9 @@ import java.util.List;
 @ApiModel(value = "用户订单详细信息")
 public class H5OrderDetailResponse implements ResponseData {
 
+    @ApiModelProperty(value = "订单CODE")
+    private String orderNumb;
+
     @ApiModelProperty(value = "头部展示信息")
     private String headerTitle;
 
@@ -52,11 +55,17 @@ public class H5OrderDetailResponse implements ResponseData {
     @ApiModelProperty(value = "合同1url")
     private String contractUrl1;
 
+    @ApiModelProperty(value = "合同1下载url")
+    private String contract1DownloadUrl;
+
     @ApiModelProperty(value = "合同2展示信息")
     private String contractTitle2;
 
     @ApiModelProperty(value = "合同2url")
     private String contractUrl2;
+
+    @ApiModelProperty(value = "合同2下载url")
+    private String contract2DownloadUrl;
 
     @ApiModelProperty(value = "按钮是否展示")
     private Boolean visible;
@@ -64,8 +73,16 @@ public class H5OrderDetailResponse implements ResponseData {
     @ApiModelProperty(value = "按钮展示信息")
     private String buttonTitle;
 
-    @ApiModelProperty(value = "按钮点击跳转页面")
-    private String buttonUrl;
+    @ApiModelProperty(value = "按钮类型")
+    private Integer buttonType;
+
+    public String getOrderNumb() {
+        return orderNumb;
+    }
+
+    public void setOrderNumb(String orderNumb) {
+        this.orderNumb = orderNumb;
+    }
 
     public String getHeaderTitle() {
         return headerTitle;
@@ -195,11 +212,28 @@ public class H5OrderDetailResponse implements ResponseData {
         this.buttonTitle = buttonTitle;
     }
 
-    public String getButtonUrl() {
-        return buttonUrl;
+    public Integer getButtonType() {
+        return buttonType;
     }
 
-    public void setButtonUrl(String buttonUrl) {
-        this.buttonUrl = buttonUrl;
+    public void setButtonType(Integer buttonType) {
+        this.buttonType = buttonType;
     }
+
+    public String getContract1DownloadUrl() {
+        return contract1DownloadUrl;
+    }
+
+    public void setContract1DownloadUrl(String contract1DownloadUrl) {
+        this.contract1DownloadUrl = contract1DownloadUrl;
+    }
+
+    public String getContract2DownloadUrl() {
+        return contract2DownloadUrl;
+    }
+
+    public void setContract2DownloadUrl(String contract2DownloadUrl) {
+        this.contract2DownloadUrl = contract2DownloadUrl;
+    }
+
 }

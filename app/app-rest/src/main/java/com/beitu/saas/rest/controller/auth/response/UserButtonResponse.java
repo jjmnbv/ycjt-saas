@@ -1,6 +1,7 @@
 package com.beitu.saas.rest.controller.auth.response;
 
 import com.beitu.saas.auth.entity.SaasOperationButton;
+import com.fqgj.common.api.ResponseData;
 import com.timevale.tech.sdk.seal.IFontsLoader;
 import org.springframework.validation.annotation.Validated;
 
@@ -14,7 +15,7 @@ import java.util.Map;
  * @create 2018/3/23 下午5:32
  * @description
  */
-public class UserButtonResponse {
+public class UserButtonResponse implements ResponseData {
 
     private List<OperationButton> list;
 
@@ -54,8 +55,16 @@ public class UserButtonResponse {
     class OperationButton {
         private Long id;
         private String name;
+        private Boolean checked;
         private List<OperationButtonItem> list;
 
+        public Boolean getChecked() {
+            return checked;
+        }
+
+        public void setChecked(Boolean checked) {
+            this.checked = checked;
+        }
         public Long getId() {
             return id;
         }
@@ -84,10 +93,19 @@ public class UserButtonResponse {
     class OperationButtonItem {
         private Long id;
         private String name;
+        private Boolean checked;
 
         public OperationButtonItem(Long id, String name) {
             this.id = id;
             this.name = name;
+        }
+
+        public Boolean getChecked() {
+            return checked;
+        }
+
+        public void setChecked(Boolean checked) {
+            this.checked = checked;
         }
 
         public Long getId() {

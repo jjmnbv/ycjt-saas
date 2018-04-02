@@ -1,5 +1,8 @@
 package com.beitu.saas.rest.controller.collection.request;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * Created with IntelliJ IDEA.
  * Description:
@@ -7,11 +10,22 @@ package com.beitu.saas.rest.controller.collection.request;
  * Date: 2018/3/24
  * Time: 下午1:36
  */
+@ApiModel(value = "催收列表查询条件")
 public class CollectionOrderQueryRequestParam {
+
+    @ApiModelProperty(value = "逾期类型")
     private Integer overdueDaysType;
+
+    @ApiModelProperty(value = "借款人手机号码")
     private String mobile;
+
+    @ApiModelProperty(value = "借款人姓名")
     private String name;
+
+    @ApiModelProperty(value = "借款人身份证号")
     private String identityCode;
+
+    @ApiModelProperty(value = "渠道CODE")
     private String channelCode;
 
     public Integer getOverdueDaysType() {

@@ -76,4 +76,28 @@ public class RoleApplication {
         return true;
 
     }
+
+
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean updateRole(String roleName, Long roleId, List menuIds, List buttonIds) {
+        SaasRole saasRole = new SaasRole();
+        saasRole.setName(roleName);
+        saasRole.setId(roleId);
+        saasRoleService.updateById(saasRole);
+        return saasRolePermissionService.replacePermissionToRole(roleId.intValue(), menuIds, buttonIds);
+
+    }
+
+    public SaasRole getRoleByAdminCode(String adminCode) {
+        List list = saasAdminRoleService.selectByParams(new HashMap<String, Object>(2) {{
+            put("adminCode", adminCode);
+            put("deleted", false);
+        }});
+        if (CollectionUtils.isEmpty(list)) {
+            return null;
+        }
+        SaasAdminRole saasAdminRole = (SaasAdminRole) list.get(0);
+        return ((SaasRole) saasRoleService.selectById(saasAdminRole.getRoleId()));
+
+    }
 }

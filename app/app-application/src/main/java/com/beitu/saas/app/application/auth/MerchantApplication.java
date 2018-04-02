@@ -1,12 +1,14 @@
 package com.beitu.saas.app.application.auth;
 
 import com.beitu.saas.auth.entity.*;
+import com.beitu.saas.auth.enums.AdminErrorEnum;
 import com.beitu.saas.auth.enums.ContractConfigTypeEnum;
 import com.beitu.saas.auth.enums.MerchantConfigTypeEnum;
 import com.beitu.saas.auth.service.*;
 import com.fqgj.common.utils.GenerOrderNoUtil;
 import com.fqgj.common.utils.MD5;
 import com.fqgj.common.utils.StringUtils;
+import com.fqgj.exception.common.ApplicationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,6 +60,9 @@ public class MerchantApplication {
         saasAdmin.setCreateName("system");
         saasAdmin.setDefault(true);
         saasAdmin.setEnable(true);
+        if (saasAdminService.hasRegisteredMobile(saasAdmin.getMobile())) {
+            throw new ApplicationException(AdminErrorEnum.MOBILE_EXIST);
+        }
         saasAdminService.create(saasAdmin);
         //3.添加机构默认角色
         //超级管理员
@@ -93,14 +98,16 @@ public class MerchantApplication {
         saasAdminRoleService.create(saasAdminRole);
         //5.添加默认机构配置
         SaasMerchantConfig saasMerchantConfig = new SaasMerchantConfig();
-        saasMerchantConfig.setConfigEnum(ContractConfigTypeEnum.COMPANY_CONTRACT.getKey());
+        saasMerchantConfig.setMerchantCode(saasAdmin.getMerchantCode());
+        saasMerchantConfig.setConfigEnum(ContractConfigTypeEnum.COMPANY_CONTRACT.getKey().toString());
         saasMerchantConfig.setConfigType(MerchantConfigTypeEnum.CONTRACT_CONFIG.getKey().longValue());
         saasMerchantConfigService.create(saasMerchantConfig);
 
         List<SaasSmsConfigDictionary> smsConfig = saasSmsConfigDictionaryService.getAllSmsConfig();
         smsConfig.forEach(saasSmsConfigDictionary -> {
             SaasMerchantConfig entity = new SaasMerchantConfig();
-            saasMerchantConfig.setConfigEnum(saasSmsConfigDictionary.getId().intValue());
+            saasMerchantConfig.setMerchantCode(saasAdmin.getMerchantCode());
+            saasMerchantConfig.setConfigEnum(saasSmsConfigDictionary.getBizCode());
             saasMerchantConfig.setConfigType(MerchantConfigTypeEnum.SMS_CONFIG.getKey().longValue());
             saasMerchantConfigService.create(entity);
         });

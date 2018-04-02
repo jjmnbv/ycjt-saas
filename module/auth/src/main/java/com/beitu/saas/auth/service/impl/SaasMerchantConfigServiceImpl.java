@@ -41,15 +41,15 @@ public class SaasMerchantConfigServiceImpl extends AbstractBaseService implement
             put("deleted", false);
         }});
         if (CollectionUtils.isNotEmpty(list)) {
-            if (ContractConfigTypeEnum.COMPANY_CONTRACT.getKey().equals(list.get(0).getConfigEnum())) {
-                return false;
+            if (ContractConfigTypeEnum.COMPANY_CONTRACT.getKey().toString().equals(list.get(0).getConfigEnum())) {
+                return true;
             }
         }
         return false;
     }
 
     @Override
-    public List<Integer> getSmsConfigByMerchantCode(String merchantCode) {
+    public List<String> getSmsConfigByMerchantCode(String merchantCode) {
         List<SaasMerchantConfig> list = this.selectByParams(new HashMap<String, Object>(2) {{
             put("merchantCode", merchantCode);
             put("configType", MerchantConfigTypeEnum.SMS_CONFIG.getKey());
@@ -70,7 +70,7 @@ public class SaasMerchantConfigServiceImpl extends AbstractBaseService implement
     public Boolean updateContractConfig(String merchantCode, Integer type) {
         SaasMerchantConfig saasMerchantConfig = new SaasMerchantConfig();
         saasMerchantConfig.setMerchantCode(merchantCode);
-        saasMerchantConfig.setConfigEnum(type);
+        saasMerchantConfig.setConfigEnum(type.toString());
         List list = this.selectByParams(new HashMap<String, Object>() {{
             put("merchantCode", merchantCode);
             put("configType", MerchantConfigTypeEnum.CONTRACT_CONFIG.getKey());
@@ -86,18 +86,18 @@ public class SaasMerchantConfigServiceImpl extends AbstractBaseService implement
     }
 
     @Override
-    public Boolean updateSmsConfig(String merchantCode, Boolean enable, Integer smsConfigId) {
+    public Boolean updateSmsConfig(String merchantCode, Boolean enable, String bizCode) {
         SaasMerchantConfig saasMerchantConfig = new SaasMerchantConfig();
         saasMerchantConfig.setDeleted(enable);
         List<SaasMerchantConfig> list = this.selectByParams(new HashMap<String, Object>(4) {{
             put("merchantCode", merchantCode);
-            put("configEnum", smsConfigId);
+            put("configEnum", bizCode);
             put("configType", MerchantConfigTypeEnum.SMS_CONFIG.getKey());
         }});
         if (CollectionUtils.isEmpty(list)) {
             saasMerchantConfig.setMerchantCode(merchantCode);
-            saasMerchantConfig.setConfigEnum(smsConfigId);
-            saasMerchantConfig.setConfigType(MerchantConfigTypeEnum.CONTRACT_CONFIG.getKey().longValue());
+            saasMerchantConfig.setConfigEnum(bizCode);
+            saasMerchantConfig.setConfigType(MerchantConfigTypeEnum.SMS_CONFIG.getKey().longValue());
             saasMerchantConfigDao.insert(saasMerchantConfig);
             return true;
         }
@@ -105,6 +105,19 @@ public class SaasMerchantConfigServiceImpl extends AbstractBaseService implement
         return saasMerchantConfigDao.updateByPrimaryKey(saasMerchantConfig) > 0;
     }
 
+    @Override
+    public Boolean hasSmsConfig(String merchantCode, String bizCode) {
+        List<SaasMerchantConfig> list = this.selectByParams(new HashMap<String, Object>(2) {{
+            put("merchantCode", merchantCode);
+            put("configEnum", bizCode);
+            put("configType", MerchantConfigTypeEnum.SMS_CONFIG.getKey());
+            put("deleted", false);
+        }});
+        if (CollectionUtils.isNotEmpty(list)) {
+            return true;
+        }
+        return false;
+    }
 
 }
 

@@ -15,7 +15,7 @@ public class SaasMerchantConfig extends BaseEntity {
     /**
     *设置内容的枚举
     */
-    private Integer configEnum;
+    private String configEnum;
     /**
     *设置类型1.合同2.短信3.支付密码
     */
@@ -31,11 +31,11 @@ public class SaasMerchantConfig extends BaseEntity {
         return this;
     }
 
-    public  Integer getConfigEnum(){
+    public  String getConfigEnum(){
         return this.configEnum;
     }
 
-    public  SaasMerchantConfig setConfigEnum(Integer configEnum){
+    public  SaasMerchantConfig setConfigEnum(String configEnum){
         this.configEnum = configEnum;
         return this;
     }

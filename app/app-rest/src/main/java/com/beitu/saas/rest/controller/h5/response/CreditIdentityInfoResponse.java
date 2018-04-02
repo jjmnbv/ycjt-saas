@@ -2,6 +2,7 @@ package com.beitu.saas.rest.controller.h5.response;
 
 import com.beitu.saas.borrower.domain.SaasBorrowerIdentityInfoVo;
 import com.fqgj.common.api.ResponseData;
+import com.fqgj.common.utils.StringUtils;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.beans.BeanUtils;
@@ -32,9 +33,15 @@ public class CreditIdentityInfoResponse implements ResponseData {
 
     public CreditIdentityInfoResponse(SaasBorrowerIdentityInfoVo saasBorrowerIdentityInfoVo, String prefixUrl) {
         if (saasBorrowerIdentityInfoVo != null) {
-            this.frontUrl = prefixUrl + saasBorrowerIdentityInfoVo.getFrontUrl();
-            this.backUrl = prefixUrl + saasBorrowerIdentityInfoVo.getBackUrl();
-            this.holdUrl = prefixUrl + saasBorrowerIdentityInfoVo.getHoldUrl();
+            if (StringUtils.isNotEmpty(saasBorrowerIdentityInfoVo.getFrontUrl())) {
+                this.frontUrl = prefixUrl + saasBorrowerIdentityInfoVo.getFrontUrl();
+            }
+            if (StringUtils.isNotEmpty(saasBorrowerIdentityInfoVo.getBackUrl())) {
+                this.backUrl = prefixUrl + saasBorrowerIdentityInfoVo.getBackUrl();
+            }
+            if (StringUtils.isNotEmpty(saasBorrowerIdentityInfoVo.getHoldUrl())) {
+                this.holdUrl = prefixUrl + saasBorrowerIdentityInfoVo.getHoldUrl();
+            }
         }
     }
 

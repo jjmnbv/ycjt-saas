@@ -7,7 +7,7 @@ package com.beitu.saas.auth.enums;
  */
 public enum MerchantConfigTypeEnum {
     CONTRACT_CONFIG(1, "合同设置"),
-    SMS_CONFIG(22, "短信设置"),
+    SMS_CONFIG(2, "短信设置"),
     PASSWORD_CONFIG(3, "密码设置");
     private Integer key;
     private String value;

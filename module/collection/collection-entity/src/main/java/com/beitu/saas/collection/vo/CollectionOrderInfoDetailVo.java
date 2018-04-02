@@ -9,7 +9,10 @@ import java.math.BigDecimal;
  * Date: 2018/3/23
  * Time: 上午11:35
  */
+
 public class CollectionOrderInfoDetailVo {
+
+
     private String orderNo;
     private String name;
     private String gender;

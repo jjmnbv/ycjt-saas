@@ -7,7 +7,8 @@ public enum ServicerEnum {
     JIANZHOU("JIANZHOU"),
     DH3T("DH3T"),
     WEIWANG("WEIWANG"),
-    DH3T_VOICE("DH3T_VOICE");
+    DH3T_VOICE("DH3T_VOICE"),
+    CHUANGLAN("CHUANGLAN");
 
     private String code;
 

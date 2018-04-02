@@ -3,6 +3,7 @@ package com.beitu.saas.app.application.order;
 import com.beitu.saas.app.application.borrower.BorrowerApplication;
 import com.beitu.saas.app.application.borrower.vo.BorrowerInfoVo;
 import com.beitu.saas.app.application.order.vo.QueryOrderBillDetailVo;
+import com.beitu.saas.app.application.order.vo.QueryOrderVo;
 import com.beitu.saas.app.application.order.vo.SaasOrderBillDetailListVo;
 import com.beitu.saas.app.enums.QueryRepaymentDtEnum;
 import com.beitu.saas.channel.client.SaasChannelService;
@@ -11,9 +12,11 @@ import com.beitu.saas.order.client.SaasOrderBillDetailService;
 import com.beitu.saas.order.client.SaasOrderService;
 import com.beitu.saas.order.client.SaasOrderStatusHistoryService;
 import com.beitu.saas.order.domain.QuerySaasOrderBillDetailVo;
+import com.beitu.saas.order.domain.QuerySaasOrderVo;
 import com.beitu.saas.order.domain.SaasOrderBillDetailVo;
 import com.beitu.saas.order.domain.SaasOrderVo;
 import com.beitu.saas.order.entity.SaasOrderBillDetail;
+import com.beitu.saas.order.enums.OrderStatusEnum;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.utils.CollectionUtils;
 import org.springframework.beans.BeanUtils;
@@ -58,7 +61,10 @@ public class OrderBillDetailApplication {
             return null;
         }
         if (queryVo.getOrderStatus() != null) {
-            querySaasOrderBillDetailVo.setOrderStatusList(Arrays.asList(queryVo.getOrderStatus()));
+            querySaasOrderBillDetailVo.setQueryOrderStatus(queryVo.getOrderStatus());
+            if (OrderStatusEnum.TO_CONFIRM_EXTEND.getCode().equals(queryVo.getOrderStatus())) {
+                querySaasOrderBillDetailVo.setOrderNumbList(saasOrderService.listAllConfirmReceiptOrderNumbByMerchantCode(queryVo.getMerchantCode()));
+            }
         }
         List<SaasOrderBillDetailVo> saasOrderBillDetailVoList = saasOrderBillDetailService.listByQueryOrderBillDetailVoAndPage(querySaasOrderBillDetailVo, page);
         if (CollectionUtils.isEmpty(saasOrderBillDetailVoList)) {
@@ -132,6 +138,26 @@ public class OrderBillDetailApplication {
         return saasOrderBillDetailListVo;
     }
 
+    private SaasOrderBillDetailListVo convertSaasOrderVo2SaasOrderBillDetailListVo(SaasOrderVo saasOrderVo) {
+        SaasOrderBillDetailListVo saasOrderBillDetailListVo = new SaasOrderBillDetailListVo();
+        saasOrderBillDetailListVo.setOrderNumb(saasOrderVo.getOrderNumb());
+        saasOrderBillDetailListVo.setCapital(saasOrderVo.getRealCapital().toString());
+        saasOrderBillDetailListVo.setAmount(orderCalculateApplication.getAmount(saasOrderVo).toString());
+        saasOrderBillDetailListVo.setCreatedDate(DateUtil.getDate(saasOrderVo.getCreatedDt()));
+        saasOrderBillDetailListVo.setRepaymentDate(DateUtil.getDate(saasOrderVo.getRepaymentDt()));
+        saasOrderBillDetailListVo.setExtend(saasOrderVo.getRelationOrderId() != null);
+        saasOrderBillDetailListVo.setOverdueDuration(DateUtil.countDay(new Date(), saasOrderVo.getRepaymentDt()));
+
+        BorrowerInfoVo borrowerInfoVo = borrowerApplication.getBorrowerInfoVoByBorrowerCode(saasOrderVo.getBorrowerCode());
+        BeanUtils.copyProperties(borrowerInfoVo, saasOrderBillDetailListVo);
+
+        saasOrderBillDetailListVo.setLoanLendRemark(saasOrderStatusHistoryService.getLoanLendRemark(saasOrderVo.getOrderNumb()));
+        saasOrderBillDetailListVo.setChannelName(saasChannelService.getSaasChannelByChannelCode(saasOrderVo.getChannelCode()).getChannelName());
+        saasOrderBillDetailListVo.setOrderStatus(saasOrderService.getOrderStatusByOrderNumb(saasOrderVo.getOrderNumb()).getMsg());
+
+        return saasOrderBillDetailListVo;
+    }
+
     public void createOrderBillDetail(String orderNumb) {
         SaasOrderBillDetailVo saasOrderBillDetailVo = saasOrderBillDetailService.getVisibleOrderBillDetailByOrderNumb(orderNumb);
         SaasOrderBillDetail addSaasOrderBillDetail = new SaasOrderBillDetail();
@@ -151,6 +177,10 @@ public class OrderBillDetailApplication {
             addSaasOrderBillDetail.setRelationOrderBillDetailId(saasOrderBillDetailVo.getSaasOrderBillDetailId());
         }
         SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
+        addSaasOrderBillDetail.setOrderNumb(orderNumb);
+        addSaasOrderBillDetail.setMerchantCode(saasOrderVo.getMerchantCode());
+        addSaasOrderBillDetail.setChannelCode(saasOrderVo.getChannelCode());
+        addSaasOrderBillDetail.setBorrowerCode(saasOrderVo.getBorrowerCode());
         addSaasOrderBillDetail.setRealCapital(saasOrderVo.getRealCapital());
         addSaasOrderBillDetail.setTotalInterestRatio(saasOrderVo.getTotalInterestRatio());
         addSaasOrderBillDetail.setLateInterestRatio(saasOrderVo.getLateInterestRatio());

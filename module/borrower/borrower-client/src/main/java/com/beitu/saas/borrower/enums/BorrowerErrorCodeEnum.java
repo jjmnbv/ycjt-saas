@@ -25,7 +25,8 @@ public enum BorrowerErrorCodeEnum implements ErrorCodeEnum {
     USER_PROFILE_NEED_ZM_CREDIT(80010, "请先完善芝麻信用", HttpStatus.OK),
     USER_PROFILE_NEED_CARRIER_AUTHENTIC(80011, "请先完善运营商认证", HttpStatus.OK),
     USER_PROFILE_NEED_EB_INFO(80012, "请先完善电商认证", HttpStatus.OK),
-    USER_PROFILE_NEED_PLATFORM_BORROW_CREDIT(80013, "请先完善多借贷平台信息", HttpStatus.OK);
+    USER_PROFILE_NEED_PLATFORM_BORROW_CREDIT(80013, "请先完善多借贷平台信息", HttpStatus.OK),
+    ILLEGAL_LOAN_PLATFORM_TYPE(80014, "非法借贷平台类型", HttpStatus.OK);
 
     private Integer code;
 

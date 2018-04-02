@@ -36,40 +36,40 @@ import java.util.Objects;
  */
 @Service
 public class CreditApplication {
-    
+
     @Autowired
     private RedisClient redisClient;
-    
+
     @Autowired
     private SaasChannelApplication saasChannelApplication;
-    
+
     @Autowired
     private SaasBorrowerRealInfoService saasBorrowerRealInfoService;
-    
+
     @Autowired
     private SaasOrderApplicationService saasOrderApplicationService;
-    
+
     @Autowired
     private SaasBorrowerPersonalInfoService saasBorrowerPersonalInfoService;
-    
+
     @Autowired
     private SaasBorrowerEmergentContactService saasBorrowerEmergentContactService;
-    
+
     @Autowired
     private SaasBorrowerWorkInfoService saasBorrowerWorkInfoService;
-    
+
     @Autowired
     private SaasBorrowerIdentityInfoService saasBorrowerIdentityInfoService;
-    
+
     @Autowired
     private SaasBorrowerCarrierService saasBorrowerCarrierService;
-    
+
     @Autowired
     private OrderApplication orderApplication;
-    
+
     @Autowired
     private UserIntegrationService userIntegrationService;
-    
+
     public List<CreditModuleListVo> listCreditModule(String channelCode, String borrowerCode) {
         List<SaasChannelRiskSettingsVo> saasChannelRiskSettingsVoList = saasChannelApplication.getSaasChannelRiskSettingsByChannelCode(channelCode);
         if (CollectionUtils.isEmpty(saasChannelRiskSettingsVoList)) {
@@ -79,13 +79,13 @@ public class CreditApplication {
         saasChannelRiskSettingsVoList.forEach(saasChannelRiskSettingsVo -> {
             CreditModuleListVo creditModuleListVo = new CreditModuleListVo();
             creditModuleListVo.setModuleCode(saasChannelRiskSettingsVo.getModuleCode());
-            creditModuleListVo.setRequired(saasChannelRiskSettingsVo.getRequired() == 1);
+            creditModuleListVo.setRequired(SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(saasChannelRiskSettingsVo.getRequired()));
             creditModuleListVo.setApplyStatus(getInfoApplyStatus(borrowerCode, saasChannelRiskSettingsVo.getModuleCode()).getCode());
             creditModuleListVoList.add(creditModuleListVo);
         });
         return creditModuleListVoList;
     }
-    
+
     private BorrowerInfoApplyStatusEnum getInfoApplyStatus(String borrowerCode, String moduleCode) {
         RiskModuleEnum riskModuleEnum = RiskModuleEnum.getRiskModuleEnumByModuleCode(moduleCode);
         switch (riskModuleEnum) {
@@ -132,7 +132,7 @@ public class CreditApplication {
         }
         return BorrowerInfoApplyStatusEnum.INCOMPLETE;
     }
-    
+
     /**
      * 用户实名认证
      *
@@ -148,7 +148,7 @@ public class CreditApplication {
         saasBorrowerRealInfoService.create(borrowerCode, name, identityCode);
         return Boolean.TRUE;
     }
-    
+
     /**
      * 实名认证
      *
@@ -158,21 +158,21 @@ public class CreditApplication {
      */
     public Boolean realNameAuth(String name, String identityCode) {
         // TODO: 2018/3/29 数据库查询既有数据直接返回结果
-        
+
         UserNameIdNoValidationParam param = new UserNameIdNoValidationParam(name, identityCode);
         UserNameIdNoValidationDto dto = userIntegrationService.userNameMatchIdNo(param);
         if (Objects.equals(dto.getCode(), UserNameIdNoValidationCodeEnum.MATCH.getCode())) {
             // TODO: 2018/3/29 数据库插入一致数据
-            
+
             return Boolean.TRUE;
         }
         if (Objects.equals(dto.getCode(), UserNameIdNoValidationCodeEnum.MISMATCH.getCode())) {
             // TODO: 2018/3/29 数据库插入不一致数据
-            
+
         }
         return Boolean.FALSE;
     }
-    
+
     /**
      * 借款人提交资料
      *
@@ -191,7 +191,7 @@ public class CreditApplication {
             RiskModuleEnum riskModuleEnum = RiskModuleEnum.getRiskModuleEnumByModuleCode(saasChannelRiskSettingsVo.getModuleCode());
             switch (riskModuleEnum) {
                 case APPLICATION:
-                    submitApplication(borrowerCode, orderNumb, saasChannelRiskSettingsVo.getRequired());
+                    submitApplication(borrowerCode, orderNumb, channelCode, saasChannelRiskSettingsVo.getRequired());
                     break;
                 case PERSONAL_INFO:
                     submitPersonalInfo(borrowerCode, orderNumb, saasChannelRiskSettingsVo.getRequired());
@@ -218,55 +218,76 @@ public class CreditApplication {
         });
         return new ApiResponse("提交成功");
     }
-    
-    private void submitApplication(String borrowerCode, String orderNumb, Integer required) {
+
+    private void submitApplication(String borrowerCode, String orderNumb, String channelCode, Integer required) {
         SaasOrderApplicationVo saasOrderApplicationVo = saasOrderApplicationService.getByBorrowerCode(borrowerCode);
-        if (saasOrderApplicationVo == null && SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
-            throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_APPLICATION_INFO);
+        if (saasOrderApplicationVo == null) {
+            if (SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
+                throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_APPLICATION_INFO);
+            }
+            return;
         }
-        orderApplication.createOrder(saasOrderApplicationVo, orderNumb);
+        saasOrderApplicationService.deleteById(saasOrderApplicationVo.getSaasOrderApplicationId());
+        // TODO 借款人签署借款合同
+
+        orderApplication.createOrder(saasOrderApplicationVo, orderNumb, channelCode);
     }
-    
+
     private void submitPersonalInfo(String borrowerCode, String orderNumb, Integer required) {
-        if (saasBorrowerPersonalInfoService.countByBorrowerCode(borrowerCode) == 0 && SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
-            throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_PERSONAL_INFO);
+        if (saasBorrowerPersonalInfoService.countByBorrowerCode(borrowerCode) == 0) {
+            if (SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
+                throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_PERSONAL_INFO);
+            }
+            return;
         }
         if (!saasBorrowerPersonalInfoService.updateOrderNumbByBorrowerCode(orderNumb, borrowerCode)) {
             throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_PERSONAL_INFO);
         }
     }
-    
+
     private void submitEmergentContact(String borrowerCode, String orderNumb, Integer required) {
-        if (saasBorrowerEmergentContactService.countByBorrowerCode(borrowerCode) == 0 && SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
-            throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_EMERGENT_CONTACT);
+        if (saasBorrowerEmergentContactService.countByBorrowerCode(borrowerCode) == 0) {
+            if (SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
+                throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_EMERGENT_CONTACT);
+            }
+            return;
         }
         if (!saasBorrowerEmergentContactService.updateOrderNumbByBorrowerCode(orderNumb, borrowerCode)) {
             throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_EMERGENT_CONTACT);
         }
     }
-    
+
     private void submitWorkInfo(String borrowerCode, String orderNumb, Integer required) {
-        if (saasBorrowerWorkInfoService.countByBorrowerCode(borrowerCode) == 0 && SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
-            throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_WORK_INFO);
+        if (saasBorrowerWorkInfoService.countByBorrowerCode(borrowerCode) == 0) {
+            if (SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
+                throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_WORK_INFO);
+            }
+            return;
         }
         if (!saasBorrowerWorkInfoService.updateOrderNumbByBorrowerCode(orderNumb, borrowerCode)) {
             throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_WORK_INFO);
         }
     }
-    
+
     private void submitIdentityInfo(String borrowerCode, String orderNumb, Integer required) {
-        if (saasBorrowerIdentityInfoService.countByBorrowerCode(borrowerCode) == 0 && SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
-            throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_IDENTITY_INFO);
+        if (saasBorrowerIdentityInfoService.countByBorrowerCode(borrowerCode) == 0) {
+            if (SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
+                throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_IDENTITY_INFO);
+            }
+            return;
         }
         if (!saasBorrowerIdentityInfoService.updateOrderNumbByBorrowerCode(orderNumb, borrowerCode)) {
             throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_IDENTITY_INFO);
         }
     }
-    
+
     private void submitCarrierAuthentic(String borrowerCode, Integer required) {
-        if (saasBorrowerCarrierService.countByBorrowerCode(borrowerCode) == 0 && SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
-            throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_IDENTITY_INFO);
+        if (saasBorrowerCarrierService.countByBorrowerCode(borrowerCode) == 0) {
+            if (SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
+                throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_CARRIER_AUTHENTIC);
+            }
+            return;
         }
     }
-    
+
 }

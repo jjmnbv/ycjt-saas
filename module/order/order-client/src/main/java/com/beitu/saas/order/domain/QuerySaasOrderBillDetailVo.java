@@ -9,8 +9,13 @@ import java.util.List;
  * @description
  */
 public class QuerySaasOrderBillDetailVo {
+
     /**
-     * 借款人CODE
+     * 订单CODE 列表
+     */
+    private List<String> orderNumbList;
+    /**
+     * 借款人CODE 列表
      */
     private List<String> borrowerCodeList;
     /**
@@ -24,7 +29,7 @@ public class QuerySaasOrderBillDetailVo {
     /**
      * 订单状态
      */
-    private List<Integer> orderStatusList;
+    private Integer queryOrderStatus;
     /**
      * 账单应还日查询开始时间
      */
@@ -33,6 +38,14 @@ public class QuerySaasOrderBillDetailVo {
      * 账单应还日查询结束时间
      */
     private Date repaymentEndDt;
+
+    public List<String> getOrderNumbList() {
+        return orderNumbList;
+    }
+
+    public void setOrderNumbList(List<String> orderNumbList) {
+        this.orderNumbList = orderNumbList;
+    }
 
     public List<String> getBorrowerCodeList() {
         return borrowerCodeList;
@@ -58,12 +71,12 @@ public class QuerySaasOrderBillDetailVo {
         this.channelCode = channelCode;
     }
 
-    public List<Integer> getOrderStatusList() {
-        return orderStatusList;
+    public Integer getQueryOrderStatus() {
+        return queryOrderStatus;
     }
 
-    public void setOrderStatusList(List<Integer> orderStatusList) {
-        this.orderStatusList = orderStatusList;
+    public void setQueryOrderStatus(Integer queryOrderStatus) {
+        this.queryOrderStatus = queryOrderStatus;
     }
 
     public Date getRepaymentBeginDt() {

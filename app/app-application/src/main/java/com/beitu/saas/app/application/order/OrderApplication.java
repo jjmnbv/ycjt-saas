@@ -7,11 +7,9 @@ import com.beitu.saas.app.enums.BorrowerOrderApplyStatusEnum;
 import com.beitu.saas.app.enums.H5OrderBillDetailViewTypeEnum;
 import com.beitu.saas.auth.service.SaasAdminService;
 import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
-import com.beitu.saas.borrower.client.SaasBorrowerService;
 import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
-import com.beitu.saas.borrower.domain.SaasBorrowerVo;
 import com.beitu.saas.channel.client.SaasChannelService;
-import com.beitu.saas.common.utils.identityNumber.vo.IdcardInfoExtractor;
+import com.beitu.saas.common.utils.DateUtil;
 import com.beitu.saas.finance.client.SaasMerchantBalanceInfoService;
 import com.beitu.saas.finance.client.SaasMerchantCreditInfoService;
 import com.beitu.saas.finance.client.SaasMerchantSmsInfoService;
@@ -19,7 +17,6 @@ import com.beitu.saas.finance.client.domain.DataDashboardVo;
 import com.beitu.saas.finance.entity.SaasMerchantBalanceInfoEntity;
 import com.beitu.saas.finance.entity.SaasMerchantCreditInfoEntity;
 import com.beitu.saas.finance.entity.SaasMerchantSmsInfoEntity;
-import com.beitu.saas.order.client.SaasOrderApplicationService;
 import com.beitu.saas.order.client.SaasOrderBillDetailService;
 import com.beitu.saas.order.client.SaasOrderService;
 import com.beitu.saas.order.client.SaasOrderStatusHistoryService;
@@ -37,7 +34,6 @@ import com.beitu.saas.order.vo.NoRepayOrderVo;
 import com.beitu.saas.order.vo.OverdueOrderVo;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.utils.CollectionUtils;
-import com.fqgj.common.utils.DateUtil;
 import com.fqgj.common.utils.StringUtils;
 import com.fqgj.exception.common.ApplicationException;
 import org.springframework.beans.BeanUtils;
@@ -50,7 +46,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author linanjun
@@ -97,19 +92,20 @@ public class OrderApplication {
     private OrderBillDetailApplication orderBillDetailApplication;
 
     public BorrowerOrderApplyStatusEnum getOrderApplyStatus(String borrowerCode, String channelCode) {
-        if (saasOrderService.isReviewing(borrowerCode, channelCode)) {
-            return BorrowerOrderApplyStatusEnum.REVIEWING;
-        } else if (saasOrderService.isReviewRefuse(borrowerCode, channelCode)) {
+        if (saasOrderService.isReviewRefuse(borrowerCode, channelCode)) {
             return BorrowerOrderApplyStatusEnum.REFUSE;
+        } else if (saasOrderService.isReviewing(borrowerCode, channelCode)) {
+            return BorrowerOrderApplyStatusEnum.REVIEWING;
         }
         return BorrowerOrderApplyStatusEnum.NO_SUBMIT;
     }
 
     @Transactional
-    public SaasOrder createOrder(SaasOrderApplicationVo saasOrderApplicationVo, String orderNumb) {
+    public SaasOrder createOrder(SaasOrderApplicationVo saasOrderApplicationVo, String orderNumb, String channelCode) {
         SaasOrder saasOrder = new SaasOrder();
         BeanUtils.copyProperties(saasOrderApplicationVo, saasOrder);
         saasOrder.setOrderNumb(orderNumb);
+        saasOrder.setChannelCode(channelCode);
         saasOrder.setCreatedDt(saasOrderApplicationVo.getGmtCreate());
         saasOrder.setOrderStatus(OrderStatusEnum.SUBMIT_PRELIMINARY_REVIEW.getCode());
         saasOrder.setExpireDate(DateUtil.addDate(new Date(), 20));
@@ -118,25 +114,32 @@ public class OrderApplication {
         return saasOrder;
     }
 
-    @Transactional
-    public SaasOrderBillDetail createOrderBillDetail(SaasOrderVo saasOrderVo) {
-        return new SaasOrderBillDetail();
-    }
-
     public List<H5OrderListVo> listH5Order(String borrowerCode, String merchantCode) {
-        List<SaasOrderBillDetailVo> saasOrderBillDetailVoList = saasOrderBillDetailService.listByBorrowerCodeAndMerchantCode(borrowerCode, merchantCode);
-        if (CollectionUtils.isEmpty(saasOrderBillDetailVoList)) {
-            return null;
+        List<SaasOrderVo> saasOrderVoList = saasOrderService.listAllConfirmReceiptOrderByBorrowerCode(borrowerCode);
+        List<H5OrderListVo> results = new ArrayList<>(20);
+        if (CollectionUtils.isNotEmpty(saasOrderVoList)) {
+            saasOrderVoList.forEach(saasOrderVo -> {
+                H5OrderListVo h5OrderListVo = new H5OrderListVo();
+                h5OrderListVo.setOrderNumb(saasOrderVo.getOrderNumb());
+                h5OrderListVo.setAmount(orderCalculateApplication.getAmount(saasOrderVo).toString());
+                h5OrderListVo.setRepaymentDt(DateUtil.getDate(saasOrderVo.getRepaymentDt()));
+                h5OrderListVo.setOrderStatus(saasOrderService.getOrderStatusByOrderNumb(saasOrderVo.getOrderNumb()).getCode());
+                h5OrderListVo.setViewType(H5OrderBillDetailViewTypeEnum.getByOrderStatus(h5OrderListVo.getOrderStatus()).getCode());
+                results.add(h5OrderListVo);
+            });
         }
-        List<H5OrderListVo> results = new ArrayList<>(saasOrderBillDetailVoList.size());
-        saasOrderBillDetailVoList.forEach(saasOrderBillDetailVo -> {
-            H5OrderListVo h5OrderListVo = new H5OrderListVo();
-            h5OrderListVo.setAmount(orderCalculateApplication.getAmount(saasOrderBillDetailVo).toString());
-            h5OrderListVo.setRepaymentDt(DateUtil.getDate(saasOrderBillDetailVo.getRepaymentDt()));
-            h5OrderListVo.setOrderStatus(saasOrderService.getOrderStatusByOrderNumb(saasOrderBillDetailVo.getOrderNumb()).getCode());
-            h5OrderListVo.setViewType(H5OrderBillDetailViewTypeEnum.getByOrderStatus(h5OrderListVo.getOrderStatus()).getCode());
-            results.add(h5OrderListVo);
-        });
+        List<SaasOrderBillDetailVo> saasOrderBillDetailVoList = saasOrderBillDetailService.listByBorrowerCodeAndMerchantCode(borrowerCode, merchantCode);
+        if (CollectionUtils.isNotEmpty(saasOrderBillDetailVoList)) {
+            saasOrderBillDetailVoList.forEach(saasOrderBillDetailVo -> {
+                H5OrderListVo h5OrderListVo = new H5OrderListVo();
+                h5OrderListVo.setOrderNumb(saasOrderBillDetailVo.getOrderNumb());
+                h5OrderListVo.setAmount(orderCalculateApplication.getAmount(saasOrderBillDetailVo).toString());
+                h5OrderListVo.setRepaymentDt(DateUtil.getDate(saasOrderBillDetailVo.getRepaymentDt()));
+                h5OrderListVo.setOrderStatus(saasOrderService.getOrderStatusByOrderNumb(saasOrderBillDetailVo.getOrderNumb()).getCode());
+                h5OrderListVo.setViewType(H5OrderBillDetailViewTypeEnum.getByOrderStatus(h5OrderListVo.getOrderStatus()).getCode());
+                results.add(h5OrderListVo);
+            });
+        }
         return results;
     }
 
@@ -145,18 +148,19 @@ public class OrderApplication {
         if (CollectionUtils.isEmpty(saasOrderVoList)) {
             return null;
         }
-        OrderDetailVo orderDetailVo = new OrderDetailVo();
+        OrderDetailVo orderDetailVo;
         SaasOrderVo saasOrderVo;
         if (saasOrderVoList.size() == 1) {
             saasOrderVo = saasOrderVoList.get(0);
-            BeanUtils.copyProperties(saasOrderVo, orderDetailVo);
+            orderDetailVo = convertSaasOrderVo2OrderDetailVo(saasOrderVo);
             orderDetailVo.setAmount(orderCalculateApplication.getAmount(saasOrderVo).toString());
         } else {
             saasOrderVo = saasOrderVoList.get(saasOrderVoList.size() - 1);
-            BeanUtils.copyProperties(saasOrderVo, orderDetailVo);
-            if (OrderStatusEnum.FOR_REIMBURSEMENT.getCode().equals(saasOrderVo.getOrderStatus())) {
-                orderDetailVo.setOrderStatus(OrderStatusEnum.IN_EXTEND.getCode());
+            if (OrderStatusEnum.TO_CONFIRM_EXTEND.getCode().equals(saasOrderVo.getOrderStatus())) {
+                saasOrderVo = saasOrderVoList.get(saasOrderVoList.size() - 2);
+                saasOrderVo.setOrderStatus(OrderStatusEnum.TO_CONFIRM_EXTEND.getCode());
             }
+            orderDetailVo = convertSaasOrderVo2OrderDetailVo(saasOrderVo);
             SaasOrderBillDetailVo saasOrderBillDetailVo = saasOrderBillDetailService.getVisibleOrderBillDetailByOrderNumb(orderNumb);
             orderDetailVo.setAmount(orderCalculateApplication.getAmount(saasOrderBillDetailVo).toString());
             orderDetailVo.setRepaymentDt(DateUtil.getDate(saasOrderBillDetailVo.getRepaymentDt()));
@@ -165,16 +169,53 @@ public class OrderApplication {
         orderDetailVo.setBorrowerName(realInfoVo.getName());
         orderDetailVo.setBorrowerIdentityCode(realInfoVo.getIdentityCode());
 
-        if (OrderStatusEnum.IN_EXTEND.getCode().equals(orderDetailVo.getOrderStatus())) {
+        if (OrderStatusEnum.TO_CONFIRM_EXTEND.getCode().equals(orderDetailVo.getOrderStatus())) {
+            saasOrderVo = saasOrderVoList.get(saasOrderVoList.size() - 1);
             ExtendOrderDetailVo extendOrderDetailVo = new ExtendOrderDetailVo();
             extendOrderDetailVo.setExtendDuration(DateUtil.countDay(saasOrderVo.getRepaymentDt(), saasOrderVo.getGmtCreate()));
             extendOrderDetailVo.setRepaymentDt(DateUtil.getDate(saasOrderVo.getRepaymentDt()));
-            extendOrderDetailVo.setTotalInterestRatio(saasOrderVo.getTotalInterestRatio().toString());
+            extendOrderDetailVo.setTotalInterestRatio(orderCalculateApplication.getInterestRatio(saasOrderVo.getTotalInterestRatio()));
             extendOrderDetailVo.setExtendTitle("确认展期");
             orderDetailVo.setExtendOrderDetailVos(Arrays.asList(extendOrderDetailVo));
         }
 
         return orderDetailVo;
+    }
+
+    private OrderDetailVo convertSaasOrderVo2OrderDetailVo(SaasOrderVo saasOrderVo) {
+        OrderDetailVo orderDetailVo = new OrderDetailVo();
+        orderDetailVo.setRealCapital(saasOrderVo.getRealCapital().toString());
+        orderDetailVo.setBorrowingDuration(DateUtil.countDay(saasOrderVo.getRepaymentDt(), saasOrderVo.getCreatedDt()));
+        orderDetailVo.setTotalInterestRatio(orderCalculateApplication.getInterestRatio(saasOrderVo.getTotalInterestRatio()));
+        orderDetailVo.setRepaymentDt(DateUtil.getDate(saasOrderVo.getRepaymentDt()));
+        orderDetailVo.setOrderStatus(saasOrderVo.getOrderStatus());
+        orderDetailVo.setBorrowPurpose(saasOrderVo.getBorrowPurpose());
+        return orderDetailVo;
+    }
+
+    @Transactional(rollbackFor = RuntimeException.class)
+    public void saveOrderRemark(String operatorCode, String orderNumb, String remark) {
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
+        if (StringUtils.isEmpty(remark)) {
+            if (StringUtils.isEmpty(saasOrderVo.getRemark())) {
+                return;
+            }
+        } else {
+            remark = remark.trim();
+            if (remark.equals(saasOrderVo.getRemark())) {
+                return;
+            }
+        }
+        if (!saasOrderService.updateOrderRemark(saasOrderVo.getSaasOrderId(), remark)) {
+            return;
+        }
+        SaasOrderStatusHistory saasOrderStatusHistory = new SaasOrderStatusHistory();
+        saasOrderStatusHistory.setOrderId(saasOrderVo.getSaasOrderId());
+        saasOrderStatusHistory.setOrderNumb(orderNumb);
+        saasOrderStatusHistory.setCurrentOrderStatus(saasOrderVo.getOrderStatus());
+        saasOrderStatusHistory.setRemark(remark);
+        saasOrderStatusHistory.setOperatorCode(operatorCode);
+        saasOrderStatusHistoryService.create(saasOrderStatusHistory);
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
@@ -184,7 +225,7 @@ public class OrderApplication {
         OrderStatusEnum nextOrderStatus = OrderStatusEnum.getEnumByCode(updateOrderStatus.getCode());
         OrderStatusEnum currentOrderStatus = OrderStatusEnum.getEnumByCode(saasOrderVo.getOrderStatus());
 
-        if (Arrays.binarySearch(nextOrderStatus.getCodeArray(), currentOrderStatus.getCode()) < 0) {
+        if ((nextOrderStatus.getCodeArray() == null || Arrays.binarySearch(nextOrderStatus.getCodeArray(), currentOrderStatus.getCode()) < 0) && nextOrderStatus.getNeedForcedToUpdate()) {
             throw new ApplicationException(OrderErrorCodeEnum.ILLEGAL_OPERATION_ORDER_STATUS);
         }
         updateOrderStatus(operatorCode, saasOrderVo.getSaasOrderId(), saasOrderVo.getVersion(), saasOrderVo.getOrderNumb(), currentOrderStatus, updateOrderStatus, remark);
@@ -484,14 +525,17 @@ public class OrderApplication {
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
-    public void lenderAgree(String operatorCode, String orderNumb) {
+    public void lenderAgree(String merchantCode, String operatorCode, String orderNumb) {
         SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
         if (StringUtils.isNotEmpty(saasOrderVo.getLoanLenderCode()) && !operatorCode.equals(saasOrderVo.getLoanLenderCode())) {
             throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
         }
         if (StringUtils.isNotEmpty(saasOrderVo.getTermUrl())) {
             updateOrderStatus(operatorCode, orderNumb, OrderStatusEnum.FOR_REIMBURSEMENT, null);
+            orderBillDetailApplication.createOrderBillDetail(orderNumb);
         } else {
+            // TODO 机构签署合同
+
             updateOrderStatus(operatorCode, orderNumb, OrderStatusEnum.TO_CONFIRM_RECEIPT, null);
         }
         SaasOrder updateSaasOrder = new SaasOrder();
@@ -515,7 +559,7 @@ public class OrderApplication {
 
     @Transactional(rollbackFor = RuntimeException.class)
     public void confirmReceipt(String operatorCode, String orderNumb) {
-        // TODO 签署借款协议
+        // TODO 借款人签署借款协议
 
         updateOrderStatus(operatorCode, orderNumb, OrderStatusEnum.FOR_REIMBURSEMENT, null);
         orderBillDetailApplication.createOrderBillDetail(orderNumb);
@@ -528,9 +572,10 @@ public class OrderApplication {
         OrderStatusEnum nextOrderStatus = OrderStatusEnum.TO_CONFIRM_EXTEND;
         OrderStatusEnum currentOrderStatus = OrderStatusEnum.getEnumByCode(saasOrderVo.getOrderStatus());
 
-        if (Arrays.binarySearch(nextOrderStatus.getCodeArray(), currentOrderStatus.getCode()) < 0) {
+        if (Arrays.binarySearch(nextOrderStatus.getCodeArray(), currentOrderStatus.getCode()) < 0 && nextOrderStatus.getNeedForcedToUpdate()) {
             throw new ApplicationException(OrderErrorCodeEnum.ILLEGAL_OPERATION_ORDER_STATUS);
         }
+        // TODO 机构签署展期协议
 
         SaasOrder extendSaasOrder = new SaasOrder();
         BeanUtils.copyProperties(saasOrderVo, extendSaasOrder);
@@ -555,7 +600,7 @@ public class OrderApplication {
 
     @Transactional(rollbackFor = RuntimeException.class)
     public void confirmExtend(String operatorCode, String orderNumb) {
-        // TODO 签署展期协议
+        // TODO 借款人签署展期协议
 
         SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
         if (!OrderStatusEnum.TO_CONFIRM_EXTEND.getCode().equals(saasOrderVo.getOrderStatus())) {

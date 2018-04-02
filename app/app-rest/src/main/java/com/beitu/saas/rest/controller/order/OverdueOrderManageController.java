@@ -8,6 +8,7 @@ import com.beitu.saas.app.application.order.OrderBillDetailApplication;
 import com.beitu.saas.app.application.order.vo.QueryOrderBillDetailVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.auth.entity.SaasAdmin;
+import com.beitu.saas.collection.client.SaasCollectionOrderService;
 import com.beitu.saas.order.enums.OrderStatusEnum;
 import com.beitu.saas.rest.controller.order.request.*;
 import com.beitu.saas.rest.controller.order.response.OverdueOrderDetailResponse;
@@ -41,6 +42,9 @@ public class OverdueOrderManageController {
     @Autowired
     private OrderBillDetailApplication orderBillDetailApplication;
 
+    @Autowired
+    private SaasCollectionOrderService saasCollectionOrderService;
+
     @RequestMapping(value = "/query", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "待放款订单查询", response = OverdueOrderListResponse.class)
@@ -68,7 +72,8 @@ public class OverdueOrderManageController {
     @ApiOperation(value = "委托催收", response = ApiResponse.class)
     public ApiResponse entrustedCollection(@RequestBody @Valid OverdueManagerOperateOrderRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        return new ApiResponse("操作成功");
+        saasCollectionOrderService.createCollectionOrder(req.getOrderNumb());
+        return new ApiResponse("委托催收成功");
     }
 
 }

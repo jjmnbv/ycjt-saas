@@ -55,8 +55,9 @@ public class ForLendingOrderController {
     @ResponseBody
     @ApiOperation(value = "待放款订单备注保存", response = ApiResponse.class)
     public ApiResponse saveRemark(@RequestBody @Valid LendingOrderRemarkSaveRequest req) {
-        // TODO
-        return new ApiResponse();
+        String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
+        orderApplication.saveOrderRemark(adminCode, req.getOrderNumb(), req.getRemark());
+        return new ApiResponse("保存成功");
     }
 
     @RequestMapping(value = "/detail", method = RequestMethod.POST)
@@ -74,8 +75,8 @@ public class ForLendingOrderController {
     @ResponseBody
     @ApiOperation(value = "放款", response = ApiResponse.class)
     public ApiResponse agree(@RequestBody @Valid FinalReviewerOperateOrderRequest req) {
-        String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.lenderAgree(adminCode, req.getOrderNumb());
+        SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
+        orderApplication.lenderAgree(saasAdmin.getMerchantCode(), saasAdmin.getCode(), req.getOrderNumb());
         return new ApiResponse("操作成功");
     }
 

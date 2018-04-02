@@ -1,6 +1,7 @@
 package com.beitu.saas.rest.controller.h5.request;
 
 import com.fqgj.common.api.ParamsObject;
+import com.fqgj.common.utils.StringUtils;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
@@ -34,7 +35,9 @@ public class CreditSaveIdentityInfoRequest extends ParamsObject {
     }
 
     public void setFrontUrl(String frontUrl) {
-        this.frontUrl = frontUrl;
+        if (StringUtils.isNotEmpty(frontUrl)) {
+            this.frontUrl = frontUrl;
+        }
     }
 
     public String getBackUrl() {
@@ -42,7 +45,9 @@ public class CreditSaveIdentityInfoRequest extends ParamsObject {
     }
 
     public void setBackUrl(String backUrl) {
-        this.backUrl = backUrl;
+        if (StringUtils.isNotEmpty(backUrl)) {
+            this.backUrl = backUrl;
+        }
     }
 
     public String getHoldUrl() {
@@ -50,7 +55,9 @@ public class CreditSaveIdentityInfoRequest extends ParamsObject {
     }
 
     public void setHoldUrl(String holdUrl) {
-        this.holdUrl = holdUrl;
+        if (StringUtils.isNotEmpty(holdUrl)) {
+            this.holdUrl = holdUrl;
+        }
     }
 
     @Override

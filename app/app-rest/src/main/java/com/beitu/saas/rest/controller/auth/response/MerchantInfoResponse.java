@@ -31,7 +31,7 @@ public class MerchantInfoResponse {
     @ApiModelProperty("短信配置")
     private List<SmsConfigInfo> smsConfigInfo;
 
-    public MerchantInfoResponse(SaasMerchantVo saasMerchantVo, List<SaasSmsConfigDictionary> saasSmsConfigDictionaryList, List<Integer> smsConfig, Boolean isCompanyContract) {
+    public MerchantInfoResponse(SaasMerchantVo saasMerchantVo, List<SaasSmsConfigDictionary> saasSmsConfigDictionaryList, List<String> smsConfig, Boolean isCompanyContract) {
         merchantInfo = new MerchantInfo();
         BeanUtils.copyProperties(saasMerchantVo, merchantInfo);
         lenderInfo = new LenderInfo();
@@ -39,10 +39,10 @@ public class MerchantInfoResponse {
         this.contractType = isCompanyContract ? ContractConfigTypeEnum.COMPANY_CONTRACT.getKey() : ContractConfigTypeEnum.PERSONAL_CONTRACT.getKey();
         smsConfigInfo = new ArrayList<>();
         saasSmsConfigDictionaryList.forEach(saasSmsConfigDictionary -> {
-            SmsConfigInfo smsConfigInfo = new SmsConfigInfo();
-            BeanUtils.copyProperties(saasSmsConfigDictionary, smsConfigInfo);
-            smsConfigInfo.setSmsConfigId(saasSmsConfigDictionary.getId());
-            smsConfigInfo.setEnable(smsConfig.contains(saasSmsConfigDictionary.getId()));
+            SmsConfigInfo config = new SmsConfigInfo();
+            BeanUtils.copyProperties(saasSmsConfigDictionary, config);
+            config.setEnable(smsConfig.contains(saasSmsConfigDictionary.getBizCode()));
+            smsConfigInfo.add(config);
         });
     }
 
@@ -219,7 +219,7 @@ public class MerchantInfoResponse {
     class SmsConfigInfo {
 
         @ApiModelProperty("配置Id")
-        private Long smsConfigId;
+        private String bizCode;
 
         @ApiModelProperty("短信类型")
         private String smsType;
@@ -233,12 +233,12 @@ public class MerchantInfoResponse {
         @ApiModelProperty("启用")
         private Boolean enable;
 
-        public Long getSmsConfigId() {
-            return smsConfigId;
+        public String getBizCode() {
+            return bizCode;
         }
 
-        public void setSmsConfigId(Long smsConfigId) {
-            this.smsConfigId = smsConfigId;
+        public void setBizCode(String bizCode) {
+            this.bizCode = bizCode;
         }
 
         public String getSmsType() {

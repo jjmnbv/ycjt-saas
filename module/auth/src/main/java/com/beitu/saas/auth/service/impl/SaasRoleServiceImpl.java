@@ -16,10 +16,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
-* User: xiaochong
-* Date: 2018-03-22
-* Time: 15:36:13.691
-*/
+ * User: xiaochong
+ * Date: 2018-03-22
+ * Time: 15:36:13.691
+ */
 @Module(value = "服务模块")
 @NameSpace("com.beitu.saas.auth.dao.impl.SaasRoleDaoImpl")
 @Service
@@ -30,13 +30,15 @@ public class SaasRoleServiceImpl extends AbstractBaseService implements SaasRole
     private SaasRoleDao saasRoleDao;
 
     @Override
-    public List<SaasRole> getRoleListByMerchantCode(String merchantCode, Page page){
+    public List<SaasRole> getRoleListByMerchantCode(String merchantCode, Page page) {
         Map<String, Object> map = new HashMap<String, Object>(2) {{
             put("merchantCode", merchantCode);
             put("deleted", false);
             put("page", page);
         }};
-        page.setTotalCount(this.queryTotal(map));
+        if (null != page) {
+            page.setTotalCount(this.queryTotal(map));
+        }
         return this.selectByParams(map);
     }
 }

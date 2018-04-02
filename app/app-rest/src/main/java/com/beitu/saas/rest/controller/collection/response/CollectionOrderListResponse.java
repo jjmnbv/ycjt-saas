@@ -1,8 +1,10 @@
 package com.beitu.saas.rest.controller.collection.response;
 
+import com.beitu.saas.app.application.collection.vo.CollectionOrderListVo;
 import com.beitu.saas.collection.vo.CollectionOrderInfoDetailVo;
 import com.fqgj.common.api.ResponseData;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,18 +18,19 @@ import java.util.List;
  */
 @ApiModel(value = "催收列表")
 public class CollectionOrderListResponse implements ResponseData {
-    private List<CollectionOrderInfoDetailVo> collectionOrderInfoDetailVos=new ArrayList<>();
 
-    public CollectionOrderListResponse(List<CollectionOrderInfoDetailVo> collectionOrderInfoDetailVos) {
-        this.collectionOrderInfoDetailVos = collectionOrderInfoDetailVos;
+    @ApiModelProperty(value = "催收列表信息")
+    private List<CollectionOrderListVo> collectionOrderListVoList;
+
+    public CollectionOrderListResponse(List<CollectionOrderListVo> collectionOrderListVoList) {
+        this.collectionOrderListVoList = collectionOrderListVoList;
     }
 
-    public List<CollectionOrderInfoDetailVo> getCollectionOrderInfoDetailVos() {
-        return collectionOrderInfoDetailVos;
+    public List<CollectionOrderListVo> getCollectionOrderListVoList() {
+        return collectionOrderListVoList;
     }
 
-    public CollectionOrderListResponse setCollectionOrderInfoDetailVos(List<CollectionOrderInfoDetailVo> collectionOrderInfoDetailVos) {
-        this.collectionOrderInfoDetailVos = collectionOrderInfoDetailVos;
-        return this;
+    public void setCollectionOrderListVoList(List<CollectionOrderListVo> collectionOrderListVoList) {
+        this.collectionOrderListVoList = collectionOrderListVoList;
     }
 }
