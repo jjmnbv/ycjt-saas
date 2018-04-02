@@ -15,6 +15,9 @@ import javax.validation.constraints.NotNull;
 @ApiModel(description = "保存风控模块申请表信息")
 public class SaasCreditSaveWorkInfoRequest extends ParamsObject {
 
+    @ApiModelProperty(value = "借款人CODE")
+    @NotBlank(message = "借款人CODE不能为空")
+    private String borrowerCode;
     /**
      * 职业
      */
@@ -45,6 +48,14 @@ public class SaasCreditSaveWorkInfoRequest extends ParamsObject {
     @ApiModelProperty(value = "公司地址")
     @NotBlank(message = "公司地址不能为空")
     private String companyDetailAddress;
+
+    public String getBorrowerCode() {
+        return borrowerCode;
+    }
+
+    public void setBorrowerCode(String borrowerCode) {
+        this.borrowerCode = borrowerCode;
+    }
 
     public String getCareerType() {
         return careerType;

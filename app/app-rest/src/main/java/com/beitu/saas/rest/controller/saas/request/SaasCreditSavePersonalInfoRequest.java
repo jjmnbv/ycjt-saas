@@ -15,6 +15,10 @@ import javax.validation.constraints.NotNull;
 @ApiModel(description = "保存风控模块个人信息")
 public class SaasCreditSavePersonalInfoRequest extends ParamsObject {
 
+    @ApiModelProperty(value = "借款人CODE")
+    @NotBlank(message = "借款人CODE不能为空")
+    private String borrowerCode;
+
     /**
      * QQ
      */
@@ -49,6 +53,14 @@ public class SaasCreditSavePersonalInfoRequest extends ParamsObject {
     @ApiModelProperty(value = "芝麻分")
     @NotNull(message = "芝麻分不能为空")
     private Integer zmCreditScore;
+
+    public String getBorrowerCode() {
+        return borrowerCode;
+    }
+
+    public void setBorrowerCode(String borrowerCode) {
+        this.borrowerCode = borrowerCode;
+    }
 
     public String getQq() {
         return qq;

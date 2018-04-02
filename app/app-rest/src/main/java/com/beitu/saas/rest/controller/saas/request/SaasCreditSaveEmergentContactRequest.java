@@ -13,6 +13,9 @@ import org.hibernate.validator.constraints.NotBlank;
 @ApiModel(description = "保存风控模块紧急联系人信息")
 public class SaasCreditSaveEmergentContactRequest extends ParamsObject {
 
+    @ApiModelProperty(value = "借款人CODE")
+    @NotBlank(message = "借款人CODE不能为空")
+    private String borrowerCode;
     /**
      * 直系亲属联系人类型
      */
@@ -49,6 +52,14 @@ public class SaasCreditSaveEmergentContactRequest extends ParamsObject {
     @ApiModelProperty(value = "同事朋友手机号码")
     @NotBlank(message = "同事朋友手机号码不能为空")
     private String friendMobile;
+
+    public String getBorrowerCode() {
+        return borrowerCode;
+    }
+
+    public void setBorrowerCode(String borrowerCode) {
+        this.borrowerCode = borrowerCode;
+    }
 
     public String getFamilyType() {
         return familyType;

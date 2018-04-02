@@ -4,6 +4,7 @@ import com.fqgj.common.api.ParamsObject;
 import com.fqgj.common.utils.StringUtils;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * @author linanjun
@@ -13,6 +14,9 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(description = "保存风控模块身份证信息")
 public class SaasCreditSaveIdentityInfoRequest extends ParamsObject {
 
+    @ApiModelProperty(value = "借款人CODE")
+    @NotBlank(message = "借款人CODE不能为空")
+    private String borrowerCode;
     /**
      * 身份证正面面图片URL
      */
@@ -28,6 +32,14 @@ public class SaasCreditSaveIdentityInfoRequest extends ParamsObject {
      */
     @ApiModelProperty(value = "手持身份证图片URL")
     private String holdUrl;
+
+    public String getBorrowerCode() {
+        return borrowerCode;
+    }
+
+    public void setBorrowerCode(String borrowerCode) {
+        this.borrowerCode = borrowerCode;
+    }
 
     public String getFrontUrl() {
         return frontUrl;
