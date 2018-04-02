@@ -1,55 +1,42 @@
 package com.beitu.saas.rest.controller.saas;
 
-import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.api.ApiResponse;
 import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.application.borrower.BorrowerApplication;
 import com.beitu.saas.app.application.channel.SaasChannelApplication;
-import com.beitu.saas.app.application.contract.ContractApplication;
 import com.beitu.saas.app.application.credit.CreditApplication;
-import com.beitu.saas.app.application.credit.LoanPlatformApplication;
-import com.beitu.saas.app.application.credit.vo.BorrowerEmergentContactVo;
-import com.beitu.saas.app.application.credit.vo.BorrowerIdentityInfoVo;
-import com.beitu.saas.app.application.credit.vo.BorrowerWorkInfoVo;
-import com.beitu.saas.app.application.order.OrderApplication;
-import com.beitu.saas.app.application.order.vo.OrderDetailVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
-import com.beitu.saas.app.enums.H5OrderDetailButtonTypeEnum;
-import com.beitu.saas.app.enums.SaasContractEnum;
-import com.beitu.saas.auth.domain.SaasMerchantVo;
 import com.beitu.saas.auth.enums.AdminErrorEnum;
-import com.beitu.saas.auth.service.SaasMerchantService;
 import com.beitu.saas.borrower.client.SaasBorrowerEmergentContactService;
 import com.beitu.saas.borrower.client.SaasBorrowerIdentityInfoService;
 import com.beitu.saas.borrower.client.SaasBorrowerPersonalInfoService;
 import com.beitu.saas.borrower.client.SaasBorrowerWorkInfoService;
-import com.beitu.saas.borrower.domain.*;
+import com.beitu.saas.borrower.domain.SaasBorrowerEmergentContactVo;
+import com.beitu.saas.borrower.domain.SaasBorrowerIdentityInfoVo;
+import com.beitu.saas.borrower.domain.SaasBorrowerPersonalInfoVo;
+import com.beitu.saas.borrower.domain.SaasBorrowerWorkInfoVo;
 import com.beitu.saas.borrower.entity.SaasBorrowerEmergentContact;
 import com.beitu.saas.borrower.entity.SaasBorrowerIdentityInfo;
 import com.beitu.saas.borrower.entity.SaasBorrowerPersonalInfo;
 import com.beitu.saas.borrower.entity.SaasBorrowerWorkInfo;
 import com.beitu.saas.borrower.enums.BorrowerErrorCodeEnum;
-import com.beitu.saas.channel.domain.SaasH5ChannelVo;
 import com.beitu.saas.channel.enums.ChannelErrorCodeEnum;
-import com.beitu.saas.common.config.ConfigUtil;
-import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.utils.DateUtil;
 import com.beitu.saas.order.client.SaasOrderApplicationService;
 import com.beitu.saas.order.domain.SaasOrderApplicationVo;
-import com.beitu.saas.order.enums.OrderStatusEnum;
 import com.beitu.saas.rest.controller.saas.request.*;
-import com.beitu.saas.rest.controller.saas.response.*;
-import com.beitu.saas.sms.enums.SmsErrorCodeEnum;
-import com.fqgj.base.services.redis.RedisClient;
+import com.beitu.saas.rest.controller.saas.response.SaasCreateBorrowerSuccessResponse;
 import com.fqgj.common.api.annotations.ParamsValidate;
 import com.fqgj.common.utils.StringUtils;
-import com.fqgj.exception.common.ApplicationException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
@@ -187,6 +174,7 @@ public class SaasController {
         return new ApiResponse("保存成功");
     }
 
+    @ParamsValidate
     @RequestMapping(value = "/credit/emergent/contact/save", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "保存风控模块紧急联系人信息", response = ApiResponse.class)

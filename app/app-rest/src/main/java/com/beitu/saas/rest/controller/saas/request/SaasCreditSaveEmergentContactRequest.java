@@ -1,6 +1,9 @@
 package com.beitu.saas.rest.controller.saas.request;
 
+import com.beitu.saas.app.enums.VerifyCodeErrorCodeEnum;
+import com.beitu.saas.common.utils.MobileUtil;
 import com.fqgj.common.api.ParamsObject;
+import com.fqgj.common.api.exception.ApiIllegalArgumentException;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
@@ -111,7 +114,12 @@ public class SaasCreditSaveEmergentContactRequest extends ParamsObject {
 
     @Override
     public void validate() {
-
+        if (!MobileUtil.isMobile(familyMobile)) {
+            throw new ApiIllegalArgumentException(VerifyCodeErrorCodeEnum.NOT_MOBILE);
+        }
+        if (!MobileUtil.isMobile(friendMobile)) {
+            throw new ApiIllegalArgumentException(VerifyCodeErrorCodeEnum.NOT_MOBILE);
+        }
     }
 
 }
