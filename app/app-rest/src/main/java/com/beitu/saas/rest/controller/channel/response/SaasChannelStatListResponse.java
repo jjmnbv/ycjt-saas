@@ -1,5 +1,6 @@
 package com.beitu.saas.rest.controller.channel.response;
 
+import com.beitu.saas.app.application.channel.vo.ChannelStatDetailVo;
 import com.beitu.saas.channel.vo.ChannelStatVo;
 import com.fqgj.common.api.ResponseData;
 import io.swagger.annotations.ApiModel;
@@ -17,17 +18,17 @@ import java.util.List;
 @ApiModel(value = "渠道统计列表")
 public class SaasChannelStatListResponse implements ResponseData {
 
-    private List<ChannelStatVo> channelVos = new ArrayList<>();
+    private List<ChannelStatDetailVo> channelVos = new ArrayList<>();
 
-    public SaasChannelStatListResponse(List<ChannelStatVo> channelVos) {
+    public SaasChannelStatListResponse(List<ChannelStatDetailVo> channelVos) {
         this.channelVos = channelVos;
     }
 
-    public List<ChannelStatVo> getChannelVos() {
+    public List<ChannelStatDetailVo> getChannelVos() {
         return channelVos;
     }
 
-    public SaasChannelStatListResponse setChannelVos(List<ChannelStatVo> channelVos) {
+    public SaasChannelStatListResponse setChannelVos(List<ChannelStatDetailVo> channelVos) {
         this.channelVos = channelVos;
         return this;
     }
