@@ -176,6 +176,11 @@
         </dependency>
         <dependency>
             <groupId>com.beitu.saas</groupId>
+            <artifactId>user-service</artifactId>
+            <version>0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.beitu.saas</groupId>
             <artifactId>app-intergration</artifactId>
             <version>0.1</version>
         </dependency>
