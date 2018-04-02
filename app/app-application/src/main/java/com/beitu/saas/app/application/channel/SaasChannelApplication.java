@@ -72,7 +72,7 @@ public class SaasChannelApplication {
             String channelCode = OrderNoUtil.makeOrderNum();
             saasChannelEntity.setChannelCode(channelCode)
                     .setChannelStatus(ChannelStatusEnum.OPEN.getType())
-                    .setLinkUrl("?channelCode=" + channelCode)
+                    .setLinkUrl("?channel=" + channelCode)
                     .setCreatorCode(RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode());
             saasChannelService.create(saasChannelEntity);
 
@@ -220,6 +220,8 @@ public class SaasChannelApplication {
 
         return channelStatDetailVos;
     }
+
+
 
 
     /**
