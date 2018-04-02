@@ -1,6 +1,8 @@
 package com.beitu.saas.user.domain;
 
+import com.beitu.saas.user.entity.SaasUserEsignAuthorization;
 import com.fqgj.common.api.ResponseData;
+import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -95,4 +97,25 @@ public class SaasUserEsignAuthorizationVo implements ResponseData, Serializable 
     public void setSuccess(Boolean success) {
         this.success = success;
     }
+
+    public static SaasUserEsignAuthorizationVo convertEntityToVO(SaasUserEsignAuthorization saasUserEsignAuthorization) {
+        if (saasUserEsignAuthorization == null) {
+            return null;
+        }
+        SaasUserEsignAuthorizationVo saasUserEsignAuthorizationVo = new SaasUserEsignAuthorizationVo();
+        BeanUtils.copyProperties(saasUserEsignAuthorization, saasUserEsignAuthorizationVo);
+        saasUserEsignAuthorizationVo.setSaasUserEsignAuthorizationId(saasUserEsignAuthorization.getId());
+        return saasUserEsignAuthorizationVo;
+    }
+
+    public static SaasUserEsignAuthorization convertVOToEntity(SaasUserEsignAuthorizationVo saasUserEsignAuthorizationVo) {
+        if (saasUserEsignAuthorizationVo == null) {
+            return null;
+        }
+        SaasUserEsignAuthorization saasUserEsignAuthorization = new SaasUserEsignAuthorization();
+        BeanUtils.copyProperties(saasUserEsignAuthorizationVo, saasUserEsignAuthorization);
+        saasUserEsignAuthorization.setId(saasUserEsignAuthorizationVo.getSaasUserEsignAuthorizationId());
+        return saasUserEsignAuthorization;
+    }
+
 }

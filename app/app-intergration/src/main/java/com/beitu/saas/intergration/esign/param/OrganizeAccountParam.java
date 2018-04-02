@@ -7,9 +7,19 @@ package com.beitu.saas.intergration.esign.param;
  */
 public class OrganizeAccountParam {
 
+    private String merchantCode;
+
     private String name;
 
     private String organizeCode;
+
+    public String getMerchantCode() {
+        return merchantCode;
+    }
+
+    public void setMerchantCode(String merchantCode) {
+        this.merchantCode = merchantCode;
+    }
 
     public String getName() {
         return name;

@@ -33,7 +33,7 @@ public class SaasUserEsignAuthorizationServiceImpl extends AbstractBaseService i
     }
 
     @Override
-    public String getSealUrlByUserCode(String userCode) {
+    public SaasUserEsignAuthorizationVo getByUserCode(String userCode) {
         List<SaasUserEsignAuthorization> authorizationList = saasUserEsignAuthorizationDao.selectByParams(new HashMap<String, Object>(4) {{
             put("userCode", userCode);
             put("success", Boolean.TRUE);
@@ -42,12 +42,14 @@ public class SaasUserEsignAuthorizationServiceImpl extends AbstractBaseService i
         if (CollectionUtils.isEmpty(authorizationList)) {
             return null;
         }
-        return authorizationList.get(0).getSealUrl();
+        return SaasUserEsignAuthorizationVo.convertEntityToVO(authorizationList.get(0));
     }
 
     @Override
     public SaasUserEsignAuthorization create(SaasUserEsignAuthorizationVo saasUserEsignAuthorizationVo) {
-        return null;
+        SaasUserEsignAuthorization saasUserEsignAuthorization = SaasUserEsignAuthorizationVo.convertVOToEntity(saasUserEsignAuthorizationVo);
+        saasUserEsignAuthorizationDao.insert(saasUserEsignAuthorization);
+        return saasUserEsignAuthorization;
     }
 
 }

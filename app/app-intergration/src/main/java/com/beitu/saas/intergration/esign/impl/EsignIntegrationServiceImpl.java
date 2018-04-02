@@ -4,10 +4,7 @@ import com.beitu.saas.common.utils.contract.utils.FileHelper;
 import com.beitu.saas.intergration.esign.EsignIntegrationService;
 import com.beitu.saas.intergration.esign.dto.AddOrganizeAccountSuccessDto;
 import com.beitu.saas.intergration.esign.dto.AddPersonAccountSuccessDto;
-import com.beitu.saas.intergration.esign.param.LicenseContractSignParam;
-import com.beitu.saas.intergration.esign.param.LoanContractSignParam;
-import com.beitu.saas.intergration.esign.param.OrganizeAccountParam;
-import com.beitu.saas.intergration.esign.param.PersonAccountParam;
+import com.beitu.saas.intergration.esign.param.*;
 import com.fqgj.common.utils.StringUtils;
 import com.fqgj.exception.common.ApplicationException;
 import com.fqgj.log.factory.LogFactory;
@@ -58,7 +55,7 @@ public class EsignIntegrationServiceImpl implements EsignIntegrationService {
         AccountService accountService = AccountServiceFactory.instance();
         AddAccountResult addAccountResult = accountService.addAccount(personBean);
         if (0 != addAccountResult.getErrCode()) {
-            LOGGER.error("创建个人账户失败，errCode=" + addAccountResult.getErrCode() + " msg=" + addAccountResult.getMsg());
+            LOGGER.error("创建个人账户失败，errCode=" + addAccountResult.getErrCode() + " msg=" + addAccountResult.getMsg() + " --- userCode:" + personAccountParam.getUserCode());
             return null;
         }
         String accountId = addAccountResult.getAccountId();
@@ -70,7 +67,7 @@ public class EsignIntegrationServiceImpl implements EsignIntegrationService {
         SealService sealService = SealServiceFactory.instance();
         AddSealResult addSealResult = sealService.addTemplateSeal(accountId, personTemplateType, sealColor);
         if (0 != addSealResult.getErrCode()) {
-            LOGGER.info("创建个人模板印章失败，errCode=" + addSealResult.getErrCode() + " msg=" + addSealResult.getMsg());
+            LOGGER.info("创建个人模板印章失败，errCode=" + addSealResult.getErrCode() + " msg=" + addSealResult.getMsg() + " --- userCode:" + personAccountParam.getUserCode());
             return null;
         }
         return new AddPersonAccountSuccessDto(accountId, addSealResult.getSealData());
@@ -88,7 +85,7 @@ public class EsignIntegrationServiceImpl implements EsignIntegrationService {
         AccountService accountService = AccountServiceFactory.instance();
         AddAccountResult addAccountResult = accountService.addAccount(organizeBean);
         if (0 != addAccountResult.getErrCode()) {
-            LOGGER.info("创建企业账户失败，errCode=" + addAccountResult.getErrCode() + " msg=" + addAccountResult.getMsg());
+            LOGGER.info("创建企业账户失败，errCode=" + addAccountResult.getErrCode() + " msg=" + addAccountResult.getMsg() + " --- merchantCode:" + organizeAccountParam.getMerchantCode());
             return null;
         }
         String accountId = addAccountResult.getAccountId();
@@ -102,49 +99,72 @@ public class EsignIntegrationServiceImpl implements EsignIntegrationService {
         SealService sealService = SealServiceFactory.instance();
         AddSealResult addSealResult = sealService.addTemplateSeal(accountId, organizeTemplateType, sealColor, hText, pText);
         if (0 != addSealResult.getErrCode()) {
-            LOGGER.info("创建企业模板印章失败，errCode=" + addSealResult.getErrCode() + " msg=" + addSealResult.getMsg());
+            LOGGER.info("创建企业模板印章失败，errCode=" + addSealResult.getErrCode() + " msg=" + addSealResult.getMsg() + " --- merchantCode:" + organizeAccountParam.getMerchantCode());
             return null;
         }
         return new AddOrganizeAccountSuccessDto(accountId, addSealResult.getSealData());
     }
 
+
     @Override
-    public InputStream doLoanContractSign(LoanContractSignParam loanContractSignParam) {
-        if (StringUtils.isEmpty(loanContractSignParam.getMerchantSealData())) {
-            throw new ApplicationException("出借用户印章数据丢失");
-        }
-        if (StringUtils.isEmpty(loanContractSignParam.getBorrowerSealData())) {
+    public String borrowerDoContractSign(BorrowerDoContractSignParam borrowerDoContractSignParam) {
+        if (StringUtils.isEmpty(borrowerDoContractSignParam.getBorrowerSealData())) {
             throw new ApplicationException("借款用户印章数据丢失");
         }
+        SignPDFStreamBean signPDFStreamBean = new SignPDFStreamBean();
+        if (borrowerDoContractSignParam.getSrcContent() == null) {
+            platformDoContractSign(borrowerDoContractSignParam.getSrcPdf(), signPDFStreamBean);
+        } else {
+            signPDFStreamBean.setStream(borrowerDoContractSignParam.getSrcContent());
+        }
+        SignType signType = SignType.Key;
+        PosBean posBean = setKeyPosBean("乙方：", 200, 5, 60);
+        UserSignService userSignService = UserSignServiceFactory.instance();
+        FileDigestSignResult finalResult = userSignService.localSignPDF(borrowerDoContractSignParam.getBorrowerAccountId(), borrowerDoContractSignParam.getBorrowerSealData(), signPDFStreamBean, posBean, signType);
+        if (0 != finalResult.getErrCode()) {
+            throw new ApplicationException("借款协议借款方签章失败" + (finalResult.isErrShow() ? (":" + finalResult.getMsg()) : "") + " --- borrowerCode:" + borrowerDoContractSignParam.getBorrowerCode());
+        }
+        return new String(finalResult.getStream());
+    }
+
+    @Override
+    public String lenderDoContractSign(LenderDoContractSignParam lenderDoContractSignParam) {
+        if (StringUtils.isEmpty(lenderDoContractSignParam.getMerchantSealData())) {
+            throw new ApplicationException("出借用户印章数据丢失");
+        }
+        SignPDFStreamBean signPDFStreamBean = new SignPDFStreamBean();
+        if (lenderDoContractSignParam.getSrcContent() == null) {
+            platformDoContractSign(lenderDoContractSignParam.getSrcPdf(), signPDFStreamBean);
+        } else {
+            signPDFStreamBean.setStream(lenderDoContractSignParam.getSrcContent());
+        }
+        SignType signType = SignType.Key;
+        PosBean posBean = setKeyPosBean("甲方：", 200, 5, 60);
+        UserSignService userSignService = UserSignServiceFactory.instance();
+        FileDigestSignResult finalResult = userSignService.localSignPDF(lenderDoContractSignParam.getMerchantAccountId(), lenderDoContractSignParam.getMerchantSealData(), signPDFStreamBean, posBean, signType);
+        if (0 != finalResult.getErrCode()) {
+            throw new ApplicationException("借款协议出借方签章失败" + (finalResult.isErrShow() ? (":" + finalResult.getMsg()) : "") + " --- merchantCode:" + lenderDoContractSignParam.getMerchantCode());
+        }
+        return new String(finalResult.getStream());
+    }
+
+    private void platformDoContractSign(String srcPdf, SignPDFStreamBean signPDFStreamBean) {
         // 设置签署印章，www.tsign.cn官网设置的默认签名sealId = 0
         int sealId = 0;
         // 签章类型：关键字签章
-        SignPDFStreamBean signPDFStreamBean = new SignPDFStreamBean();
-        signPDFStreamBean.setStream(FileHelper.getBytes(loanContractSignParam.getSrcPdf()));
         SignType signType = SignType.Key;
+        signPDFStreamBean.setStream(FileHelper.getBytes(srcPdf));
         PosBean posBean = setKeyPosBean("丙方：", 260, -35, 160);
         SelfSignService selfSignService = SelfSignServiceFactory.instance();
         FileDigestSignResult platformSignResult = selfSignService.localSignPdf(signPDFStreamBean, posBean, sealId, signType);
         if (0 != platformSignResult.getErrCode()) {
             LOGGER.info("平台自身PDF摘要签署（文件流）失败，errCode=" + platformSignResult.getErrCode() + " msg=" + platformSignResult.getMsg());
         }
-        posBean = setKeyPosBean("乙方：", 200, 5, 60);
         signPDFStreamBean.setStream(platformSignResult.getStream());
-        UserSignService userSignService = UserSignServiceFactory.instance();
-        FileDigestSignResult borrowerResult = userSignService.localSignPDF(loanContractSignParam.getBorrowerAccountId(), loanContractSignParam.getBorrowerSealData(), signPDFStreamBean, posBean, signType);
-        if (0 != borrowerResult.getErrCode()) {
-            throw new ApplicationException("借款协议借款方签章失败" + (borrowerResult.isErrShow() ? (":" + borrowerResult.getMsg()) : "") + " --- borrowerCode:" + loanContractSignParam.getMerchantCode());
-        }
-        posBean = setKeyPosBean("甲方：", 200, 5, 60);
-        FileDigestSignResult finalResult = userSignService.localSignPDF(loanContractSignParam.getMerchantAccountId(), loanContractSignParam.getMerchantSealData(), signPDFStreamBean, posBean, signType);
-        if (0 != finalResult.getErrCode()) {
-            throw new ApplicationException("借款协议出借方签章失败" + (finalResult.isErrShow() ? (":" + finalResult.getMsg()) : "") + " --- merchantCode:" + loanContractSignParam.getMerchantCode());
-        }
-        return new ByteArrayInputStream(finalResult.getStream());
     }
 
     @Override
-    public InputStream doLicenseContractSign(LicenseContractSignParam licenseContractSignParam) {
+    public String doLicenseContractSign(LicenseContractSignParam licenseContractSignParam) {
         if (StringUtils.isEmpty(licenseContractSignParam.getUserSealData())) {
             throw new ApplicationException("授权方印章数据丢失");
         }
@@ -167,7 +187,7 @@ public class EsignIntegrationServiceImpl implements EsignIntegrationService {
         if (0 != finalResult.getErrCode()) {
             throw new ApplicationException("授权协议授权方签章失败" + (finalResult.isErrShow() ? (":" + finalResult.getMsg()) : "") + " --- userCode:" + licenseContractSignParam.getUserCode());
         }
-        return new ByteArrayInputStream(finalResult.getStream());
+        return new String(finalResult.getStream());
     }
 
     public static PosBean setKeyPosBean(String key, int x, int y, int width) {

@@ -5,13 +5,7 @@ package com.beitu.saas.intergration.esign.param;
  * @create 2018/3/30 下午3:49
  * @description
  */
-public class LoanContractSignParam {
-
-    private String merchantCode;
-
-    private String merchantAccountId;
-
-    private String merchantSealData;
+public class BorrowerDoContractSignParam {
 
     private String borrowerCode;
 
@@ -19,31 +13,9 @@ public class LoanContractSignParam {
 
     private String borrowerSealData;
 
+    private byte[] srcContent;
+
     private String srcPdf;
-
-    public String getMerchantCode() {
-        return merchantCode;
-    }
-
-    public void setMerchantCode(String merchantCode) {
-        this.merchantCode = merchantCode;
-    }
-
-    public String getMerchantAccountId() {
-        return merchantAccountId;
-    }
-
-    public void setMerchantAccountId(String merchantAccountId) {
-        this.merchantAccountId = merchantAccountId;
-    }
-
-    public String getMerchantSealData() {
-        return merchantSealData;
-    }
-
-    public void setMerchantSealData(String merchantSealData) {
-        this.merchantSealData = merchantSealData;
-    }
 
     public String getBorrowerCode() {
         return borrowerCode;
@@ -69,6 +41,14 @@ public class LoanContractSignParam {
         this.borrowerSealData = borrowerSealData;
     }
 
+    public byte[] getSrcContent() {
+        return srcContent;
+    }
+
+    public void setSrcContent(byte[] srcContent) {
+        this.srcContent = srcContent;
+    }
+
     public String getSrcPdf() {
         return srcPdf;
     }
@@ -76,5 +56,4 @@ public class LoanContractSignParam {
     public void setSrcPdf(String srcPdf) {
         this.srcPdf = srcPdf;
     }
-
 }

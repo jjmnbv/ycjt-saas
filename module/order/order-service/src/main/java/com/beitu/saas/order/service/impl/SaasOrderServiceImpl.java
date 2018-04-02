@@ -190,4 +190,10 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
     public Boolean updateFinalReviewerCode(Long orderId, String operatorCode) {
         return saasOrderDao.updateFinalReviewerCode(orderId, operatorCode) > 0;
     }
+
+    @Override
+    public SaasOrderVo getConfirmReceiptOrderByOrderNumb(String orderNumb) {
+        return null;
+    }
+
 }
