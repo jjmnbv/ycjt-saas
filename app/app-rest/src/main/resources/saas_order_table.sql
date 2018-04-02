@@ -255,4 +255,18 @@ CREATE TABLE `saas_borrower_carrier_ext` (
   KEY `idx_borrower_code` (`borrower_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='SAAS借款人运营商报告扩充资料表';
 
-
+DROP TABLE IF EXISTS `saas_user_esign_authorization`;
+CREATE TABLE `saas_user_esign_authorization` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '表ID',
+  `user_code` varchar(32) DEFAULT NULL COMMENT '用户码',
+  `account_id` varchar(40) NOT NULL COMMENT '用户e签宝账户标识',
+  `seal_url` varchar(128) DEFAULT NULL COMMENT 'e签宝生成印章URL地址',
+  `authorization_url` varchar(128) DEFAULT NULL COMMENT '签章后授权协议URL地址',
+  `authorization_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '用户授权意愿时间',
+  `success` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否已成功授权',
+  `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
+  `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_user_code` (`user_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='SAAS用户e签宝授权信息表';

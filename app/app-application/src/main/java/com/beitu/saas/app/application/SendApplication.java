@@ -1,8 +1,10 @@
 package com.beitu.saas.app.application;
 
 import com.beitu.saas.app.enums.SaasSmsTypeEnum;
+import com.beitu.saas.auth.domain.SaasMerchantVo;
 import com.beitu.saas.auth.entity.SaasMerchantConfig;
 import com.beitu.saas.auth.service.SaasMerchantConfigService;
+import com.beitu.saas.auth.service.SaasMerchantService;
 import com.beitu.saas.sms.client.SmsMsgService;
 import com.beitu.saas.sms.enums.MessageSendErrorCodeEnum;
 import com.beitu.saas.sms.enums.SmsTypeEnum;
@@ -29,6 +31,9 @@ public class SendApplication {
 
     @Autowired
     private SaasMerchantConfigService saasMerchantConfigService;
+
+    @Autowired
+    private SaasMerchantService saasMerchantService;
 
 
     /**
@@ -58,6 +63,8 @@ public class SendApplication {
         if (saasMerchantConfigService.hasSmsConfig(merchantCode, saasSmsTypeEnum.getBizCode())) {
             return;
         }
+        SaasMerchantVo saasMerchantVo = saasMerchantService.getByMerchantCode(merchantCode);
+        map.put("sign",saasMerchantVo.getCompanyName());
         SingleSmsSendRequestRO ro = new SingleSmsSendRequestRO();
         ro.setPhone(mobile);
         ro.setBizCode(saasSmsTypeEnum.getBizCode());

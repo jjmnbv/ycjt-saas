@@ -1,7 +1,6 @@
 package com.beitu.saas.app.application.order.vo;
 
 import com.fqgj.common.api.ResponseData;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
