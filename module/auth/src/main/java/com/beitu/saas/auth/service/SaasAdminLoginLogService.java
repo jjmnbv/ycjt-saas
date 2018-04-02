@@ -1,4 +1,5 @@
 package com.beitu.saas.auth.service;
+import com.beitu.saas.auth.entity.SaasAdminLoginLog;
 import com.fqgj.common.base.BaseService;
 import com.fqgj.common.entity.BaseEntity;
 
@@ -12,4 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 public interface SaasAdminLoginLogService<T extends BaseEntity> extends BaseService<T> {
 
     Boolean addAdminLoginLog(HttpServletRequest request, String adminCode);
+
+    Boolean equalLoginIp(String adminCode, String ip);
+
+    SaasAdminLoginLog getLoginLogByCodeTop(String adminCode);
 }
