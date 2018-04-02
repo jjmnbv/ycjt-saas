@@ -214,4 +214,12 @@ public class SaasChannelApplication {
         return null;
     }
 
+    public String getDefaultSaasChannelCodeByMerchantCode(String merchantCode) {
+        SaasChannelEntity saasChannelEntity = saasChannelService.getDefaultSaasChannelByMerchantCode(merchantCode);
+        if (ChannelStatusEnum.CLOSE.getType().equals(saasChannelEntity.getChannelStatus())) {
+            return null;
+        }
+        return saasChannelEntity.getChannelCode();
+    }
+
 }

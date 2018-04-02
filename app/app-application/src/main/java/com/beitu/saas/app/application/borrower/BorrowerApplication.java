@@ -8,9 +8,11 @@ import com.beitu.saas.borrower.client.SaasBorrowerTokenService;
 import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
 import com.beitu.saas.borrower.domain.SaasBorrowerVo;
 import com.beitu.saas.borrower.entity.SaasBorrower;
+import com.beitu.saas.borrower.enums.BorrowerErrorCodeEnum;
 import com.beitu.saas.channel.domain.SaasH5ChannelVo;
 import com.beitu.saas.channel.enums.ChannelErrorCodeEnum;
 import com.beitu.saas.common.consts.RedisKeyConsts;
+import com.beitu.saas.common.utils.MobileUtil;
 import com.beitu.saas.common.utils.identityNumber.vo.IdcardInfoExtractor;
 import com.fqgj.base.services.redis.RedisClient;
 import com.fqgj.base.services.redis.TimeConsts;
@@ -79,6 +81,28 @@ public class BorrowerApplication {
         }
         redisClient.set(RedisKeyConsts.SAAS_TOKEN_KEY, borrowerCode, TimeConsts.AN_HOUR, token);
         return token;
+    }
+
+    @Transactional(rollbackFor = RuntimeException.class)
+    public String createBorrower(String mobile, String channelCode, String merchantCode) {
+        if (channelCode == null) {
+            throw new ApplicationException(ChannelErrorCodeEnum.DISABLE_CHANNEL);
+        }
+        if (!MobileUtil.isMobile(mobile)) {
+            throw new ApplicationException(BorrowerErrorCodeEnum.ILLEGAL_MOBILE);
+        }
+        SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByMobileAndMerchantCode(mobile, merchantCode);
+        if (saasBorrowerVo == null) {
+            saasBorrowerVo = new SaasBorrowerVo();
+            saasBorrowerVo.setMerchantCode(merchantCode);
+            saasBorrowerVo.setChannelCode(channelCode);
+            saasBorrowerVo.setMobile(mobile);
+            SaasBorrower saasBorrower = saasBorrowerService.create(saasBorrowerVo);
+            String borrowerCode = saasBorrower.getBorrowerCode();
+            saasBorrowerTokenService.create(saasBorrower.getBorrowerCode(), merchantCode);
+            return borrowerCode;
+        }
+        return saasBorrowerVo.getBorrowerCode();
     }
 
     public Boolean needRealName(String borrowerCode) {
