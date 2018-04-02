@@ -18,8 +18,8 @@ public class AddMerchantRequest extends ParamsObject {
     @ApiModelProperty("放款人")
     private LenderInfo lenderInfo;
 
-    @ApiModelProperty("机构管理员登录密码")
-    private String password;
+    @ApiModelProperty("管理员信息")
+    private AdminInfo adminInfo;
 
     public MerchantInfo getMerchantInfo() {
         return merchantInfo;
@@ -37,12 +37,12 @@ public class AddMerchantRequest extends ParamsObject {
         this.lenderInfo = lenderInfo;
     }
 
-    public String getPassword() {
-        return password;
+    public AdminInfo getAdminInfo() {
+        return adminInfo;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setAdminInfo(AdminInfo adminInfo) {
+        this.adminInfo = adminInfo;
     }
 
     @Override
@@ -191,6 +191,40 @@ public class AddMerchantRequest extends ParamsObject {
 
         public void setLenderTel(String lenderTel) {
             this.lenderTel = lenderTel;
+        }
+    }
+
+    public class AdminInfo{
+
+        @ApiModelProperty("管理员手机")
+        private String accountPhone;
+        @ApiModelProperty("管理员昵称")
+        private String accountName;
+        @ApiModelProperty("管理员密码")
+        private String password;
+
+        public String getAccountPhone() {
+            return accountPhone;
+        }
+
+        public void setAccountPhone(String accountPhone) {
+            this.accountPhone = accountPhone;
+        }
+
+        public String getAccountName() {
+            return accountName;
+        }
+
+        public void setAccountName(String accountName) {
+            this.accountName = accountName;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
         }
     }
 }

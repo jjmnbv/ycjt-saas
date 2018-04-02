@@ -55,7 +55,7 @@ public class SaasMerchantSmsInfoServiceImpl extends AbstractBaseService implemen
     }
 
     private Boolean creditValueOp(String merchantCode, Long value, Boolean add) {
-        SaasMerchantSmsInfoEntity userBalanceInfo = getSmsInfoByMerchantCode(merchantCode);
+        SaasMerchantSmsInfoEntity userBalanceInfo = getOrInitUserSmsInfoByMerchantCode(merchantCode);
         Long balanceValue = getDecryptValue(userBalanceInfo.getEncryptValue());
         if (add) {
             balanceValue = balanceValue + value;
