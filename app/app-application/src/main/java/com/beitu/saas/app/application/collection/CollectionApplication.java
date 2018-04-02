@@ -6,6 +6,7 @@ import com.beitu.saas.collection.client.SaasCollectionOrderService;
 import com.beitu.saas.collection.param.CollectionOrderQueryParam;
 import com.beitu.saas.collection.vo.CollectionOrderInfoDetailVo;
 import com.beitu.saas.common.utils.identityNumber.vo.IdcardInfoExtractor;
+import com.beitu.saas.order.client.SaasOrderBillDetailService;
 import com.beitu.saas.order.client.SaasOrderStatusHistoryService;
 import com.beitu.saas.order.domain.SaasOrderBillDetailVo;
 import com.beitu.saas.order.entity.SaasOrderStatusHistory;
@@ -32,6 +33,10 @@ public class CollectionApplication {
     @Autowired
     private SaasCollectionOrderService saasCollectionOrderService;
 
+
+    @Autowired
+    private SaasOrderBillDetailService saasOrderBillDetailService;
+
     @Autowired
     private OrderCalculateApplication orderCalculateApplication;
 
@@ -39,9 +44,7 @@ public class CollectionApplication {
         List<CollectionOrderInfoDetailVo> collectionOrderInfoDetailVos = saasCollectionOrderService.getCollectionOrderListByPage(collectionOrderQueryParam, page);
 
         collectionOrderInfoDetailVos.stream().forEach(x -> {
-            SaasOrderBillDetailVo saasOrderBillDetailVo = new SaasOrderBillDetailVo();
-            saasOrderBillDetailVo.setOrderNumb(x.getOrderNo());
-            saasOrderBillDetailVo.setVisible(true);
+            SaasOrderBillDetailVo saasOrderBillDetailVo = saasOrderBillDetailService.getVisibleOrderBillDetailByOrderNumb(x.getOrderNo());
             x.setShouldRepayCapital(orderCalculateApplication.getAmount(saasOrderBillDetailVo));
         });
 
