@@ -52,7 +52,6 @@ public class CollectionApplication {
 
             collectionOrderListVos.add(collectionOrderListVo);
         });
-
         return collectionOrderListVos;
     }
 
