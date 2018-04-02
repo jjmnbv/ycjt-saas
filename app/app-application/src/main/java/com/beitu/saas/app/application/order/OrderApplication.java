@@ -254,16 +254,10 @@ public class OrderApplication {
         if (queryOrderVo.getOrderStatus() != null) {
             querySaasOrderVo.setOrderStatusList(Arrays.asList(queryOrderVo.getOrderStatus()));
         } else {
-            if (StringUtils.isNotEmpty(queryOrderVo.getReviewerCode())) {
-                querySaasOrderVo.setOrderStatusList(Arrays.asList(OrderStatusEnum.PRELIMINARY_REVIEWER_GET_ORDER.getCode(),
-                        OrderStatusEnum.PRELIMINARY_REVIEWER_REJECT.getCode(),
-                        OrderStatusEnum.PRELIMINARY_REVIEWER_REFUSE.getCode()));
-            } else {
-                querySaasOrderVo.setOrderStatusList(Arrays.asList(
-                        OrderStatusEnum.SUBMIT_PRELIMINARY_REVIEW.getCode(),
-                        OrderStatusEnum.IN_PRELIMINARY_REVIEWER.getCode(),
-                        OrderStatusEnum.PRELIMINARY_REVIEWER_REJECT.getCode()));
-            }
+            querySaasOrderVo.setOrderStatusList(Arrays.asList(
+                    OrderStatusEnum.SUBMIT_PRELIMINARY_REVIEW.getCode(),
+                    OrderStatusEnum.IN_PRELIMINARY_REVIEWER.getCode(),
+                    OrderStatusEnum.PRELIMINARY_REVIEWER_REJECT.getCode()));
         }
         if (StringUtils.isNotEmpty(queryOrderVo.getReviewerCode())) {
             querySaasOrderVo.setPreliminaryReviewerCode(queryOrderVo.getReviewerCode());
@@ -288,17 +282,10 @@ public class OrderApplication {
             querySaasOrderVo.setOrderStatusList(Arrays.asList(
                     queryOrderVo.getOrderStatus()));
         } else {
-            if (StringUtils.isNotEmpty(queryOrderVo.getReviewerCode())) {
-                querySaasOrderVo.setOrderStatusList(Arrays.asList(
-                        OrderStatusEnum.FINAL_REVIEWER_GET_ORDER.getCode(),
-                        OrderStatusEnum.FINAL_REVIEWER_REJECT.getCode(),
-                        OrderStatusEnum.FINAL_REVIEWER_REFUSE.getCode()));
-            } else {
-                querySaasOrderVo.setOrderStatusList(Arrays.asList(
-                        OrderStatusEnum.SUBMIT_FINAL_REVIEW.getCode(),
-                        OrderStatusEnum.IN_FINAL_REVIEWER.getCode(),
-                        OrderStatusEnum.FINAL_REVIEWER_REJECT.getCode()));
-            }
+            querySaasOrderVo.setOrderStatusList(Arrays.asList(
+                    OrderStatusEnum.SUBMIT_FINAL_REVIEW.getCode(),
+                    OrderStatusEnum.IN_FINAL_REVIEWER.getCode(),
+                    OrderStatusEnum.FINAL_REVIEWER_REJECT.getCode()));
         }
         if (StringUtils.isNotEmpty(queryOrderVo.getReviewerCode())) {
             querySaasOrderVo.setFinalReviewerCode(queryOrderVo.getReviewerCode());
@@ -426,11 +413,9 @@ public class OrderApplication {
         if (StringUtils.isNotEmpty(saasOrderVo.getPreliminaryReviewerCode()) && !operatorCode.equals(saasOrderVo.getPreliminaryReviewerCode())) {
             throw new ApplicationException(OrderErrorCodeEnum.ORDER_BEING_SINGLE);
         }
-        updateOrderStatus(operatorCode, orderNumb, OrderStatusEnum.PRELIMINARY_REVIEWER_GET_ORDER, null);
-        SaasOrder updateSaasOrder = new SaasOrder();
-        updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
-        updateSaasOrder.setPreliminaryReviewerCode(operatorCode);
-        saasOrderService.updateById(updateSaasOrder);
+        if (saasOrderService.updatePreliminaryReviewerCode(saasOrderVo.getSaasOrderId(), operatorCode)) {
+            throw new ApplicationException(OrderErrorCodeEnum.ORDER_BEING_SINGLE);
+        }
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
@@ -478,11 +463,9 @@ public class OrderApplication {
         if (StringUtils.isNotEmpty(saasOrderVo.getFinalReviewerCode()) && !operatorCode.equals(saasOrderVo.getFinalReviewerCode())) {
             throw new ApplicationException(OrderErrorCodeEnum.ORDER_BEING_SINGLE);
         }
-        updateOrderStatus(operatorCode, orderNumb, OrderStatusEnum.FINAL_REVIEWER_GET_ORDER, null);
-        SaasOrder updateSaasOrder = new SaasOrder();
-        updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
-        updateSaasOrder.setFinalReviewerCode(operatorCode);
-        saasOrderService.updateById(updateSaasOrder);
+        if (!saasOrderService.updateFinalReviewerCode(saasOrderVo.getSaasOrderId(), operatorCode)) {
+            throw new ApplicationException(OrderErrorCodeEnum.ORDER_BEING_SINGLE);
+        }
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
@@ -569,6 +552,10 @@ public class OrderApplication {
     public void extendOrder(String operatorCode, String orderNumb, Date repaymentDt, BigDecimal extendInterestRatio) {
         SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
 
+        if (DateUtil.countDays(saasOrderVo.getRepaymentDt(), repaymentDt) > 0
+                || DateUtil.countDays(new Date(), repaymentDt) > 0) {
+            throw new ApplicationException(OrderErrorCodeEnum.ILLEGAL_REPAYMENTDATE);
+        }
         OrderStatusEnum nextOrderStatus = OrderStatusEnum.TO_CONFIRM_EXTEND;
         OrderStatusEnum currentOrderStatus = OrderStatusEnum.getEnumByCode(saasOrderVo.getOrderStatus());
 
@@ -582,7 +569,11 @@ public class OrderApplication {
         extendSaasOrder.setTotalInterestRatio(extendInterestRatio);
         extendSaasOrder.setTermUrl(null);
         extendSaasOrder.setExpireDate(DateUtil.getTodayOverTime());
-        extendSaasOrder.setCreatedDt(new Date());
+        if (DateUtil.countDays(new Date(), saasOrderVo.getRepaymentDt()) > 0) {
+            extendSaasOrder.setCreatedDt(DateUtil.addDate(new Date(), 1));
+        } else {
+            extendSaasOrder.setCreatedDt(DateUtil.addDate(saasOrderVo.getRepaymentDt(), 1));
+        }
         extendSaasOrder.setRepaymentDt(repaymentDt);
         extendSaasOrder.setTotalInterestFee(orderCalculateApplication.getInterest(extendSaasOrder.getRealCapital(), extendSaasOrder.getTotalInterestRatio(), extendSaasOrder.getCreatedDt(), extendSaasOrder.getRepaymentDt()));
         extendSaasOrder.setOrderStatus(nextOrderStatus.getCode());

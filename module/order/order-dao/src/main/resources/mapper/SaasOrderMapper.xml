@@ -123,4 +123,15 @@
         and expire_date <![CDATA[ >= ]]> NOW()
     </select>
 
+    <update id="updatePreliminaryReviewerCode">
+        update saas_order
+        set preliminary_reviewer_code = #{preliminaryReviewerCode,jdbcType=VARCHAR},gmt_modified = NOW()
+        where id = #{id,jdbcType=BIGINT} and preliminary_reviewer_code is null
+    </update>
+
+    <update id="updateFinalReviewerCode">
+        update saas_order
+        set final_reviewer_code = #{finalReviewerCode,jdbcType=VARCHAR},gmt_modified = NOW()
+        where id = #{id,jdbcType=BIGINT} and final_reviewer_code is null
+    </update>
 </mapper>

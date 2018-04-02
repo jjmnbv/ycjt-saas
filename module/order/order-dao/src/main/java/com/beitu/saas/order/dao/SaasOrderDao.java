@@ -28,4 +28,8 @@ public interface SaasOrderDao extends BaseMapper<SaasOrder> {
 
     List<SaasOrder> selectByBorrowerCodeAndOrderStatusList(String borrowerCode,List<Integer> orderStatusList);
 
+    int updatePreliminaryReviewerCode(Long orderId, String operatorCode);
+
+    int updateFinalReviewerCode(Long orderId, String operatorCode);
+
 }
