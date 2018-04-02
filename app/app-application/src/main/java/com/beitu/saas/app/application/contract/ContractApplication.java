@@ -37,6 +37,10 @@ public class ContractApplication {
         return Boolean.TRUE;
     }
 
+    public String getUserSealUrl(String userCode) {
+        return saasUserEsignAuthorizationService.getSealUrlByUserCode(userCode);
+    }
+
     /**
      * 签署 esign 授权协议
      *

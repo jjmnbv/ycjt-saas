@@ -59,4 +59,20 @@ public class SaasOrderDaoImpl extends AbstractBaseMapper<SaasOrder> implements S
         return this.getSqlSession().selectList(this.getStatement(".selectByBorrowerCodeAndOrderStatusList"), params);
     }
 
+    @Override
+    public int updatePreliminaryReviewerCode(Long orderId, String operatorCode) {
+        Map<String, Object> params = new HashMap<>(4);
+        params.put("id", orderId);
+        params.put("preliminaryReviewerCode", operatorCode);
+        return this.getSqlSession().update(this.getStatement(".updatePreliminaryReviewerCode"), params);
+    }
+
+    @Override
+    public int updateFinalReviewerCode(Long orderId, String operatorCode) {
+        Map<String, Object> params = new HashMap<>(4);
+        params.put("id", orderId);
+        params.put("finalReviewerCode", operatorCode);
+        return this.getSqlSession().update(this.getStatement(".updateFinalReviewerCode"), params);
+    }
+
 }

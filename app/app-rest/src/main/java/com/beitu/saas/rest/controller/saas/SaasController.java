@@ -6,6 +6,7 @@ import com.beitu.saas.app.application.borrower.BorrowerApplication;
 import com.beitu.saas.app.application.channel.SaasChannelApplication;
 import com.beitu.saas.app.application.credit.CreditApplication;
 import com.beitu.saas.app.common.RequestLocalInfo;
+import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.auth.enums.AdminErrorEnum;
 import com.beitu.saas.borrower.client.SaasBorrowerEmergentContactService;
 import com.beitu.saas.borrower.client.SaasBorrowerIdentityInfoService;
@@ -81,7 +82,8 @@ public class SaasController {
     @ResponseBody
     @ApiOperation(value = "创建客户信息", response = SaasCreateBorrowerSuccessResponse.class)
     public DataApiResponse<SaasCreateBorrowerSuccessResponse> createBorrower(@RequestBody @Valid SaasCreateBorrowerRequest req) {
-        String merchantCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
+        SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
+        String merchantCode = saasAdmin.getMerchantCode();
         if (StringUtils.isEmpty(merchantCode)) {
             return new DataApiResponse<>(AdminErrorEnum.ILLEGAL_MERCHANT_CODE);
         }
@@ -102,7 +104,8 @@ public class SaasController {
     @ResponseBody
     @ApiOperation(value = "保存风控模块申请表信息", response = ApiResponse.class)
     public ApiResponse saveCreditApplyInfo(@RequestBody @Valid SaasCreditSaveApplyInfoRequest req) {
-        String merchantCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
+        SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
+        String merchantCode = saasAdmin.getMerchantCode();
         if (StringUtils.isEmpty(merchantCode)) {
             return new DataApiResponse<>(AdminErrorEnum.ILLEGAL_MERCHANT_CODE);
         }
@@ -196,7 +199,8 @@ public class SaasController {
     @ResponseBody
     @ApiOperation(value = "提交风控模块", response = ApiResponse.class)
     public ApiResponse submitCreditInfo(SaasCreditSubmitRequest req) {
-        String merchantCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
+        SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
+        String merchantCode = saasAdmin.getMerchantCode();
         if (StringUtils.isEmpty(merchantCode)) {
             return new DataApiResponse<>(AdminErrorEnum.ILLEGAL_MERCHANT_CODE);
         }

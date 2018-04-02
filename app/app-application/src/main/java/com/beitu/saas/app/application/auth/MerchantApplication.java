@@ -149,8 +149,7 @@ public class MerchantApplication {
         if (saasMerchantConfigService.isCompanyContractByMerchantCode(merchantCode)){
             merchantContractInfoVo.setContractType(ContractConfigTypeEnum.COMPANY_CONTRACT.getKey());
             merchantContractInfoVo.setName(saasMerchantVo.getCompanyName());
-            merchantContractInfoVo.setName(saasMerchantVo.getJurisdicalPersonIdcard());
-            merchantContractInfoVo.setCode(saasMerchantVo.getLenderIdcard());
+            merchantContractInfoVo.setCode(saasMerchantVo.getJurisdicalPersonIdcard());
             merchantContractInfoVo.setContractUrl(saasMerchantVo.getContractSealUrl());
         }
         return merchantContractInfoVo;

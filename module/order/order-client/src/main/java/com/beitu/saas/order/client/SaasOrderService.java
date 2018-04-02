@@ -66,4 +66,10 @@ public interface SaasOrderService<T extends BaseEntity> extends BaseService<T> {
      */
     List<String> listAllConfirmReceiptOrderNumbByMerchantCode(String merchantCode);
 
+    SaasOrderVo getConfirmExtendOrderByOrderNumb(String orderNumb);
+
+    Boolean updatePreliminaryReviewerCode(Long orderId, String operatorCode);
+
+    Boolean updateFinalReviewerCode(Long orderId, String operatorCode);
+
 }
