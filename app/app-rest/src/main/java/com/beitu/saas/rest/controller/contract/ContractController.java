@@ -3,15 +3,25 @@ package com.beitu.saas.rest.controller.contract;
 import com.beitu.saas.app.annotations.SignIgnore;
 import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.api.ModuleApiResponse;
+import com.beitu.saas.app.application.auth.MerchantApplication;
+import com.beitu.saas.app.application.contract.ContractApplication;
+import com.beitu.saas.app.application.order.OrderCalculateApplication;
 import com.beitu.saas.app.application.order.vo.QueryOrderVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
+import com.beitu.saas.auth.domain.MerchantContractInfoVo;
 import com.beitu.saas.auth.entity.SaasAdmin;
+import com.beitu.saas.auth.enums.ContractConfigTypeEnum;
 import com.beitu.saas.auth.service.SaasAdminService;
 import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
 import com.beitu.saas.borrower.client.SaasBorrowerService;
+import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
 import com.beitu.saas.borrower.domain.SaasBorrowerVo;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.enums.RestCodeEnum;
+import com.beitu.saas.common.utils.DateUtil;
+import com.beitu.saas.common.utils.StringUtil;
+import com.beitu.saas.order.client.SaasOrderService;
+import com.beitu.saas.order.domain.SaasOrderVo;
 import com.beitu.saas.rest.controller.contract.request.OrderExtendContractInfoRequest;
 import com.beitu.saas.rest.controller.contract.response.OrderExtendContractInfoResponse;
 import com.beitu.saas.rest.controller.order.request.LendingOrderQueryRequest;
@@ -30,6 +40,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
+import java.util.Date;
 
 /**
  * @author linanjun
@@ -54,7 +65,16 @@ public class ContractController {
     private SaasAdminService saasAdminService;
 
     @Autowired
-    private Saas
+    private MerchantApplication merchantApplication;
+
+    @Autowired
+    private ContractApplication contractApplication;
+
+    @Autowired
+    private SaasOrderService saasOrderService;
+
+    @Autowired
+    private OrderCalculateApplication orderCalculateApplication;
 
     @SignIgnore
     @RequestMapping(value = "/order/extend", method = RequestMethod.POST)
@@ -68,12 +88,44 @@ public class ContractController {
         OrderExtendContractInfoResponse response = new OrderExtendContractInfoResponse();
         SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCode(userCode);
         if (saasBorrowerVo != null) {
-            response.setBorrowUserName();
-            response.setBorrowIdentityNo();
+            SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(saasBorrowerVo.getBorrowerCode());
+            response.setBorrowUserName(saasBorrowerRealInfoVo.getName());
+            response.setBorrowIdentityNo(saasBorrowerRealInfoVo.getIdentityCode());
+            String sealUrl = contractApplication.getUserSealUrl(userCode);
+            if (StringUtils.isNotEmpty(sealUrl)) {
+                response.setBorrowStamp(Boolean.TRUE);
+                response.setBorrowStampUrl(sealUrl);
+            }
         }
         SaasAdmin saasAdmin = saasAdminService.getSaasAdminByAdminCode(userCode);
         if (saasAdmin != null) {
-
+            MerchantContractInfoVo merchantContractInfoVo = merchantApplication.getMerchantContractInfo(saasAdmin.getMerchantCode());
+            if (ContractConfigTypeEnum.PERSONAL_CONTRACT.getKey().equals(merchantContractInfoVo.getContractType())) {
+                response.setLenderUserName(merchantContractInfoVo.getName());
+                response.setLenderIdentityNo("身份证号：" + merchantContractInfoVo.getCode());
+            } else {
+                response.setLenderUserName(merchantContractInfoVo.getName());
+                response.setLenderIdentityNo("统一信用代码：" + merchantContractInfoVo.getCode());
+            }
+            String sealUrl = contractApplication.getUserSealUrl(userCode);
+            if (StringUtils.isNotEmpty(sealUrl)) {
+                response.setLenderStamp(Boolean.TRUE);
+                response.setLenderStampUrl(sealUrl);
+            }
+            if (StringUtils.isNotEmpty(merchantContractInfoVo.getContractUrl())) {
+                response.setLenderStamp(Boolean.TRUE);
+                response.setLenderStampUrl(merchantContractInfoVo.getContractUrl());
+            }
+        }
+        SaasOrderVo saasOrderVo = saasOrderService.getConfirmExtendOrderByOrderNumb(req.getOrderNumb());
+        if (saasOrderVo != null) {
+            response.setOrderNo(saasOrderVo.getSaasOrderId() + "");
+            response.setRealCapital(saasOrderVo.getRealCapital());
+            response.setCreatedDt(DateUtil.getDate(saasOrderVo.getCreatedDt()));
+            response.setRepaymentDt(DateUtil.getDate(saasOrderVo.getRepaymentDt()));
+            response.setTotalInterestRatio(orderCalculateApplication.getInterestRatio(saasOrderVo.getTotalInterestRatio()));
+            response.setFirstOrderNo(saasOrderVo.getRelationOrderId() + "");
+            response.setInscribeDate(DateUtil.getDate(new Date()));
         }
         return new DataApiResponse(new OrderExtendContractInfoResponse());
     }

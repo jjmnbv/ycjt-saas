@@ -29,11 +29,11 @@ public class OrderExtendContractInfoResponse implements ResponseData {
     /**
      * 是否显示 出借人印章
      */
-    private Boolean stamp;
+    private Boolean lenderStamp;
     /**
      * 出借人印章URL
      */
-    private String stampUrl;
+    private String lenderStampUrl;
 
     /**
      * 借款人姓名
@@ -43,7 +43,14 @@ public class OrderExtendContractInfoResponse implements ResponseData {
      * 借款人身份证号
      */
     private String borrowIdentityNo;
-
+    /**
+     * 是否显示 借款人印章
+     */
+    private Boolean borrowStamp;
+    /**
+     * 借款人印章URL
+     */
+    private String borrowStampUrl;
     /**
      * 借款金额
      */
@@ -60,11 +67,6 @@ public class OrderExtendContractInfoResponse implements ResponseData {
      * 借款年利率
      */
     private String totalInterestRatio;
-    /**
-     * 大写金额
-     */
-    private String realCapitalCN;
-
     /**
      * 落款时间
      */
@@ -102,20 +104,36 @@ public class OrderExtendContractInfoResponse implements ResponseData {
         this.lenderIdentityNo = lenderIdentityNo;
     }
 
-    public Boolean getStamp() {
-        return stamp;
+    public Boolean getLenderStamp() {
+        return lenderStamp;
     }
 
-    public void setStamp(Boolean stamp) {
-        this.stamp = stamp;
+    public void setLenderStamp(Boolean lenderStamp) {
+        this.lenderStamp = lenderStamp;
     }
 
-    public String getStampUrl() {
-        return stampUrl;
+    public String getLenderStampUrl() {
+        return lenderStampUrl;
     }
 
-    public void setStampUrl(String stampUrl) {
-        this.stampUrl = stampUrl;
+    public void setLenderStampUrl(String lenderStampUrl) {
+        this.lenderStampUrl = lenderStampUrl;
+    }
+
+    public Boolean getBorrowStamp() {
+        return borrowStamp;
+    }
+
+    public void setBorrowStamp(Boolean borrowStamp) {
+        this.borrowStamp = borrowStamp;
+    }
+
+    public String getBorrowStampUrl() {
+        return borrowStampUrl;
+    }
+
+    public void setBorrowStampUrl(String borrowStampUrl) {
+        this.borrowStampUrl = borrowStampUrl;
     }
 
     public String getBorrowUserName() {
@@ -164,14 +182,6 @@ public class OrderExtendContractInfoResponse implements ResponseData {
 
     public void setTotalInterestRatio(String totalInterestRatio) {
         this.totalInterestRatio = totalInterestRatio;
-    }
-
-    public String getRealCapitalCN() {
-        return realCapitalCN;
-    }
-
-    public void setRealCapitalCN(String realCapitalCN) {
-        this.realCapitalCN = realCapitalCN;
     }
 
     public String getInscribeDate() {
