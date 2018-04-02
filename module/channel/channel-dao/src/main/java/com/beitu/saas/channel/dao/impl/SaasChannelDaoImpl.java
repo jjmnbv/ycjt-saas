@@ -59,8 +59,17 @@ public class SaasChannelDaoImpl extends AbstractBaseMapper<SaasChannelEntity> im
 
     @Override
     public Integer queryTotalChannelStatCount(ChannelStatQueryParam channelStatQueryParam) {
-        Map<String, Object> paramMap = new HashMap();
+        Map<String, Object> paramMap = new HashMap(2);
         paramMap.put("channelStatQueryParam", channelStatQueryParam);
         return getSqlSession().selectOne(this.getStatement("queryTotalChannelStatCount"), paramMap);
     }
+
+    @Override
+    public SaasChannelEntity selectChannelEntityByMerchantCodeAndCreatorCode(String merchantCode, String creatorCode) {
+        Map<String, Object> paramMap = new HashMap(4);
+        paramMap.put("merchantCode", merchantCode);
+        paramMap.put("creatorCode", creatorCode);
+        return getSqlSession().selectOne(this.getStatement("selectChannelEntityByMerchantCodeAndCreatorCode"), paramMap);
+    }
+
 }
