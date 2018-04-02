@@ -1,5 +1,6 @@
 package com.beitu.saas.app.application.collection;
 
+import com.beitu.saas.app.application.collection.vo.CollectionOrderListVo;
 import com.beitu.saas.collection.client.SaasCollectionOrderService;
 import com.beitu.saas.collection.param.CollectionOrderQueryParam;
 import com.beitu.saas.collection.vo.CollectionOrderInfoDetailVo;
@@ -9,9 +10,11 @@ import com.beitu.saas.order.entity.SaasOrderStatusHistory;
 import com.fqgj.common.api.Page;
 import com.fqgj.log.factory.LogFactory;
 import com.fqgj.log.interfaces.Log;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,9 +32,9 @@ public class CollectionApplication {
     @Autowired
     private SaasOrderStatusHistoryService saasOrderStatusHistoryService;
 
-    public List<CollectionOrderInfoDetailVo> getCollectionOrderListByPage(CollectionOrderQueryParam collectionOrderQueryParam, Page page) {
-        List<CollectionOrderInfoDetailVo> collectionOrderList = saasCollectionOrderService.getCollectionOrderListByPage(collectionOrderQueryParam, page);
-        collectionOrderList.stream().forEach(x -> {
+    public List<CollectionOrderListVo> getCollectionOrderListByPage(CollectionOrderQueryParam collectionOrderQueryParam, Page page) {
+        List<CollectionOrderInfoDetailVo> collectionOrderInfoDetailVos = saasCollectionOrderService.getCollectionOrderListByPage(collectionOrderQueryParam, page);
+        collectionOrderInfoDetailVos.stream().forEach(x -> {
             IdcardInfoExtractor idcardInfoExtractor = new IdcardInfoExtractor(x.getIdentityCode());
             x.setAge(idcardInfoExtractor.getAge());
 
@@ -41,7 +44,15 @@ public class CollectionApplication {
             }
         });
 
-        return collectionOrderList;
+
+        List<CollectionOrderListVo> collectionOrderListVos = new ArrayList<>();
+        collectionOrderInfoDetailVos.stream().forEach(x -> {
+            CollectionOrderListVo collectionOrderListVo = new CollectionOrderListVo();
+            BeanUtils.copyProperties(x, collectionOrderListVo);
+
+            collectionOrderListVos.add(collectionOrderListVo);
+        });
+        return collectionOrderListVos;
     }
 
 }

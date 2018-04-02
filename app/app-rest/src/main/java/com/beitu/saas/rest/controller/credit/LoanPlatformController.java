@@ -54,6 +54,11 @@ public class LoanPlatformController {
         String reqStr = IOUtils.toString(request.getInputStream(), "utf-8");
         LOGGER.info(reqStr);
         write(response, "success");
+    
+    
+        // TODO: 2018/4/2 查询token 入库
+        
+        
         LOGGER.info("************************* 聚信立回调结束 *************************");
     }
 

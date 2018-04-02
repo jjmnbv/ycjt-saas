@@ -477,15 +477,8 @@ public class ConfigUtil {
     }
     /************* risk end *************/
 
-    /**
-     * 服务器域名
-     */
-    public String getWebsiteDomainSName() {
-        return config.getProperty("website.domain.name", "");
-    }
-
     public String getH5AddressURLPrefix() {
-        return config.getProperty("oss.h5.addressURLPrefix", "http://ycjt.oss-cn-hangzhou.aliyuncs.com/H5/Saas-channel/index.html");
+        return config.getProperty("oss.h5.addressURLPrefix", "");
     }
 
     /**
