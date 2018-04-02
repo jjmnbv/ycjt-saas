@@ -17,8 +17,6 @@ public class ChannelStatQueryRequestParam extends ParamsObject {
     private String createStartDate;
     @ApiModelProperty(value = "渠道创建结束日期")
     private String createEndDate;  //当前天数
-    @ApiModelProperty(value = "渠道号")
-    private String merchantCode;
 
     public String getCreateStartDate() {
         return createStartDate;
@@ -35,15 +33,6 @@ public class ChannelStatQueryRequestParam extends ParamsObject {
 
     public ChannelStatQueryRequestParam setCreateEndDate(String createEndDate) {
         this.createEndDate = createEndDate;
-        return this;
-    }
-
-    public String getMerchantCode() {
-        return merchantCode;
-    }
-
-    public ChannelStatQueryRequestParam setMerchantCode(String merchantCode) {
-        this.merchantCode = merchantCode;
         return this;
     }
 

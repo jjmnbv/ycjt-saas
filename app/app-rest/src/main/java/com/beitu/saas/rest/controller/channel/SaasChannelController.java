@@ -3,6 +3,7 @@ package com.beitu.saas.rest.controller.channel;
 import com.beitu.saas.app.annotations.SignIgnore;
 import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.application.channel.SaasChannelApplication;
+import com.beitu.saas.app.application.channel.vo.ChannelStatDetailVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.channel.domain.SaasChannelDetailVo;
@@ -150,9 +151,11 @@ public class SaasChannelController {
     @RequestMapping(value = "/channelStatList", method = RequestMethod.POST)
     @ApiOperation(value = "渠道统计列表", response = SaasChannelListResponse.class)
     public ModuleResponse getChannelStatList(@RequestBody ChannelStatQueryRequestParam channelStatQueryRequestParam, Page page) {
+        String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
         ChannelStatQueryParam channelStatQueryParam = new ChannelStatQueryParam();
         BeanUtils.copyProperties(channelStatQueryRequestParam, channelStatQueryParam);
-        List<ChannelStatVo> voList = saasChannelService.getChannelStatByPage(channelStatQueryParam, page);
+        channelStatQueryParam.setMerchantCode(merchantCode);
+        List<ChannelStatDetailVo> voList = saasChannelApplication.getChannelStatByPage(channelStatQueryParam, page);
 
         SaasChannelStatListResponse saasChannelStatListResponse = new SaasChannelStatListResponse(voList);
         return new ModuleResponse<>(saasChannelStatListResponse, page);

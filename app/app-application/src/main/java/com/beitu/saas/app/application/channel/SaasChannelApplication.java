@@ -1,5 +1,6 @@
 package com.beitu.saas.app.application.channel;
 
+import com.beitu.saas.app.application.channel.vo.ChannelStatDetailVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.auth.service.SaasAdminService;
@@ -7,6 +8,7 @@ import com.beitu.saas.channel.domain.SaasChannelDetailVo;
 import com.beitu.saas.channel.domain.SaasChannelRiskSettingsVo;
 import com.beitu.saas.channel.domain.SaasH5ChannelVo;
 import com.beitu.saas.channel.enums.ChannelOperateTypeEnum;
+import com.beitu.saas.channel.param.ChannelStatQueryParam;
 import com.beitu.saas.channel.param.SaasChannelParam;
 import com.beitu.saas.channel.client.SaasChannelRiskSettingsService;
 import com.beitu.saas.channel.client.SaasChannelService;
@@ -15,6 +17,7 @@ import com.beitu.saas.channel.entity.SaasChannelEntity;
 import com.beitu.saas.channel.entity.SaasChannelRiskSettingsEntity;
 import com.beitu.saas.channel.enums.ChannelStatusEnum;
 import com.beitu.saas.channel.param.SaasChannelRiskSettingsParam;
+import com.beitu.saas.channel.vo.ChannelStatVo;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.utils.OrderNoUtil;
 import com.beitu.saas.common.utils.ShortUrlUtil;
@@ -196,6 +199,26 @@ public class SaasChannelApplication {
         });
 
         return riskSettingsVos;
+    }
+
+
+    /**
+     * 渠道统计查询
+     *
+     * @param channelStatQueryParam
+     * @param page
+     * @return
+     */
+    public List<ChannelStatDetailVo> getChannelStatByPage(ChannelStatQueryParam channelStatQueryParam, Page page) {
+        List<ChannelStatVo> channelStatVos = saasChannelService.getChannelStatByPage(channelStatQueryParam, page);
+        List<ChannelStatDetailVo> channelStatDetailVos = new ArrayList<>();
+        channelStatVos.stream().forEach(x -> {
+            ChannelStatDetailVo channelStatDetailVo = new ChannelStatDetailVo();
+            BeanUtils.copyProperties(x, channelStatDetailVo);
+            channelStatDetailVos.add(channelStatDetailVo);
+        });
+
+        return channelStatDetailVos;
     }
 
 
