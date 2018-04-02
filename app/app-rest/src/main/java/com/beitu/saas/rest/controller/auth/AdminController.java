@@ -91,8 +91,10 @@ public class AdminController {
     public Response login(@RequestBody AdminLoginRequest adminLoginRequest, HttpServletRequest request) throws IOException {
         //TODO 校验验证码
         SaasAdmin saasAdmin = saasAdminService.login(adminLoginRequest.getMobile(), adminLoginRequest.getPassword());
-        if (!saasAdminLoginLogService.equalLoginIp(saasAdmin.getCode(), NetworkUtil.getIpAddress(request))) {
-            throw new ApiErrorException(AdminErrorEnum.SHOW_VERIFYCODE);
+        if (StringUtils.isEmpty(adminLoginRequest.getVerifyCode())) {
+            if (!saasAdminLoginLogService.equalLoginIp(saasAdmin.getCode(), NetworkUtil.getIpAddress(request))) {
+                throw new ApiErrorException(AdminErrorEnum.SHOW_VERIFYCODE);
+            }
         }
         String oldToken = redisClient.get(RedisKeyConsts.SAAS_TOKEN_KEY, saasAdmin.getCode());
         if (StringUtils.isNotEmpty(oldToken)) {

@@ -43,6 +43,8 @@ public class MerchantApplication {
     private SaasSmsConfigDictionaryService saasSmsConfigDictionaryService;
 
 
+
+
     @Transactional(rollbackFor = Exception.class)
     public void addMerchant(SaasMerchant saasMerchant, String password) {
 
@@ -111,5 +113,8 @@ public class MerchantApplication {
             saasMerchantConfig.setConfigType(MerchantConfigTypeEnum.SMS_CONFIG.getKey().longValue());
             saasMerchantConfigService.create(entity);
         });
+
+        //6.添加默认渠道
+
     }
 }
