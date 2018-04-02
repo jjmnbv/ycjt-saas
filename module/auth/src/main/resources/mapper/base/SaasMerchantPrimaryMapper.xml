@@ -18,6 +18,7 @@
         <result column="lender_idcard" jdbcType="VARCHAR" property="lenderIdcard"/>
         <result column="lender_tel" jdbcType="VARCHAR" property="lenderTel"/>
         <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="allow_account_num" jdbcType="INTEGER" property="allowAccountNum"/>
         <result column="deleted" jdbcType="BIT" property="deleted"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
         <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
@@ -38,6 +39,7 @@
         lender_idcard,
         lender_tel,
         password,
+        allow_account_num,
         deleted,
         gmt_modified,
         gmt_create
@@ -95,6 +97,9 @@
             <if test="password !=null">
                 password,
             </if>
+            <if test="allowAccountNum !=null">
+                allow_account_num,
+            </if>
             <if test="deleted !=null">
                 deleted,
             </if>
@@ -147,6 +152,9 @@
             </if>
             <if test="password != null">
                 #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="allowAccountNum != null">
+                #{allowAccountNum,jdbcType=INTEGER},
             </if>
             <if test="deleted != null">
                 #{deleted,jdbcType=BIT},
@@ -204,6 +212,9 @@
             </if>
             <if test="password !=null">
                 password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="allowAccountNum !=null">
+                allow_account_num = #{allowAccountNum,jdbcType=INTEGER},
             </if>
             <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},
@@ -283,6 +294,9 @@
             <if test="password !=null">
                 and password = #{password,jdbcType=VARCHAR}
             </if>
+            <if test="allowAccountNum !=null">
+                and allow_account_num = #{allowAccountNum,jdbcType=INTEGER}
+            </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}
             </if>
@@ -342,6 +356,9 @@
             </if>
             <if test="password !=null">
                 and password = #{password,jdbcType=VARCHAR}
+            </if>
+            <if test="allowAccountNum !=null">
+                and allow_account_num = #{allowAccountNum,jdbcType=INTEGER}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}

@@ -9,6 +9,7 @@ import com.beitu.saas.auth.enums.MerchantConfigTypeEnum;
 import com.beitu.saas.auth.service.*;
 import com.beitu.saas.channel.client.SaasChannelRiskSettingsService;
 import com.beitu.saas.channel.client.SaasChannelService;
+import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.finance.client.SaasCreditHistoryService;
 import com.beitu.saas.finance.client.SaasMerchantCreditInfoService;
 import com.beitu.saas.finance.client.SaasMerchantSmsInfoService;
@@ -68,11 +69,15 @@ public class MerchantApplication {
     @Autowired
     private SaasCreditHistoryService saasCreditHistoryService;
 
+    @Autowired
+    private ConfigUtil configUtil;
+
     @Transactional(rollbackFor = Exception.class)
-    public void addMerchant(SaasMerchant saasMerchant, String password,String accountPhone,String accountName) {
+    public void addMerchant(SaasMerchant saasMerchant, String password, String accountPhone, String accountName) {
 
         //1.保存机构信息
         saasMerchant.setMerchantCode(GenerOrderNoUtil.generateOrderNo());
+        saasMerchant.setAllowAccountNum(configUtil.allowAccountNum());
         saasMerchantService.create(saasMerchant);
         String merchantCode = saasMerchant.getMerchantCode();
         //2.添加登录用户
@@ -143,20 +148,20 @@ public class MerchantApplication {
         saasChannelRiskSettingsService.createDefaultChannelRiskSettings(merchantCode);
 
         //7 初始化点券和短信余额
-        saasMerchantSmsInfoService.increase(merchantCode,10L);
-        saasSmsHistoryService.addIncomeSmsHistory(merchantCode,10L,null,"充值");
-        saasMerchantCreditInfoService.increase(merchantCode,10L);
-        saasCreditHistoryService.addIncomeCreditHistory(merchantCode,10L,"system","充值");
+        saasMerchantSmsInfoService.increase(merchantCode, 10L);
+        saasSmsHistoryService.addIncomeSmsHistory(merchantCode, 10L, null, "充值");
+        saasMerchantCreditInfoService.increase(merchantCode, 10L);
+        saasCreditHistoryService.addIncomeCreditHistory(merchantCode, 10L, "system", "充值");
 
     }
 
-    public MerchantContractInfoVo getMerchantContractInfo(String merchantCode){
+    public MerchantContractInfoVo getMerchantContractInfo(String merchantCode) {
         MerchantContractInfoVo merchantContractInfoVo = new MerchantContractInfoVo();
         SaasMerchantVo saasMerchantVo = saasMerchantService.getByMerchantCode(merchantCode);
         merchantContractInfoVo.setName(saasMerchantVo.getLenderName());
         merchantContractInfoVo.setCode(saasMerchantVo.getLenderIdcard());
         merchantContractInfoVo.setContractType(ContractConfigTypeEnum.PERSONAL_CONTRACT.getKey());
-        if (saasMerchantConfigService.isCompanyContractByMerchantCode(merchantCode)){
+        if (saasMerchantConfigService.isCompanyContractByMerchantCode(merchantCode)) {
             merchantContractInfoVo.setContractType(ContractConfigTypeEnum.COMPANY_CONTRACT.getKey());
             merchantContractInfoVo.setName(saasMerchantVo.getCompanyName());
             merchantContractInfoVo.setCode(saasMerchantVo.getJurisdicalPersonIdcard());
@@ -164,4 +169,15 @@ public class MerchantApplication {
         }
         return merchantContractInfoVo;
     }
+
+    public Boolean canAddAccount(String merchantCode) {
+        Integer allowAccountNum = saasMerchantService.getMerchantAllowAccountNum(merchantCode);
+        Integer accountNum = saasAdminService.countAdminByMerchantCode(merchantCode);
+        if (allowAccountNum > accountNum) {
+            return true;
+        }
+        return false;
+    }
+
+
 }
