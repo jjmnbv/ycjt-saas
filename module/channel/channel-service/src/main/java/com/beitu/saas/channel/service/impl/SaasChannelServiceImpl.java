@@ -76,6 +76,12 @@ public class SaasChannelServiceImpl extends AbstractBaseService implements SaasC
         channelStatVo.setLoanLenderRatio(loanLenderNum.divide(finalReviewerNum, 2, BigDecimal.ROUND_HALF_UP));
         channelStatVo.setLoanLenderBaseRatio(loanLenderNum.divide(intoPiecesNum, 2, BigDecimal.ROUND_HALF_UP));
     }
+
+    @Override
+    public SaasChannelEntity getDefaultSaasChannelByMerchantCode(String merchantCode) {
+        return null;
+    }
+
 }
 
 

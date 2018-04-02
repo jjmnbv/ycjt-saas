@@ -41,4 +41,10 @@ public interface SaasChannelService<T extends BaseEntity> extends BaseService<T>
      * @return
      */
     List<ChannelStatVo> getChannelStatByPage(ChannelStatQueryParam channelStatQueryParam, Page page);
+
+    /**
+     * 根据 机构CODE 得到 机构SAAS进件渠道
+     */
+    SaasChannelEntity getDefaultSaasChannelByMerchantCode(String merchantCode);
+
 }

@@ -20,6 +20,7 @@
         <module>order</module>
         <module>risk</module>
         <module>sms</module>
+        <module>user</module>
     </modules>
 
     <dependencies>

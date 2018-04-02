@@ -1,4 +1,4 @@
-package com.beitu.saas.rest.controller.h5.request;
+package com.beitu.saas.rest.controller.saas.request;
 
 import com.beitu.saas.app.enums.VerifyCodeErrorCodeEnum;
 import com.beitu.saas.common.utils.MobileUtil;
@@ -14,8 +14,11 @@ import org.hibernate.validator.constraints.NotBlank;
  * @description
  */
 @ApiModel(description = "保存风控模块紧急联系人信息")
-public class CreditSaveEmergentContactRequest extends ParamsObject {
+public class SaasCreditSaveEmergentContactRequest extends ParamsObject {
 
+    @ApiModelProperty(value = "借款人CODE")
+    @NotBlank(message = "借款人CODE不能为空")
+    private String borrowerCode;
     /**
      * 直系亲属联系人类型
      */
@@ -52,6 +55,14 @@ public class CreditSaveEmergentContactRequest extends ParamsObject {
     @ApiModelProperty(value = "同事朋友手机号码")
     @NotBlank(message = "同事朋友手机号码不能为空")
     private String friendMobile;
+
+    public String getBorrowerCode() {
+        return borrowerCode;
+    }
+
+    public void setBorrowerCode(String borrowerCode) {
+        this.borrowerCode = borrowerCode;
+    }
 
     public String getFamilyType() {
         return familyType;
