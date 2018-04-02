@@ -69,7 +69,7 @@ public class SaasChannelApplication {
             String channelCode = OrderNoUtil.makeOrderNum();
             saasChannelEntity.setChannelCode(channelCode)
                     .setChannelStatus(ChannelStatusEnum.OPEN.getType())
-                    .setLinkUrl("?channel=" + channelCode)
+                    .setLinkUrl("?channelCode=" + channelCode)
                     .setCreatorCode(RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode());
             saasChannelService.create(saasChannelEntity);
 
@@ -150,7 +150,7 @@ public class SaasChannelApplication {
                     .setChargePersonName(this.getAdminNameByAdminCode(x.getChargePersonCode()))
                     .setLinkUrl(configUtil.getAddressURLPrefix() + configUtil.getH5AddressURLPrefix() + x.getLinkUrl())
                     .setLongLinkUrl(configUtil.getAddressURLPrefix() + configUtil.getH5AddressURLPrefix() + x.getLinkUrl())
-                    .setShortLinkUrl(ShortUrlUtil.generateShortUrl(configUtil.getAddressURLPrefix() + x.getLinkUrl()))
+                    .setShortLinkUrl(ShortUrlUtil.generateShortUrl(configUtil.getAddressURLPrefix() + configUtil.getH5AddressURLPrefix() + x.getLinkUrl()))
                     .setCreatorName(this.getAdminNameByAdminCode(x.getCreatorCode()))
                     .setCreatorCode(x.getCreatorCode())
                     .setGmtCreate(x.getGmtCreate())

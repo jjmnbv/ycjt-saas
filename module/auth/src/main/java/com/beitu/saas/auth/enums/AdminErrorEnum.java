@@ -9,7 +9,8 @@ import org.springframework.http.HttpStatus;
  * @description
  */
 public enum AdminErrorEnum implements ErrorCodeEnum {
-    MOBILE_EXIST(50001, "该手机号已注册", HttpStatus.OK),;
+    MOBILE_EXIST(50001, "该手机号已注册", HttpStatus.OK),
+    SHOW_VERIFYCODE(50002, "需要验证码", HttpStatus.OK);
 
     private Integer code;
 
