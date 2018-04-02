@@ -175,4 +175,19 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
     public List<String> listAllConfirmReceiptOrderNumbByMerchantCode(String merchantCode) {
         return null;
     }
+
+    @Override
+    public SaasOrderVo getConfirmExtendOrderByOrderNumb(String orderNumb) {
+        return null;
+    }
+
+    @Override
+    public Boolean updatePreliminaryReviewerCode(Long orderId, String operatorCode) {
+        return saasOrderDao.updatePreliminaryReviewerCode(orderId, operatorCode) > 0;
+    }
+
+    @Override
+    public Boolean updateFinalReviewerCode(Long orderId, String operatorCode) {
+        return saasOrderDao.updateFinalReviewerCode(orderId, operatorCode) > 0;
+    }
 }
