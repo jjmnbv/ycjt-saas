@@ -11,9 +11,7 @@ import com.fqgj.common.entity.BaseEntity;
  */
 public interface SaasBorrowerEmergentContactService<T extends BaseEntity> extends BaseService<T> {
 
-    SaasBorrowerEmergentContactVo getByBorrowerCode(String borrowerCode);
-
-    int countByBorrowerCode(String borrowerCode);
+    int countByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb);
 
     SaasBorrowerEmergentContactVo getByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb);
 

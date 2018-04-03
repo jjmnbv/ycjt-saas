@@ -17,6 +17,10 @@ public class BorrowerLivingAreaVo implements ResponseData {
     @ApiModelProperty(value = "用户生活区域详情列表")
     private List<BorrowerLivingAreaDetailVo> borrowerLivingAreaDetailVoList;
 
+    public BorrowerLivingAreaVo(List<BorrowerLivingAreaDetailVo> borrowerLivingAreaDetailVoList) {
+        this.borrowerLivingAreaDetailVoList = borrowerLivingAreaDetailVoList;
+    }
+
     public List<BorrowerLivingAreaDetailVo> getBorrowerLivingAreaDetailVoList() {
         return borrowerLivingAreaDetailVoList;
     }

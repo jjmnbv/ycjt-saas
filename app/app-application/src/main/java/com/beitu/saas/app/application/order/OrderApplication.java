@@ -100,7 +100,7 @@ public class OrderApplication {
     private ContractApplication contractApplication;
 
     public BorrowerOrderApplyStatusEnum getOrderApplyStatus(String borrowerCode, String channelCode) {
-        if (saasOrderService.isReviewRefuse(borrowerCode, channelCode)) {
+        if (StringUtils.isNotEmpty(saasOrderService.getReviewerRefuseOrderNumb(borrowerCode, channelCode))) {
             return BorrowerOrderApplyStatusEnum.REFUSE;
         } else if (saasOrderService.isReviewing(borrowerCode, channelCode)) {
             return BorrowerOrderApplyStatusEnum.REVIEWING;

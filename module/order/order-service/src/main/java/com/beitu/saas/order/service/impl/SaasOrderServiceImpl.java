@@ -76,16 +76,16 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
     }
 
     @Override
-    public Boolean isReviewRefuse(String borrowerCode, String channelCode) {
+    public String getReviewerRefuseOrderNumb(String borrowerCode, String channelCode) {
         SaasOrder saasOrder = saasOrderDao.selectByBorrowerCodeAndChannelCode(borrowerCode, channelCode);
         if (saasOrder == null) {
-            return Boolean.FALSE;
+            return null;
         }
         if (OrderStatusEnum.PRELIMINARY_REVIEWER_REJECT.getCode().equals(saasOrder.getOrderStatus())
                 || OrderStatusEnum.FINAL_REVIEWER_REJECT.getCode().equals(saasOrder.getOrderStatus())) {
-            return Boolean.TRUE;
+            return saasOrder.getOrderNumb();
         }
-        return Boolean.FALSE;
+        return null;
     }
 
     @Override
