@@ -7,6 +7,7 @@ import com.beitu.saas.order.domain.SaasOrderBillDetailVo;
 import com.beitu.saas.order.entity.SaasOrderBillDetail;
 import com.beitu.saas.order.enums.OrderStatusEnum;
 import com.beitu.saas.order.vo.LoanDataDetailVo;
+import com.beitu.saas.order.vo.LoanStateDetailVo;
 import com.beitu.saas.order.vo.NoRepayOrderVo;
 import com.beitu.saas.order.vo.OverdueOrderVo;
 import com.fqgj.common.api.Page;
@@ -94,13 +95,21 @@ public class SaasOrderBillDetailServiceImpl extends AbstractBaseService implemen
     }
 
     @Override
+    public List<LoanStateDetailVo> getLoanStateDetailList(String merchantCode) {
+        List<LoanStateDetailVo> loanStateDetailVos = saasOrderBillDetailDao.selectLoanStatDetailList(merchantCode);
+        return loanStateDetailVos.size() == 0 ? new ArrayList<>() : saasOrderBillDetailDao.selectLoanStatDetailList(merchantCode);
+    }
+
+    @Override
     public List<NoRepayOrderVo> getNoRepayOrderListByPage(String merchantCode, Page page) {
-        return saasOrderBillDetailDao.selectNoRepayOrder(merchantCode, page);
+        List<NoRepayOrderVo> noRepayOrderVos = saasOrderBillDetailDao.selectNoRepayOrder(merchantCode, page);
+        return noRepayOrderVos.size() == 0 ? new ArrayList<>() : saasOrderBillDetailDao.selectNoRepayOrder(merchantCode, page);
     }
 
     @Override
     public List<OverdueOrderVo> getOverdueOrderListByPage(String merchantCode, Page page) {
-        return saasOrderBillDetailDao.selectOverdueOrder(merchantCode, page);
+        List<OverdueOrderVo> overdueOrderVos = saasOrderBillDetailDao.selectOverdueOrder(merchantCode, page);
+        return overdueOrderVos.size() == 0 ? new ArrayList<>() : saasOrderBillDetailDao.selectOverdueOrder(merchantCode, page);
     }
 
     @Override

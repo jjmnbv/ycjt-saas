@@ -28,6 +28,14 @@ public class UserBaseInfoResponse implements ResponseData {
     @ApiModelProperty(value = "生活区域")
     private BorrowerLivingAreaVo borrowerLivingAreaVo;
 
+    public UserBaseInfoResponse(BorrowerPersonalInfoVo borrowerPersonalInfoVo, BorrowerIdentityInfoVo borrowerIdentityInfoVo, BorrowerWorkInfoVo borrowerWorkInfoVo, BorrowerEmergentContactVo userEmergentContactVo, BorrowerLivingAreaVo borrowerLivingAreaVo) {
+        this.borrowerPersonalInfoVo = borrowerPersonalInfoVo;
+        this.borrowerIdentityInfoVo = borrowerIdentityInfoVo;
+        this.borrowerWorkInfoVo = borrowerWorkInfoVo;
+        this.userEmergentContactVo = userEmergentContactVo;
+        this.borrowerLivingAreaVo = borrowerLivingAreaVo;
+    }
+
     public BorrowerPersonalInfoVo getBorrowerPersonalInfoVo() {
         return borrowerPersonalInfoVo;
     }

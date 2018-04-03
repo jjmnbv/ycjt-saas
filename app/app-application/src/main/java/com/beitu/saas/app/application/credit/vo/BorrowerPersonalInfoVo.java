@@ -31,16 +31,19 @@ public class BorrowerPersonalInfoVo implements ResponseData {
     private String nativePlace;
 
     @ApiModelProperty(value = "学历")
-    private Integer education;
+    private String education;
 
     @ApiModelProperty(value = "QQ")
     private String qq;
 
     @ApiModelProperty(value = "婚姻状况")
-    private Integer maritalStatus;
+    private String maritalStatus;
 
     @ApiModelProperty(value = "手机操作系统")
     private String phoneSystem;
+
+    @ApiModelProperty(value = "芝麻分")
+    private Integer zmCreditScore;
 
     public String getUserName() {
         return userName;
@@ -90,11 +93,11 @@ public class BorrowerPersonalInfoVo implements ResponseData {
         this.nativePlace = nativePlace;
     }
 
-    public Integer getEducation() {
+    public String getEducation() {
         return education;
     }
 
-    public void setEducation(Integer education) {
+    public void setEducation(String education) {
         this.education = education;
     }
 
@@ -106,11 +109,11 @@ public class BorrowerPersonalInfoVo implements ResponseData {
         this.qq = qq;
     }
 
-    public Integer getMaritalStatus() {
+    public String getMaritalStatus() {
         return maritalStatus;
     }
 
-    public void setMaritalStatus(Integer maritalStatus) {
+    public void setMaritalStatus(String maritalStatus) {
         this.maritalStatus = maritalStatus;
     }
 
@@ -121,4 +124,13 @@ public class BorrowerPersonalInfoVo implements ResponseData {
     public void setPhoneSystem(String phoneSystem) {
         this.phoneSystem = phoneSystem;
     }
+
+    public Integer getZmCreditScore() {
+        return zmCreditScore;
+    }
+
+    public void setZmCreditScore(Integer zmCreditScore) {
+        this.zmCreditScore = zmCreditScore;
+    }
+
 }

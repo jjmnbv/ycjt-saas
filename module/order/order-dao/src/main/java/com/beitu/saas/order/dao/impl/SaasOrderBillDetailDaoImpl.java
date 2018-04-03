@@ -3,6 +3,7 @@ package com.beitu.saas.order.dao.impl;
 import com.beitu.saas.order.dao.SaasOrderBillDetailDao;
 import com.beitu.saas.order.entity.SaasOrderBillDetail;
 import com.beitu.saas.order.vo.LoanDataDetailVo;
+import com.beitu.saas.order.vo.LoanStateDetailVo;
 import com.beitu.saas.order.vo.NoRepayOrderVo;
 import com.beitu.saas.order.vo.OverdueOrderVo;
 import com.fqgj.common.api.Page;
@@ -52,6 +53,12 @@ public class SaasOrderBillDetailDaoImpl extends AbstractBaseMapper<SaasOrderBill
         params.put("merchantCode", merchantCode);
         return this.getSqlSession().selectOne(this.getStatement(".selectLoanDataDetail"), params);
     }
+
+    @Override
+    public List<LoanStateDetailVo> selectLoanStatDetailList(String merchantCode) {
+        Map<String, Object> params = new HashMap<>(4);
+        params.put("merchantCode", merchantCode);
+        return this.getSqlSession().selectList(this.getStatement(".selectLoanStatDetailList"), params);    }
 
     @Override
     public List<NoRepayOrderVo> selectNoRepayOrder(String merchantCode, Page page) {

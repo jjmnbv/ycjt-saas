@@ -39,4 +39,16 @@ public enum MaritalStatusMsgCodeEnum implements MsgCodeEnum {
         this.msg = msg;
     }
 
+    public static MaritalStatusMsgCodeEnum getByCode(Integer code) {
+        if (code == null) {
+            return null;
+        }
+        for (MaritalStatusMsgCodeEnum maritalStatusMsgCodeEnum : MaritalStatusMsgCodeEnum.values()) {
+            if (maritalStatusMsgCodeEnum.getCode().equals(code)) {
+                return maritalStatusMsgCodeEnum;
+            }
+        }
+        return null;
+    }
+
 }
