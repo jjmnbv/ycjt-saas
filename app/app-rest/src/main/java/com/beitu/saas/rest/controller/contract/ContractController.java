@@ -75,7 +75,7 @@ public class ContractController {
     @Autowired
     private OrderCalculateApplication orderCalculateApplication;
 
-    @SignIgnore
+    //@SignIgnore
     @RequestMapping(value = "/order/extend", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "展期协议详情", response = OrderExtendContractInfoResponse.class)
