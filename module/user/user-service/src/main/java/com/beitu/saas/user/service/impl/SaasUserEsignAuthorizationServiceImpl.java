@@ -2,6 +2,7 @@ package com.beitu.saas.user.service.impl;
 
 import com.beitu.saas.user.client.SaasUserEsignAuthorizationService;
 import com.beitu.saas.user.dao.SaasUserEsignAuthorizationDao;
+import com.beitu.saas.user.domain.SaasUserEsignAuthorizationVo;
 import com.beitu.saas.user.entity.SaasUserEsignAuthorization;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
@@ -32,7 +33,7 @@ public class SaasUserEsignAuthorizationServiceImpl extends AbstractBaseService i
     }
 
     @Override
-    public String getSealUrlByUserCode(String userCode) {
+    public SaasUserEsignAuthorizationVo getByUserCode(String userCode) {
         List<SaasUserEsignAuthorization> authorizationList = saasUserEsignAuthorizationDao.selectByParams(new HashMap<String, Object>(4) {{
             put("userCode", userCode);
             put("success", Boolean.TRUE);
@@ -41,11 +42,14 @@ public class SaasUserEsignAuthorizationServiceImpl extends AbstractBaseService i
         if (CollectionUtils.isEmpty(authorizationList)) {
             return null;
         }
-        return authorizationList.get(0).getSealUrl();
+        return SaasUserEsignAuthorizationVo.convertEntityToVO(authorizationList.get(0));
     }
 
     @Override
-    public void create() {
-
+    public SaasUserEsignAuthorization create(SaasUserEsignAuthorizationVo saasUserEsignAuthorizationVo) {
+        SaasUserEsignAuthorization saasUserEsignAuthorization = SaasUserEsignAuthorizationVo.convertVOToEntity(saasUserEsignAuthorizationVo);
+        saasUserEsignAuthorizationDao.insert(saasUserEsignAuthorization);
+        return saasUserEsignAuthorization;
     }
+
 }

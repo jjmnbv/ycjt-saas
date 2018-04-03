@@ -1,5 +1,7 @@
 package com.beitu.saas.user.client;
 
+import com.beitu.saas.user.domain.SaasUserEsignAuthorizationVo;
+import com.beitu.saas.user.entity.SaasUserEsignAuthorization;
 import com.fqgj.common.base.BaseService;
 import com.fqgj.common.entity.BaseEntity;
 
@@ -12,8 +14,8 @@ public interface SaasUserEsignAuthorizationService<T extends BaseEntity> extends
 
     Boolean isSuccessAuthorization(String userCode);
 
-    String getSealUrlByUserCode(String userCode);
+    SaasUserEsignAuthorizationVo getByUserCode(String userCode);
 
-    void create();
+    SaasUserEsignAuthorization create(SaasUserEsignAuthorizationVo saasUserEsignAuthorizationVo);
 
 }

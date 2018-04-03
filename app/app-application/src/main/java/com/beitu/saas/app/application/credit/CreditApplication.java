@@ -7,6 +7,7 @@ import com.beitu.saas.app.application.order.OrderApplication;
 import com.beitu.saas.app.enums.BorrowerInfoApplyStatusEnum;
 import com.beitu.saas.borrower.client.*;
 import com.beitu.saas.borrower.enums.BorrowerErrorCodeEnum;
+import com.beitu.saas.channel.consts.ChannelConsts;
 import com.beitu.saas.channel.domain.SaasChannelRiskSettingsVo;
 import com.beitu.saas.channel.enums.ChannelErrorCodeEnum;
 import com.beitu.saas.channel.enums.RiskModuleEnum;
@@ -228,8 +229,6 @@ public class CreditApplication {
             return;
         }
         saasOrderApplicationService.deleteById(saasOrderApplicationVo.getSaasOrderApplicationId());
-        // TODO 借款人签署借款合同
-
         orderApplication.createOrder(saasOrderApplicationVo, orderNumb, channelCode);
     }
 

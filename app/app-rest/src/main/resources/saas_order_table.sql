@@ -89,7 +89,7 @@ CREATE TABLE `saas_order_status_history` (
   `order_id` bigint(20) unsigned NOT NULL COMMENT '订单ID',
   `order_numb` varchar(32) NOT NULL COMMENT '订单号',
   `current_order_status` smallint(4) DEFAULT NULL COMMENT '当前订单状态',
-  `update_order_status` smallint(4) NOT NULL COMMENT '更新后订单状态',
+  `update_order_status` smallint(4) DEFAULT NULL COMMENT '更新后订单状态',
   `operator_code` varchar(32) NOT NULL COMMENT '操作人CODE',
   `remark` varchar(128) DEFAULT NULL COMMENT '备注',
   `deleted` bit(1) NOT NULL COMMENT '是否删除',

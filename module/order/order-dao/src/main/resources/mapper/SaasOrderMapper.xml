@@ -134,4 +134,5 @@
         set final_reviewer_code = #{finalReviewerCode,jdbcType=VARCHAR},gmt_modified = NOW()
         where id = #{id,jdbcType=BIGINT} and final_reviewer_code is null
     </update>
+
 </mapper>
