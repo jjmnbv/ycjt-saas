@@ -31,6 +31,11 @@ public class TimeConsts {
     public static final Integer TWO_MINUTE = 120;
     
     /**
+     * 秒数：三分钟
+     */
+    public static final Integer THREE_MINUTE = 180;
+    
+    /**
      * 秒数：五分钟
      */
     public static final Integer FIVE_MINUTES = 300;

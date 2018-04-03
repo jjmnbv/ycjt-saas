@@ -13,6 +13,10 @@ public class LoanPlatformQueryParam {
         return token;
     }
     
+    public LoanPlatformQueryParam(String token) {
+        this.token = token;
+    }
+    
     public LoanPlatformQueryParam setToken(String token) {
         this.token = token;
         return this;
