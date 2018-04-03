@@ -6,10 +6,13 @@ import com.beitu.saas.intergration.risk.RiskIntergrationService;
 import com.beitu.saas.intergration.risk.consts.JuxinliApiCodeConst;
 import com.beitu.saas.intergration.risk.dto.LoanPlatformCrawlingDto;
 import com.beitu.saas.intergration.risk.dto.LoanPlatformQueryDto;
+import com.beitu.saas.intergration.risk.dto.LoanPlatformTaskIdPrefixDto;
 import com.beitu.saas.intergration.risk.enums.LoanPlatformCrawlingCodeEnum;
 import com.beitu.saas.intergration.risk.enums.LoanPlatformQueryCodeEnum;
 import com.beitu.saas.intergration.risk.param.LoanPlatformCrawlingParam;
 import com.beitu.saas.intergration.risk.param.LoanPlatformQueryParam;
+import com.beitu.saas.intergration.risk.param.LoanPlatformTaskIdPrefixParam;
+import com.beitu.saas.intergration.risk.param.LoanPlatformValidatePrefixParam;
 import com.beitu.saas.intergration.risk.pojo.LoanPlatformQueryPojo;
 import com.fqgj.common.utils.JSONUtils;
 import com.fqgj.common.utils.MD5;
@@ -41,7 +44,8 @@ public class RiskIntergrationServiceImpl implements RiskIntergrationService {
         String timeMark = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
         String website = param.getPlatformEnum().getWebsite();
         String apiKey = configUtil.getJuXinLiApiKey();
-        String sign = MD5.md5(orgId + timeMark + website + param.getTaskId() + apiKey);
+        String taskId = param.getTaskId();
+        String sign = MD5.md5(orgId + timeMark + website + taskId + apiKey);
         
         String url = configUtil.getJuXinLiApiUrl() + configUtil.getJuXinLiCrawlingPath();
         StringBuilder urlSb = new StringBuilder();
@@ -50,7 +54,7 @@ public class RiskIntergrationServiceImpl implements RiskIntergrationService {
         urlSb.append(sign + "/");
         urlSb.append(timeMark + "/");
         urlSb.append(website + "/");
-        urlSb.append(param.getTaskId() + "?");
+        urlSb.append(taskId + "?");
         urlSb.append("jumpUrl=" + param.getJumpUrl());
         
         return new LoanPlatformCrawlingDto(LoanPlatformCrawlingCodeEnum.SUCCESS).setUrl(urlSb.toString());
@@ -102,4 +106,35 @@ public class RiskIntergrationServiceImpl implements RiskIntergrationService {
                 .setDetailInfo(pojo.getDetail());
     }
     
+    @Override
+    public LoanPlatformTaskIdPrefixDto generateLoanPlatformTaskIdPrefix(LoanPlatformTaskIdPrefixParam param) {
+        if (param == null || !param.validate()) {
+            return null;
+        }
+        String userCode = param.getUserCode();
+        String website = param.getPlatformEnum().getWebsite();
+        String orgId = configUtil.getJuXinLiOrgId();
+        String apiKey = configUtil.getJuXinLiApiKey();
+        String timeMark = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String prefix = signParams(timeMark, orgId, userCode, apiKey, website);
+        return new LoanPlatformTaskIdPrefixDto(timeMark, prefix);
+    }
+    
+    @Override
+    public Boolean validateLoanPlatformCallbackPrefix(LoanPlatformValidatePrefixParam param) {
+        if (param == null || !param.validate()) {
+            return Boolean.FALSE;
+        }
+        String userCode = param.getUserCode();
+        String website = param.getWebsite();
+        String orgId = configUtil.getJuXinLiOrgId();
+        String apiKey = configUtil.getJuXinLiApiKey();
+        String timeMark = param.getTimestamp();
+        String prefix = param.getPrefix();
+        return Objects.equals(prefix, signParams(timeMark, orgId, userCode, apiKey, website));
+    }
+    
+    private String signParams(String timeMark, String orgId, String userCode, String apiKey, String website) {
+        return MD5.md5(timeMark + orgId + userCode + apiKey + website);
+    }
 }
