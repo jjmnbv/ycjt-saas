@@ -86,6 +86,7 @@ public class LoanPlatformApplication {
     }
     
     public String juxinliCallbackProcess(String requestString) {
+        LOGGER.info(requestString);
         JuxinliCallbackDataPojo pojo;
         try {
             pojo = JSONUtils.json2pojoAndOffUnknownField(requestString, JuxinliCallbackDataPojo.class);
@@ -108,6 +109,7 @@ public class LoanPlatformApplication {
         if (!validateTaskIdPrefix(pojo)) {
             return "回调TaskId验证不通过";
         }
+        LOGGER.info("************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************");
         LoanPlatformQueryParam param = new LoanPlatformQueryParam(pojo.getToken());
         LoanPlatformQueryDto dto = riskIntergrationService.loanPlatformQuery(param);
         LOGGER.info(JSON.toJSONString(dto));
@@ -166,6 +168,7 @@ public class LoanPlatformApplication {
         if (!riskIntergrationService.validateLoanPlatformCallbackPrefix(validateParam)) {
             return Boolean.FALSE;
         }
+        redisClient.del(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, userCode, website);
         return Boolean.TRUE;
     }
 }
