@@ -72,8 +72,6 @@ public class LoanPlatformApplication {
         urlSb.append(prefixDto.getTimestamp() + "_");
         urlSb.append(channelCode);
         param.setJumpUrl(urlSb.toString());
-    
-        LOGGER.info(urlSb.toString());
         
         LOGGER.info("得到{}借贷平台地址......taskId:{};borrowerCode:{}", saasLoanPlatformEnum.getMsg(), taskId, borrowerCode);
         LoanPlatformCrawlingDto resultDto = riskIntergrationService.loanPlatformCrawlingUrl(param);
@@ -81,12 +79,10 @@ public class LoanPlatformApplication {
             LOGGER.warn("获取{}借贷平台地址失败......taskId:{};msg:{}", saasLoanPlatformEnum.getMsg(), taskId, resultDto.getMsg());
             throw new ApplicationException("获取借贷平台地址失败,请重试");
         }
-        LOGGER.info(resultDto.getUrl());
         return resultDto.getUrl();
     }
     
     public String juxinliCallbackProcess(String requestString) {
-        LOGGER.info(requestString);
         JuxinliCallbackDataPojo pojo;
         try {
             pojo = JSONUtils.json2pojoAndOffUnknownField(requestString, JuxinliCallbackDataPojo.class);
@@ -102,14 +98,12 @@ public class LoanPlatformApplication {
         if (!Objects.equals(pojo.getSuccess(), "true")) {
             return "爬取失败";
         }
-        // TODO: 2018/4/3 等待聚信立开启签名机制
-//        if (!validateSign(pojo)) {
-//            return "回调验签失败";
-//        }
+        if (!validateSign(pojo)) {
+            return "回调验签失败";
+        }
         if (!validateTaskIdPrefix(pojo)) {
             return "回调TaskId验证不通过";
         }
-        LOGGER.info("************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************");
         LoanPlatformQueryParam param = new LoanPlatformQueryParam(pojo.getToken());
         LoanPlatformQueryDto dto = riskIntergrationService.loanPlatformQuery(param);
         LOGGER.info(JSON.toJSONString(dto));
@@ -165,9 +159,6 @@ public class LoanPlatformApplication {
         String website = pojo.getWebsite();
         String timestamp = redisClient.get(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, userCode, website);
         LoanPlatformValidatePrefixParam validateParam = new LoanPlatformValidatePrefixParam(timestamp, userCode, website, prefix);
-        LOGGER.info("************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************");
-        LOGGER.info(JSON.toJSONString(validateParam));
-        LOGGER.info("************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************");
         if (!riskIntergrationService.validateLoanPlatformCallbackPrefix(validateParam)) {
             return Boolean.FALSE;
         }
