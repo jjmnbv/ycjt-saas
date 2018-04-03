@@ -75,8 +75,11 @@ public class JuxinliCallbackDataPojo {
         if (StringUtils.isEmpty(this.taskId) ||
                 StringUtils.isEmpty(this.token) ||
                 StringUtils.isEmpty(this.success) ||
-                StringUtils.isEmpty(this.website) ||
-                StringUtils.isEmpty(this.sign)) {
+                StringUtils.isEmpty(this.website)
+            // TODO: 2018/4/3 等待聚信立开启签名机制
+//                ||
+//                StringUtils.isEmpty(this.sign)
+                ) {
             return Boolean.FALSE;
         }
         
