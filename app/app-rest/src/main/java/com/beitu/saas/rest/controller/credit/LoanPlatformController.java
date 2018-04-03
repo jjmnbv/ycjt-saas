@@ -60,7 +60,6 @@ public class LoanPlatformController {
         LOGGER.info("************************* 聚信立回调开始 *************************");
         request.setCharacterEncoding("UTF-8");
         String reqStr = IOUtils.toString(request.getInputStream(), "utf-8");
-        LOGGER.info(reqStr);
         String result;
         try {
             result = loanPlatformApplication.juxinliCallbackProcess(reqStr);
