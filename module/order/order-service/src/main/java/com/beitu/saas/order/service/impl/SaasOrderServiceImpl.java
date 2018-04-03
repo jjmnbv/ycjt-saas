@@ -178,7 +178,12 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
 
     @Override
     public SaasOrderVo getConfirmExtendOrderByOrderNumb(String orderNumb) {
-        List<SaasOrder> saasOrderList = saasOrderDao.selectByParams(orderNumb, null, OrderStatusEnum.TO_CONFIRM_EXTEND.getCode());
+        Map<String, Object> params = new HashMap<>(4);
+        params.put("orderNumb", orderNumb);
+        params.put("deleted", Boolean.FALSE);
+        params.put("expireDate", new Date());
+        params.put("orderStatus", OrderStatusEnum.TO_CONFIRM_EXTEND.getCode());
+        List<SaasOrder> saasOrderList = saasOrderDao.selectByParams(params);
         if (CollectionUtils.isEmpty(saasOrderList)) {
             return null;
         }
@@ -197,7 +202,12 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
 
     @Override
     public SaasOrderVo getConfirmReceiptOrderByOrderNumb(String orderNumb) {
-        List<SaasOrder> saasOrderList = saasOrderDao.selectByParams(orderNumb, null, OrderStatusEnum.TO_CONFIRM_RECEIPT.getCode());
+        Map<String, Object> params = new HashMap<>(4);
+        params.put("orderNumb", orderNumb);
+        params.put("deleted", Boolean.FALSE);
+        params.put("expireDate", new Date());
+        params.put("orderStatus", OrderStatusEnum.TO_CONFIRM_RECEIPT.getCode());
+        List<SaasOrder> saasOrderList = saasOrderDao.selectByParams(params);
         if (CollectionUtils.isEmpty(saasOrderList)) {
             return null;
         }

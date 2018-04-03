@@ -1,23 +1,24 @@
 package com.beitu.saas.rest.controller.channel;
 
-import com.beitu.saas.app.annotations.SignIgnore;
-import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.application.channel.SaasChannelApplication;
 import com.beitu.saas.app.application.channel.vo.ChannelStatDetailVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.auth.entity.SaasAdmin;
-import com.beitu.saas.channel.domain.SaasChannelDetailVo;
-import com.beitu.saas.channel.param.ChannelStatQueryParam;
-import com.beitu.saas.channel.param.SaasChannelParam;
 import com.beitu.saas.channel.client.SaasChannelService;
+import com.beitu.saas.channel.domain.SaasChannelDetailVo;
 import com.beitu.saas.channel.domain.SaasChannelVo;
 import com.beitu.saas.channel.enums.ChannelErrorCodeEnum;
+import com.beitu.saas.channel.param.ChannelStatQueryParam;
+import com.beitu.saas.channel.param.SaasChannelParam;
 import com.beitu.saas.channel.param.SaasChannelRiskSettingsParam;
 import com.beitu.saas.rest.controller.channel.request.ChannelStatQueryRequestParam;
 import com.beitu.saas.rest.controller.channel.request.SaasChannelQueryRequestParam;
 import com.beitu.saas.rest.controller.channel.request.SaasChannelRequestParam;
 import com.beitu.saas.rest.controller.channel.request.SaasOperateChannelRequestParam;
-import com.beitu.saas.rest.controller.channel.response.*;
+import com.beitu.saas.rest.controller.channel.response.SaasChannelDetailResponse;
+import com.beitu.saas.rest.controller.channel.response.SaasChannelListResponse;
+import com.beitu.saas.rest.controller.channel.response.SaasChannelStatListResponse;
+import com.beitu.saas.rest.controller.channel.response.SaasMerchantAdminResponse;
 import com.fqgj.common.api.ApiResponse;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.api.Response;
@@ -37,7 +38,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;

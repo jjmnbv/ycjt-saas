@@ -32,8 +32,6 @@ public interface SaasOrderDao extends BaseMapper<SaasOrder> {
 
     int updateFinalReviewerCode(Long orderId, String operatorCode);
 
-    List<SaasOrder> selectByParams(String orderNumb, String merchantCode, Integer orderStatus);
-
     List<String> selectOrderNumbByParams(String merchantCode, Integer orderStatus);
 
 }
