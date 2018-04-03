@@ -72,8 +72,6 @@ public class LoanPlatformApplication {
         urlSb.append(prefixDto.getTimestamp() + "_");
         urlSb.append(channelCode);
         param.setJumpUrl(urlSb.toString());
-    
-        LOGGER.info(urlSb.toString());
         
         LOGGER.info("得到{}借贷平台地址......taskId:{};borrowerCode:{}", saasLoanPlatformEnum.getMsg(), taskId, borrowerCode);
         LoanPlatformCrawlingDto resultDto = riskIntergrationService.loanPlatformCrawlingUrl(param);
@@ -81,7 +79,6 @@ public class LoanPlatformApplication {
             LOGGER.warn("获取{}借贷平台地址失败......taskId:{};msg:{}", saasLoanPlatformEnum.getMsg(), taskId, resultDto.getMsg());
             throw new ApplicationException("获取借贷平台地址失败,请重试");
         }
-        LOGGER.info(resultDto.getUrl());
         return resultDto.getUrl();
     }
     
@@ -101,10 +98,9 @@ public class LoanPlatformApplication {
         if (!Objects.equals(pojo.getSuccess(), "true")) {
             return "爬取失败";
         }
-        // TODO: 2018/4/3 等待聚信立开启签名机制
-//        if (!validateSign(pojo)) {
-//            return "回调验签失败";
-//        }
+        if (!validateSign(pojo)) {
+            return "回调验签失败";
+        }
         if (!validateTaskIdPrefix(pojo)) {
             return "回调TaskId验证不通过";
         }
@@ -140,7 +136,7 @@ public class LoanPlatformApplication {
         }
         redisClient.set(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, timestamp, TimeConsts.THREE_MINUTE, userCode, website);
         return "redirect:" + configUtil.getAddressURLPrefix() + configUtil.getH5AddressURLPrefix()
-                + "?channel=" + channelCode + "/formList";
+                + "?channel=" + channelCode + "#/formList";
     }
     
     private Boolean validateSign(JuxinliCallbackDataPojo pojo) {
@@ -161,11 +157,28 @@ public class LoanPlatformApplication {
             userCode = prefixAndUserCode[1];
         }
         String website = pojo.getWebsite();
-        String timestamp = redisClient.get(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, userCode, website);
+        String timestamp = pollingRedisTimestamp(userCode, website);
         LoanPlatformValidatePrefixParam validateParam = new LoanPlatformValidatePrefixParam(timestamp, userCode, website, prefix);
         if (!riskIntergrationService.validateLoanPlatformCallbackPrefix(validateParam)) {
             return Boolean.FALSE;
         }
+        redisClient.del(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, userCode, website);
         return Boolean.TRUE;
+    }
+    
+    private String pollingRedisTimestamp(String userCode, String website) {
+        Integer cnt = 0;
+        String timestamp = null;
+        while (cnt < 20 || StringUtils.isEmpty(timestamp)) {
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            timestamp = redisClient.get(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, userCode, website);
+            cnt++;
+        }
+        LOGGER.info("polling for " + cnt + "times!!!");
+        return timestamp;
     }
 }

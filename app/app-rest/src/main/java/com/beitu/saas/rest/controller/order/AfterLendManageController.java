@@ -6,7 +6,6 @@ import com.beitu.saas.app.api.ModuleApiResponse;
 import com.beitu.saas.app.application.order.OrderApplication;
 import com.beitu.saas.app.application.order.OrderBillDetailApplication;
 import com.beitu.saas.app.application.order.vo.QueryOrderBillDetailVo;
-import com.beitu.saas.app.application.order.vo.QueryOrderVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.order.enums.OrderStatusEnum;
@@ -67,7 +66,7 @@ public class AfterLendManageController {
     @RequestMapping(value = "/extend", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "展期", response = ApiResponse.class)
-    public ApiResponse extend(@RequestBody @Valid AfterLendManagerOperateOrderRequest req) {
+    public ApiResponse extend(@RequestBody @Valid AfterLendManagerExtendOrderRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
         orderApplication.extendOrder(adminCode, req.getOrderNumb(), req.getRepaymentDt(), req.getExtendInterestRatio());
         return new ApiResponse("操作成功");
@@ -76,7 +75,7 @@ public class AfterLendManageController {
     @RequestMapping(value = "/destroy", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "核销", response = ApiResponse.class)
-    public ApiResponse destroy(@RequestBody @Valid AfterLendManagerOperateOrderRequest req) {
+    public ApiResponse destroy(@RequestBody @Valid AfterLendManagerDestroyOrderRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
         orderApplication.destroyOrder(adminCode, req.getOrderNumb());
         return new ApiResponse("操作成功");
