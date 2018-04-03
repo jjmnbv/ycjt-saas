@@ -1,6 +1,5 @@
 package com.beitu.saas.app.application.credit;
 
-import com.alibaba.fastjson.JSON;
 import com.beitu.saas.app.application.credit.pojo.JuxinliCallbackDataPojo;
 import com.beitu.saas.app.enums.SaasLoanPlatformEnum;
 import com.beitu.saas.common.config.ConfigUtil;
@@ -12,6 +11,7 @@ import com.beitu.saas.intergration.risk.dto.LoanPlatformQueryDto;
 import com.beitu.saas.intergration.risk.dto.LoanPlatformTaskIdPrefixDto;
 import com.beitu.saas.intergration.risk.enums.LoanPlatformCrawlingCodeEnum;
 import com.beitu.saas.intergration.risk.enums.LoanPlatformEnum;
+import com.beitu.saas.intergration.risk.enums.LoanPlatformQueryCodeEnum;
 import com.beitu.saas.intergration.risk.param.LoanPlatformCrawlingParam;
 import com.beitu.saas.intergration.risk.param.LoanPlatformQueryParam;
 import com.beitu.saas.intergration.risk.param.LoanPlatformTaskIdPrefixParam;
@@ -75,7 +75,7 @@ public class LoanPlatformApplication {
         
         LOGGER.info("得到{}借贷平台地址......taskId:{};borrowerCode:{}", saasLoanPlatformEnum.getMsg(), taskId, borrowerCode);
         LoanPlatformCrawlingDto resultDto = riskIntergrationService.loanPlatformCrawlingUrl(param);
-        if (!LoanPlatformCrawlingCodeEnum.SUCCESS.getCode().equals(resultDto.getCode())) {
+        if (!Objects.equals(LoanPlatformCrawlingCodeEnum.SUCCESS.getCode(), resultDto.getCode())) {
             LOGGER.warn("获取{}借贷平台地址失败......taskId:{};msg:{}", saasLoanPlatformEnum.getMsg(), taskId, resultDto.getMsg());
             throw new ApplicationException("获取借贷平台地址失败,请重试");
         }
@@ -106,6 +106,16 @@ public class LoanPlatformApplication {
         }
         LoanPlatformQueryParam param = new LoanPlatformQueryParam(pojo.getToken());
         LoanPlatformQueryDto dto = riskIntergrationService.loanPlatformQuery(param);
+        if (!Objects.equals(LoanPlatformQueryCodeEnum.SUCCESS.getCode(), dto.getCode())) {
+            return "查询" + pojo.getWebsite() + "借贷平台爬虫结果失败......taskId:" + pojo.getTaskId() + ";msg:" + dto.getMsg();
+        }
+        
+        
+        pojo.getTaskId();
+        pojo.getToken();
+        SaasLoanPlatformEnum platformEnum = SaasLoanPlatformEnum.getByWebsite(pojo.getWebsite());
+        dto.getData();
+        String userCode = getUserCodeFromTaskId(pojo.getTaskId());
         
         return null;
     }
@@ -122,13 +132,8 @@ public class LoanPlatformApplication {
             timestamp = params[3];
             channelCode = params[4];
         }
-        String prefix = null;
-        String userCode = null;
-        if (taskId.contains("_")) {
-            String[] prefixAndUserCode = taskId.split("_");
-            prefix = prefixAndUserCode[0];
-            userCode = prefixAndUserCode[1];
-        }
+        String prefix = getPrefixFromTaskId(taskId);
+        String userCode = getUserCodeFromTaskId(taskId);
         LoanPlatformValidatePrefixParam param = new LoanPlatformValidatePrefixParam(timestamp, userCode, website, prefix);
         if (!riskIntergrationService.validateLoanPlatformCallbackPrefix(param)) {
             return "redirect:" + "";
@@ -147,14 +152,9 @@ public class LoanPlatformApplication {
     }
     
     private Boolean validateTaskIdPrefix(JuxinliCallbackDataPojo pojo) {
-        String prefix = null;
-        String userCode = null;
         String taskId = pojo.getTaskId();
-        if (taskId.contains("_")) {
-            String[] prefixAndUserCode = taskId.split("_");
-            prefix = prefixAndUserCode[0];
-            userCode = prefixAndUserCode[1];
-        }
+        String prefix = getPrefixFromTaskId(taskId);
+        String userCode = getUserCodeFromTaskId(taskId);
         String website = pojo.getWebsite();
         String timestamp = pollingRedisTimestamp(userCode, website);
         LoanPlatformValidatePrefixParam validateParam = new LoanPlatformValidatePrefixParam(timestamp, userCode, website, prefix);
@@ -175,10 +175,33 @@ public class LoanPlatformApplication {
             }
             timestamp = redisClient.get(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, userCode, website);
             if (StringUtils.isNotEmpty(timestamp)) {
-                LOGGER.info("polling for " + i + "times!!!");
                 break;
             }
         }
         return timestamp;
+    }
+    
+    private String getPrefixFromTaskId(String taskId) {
+        if (StringUtils.isEmpty(taskId)) {
+            return null;
+        }
+        String prefix = null;
+        if (taskId.contains("_")) {
+            String[] prefixAndUserCode = taskId.split("_");
+            prefix = prefixAndUserCode[0];
+        }
+        return prefix;
+    }
+    
+    private String getUserCodeFromTaskId(String taskId) {
+        if (StringUtils.isEmpty(taskId)) {
+            return null;
+        }
+        String userCode = null;
+        if (taskId.contains("_")) {
+            String[] prefixAndUserCode = taskId.split("_");
+            userCode = prefixAndUserCode[1];
+        }
+        return userCode;
     }
 }

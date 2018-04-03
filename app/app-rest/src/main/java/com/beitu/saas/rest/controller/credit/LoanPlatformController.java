@@ -5,7 +5,6 @@ import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.application.credit.LoanPlatformApplication;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.app.enums.SaasLoanPlatformEnum;
-import com.beitu.saas.common.consts.TimeConsts;
 import com.beitu.saas.rest.controller.credit.request.GetLoanPlatformUrlRequest;
 import com.beitu.saas.rest.controller.credit.response.LoanPlatformUrlResponse;
 import com.fqgj.log.factory.LogFactory;
@@ -66,12 +65,12 @@ public class LoanPlatformController {
             result = loanPlatformApplication.juxinliCallbackProcess(reqStr);
         } catch (Exception e) {
             write(response, "error");
-            LOGGER.info("************************* 聚信立回调处理失败:{} *************************", e);
+            LOGGER.warn("************************* 聚信立回调处理失败:{} *************************", e);
             return;
         }
         if (StringUtils.isNotEmpty(result)) {
             write(response, "error");
-            LOGGER.info("************************* 聚信立回调处理失败:{} *************************", result);
+            LOGGER.warn("************************* 聚信立回调处理失败:{} *************************", result);
             return;
         }
         write(response, "success");
