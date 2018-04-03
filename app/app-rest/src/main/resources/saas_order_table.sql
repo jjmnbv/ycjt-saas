@@ -4,13 +4,14 @@ CREATE TABLE `saas_order_application` (
   `merchant_code` varchar(32) NOT NULL COMMENT '机构CODE',
   `channel_code` varchar(32) NOT NULL COMMENT '渠道CODE',
   `borrower_code` varchar(32) NOT NULL COMMENT '借款人CODE',
+  `order_numb` varchar(32) DEFAULT NULL COMMENT '订单号',
   `real_capital` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '借款金额',
   `total_interest_ratio` decimal(5,4) NOT NULL DEFAULT '0.0000' COMMENT '借款年利率',
   `late_interest_ratio` decimal(5,4) NOT NULL DEFAULT '0.2400' COMMENT '逾期利率',
   `borrow_purpose` varchar(32) DEFAULT NULL COMMENT '借款意图',
   `repayment_dt` date NOT NULL COMMENT '账单应还日',
   `term_url` varchar(256) DEFAULT NULL COMMENT '借款协议URL地址',
-  `apply_status` tinyint(4) DEFAULT 1 COMMENT '申请状态（1未提交，2提交，3审核驳回）',
+  `apply_status` tinyint(4) DEFAULT 1 COMMENT '申请状态(1未提交，2提交，3审核驳回)',
   `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后修改时间',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -116,6 +117,24 @@ CREATE TABLE `saas_borrower` (
   KEY `idy_merchant_code` (`merchant_code`),
   KEY `idy_channel_code` (`channel_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='SAAS借款人表';
+
+DROP TABLE IF EXISTS `saas_borrower_login_log`;
+CREATE TABLE `saas_borrower_login_log` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '表ID',
+  `borrower_code` varchar(32) NOT NULL COMMENT '借款人CODE',
+  `merchant_code` varchar(32) NOT NULL COMMENT '机构CODE',
+  `channel_code` varchar(32) NOT NULL COMMENT '渠道CODE',
+  `phone_system` varchar(32) DEFAULT NULL COMMENT '手机操作系统',
+  `login_ip` varchar(16) NOT NULL COMMENT '登录IP',
+  `login_ip_address` varchar(32) DEFAULT NULL COMMENT '登录详细地址',
+  `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
+  `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_borrower_code` (`borrower_code`),
+  KEY `idy_merchant_code` (`merchant_code`),
+  KEY `idy_channel_code` (`channel_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='SAAS借款人登录日志表';
 
 DROP TABLE IF EXISTS `saas_borrower_token`;
 CREATE TABLE `saas_borrower_token` (

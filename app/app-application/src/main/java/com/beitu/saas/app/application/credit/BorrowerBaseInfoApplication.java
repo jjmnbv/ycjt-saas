@@ -10,10 +10,15 @@ import com.beitu.saas.borrower.entity.SaasBorrowerRealInfo;
 import com.beitu.saas.borrower.entity.SaasBorrowerWorkInfo;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.utils.identityNumber.vo.IdcardInfoExtractor;
+import com.beitu.saas.order.client.SaasOrderApplicationService;
+import com.fqgj.common.utils.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author linanjun
@@ -22,6 +27,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class BorrowerBaseInfoApplication {
+
+    @Autowired
+    private SaasOrderApplicationService saasOrderApplicationService;
 
     @Autowired
     private SaasBorrowerPersonalInfoService saasBorrowerPersonalInfoService;
@@ -43,6 +51,13 @@ public class BorrowerBaseInfoApplication {
 
     @Autowired
     private SaasBorrowerEmergentContactService saasBorrowerEmergentContactService;
+
+    @Autowired
+    private SaasBorrowerLoginLogService saasBorrowerLoginLogService;
+
+    public BorrowerOrderApplicationVo getUserOrderApplicationVo(String borrowerCode, String orderNumb) {
+
+    }
 
     public BorrowerPersonalInfoVo getUserPersonalInfoVo(String borrowerCode, String orderNumb) {
         BorrowerPersonalInfoVo borrowerPersonalInfoVo = new BorrowerPersonalInfoVo();
@@ -69,6 +84,8 @@ public class BorrowerBaseInfoApplication {
             borrowerPersonalInfoVo.setMaritalStatus(MaritalStatusMsgCodeEnum.getByCode(saasBorrowerPersonalInfoVo.getMaritalStatus()).getMsg());
             borrowerPersonalInfoVo.setZmCreditScore(saasBorrowerPersonalInfoVo.getZmCreditScore());
         }
+
+        borrowerPersonalInfoVo.setPhoneSystem(saasBorrowerLoginLogService.getBorrowerPhoneSystem(borrowerCode));
 
         return borrowerPersonalInfoVo;
     }
@@ -106,7 +123,18 @@ public class BorrowerBaseInfoApplication {
     }
 
     public BorrowerLivingAreaVo getUserLivingAreaVo(String borrowerCode, String orderNumb) {
-        return null;
+        List<SaasBorrowerLoginLogVo> saasBorrowerLoginLogVoList = saasBorrowerLoginLogService.listBorrowerLivingArea(borrowerCode);
+        if (CollectionUtils.isEmpty(saasBorrowerLoginLogVoList)) {
+            return null;
+        }
+        List<BorrowerLivingAreaDetailVo> results = new ArrayList<>(saasBorrowerLoginLogVoList.size());
+        saasBorrowerLoginLogVoList.forEach(saasBorrowerLoginLogVo -> {
+            BorrowerLivingAreaDetailVo borrowerLivingAreaDetailVo = new BorrowerLivingAreaDetailVo();
+            borrowerLivingAreaDetailVo.setAddress(saasBorrowerLoginLogVo.getLoginIpAddress());
+            borrowerLivingAreaDetailVo.setCreatedDate(saasBorrowerLoginLogVo.getGmtCreate());
+            results.add(borrowerLivingAreaDetailVo);
+        });
+        return new BorrowerLivingAreaVo(results);
     }
 
 }

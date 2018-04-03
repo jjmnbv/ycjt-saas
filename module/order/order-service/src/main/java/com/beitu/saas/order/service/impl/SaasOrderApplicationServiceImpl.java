@@ -5,6 +5,7 @@ import com.beitu.saas.order.client.SaasOrderApplicationService;
 import com.beitu.saas.order.dao.SaasOrderApplicationDao;
 import com.beitu.saas.order.domain.SaasOrderApplicationVo;
 import com.beitu.saas.order.entity.SaasOrderApplication;
+import com.beitu.saas.order.enums.OrderApplyStatusMsgEnum;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.BaseService;
 import com.fqgj.common.base.NameSpace;
@@ -30,11 +31,17 @@ public class SaasOrderApplicationServiceImpl extends AbstractBaseService impleme
     @Autowired
     private SaasOrderApplicationDao saasOrderApplicationDao;
 
-
     @Override
     public SaasOrderApplicationVo getByBorrowerCode(String borrowerCode) {
+        return SaasOrderApplicationVo.convertEntityToVO(saasOrderApplicationDao.selectByBorrowerCode(borrowerCode));
+    }
+
+    @Override
+    public SaasOrderApplicationVo getByBorrowerCodeAndChannelCode(String borrowerCode, String channelCode) {
         List<SaasOrderApplication> saasOrderApplicationList = saasOrderApplicationDao.selectByParams(new HashMap<String, Object>(4) {{
             put("borrowerCode", borrowerCode);
+            put("channelCode", channelCode);
+            put("applyStatus", OrderApplyStatusMsgEnum.REVIEWER_REJECT.getCode());
             put("deleted", Boolean.FALSE);
         }});
         if (CollectionUtils.isEmpty(saasOrderApplicationList)) {
@@ -56,6 +63,20 @@ public class SaasOrderApplicationServiceImpl extends AbstractBaseService impleme
         saasOrderApplication.setId(saasOrderApplicationList.get(0).getId());
         saasOrderApplicationDao.updateByPrimaryKey(saasOrderApplication);
         return saasOrderApplication;
+    }
+
+    @Override
+    public SaasOrderApplicationVo getByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb) {
+        List<SaasOrderApplication> saasOrderApplicationList = saasOrderApplicationDao.selectByParams(new HashMap<String, Object>(4) {{
+            put("borrowerCode", borrowerCode);
+            put("orderNumb", orderNumb);
+            put("applyStatus", OrderApplyStatusMsgEnum.SUBMIT.getCode());
+            put("deleted", Boolean.FALSE);
+        }});
+        if (CollectionUtils.isEmpty(saasOrderApplicationList)) {
+            return null;
+        }
+        return SaasOrderApplicationVo.convertEntityToVO(saasOrderApplicationList.get(0));
     }
 
 }

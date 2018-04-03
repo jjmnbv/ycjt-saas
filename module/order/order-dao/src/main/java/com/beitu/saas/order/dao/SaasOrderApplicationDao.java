@@ -10,4 +10,6 @@ import com.beitu.saas.order.entity.SaasOrderApplication;
 
 public interface SaasOrderApplicationDao  extends BaseMapper<SaasOrderApplication> {
 
+    SaasOrderApplication selectByBorrowerCode(String borrowerCode);
+
 }

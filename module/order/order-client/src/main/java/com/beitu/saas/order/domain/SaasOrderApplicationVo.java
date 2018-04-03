@@ -10,8 +10,8 @@ import java.util.Date;
 
 /**
  * User: jungle
- * Date: 2018-03-25
- * Time: 21:55:45.854
+ * Date: 2018-04-03
+ * Time: 16:49:32.680
  */
 public class SaasOrderApplicationVo implements ResponseData, Serializable {
 
@@ -29,6 +29,10 @@ public class SaasOrderApplicationVo implements ResponseData, Serializable {
      * 借款人CODE
      */
     private String borrowerCode;
+    /**
+     * 订单号
+     */
+    private String orderNumb;
     /**
      * 借款金额
      */
@@ -53,8 +57,10 @@ public class SaasOrderApplicationVo implements ResponseData, Serializable {
      * 借款协议URL地址
      */
     private String termUrl;
-
-    private Date gmtCreate;
+    /**
+     * 申请状态(1未提交，2提交，3审核驳回)
+     */
+    private Integer applyStatus;
 
     public Long getSaasOrderApplicationId() {
         return saasOrderApplicationId;
@@ -87,6 +93,14 @@ public class SaasOrderApplicationVo implements ResponseData, Serializable {
 
     public void setBorrowerCode(String borrowerCode) {
         this.borrowerCode = borrowerCode;
+    }
+
+    public String getOrderNumb() {
+        return this.orderNumb;
+    }
+
+    public void setOrderNumb(String orderNumb) {
+        this.orderNumb = orderNumb;
     }
 
     public BigDecimal getRealCapital() {
@@ -137,13 +151,14 @@ public class SaasOrderApplicationVo implements ResponseData, Serializable {
         this.termUrl = termUrl;
     }
 
-    public Date getGmtCreate() {
-        return gmtCreate;
+    public Integer getApplyStatus() {
+        return this.applyStatus;
     }
 
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
+    public void setApplyStatus(Integer applyStatus) {
+        this.applyStatus = applyStatus;
     }
+
 
     public static SaasOrderApplicationVo convertEntityToVO(SaasOrderApplication saasOrderApplication) {
         if (saasOrderApplication == null) {

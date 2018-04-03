@@ -7,12 +7,14 @@
         <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode"/>
         <result column="channel_code" jdbcType="VARCHAR" property="channelCode"/>
         <result column="borrower_code" jdbcType="VARCHAR" property="borrowerCode"/>
+        <result column="order_numb" jdbcType="VARCHAR" property="orderNumb"/>
         <result column="real_capital" jdbcType="DECIMAL" property="realCapital"/>
         <result column="total_interest_ratio" jdbcType="DECIMAL" property="totalInterestRatio"/>
         <result column="late_interest_ratio" jdbcType="DECIMAL" property="lateInterestRatio"/>
         <result column="borrow_purpose" jdbcType="VARCHAR" property="borrowPurpose"/>
         <result column="repayment_dt" jdbcType="DATE" property="repaymentDt"/>
         <result column="term_url" jdbcType="VARCHAR" property="termUrl"/>
+        <result column="apply_status" jdbcType="TINYINT" property="applyStatus"/>
         <result column="deleted" jdbcType="BIT" property="deleted"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
         <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
@@ -23,12 +25,14 @@
     merchant_code,
     channel_code,
     borrower_code,
+    order_numb,
     real_capital,
     total_interest_ratio,
     late_interest_ratio,
     borrow_purpose,
     repayment_dt,
     term_url,
+    apply_status,
     deleted,
     gmt_modified,
     gmt_create
@@ -55,6 +59,9 @@
             <if test="borrowerCode !=null">
                 borrower_code,
             </if>
+            <if test="orderNumb !=null">
+                order_numb,
+            </if>
             <if test="realCapital !=null">
                 real_capital,
             </if>
@@ -72,6 +79,9 @@
             </if>
             <if test="termUrl !=null">
                 term_url,
+            </if>
+            <if test="applyStatus !=null">
+                apply_status,
             </if>
             <if test="deleted !=null">
                 deleted,
@@ -93,6 +103,9 @@
             <if test="borrowerCode != null">
                 #{borrowerCode,jdbcType=VARCHAR},
             </if>
+            <if test="orderNumb != null">
+                #{orderNumb,jdbcType=VARCHAR},
+            </if>
             <if test="realCapital != null">
                 #{realCapital,jdbcType=DECIMAL},
             </if>
@@ -110,6 +123,9 @@
             </if>
             <if test="termUrl != null">
                 #{termUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="applyStatus != null">
+                #{applyStatus,jdbcType=TINYINT},
             </if>
             <if test="deleted != null">
                 #{deleted,jdbcType=BIT},
@@ -135,6 +151,9 @@
             <if test="borrowerCode !=null">
                 borrower_code = #{borrowerCode,jdbcType=VARCHAR},
             </if>
+            <if test="orderNumb !=null">
+                order_numb = #{orderNumb,jdbcType=VARCHAR},
+            </if>
             <if test="realCapital !=null">
                 real_capital = #{realCapital,jdbcType=DECIMAL},
             </if>
@@ -152,6 +171,9 @@
             </if>
             <if test="termUrl !=null">
                 term_url = #{termUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="applyStatus !=null">
+                apply_status = #{applyStatus,jdbcType=TINYINT},
             </if>
             <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},
@@ -198,6 +220,9 @@
             <if test="borrowerCode !=null">
                 and borrower_code = #{borrowerCode,jdbcType=VARCHAR}
             </if>
+            <if test="orderNumb !=null">
+                and order_numb = #{orderNumb,jdbcType=VARCHAR}
+            </if>
             <if test="realCapital !=null">
                 and real_capital = #{realCapital,jdbcType=DECIMAL}
             </if>
@@ -215,6 +240,9 @@
             </if>
             <if test="termUrl !=null">
                 and term_url = #{termUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="applyStatus !=null">
+                and apply_status = #{applyStatus,jdbcType=TINYINT}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}
@@ -243,6 +271,9 @@
             <if test="borrowerCode !=null">
                 and borrower_code = #{borrowerCode,jdbcType=VARCHAR}
             </if>
+            <if test="orderNumb !=null">
+                and order_numb = #{orderNumb,jdbcType=VARCHAR}
+            </if>
             <if test="realCapital !=null">
                 and real_capital = #{realCapital,jdbcType=DECIMAL}
             </if>
@@ -260,6 +291,9 @@
             </if>
             <if test="termUrl !=null">
                 and term_url = #{termUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="applyStatus !=null">
+                and apply_status = #{applyStatus,jdbcType=TINYINT}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}

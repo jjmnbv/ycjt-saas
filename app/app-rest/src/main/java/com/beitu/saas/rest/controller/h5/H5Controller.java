@@ -34,6 +34,7 @@ import com.beitu.saas.channel.enums.ChannelErrorCodeEnum;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.utils.DateUtil;
+import com.beitu.saas.common.utils.NetworkUtil;
 import com.beitu.saas.order.client.SaasOrderApplicationService;
 import com.beitu.saas.order.domain.SaasOrderApplicationVo;
 import com.beitu.saas.order.enums.OrderStatusEnum;
@@ -51,6 +52,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -112,7 +114,7 @@ public class H5Controller {
     @RequestMapping(value = "/user/login", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "登录", response = UserLoginSuccessResponse.class)
-    public DataApiResponse<UserLoginSuccessResponse> login(@RequestBody @Valid UserLoginRequest req) {
+    public DataApiResponse<UserLoginSuccessResponse> login(@RequestBody @Valid UserLoginRequest req, HttpServletRequest request) {
         String verifyCode = redisClient.get(RedisKeyConsts.H5_SAVE_LOGIN_VERIFYCODE_KEY, req.getMobile());
         if (StringUtils.isEmpty(verifyCode)) {
             return new DataApiResponse<>(SmsErrorCodeEnum.VERIFY_CODE_FAILURE);
@@ -124,7 +126,13 @@ public class H5Controller {
         if (StringUtils.isEmpty(channelCode)) {
             return new DataApiResponse<>(ChannelErrorCodeEnum.DISABLE_CHANNEL);
         }
-        String token = borrowerApplication.login(req.getMobile(), channelCode);
+        String ip = null;
+        try {
+            ip = NetworkUtil.getIpAddress(request);
+        } catch (Exception e) {
+
+        }
+        String token = borrowerApplication.login(req.getMobile(), channelCode, req.getPhoneSystem(), ip);
         redisClient.del(RedisKeyConsts.H5_SAVE_LOGIN_VERIFYCODE_KEY, req.getMobile());
         return new DataApiResponse<>(new UserLoginSuccessResponse(token));
     }
