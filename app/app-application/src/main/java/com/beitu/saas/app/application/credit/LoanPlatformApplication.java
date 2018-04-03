@@ -95,7 +95,7 @@ public class LoanPlatformApplication {
         if (!pojo.validate()) {
             return "回调必要数据缺失";
         }
-        if (Objects.equals(pojo.getSuccess(), "true")) {
+        if (!Objects.equals(pojo.getSuccess(), "true")) {
             return "爬取失败";
         }
         // TODO: 2018/4/3 等待聚信立开启签名机制
