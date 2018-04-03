@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -21,7 +22,7 @@ public class AfterLendManagerExtendOrderRequest extends ParamsObject {
     private String orderNumb;
 
     @ApiModelProperty(value = "展期结束日期", required = true)
-    @NotBlank(message = "展期结束日期不能为空")
+    @NotNull(message = "展期结束日期不能为空")
     private Date repaymentDt;
 
     @ApiModelProperty(value = "展期利率", required = true)
