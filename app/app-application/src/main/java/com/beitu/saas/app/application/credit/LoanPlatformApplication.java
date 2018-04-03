@@ -66,11 +66,11 @@ public class LoanPlatformApplication {
         param.setTaskId(taskId);
         
         StringBuilder urlSb = new StringBuilder();
-        urlSb.append(configUtil.getApiWebPath() + "/credit/loan/platform/juxinli/crawling?");
-        urlSb.append("taskId=" + taskId + "&");
-        urlSb.append("website=" + saasLoanPlatformEnum.getWebsite() + "&");
-        urlSb.append("timestamp=" + prefixDto.getTimestamp() + "&");
-        urlSb.append("channelCode=" + channelCode);
+        urlSb.append(configUtil.getApiWebPath() + "/credit/loan/platform/juxinli/crawling?param=");
+        urlSb.append(taskId + "_");
+        urlSb.append(saasLoanPlatformEnum.getWebsite() + "_");
+        urlSb.append(prefixDto.getTimestamp() + "_");
+        urlSb.append(channelCode);
         param.setJumpUrl(urlSb.toString());
     
         LOGGER.info(urlSb.toString());
@@ -115,7 +115,18 @@ public class LoanPlatformApplication {
         return null;
     }
     
-    public String juxinliCrawlingProcess(String taskId, String website, String timestamp, String channelCode) {
+    public String juxinliCrawlingProcess(String paramString) {
+        String taskId = null;
+        String website = null;
+        String timestamp = null;
+        String channelCode = null;
+        if (paramString.contains("_")) {
+            String[] params = paramString.split("_");
+            taskId = params[0] + "_" + params[1];
+            website = params[2];
+            timestamp = params[3];
+            channelCode = params[4];
+        }
         String prefix = null;
         String userCode = null;
         if (taskId.contains("_")) {
