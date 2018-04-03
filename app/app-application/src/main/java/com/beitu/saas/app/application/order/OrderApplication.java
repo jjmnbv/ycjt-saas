@@ -597,7 +597,7 @@ public class OrderApplication {
 
         if (DateUtil.countDays(saasOrderVo.getRepaymentDt(), repaymentDt) > 0
                 || DateUtil.countDays(new Date(), repaymentDt) > 0) {
-            LOG.warn("......应还日期非法.......展期结束日期:{};订单应还日期:{}", DateUtil.getDate(repaymentDt), saasOrderVo.getRepaymentDt());
+            LOG.warn("......应还日期非法.......展期结束日期:{};订单应还日期:{}", DateUtil.getDate(repaymentDt), DateUtil.getDate(saasOrderVo.getRepaymentDt()));
             throw new ApplicationException(OrderErrorCodeEnum.ILLEGAL_REPAYMENTDATE);
         }
         OrderStatusEnum nextOrderStatus = OrderStatusEnum.TO_CONFIRM_EXTEND;

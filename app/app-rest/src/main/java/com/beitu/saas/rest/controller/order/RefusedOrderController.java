@@ -64,7 +64,6 @@ public class RefusedOrderController {
     @ApiOperation(value = "已拒订单详情查看", response = RefusedOrderDetailResponse.class)
     public DataApiResponse<RefusedOrderDetailResponse> detail(@RequestBody @Valid RefusedOrderDetailRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.updateOrderStatus(adminCode, req.getOrderNumb(), OrderStatusEnum.IN_FINAL_REVIEWER, null);
         RefusedOrderDetailResponse response = new RefusedOrderDetailResponse();
         response.setOrderNumb(req.getOrderNumb());
         return new DataApiResponse<>(response);
