@@ -6,7 +6,9 @@ import com.beitu.saas.auth.domain.MerchantContractInfoVo;
 import com.beitu.saas.auth.enums.ContractConfigTypeEnum;
 import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
 import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
+import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.handle.oss.OSSService;
+import com.beitu.saas.common.utils.OrderNoUtil;
 import com.beitu.saas.intergration.esign.EsignIntegrationService;
 import com.beitu.saas.intergration.esign.dto.AddOrganizeAccountSuccessDto;
 import com.beitu.saas.intergration.esign.dto.AddPersonAccountSuccessDto;
@@ -15,6 +17,7 @@ import com.beitu.saas.order.client.SaasOrderService;
 import com.beitu.saas.order.entity.SaasOrder;
 import com.beitu.saas.user.client.SaasUserEsignAuthorizationService;
 import com.beitu.saas.user.domain.SaasUserEsignAuthorizationVo;
+import com.fqgj.common.utils.MD5;
 import com.fqgj.common.utils.StringUtils;
 import com.fqgj.exception.common.ApplicationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +51,9 @@ public class ContractApplication {
 
     @Autowired
     private SaasOrderService<SaasOrder> saasOrderService;
+
+    @Autowired
+    private ConfigUtil configUtil;
 
     public Boolean needDoLicenseContractSign(String userCode) {
         if (saasUserEsignAuthorizationService.isSuccessAuthorization(userCode)) {
@@ -232,19 +238,40 @@ public class ContractApplication {
 
 
     private String getSealUrl(String userCode) {
-        return "";
+        StringBuilder filePath = new StringBuilder("contract/seal/");
+        if (configUtil.isServerTest()) {
+            filePath.append("test/");
+        }
+        filePath.append(userCode).append("_").append(MD5.md5(OrderNoUtil.makeOrderNum())).append(".pdf");
+        return filePath.toString();
     }
 
     private String getAuthorizationUrl(String userCode) {
-        return "";
+        StringBuilder filePath = new StringBuilder("contract/authorization/");
+        if (configUtil.isServerTest()) {
+            filePath.append("test/");
+        }
+        filePath.append(userCode).append("_").append(MD5.md5(OrderNoUtil.makeOrderNum())).append(".pdf");
+        return filePath.toString();
     }
 
     private String getLoanContractUrl(String userCode) {
-        return "";
+        StringBuilder filePath = new StringBuilder("contract/loan/");
+        if (configUtil.isServerTest()) {
+            filePath.append("test/");
+        }
+        filePath.append(userCode).append("_").append(MD5.md5(OrderNoUtil.makeOrderNum())).append(".pdf");
+        return filePath.toString();
     }
 
     private String getExtendContractUrl(String userCode) {
-        return "";
+        StringBuilder filePath = new StringBuilder("contract/extend/");
+        if (configUtil.isServerTest()) {
+            filePath.append("test/");
+        }
+        filePath.append(userCode).append("_").append(MD5.md5(OrderNoUtil.makeOrderNum())).append(".pdf");
+        return filePath.toString();
+
     }
 
 }

@@ -135,4 +135,34 @@
         where id = #{id,jdbcType=BIGINT} and final_reviewer_code is null
     </update>
 
+    <select id="selectByParams" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_order
+        where deleted = false
+        and expire_date <![CDATA[ >= ]]> NOW()
+        <if test="orderNumb !=null">
+            and order_numb = #{orderNumb,jdbcType=VARCHAR}
+        </if>
+        <if test="merchantCode !=null">
+            and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+        </if>
+        <if test="orderStatus !=null">
+            and order_status = #{orderStatus,jdbcType=SMALLINT}
+        </if>
+    </select>
+
+    <select id="selectOrderNumbByParams" resultType="java.lang.String">
+        select order_numb
+        from saas_order
+        where deleted = false
+        and expire_date <![CDATA[ >= ]]> NOW()
+        <if test="merchantCode !=null">
+            and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+        </if>
+        <if test="orderStatus !=null">
+            and order_status = #{orderStatus,jdbcType=SMALLINT}
+        </if>
+    </select>
+
 </mapper>

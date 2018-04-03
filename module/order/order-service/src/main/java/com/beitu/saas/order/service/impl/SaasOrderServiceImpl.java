@@ -173,12 +173,16 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
 
     @Override
     public List<String> listAllConfirmReceiptOrderNumbByMerchantCode(String merchantCode) {
-        return null;
+        return saasOrderDao.selectOrderNumbByParams(merchantCode, OrderStatusEnum.TO_CONFIRM_RECEIPT.getCode());
     }
 
     @Override
     public SaasOrderVo getConfirmExtendOrderByOrderNumb(String orderNumb) {
-        return null;
+        List<SaasOrder> saasOrderList = saasOrderDao.selectByParams(orderNumb, null, OrderStatusEnum.TO_CONFIRM_EXTEND.getCode());
+        if (CollectionUtils.isEmpty(saasOrderList)) {
+            return null;
+        }
+        return SaasOrderVo.convertEntityToVO(saasOrderList.get(0));
     }
 
     @Override
@@ -193,7 +197,11 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
 
     @Override
     public SaasOrderVo getConfirmReceiptOrderByOrderNumb(String orderNumb) {
-        return null;
+        List<SaasOrder> saasOrderList = saasOrderDao.selectByParams(orderNumb, null, OrderStatusEnum.TO_CONFIRM_RECEIPT.getCode());
+        if (CollectionUtils.isEmpty(saasOrderList)) {
+            return null;
+        }
+        return SaasOrderVo.convertEntityToVO(saasOrderList.get(0));
     }
 
 }
