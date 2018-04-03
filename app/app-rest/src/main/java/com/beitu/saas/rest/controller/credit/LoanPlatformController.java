@@ -92,11 +92,8 @@ public class LoanPlatformController {
     @SignIgnore
     @RequestMapping("/juxinli/crawling")
     public String juxinliCrawlingCallback(HttpServletRequest request) {
-        String taskId = request.getParameter("taskId");
-        String website = request.getParameter("website");
-        String timestamp = request.getParameter("timestamp");
-        String channelCode = request.getParameter("channelCode");
-        return loanPlatformApplication.juxinliCrawlingProcess(taskId, website, timestamp, channelCode);
+        String paramString = request.getParameter("param");
+        return loanPlatformApplication.juxinliCrawlingProcess(paramString);
     }
     
 }
