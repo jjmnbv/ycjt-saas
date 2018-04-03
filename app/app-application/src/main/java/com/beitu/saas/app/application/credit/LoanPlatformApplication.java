@@ -165,6 +165,9 @@ public class LoanPlatformApplication {
         String website = pojo.getWebsite();
         String timestamp = redisClient.get(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, userCode, website);
         LoanPlatformValidatePrefixParam validateParam = new LoanPlatformValidatePrefixParam(timestamp, userCode, website, prefix);
+        LOGGER.info("************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************");
+        LOGGER.info(JSON.toJSONString(validateParam));
+        LOGGER.info("************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************");
         if (!riskIntergrationService.validateLoanPlatformCallbackPrefix(validateParam)) {
             return Boolean.FALSE;
         }
