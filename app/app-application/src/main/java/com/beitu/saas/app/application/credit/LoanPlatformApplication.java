@@ -72,6 +72,8 @@ public class LoanPlatformApplication {
         urlSb.append("timestamp=" + prefixDto.getTimestamp() + "&");
         urlSb.append("channelCode=" + channelCode);
         param.setJumpUrl(urlSb.toString());
+    
+        LOGGER.info(urlSb.toString());
         
         LOGGER.info("得到{}借贷平台地址......taskId:{};borrowerCode:{}", saasLoanPlatformEnum.getMsg(), taskId, borrowerCode);
         LoanPlatformCrawlingDto resultDto = riskIntergrationService.loanPlatformCrawlingUrl(param);
@@ -79,6 +81,7 @@ public class LoanPlatformApplication {
             LOGGER.warn("获取{}借贷平台地址失败......taskId:{};msg:{}", saasLoanPlatformEnum.getMsg(), taskId, resultDto.getMsg());
             throw new ApplicationException("获取借贷平台地址失败,请重试");
         }
+        LOGGER.info(resultDto.getUrl());
         return resultDto.getUrl();
     }
     
