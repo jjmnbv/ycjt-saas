@@ -1,4 +1,5 @@
 package com.beitu.saas.finance.client;
+import com.beitu.saas.finance.client.enums.CreditConsumeEnum;
 import com.beitu.saas.finance.client.param.CreditHistoryQueryParam;
 import com.beitu.saas.finance.entity.SaasCreditHistoryEntity;
 import com.fqgj.common.api.Page;
@@ -18,6 +19,8 @@ public interface SaasCreditHistoryService<T extends BaseEntity> extends BaseServ
     Long getYesterdayCreditStatCredit(String merchantCode, Date yesterday);
 
     List<SaasCreditHistoryEntity> getCreditListByParam(CreditHistoryQueryParam param, Page page);
+
+    SaasCreditHistoryEntity addExpenditureCreditHistory(String merchantCode, String opName, CreditConsumeEnum creditConsumeEnum);
 
     SaasCreditHistoryEntity addExpenditureCreditHistory(String merchantCode, Long credit, String opName, String comment);
 
