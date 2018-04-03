@@ -142,7 +142,7 @@ public class LoanPlatformApplication {
         }
         redisClient.set(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, timestamp, TimeConsts.THREE_MINUTE, userCode, website);
         return "redirect:" + configUtil.getAddressURLPrefix() + configUtil.getH5AddressURLPrefix()
-                + "?channel=" + channelCode + "/formList";
+                + "?channel=" + channelCode + "#/formList";
     }
     
     private Boolean validateSign(JuxinliCallbackDataPojo pojo) {
