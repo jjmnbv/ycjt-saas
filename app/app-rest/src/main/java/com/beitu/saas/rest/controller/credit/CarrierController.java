@@ -2,7 +2,6 @@ package com.beitu.saas.rest.controller.credit;
 
 import com.alibaba.fastjson.JSON;
 import com.beitu.saas.app.annotations.SignIgnore;
-import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.application.credit.CarrierApplication;
 import com.beitu.saas.app.application.credit.vo.CarrierH5CallbackVo;
