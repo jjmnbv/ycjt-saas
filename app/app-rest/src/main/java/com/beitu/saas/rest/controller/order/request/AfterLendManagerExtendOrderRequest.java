@@ -13,8 +13,8 @@ import java.util.Date;
  * @create 2018/3/27 上午11:33
  * @description
  */
-@ApiModel(description = "贷后管理订单操作")
-public class AfterLendManagerOperateOrderRequest extends ParamsObject {
+@ApiModel(description = "贷后管理订单展期操作")
+public class AfterLendManagerExtendOrderRequest extends ParamsObject {
 
     @ApiModelProperty(value = "订单号", required = true)
     @NotBlank(message = "订单号不能为空")

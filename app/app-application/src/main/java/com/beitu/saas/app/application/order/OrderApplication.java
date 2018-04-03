@@ -603,7 +603,8 @@ public class OrderApplication {
         SaasOrder extendSaasOrder = new SaasOrder();
         BeanUtils.copyProperties(saasOrderVo, extendSaasOrder);
         extendSaasOrder.setTotalInterestRatio(extendInterestRatio);
-        extendSaasOrder.setTermUrl(contractApplication.lenderDoExtendContractSign(saasOrderVo.getMerchantCode(), null));
+//        extendSaasOrder.setTermUrl(contractApplication.lenderDoExtendContractSign(saasOrderVo.getMerchantCode(), null));
+        extendSaasOrder.setTermUrl("test");
         extendSaasOrder.setExpireDate(DateUtil.getTodayOverTime());
         if (DateUtil.countDays(new Date(), saasOrderVo.getRepaymentDt()) > 0) {
             extendSaasOrder.setCreatedDt(DateUtil.addDate(new Date(), 1));
