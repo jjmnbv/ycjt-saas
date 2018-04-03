@@ -75,6 +75,18 @@
       where merchant_code = #{merchantCode,jdbcType=VARCHAR} and deleted = false
     </select>
 
+    <select id="selectLoanStatDetailList" parameterType="java.lang.String"
+            resultType="com.beitu.saas.order.vo.LoanStateDetailVo">
+      select
+      sum(case when visible=1 then real_capital else null end) loanTotalAmount,
+      sum(case when visible=1 and destroy=1 then amount else null end) destroyTotalAmount,
+      count(distinct( case when visible=1 then borrower_code else null end)) loanPersonNum,
+      date_format(gmt_create, '%Y-%m') dateMonth
+      from saas_order_bill_detail
+      where merchant_code = #{merchantCode,jdbcType=VARCHAR} and deleted = false
+      group by  date_format(gmt_create, '%Y-%m')
+    </select>
+
 
     <select id="selectNoRepayOrder" parameterType="java.lang.String"
             resultType="com.beitu.saas.order.vo.NoRepayOrderVo">
