@@ -1,6 +1,9 @@
 package com.beitu.saas.app.enums;
 
 import com.fqgj.common.api.enums.MsgCodeEnum;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Objects;
 
 /**
  * @author linanjun
@@ -8,50 +11,50 @@ import com.fqgj.common.api.enums.MsgCodeEnum;
  * @description
  */
 public enum SaasLoanPlatformEnum implements MsgCodeEnum {
-
+    
     JIN_JIE_DAO(1, "今借到", "jinjiedao"),
     MI_FANG(2, "米房", "mifang"),
     JIE_DAI_BAO(3, "借贷宝", "jiedaibao"),
     WU_YOU_JIE_TIAO(4, "无忧借条", "wuyoujietiao");
-
+    
     private Integer code;
-
+    
     private String msg;
-
+    
     private String website;
-
+    
     SaasLoanPlatformEnum(Integer code, String msg, String website) {
         this.code = code;
         this.msg = msg;
         this.website = website;
     }
-
+    
     @Override
     public Integer getCode() {
         return code;
     }
-
+    
     public void setCode(Integer code) {
         this.code = code;
     }
-
+    
     @Override
     public String getMsg() {
         return msg;
     }
-
+    
     public void setMsg(String msg) {
         this.msg = msg;
     }
-
+    
     public String getWebsite() {
         return website;
     }
-
+    
     public void setWebsite(String website) {
         this.website = website;
     }
-
+    
     public static SaasLoanPlatformEnum getByCode(Integer code) {
         if (code == null) {
             return null;
@@ -63,5 +66,17 @@ public enum SaasLoanPlatformEnum implements MsgCodeEnum {
         }
         return null;
     }
-
+    
+    public static SaasLoanPlatformEnum getByWebsite(String website) {
+        if (StringUtils.isEmpty(website)) {
+            return null;
+        }
+        for (SaasLoanPlatformEnum enumObj : SaasLoanPlatformEnum.values()) {
+            if (Objects.equals(website, enumObj.getWebsite())) {
+                return enumObj;
+            }
+        }
+        return null;
+    }
+    
 }

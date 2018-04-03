@@ -66,12 +66,12 @@ public class LoanPlatformController {
             result = loanPlatformApplication.juxinliCallbackProcess(reqStr);
         } catch (Exception e) {
             write(response, "error");
-            LOGGER.info("************************* 聚信立回调处理失败:{} *************************", e);
+            LOGGER.warn("************************* 聚信立回调处理失败:{} *************************", e);
             return;
         }
         if (StringUtils.isNotEmpty(result)) {
             write(response, "error");
-            LOGGER.info("************************* 聚信立回调处理失败:{} *************************", result);
+            LOGGER.warn("************************* 聚信立回调处理失败:{} *************************", result);
             return;
         }
         write(response, "success");
