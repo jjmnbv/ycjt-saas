@@ -1,6 +1,7 @@
 package com.beitu.saas.order.dao;
 
 import com.beitu.saas.order.vo.LoanDataDetailVo;
+import com.beitu.saas.order.vo.LoanStateDetailVo;
 import com.beitu.saas.order.vo.NoRepayOrderVo;
 import com.beitu.saas.order.vo.OverdueOrderVo;
 import com.fqgj.common.api.Page;
@@ -27,6 +28,8 @@ public interface SaasOrderBillDetailDao extends BaseMapper<SaasOrderBillDetail> 
     List<SaasOrderBillDetail> selectByConditions(Map<String, Object> conditions);
 
     LoanDataDetailVo selectLoanDataDetail(String merchantCode);
+
+    List<LoanStateDetailVo> selectLoanStatDetailList(String merchantCode);
 
     List<NoRepayOrderVo> selectNoRepayOrder(String merchantCode, Page page);
 
