@@ -29,7 +29,7 @@ public class SaasBorrowerEmergentContactServiceImpl extends AbstractBaseService 
 
     @Override
     public int countByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb) {
-        return saasBorrowerEmergentContactDao.countH5SaveInfoByBorrowerCode(borrowerCode);
+        return saasBorrowerEmergentContactDao.countByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
     }
 
     @Override

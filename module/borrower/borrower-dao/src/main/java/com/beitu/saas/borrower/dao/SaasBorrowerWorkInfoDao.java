@@ -13,7 +13,7 @@ public interface SaasBorrowerWorkInfoDao extends BaseMapper<SaasBorrowerWorkInfo
 
     SaasBorrowerWorkInfo selectByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb);
 
-    int countH5SaveInfoByBorrowerCode(String borrowerCode);
+    int countByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb);
 
     int updateOrderNumbByBorrowerCode(String orderNumb, String borrowerCode);
 

@@ -125,7 +125,7 @@ public class CreditApplication {
                 }
                 return BorrowerInfoApplyStatusEnum.FINISHED;
             case CARRIER_AUTHENTIC:
-                if (saasBorrowerCarrierService.countByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb) == 0) {
+                if (saasBorrowerCarrierService.countByBorrowerCode(borrowerCode) == 0) {
                     return BorrowerInfoApplyStatusEnum.INCOMPLETE;
                 }
                 String value = redisClient.get(RedisKeyConsts.H5_CARRIER_CRAWLING, borrowerCode);
@@ -254,7 +254,7 @@ public class CreditApplication {
     }
 
     private void submitPersonalInfo(String borrowerCode, String orderNumb, Integer required) {
-        if (saasBorrowerPersonalInfoService.countByBorrowerCode(borrowerCode) == 0) {
+        if (saasBorrowerPersonalInfoService.countByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb) == 0) {
             if (SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
                 throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_PERSONAL_INFO);
             }
@@ -266,7 +266,7 @@ public class CreditApplication {
     }
 
     private void submitEmergentContact(String borrowerCode, String orderNumb, Integer required) {
-        if (saasBorrowerEmergentContactService.countByBorrowerCode(borrowerCode) == 0) {
+        if (saasBorrowerEmergentContactService.countByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb) == 0) {
             if (SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
                 throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_EMERGENT_CONTACT);
             }
@@ -278,7 +278,7 @@ public class CreditApplication {
     }
 
     private void submitWorkInfo(String borrowerCode, String orderNumb, Integer required) {
-        if (saasBorrowerWorkInfoService.countByBorrowerCode(borrowerCode) == 0) {
+        if (saasBorrowerWorkInfoService.countByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb) == 0) {
             if (SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
                 throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_WORK_INFO);
             }
@@ -290,7 +290,7 @@ public class CreditApplication {
     }
 
     private void submitIdentityInfo(String borrowerCode, String orderNumb, Integer required) {
-        if (saasBorrowerIdentityInfoService.countByBorrowerCode(borrowerCode) == 0) {
+        if (saasBorrowerIdentityInfoService.countByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb) == 0) {
             if (SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
                 throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_IDENTITY_INFO);
             }

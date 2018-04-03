@@ -27,10 +27,9 @@ public class SaasBorrowerWorkInfoServiceImpl extends AbstractBaseService impleme
     @Autowired
     private SaasBorrowerWorkInfoDao saasBorrowerWorkInfoDao;
 
-
     @Override
-    public int countByBorrowerCode(String borrowerCode) {
-        return saasBorrowerWorkInfoDao.countH5SaveInfoByBorrowerCode(borrowerCode);
+    public int countByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb) {
+        return saasBorrowerWorkInfoDao.countByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
     }
 
     @Override

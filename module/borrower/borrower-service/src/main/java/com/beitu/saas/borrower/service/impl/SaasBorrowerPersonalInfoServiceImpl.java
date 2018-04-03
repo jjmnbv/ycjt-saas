@@ -30,13 +30,13 @@ public class SaasBorrowerPersonalInfoServiceImpl extends AbstractBaseService imp
 
 
     @Override
-    public int countByBorrowerCode(String borrowerCode) {
-        return saasBorrowerPersonalInfoDao.countH5SaveInfoByBorrowerCode(borrowerCode);
+    public int countByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb) {
+        return saasBorrowerPersonalInfoDao.countByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
     }
 
     @Override
-    public SaasBorrowerPersonalInfo getByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb) {
-        return saasBorrowerPersonalInfoDao.selectByBorrowerCodeAndOrderNumb(borrowerCode,orderNumb);
+    public SaasBorrowerPersonalInfoVo getByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb) {
+        return SaasBorrowerPersonalInfoVo.convertEntityToVO(saasBorrowerPersonalInfoDao.selectByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb));
     }
 
     @Override

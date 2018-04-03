@@ -307,7 +307,7 @@ public class H5Controller {
 
         String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
         String orderNumb = saasOrderService.getReviewerRefuseOrderNumb(borrowerCode, channelCode);
-        SaasBorrowerIdentityInfoVo saasBorrowerIdentityInfoVo = saasBorrowerIdentityInfoService.getByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb;
+        SaasBorrowerIdentityInfoVo saasBorrowerIdentityInfoVo = saasBorrowerIdentityInfoService.getByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
 
         String prefixUrl = configUtil.getAddressURLPrefix();
         return new DataApiResponse<>(new CreditIdentityInfoResponse(saasBorrowerIdentityInfoVo, prefixUrl));
@@ -323,7 +323,7 @@ public class H5Controller {
         saasBorrowerIdentityInfo.setBorrowerCode(borrowerCode);
         String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
         String orderNumb = saasOrderService.getReviewerRefuseOrderNumb(borrowerCode, channelCode);
-        SaasBorrowerIdentityInfoVo saasBorrowerIdentityInfoVo = saasBorrowerIdentityInfoService.getByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb;
+        SaasBorrowerIdentityInfoVo saasBorrowerIdentityInfoVo = saasBorrowerIdentityInfoService.getByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
         if (saasBorrowerIdentityInfoVo == null) {
             saasBorrowerIdentityInfoService.create(saasBorrowerIdentityInfo);
         } else {

@@ -132,7 +132,7 @@ public class SaasController {
         SaasBorrowerPersonalInfo saasBorrowerPersonalInfo = new SaasBorrowerPersonalInfo();
         BeanUtils.copyProperties(req, saasBorrowerPersonalInfo);
         saasBorrowerPersonalInfo.setBorrowerCode(req.getBorrowerCode());
-        SaasBorrowerPersonalInfoVo saasBorrowerPersonalInfoVo = saasBorrowerPersonalInfoService.getByBorrowerCode(req.getBorrowerCode());
+        SaasBorrowerPersonalInfoVo saasBorrowerPersonalInfoVo = saasBorrowerPersonalInfoService.getByBorrowerCodeAndOrderNumb(req.getBorrowerCode(), null);
         if (saasBorrowerPersonalInfoVo == null) {
             saasBorrowerPersonalInfoService.create(saasBorrowerPersonalInfo);
         } else {
@@ -149,7 +149,7 @@ public class SaasController {
         SaasBorrowerIdentityInfo saasBorrowerIdentityInfo = new SaasBorrowerIdentityInfo();
         BeanUtils.copyProperties(req, saasBorrowerIdentityInfo);
         saasBorrowerIdentityInfo.setBorrowerCode(req.getBorrowerCode());
-        SaasBorrowerIdentityInfoVo saasBorrowerIdentityInfoVo = saasBorrowerIdentityInfoService.getByBorrowerCode(req.getBorrowerCode());
+        SaasBorrowerIdentityInfoVo saasBorrowerIdentityInfoVo = saasBorrowerIdentityInfoService.getByBorrowerCodeAndOrderNumb(req.getBorrowerCode(), null);
         if (saasBorrowerIdentityInfoVo == null) {
             saasBorrowerIdentityInfoService.create(saasBorrowerIdentityInfo);
         } else {
@@ -167,7 +167,7 @@ public class SaasController {
         BeanUtils.copyProperties(req, saasBorrowerWorkInfo);
         saasBorrowerWorkInfo.setBorrowerCode(req.getBorrowerCode());
         saasBorrowerWorkInfo.setCareer(req.getCareerType());
-        SaasBorrowerWorkInfoVo saasBorrowerWorkInfoVo = saasBorrowerWorkInfoService.getByBorrowerCode(req.getBorrowerCode());
+        SaasBorrowerWorkInfoVo saasBorrowerWorkInfoVo = saasBorrowerWorkInfoService.getByBorrowerCodeAndOrderNumb(req.getBorrowerCode(), null);
         if (saasBorrowerWorkInfoVo == null) {
             saasBorrowerWorkInfoService.create(saasBorrowerWorkInfo);
         } else {
@@ -185,7 +185,7 @@ public class SaasController {
         SaasBorrowerEmergentContact saasBorrowerEmergentContact = new SaasBorrowerEmergentContact();
         BeanUtils.copyProperties(req, saasBorrowerEmergentContact);
         saasBorrowerEmergentContact.setBorrowerCode(req.getBorrowerCode());
-        SaasBorrowerEmergentContactVo saasBorrowerEmergentContactVo = saasBorrowerEmergentContactService.getByBorrowerCode(req.getBorrowerCode());
+        SaasBorrowerEmergentContactVo saasBorrowerEmergentContactVo = saasBorrowerEmergentContactService.getByBorrowerCodeAndOrderNumb(req.getBorrowerCode(), null);
         if (saasBorrowerEmergentContactVo == null) {
             saasBorrowerEmergentContactService.create(saasBorrowerEmergentContact);
         } else {
@@ -208,7 +208,7 @@ public class SaasController {
         if (StringUtils.isEmpty(channelCode)) {
             return new DataApiResponse<>(ChannelErrorCodeEnum.DISABLE_CHANNEL);
         }
-        return creditApplication.submitCreditInfo(req.getBorrowerCode(), channelCode);
+        return creditApplication.submitCreditInfo(req.getBorrowerCode(), channelCode, null);
     }
 
 }

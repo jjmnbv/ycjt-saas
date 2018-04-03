@@ -17,11 +17,16 @@
         and deleted = 0
     </select>
 
-    <select id="countH5SaveInfoByBorrowerCode" resultType="java.lang.Integer">
+    <select id="countByBorrowerCodeAndOrderNumb" resultType="java.lang.Integer">
         select COUNT(1)
         from saas_borrower_personal_info
         where borrower_code = #{borrowerCode,jdbcType=VARCHAR}
-        and order_numb is null
+        <if test="orderNumb !=null">
+            and order_numb = #{orderNumb,jdbcType=VARCHAR}
+        </if>
+        <if test="orderNumb == null">
+            and order_numb is null
+        </if>
         and deleted = 0
     </select>
 

@@ -11,6 +11,7 @@ import com.beitu.saas.borrower.entity.SaasBorrowerWorkInfo;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.utils.identityNumber.vo.IdcardInfoExtractor;
 import com.beitu.saas.order.client.SaasOrderApplicationService;
+import com.beitu.saas.order.domain.SaasOrderApplicationVo;
 import com.fqgj.common.utils.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +57,13 @@ public class BorrowerBaseInfoApplication {
     private SaasBorrowerLoginLogService saasBorrowerLoginLogService;
 
     public BorrowerOrderApplicationVo getUserOrderApplicationVo(String borrowerCode, String orderNumb) {
-
+        SaasOrderApplicationVo saasOrderApplicationVo = saasOrderApplicationService.getByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
+        if (saasOrderApplicationVo == null) {
+            return null;
+        }
+        BorrowerOrderApplicationVo borrowerOrderApplicationVo = new BorrowerOrderApplicationVo();
+        BeanUtils.copyProperties(saasOrderApplicationVo, borrowerOrderApplicationVo);
+        return borrowerOrderApplicationVo;
     }
 
     public BorrowerPersonalInfoVo getUserPersonalInfoVo(String borrowerCode, String orderNumb) {
