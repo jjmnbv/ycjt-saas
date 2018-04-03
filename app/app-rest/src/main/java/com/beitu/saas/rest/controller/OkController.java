@@ -51,8 +51,7 @@ public class OkController {
 //        LoanPlatformCrawlingDto dto = riskIntergrationService.loanPlatformCrawlingUrl(param);
 //        return JSON.toJSONString(dto);
         
-        LoanPlatformQueryParam param = new LoanPlatformQueryParam();
-        param.setToken("964e45dd5f984d6ea2a2f4546973f8e9");
+        LoanPlatformQueryParam param = new LoanPlatformQueryParam("964e45dd5f984d6ea2a2f4546973f8e9");
         LoanPlatformQueryDto dto = riskIntergrationService.loanPlatformQuery(param);
         return JSON.toJSONString(dto);
     }
