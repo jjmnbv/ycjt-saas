@@ -16,6 +16,10 @@ public class SaasBorrowerRealInfoVo implements ResponseData, Serializable {
     private Long saasBorrowerRealInfoId;
 
     /**
+     * 机构CODE
+     */
+    private String merchantCode;
+    /**
      * 借款人CODE
      */
     private String borrowerCode;
@@ -35,6 +39,14 @@ public class SaasBorrowerRealInfoVo implements ResponseData, Serializable {
      * 用户籍贯
      */
     private String nativePlace;
+
+    public String getMerchantCode() {
+        return merchantCode;
+    }
+
+    public void setMerchantCode(String merchantCode) {
+        this.merchantCode = merchantCode;
+    }
 
     public Long getSaasBorrowerRealInfoId() {
         return saasBorrowerRealInfoId;

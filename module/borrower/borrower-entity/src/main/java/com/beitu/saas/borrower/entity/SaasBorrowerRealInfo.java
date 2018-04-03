@@ -4,11 +4,15 @@ import com.fqgj.common.entity.BaseEntity;
 
 /**
  * User: jungle
- * Date: 2018-03-22
- * Time: 20:25:59.889
+ * Date: 2018-04-03
+ * Time: 23:06:30.647
  * TableDesc:SAAS借款人实名信息表
  */
 public class SaasBorrowerRealInfo extends BaseEntity {
+    /**
+     * 机构CODE
+     */
+    private String merchantCode;
     /**
      * 借款人CODE
      */
@@ -30,6 +34,15 @@ public class SaasBorrowerRealInfo extends BaseEntity {
      */
     private String nativePlace;
 
+
+    public String getMerchantCode() {
+        return this.merchantCode;
+    }
+
+    public SaasBorrowerRealInfo setMerchantCode(String merchantCode) {
+        this.merchantCode = merchantCode;
+        return this;
+    }
 
     public String getBorrowerCode() {
         return this.borrowerCode;

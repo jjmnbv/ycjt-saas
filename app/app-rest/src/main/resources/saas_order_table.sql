@@ -155,6 +155,7 @@ CREATE TABLE `saas_borrower_token` (
 DROP TABLE IF EXISTS `saas_borrower_real_info`;
 CREATE TABLE `saas_borrower_real_info` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '表ID',
+  `merchant_code` varchar(32) NOT NULL COMMENT '机构CODE',
   `borrower_code` varchar(32) NOT NULL COMMENT '借款人CODE',
   `name` varchar(64) NOT NULL COMMENT '用户实名',
   `identity_code` varchar(32) NOT NULL COMMENT '用户身份证号码',
@@ -164,7 +165,8 @@ CREATE TABLE `saas_borrower_real_info` (
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后修改时间',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`),
-  KEY `idx_borrower_code` (`borrower_code`)
+  KEY `idx_merchant_code` (`merchant_code`),
+  KEY `idy_borrower_code` (`borrower_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='SAAS借款人实名信息表';
 
 DROP TABLE IF EXISTS `saas_borrower_personal_info`;
