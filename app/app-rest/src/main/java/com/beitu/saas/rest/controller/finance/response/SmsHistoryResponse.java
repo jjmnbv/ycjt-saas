@@ -50,6 +50,8 @@ public class SmsHistoryResponse {
 
     class SmsHistoryItem {
 
+        private Long id;
+
         @ApiModelProperty("0：支出，1：收入")
         private Integer opType;
 
@@ -67,6 +69,14 @@ public class SmsHistoryResponse {
 
         @ApiModelProperty("号码")
         private String sendPhone;
+
+        public Long getId() {
+            return id;
+        }
+
+        public void setId(Long id) {
+            this.id = id;
+        }
 
         public Integer getOpType() {
             return opType;
