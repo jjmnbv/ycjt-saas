@@ -143,13 +143,11 @@ public class ContractApplication {
         saasUserEsignAuthorizationVo.setAccountId(accountId);
         saasUserEsignAuthorizationVo.setSealUrl(sealUrl);
         saasUserEsignAuthorizationVo.setSuccess(Boolean.FALSE);
-        try {
+        if (StringUtils.isNotEmpty(content)) {
             String authorizationUrl = ossService.uploadFile(getAuthorizationUrl(userCode), content);
             saasUserEsignAuthorizationVo.setAuthorizationUrl(authorizationUrl);
             saasUserEsignAuthorizationVo.setAuthorizationTime(new Date());
             saasUserEsignAuthorizationVo.setSuccess(Boolean.TRUE);
-        } catch (Exception e) {
-
         }
         saasUserEsignAuthorizationService.create(saasUserEsignAuthorizationVo);
     }

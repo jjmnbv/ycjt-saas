@@ -16,7 +16,7 @@ public class BorrowerWorkInfoVo implements ResponseData {
      * 职业
      */
     @ApiModelProperty(value = "职业")
-    private Integer careerType;
+    private String career;
     /**
      * 月收入
      */
@@ -38,12 +38,12 @@ public class BorrowerWorkInfoVo implements ResponseData {
     @ApiModelProperty(value = "公司地址")
     private String companyDetailAddress;
 
-    public Integer getCareerType() {
-        return careerType;
+    public String getCareer() {
+        return career;
     }
 
-    public void setCareerType(Integer careerType) {
-        this.careerType = careerType;
+    public void setCareer(String career) {
+        this.career = career;
     }
 
     public Integer getSalary() {

@@ -12,6 +12,17 @@
     <artifactId>app-intergration</artifactId>
     <dependencies>
         <dependency>
+            <groupId>com.fqgj</groupId>
+            <artifactId>common</artifactId>
+            <version>RELEASE</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.bouncycastle</groupId>
+                    <artifactId>bcprov-jdk15on</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
             <groupId>com.beitu.saas</groupId>
             <artifactId>common</artifactId>
             <version>0.1</version>

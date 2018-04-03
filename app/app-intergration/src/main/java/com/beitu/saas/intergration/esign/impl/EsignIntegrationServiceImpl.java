@@ -175,15 +175,15 @@ public class EsignIntegrationServiceImpl implements EsignIntegrationService {
         // 签章类型：关键字签章
         SignPDFStreamBean signPDFStreamBean = new SignPDFStreamBean();
         signPDFStreamBean.setStream(FileHelper.getBytes(licenseContractSignParam.getSrcPdf()));
-        SignType signType = SignType.Key;
-        PosBean posBean = setKeyPosBean("丙方：", 260, -35, 160);
+        SignType signType = SignType.Single;
+        PosBean posBean = setXYPosBean("1", 100, 250, 140);
         SelfSignService selfSignService = SelfSignServiceFactory.instance();
         FileDigestSignResult platformSignResult = selfSignService.localSignPdf(signPDFStreamBean, posBean, sealId, signType);
         if (0 != platformSignResult.getErrCode()) {
             LOGGER.error("平台自身PDF摘要签署（文件流）失败，errCode=" + platformSignResult.getErrCode() + " msg=" + platformSignResult.getMsg());
             return null;
         }
-        posBean = setKeyPosBean("乙方：", 200, 5, 60);
+        posBean = setXYPosBean("1", 360, 250, 140);
         signPDFStreamBean.setStream(platformSignResult.getStream());
         UserSignService userSignService = UserSignServiceFactory.instance();
         FileDigestSignResult finalResult = userSignService.localSignPDF(licenseContractSignParam.getUserAccountId(), licenseContractSignParam.getUserSealData(), signPDFStreamBean, posBean, signType);
@@ -205,6 +205,21 @@ public class EsignIntegrationServiceImpl implements EsignIntegrationService {
         // 签署位置X坐标，以关键字所在位置为原点进行偏移，默认值为0，控制横向移动距离，单位为px
         posBean.setPosX(x);
         // 签署位置Y坐标，以关键字所在位置为原点进行偏移，默认值为0，控制纵向移动距离，单位为px
+        posBean.setPosY(y);
+        // 印章展现宽度，将以此宽度对印章图片做同比缩放。详细查阅接口文档的15 PosBean描述
+        posBean.setWidth(width);
+        return posBean;
+    }
+
+    public static PosBean setXYPosBean(String page, int x, int y, int width) {
+        PosBean posBean = new PosBean();
+        // 定位类型，0-坐标定位，1-关键字定位，默认0，若选择关键字定位，签署类型(signType)必须指定为关键字签署才会生效。
+        posBean.setPosType(0);
+        // 签署页码，若为多页签章，支持页码格式“1-3,5,8“，若为坐标定位时，不可空
+        posBean.setPosPage(page);
+        // 签署位置X坐标，默认值为0，以pdf页面的左下角作为原点，控制横向移动距离，单位为px
+        posBean.setPosX(x);
+        // 签署位置Y坐标，默认值为0，以pdf页面的左下角作为原点，控制纵向移动距离，单位为px
         posBean.setPosY(y);
         // 印章展现宽度，将以此宽度对印章图片做同比缩放。详细查阅接口文档的15 PosBean描述
         posBean.setWidth(width);
