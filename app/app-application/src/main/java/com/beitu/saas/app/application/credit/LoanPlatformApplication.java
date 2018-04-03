@@ -167,18 +167,19 @@ public class LoanPlatformApplication {
     }
     
     private String pollingRedisTimestamp(String userCode, String website) {
-        Integer cnt = 0;
         String timestamp = null;
-        while (cnt < 20 || StringUtils.isEmpty(timestamp)) {
+        for (int i = 0; i < 40; i++) {
             try {
                 Thread.sleep(50);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             timestamp = redisClient.get(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, userCode, website);
-            cnt++;
+            if (StringUtils.isNotEmpty(timestamp)) {
+                LOGGER.info("polling for " + i + "times!!!");
+                break;
+            }
         }
-        LOGGER.info("polling for " + cnt + "times!!!");
         return timestamp;
     }
 }
