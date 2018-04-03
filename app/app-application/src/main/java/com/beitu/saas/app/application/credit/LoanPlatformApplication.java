@@ -157,7 +157,17 @@ public class LoanPlatformApplication {
             userCode = prefixAndUserCode[1];
         }
         String website = pojo.getWebsite();
-        String timestamp = redisClient.get(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, userCode, website);
+        Integer cnt = 0;
+        String timestamp = null;
+        while (cnt < 20 || StringUtils.isNotEmpty(timestamp)) {
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            timestamp = redisClient.get(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, userCode, website);
+            cnt++;
+        }
         LoanPlatformValidatePrefixParam validateParam = new LoanPlatformValidatePrefixParam(timestamp, userCode, website, prefix);
         if (!riskIntergrationService.validateLoanPlatformCallbackPrefix(validateParam)) {
             LOGGER.info(JSON.toJSONString(validateParam));
