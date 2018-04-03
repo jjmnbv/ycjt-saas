@@ -232,6 +232,9 @@ public class H5Controller {
         if (saasH5ChannelVo == null) {
             throw new ApplicationException(ChannelErrorCodeEnum.DISABLE_CHANNEL);
         }
+        if (contractApplication.needDoLicenseContractSign(borrowerCode)) {
+            contractApplication.doLicenseContractSign(borrowerCode);
+        }
         SaasOrderApplicationVo addOrderApplication = new SaasOrderApplicationVo();
         addOrderApplication.setBorrowerCode(borrowerCode);
         addOrderApplication.setChannelCode(saasH5ChannelVo.getChannelCode());
