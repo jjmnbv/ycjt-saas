@@ -14,7 +14,6 @@
         <result column="borrow_purpose" jdbcType="VARCHAR" property="borrowPurpose"/>
         <result column="repayment_dt" jdbcType="DATE" property="repaymentDt"/>
         <result column="term_url" jdbcType="VARCHAR" property="termUrl"/>
-        <result column="apply_status" jdbcType="TINYINT" property="applyStatus"/>
         <result column="deleted" jdbcType="BIT" property="deleted"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
         <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
@@ -32,7 +31,6 @@
     borrow_purpose,
     repayment_dt,
     term_url,
-    apply_status,
     deleted,
     gmt_modified,
     gmt_create
@@ -80,9 +78,6 @@
             <if test="termUrl !=null">
                 term_url,
             </if>
-            <if test="applyStatus !=null">
-                apply_status,
-            </if>
             <if test="deleted !=null">
                 deleted,
             </if>
@@ -123,9 +118,6 @@
             </if>
             <if test="termUrl != null">
                 #{termUrl,jdbcType=VARCHAR},
-            </if>
-            <if test="applyStatus != null">
-                #{applyStatus,jdbcType=TINYINT},
             </if>
             <if test="deleted != null">
                 #{deleted,jdbcType=BIT},
@@ -171,9 +163,6 @@
             </if>
             <if test="termUrl !=null">
                 term_url = #{termUrl,jdbcType=VARCHAR},
-            </if>
-            <if test="applyStatus !=null">
-                apply_status = #{applyStatus,jdbcType=TINYINT},
             </if>
             <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},
@@ -241,9 +230,6 @@
             <if test="termUrl !=null">
                 and term_url = #{termUrl,jdbcType=VARCHAR}
             </if>
-            <if test="applyStatus !=null">
-                and apply_status = #{applyStatus,jdbcType=TINYINT}
-            </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}
             </if>
@@ -291,9 +277,6 @@
             </if>
             <if test="termUrl !=null">
                 and term_url = #{termUrl,jdbcType=VARCHAR}
-            </if>
-            <if test="applyStatus !=null">
-                and apply_status = #{applyStatus,jdbcType=TINYINT}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}

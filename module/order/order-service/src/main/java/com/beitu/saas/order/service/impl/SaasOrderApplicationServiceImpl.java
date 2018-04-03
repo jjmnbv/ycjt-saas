@@ -32,51 +32,25 @@ public class SaasOrderApplicationServiceImpl extends AbstractBaseService impleme
     private SaasOrderApplicationDao saasOrderApplicationDao;
 
     @Override
-    public SaasOrderApplicationVo getByBorrowerCode(String borrowerCode) {
-        return SaasOrderApplicationVo.convertEntityToVO(saasOrderApplicationDao.selectByBorrowerCode(borrowerCode));
-    }
-
-    @Override
-    public SaasOrderApplicationVo getByBorrowerCodeAndChannelCode(String borrowerCode, String channelCode) {
-        List<SaasOrderApplication> saasOrderApplicationList = saasOrderApplicationDao.selectByParams(new HashMap<String, Object>(4) {{
-            put("borrowerCode", borrowerCode);
-            put("channelCode", channelCode);
-            put("applyStatus", OrderApplyStatusMsgEnum.REVIEWER_REJECT.getCode());
-            put("deleted", Boolean.FALSE);
-        }});
-        if (CollectionUtils.isEmpty(saasOrderApplicationList)) {
-            return null;
-        }
-        return SaasOrderApplicationVo.convertEntityToVO(saasOrderApplicationList.get(0));
-    }
-
-    @Override
     public SaasOrderApplication save(SaasOrderApplicationVo saasOrderApplicationVo) {
         SaasOrderApplication saasOrderApplication = SaasOrderApplicationVo.convertVOToEntity(saasOrderApplicationVo);
-        List<SaasOrderApplication> saasOrderApplicationList = saasOrderApplicationDao.selectByParams(new HashMap<String, Object>(4) {{
-            put("borrowerCode", saasOrderApplicationVo.getBorrowerCode());
-            put("deleted", Boolean.FALSE);
-        }});
-        if (CollectionUtils.isEmpty(saasOrderApplicationList)) {
+        SaasOrderApplication oldSaasOrderApplication = saasOrderApplicationDao.selectByBorrowerCodeAndOrderNumb(saasOrderApplicationVo.getBorrowerCode(), saasOrderApplicationVo.getOrderNumb());
+        if (oldSaasOrderApplication == null) {
             return saasOrderApplicationDao.insert(saasOrderApplication);
         }
-        saasOrderApplication.setId(saasOrderApplicationList.get(0).getId());
+        saasOrderApplication.setId(oldSaasOrderApplication.getId());
         saasOrderApplicationDao.updateByPrimaryKey(saasOrderApplication);
         return saasOrderApplication;
     }
 
     @Override
     public SaasOrderApplicationVo getByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb) {
-        List<SaasOrderApplication> saasOrderApplicationList = saasOrderApplicationDao.selectByParams(new HashMap<String, Object>(4) {{
-            put("borrowerCode", borrowerCode);
-            put("orderNumb", orderNumb);
-            put("applyStatus", OrderApplyStatusMsgEnum.SUBMIT.getCode());
-            put("deleted", Boolean.FALSE);
-        }});
-        if (CollectionUtils.isEmpty(saasOrderApplicationList)) {
-            return null;
-        }
-        return SaasOrderApplicationVo.convertEntityToVO(saasOrderApplicationList.get(0));
+        return SaasOrderApplicationVo.convertEntityToVO(saasOrderApplicationDao.selectByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb));
+    }
+
+    @Override
+    public Boolean updateOrderNumbByBorrowerCode(String orderNumb, String borrowerCode) {
+        return saasOrderApplicationDao.updateOrderNumbByBorrowerCode(orderNumb, borrowerCode) > 0;
     }
 
 }

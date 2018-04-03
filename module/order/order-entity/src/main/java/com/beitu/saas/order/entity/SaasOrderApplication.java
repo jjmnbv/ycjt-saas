@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * User: jungle
  * Date: 2018-04-03
- * Time: 16:49:32.668
+ * Time: 19:26:04.836
  * TableDesc:SAAS订单申请表
  */
 public class SaasOrderApplication extends BaseEntity {
@@ -52,10 +52,6 @@ public class SaasOrderApplication extends BaseEntity {
      * 借款协议URL地址
      */
     private String termUrl;
-    /**
-     * 申请状态(1未提交，2提交，3审核驳回)
-     */
-    private Integer applyStatus;
 
 
     public String getMerchantCode() {
@@ -145,15 +141,6 @@ public class SaasOrderApplication extends BaseEntity {
 
     public SaasOrderApplication setTermUrl(String termUrl) {
         this.termUrl = termUrl;
-        return this;
-    }
-
-    public Integer getApplyStatus() {
-        return this.applyStatus;
-    }
-
-    public SaasOrderApplication setApplyStatus(Integer applyStatus) {
-        this.applyStatus = applyStatus;
         return this;
     }
 }

@@ -57,10 +57,8 @@ public class SaasOrderApplicationVo implements ResponseData, Serializable {
      * 借款协议URL地址
      */
     private String termUrl;
-    /**
-     * 申请状态(1未提交，2提交，3审核驳回)
-     */
-    private Integer applyStatus;
+
+    private Date gmtCreate;
 
     public Long getSaasOrderApplicationId() {
         return saasOrderApplicationId;
@@ -151,14 +149,13 @@ public class SaasOrderApplicationVo implements ResponseData, Serializable {
         this.termUrl = termUrl;
     }
 
-    public Integer getApplyStatus() {
-        return this.applyStatus;
+    public Date getGmtCreate() {
+        return gmtCreate;
     }
 
-    public void setApplyStatus(Integer applyStatus) {
-        this.applyStatus = applyStatus;
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
     }
-
 
     public static SaasOrderApplicationVo convertEntityToVO(SaasOrderApplication saasOrderApplication) {
         if (saasOrderApplication == null) {

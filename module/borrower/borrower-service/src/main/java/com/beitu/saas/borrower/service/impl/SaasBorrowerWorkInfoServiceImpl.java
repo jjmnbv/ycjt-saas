@@ -27,11 +27,6 @@ public class SaasBorrowerWorkInfoServiceImpl extends AbstractBaseService impleme
     @Autowired
     private SaasBorrowerWorkInfoDao saasBorrowerWorkInfoDao;
 
-    @Override
-    public SaasBorrowerWorkInfoVo getByBorrowerCode(String borrowerCode) {
-        SaasBorrowerWorkInfo saasBorrowerWorkInfo = saasBorrowerWorkInfoDao.selectH5SaveInfoByBorrowerCode(borrowerCode);
-        return SaasBorrowerWorkInfoVo.convertEntityToVO(saasBorrowerWorkInfo);
-    }
 
     @Override
     public int countByBorrowerCode(String borrowerCode) {
@@ -40,15 +35,7 @@ public class SaasBorrowerWorkInfoServiceImpl extends AbstractBaseService impleme
 
     @Override
     public SaasBorrowerWorkInfoVo getByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb) {
-        List<SaasBorrowerWorkInfo> saasBorrowerWorkInfoList = saasBorrowerWorkInfoDao.selectByParams(new HashMap<String, Object>(4) {{
-            put("borrowerCode", borrowerCode);
-            put("orderNumb", orderNumb);
-            put("deleted", Boolean.FALSE);
-        }});
-        if (CollectionUtils.isEmpty(saasBorrowerWorkInfoList)) {
-            return null;
-        }
-        return SaasBorrowerWorkInfoVo.convertEntityToVO(saasBorrowerWorkInfoList.get(0));
+        return SaasBorrowerWorkInfoVo.convertEntityToVO(saasBorrowerWorkInfoDao.selectByBorrowerCodeAndOrderNumb(borrowerCode,orderNumb));
     }
 
     @Override

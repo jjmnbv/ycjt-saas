@@ -11,14 +11,14 @@ CREATE TABLE `saas_order_application` (
   `borrow_purpose` varchar(32) DEFAULT NULL COMMENT '借款意图',
   `repayment_dt` date NOT NULL COMMENT '账单应还日',
   `term_url` varchar(256) DEFAULT NULL COMMENT '借款协议URL地址',
-  `apply_status` tinyint(4) DEFAULT 1 COMMENT '申请状态(1未提交，2提交，3审核驳回)',
   `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后修改时间',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`),
   KEY `idx_merchant_code` (`merchant_code`),
   KEY `idx_channel_code` (`channel_code`),
-  KEY `idy_borrower_code` (`borrower_code`)
+  KEY `idy_borrower_code` (`borrower_code`),
+  KEY `idy_order_numb` (`order_numb`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='SAAS订单申请表';
 
 DROP TABLE IF EXISTS `saas_order`;

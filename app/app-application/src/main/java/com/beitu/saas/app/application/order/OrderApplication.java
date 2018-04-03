@@ -12,6 +12,7 @@ import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.consts.ChannelConsts;
 import com.beitu.saas.common.utils.DateUtil;
+import com.beitu.saas.common.utils.StringUtil;
 import com.beitu.saas.finance.client.SaasMerchantBalanceInfoService;
 import com.beitu.saas.finance.client.SaasMerchantCreditInfoService;
 import com.beitu.saas.finance.client.SaasMerchantSmsInfoService;
@@ -96,7 +97,7 @@ public class OrderApplication {
     private ContractApplication contractApplication;
 
     public BorrowerOrderApplyStatusEnum getOrderApplyStatus(String borrowerCode, String channelCode) {
-        if (saasOrderService.isReviewRefuse(borrowerCode, channelCode)) {
+        if (StringUtils.isNotEmpty(saasOrderService.getReviewerRefuseOrderNumb(borrowerCode, channelCode))) {
             return BorrowerOrderApplyStatusEnum.REFUSE;
         } else if (saasOrderService.isReviewing(borrowerCode, channelCode)) {
             return BorrowerOrderApplyStatusEnum.REVIEWING;

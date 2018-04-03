@@ -1,6 +1,7 @@
 package com.beitu.saas.borrower.client;
 
 import com.beitu.saas.borrower.domain.SaasBorrowerPersonalInfoVo;
+import com.beitu.saas.borrower.entity.SaasBorrowerPersonalInfo;
 import com.fqgj.common.base.BaseService;
 import com.fqgj.common.entity.BaseEntity;
 
@@ -11,11 +12,9 @@ import com.fqgj.common.entity.BaseEntity;
  */
 public interface SaasBorrowerPersonalInfoService<T extends BaseEntity> extends BaseService<T> {
 
-    SaasBorrowerPersonalInfoVo getByBorrowerCode(String borrowerCode);
-
     int countByBorrowerCode(String borrowerCode);
 
-    SaasBorrowerPersonalInfoVo getByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb);
+    SaasBorrowerPersonalInfo getByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb);
 
     Boolean updateOrderNumbByBorrowerCode(String orderNumb, String borrowerCode);
 

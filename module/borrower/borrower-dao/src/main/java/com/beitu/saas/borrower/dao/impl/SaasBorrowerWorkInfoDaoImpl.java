@@ -18,8 +18,11 @@ import java.util.Map;
 public class SaasBorrowerWorkInfoDaoImpl extends AbstractBaseMapper<SaasBorrowerWorkInfo> implements SaasBorrowerWorkInfoDao {
 
     @Override
-    public SaasBorrowerWorkInfo selectH5SaveInfoByBorrowerCode(String borrowerCode) {
-        return this.getSqlSession().selectOne(this.getStatement(".selectH5SaveInfoByBorrowerCode"), borrowerCode);
+    public SaasBorrowerWorkInfo selectByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb) {
+        Map<String, Object> params = new HashMap<>(4);
+        params.put("orderNumb", orderNumb);
+        params.put("borrowerCode", borrowerCode);
+        return this.getSqlSession().selectOne(this.getStatement(".selectH5SaveInfoByBorrowerCode"), params);
     }
 
     @Override

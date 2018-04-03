@@ -28,27 +28,14 @@ public class SaasBorrowerEmergentContactServiceImpl extends AbstractBaseService 
     private SaasBorrowerEmergentContactDao saasBorrowerEmergentContactDao;
 
     @Override
-    public SaasBorrowerEmergentContactVo getByBorrowerCode(String borrowerCode) {
-        SaasBorrowerEmergentContact saasBorrowerEmergentContact = saasBorrowerEmergentContactDao.selectH5SaveInfoByBorrowerCode(borrowerCode);
-        return SaasBorrowerEmergentContactVo.convertEntityToVO(saasBorrowerEmergentContact);
-    }
-
-    @Override
-    public int countByBorrowerCode(String borrowerCode) {
+    public int countByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb) {
         return saasBorrowerEmergentContactDao.countH5SaveInfoByBorrowerCode(borrowerCode);
     }
 
     @Override
     public SaasBorrowerEmergentContactVo getByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb) {
-        List<SaasBorrowerEmergentContact> saasBorrowerEmergentContactList = saasBorrowerEmergentContactDao.selectByParams(new HashMap<String, Object>(4) {{
-            put("borrowerCode", borrowerCode);
-            put("orderNumb", orderNumb);
-            put("deleted", Boolean.FALSE);
-        }});
-        if (CollectionUtils.isEmpty(saasBorrowerEmergentContactList)) {
-            return null;
-        }
-        return SaasBorrowerEmergentContactVo.convertEntityToVO(saasBorrowerEmergentContactList.get(0));
+        SaasBorrowerEmergentContact saasBorrowerEmergentContact = saasBorrowerEmergentContactDao.selectByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
+        return SaasBorrowerEmergentContactVo.convertEntityToVO(saasBorrowerEmergentContact);
     }
 
     @Override
