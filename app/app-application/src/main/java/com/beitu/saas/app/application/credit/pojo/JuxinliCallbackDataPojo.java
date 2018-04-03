@@ -75,8 +75,10 @@ public class JuxinliCallbackDataPojo {
         if (StringUtils.isEmpty(this.taskId) ||
                 StringUtils.isEmpty(this.token) ||
                 StringUtils.isEmpty(this.success) ||
-                StringUtils.isEmpty(this.website) ||
-                StringUtils.isEmpty(this.sign)) {
+                StringUtils.isEmpty(this.website)
+//                ||
+//                StringUtils.isEmpty(this.sign)
+                ) {
             return Boolean.FALSE;
         }
         
