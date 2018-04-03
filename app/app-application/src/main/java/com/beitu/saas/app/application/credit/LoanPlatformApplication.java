@@ -160,7 +160,6 @@ public class LoanPlatformApplication {
         String timestamp = pollingRedisTimestamp(userCode, website);
         LoanPlatformValidatePrefixParam validateParam = new LoanPlatformValidatePrefixParam(timestamp, userCode, website, prefix);
         if (!riskIntergrationService.validateLoanPlatformCallbackPrefix(validateParam)) {
-            LOGGER.info(JSON.toJSONString(validateParam));
             return Boolean.FALSE;
         }
         redisClient.del(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, userCode, website);
@@ -179,6 +178,7 @@ public class LoanPlatformApplication {
             timestamp = redisClient.get(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, userCode, website);
             cnt++;
         }
+        LOGGER.info("polling for " + cnt + "times!!!");
         return timestamp;
     }
 }
