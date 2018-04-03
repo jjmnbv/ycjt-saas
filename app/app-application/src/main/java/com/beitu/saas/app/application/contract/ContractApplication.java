@@ -242,7 +242,7 @@ public class ContractApplication {
         if (configUtil.isServerTest()) {
             filePath.append("test/");
         }
-        filePath.append(userCode).append("_").append(MD5.md5(OrderNoUtil.makeOrderNum())).append(".pdf");
+        filePath.append(userCode).append("/").append(MD5.md5(OrderNoUtil.makeOrderNum()));
         return filePath.toString();
     }
 
