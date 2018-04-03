@@ -157,9 +157,20 @@ public class LoanPlatformApplication {
             userCode = prefixAndUserCode[1];
         }
         String website = pojo.getWebsite();
+        String timestamp = pollingRedisTimestamp(userCode, website);
+        LoanPlatformValidatePrefixParam validateParam = new LoanPlatformValidatePrefixParam(timestamp, userCode, website, prefix);
+        if (!riskIntergrationService.validateLoanPlatformCallbackPrefix(validateParam)) {
+            LOGGER.info(JSON.toJSONString(validateParam));
+            return Boolean.FALSE;
+        }
+        redisClient.del(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, userCode, website);
+        return Boolean.TRUE;
+    }
+    
+    private String pollingRedisTimestamp(String userCode, String website) {
         Integer cnt = 0;
         String timestamp = null;
-        while (cnt < 20 || StringUtils.isNotEmpty(timestamp)) {
+        while (cnt < 20 || StringUtils.isEmpty(timestamp)) {
             try {
                 Thread.sleep(50);
             } catch (InterruptedException e) {
@@ -168,12 +179,6 @@ public class LoanPlatformApplication {
             timestamp = redisClient.get(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, userCode, website);
             cnt++;
         }
-        LoanPlatformValidatePrefixParam validateParam = new LoanPlatformValidatePrefixParam(timestamp, userCode, website, prefix);
-        if (!riskIntergrationService.validateLoanPlatformCallbackPrefix(validateParam)) {
-            LOGGER.info(JSON.toJSONString(validateParam));
-            return Boolean.FALSE;
-        }
-        redisClient.del(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, userCode, website);
-        return Boolean.TRUE;
+        return timestamp;
     }
 }
