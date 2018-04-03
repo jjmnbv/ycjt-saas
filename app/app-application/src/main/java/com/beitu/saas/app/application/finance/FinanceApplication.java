@@ -15,16 +15,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class FinanceApplication {
 
-    @Autowired
-    private SaasCreditHistoryService saasCreditHistoryService;
-
-    @Autowired
-    private SaasMerchantCreditInfoService saasMerchantCreditInfoService;
-
-    @Transactional(rollbackFor = Exception.class)
-    public Boolean consumeCredit(String merchantCode, String opName, CreditConsumeEnum creditConsumeEnum) {
-        Boolean success = saasMerchantCreditInfoService.decrease(merchantCode, creditConsumeEnum.getNum().longValue());
-        saasCreditHistoryService.addExpenditureCreditHistory(merchantCode, creditConsumeEnum.getNum().longValue(), opName, creditConsumeEnum.getDesc());
-        return success;
-    }
+//    @Autowired
+//    private SaasCreditHistoryService saasCreditHistoryService;
+//
+//    @Autowired
+//    private SaasMerchantCreditInfoService saasMerchantCreditInfoService;
+//
+//    @Transactional(rollbackFor = Exception.class)
+//    public Boolean consumeCredit(String merchantCode, String opName, CreditConsumeEnum creditConsumeEnum) {
+//        Boolean success = saasMerchantCreditInfoService.decrease(merchantCode, creditConsumeEnum.getNum().longValue());
+//        saasCreditHistoryService.addExpenditureCreditHistory(merchantCode, creditConsumeEnum.getNum().longValue(), opName, creditConsumeEnum.getDesc());
+//        return success;
+//    }
 }
