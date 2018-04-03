@@ -78,10 +78,10 @@
     <select id="selectLoanStatDetailList" parameterType="java.lang.String"
             resultType="com.beitu.saas.order.vo.LoanStateDetailVo">
       select
-      sum(case when visible=1 then real_capital else null end) loanTotalAmount,
-      sum(case when visible=1 and destroy=1 then amount else null end) destroyTotalAmount,
-      count(distinct( case when visible=1 then borrower_code else null end)) loanPersonNum,
-      date_format(gmt_create, '%Y-%m') dateMonth
+      sum(case when visible=1 then real_capital else null end) monthLoanTotalAmount,
+      sum(case when visible=1 and destroy=1 then amount else null end) monthDestroyTotalAmount,
+      count(distinct( case when visible=1 then borrower_code else null end)) monthLoanPersonNum,
+      date_format(gmt_create, '%Y-%m') `month`
       from saas_order_bill_detail
       where merchant_code = #{merchantCode,jdbcType=VARCHAR} and deleted = false
       group by  date_format(gmt_create, '%Y-%m')
@@ -90,7 +90,7 @@
 
     <select id="selectNoRepayOrder" parameterType="java.lang.String"
             resultType="com.beitu.saas.order.vo.NoRepayOrderVo">
-        select order_numb orderNumb,real_capital realCapital
+        select order_numb orderNo,real_capital realCapital
         from saas_order_bill_detail
         where merchant_code = #{merchantCode,jdbcType=VARCHAR}
         and visible=1 and destroy=0
@@ -99,7 +99,7 @@
 
     <select id="countNoRepayOrder" parameterType="map" resultType="INTEGER">
         SELECT COUNT(*)
-        from saas_channel
+        from saas_order_bill_detail
         where merchant_code = #{merchantCode,jdbcType=VARCHAR}
         and visible=1 and destroy=0
         and deleted = false
@@ -107,7 +107,7 @@
 
     <select id="selectOverdueOrder" parameterType="java.lang.String"
             resultType="com.beitu.saas.order.vo.OverdueOrderVo">
-        select order_numb orderNumb,real_capital realCapital
+        select order_numb orderNo,real_capital realCapital
         from saas_order_bill_detail
         where merchant_code = #{merchantCode,jdbcType=VARCHAR}
         and datediff(DATE_SUB(curdate(),INTERVAL 0 DAY),repayment_dt)>0
@@ -117,7 +117,7 @@
 
     <select id="countOverdueOrder" parameterType="map" resultType="INTEGER">
         SELECT COUNT(*)
-        from saas_channel
+        from saas_order_bill_detail
         where merchant_code = #{merchantCode,jdbcType=VARCHAR}
         and datediff(DATE_SUB(curdate(),INTERVAL 0 DAY),repayment_dt)>0
         and visible=1 and destroy=0

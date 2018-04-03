@@ -380,16 +380,16 @@ public class OrderApplication {
 
         DataDashboardShowVo dataDashboardShowVo = new DataDashboardShowVo()
                 .setLoanDataDetailVo(loanDataDetailShowVo)
-                .setMerchantBalance(balanceInfoEntity.getValue())
-                .setMerchantCredit(creditInfoByMerchantCode.getValue())
-                .setMerchantSms(smsInfoByMerchantCode.getValue());
+                .setMerchantBalance(balanceInfoEntity == null ? BigDecimal.ZERO : balanceInfoEntity.getValue())
+                .setMerchantCredit(creditInfoByMerchantCode == null ? 0l : creditInfoByMerchantCode.getValue())
+                .setMerchantSms(smsInfoByMerchantCode == null ? 0l : smsInfoByMerchantCode.getValue());
 
         //走势曲线图
         List<LoanStateDetailVo> loanStateDetailVos = saasOrderBillDetailService.getLoanStateDetailList(merchantCode);
         List<LoanStateDetailShowVo> stateDetailShowVos = new ArrayList<>();
         loanStateDetailVos.stream().forEach(x -> {
             LoanStateDetailShowVo loanStateDetailShowVo = new LoanStateDetailShowVo();
-            BeanUtils.copyProperties(x, loanDataDetailShowVo);
+            BeanUtils.copyProperties(x, loanStateDetailShowVo);
             stateDetailShowVos.add(loanStateDetailShowVo);
         });
         dataDashboardShowVo.setLoanStateDetailShowVos(stateDetailShowVos);

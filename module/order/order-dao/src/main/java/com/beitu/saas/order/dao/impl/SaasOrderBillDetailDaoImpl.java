@@ -58,7 +58,7 @@ public class SaasOrderBillDetailDaoImpl extends AbstractBaseMapper<SaasOrderBill
     public List<LoanStateDetailVo> selectLoanStatDetailList(String merchantCode) {
         Map<String, Object> params = new HashMap<>(4);
         params.put("merchantCode", merchantCode);
-        return this.getSqlSession().selectOne(this.getStatement(".selectLoanStatDetailList"), params);    }
+        return this.getSqlSession().selectList(this.getStatement(".selectLoanStatDetailList"), params);    }
 
     @Override
     public List<NoRepayOrderVo> selectNoRepayOrder(String merchantCode, Page page) {
