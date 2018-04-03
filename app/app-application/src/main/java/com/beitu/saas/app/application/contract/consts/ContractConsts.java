@@ -7,10 +7,10 @@ package com.beitu.saas.app.application.contract.consts;
  */
 public class ContractConsts {
 
-    String AUTHORIZATION_PDF_PATH = ContractConsts.class.getClassLoader().getResource("").getPath() + "authorization.pdf";
+    public static final String AUTHORIZATION_PDF_PATH = ContractConsts.class.getClassLoader().getResource("").getPath() + "authorization.pdf";
 
-    String LOAN_PDF_PATH = ContractConsts.class.getClassLoader().getResource("").getPath() + "licence.pdf";
+    public static final String LOAN_PDF_PATH = ContractConsts.class.getClassLoader().getResource("").getPath() + "licence.pdf";
 
-    String EXTEND_PDF_PATH = ContractConsts.class.getClassLoader().getResource("").getPath() + "extendTerm.pdf";
+    public static final String EXTEND_PDF_PATH = ContractConsts.class.getClassLoader().getResource("").getPath() + "extendTerm.pdf";
 
 }
