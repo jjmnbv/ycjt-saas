@@ -26,7 +26,7 @@ public class AfterLendManagerExtendOrderRequest extends ParamsObject {
     private Date repaymentDt;
 
     @ApiModelProperty(value = "展期利率", required = true)
-    @NotBlank(message = "展期利率不能为空")
+    @NotNull(message = "展期利率不能为空")
     private BigDecimal extendInterestRatio;
 
     public String getOrderNumb() {
