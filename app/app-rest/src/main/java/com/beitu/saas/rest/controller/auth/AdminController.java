@@ -32,10 +32,7 @@ import com.fqgj.common.api.Response;
 import com.fqgj.common.api.annotations.ParamsValidate;
 import com.fqgj.common.api.exception.ApiErrorException;
 import com.fqgj.common.entity.BaseEntity;
-import com.fqgj.common.utils.DateUtil;
-import com.fqgj.common.utils.GenerOrderNoUtil;
-import com.fqgj.common.utils.MD5;
-import com.fqgj.common.utils.StringUtils;
+import com.fqgj.common.utils.*;
 import com.fqgj.exception.common.ApplicationException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -220,11 +217,15 @@ public class AdminController {
             BeanUtils.copyProperties(admin, response);
             response.setAdminId(admin.getId());
             response.setCreateTime(DateUtil.convertDateToString(admin.getGmtCreate()));
-            SaasAdminRole saasAdminRole = (SaasAdminRole) saasAdminRoleService.selectByParams(new HashMap<String, Object>() {{
+
+            List list1 = saasAdminRoleService.selectByParams(new HashMap<String, Object>() {{
                 put("adminCode", admin.getCode());
                 put("deleted", false);
-            }}).get(0);
-            response.setRoleName(((SaasRole) saasRoleService.selectById(saasAdminRole.getRoleId())).getName());
+            }});
+            if (CollectionUtils.isNotEmpty(list1)) {
+                SaasAdminRole saasAdminRole = (SaasAdminRole) list1.get(0);
+                response.setRoleName(((SaasRole) saasRoleService.selectById(saasAdminRole.getRoleId())).getName());
+            }
             listResponses.add(response);
         });
         return Response.ok().putData(new HashMap<String, Object>(2) {{
