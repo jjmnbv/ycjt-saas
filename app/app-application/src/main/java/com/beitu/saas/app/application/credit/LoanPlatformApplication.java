@@ -106,7 +106,7 @@ public class LoanPlatformApplication {
         }
         LoanPlatformQueryParam param = new LoanPlatformQueryParam(pojo.getToken());
         LoanPlatformQueryDto dto = riskIntergrationService.loanPlatformQuery(param);
-        LOGGER.info(JSON.toJSONString(dto.getData()));
+        LOGGER.info(dto.getData());
         
         return null;
     }
