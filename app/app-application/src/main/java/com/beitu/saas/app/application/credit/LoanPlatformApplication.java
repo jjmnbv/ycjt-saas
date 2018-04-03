@@ -168,7 +168,7 @@ public class LoanPlatformApplication {
     
     private String pollingRedisTimestamp(String userCode, String website) {
         String timestamp = null;
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 40; i++) {
             try {
                 Thread.sleep(50);
             } catch (InterruptedException e) {
