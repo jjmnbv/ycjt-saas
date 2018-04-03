@@ -12,7 +12,6 @@ import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.consts.ChannelConsts;
 import com.beitu.saas.common.utils.DateUtil;
-import com.beitu.saas.common.utils.StringUtil;
 import com.beitu.saas.finance.client.SaasMerchantBalanceInfoService;
 import com.beitu.saas.finance.client.SaasMerchantCreditInfoService;
 import com.beitu.saas.finance.client.SaasMerchantSmsInfoService;
@@ -386,16 +385,16 @@ public class OrderApplication {
 
         DataDashboardShowVo dataDashboardShowVo = new DataDashboardShowVo()
                 .setLoanDataDetailVo(loanDataDetailShowVo)
-                .setMerchantBalance(balanceInfoEntity.getValue())
-                .setMerchantCredit(creditInfoByMerchantCode.getValue())
-                .setMerchantSms(smsInfoByMerchantCode.getValue());
+                .setMerchantBalance(balanceInfoEntity == null ? BigDecimal.ZERO : balanceInfoEntity.getValue())
+                .setMerchantCredit(creditInfoByMerchantCode == null ? 0l : creditInfoByMerchantCode.getValue())
+                .setMerchantSms(smsInfoByMerchantCode == null ? 0l : smsInfoByMerchantCode.getValue());
 
         //走势曲线图
         List<LoanStateDetailVo> loanStateDetailVos = saasOrderBillDetailService.getLoanStateDetailList(merchantCode);
         List<LoanStateDetailShowVo> stateDetailShowVos = new ArrayList<>();
         loanStateDetailVos.stream().forEach(x -> {
             LoanStateDetailShowVo loanStateDetailShowVo = new LoanStateDetailShowVo();
-            BeanUtils.copyProperties(x, loanDataDetailShowVo);
+            BeanUtils.copyProperties(x, loanStateDetailShowVo);
             stateDetailShowVos.add(loanStateDetailShowVo);
         });
         dataDashboardShowVo.setLoanStateDetailShowVos(stateDetailShowVos);
@@ -598,7 +597,7 @@ public class OrderApplication {
 
         if (DateUtil.countDays(saasOrderVo.getRepaymentDt(), repaymentDt) > 0
                 || DateUtil.countDays(new Date(), repaymentDt) > 0) {
-            LOG.warn("......应还日期非法.......展期结束日期:{};订单应还日期:{}", DateUtil.getDate(repaymentDt), saasOrderVo.getRepaymentDt());
+            LOG.warn("......应还日期非法.......展期结束日期:{};订单应还日期:{}", DateUtil.getDate(repaymentDt), DateUtil.getDate(saasOrderVo.getRepaymentDt()));
             throw new ApplicationException(OrderErrorCodeEnum.ILLEGAL_REPAYMENTDATE);
         }
         OrderStatusEnum nextOrderStatus = OrderStatusEnum.TO_CONFIRM_EXTEND;
@@ -611,7 +610,8 @@ public class OrderApplication {
         SaasOrder extendSaasOrder = new SaasOrder();
         BeanUtils.copyProperties(saasOrderVo, extendSaasOrder);
         extendSaasOrder.setTotalInterestRatio(extendInterestRatio);
-        extendSaasOrder.setTermUrl(contractApplication.lenderDoExtendContractSign(saasOrderVo.getMerchantCode(), null));
+//        extendSaasOrder.setTermUrl(contractApplication.lenderDoExtendContractSign(saasOrderVo.getMerchantCode(), null));
+        extendSaasOrder.setTermUrl("test");
         extendSaasOrder.setExpireDate(DateUtil.getTodayOverTime());
         if (DateUtil.countDays(new Date(), saasOrderVo.getRepaymentDt()) > 0) {
             extendSaasOrder.setCreatedDt(DateUtil.addDate(new Date(), 1));

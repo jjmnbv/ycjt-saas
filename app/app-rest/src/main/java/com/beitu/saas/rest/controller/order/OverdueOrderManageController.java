@@ -47,7 +47,7 @@ public class OverdueOrderManageController {
 
     @RequestMapping(value = "/query", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "待放款订单查询", response = OverdueOrderListResponse.class)
+    @ApiOperation(value = "逾期管理订单查询", response = OverdueOrderListResponse.class)
     public ModuleApiResponse<OverdueOrderListResponse> query(@RequestBody @Valid OverdueOrderQueryRequest req, Page page) {
         SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
         QueryOrderBillDetailVo queryOrderBillDetailVo = new QueryOrderBillDetailVo();
@@ -58,10 +58,9 @@ public class OverdueOrderManageController {
 
     @RequestMapping(value = "/detail", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "待放款订单详情查看", response = OverdueOrderDetailResponse.class)
+    @ApiOperation(value = "逾期管理订单详情查看", response = OverdueOrderDetailResponse.class)
     public DataApiResponse<OverdueOrderDetailResponse> detail(@RequestBody @Valid OverdueManagerOperateOrderRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.updateOrderStatus(adminCode, req.getOrderNumb(), OrderStatusEnum.IN_FINAL_REVIEWER, null);
         OverdueOrderDetailResponse response = new OverdueOrderDetailResponse();
         response.setOrderNumb(req.getOrderNumb());
         return new DataApiResponse<>(response);

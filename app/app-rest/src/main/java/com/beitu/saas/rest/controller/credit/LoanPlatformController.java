@@ -5,6 +5,7 @@ import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.application.credit.LoanPlatformApplication;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.app.enums.SaasLoanPlatformEnum;
+import com.beitu.saas.common.consts.TimeConsts;
 import com.beitu.saas.rest.controller.credit.request.GetLoanPlatformUrlRequest;
 import com.beitu.saas.rest.controller.credit.response.LoanPlatformUrlResponse;
 import com.fqgj.log.factory.LogFactory;
@@ -60,7 +61,6 @@ public class LoanPlatformController {
         LOGGER.info("************************* 聚信立回调开始 *************************");
         request.setCharacterEncoding("UTF-8");
         String reqStr = IOUtils.toString(request.getInputStream(), "utf-8");
-        LOGGER.info(reqStr);
         String result;
         try {
             result = loanPlatformApplication.juxinliCallbackProcess(reqStr);
@@ -92,11 +92,8 @@ public class LoanPlatformController {
     @SignIgnore
     @RequestMapping("/juxinli/crawling")
     public String juxinliCrawlingCallback(HttpServletRequest request) {
-        String taskId = request.getParameter("taskId");
-        String website = request.getParameter("website");
-        String timestamp = request.getParameter("timestamp");
-        String channelCode = request.getParameter("channelCode");
-        return loanPlatformApplication.juxinliCrawlingProcess(taskId, website, timestamp, channelCode);
+        String paramString = request.getParameter("param");
+        return loanPlatformApplication.juxinliCrawlingProcess(paramString);
     }
     
 }

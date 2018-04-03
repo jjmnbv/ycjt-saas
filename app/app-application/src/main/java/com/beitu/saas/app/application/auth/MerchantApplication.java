@@ -85,8 +85,8 @@ public class MerchantApplication {
         saasAdmin.setMerchantCode(merchantCode);
         saasAdmin.setCode(GenerOrderNoUtil.generateOrderNo());
         saasAdmin.setJob("系统超级管理员");
-        saasAdmin.setName(accountPhone);
-        saasAdmin.setMobile(accountName);
+        saasAdmin.setName(accountName);
+        saasAdmin.setMobile(accountPhone);
         saasAdmin.setPassword(MD5.md5(password));
         saasAdmin.setCreateName("system");
         saasAdmin.setDefault(true);

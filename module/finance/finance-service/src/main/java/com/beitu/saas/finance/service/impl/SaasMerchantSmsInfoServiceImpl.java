@@ -74,7 +74,7 @@ public class SaasMerchantSmsInfoServiceImpl extends AbstractBaseService implemen
         SaasMerchantSmsInfoEntity merchantCreditInfo = this.getSmsInfoByMerchantCode(merchantCode);
         if (merchantCreditInfo != null) {
             if (!CalculateUtil.isIllegalAmount(merchantCode, merchantCreditInfo.getEncryptValue())) {
-                throw new ApiIllegalArgumentException(BalanceErrorCodeEnum.AMOUNT_ERROR);
+                throw new ApiIllegalArgumentException(BalanceErrorCodeEnum.AMOUNT_ERROR.setMsg("数据非法"));
             }
             return merchantCreditInfo;
         }

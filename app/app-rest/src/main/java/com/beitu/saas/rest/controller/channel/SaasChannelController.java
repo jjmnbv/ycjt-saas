@@ -1,5 +1,7 @@
 package com.beitu.saas.rest.controller.channel;
 
+import com.beitu.saas.app.annotations.SignIgnore;
+import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.application.channel.SaasChannelApplication;
 import com.beitu.saas.app.application.channel.vo.ChannelStatDetailVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
@@ -160,9 +162,12 @@ public class SaasChannelController {
      */
     @RequestMapping(value = "/getQRcode", method = {RequestMethod.POST, RequestMethod.GET})
     @ApiOperation(value = "获取二维码", response = ApiResponse.class)
-    public ApiResponse getQRcode(HttpServletResponse resp, @RequestParam String qrUrl) throws IOException {
+    @SignIgnore
+    @VisitorAccessible
+    public ApiResponse getQRcode(HttpServletResponse resp, String qrUrl) throws IOException {
         if (qrUrl != null && !"".equals(qrUrl)) {
-            resp.setHeader("Content-type", "image/png");
+            resp.setHeader("Content-type", "image/jpeg");
+            resp.setHeader("Content-disposition","attachment;filename=code.jpeg");
             OutputStream stream = null;
             try {
                 int width = 400;//图片的宽度
@@ -171,7 +176,7 @@ public class SaasChannelController {
 
                 QRCodeWriter writer = new QRCodeWriter();
                 BitMatrix m = writer.encode(qrUrl, BarcodeFormat.QR_CODE, height, width);
-                MatrixToImageWriter.writeToStream(m, "png", stream);
+                MatrixToImageWriter.writeToStream(m, "jpeg", stream);
             } catch (WriterException e) {
                 e.printStackTrace();
             } finally {
