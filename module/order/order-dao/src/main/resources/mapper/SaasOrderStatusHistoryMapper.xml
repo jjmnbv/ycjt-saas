@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.beitu.saas.order.dao.impl.SaasOrderStatusHistoryDaoImpl">
 
-    <select id="selectOrderStatusHistoryByOrderNumb" parameterType="map"
+    <select id="selectLatestOrderStatusHistoryByOrderNumb" parameterType="map"
             resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
@@ -17,6 +17,21 @@
             </trim>
         </where>
         order by id desc limit 1
+    </select>
+
+    <select id="selectOrderStatusHistoryByOrderNumb" parameterType="map"
+            resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from saas_order_status_history
+        <where>
+            <trim prefixOverrides="and">
+                <if test="orderNumb !=null">
+                    and order_numb = #{orderNumb,jdbcType=VARCHAR}
+                </if>
+                and deleted = false
+            </trim>
+        </where>
     </select>
 
     <select id="selectByCurrentOrderStatusAndOrderNumb" parameterType="map"
