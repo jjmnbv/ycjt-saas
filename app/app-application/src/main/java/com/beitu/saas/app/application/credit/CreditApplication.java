@@ -246,19 +246,19 @@ public class CreditApplication {
     }
 
     private void submitApplication(String borrowerCode, String orderNumb, String channelCode, Integer required) {
-        SaasOrderApplicationVo saasOrderApplicationVo = saasOrderApplicationService.getByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
+        SaasOrderApplicationVo saasOrderApplicationVo = saasOrderApplicationService.getByBorrowerCodeAndOrderNumb(borrowerCode, null);
         if (saasOrderApplicationVo == null) {
             if (SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
                 throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_APPLICATION_INFO);
             }
             return;
         }
-        saasOrderApplicationService.deleteById(saasOrderApplicationVo.getSaasOrderApplicationId());
+        saasOrderApplicationService.updateOrderNumbByBorrowerCode(orderNumb, borrowerCode);
         orderApplication.createOrder(saasOrderApplicationVo, orderNumb, channelCode);
     }
 
     private void submitPersonalInfo(String borrowerCode, String orderNumb, Integer required) {
-        if (saasBorrowerPersonalInfoService.countByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb) == 0) {
+        if (saasBorrowerPersonalInfoService.countByBorrowerCodeAndOrderNumb(borrowerCode, null) == 0) {
             if (SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
                 throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_PERSONAL_INFO);
             }
@@ -270,7 +270,7 @@ public class CreditApplication {
     }
 
     private void submitEmergentContact(String borrowerCode, String orderNumb, Integer required) {
-        if (saasBorrowerEmergentContactService.countByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb) == 0) {
+        if (saasBorrowerEmergentContactService.countByBorrowerCodeAndOrderNumb(borrowerCode, null) == 0) {
             if (SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
                 throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_EMERGENT_CONTACT);
             }
@@ -282,7 +282,7 @@ public class CreditApplication {
     }
 
     private void submitWorkInfo(String borrowerCode, String orderNumb, Integer required) {
-        if (saasBorrowerWorkInfoService.countByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb) == 0) {
+        if (saasBorrowerWorkInfoService.countByBorrowerCodeAndOrderNumb(borrowerCode, null) == 0) {
             if (SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
                 throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_WORK_INFO);
             }
@@ -294,7 +294,7 @@ public class CreditApplication {
     }
 
     private void submitIdentityInfo(String borrowerCode, String orderNumb, Integer required) {
-        if (saasBorrowerIdentityInfoService.countByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb) == 0) {
+        if (saasBorrowerIdentityInfoService.countByBorrowerCodeAndOrderNumb(borrowerCode, null) == 0) {
             if (SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
                 throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_IDENTITY_INFO);
             }
