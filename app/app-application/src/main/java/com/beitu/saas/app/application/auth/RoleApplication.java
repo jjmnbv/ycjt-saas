@@ -1,13 +1,11 @@
 package com.beitu.saas.app.application.auth;
 
+import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.auth.entity.SaasAdminRole;
 import com.beitu.saas.auth.entity.SaasOperationButton;
 import com.beitu.saas.auth.entity.SaasRole;
 import com.beitu.saas.auth.enums.PermissionTypeEnum;
-import com.beitu.saas.auth.service.SaasAdminRoleService;
-import com.beitu.saas.auth.service.SaasOperationButtonService;
-import com.beitu.saas.auth.service.SaasRolePermissionService;
-import com.beitu.saas.auth.service.SaasRoleService;
+import com.beitu.saas.auth.service.*;
 import com.fqgj.common.utils.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -35,6 +33,9 @@ public class RoleApplication {
 
     @Autowired
     private SaasAdminRoleService saasAdminRoleService;
+
+    @Autowired
+    private SaasAdminService saasAdminService;
 
 
     @Transactional(rollbackFor = Exception.class)
@@ -98,6 +99,11 @@ public class RoleApplication {
         }
         SaasAdminRole saasAdminRole = (SaasAdminRole) list.get(0);
         return ((SaasRole) saasRoleService.selectById(saasAdminRole.getRoleId()));
+    }
+
+    public Long getMerchantDefaultRole(String merchantCode) {
+        SaasAdmin saasAdmin = saasAdminService.getDefaultAdminByMerchantCode(merchantCode);
+        return saasAdminRoleService.getRoleIdByAdminCode(saasAdmin.getCode());
 
     }
 }

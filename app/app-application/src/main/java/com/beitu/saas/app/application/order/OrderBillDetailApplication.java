@@ -5,6 +5,7 @@ import com.beitu.saas.app.application.borrower.vo.BorrowerInfoVo;
 import com.beitu.saas.app.application.order.vo.QueryOrderBillDetailVo;
 import com.beitu.saas.app.application.order.vo.QueryOrderVo;
 import com.beitu.saas.app.application.order.vo.SaasOrderBillDetailListVo;
+import com.beitu.saas.app.application.order.vo.SaasOrderDetailVo;
 import com.beitu.saas.app.enums.QueryRepaymentDtEnum;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.common.utils.DateUtil;
@@ -205,6 +206,58 @@ public class OrderBillDetailApplication {
         BigDecimal lateInterest = amount.subtract(saasOrderBillDetailVo.getRealCapital()).subtract(saasOrderBillDetailVo.getInterest()).subtract(saasOrderBillDetailVo.getNeedPayInterest());
         updateSaasOrderBillDetail.setLateInterest(lateInterest);
         saasOrderBillDetailService.updateById(updateSaasOrderBillDetail);
+    }
+
+    public List<SaasOrderDetailVo> getAllOrderBillDetailByOrderNumb(String orderNumb) {
+        List<SaasOrderBillDetailVo> saasOrderBillDetailVoList = saasOrderBillDetailService.listByOrderNumb(orderNumb);
+        if (CollectionUtils.isEmpty(saasOrderBillDetailVoList)) {
+            return null;
+        }
+        List<SaasOrderDetailVo> results = new ArrayList<>(saasOrderBillDetailVoList.size());
+        SaasOrderDetailVo lastSaasOrderDetailVo = null;
+        for (int i = 0; i < saasOrderBillDetailVoList.size(); i++) {
+            SaasOrderBillDetailVo saasOrderBillDetailVo = saasOrderBillDetailVoList.get(i);
+            if (saasOrderBillDetailVo == null) {
+                continue;
+            }
+            SaasOrderDetailVo saasOrderDetailVo = new SaasOrderDetailVo();
+            saasOrderDetailVo.setPeriod(i);
+            saasOrderDetailVo.setOrderNumb(saasOrderBillDetailVo.getOrderNumb());
+            saasOrderDetailVo.setCapital(saasOrderBillDetailVo.getRealCapital().toString());
+            saasOrderDetailVo.setCreatedDate(DateUtil.getDate(saasOrderBillDetailVo.getGmtCreate()));
+            saasOrderDetailVo.setRepaymentDate(DateUtil.getDate(saasOrderBillDetailVo.getRepaymentDt()));
+            saasOrderDetailVo.setBorrowingDuration(DateUtil.countDays(saasOrderBillDetailVo.getRepaymentDt(), saasOrderBillDetailVo.getGmtCreate()));
+            saasOrderDetailVo.setTotalInterestRatio(orderCalculateApplication.getInterestRatio(saasOrderBillDetailVo.getTotalInterestRatio()));
+            saasOrderDetailVo.setInterest(saasOrderBillDetailVo.getInterest().toString());
+            if (saasOrderBillDetailVo.getAmount() == null) {
+                saasOrderDetailVo.setAmount(orderCalculateApplication.getAmount(saasOrderBillDetailVo).toString());
+            } else {
+                saasOrderDetailVo.setAmount(saasOrderBillDetailVo.getAmount().toString());
+            }
+            if (lastSaasOrderDetailVo != null) {
+                try {
+                    lastSaasOrderDetailVo.setOverdueDuration(DateUtil.countDays(saasOrderDetailVo.getCreatedDate(), lastSaasOrderDetailVo.getRepaymentDate()));
+                } catch (Exception e) {
+
+                }
+            }
+            if (i == saasOrderBillDetailVoList.size() - 1) {
+                Integer overdueDuration;
+                if (saasOrderBillDetailVo.getActualDestroyDt() != null) {
+                    overdueDuration = DateUtil.countDays(saasOrderBillDetailVo.getActualDestroyDt(), saasOrderBillDetailVo.getRepaymentDt());
+                } else {
+                    overdueDuration = DateUtil.countDays(new Date(), saasOrderBillDetailVo.getRepaymentDt());
+                }
+                if (overdueDuration < 0) {
+                    overdueDuration = 0;
+                }
+                saasOrderDetailVo.setOverdueDuration(overdueDuration);
+                saasOrderDetailVo.setOrderStatus(saasOrderService.getOrderStatusByOrderNumb(saasOrderBillDetailVo.getOrderNumb()).getMsg());
+            }
+            results.add(saasOrderDetailVo);
+            lastSaasOrderDetailVo = saasOrderDetailVo;
+        }
+        return results;
     }
 
 }

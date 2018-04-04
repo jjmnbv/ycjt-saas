@@ -11,4 +11,6 @@ import com.fqgj.common.entity.BaseEntity;
 public interface SaasAdminRoleService<T extends BaseEntity> extends BaseService<T> {
 
     Integer updateByAdminCode(SaasAdminRole record);
+
+    Long getRoleIdByAdminCode(String adminCode);
 }

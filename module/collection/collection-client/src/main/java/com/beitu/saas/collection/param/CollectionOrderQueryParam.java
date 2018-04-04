@@ -16,15 +16,6 @@ public class CollectionOrderQueryParam {
     private String identityCode;
     private String channelCode;
 
-    public Integer getOverdueDaysType() {
-        return overdueDaysType;
-    }
-
-    public CollectionOrderQueryParam setOverdueDaysType(Integer overdueDaysType) {
-        this.overdueDaysType = overdueDaysType;
-        return this;
-    }
-
     public String getOverdueStartDate() {
         return overdueStartDate;
     }
@@ -40,6 +31,15 @@ public class CollectionOrderQueryParam {
 
     public CollectionOrderQueryParam setOverdueEndDate(String overdueEndDate) {
         this.overdueEndDate = overdueEndDate;
+        return this;
+    }
+
+    public Integer getOverdueDaysType() {
+        return overdueDaysType;
+    }
+
+    public CollectionOrderQueryParam setOverdueDaysType(Integer overdueDaysType) {
+        this.overdueDaysType = overdueDaysType;
         return this;
     }
 

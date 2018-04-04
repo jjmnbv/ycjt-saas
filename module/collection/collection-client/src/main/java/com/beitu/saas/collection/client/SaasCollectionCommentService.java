@@ -15,5 +15,5 @@ public interface SaasCollectionCommentService<T extends BaseEntity> extends Base
      *
      * @param param
      */
-    void createCollectionComment(CollectionCommentParam param);
+    void createCollectionComment(CollectionCommentParam param, String followCode, String followUp);
 }

@@ -43,7 +43,7 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
         if (saasOrderList.size() == 1) {
             SaasOrder saasOrder = saasOrderList.get(0);
             if (OrderStatusEnum.FOR_REIMBURSEMENT.getCode().equals(saasOrder.getOrderStatus())) {
-                if (DateUtil.countDay(new Date(), saasOrder.getRepaymentDt()) < 0) {
+                if (DateUtil.countDay(new Date(), saasOrder.getRepaymentDt()) > 0) {
                     return OrderStatusEnum.OVERDUE;
                 }
             }
@@ -51,7 +51,7 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
         }
         SaasOrder saasOrder = saasOrderList.get(saasOrderList.size() - 1);
         if (OrderStatusEnum.FOR_REIMBURSEMENT.getCode().equals(saasOrder.getOrderStatus())) {
-            if (DateUtil.countDay(new Date(), saasOrder.getRepaymentDt()) < 0) {
+            if (DateUtil.countDay(new Date(), saasOrder.getRepaymentDt()) > 0) {
                 return OrderStatusEnum.OVERDUE;
             } else {
                 return OrderStatusEnum.IN_EXTEND;
@@ -76,16 +76,16 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
     }
 
     @Override
-    public Boolean isReviewRefuse(String borrowerCode, String channelCode) {
+    public String getReviewerRefuseOrderNumb(String borrowerCode, String channelCode) {
         SaasOrder saasOrder = saasOrderDao.selectByBorrowerCodeAndChannelCode(borrowerCode, channelCode);
         if (saasOrder == null) {
-            return Boolean.FALSE;
+            return null;
         }
         if (OrderStatusEnum.PRELIMINARY_REVIEWER_REJECT.getCode().equals(saasOrder.getOrderStatus())
                 || OrderStatusEnum.FINAL_REVIEWER_REJECT.getCode().equals(saasOrder.getOrderStatus())) {
-            return Boolean.TRUE;
+            return saasOrder.getOrderNumb();
         }
-        return Boolean.FALSE;
+        return null;
     }
 
     @Override
@@ -173,6 +173,45 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
 
     @Override
     public List<String> listAllConfirmReceiptOrderNumbByMerchantCode(String merchantCode) {
-        return null;
+        return saasOrderDao.selectOrderNumbByParams(merchantCode, OrderStatusEnum.TO_CONFIRM_RECEIPT.getCode());
     }
+
+    @Override
+    public SaasOrderVo getConfirmExtendOrderByOrderNumb(String orderNumb) {
+        Map<String, Object> params = new HashMap<>(4);
+        params.put("orderNumb", orderNumb);
+        params.put("deleted", Boolean.FALSE);
+        params.put("expireDate", new Date());
+        params.put("orderStatus", OrderStatusEnum.TO_CONFIRM_EXTEND.getCode());
+        List<SaasOrder> saasOrderList = saasOrderDao.selectByParams(params);
+        if (CollectionUtils.isEmpty(saasOrderList)) {
+            return null;
+        }
+        return SaasOrderVo.convertEntityToVO(saasOrderList.get(0));
+    }
+
+    @Override
+    public Boolean updatePreliminaryReviewerCode(Long orderId, String operatorCode) {
+        return saasOrderDao.updatePreliminaryReviewerCode(orderId, operatorCode) > 0;
+    }
+
+    @Override
+    public Boolean updateFinalReviewerCode(Long orderId, String operatorCode) {
+        return saasOrderDao.updateFinalReviewerCode(orderId, operatorCode) > 0;
+    }
+
+    @Override
+    public SaasOrderVo getConfirmReceiptOrderByOrderNumb(String orderNumb) {
+        Map<String, Object> params = new HashMap<>(4);
+        params.put("orderNumb", orderNumb);
+        params.put("deleted", Boolean.FALSE);
+        params.put("expireDate", new Date());
+        params.put("orderStatus", OrderStatusEnum.TO_CONFIRM_RECEIPT.getCode());
+        List<SaasOrder> saasOrderList = saasOrderDao.selectByParams(params);
+        if (CollectionUtils.isEmpty(saasOrderList)) {
+            return null;
+        }
+        return SaasOrderVo.convertEntityToVO(saasOrderList.get(0));
+    }
+
 }

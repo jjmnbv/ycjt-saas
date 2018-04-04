@@ -44,4 +44,16 @@ public enum EducationMsgCodeEnum implements MsgCodeEnum {
         this.msg = msg;
     }
 
+    public static EducationMsgCodeEnum getByCode(Integer code) {
+        if (code == null) {
+            return null;
+        }
+        for (EducationMsgCodeEnum educationMsgCodeEnum : EducationMsgCodeEnum.values()) {
+            if (educationMsgCodeEnum.getCode().equals(code)) {
+                return educationMsgCodeEnum;
+            }
+        }
+        return null;
+    }
+
 }

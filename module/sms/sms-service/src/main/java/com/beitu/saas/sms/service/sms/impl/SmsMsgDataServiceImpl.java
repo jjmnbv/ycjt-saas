@@ -2,6 +2,7 @@ package com.beitu.saas.sms.service.sms.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.beitu.saas.common.config.ConfigUtil;
+import com.beitu.saas.common.utils.ThreadPoolUtils;
 import com.beitu.saas.sms.client.plugin.*;
 import com.beitu.saas.sms.domain.SmsMsgLinkInfo;
 import com.beitu.saas.sms.model.BusinessRefInfo;
@@ -41,7 +42,7 @@ public class SmsMsgDataServiceImpl implements SmsMsgDataService {
 
     private static Log LOGGER = LogFactory.getLog(SmsMsgDataService.class);
 
-    private static final int PAGE_SIZE = 1000;
+    //private static final int PAGE_SIZE = 1000;
 
     @Autowired
     private ConfigUtil configUtil;
@@ -56,13 +57,15 @@ public class SmsMsgDataServiceImpl implements SmsMsgDataService {
      * @see SmsMsgDataService#singleSend(SingleSmsSendRequestRO)
      */
     @Override
-    public StateCode singleSend(SingleSmsSendRequestRO single) {
+    public StateCode singleSend(SingleSmsSendRequestRO element) {
+        ThreadPoolUtils.getSmsInstance().execute(() -> doSend(element.getPhone(), element.getBizCode(), element.getReplaceParam(), element.getType(), element.getSendTime()));
         //塞队列
-        if (DataQueueUtils.getSmsInstance().add(single)) {
-            return StateCode.SUCCESS;
-        }
-        LOGGER.info("client msg queue is oom,please check the service");
-        return StateCode.QUEUE_OOM;
+//        if (DataQueueUtils.getSmsInstance().add(single)) {
+//            return StateCode.SUCCESS;
+//        }
+//        LOGGER.info("client msg queue is oom,please check the service");
+
+        return StateCode.SUCCESS;
     }
 
     /**
@@ -70,52 +73,54 @@ public class SmsMsgDataServiceImpl implements SmsMsgDataService {
      */
     @Override
     public StateCode batchSend(BatchSmsSendRquestRO batch) {
-        List<SingleSmsSendRequestRO> singles = Lists.newArrayList();
+        // List<SingleSmsSendRequestRO> singles = Lists.newArrayList();
         for (SmsMsgBatchContentRO contentRO : batch.getContents()) {
-            SingleSmsSendRequestRO single = new SingleSmsSendRequestRO();
-            single.setBizCode(batch.getBizCode());
-            single.setPhone(contentRO.getPhone());
-            single.setSendTime(batch.getSendTime());
-            single.setType(SmsTypeEnum.NOTIFY.getCode());
-            single.setReplaceParam(contentRO.getReplaceParam());
-            singles.add(single);
+//            SingleSmsSendRequestRO single = new SingleSmsSendRequestRO();
+//            single.setBizCode(batch.getBizCode());
+//            single.setPhone(contentRO.getPhone());
+//            single.setSendTime(batch.getSendTime());
+//            single.setType(SmsTypeEnum.NOTIFY.getCode());
+//            single.setReplaceParam(contentRO.getReplaceParam());
+//            singles.add(single);
+            ThreadPoolUtils.getSmsInstance().execute(() -> doSend(contentRO.getPhone(), batch.getBizCode(), contentRO.getReplaceParam(), SmsTypeEnum.NOTIFY.getCode(), batch.getSendTime()));
         }
-        //塞队列
-        if (DataQueueUtils.getSmsInstance().addAll(singles)) {
-            return StateCode.SUCCESS;
-        }
-        LOGGER.info("client msg queue is oom,please check the service");
-        return StateCode.QUEUE_OOM;
+        return StateCode.SUCCESS;
+//        //塞队列
+//        if (DataQueueUtils.getSmsInstance().addAll(singles)) {
+//            return StateCode.SUCCESS;
+//        }
+//        LOGGER.info("client msg queue is oom,please check the service");
+//        return StateCode.QUEUE_OOM;
     }
 
-    @PostConstruct
-    public void dealWithSms() {
-        LOGGER.info("conusmer client msg start!");
-        new Thread() {
-            @SuppressWarnings("static-access")
-            @Override
-            public void run() {
-                while (true) {
-                    List<SingleSmsSendRequestRO> elements = DataQueueUtils.batchSmsGetElements(PAGE_SIZE);
-                    if (CollectionUtils.isEmpty(elements)) {
-                        try {
-                            sleep(5000);
-                        } catch (InterruptedException e) {
-                            LOGGER.info("conusmer client msg main thread sleep 5 s error," + e);
-                        }
-                        continue;
-                    }
-                    for (SingleSmsSendRequestRO element : elements) {
-                        try {
-                            doSend(element.getPhone(), element.getBizCode(), element.getReplaceParam(), element.getType(), element.getSendTime());
-                        } catch (Exception e) {
-
-                        }
-                    }
-                }
-            }
-        }.start();
-    }
+//    @PostConstruct
+//    public void dealWithSms() {
+//        LOGGER.info("conusmer client msg start!");
+//        new Thread() {
+//            @SuppressWarnings("static-access")
+//            @Override
+//            public void run() {
+//                while (true) {
+//                    List<SingleSmsSendRequestRO> elements = DataQueueUtils.batchSmsGetElements(PAGE_SIZE);
+//                    if (CollectionUtils.isEmpty(elements)) {
+//                        try {
+//                            sleep(5000);
+//                        } catch (InterruptedException e) {
+//                            LOGGER.info("conusmer client msg main thread sleep 5 s error," + e);
+//                        }
+//                        continue;
+//                    }
+//                    for (SingleSmsSendRequestRO element : elements) {
+//                        try {
+//                            doSend(element.getPhone(), element.getBizCode(), element.getReplaceParam(), element.getType(), element.getSendTime());
+//                        } catch (Exception e) {
+//
+//                        }
+//                    }
+//                }
+//            }
+//        }.start();
+//    }
 
     /**
      * @param phone
@@ -262,7 +267,7 @@ public class SmsMsgDataServiceImpl implements SmsMsgDataService {
             if (null != dataMap.get("msgId")) {
                 result = dataMap.get("msgId").toString();
             }
-        }else if (ServicerEnum.CHUANGLAN.getCode().equals(info.getServicerCode())){
+        } else if (ServicerEnum.CHUANGLAN.getCode().equals(info.getServicerCode())) {
             result = ChuangLanPluginUtils.send(linkInfo, msgInfo.getReceiver(), content);
         }
         return result;

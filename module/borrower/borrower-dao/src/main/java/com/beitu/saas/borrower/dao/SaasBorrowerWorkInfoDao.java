@@ -11,9 +11,9 @@ import com.fqgj.common.base.BaseMapper;
 
 public interface SaasBorrowerWorkInfoDao extends BaseMapper<SaasBorrowerWorkInfo> {
 
-    SaasBorrowerWorkInfo selectH5SaveInfoByBorrowerCode(String borrowerCode);
+    SaasBorrowerWorkInfo selectByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb);
 
-    int countH5SaveInfoByBorrowerCode(String borrowerCode);
+    int countByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb);
 
     int updateOrderNumbByBorrowerCode(String orderNumb, String borrowerCode);
 

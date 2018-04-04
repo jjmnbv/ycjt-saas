@@ -18,10 +18,10 @@ import java.util.Date;
 import java.util.Map;
 
 /**
-* User: xiaochong
-* Date: 2018-03-22
-* Time: 15:33:55.839
-*/
+ * User: xiaochong
+ * Date: 2018-03-22
+ * Time: 15:33:55.839
+ */
 @Module(value = "管理员登录日志表服务模块")
 @NameSpace("com.beitu.saas.auth.dao.impl.SaasAdminLoginLogDaoImpl")
 @Service
@@ -34,9 +34,12 @@ public class SaasAdminLoginLogServiceImpl extends AbstractBaseService implements
     @Override
     public Boolean addAdminLoginLog(HttpServletRequest request, String adminCode) {
         SaasAdminLoginLog adminLoginLog = new SaasAdminLoginLog();
-        String ip=null;
+        String ip = null;
         try {
-             ip = NetworkUtil.getIpAddress(request);
+            ip = NetworkUtil.getIpAddress(request);
+            if (equalLoginIp(adminCode, ip)) {
+                return true;
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -48,7 +51,22 @@ public class SaasAdminLoginLogServiceImpl extends AbstractBaseService implements
         }
         adminLoginLog.setLoginIp(ip);
         adminLoginLog.setAdminCode(adminCode);
-        return saasAdminLoginLogDao.insert(adminLoginLog)!=null;
+        return saasAdminLoginLogDao.insert(adminLoginLog) != null;
+    }
+
+
+    @Override
+    public Boolean equalLoginIp(String adminCode, String ip) {
+        SaasAdminLoginLog saasAdminLoginLog = getLoginLogByCodeTop(adminCode);
+        if (saasAdminLoginLog != null && saasAdminLoginLog.getLoginIp() != null && saasAdminLoginLog.getLoginIp().equals(ip)) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public SaasAdminLoginLog getLoginLogByCodeTop(String adminCode) {
+        return saasAdminLoginLogDao.selectLoginLogByCodeTop(adminCode);
     }
 }
 

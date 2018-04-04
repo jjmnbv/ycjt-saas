@@ -3,26 +3,38 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.beitu.saas.borrower.dao.impl.SaasBorrowerPersonalInfoDaoImpl">
 
-    <select id="selectH5SaveInfoByBorrowerCode" resultMap="BaseResultMap">
+    <select id="selectByBorrowerCodeAndOrderNumb" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from saas_borrower_personal_info
         where borrower_code = #{borrowerCode,jdbcType=VARCHAR}
-        and order_numb is null
+        <if test="orderNumb !=null">
+            and order_numb = #{orderNumb,jdbcType=VARCHAR}
+        </if>
+        <if test="orderNumb == null">
+            and order_numb is null
+        </if>
         and deleted = 0
     </select>
 
-    <select id="countH5SaveInfoByBorrowerCode" resultType="java.lang.Integer">
+    <select id="countByBorrowerCodeAndOrderNumb" resultType="java.lang.Integer">
         select COUNT(1)
         from saas_borrower_personal_info
         where borrower_code = #{borrowerCode,jdbcType=VARCHAR}
-        and order_numb is null
+        <if test="orderNumb !=null">
+            and order_numb = #{orderNumb,jdbcType=VARCHAR}
+        </if>
+        <if test="orderNumb == null">
+            and order_numb is null
+        </if>
         and deleted = 0
     </select>
 
     <update id="updateOrderNumbByBorrowerCode">
         update  saas_borrower_personal_info
-        set order_numb = #{orderNumb,jdbcType=VARCHAR}
+        set order_numb = #{orderNumb,jdbcType=VARCHAR},
+          success = true,
+          gmt_modified = NOW()
         where borrower_code = #{borrowerCode,jdbcType=VARCHAR}
         and order_numb is null
         and deleted = 0

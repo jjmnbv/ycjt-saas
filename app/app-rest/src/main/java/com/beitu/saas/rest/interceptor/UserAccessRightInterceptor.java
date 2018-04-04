@@ -130,6 +130,10 @@ public class UserAccessRightInterceptor implements HandlerInterceptor {
                                 Object o, Exception e) throws Exception {
         if (o instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) o;
+            SignIgnore signIgnoreAnnotation = handlerMethod.getMethodAnnotation(SignIgnore.class);
+            if (signIgnoreAnnotation != null) {
+                return;
+            }
             VisitorAccessible visitorAccessibleAnnotation = handlerMethod.getMethodAnnotation(VisitorAccessible.class);
             if (visitorAccessibleAnnotation == null) {
                 IgnoreRepeatRequest ignoreRepeatRequest = handlerMethod.getMethodAnnotation(IgnoreRepeatRequest.class);

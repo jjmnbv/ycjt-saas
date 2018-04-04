@@ -96,7 +96,7 @@
                 encrypt_value = #{encryptValue,jdbcType=VARCHAR},
                 </if>
                 <if test="version !=null">
-                version = #{version,jdbcType=BIGINT} + 1,,
+                version = #{version,jdbcType=BIGINT} + 1,
                 </if>
                 <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},

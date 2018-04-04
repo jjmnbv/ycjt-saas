@@ -11,4 +11,5 @@ import com.fqgj.common.base.BaseMapper;
 
 public interface SaasAdminLoginLogDao  extends BaseMapper<SaasAdminLoginLog> {
 
+    SaasAdminLoginLog selectLoginLogByCodeTop(String adminCode);
 }

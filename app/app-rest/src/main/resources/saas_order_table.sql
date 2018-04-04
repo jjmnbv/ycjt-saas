@@ -4,6 +4,7 @@ CREATE TABLE `saas_order_application` (
   `merchant_code` varchar(32) NOT NULL COMMENT '机构CODE',
   `channel_code` varchar(32) NOT NULL COMMENT '渠道CODE',
   `borrower_code` varchar(32) NOT NULL COMMENT '借款人CODE',
+  `order_numb` varchar(32) DEFAULT NULL COMMENT '订单号',
   `real_capital` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '借款金额',
   `total_interest_ratio` decimal(5,4) NOT NULL DEFAULT '0.0000' COMMENT '借款年利率',
   `late_interest_ratio` decimal(5,4) NOT NULL DEFAULT '0.2400' COMMENT '逾期利率',
@@ -16,7 +17,8 @@ CREATE TABLE `saas_order_application` (
   PRIMARY KEY (`id`),
   KEY `idx_merchant_code` (`merchant_code`),
   KEY `idx_channel_code` (`channel_code`),
-  KEY `idy_borrower_code` (`borrower_code`)
+  KEY `idy_borrower_code` (`borrower_code`),
+  KEY `idy_order_numb` (`order_numb`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='SAAS订单申请表';
 
 DROP TABLE IF EXISTS `saas_order`;
@@ -89,7 +91,7 @@ CREATE TABLE `saas_order_status_history` (
   `order_id` bigint(20) unsigned NOT NULL COMMENT '订单ID',
   `order_numb` varchar(32) NOT NULL COMMENT '订单号',
   `current_order_status` smallint(4) DEFAULT NULL COMMENT '当前订单状态',
-  `update_order_status` smallint(4) NOT NULL COMMENT '更新后订单状态',
+  `update_order_status` smallint(4) DEFAULT NULL COMMENT '更新后订单状态',
   `operator_code` varchar(32) NOT NULL COMMENT '操作人CODE',
   `remark` varchar(128) DEFAULT NULL COMMENT '备注',
   `deleted` bit(1) NOT NULL COMMENT '是否删除',
@@ -116,6 +118,24 @@ CREATE TABLE `saas_borrower` (
   KEY `idy_channel_code` (`channel_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='SAAS借款人表';
 
+DROP TABLE IF EXISTS `saas_borrower_login_log`;
+CREATE TABLE `saas_borrower_login_log` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '表ID',
+  `borrower_code` varchar(32) NOT NULL COMMENT '借款人CODE',
+  `merchant_code` varchar(32) NOT NULL COMMENT '机构CODE',
+  `channel_code` varchar(32) NOT NULL COMMENT '渠道CODE',
+  `phone_system` varchar(32) DEFAULT NULL COMMENT '手机操作系统',
+  `login_ip` varchar(16) NOT NULL COMMENT '登录IP',
+  `login_ip_address` varchar(32) DEFAULT NULL COMMENT '登录详细地址',
+  `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
+  `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_borrower_code` (`borrower_code`),
+  KEY `idy_merchant_code` (`merchant_code`),
+  KEY `idy_channel_code` (`channel_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='SAAS借款人登录日志表';
+
 DROP TABLE IF EXISTS `saas_borrower_token`;
 CREATE TABLE `saas_borrower_token` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '表ID',
@@ -135,6 +155,7 @@ CREATE TABLE `saas_borrower_token` (
 DROP TABLE IF EXISTS `saas_borrower_real_info`;
 CREATE TABLE `saas_borrower_real_info` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '表ID',
+  `merchant_code` varchar(32) NOT NULL COMMENT '机构CODE',
   `borrower_code` varchar(32) NOT NULL COMMENT '借款人CODE',
   `name` varchar(64) NOT NULL COMMENT '用户实名',
   `identity_code` varchar(32) NOT NULL COMMENT '用户身份证号码',
@@ -144,7 +165,8 @@ CREATE TABLE `saas_borrower_real_info` (
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后修改时间',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`),
-  KEY `idx_borrower_code` (`borrower_code`)
+  KEY `idx_merchant_code` (`merchant_code`),
+  KEY `idy_borrower_code` (`borrower_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='SAAS借款人实名信息表';
 
 DROP TABLE IF EXISTS `saas_borrower_personal_info`;
@@ -255,4 +277,18 @@ CREATE TABLE `saas_borrower_carrier_ext` (
   KEY `idx_borrower_code` (`borrower_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='SAAS借款人运营商报告扩充资料表';
 
-
+DROP TABLE IF EXISTS `saas_user_esign_authorization`;
+CREATE TABLE `saas_user_esign_authorization` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '表ID',
+  `user_code` varchar(32) DEFAULT NULL COMMENT '用户码',
+  `account_id` varchar(40) NOT NULL COMMENT '用户e签宝账户标识',
+  `seal_url` varchar(128) DEFAULT NULL COMMENT 'e签宝生成印章URL地址',
+  `authorization_url` varchar(128) DEFAULT NULL COMMENT '签章后授权协议URL地址',
+  `authorization_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '用户授权意愿时间',
+  `success` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否已成功授权',
+  `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
+  `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_user_code` (`user_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='SAAS用户e签宝授权信息表';

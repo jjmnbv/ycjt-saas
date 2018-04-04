@@ -11,9 +11,9 @@ import com.beitu.saas.borrower.entity.SaasBorrowerEmergentContact;
 
 public interface SaasBorrowerEmergentContactDao extends BaseMapper<SaasBorrowerEmergentContact> {
 
-    SaasBorrowerEmergentContact selectH5SaveInfoByBorrowerCode(String borrowerCode);
+    SaasBorrowerEmergentContact selectByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb);
 
-    int countH5SaveInfoByBorrowerCode(String borrowerCode);
+    int countByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb);
 
     int updateOrderNumbByBorrowerCode(String orderNumb, String borrowerCode);
 

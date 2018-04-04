@@ -16,4 +16,5 @@ public interface SaasMerchantService<T extends BaseEntity> extends BaseService<T
 
     SaasMerchantVo getByMerchantCode(String merchantCode);
 
+    Integer getMerchantAllowAccountNum(String merchantCode);
 }

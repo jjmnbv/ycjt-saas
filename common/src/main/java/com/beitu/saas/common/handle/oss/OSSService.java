@@ -9,10 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.util.List;
 
 @Component
@@ -96,6 +93,39 @@ public class OSSService {
         ObjectListing listing = client.listObjects(listObjectsRequest);
         List<OSSObjectSummary> ossOSList = listing.getObjectSummaries();
         return ossOSList;
+    }
+
+    public String getFileContent(String fileNamePath) {
+        OSSClient client = new OSSClient(configUtil.getEndpoint(), configUtil.getAccessKeyId(), configUtil.getAccessKeySecret());
+        OSSObject ossObject = null;
+        InputStream objectContent = null;
+        String content = "";
+        try {
+            ossObject = client.getObject(configUtil.getBucketName(), fileNamePath);
+            // 获取Object的输入流
+            objectContent = ossObject.getObjectContent();
+            content = new String(input2byte(objectContent), "utf-8");
+        } catch (IOException e) {
+        } finally {
+            // 关闭流
+            try {
+                if (objectContent != null)
+                    objectContent.close();
+            } catch (IOException e) {
+            }
+        }
+        return content;
+    }
+
+    private byte[] input2byte(InputStream inStream) throws IOException {
+        ByteArrayOutputStream swapStream = new ByteArrayOutputStream();
+        byte[] buff = new byte[100];
+        int rc = 0;
+        while ((rc = inStream.read(buff, 0, 100)) > 0) {
+            swapStream.write(buff, 0, rc);
+        }
+        byte[] in2b = swapStream.toByteArray();
+        return in2b;
     }
 
 }

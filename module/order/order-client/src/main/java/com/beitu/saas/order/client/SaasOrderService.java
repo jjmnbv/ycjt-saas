@@ -33,13 +33,13 @@ public interface SaasOrderService<T extends BaseEntity> extends BaseService<T> {
     List<SaasOrderVo> listEffectiveOrderByOrderNumb(String orderNumb);
 
     /**
-     * 是否为审核驳回订单
+     * 得到 审核驳回 订单号
      *
      * @param borrowerCode 借款人CODE
      * @param channelCode  渠道CODE
      * @return
      */
-    Boolean isReviewRefuse(String borrowerCode, String channelCode);
+    String getReviewerRefuseOrderNumb(String borrowerCode, String channelCode);
 
     Boolean isReviewing(String borrowerCode, String channelCode);
 
@@ -65,5 +65,13 @@ public interface SaasOrderService<T extends BaseEntity> extends BaseService<T> {
      * @return
      */
     List<String> listAllConfirmReceiptOrderNumbByMerchantCode(String merchantCode);
+
+    SaasOrderVo getConfirmExtendOrderByOrderNumb(String orderNumb);
+
+    Boolean updatePreliminaryReviewerCode(Long orderId, String operatorCode);
+
+    Boolean updateFinalReviewerCode(Long orderId, String operatorCode);
+
+    SaasOrderVo getConfirmReceiptOrderByOrderNumb(String orderNumb);
 
 }

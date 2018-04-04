@@ -22,7 +22,7 @@
                 <if test="saasChannelParam !=null and saasChannelParam.chargePersonCode != null">
                     and charge_person_code = #{saasChannelParam.chargePersonCode,jdbcType=VARCHAR}
                 </if>
-                and deleted = 0
+                and creator_code!='SYSTEM' and deleted = 0
             </trim>
         </where>
     </sql>
@@ -92,6 +92,21 @@
         SELECT channel_code FROM saas_order
         <include refid="Param_channel_order_stat_Where_Clause"/>
         ) t
+    </select>
+
+    <select id="selectChannelEntityByMerchantCodeAndCreatorCode" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from saas_channel
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="merchantCode !=null">
+                and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+            </if>
+            <if test="creatorCode !=null">
+                and creator_code = #{creatorCode,jdbcType=VARCHAR}
+            </if>
+            and deleted = false
+        </trim>
     </select>
 
 </mapper>

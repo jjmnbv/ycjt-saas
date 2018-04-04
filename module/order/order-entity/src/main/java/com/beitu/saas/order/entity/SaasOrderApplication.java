@@ -7,8 +7,8 @@ import java.util.Date;
 
 /**
  * User: jungle
- * Date: 2018-03-27
- * Time: 14:22:21.099
+ * Date: 2018-04-03
+ * Time: 19:26:04.836
  * TableDesc:SAAS订单申请表
  */
 public class SaasOrderApplication extends BaseEntity {
@@ -24,6 +24,10 @@ public class SaasOrderApplication extends BaseEntity {
      * 借款人CODE
      */
     private String borrowerCode;
+    /**
+     * 订单号
+     */
+    private String orderNumb;
     /**
      * 借款金额
      */
@@ -74,6 +78,15 @@ public class SaasOrderApplication extends BaseEntity {
 
     public SaasOrderApplication setBorrowerCode(String borrowerCode) {
         this.borrowerCode = borrowerCode;
+        return this;
+    }
+
+    public String getOrderNumb() {
+        return this.orderNumb;
+    }
+
+    public SaasOrderApplication setOrderNumb(String orderNumb) {
+        this.orderNumb = orderNumb;
         return this;
     }
 

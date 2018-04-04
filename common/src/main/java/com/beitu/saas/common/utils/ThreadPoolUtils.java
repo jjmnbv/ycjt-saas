@@ -9,7 +9,9 @@ import java.util.concurrent.*;
  */
 public class ThreadPoolUtils extends ThreadPoolExecutor{
 
-    private static ExecutorService taskPool = Executors.newFixedThreadPool(20);
+    private static ExecutorService taskPool = Executors.newFixedThreadPool(10);
+
+    private static ExecutorService smsPool = Executors.newFixedThreadPool(10);
 
 
     private ThreadPoolUtils(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue) {
@@ -18,6 +20,10 @@ public class ThreadPoolUtils extends ThreadPoolExecutor{
 
     public static ExecutorService getTaskInstance() {
         return taskPool;
+    }
+
+    public static ExecutorService getSmsInstance() {
+        return smsPool;
     }
 
     @Override
