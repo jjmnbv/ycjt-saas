@@ -181,8 +181,10 @@ public class OrderApplication {
             orderDetailVo.setRepaymentDt(DateUtil.getDate(saasOrderBillDetailVo.getRepaymentDt()));
         }
         SaasBorrowerRealInfoVo realInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(saasOrderVo.getBorrowerCode());
-        orderDetailVo.setBorrowerName(realInfoVo.getName());
-        orderDetailVo.setBorrowerIdentityCode(realInfoVo.getIdentityCode());
+        if (realInfoVo != null) {
+            orderDetailVo.setBorrowerName(realInfoVo.getName());
+            orderDetailVo.setBorrowerIdentityCode(realInfoVo.getIdentityCode());
+        }
 
         if (OrderStatusEnum.TO_CONFIRM_EXTEND.getCode().equals(orderDetailVo.getOrderStatus())) {
             saasOrderVo = saasOrderVoList.get(saasOrderVoList.size() - 1);
