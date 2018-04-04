@@ -47,7 +47,7 @@
                 borrower_code,
             </if>
             <if test="name !=null">
-                'name',
+                name,
             </if>
             <if test="identityCode !=null">
                 identity_code,
