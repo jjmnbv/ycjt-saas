@@ -22,7 +22,7 @@ public class SaasBorrowerWorkInfoDaoImpl extends AbstractBaseMapper<SaasBorrower
         Map<String, Object> params = new HashMap<>(4);
         params.put("orderNumb", orderNumb);
         params.put("borrowerCode", borrowerCode);
-        return this.getSqlSession().selectOne(this.getStatement(".selectH5SaveInfoByBorrowerCode"), params);
+        return this.getSqlSession().selectOne(this.getStatement(".selectByBorrowerCodeAndOrderNumb"), params);
     }
 
     @Override
