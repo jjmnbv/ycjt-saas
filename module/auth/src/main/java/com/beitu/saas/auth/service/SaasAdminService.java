@@ -26,4 +26,6 @@ public interface SaasAdminService<T extends BaseEntity> extends BaseService<T> {
     Boolean hasRegisteredMobile(String mobile);
 
     Integer countAdminByMerchantCode(String merchantCode);
+
+    SaasAdmin getDefaultAdminByMerchantCode(String merchantCode);
 }

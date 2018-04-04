@@ -5,11 +5,14 @@ import com.beitu.saas.auth.entity.SaasAdminRole;
 import com.beitu.saas.auth.service.SaasAdminRoleService;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
+import com.fqgj.common.utils.CollectionUtils;
 import com.fqgj.log.enhance.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 /**
 * User: xiaochong
@@ -29,6 +32,18 @@ public class SaasAdminRoleServiceImpl extends AbstractBaseService implements Saa
     @Override
     public Integer updateByAdminCode(SaasAdminRole record) {
         return saasAdminRoleDao.updateByAdminCode(record);
+    }
+
+    @Override
+    public Long getRoleIdByAdminCode(String adminCode){
+        List<SaasAdminRole> list = this.selectByParams(new HashMap<String, Object>() {{
+            put("adminCode", adminCode);
+            put("deleted", false);
+        }});
+        if (CollectionUtils.isNotEmpty(list)){
+            return list.get(0).getRoleId();
+        }
+        return null;
     }
 }
 
