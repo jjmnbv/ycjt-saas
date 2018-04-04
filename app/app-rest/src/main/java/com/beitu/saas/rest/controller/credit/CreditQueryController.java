@@ -5,11 +5,15 @@ import com.beitu.saas.app.application.borrower.BorrowerApplication;
 import com.beitu.saas.app.application.credit.BorrowerBaseInfoApplication;
 import com.beitu.saas.app.application.credit.vo.*;
 import com.beitu.saas.app.application.order.OrderApplication;
+import com.beitu.saas.app.application.order.OrderApplyApplication;
+import com.beitu.saas.app.application.order.OrderStatusHistoryApplication;
 import com.beitu.saas.order.client.SaasOrderService;
 import com.beitu.saas.order.domain.SaasOrderVo;
 import com.beitu.saas.order.enums.OrderErrorCodeEnum;
 import com.beitu.saas.rest.controller.credit.request.CreditQueryRequest;
 import com.beitu.saas.rest.controller.credit.request.UserBaseInfoQueryRequest;
+import com.beitu.saas.rest.controller.credit.response.OrderApplicationQueryResponse;
+import com.beitu.saas.rest.controller.credit.response.OrderLogQueryResponse;
 import com.beitu.saas.rest.controller.credit.response.UserBaseInfoResponse;
 import com.fqgj.exception.common.ApplicationException;
 import io.swagger.annotations.Api;
@@ -39,6 +43,12 @@ public class CreditQueryController {
     @Autowired
     private SaasOrderService saasOrderService;
 
+    @Autowired
+    private OrderStatusHistoryApplication orderStatusHistoryApplication;
+
+    @Autowired
+    private OrderApplyApplication orderApplyApplication;
+
     @RequestMapping(value = "/base", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "借款人用户基础信息", response = UserBaseInfoResponse.class)
@@ -57,14 +67,19 @@ public class CreditQueryController {
 
     @RequestMapping(value = "/order/log", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "订单操作记录", response = UserBaseInfoResponse.class)
-    public DataApiResponse<UserBaseInfoResponse> listOrderLog(@RequestBody @Valid CreditQueryRequest req) {
+    @ApiOperation(value = "订单操作记录", response = OrderLogQueryResponse.class)
+    public DataApiResponse<OrderLogQueryResponse> listOrderLog(@RequestBody @Valid CreditQueryRequest req) {
         String orderNumb = req.getOrderNumb();
-        String borrowerCode = getBorrowerCodeByOrderNumb(orderNumb);
-
-        return new DataApiResponse<>(new UserBaseInfoResponse(borrowerPersonalInfoVo, borrowerIdentityInfoVo, borrowerWorkInfoVo, borrowerEmergentContactVo, borrowerLivingAreaVo));
+        return new DataApiResponse<>(new OrderLogQueryResponse(orderStatusHistoryApplication.listOrderStatusHistory(orderNumb)));
     }
 
+    @RequestMapping(value = "/order/application", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "订单进件记录", response = OrderApplicationQueryResponse.class)
+    public DataApiResponse<OrderApplicationQueryResponse> listOrderApplication(@RequestBody @Valid CreditQueryRequest req) {
+        String borrowerCode = getBorrowerCodeByOrderNumb(req.getOrderNumb());
+        return new DataApiResponse<>(new OrderApplicationQueryResponse(orderApplyApplication.listOrderApplicationByBorrowerCodeAndOrderNumb(borrowerCode, null)));
+    }
 
     private String getBorrowerCodeByOrderNumb(String orderNumb) {
         SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
