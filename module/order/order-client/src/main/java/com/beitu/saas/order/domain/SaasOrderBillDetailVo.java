@@ -90,6 +90,8 @@ public class SaasOrderBillDetailVo implements ResponseData, Serializable {
      */
     private Date actualDestroyDt;
 
+    private Date gmtCreate;
+
     public Long getSaasOrderBillDetailId() {
         return saasOrderBillDetailId;
     }
@@ -241,6 +243,14 @@ public class SaasOrderBillDetailVo implements ResponseData, Serializable {
 
     public void setActualDestroyDt(Date actualDestroyDt) {
         this.actualDestroyDt = actualDestroyDt;
+    }
+
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
     }
 
     public static SaasOrderBillDetailVo convertEntityToVO(SaasOrderBillDetail saasOrderBillDetail) {

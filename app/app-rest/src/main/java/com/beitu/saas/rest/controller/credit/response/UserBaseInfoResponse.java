@@ -1,6 +1,7 @@
 package com.beitu.saas.rest.controller.credit.response;
 
 import com.beitu.saas.app.application.credit.vo.*;
+import com.beitu.saas.app.application.order.vo.OrderApplicationListVo;
 import com.fqgj.common.api.ResponseData;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -12,6 +13,9 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @ApiModel(value = "借款人用户基本信息")
 public class UserBaseInfoResponse implements ResponseData {
+
+    @ApiModelProperty(value = "申请信息")
+    private OrderApplicationListVo orderApplicationListVo;
 
     @ApiModelProperty(value = "个人信息")
     private BorrowerPersonalInfoVo borrowerPersonalInfoVo;
@@ -28,12 +32,21 @@ public class UserBaseInfoResponse implements ResponseData {
     @ApiModelProperty(value = "生活区域")
     private BorrowerLivingAreaVo borrowerLivingAreaVo;
 
-    public UserBaseInfoResponse(BorrowerPersonalInfoVo borrowerPersonalInfoVo, BorrowerIdentityInfoVo borrowerIdentityInfoVo, BorrowerWorkInfoVo borrowerWorkInfoVo, BorrowerEmergentContactVo userEmergentContactVo, BorrowerLivingAreaVo borrowerLivingAreaVo) {
+    public UserBaseInfoResponse(OrderApplicationListVo orderApplicationListVo, BorrowerPersonalInfoVo borrowerPersonalInfoVo, BorrowerIdentityInfoVo borrowerIdentityInfoVo, BorrowerWorkInfoVo borrowerWorkInfoVo, BorrowerEmergentContactVo userEmergentContactVo, BorrowerLivingAreaVo borrowerLivingAreaVo) {
+        this.orderApplicationListVo = orderApplicationListVo;
         this.borrowerPersonalInfoVo = borrowerPersonalInfoVo;
         this.borrowerIdentityInfoVo = borrowerIdentityInfoVo;
         this.borrowerWorkInfoVo = borrowerWorkInfoVo;
         this.userEmergentContactVo = userEmergentContactVo;
         this.borrowerLivingAreaVo = borrowerLivingAreaVo;
+    }
+
+    public OrderApplicationListVo getOrderApplicationListVo() {
+        return orderApplicationListVo;
+    }
+
+    public void setOrderApplicationListVo(OrderApplicationListVo orderApplicationListVo) {
+        this.orderApplicationListVo = orderApplicationListVo;
     }
 
     public BorrowerPersonalInfoVo getBorrowerPersonalInfoVo() {
