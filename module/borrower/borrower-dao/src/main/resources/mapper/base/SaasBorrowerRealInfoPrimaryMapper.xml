@@ -19,7 +19,7 @@
     id,
     merchant_code,
     borrower_code,
-    'name',
+    `name`,
     identity_code,
     gender,
     native_place,
@@ -47,7 +47,7 @@
                 borrower_code,
             </if>
             <if test="name !=null">
-                name,
+                `name`,
             </if>
             <if test="identityCode !=null">
                 identity_code,
@@ -109,7 +109,7 @@
                 borrower_code = #{borrowerCode,jdbcType=VARCHAR},
             </if>
             <if test="name !=null">
-                'name' = #{name,jdbcType=VARCHAR},
+                `name` = #{name,jdbcType=VARCHAR},
             </if>
             <if test="identityCode !=null">
                 identity_code = #{identityCode,jdbcType=VARCHAR},
@@ -163,7 +163,7 @@
                 and borrower_code = #{borrowerCode,jdbcType=VARCHAR}
             </if>
             <if test="name !=null">
-                and 'name' = #{name,jdbcType=VARCHAR}
+                and `name` = #{name,jdbcType=VARCHAR}
             </if>
             <if test="identityCode !=null">
                 and identity_code = #{identityCode,jdbcType=VARCHAR}
@@ -199,7 +199,7 @@
                 and borrower_code = #{borrowerCode,jdbcType=VARCHAR}
             </if>
             <if test="name !=null">
-                and 'name' = #{name,jdbcType=VARCHAR}
+                and `name` = #{name,jdbcType=VARCHAR}
             </if>
             <if test="identityCode !=null">
                 and identity_code = #{identityCode,jdbcType=VARCHAR}
