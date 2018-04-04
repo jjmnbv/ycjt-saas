@@ -93,7 +93,7 @@ public class SaasController {
         }
         String borrowerCode = borrowerApplication.createBorrower(req.getMobile(), channelCode, merchantCode);
         if (borrowerApplication.needRealName(borrowerCode)) {
-            if (!creditApplication.userRealNameAuth(borrowerCode, req.getName(), req.getIdentityCode())) {
+            if (!creditApplication.userRealNameAuth(merchantCode, borrowerCode, req.getName(), req.getIdentityCode())) {
                 return new DataApiResponse(BorrowerErrorCodeEnum.USER_PROFILE_REAL_NAME_FAILURE);
             }
         }

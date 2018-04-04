@@ -155,11 +155,11 @@ public class CreditApplication {
      * @param identityCode 用户身份证号码
      * @return
      */
-    public Boolean userRealNameAuth(String borrowerCode, String name, String identityCode) {
+    public Boolean userRealNameAuth(String merchantCode, String borrowerCode, String name, String identityCode) {
         if (!realNameAuth(name, identityCode)) {
             return Boolean.FALSE;
         }
-        saasBorrowerRealInfoService.create(borrowerCode, name, identityCode);
+        saasBorrowerRealInfoService.create(merchantCode, borrowerCode, name, identityCode);
         return Boolean.TRUE;
     }
 

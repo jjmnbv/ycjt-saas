@@ -232,23 +232,22 @@ public class H5Controller {
         if (StringUtils.isEmpty(channelCode)) {
             return new ApiResponse(ChannelErrorCodeEnum.DISABLE_CHANNEL);
         }
+        SaasH5ChannelVo saasH5ChannelVo = saasChannelApplication.getSaasChannelBychannelCode(channelCode);
+        if (saasH5ChannelVo == null) {
+            throw new ApplicationException(ChannelErrorCodeEnum.DISABLE_CHANNEL);
+        }
         String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
         if (StringUtils.isNotEmpty(req.getUserName()) && StringUtils.isNotEmpty(req.getIdentityCode())) {
-            if (!creditApplication.userRealNameAuth(borrowerCode, req.getUserName(), req.getIdentityCode())) {
+            if (!creditApplication.userRealNameAuth(saasH5ChannelVo.getMerchantCode(), borrowerCode, req.getUserName(), req.getIdentityCode())) {
                 return new ApiResponse(BorrowerErrorCodeEnum.USER_PROFILE_REAL_NAME_FAILURE);
             }
         }
         if (borrowerApplication.needRealName(borrowerCode)) {
             return new ApiResponse(BorrowerErrorCodeEnum.USER_PROFILE_NEED_REAL_NAME);
         }
-        SaasH5ChannelVo saasH5ChannelVo = saasChannelApplication.getSaasChannelBychannelCode(channelCode);
-        if (saasH5ChannelVo == null) {
-            throw new ApplicationException(ChannelErrorCodeEnum.DISABLE_CHANNEL);
-        }
         if (contractApplication.needDoLicenseContractSign(borrowerCode)) {
             contractApplication.doLicenseContractSign(borrowerCode);
         }
-
         String orderNumb = saasOrderService.getReviewerRefuseOrderNumb(borrowerCode, channelCode);
 
         SaasOrderApplicationVo addOrderApplication = new SaasOrderApplicationVo();

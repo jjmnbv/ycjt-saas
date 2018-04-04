@@ -20,6 +20,6 @@ public interface SaasBorrowerRealInfoService<T extends BaseEntity> extends BaseS
 
     List<SaasBorrowerRealInfoVo> listBorrowerRealInfoByNameAndMerchantCode(String name, String merchantCode);
 
-    SaasBorrowerRealInfo create(String borrowerCode, String name, String identityCode);
+    SaasBorrowerRealInfo create(String merchantCode, String borrowerCode, String name, String identityCode);
 
 }
