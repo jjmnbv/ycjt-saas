@@ -30,6 +30,8 @@ public class OkController {
     
     @Autowired
     private RiskIntergrationService riskIntergrationService;
+    @Autowired
+    private SaasConsumeDayStatApplication saasConsumeDayStatApplication;
 
     @RequestMapping("/ok")
     @ResponseBody
@@ -54,6 +56,15 @@ public class OkController {
 //        LoanPlatformQueryParam param = new LoanPlatformQueryParam("964e45dd5f984d6ea2a2f4546973f8e9");
 //        LoanPlatformQueryDto dto = riskIntergrationService.loanPlatformQuery(param);
 //        return JSON.toJSONString(dto);
+    }
+
+    @RequestMapping("/syncTask")
+    @ResponseBody
+    @VisitorAccessible
+    @SignIgnore
+    public String syncTask() {
+        saasConsumeDayStatApplication.creditAndMsgDayClear();
+        return "ok";
     }
 
 }
