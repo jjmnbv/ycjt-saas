@@ -1,5 +1,6 @@
 package com.beitu.saas.rest.controller.order;
 
+import com.beitu.saas.app.annotations.HasPermission;
 import com.beitu.saas.app.api.ApiResponse;
 import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.api.ModuleApiResponse;
@@ -9,6 +10,7 @@ import com.beitu.saas.app.application.order.vo.QueryOrderBillDetailVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.collection.client.SaasCollectionOrderService;
+import com.beitu.saas.common.consts.ButtonPermissionConsts;
 import com.beitu.saas.order.enums.OrderStatusEnum;
 import com.beitu.saas.rest.controller.order.request.*;
 import com.beitu.saas.rest.controller.order.response.OverdueOrderDetailResponse;
@@ -66,6 +68,7 @@ public class OverdueOrderManageController {
         return new DataApiResponse<>(response);
     }
 
+    @HasPermission(permissionKey = ButtonPermissionConsts.ENTRUSTED_COLLECTION)
     @RequestMapping(value = "/collect/entrust", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "委托催收", response = ApiResponse.class)

@@ -1,5 +1,6 @@
 package com.beitu.saas.rest.controller.order;
 
+import com.beitu.saas.app.annotations.HasPermission;
 import com.beitu.saas.app.api.ApiResponse;
 import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.api.ModuleApiResponse;
@@ -8,6 +9,7 @@ import com.beitu.saas.app.application.order.OrderBillDetailApplication;
 import com.beitu.saas.app.application.order.vo.QueryOrderBillDetailVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.auth.entity.SaasAdmin;
+import com.beitu.saas.common.consts.ButtonPermissionConsts;
 import com.beitu.saas.order.enums.OrderStatusEnum;
 import com.beitu.saas.rest.controller.order.request.*;
 import com.beitu.saas.rest.controller.order.response.AfterLendOrderDetailResponse;
@@ -62,6 +64,7 @@ public class AfterLendManageController {
         return new DataApiResponse<>(response);
     }
 
+    @HasPermission(permissionKey = ButtonPermissionConsts.EXTEND)
     @RequestMapping(value = "/extend", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "展期", response = ApiResponse.class)
@@ -71,6 +74,7 @@ public class AfterLendManageController {
         return new ApiResponse("操作成功");
     }
 
+    @HasPermission(permissionKey = ButtonPermissionConsts.DESTROY)
     @RequestMapping(value = "/destroy", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "核销", response = ApiResponse.class)

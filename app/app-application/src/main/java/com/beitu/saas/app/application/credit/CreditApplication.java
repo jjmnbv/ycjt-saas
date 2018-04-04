@@ -1,6 +1,7 @@
 package com.beitu.saas.app.application.credit;
 
 import com.beitu.saas.app.api.ApiResponse;
+import com.beitu.saas.app.application.SendApplication;
 import com.beitu.saas.app.application.channel.SaasChannelApplication;
 import com.beitu.saas.app.application.credit.vo.CreditModuleListVo;
 import com.beitu.saas.app.application.order.OrderApplication;
@@ -78,6 +79,9 @@ public class CreditApplication {
 
     @Autowired
     private SaasOrderService saasOrderService;
+
+    @Autowired
+    private SendApplication sendApplication;
 
     public List<CreditModuleListVo> listCreditModule(String channelCode, String borrowerCode) {
         List<SaasChannelRiskSettingsVo> saasChannelRiskSettingsVoList = saasChannelApplication.getSaasChannelRiskSettingsByChannelCode(channelCode);
@@ -238,6 +242,10 @@ public class CreditApplication {
                     break;
             }
         });
+
+
+
+        sendApplication.sendNotifyMessage();
         return new ApiResponse("提交成功");
     }
 
