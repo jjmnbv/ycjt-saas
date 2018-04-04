@@ -22,7 +22,7 @@
                 <if test="saasChannelParam !=null and saasChannelParam.chargePersonCode != null">
                     and charge_person_code = #{saasChannelParam.chargePersonCode,jdbcType=VARCHAR}
                 </if>
-                and deleted = 0
+                and creator_code!='SYSTEM' and deleted = 0
             </trim>
         </where>
     </sql>

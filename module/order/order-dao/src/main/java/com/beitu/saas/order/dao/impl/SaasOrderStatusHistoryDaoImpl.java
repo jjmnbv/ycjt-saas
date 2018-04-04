@@ -29,7 +29,7 @@ public class SaasOrderStatusHistoryDaoImpl extends AbstractBaseMapper<SaasOrderS
     public List<SaasOrderStatusHistory> selectOrderStatusHistoryByOrderNumb(String orderNumb) {
         Map<String, Object> map = new HashMap<>(2);
         map.put("orderNumb", orderNumb);
-        return getSqlSession().selectOne(this.getStatement("selectOrderStatusHistoryByOrderNumb"), map);
+        return getSqlSession().selectList(this.getStatement("selectOrderStatusHistoryByOrderNumb"), map);
     }
 
     @Override
