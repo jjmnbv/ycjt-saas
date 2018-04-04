@@ -36,7 +36,7 @@ public enum OrderStatusEnum implements MsgCodeEnum {
 
     private Boolean needForcedToUpdate;
 
-    OrderStatusEnum(Integer code, String msg, Integer[] codeArray, Boolean needForcedToUpdate) {
+    private OrderStatusEnum(Integer code, String msg, Integer[] codeArray, Boolean needForcedToUpdate) {
         this.code = code;
         this.msg = msg;
         this.codeArray = codeArray;

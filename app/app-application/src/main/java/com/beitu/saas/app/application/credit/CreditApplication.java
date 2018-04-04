@@ -207,7 +207,7 @@ public class CreditApplication {
                 orderApplication.updateOrderStatus(borrowerCode, orderNumb, OrderStatusEnum.SUBMIT_PRELIMINARY_REVIEW, "初审驳回后再提交");
                 return new ApiResponse("提交成功");
             } else if (orderStatusEnum.equals(OrderStatusEnum.FINAL_REVIEWER_REJECT)) {
-                orderApplication.updateOrderStatus(borrowerCode, orderNumb, OrderStatusEnum.SUBMIT_PRELIMINARY_REVIEW, "复审驳回后再提交");
+                orderApplication.updateOrderStatus(borrowerCode, orderNumb, OrderStatusEnum.SUBMIT_FINAL_REVIEW, "复审驳回后再提交");
                 return new ApiResponse("提交成功");
             }
             return new ApiResponse(OrderErrorCodeEnum.ERROR_ORDER_NUMB);
