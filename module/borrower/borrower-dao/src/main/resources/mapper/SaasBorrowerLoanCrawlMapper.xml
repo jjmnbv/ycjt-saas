@@ -3,4 +3,19 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.beitu.saas.borrower.dao.impl.SaasBorrowerLoanCrawlDaoImpl">
 
+    <select id="selectByBorrowerCodeAndPlatform" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM `saas_borrower_loan_crawl`
+        WHERE
+        <if test="borrowerCode !=null">
+            `borrower_code` = #{borrowerCode,jdbcType=VARCHAR} AND
+        </if>
+        <if test="platform !=null">
+            `platform` = #{platform,jdbcType=INTEGER} AND
+        </if>
+        `deleted` = 0
+        ORDER BY `id` DESC
+    </select>
+
 </mapper>
