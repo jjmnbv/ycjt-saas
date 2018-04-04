@@ -5,6 +5,7 @@ import com.beitu.saas.app.enums.SaasLoanPlatformEnum;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.consts.TimeConsts;
+import com.beitu.saas.common.handle.oss.OSSService;
 import com.beitu.saas.intergration.risk.RiskIntergrationService;
 import com.beitu.saas.intergration.risk.dto.LoanPlatformCrawlingDto;
 import com.beitu.saas.intergration.risk.dto.LoanPlatformQueryDto;
@@ -26,6 +27,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -43,6 +46,9 @@ public class LoanPlatformApplication {
     
     @Autowired
     private RedisClient redisClient;
+    
+    @Autowired
+    private OSSService ossService;
     
     @Autowired
     private RiskIntergrationService riskIntergrationService;
@@ -110,13 +116,22 @@ public class LoanPlatformApplication {
             return "查询" + pojo.getWebsite() + "借贷平台爬虫结果失败......taskId:" + pojo.getTaskId() + ";msg:" + dto.getMsg();
         }
         
-        
-        pojo.getTaskId();
-        pojo.getToken();
         SaasLoanPlatformEnum platformEnum = SaasLoanPlatformEnum.getByWebsite(pojo.getWebsite());
-        dto.getData();
         String userCode = getUserCodeFromTaskId(pojo.getTaskId());
+        String url = uploadLoanPlatformData(userCode, platformEnum, dto.getData());
+    
+    
+//        pojo.getTaskId();
+//        pojo.getToken();
+//
+//
+//
+//        UserCarrierVo userCarrierVo = new UserCarrierVo(Long.valueOf(userId), typeEnum.getType() + 10, carrierUrl);
+//        userCarrierService.addUserCarrier(userCarrierVo);
         
+        
+        
+        redisClient.del(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, userCode, pojo.getWebsite());
         return null;
     }
     
@@ -161,7 +176,6 @@ public class LoanPlatformApplication {
         if (!riskIntergrationService.validateLoanPlatformCallbackPrefix(validateParam)) {
             return Boolean.FALSE;
         }
-        redisClient.del(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, userCode, website);
         return Boolean.TRUE;
     }
     
@@ -204,4 +218,15 @@ public class LoanPlatformApplication {
         }
         return userCode;
     }
+    
+    private String uploadLoanPlatformData(String userCode, SaasLoanPlatformEnum platformEnum, String data) {
+        String loanPlatformUrl = "loanPlatformData/";
+        if (configUtil.isServerTest()) {
+            loanPlatformUrl += "test/";
+        }
+        String userTime = userCode + "_" + new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        loanPlatformUrl += platformEnum.getWebsite() + "_" + userTime + "_" + MD5.md5(userTime + System.currentTimeMillis()) + ".json";
+        return ossService.uploadFile(loanPlatformUrl, data);
+    }
+    
 }
