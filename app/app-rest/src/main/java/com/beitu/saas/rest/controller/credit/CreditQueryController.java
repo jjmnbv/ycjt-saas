@@ -103,7 +103,9 @@ public class CreditQueryController {
     public DataApiResponse<OrderDetailQueryResponse> getOrderDetail(@RequestBody @Valid CreditQueryRequest req) {
         String orderNumb = req.getOrderNumb();
         List<SaasOrderDetailVo> saasOrderDetailVoList = orderBillDetailApplication.getAllOrderBillDetailByOrderNumb(orderNumb);
-        return new DataApiResponse<>(new OrderDetailQueryResponse(saasOrderDetailVoList));
+        String viewContractUrl = "";
+        String downloadContractUrl = "";
+        return new DataApiResponse<>(new OrderDetailQueryResponse(saasOrderDetailVoList, viewContractUrl, downloadContractUrl));
     }
 
     @RequestMapping(value = "/collection/log", method = RequestMethod.POST)

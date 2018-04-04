@@ -1,5 +1,6 @@
 package com.beitu.saas.rest.controller.order;
 
+import com.beitu.saas.app.annotations.HasPermission;
 import com.beitu.saas.app.api.ApiResponse;
 import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.api.ModuleApiResponse;
@@ -7,6 +8,7 @@ import com.beitu.saas.app.application.order.OrderApplication;
 import com.beitu.saas.app.application.order.vo.QueryOrderVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.auth.entity.SaasAdmin;
+import com.beitu.saas.common.consts.ButtonPermissionConsts;
 import com.beitu.saas.order.enums.OrderStatusEnum;
 import com.beitu.saas.rest.controller.order.request.FinalReviewerOperateOrderRequest;
 import com.beitu.saas.rest.controller.order.request.LendingOrderDetailRequest;
@@ -51,6 +53,7 @@ public class ForLendingOrderController {
         return new ModuleApiResponse(new LendingOrderListResponse(orderApplication.listForLendingOrder(queryOrderVo, page)), page);
     }
 
+    @HasPermission(permissionKey = ButtonPermissionConsts.LOAN_REMARKS)
     @RequestMapping(value = "/remark/save", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "待放款订单备注保存", response = ApiResponse.class)
@@ -70,6 +73,7 @@ public class ForLendingOrderController {
         return new DataApiResponse<>(response);
     }
 
+    @HasPermission(permissionKey = ButtonPermissionConsts.LOAN)
     @RequestMapping(value = "/agree", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "放款", response = ApiResponse.class)
@@ -79,6 +83,7 @@ public class ForLendingOrderController {
         return new ApiResponse("操作成功");
     }
 
+    @HasPermission(permissionKey = ButtonPermissionConsts.LOAN_REFUSE)
     @RequestMapping(value = "/refuse", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "放款拒绝", response = ApiResponse.class)

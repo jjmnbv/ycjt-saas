@@ -1,5 +1,6 @@
 package com.beitu.saas.app.application.order;
 
+import com.beitu.saas.app.application.SendApplication;
 import com.beitu.saas.app.application.borrower.BorrowerApplication;
 import com.beitu.saas.app.application.borrower.vo.BorrowerInfoVo;
 import com.beitu.saas.app.application.contract.ContractApplication;
@@ -98,6 +99,9 @@ public class OrderApplication {
 
     @Autowired
     private ContractApplication contractApplication;
+
+    @Autowired
+    private SendApplication sendApplication;
 
     public BorrowerOrderApplyStatusEnum getOrderApplyStatus(String borrowerCode, String channelCode) {
         if (StringUtils.isNotEmpty(saasOrderService.getReviewerRefuseOrderNumb(borrowerCode, channelCode))) {

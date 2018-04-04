@@ -6,6 +6,7 @@ import com.beitu.saas.risk.helpers.CollectionUtils;
 import com.fqgj.common.api.ResponseData;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -34,7 +35,7 @@ public class OrderDetailQueryResponse implements ResponseData {
     @ApiModelProperty(value = "展期账单信息")
     private List<SaasOrderDetailVo> extendOrderDetailVoList;
 
-    public OrderDetailQueryResponse(List<SaasOrderDetailVo> allOrderBillDetail) {
+    public OrderDetailQueryResponse(List<SaasOrderDetailVo> allOrderBillDetail, String viewContractUrl, String downloadContractUrl) {
         if (CollectionUtils.isEmpty(allOrderBillDetail)) {
             return;
         }
@@ -42,8 +43,13 @@ public class OrderDetailQueryResponse implements ResponseData {
         if (allOrderBillDetail.size() > 1) {
             this.extendOrderDetailVoList = allOrderBillDetail.subList(1, allOrderBillDetail.size() - 1);
         }
-        this.mainOrderDetailVo = allOrderBillDetail.get(allOrderBillDetail.size() - 1);
+        this.mainOrderDetailVo = new SaasOrderDetailVo();
+        BeanUtils.copyProperties(allOrderBillDetail.get(allOrderBillDetail.size() - 1), mainOrderDetailVo);
+        this.mainOrderDetailVo.setCreatedDate(originalOrderDetailVo.getCreatedDate());
+        this.mainOrderDetailVo.setBorrowingDuration(allOrderBillDetail.stream().collect(Collectors.summingInt(SaasOrderDetailVo::getBorrowingDuration)));
         this.mainOrderDetailVo.setOverdueDuration(allOrderBillDetail.stream().collect(Collectors.summingInt(SaasOrderDetailVo::getOverdueDuration)));
+        this.viewContractUrl = viewContractUrl;
+        this.downloadContractUrl = downloadContractUrl;
     }
 
     public String getViewContractUrl() {
