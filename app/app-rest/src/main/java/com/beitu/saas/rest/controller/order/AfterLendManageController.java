@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 
 /**
  * @author linanjun
@@ -72,7 +73,7 @@ public class AfterLendManageController {
     @ApiOperation(value = "展期", response = ApiResponse.class)
     public ApiResponse extend(@RequestBody @Valid AfterLendManagerExtendOrderRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.extendOrder(adminCode, req.getOrderNumb(), req.getRepaymentDt(), req.getExtendInterestRatio());
+        orderApplication.extendOrder(adminCode, req.getOrderNumb(), req.getRepaymentDt(), req.getExtendInterestRatio().divide(new BigDecimal("100")));
         return new ApiResponse("操作成功");
     }
 
