@@ -154,10 +154,15 @@ public class RoleController {
     @ParamsValidate
     @ApiOperation(value = "角色枚举", response = RoleMapResponse.class)
     public Response roleMap() {
-        SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
-        List<SaasRole> saasRoleList = saasRoleService.getRoleListByMerchantCode(saasAdmin.getMerchantCode(), null);
+        String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
+        List<SaasRole> saasRoleList = saasRoleService.getRoleListByMerchantCode(merchantCode, null);
         List<RoleMapResponse> list = new ArrayList<>();
-        saasRoleList.forEach(saasRole -> list.add(new RoleMapResponse(saasRole.getId(), saasRole.getName())));
+        Long defaultRoleId = roleApplication.getMerchantDefaultRole(merchantCode);
+        saasRoleList.forEach(saasRole -> {
+            if (!saasRole.getId().equals(defaultRoleId)) {
+                list.add(new RoleMapResponse(saasRole.getId(), saasRole.getName()));
+            }
+        });
         return Response.ok().putData(list);
     }
 
