@@ -64,14 +64,6 @@ public class BorrowerApplication {
     @Autowired
     private SaasBorrowerRealInfoService saasBorrowerRealInfoService;
 
-    public SaasBorrowerVo getBorrowerByAccessToken(String token) {
-        String borrowerCode = saasBorrowerTokenService.getBorrowerCodeByToken(token);
-        if (StringUtils.isEmpty(borrowerCode)) {
-            return null;
-        }
-        return saasBorrowerService.getByBorrowerCode(borrowerCode);
-    }
-
     @Transactional(rollbackFor = RuntimeException.class)
     public String login(String mobile, String channelCode, String phoneSystem, String ip) {
         SaasH5ChannelVo saasH5ChannelVo = saasChannelApplication.getSaasChannelBychannelCode(channelCode);
