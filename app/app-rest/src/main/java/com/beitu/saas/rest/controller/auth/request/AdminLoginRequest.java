@@ -25,7 +25,6 @@ public class AdminLoginRequest extends ParamsObject {
     private String password;
 
     @ApiModelProperty("手机验证码")
-    @NotBlank(message = "手机验证码不能为空")
     private String verifyCode;
 
     public String getMobile() {

@@ -7,10 +7,7 @@ import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.auth.entity.SaasMenu;
 import com.beitu.saas.auth.entity.SaasOperationButton;
 import com.beitu.saas.auth.entity.SaasRole;
-import com.beitu.saas.auth.service.SaasMenuService;
-import com.beitu.saas.auth.service.SaasOperationButtonService;
-import com.beitu.saas.auth.service.SaasRolePermissionService;
-import com.beitu.saas.auth.service.SaasRoleService;
+import com.beitu.saas.auth.service.*;
 import com.beitu.saas.auth.vo.FormedMenuVO;
 import com.beitu.saas.common.utils.DateUtil;
 import com.beitu.saas.rest.controller.auth.request.AddRoleRequest;
@@ -51,7 +48,6 @@ public class RoleController {
     @Autowired
     private RoleApplication roleApplication;
 
-
     @Autowired
     private SaasMenuService saasMenuService;
 
@@ -62,14 +58,14 @@ public class RoleController {
     private AdminInfoApplication adminInfoApplication;
 
     @Autowired
-    private SaasRolePermissionService saasRolePermissionService;
+    private SaasAdminService saasAdminService;
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ParamsValidate
     @ApiOperation(value = "添加角色")
     public Response add(@RequestBody AddRoleRequest addRoleRequest) {
         SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
-        roleApplication.addRoleAndEmpower(addRoleRequest.getRoleName(), saasAdmin.getName(), saasAdmin.getCode(), addRoleRequest.getMenusIds(), addRoleRequest.getButtonIds());
+        roleApplication.addRoleAndEmpower(addRoleRequest.getRoleName(), saasAdmin.getName(), saasAdmin.getMerchantCode(), addRoleRequest.getMenusIds(), addRoleRequest.getButtonIds());
         return Response.ok();
     }
 
@@ -80,15 +76,18 @@ public class RoleController {
         Page page = new Page();
         page.setCurrentPage(currentPage);
         page.setPageSize(pageSize);
-        SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
-        List<SaasRole> list = saasRoleService.getRoleListByMerchantCode(saasAdmin.getMerchantCode(), page);
+        String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
+        List<SaasRole> list = saasRoleService.getRoleListByMerchantCode(merchantCode, page);
+        Long defaultRoleId = roleApplication.getMerchantDefaultRole(merchantCode);
         List<RoleListResponse> listResponses = new ArrayList<>();
         list.forEach(saasRole -> {
-            RoleListResponse response = new RoleListResponse();
-            BeanUtils.copyProperties(saasRole, response);
-            response.setRoleId(saasRole.getId());
-            response.setCreateTime(DateUtil.convertDateToString(saasRole.getGmtCreate()));
-            listResponses.add(response);
+            if (!saasRole.getId().equals(defaultRoleId)) {
+                RoleListResponse response = new RoleListResponse();
+                BeanUtils.copyProperties(saasRole, response);
+                response.setRoleId(saasRole.getId());
+                response.setCreateTime(DateUtil.convertDateToString(saasRole.getGmtCreate()));
+                listResponses.add(response);
+            }
         });
         return Response.ok().putData(new HashMap<String, Object>(2) {{
             put("roleList", listResponses);
@@ -155,10 +154,15 @@ public class RoleController {
     @ParamsValidate
     @ApiOperation(value = "角色枚举", response = RoleMapResponse.class)
     public Response roleMap() {
-        SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
-        List<SaasRole> saasRoleList = saasRoleService.getRoleListByMerchantCode(saasAdmin.getMerchantCode(), null);
+        String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
+        List<SaasRole> saasRoleList = saasRoleService.getRoleListByMerchantCode(merchantCode, null);
         List<RoleMapResponse> list = new ArrayList<>();
-        saasRoleList.forEach(saasRole -> list.add(new RoleMapResponse(saasRole.getId(), saasRole.getName())));
+        Long defaultRoleId = roleApplication.getMerchantDefaultRole(merchantCode);
+        saasRoleList.forEach(saasRole -> {
+            if (!saasRole.getId().equals(defaultRoleId)) {
+                list.add(new RoleMapResponse(saasRole.getId(), saasRole.getName()));
+            }
+        });
         return Response.ok().putData(list);
     }
 

@@ -10,16 +10,14 @@ import org.hibernate.criterion.Order;
  */
 public enum OrderStatusEnum implements MsgCodeEnum {
 
-    SUBMIT_PRELIMINARY_REVIEW(101, "提交初审", null, Boolean.TRUE),
+    SUBMIT_PRELIMINARY_REVIEW(101, "提交初审", new Integer[]{104}, Boolean.TRUE),
     IN_PRELIMINARY_REVIEWER(102, "初审中", new Integer[]{101}, Boolean.FALSE),
-    PRELIMINARY_REVIEWER_GET_ORDER(103, "初审已领单", new Integer[]{101, 102}, Boolean.TRUE),
-    PRELIMINARY_REVIEWER_REJECT(104, "初审驳回", new Integer[]{102, 103}, Boolean.TRUE),
-    PRELIMINARY_REVIEWER_REFUSE(105, "初审拒绝", new Integer[]{102, 103}, Boolean.TRUE),
-    SUBMIT_FINAL_REVIEW(201, "提交复审", new Integer[]{102, 103}, Boolean.TRUE),
+    PRELIMINARY_REVIEWER_REJECT(104, "初审驳回", new Integer[]{102}, Boolean.TRUE),
+    PRELIMINARY_REVIEWER_REFUSE(105, "初审拒绝", new Integer[]{102}, Boolean.TRUE),
+    SUBMIT_FINAL_REVIEW(201, "提交复审", new Integer[]{102, 204}, Boolean.TRUE),
     IN_FINAL_REVIEWER(202, "复审中", new Integer[]{201}, Boolean.FALSE),
-    FINAL_REVIEWER_GET_ORDER(203, "复审已领单", new Integer[]{201, 202}, Boolean.TRUE),
-    FINAL_REVIEWER_REJECT(204, "复审驳回", new Integer[]{202, 203}, Boolean.TRUE),
-    FINAL_REVIEWER_REFUSE(205, "复审拒绝", new Integer[]{202, 203}, Boolean.TRUE),
+    FINAL_REVIEWER_REJECT(204, "复审驳回", new Integer[]{202}, Boolean.TRUE),
+    FINAL_REVIEWER_REFUSE(205, "复审拒绝", new Integer[]{202}, Boolean.TRUE),
     SUBMIT_LOAN_LENDER(301, "待放款", new Integer[]{202, 203}, Boolean.TRUE),
     LOAN_LENDER_REFUSE(302, "放款拒绝", new Integer[]{301}, Boolean.TRUE),
     TO_CONFIRM_RECEIPT(303, "待确认收款", new Integer[]{301}, Boolean.TRUE),

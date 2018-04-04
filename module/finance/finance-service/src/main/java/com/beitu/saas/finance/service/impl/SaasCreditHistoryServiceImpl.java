@@ -3,6 +3,7 @@ package com.beitu.saas.finance.service.impl;
 import com.beitu.saas.common.utils.PojoUtil;
 import com.beitu.saas.finance.client.SaasCreditHistoryService;
 import com.beitu.saas.finance.client.SaasMerchantCreditInfoService;
+import com.beitu.saas.finance.client.enums.CreditConsumeEnum;
 import com.beitu.saas.finance.client.enums.OpTypeEnum;
 import com.beitu.saas.finance.client.param.CreditHistoryQueryParam;
 import com.beitu.saas.finance.dao.SaasCreditHistoryDao;
@@ -49,6 +50,11 @@ public class SaasCreditHistoryServiceImpl extends AbstractBaseService implements
             page.setTotalCount(saasCreditHistoryDao.queryTotalCreditListByParam(map));
         }
         return saasCreditHistoryDao.selectCreditListByParam(map);
+    }
+
+    @Override
+    public SaasCreditHistoryEntity addExpenditureCreditHistory(String merchantCode, String opName, CreditConsumeEnum creditConsumeEnum){
+        return addExpenditureCreditHistory(merchantCode,creditConsumeEnum.getNum().longValue(),opName,creditConsumeEnum.getDesc());
     }
 
     @Override

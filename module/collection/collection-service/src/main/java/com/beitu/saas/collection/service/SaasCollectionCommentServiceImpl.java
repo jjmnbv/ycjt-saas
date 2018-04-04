@@ -12,10 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
-* User: fenqiguanjia
-* Date: 2018-03-21
-* Time: 20:58:19.353
-*/
+ * User: fenqiguanjia
+ * Date: 2018-03-21
+ * Time: 20:58:19.353
+ */
 @Module(value = "订单催收表服务模块")
 @NameSpace("SaasCollectionCommentDaoImpl")
 @Service
@@ -26,9 +26,13 @@ public class SaasCollectionCommentServiceImpl extends AbstractBaseService implem
     private SaasCollectionCommentDao saasCollectionCommentDao;
 
     @Override
-    public void createCollectionComment(CollectionCommentParam param) {
-        SaasCollectionCommentEntity entity=new SaasCollectionCommentEntity();
-        BeanUtils.copyProperties(param,entity);
+    public void createCollectionComment(CollectionCommentParam param, String followCode, String followUp) {
+        SaasCollectionCommentEntity entity = new SaasCollectionCommentEntity();
+        BeanUtils.copyProperties(param, entity);
+        entity.setContent(param.getRemark())
+                .setFollowCode(followCode)
+                .setFollowUp(followUp);
+
         saasCollectionCommentDao.insert(entity);
     }
 }

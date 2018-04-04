@@ -4,6 +4,7 @@
 <mapper namespace="com.beitu.saas.borrower.dao.impl.SaasBorrowerRealInfoDaoImpl">
     <resultMap id="BaseResultMap" type="com.beitu.saas.borrower.entity.SaasBorrowerRealInfo">
         <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode"/>
         <result column="borrower_code" jdbcType="VARCHAR" property="borrowerCode"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="identity_code" jdbcType="VARCHAR" property="identityCode"/>
@@ -16,8 +17,9 @@
 
     <sql id="Base_Column_List">
     id,
+    merchant_code,
     borrower_code,
-    name,
+    `name`,
     identity_code,
     gender,
     native_place,
@@ -38,83 +40,92 @@
             parameterType="com.beitu.saas.borrower.entity.SaasBorrowerRealInfo" useGeneratedKeys="true">
         insert into saas_borrower_real_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="borrowerCode !=null">
+            <if test="merchantCode !=null">
+                merchant_code,
+            </if>
+            <if test="borrowerCode !=null">
                 borrower_code,
-                </if>
-                <if test="name !=null">
-                name,
-                </if>
-                <if test="identityCode !=null">
+            </if>
+            <if test="name !=null">
+                `name`,
+            </if>
+            <if test="identityCode !=null">
                 identity_code,
-                </if>
-                <if test="gender !=null">
+            </if>
+            <if test="gender !=null">
                 gender,
-                </if>
-                <if test="nativePlace !=null">
+            </if>
+            <if test="nativePlace !=null">
                 native_place,
-                </if>
-                <if test="deleted !=null">
+            </if>
+            <if test="deleted !=null">
                 deleted,
-                </if>
-                <if test="gmtModified !=null">
+            </if>
+            <if test="gmtModified !=null">
                 gmt_modified,
-                </if>
-                <if test="gmtCreate !=null">
+            </if>
+            <if test="gmtCreate !=null">
                 gmt_create,
-                </if>
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-                <if test="borrowerCode != null">
-                    #{borrowerCode,jdbcType=VARCHAR},
-                </if>
-                <if test="name != null">
-                    #{name,jdbcType=VARCHAR},
-                </if>
-                <if test="identityCode != null">
-                    #{identityCode,jdbcType=VARCHAR},
-                </if>
-                <if test="gender != null">
-                    #{gender,jdbcType=TINYINT},
-                </if>
-                <if test="nativePlace != null">
-                    #{nativePlace,jdbcType=VARCHAR},
-                </if>
-                <if test="deleted != null">
-                    #{deleted,jdbcType=BIT},
-                </if>
-                <if test="gmtModified != null">
-                    #{gmtModified,jdbcType=TIMESTAMP},
-                </if>
-                <if test="gmtCreate != null">
-                    #{gmtCreate,jdbcType=TIMESTAMP},
-                </if>
+            <if test="merchantCode != null">
+                #{merchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="borrowerCode != null">
+                #{borrowerCode,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="identityCode != null">
+                #{identityCode,jdbcType=VARCHAR},
+            </if>
+            <if test="gender != null">
+                #{gender,jdbcType=TINYINT},
+            </if>
+            <if test="nativePlace != null">
+                #{nativePlace,jdbcType=VARCHAR},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
         </trim>
     </insert>
 
     <update id="updateByPrimaryKey" parameterType="com.beitu.saas.borrower.entity.SaasBorrowerRealInfo">
         update saas_borrower_real_info
         <set>
-                <if test="borrowerCode !=null">
+            <if test="merchantCode !=null">
+                merchant_code = #{merchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="borrowerCode !=null">
                 borrower_code = #{borrowerCode,jdbcType=VARCHAR},
-                </if>
-                <if test="name !=null">
-                name = #{name,jdbcType=VARCHAR},
-                </if>
-                <if test="identityCode !=null">
+            </if>
+            <if test="name !=null">
+                `name` = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="identityCode !=null">
                 identity_code = #{identityCode,jdbcType=VARCHAR},
-                </if>
-                <if test="gender !=null">
+            </if>
+            <if test="gender !=null">
                 gender = #{gender,jdbcType=TINYINT},
-                </if>
-                <if test="nativePlace !=null">
+            </if>
+            <if test="nativePlace !=null">
                 native_place = #{nativePlace,jdbcType=VARCHAR},
-                </if>
-                <if test="deleted !=null">
+            </if>
+            <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},
-                </if>
-                <if test="gmtModified !=null">
+            </if>
+            <if test="gmtModified !=null">
                 gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-                </if>
+            </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
@@ -127,7 +138,7 @@
 
     <sql id="paginationSql">
         <if test="page != null">
-            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+            limit #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
         </if>
     </sql>
 
@@ -145,11 +156,14 @@
             <if test="id !=null">
                 and id = #{id,jdbcType=BIGINT}
             </if>
+            <if test="merchantCode !=null">
+                and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+            </if>
             <if test="borrowerCode !=null">
                 and borrower_code = #{borrowerCode,jdbcType=VARCHAR}
             </if>
             <if test="name !=null">
-                and name = #{name,jdbcType=VARCHAR}
+                and `name` = #{name,jdbcType=VARCHAR}
             </if>
             <if test="identityCode !=null">
                 and identity_code = #{identityCode,jdbcType=VARCHAR}
@@ -178,11 +192,14 @@
             <if test="id !=null">
                 and id = #{id,jdbcType=BIGINT}
             </if>
+            <if test="merchantCode !=null">
+                and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+            </if>
             <if test="borrowerCode !=null">
                 and borrower_code = #{borrowerCode,jdbcType=VARCHAR}
             </if>
             <if test="name !=null">
-                and name = #{name,jdbcType=VARCHAR}
+                and `name` = #{name,jdbcType=VARCHAR}
             </if>
             <if test="identityCode !=null">
                 and identity_code = #{identityCode,jdbcType=VARCHAR}

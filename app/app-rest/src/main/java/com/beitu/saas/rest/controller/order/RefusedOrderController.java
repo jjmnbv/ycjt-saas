@@ -1,5 +1,6 @@
 package com.beitu.saas.rest.controller.order;
 
+import com.beitu.saas.app.annotations.HasPermission;
 import com.beitu.saas.app.api.ApiResponse;
 import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.api.ModuleApiResponse;
@@ -7,6 +8,7 @@ import com.beitu.saas.app.application.order.OrderApplication;
 import com.beitu.saas.app.application.order.vo.QueryOrderVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.auth.entity.SaasAdmin;
+import com.beitu.saas.common.consts.ButtonPermissionConsts;
 import com.beitu.saas.order.enums.OrderStatusEnum;
 import com.beitu.saas.rest.controller.order.request.RefusedOrderDetailRequest;
 import com.beitu.saas.rest.controller.order.request.RefusedOrderQueryRequest;
@@ -64,7 +66,6 @@ public class RefusedOrderController {
     @ApiOperation(value = "已拒订单详情查看", response = RefusedOrderDetailResponse.class)
     public DataApiResponse<RefusedOrderDetailResponse> detail(@RequestBody @Valid RefusedOrderDetailRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.updateOrderStatus(adminCode, req.getOrderNumb(), OrderStatusEnum.IN_FINAL_REVIEWER, null);
         RefusedOrderDetailResponse response = new RefusedOrderDetailResponse();
         response.setOrderNumb(req.getOrderNumb());
         return new DataApiResponse<>(response);

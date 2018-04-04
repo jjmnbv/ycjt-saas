@@ -478,7 +478,7 @@ public class ConfigUtil {
     /************* risk end *************/
 
     public String getH5AddressURLPrefix() {
-        return config.getProperty("oss.h5.addressURLPrefix", "http://ycjt.oss-cn-hangzhou.aliyuncs.com/H5/Saas-channel/index.html");
+        return config.getProperty("oss.h5.addressURLPrefix", "");
     }
 
     /**
@@ -524,5 +524,13 @@ public class ConfigUtil {
         return config.getProperty("integration.juxinli.api.key", "1a63efd927e04f18a2e7a15b0391dc98");
     }
 
+    public Boolean enableAddMerchant(){
+        return config.getBooleanProperty("enable.add.merchant",false);
+
+    }
+
+    public int allowAccountNum(){
+        return config.getIntProperty("allow.account.num",20);
+    }
 
 }

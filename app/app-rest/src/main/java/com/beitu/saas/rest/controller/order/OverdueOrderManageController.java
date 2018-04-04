@@ -1,5 +1,6 @@
 package com.beitu.saas.rest.controller.order;
 
+import com.beitu.saas.app.annotations.HasPermission;
 import com.beitu.saas.app.api.ApiResponse;
 import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.api.ModuleApiResponse;
@@ -9,6 +10,7 @@ import com.beitu.saas.app.application.order.vo.QueryOrderBillDetailVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.collection.client.SaasCollectionOrderService;
+import com.beitu.saas.common.consts.ButtonPermissionConsts;
 import com.beitu.saas.order.enums.OrderStatusEnum;
 import com.beitu.saas.rest.controller.order.request.*;
 import com.beitu.saas.rest.controller.order.response.OverdueOrderDetailResponse;
@@ -47,7 +49,7 @@ public class OverdueOrderManageController {
 
     @RequestMapping(value = "/query", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "待放款订单查询", response = OverdueOrderListResponse.class)
+    @ApiOperation(value = "逾期管理订单查询", response = OverdueOrderListResponse.class)
     public ModuleApiResponse<OverdueOrderListResponse> query(@RequestBody @Valid OverdueOrderQueryRequest req, Page page) {
         SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
         QueryOrderBillDetailVo queryOrderBillDetailVo = new QueryOrderBillDetailVo();
@@ -58,15 +60,15 @@ public class OverdueOrderManageController {
 
     @RequestMapping(value = "/detail", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "待放款订单详情查看", response = OverdueOrderDetailResponse.class)
+    @ApiOperation(value = "逾期管理订单详情查看", response = OverdueOrderDetailResponse.class)
     public DataApiResponse<OverdueOrderDetailResponse> detail(@RequestBody @Valid OverdueManagerOperateOrderRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.updateOrderStatus(adminCode, req.getOrderNumb(), OrderStatusEnum.IN_FINAL_REVIEWER, null);
         OverdueOrderDetailResponse response = new OverdueOrderDetailResponse();
         response.setOrderNumb(req.getOrderNumb());
         return new DataApiResponse<>(response);
     }
 
+    @HasPermission(permissionKey = ButtonPermissionConsts.ENTRUSTED_COLLECTION)
     @RequestMapping(value = "/collect/entrust", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "委托催收", response = ApiResponse.class)

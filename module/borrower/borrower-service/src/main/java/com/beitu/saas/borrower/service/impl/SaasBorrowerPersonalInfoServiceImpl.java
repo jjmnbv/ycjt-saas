@@ -28,28 +28,15 @@ public class SaasBorrowerPersonalInfoServiceImpl extends AbstractBaseService imp
     @Autowired
     private SaasBorrowerPersonalInfoDao saasBorrowerPersonalInfoDao;
 
-    @Override
-    public SaasBorrowerPersonalInfoVo getByBorrowerCode(String borrowerCode) {
-        SaasBorrowerPersonalInfo saasBorrowerPersonalInfo = saasBorrowerPersonalInfoDao.selectH5SaveInfoByBorrowerCode(borrowerCode);
-        return SaasBorrowerPersonalInfoVo.convertEntityToVO(saasBorrowerPersonalInfo);
-    }
 
     @Override
-    public int countByBorrowerCode(String borrowerCode) {
-        return saasBorrowerPersonalInfoDao.countH5SaveInfoByBorrowerCode(borrowerCode);
+    public int countByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb) {
+        return saasBorrowerPersonalInfoDao.countByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
     }
 
     @Override
     public SaasBorrowerPersonalInfoVo getByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb) {
-        List<SaasBorrowerPersonalInfo> saasBorrowerPersonalInfoList = saasBorrowerPersonalInfoDao.selectByParams(new HashMap<String, Object>(4) {{
-            put("borrowerCode", borrowerCode);
-            put("orderNumb", orderNumb);
-            put("deleted", Boolean.FALSE);
-        }});
-        if (CollectionUtils.isEmpty(saasBorrowerPersonalInfoList)) {
-            return null;
-        }
-        return SaasBorrowerPersonalInfoVo.convertEntityToVO(saasBorrowerPersonalInfoList.get(0));
+        return SaasBorrowerPersonalInfoVo.convertEntityToVO(saasBorrowerPersonalInfoDao.selectByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb));
     }
 
     @Override

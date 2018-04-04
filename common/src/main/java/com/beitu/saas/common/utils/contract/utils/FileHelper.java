@@ -13,9 +13,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class FileHelper {
-    
+
     private static Log LOGGER = LogFactory.getLog(AlgorithmHelper.class);
-    
+
     /***
      * 获取文件基本信息
      *
@@ -29,7 +29,7 @@ public class FileHelper {
         fileInfos.put("FileLength", String.valueOf(file.length()));
         return fileInfos;
     }
-    
+
     /***
      * 获取文件的Bytes
      *
@@ -62,7 +62,35 @@ public class FileHelper {
         }
         return buffer;
     }
-    
+
+    /***
+     * 获取 输入流 的Bytes
+     *
+     * @param inputStream
+     * @return
+     * @throws IOException
+     */
+    public static byte[] getBytes(InputStream inputStream) {
+        byte[] buffer = null;
+        try {
+            buffer = new byte[inputStream.available()];
+            inputStream.read(buffer);
+        } catch (IOException e) {
+            e.printStackTrace();
+            LOGGER.info("获取输入流字节流失败：" + e.getMessage());
+        } finally {
+            try {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                LOGGER.info("inputStream 关闭时发生异常：" + e.getMessage());
+            }
+        }
+        return buffer;
+    }
+
     /**
      * @param bytes
      * @param folder
@@ -110,7 +138,7 @@ public class FileHelper {
         }
         return fileResult;
     }
-    
+
     /***
      * 获取文件MD5值
      *
@@ -144,7 +172,7 @@ public class FileHelper {
         }
         return bigInt.toString(16);
     }
-    
+
     /***
      * 创建文件夹
      *
@@ -162,14 +190,14 @@ public class FileHelper {
         }
         return isSuccess;
     }
-    
+
     /***
      * 根据图片路径将图片转成Base64数据
      *
      * @return Base64数据
      */
     public static String GetImageStr(String imgFilePath) {// 将图片文件转化为字节数组字符串，并对其进行Base64编码处理
-        
+
         InputStream in = null;
         byte[] data = null;
         // 读取图片字节数组
@@ -186,5 +214,5 @@ public class FileHelper {
         byte[] en = Base64.encodeBase64(data);
         return new String(en);// 返回Base64编码过的字节数组字符串
     }
-    
+
 }

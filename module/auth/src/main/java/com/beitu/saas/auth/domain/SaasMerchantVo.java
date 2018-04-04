@@ -69,6 +69,18 @@ public class SaasMerchantVo implements ResponseData,Serializable{
     *支付密码
     */
     private String password;
+    /**
+     *允许新建子账户个数
+     */
+    private Integer allowAccountNum;
+
+    public Integer getAllowAccountNum() {
+        return allowAccountNum;
+    }
+
+    public void setAllowAccountNum(Integer allowAccountNum) {
+        this.allowAccountNum = allowAccountNum;
+    }
 
     public Long getSaasMerchantId() {
         return saasMerchantId;

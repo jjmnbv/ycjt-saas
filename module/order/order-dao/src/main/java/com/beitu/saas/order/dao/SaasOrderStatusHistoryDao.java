@@ -13,7 +13,9 @@ import java.util.List;
 
 public interface SaasOrderStatusHistoryDao extends BaseMapper<SaasOrderStatusHistory> {
 
-    SaasOrderStatusHistory selectOrderStatusHistoryByOrderNumb(String orderNumb);
+    SaasOrderStatusHistory selectLatestOrderStatusHistoryByOrderNumb(String orderNumb);
+
+    List<SaasOrderStatusHistory> selectOrderStatusHistoryByOrderNumb(String orderNumb);
 
     List<SaasOrderStatusHistory> selectByCurrentOrderStatusAndOrderNumb(Integer currentOrderStatus, String orderNumb);
 

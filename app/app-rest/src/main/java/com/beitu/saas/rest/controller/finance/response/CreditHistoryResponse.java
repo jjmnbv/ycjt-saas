@@ -50,6 +50,9 @@ public class CreditHistoryResponse implements ResponseData {
     }
 
     class CreditHistoryItem {
+
+        private Long id;
+
         @ApiModelProperty("0：支出，1：收入")
         private Integer opType;
 
@@ -64,6 +67,14 @@ public class CreditHistoryResponse implements ResponseData {
 
         @ApiModelProperty("时间")
         private Date gmtCreate;
+
+        public Long getId() {
+            return id;
+        }
+
+        public void setId(Long id) {
+            this.id = id;
+        }
 
         public Integer getOpType() {
             return opType;

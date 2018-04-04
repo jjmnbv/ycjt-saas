@@ -14,4 +14,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class SaasAdminLoginLogDaoImpl extends AbstractBaseMapper<SaasAdminLoginLog> implements SaasAdminLoginLogDao {
 
+    @Override
+    public SaasAdminLoginLog selectLoginLogByCodeTop(String adminCode){
+       return this.getSqlSession().selectOne(this.getStatement("selectLoginLogByCodeTop"),adminCode);
+    }
 }

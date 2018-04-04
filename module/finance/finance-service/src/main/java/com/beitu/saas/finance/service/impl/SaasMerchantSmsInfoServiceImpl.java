@@ -55,7 +55,7 @@ public class SaasMerchantSmsInfoServiceImpl extends AbstractBaseService implemen
     }
 
     private Boolean creditValueOp(String merchantCode, Long value, Boolean add) {
-        SaasMerchantSmsInfoEntity userBalanceInfo = getSmsInfoByMerchantCode(merchantCode);
+        SaasMerchantSmsInfoEntity userBalanceInfo = getOrInitUserSmsInfoByMerchantCode(merchantCode);
         Long balanceValue = getDecryptValue(userBalanceInfo.getEncryptValue());
         if (add) {
             balanceValue = balanceValue + value;
@@ -74,7 +74,7 @@ public class SaasMerchantSmsInfoServiceImpl extends AbstractBaseService implemen
         SaasMerchantSmsInfoEntity merchantCreditInfo = this.getSmsInfoByMerchantCode(merchantCode);
         if (merchantCreditInfo != null) {
             if (!CalculateUtil.isIllegalAmount(merchantCode, merchantCreditInfo.getEncryptValue())) {
-                throw new ApiIllegalArgumentException(BalanceErrorCodeEnum.AMOUNT_ERROR);
+                throw new ApiIllegalArgumentException(BalanceErrorCodeEnum.AMOUNT_ERROR.setMsg("数据非法"));
             }
             return merchantCreditInfo;
         }

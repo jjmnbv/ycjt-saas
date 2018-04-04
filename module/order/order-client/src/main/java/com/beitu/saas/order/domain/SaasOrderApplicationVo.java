@@ -10,8 +10,8 @@ import java.util.Date;
 
 /**
  * User: jungle
- * Date: 2018-03-25
- * Time: 21:55:45.854
+ * Date: 2018-04-03
+ * Time: 16:49:32.680
  */
 public class SaasOrderApplicationVo implements ResponseData, Serializable {
 
@@ -29,6 +29,10 @@ public class SaasOrderApplicationVo implements ResponseData, Serializable {
      * 借款人CODE
      */
     private String borrowerCode;
+    /**
+     * 订单号
+     */
+    private String orderNumb;
     /**
      * 借款金额
      */
@@ -87,6 +91,14 @@ public class SaasOrderApplicationVo implements ResponseData, Serializable {
 
     public void setBorrowerCode(String borrowerCode) {
         this.borrowerCode = borrowerCode;
+    }
+
+    public String getOrderNumb() {
+        return this.orderNumb;
+    }
+
+    public void setOrderNumb(String orderNumb) {
+        this.orderNumb = orderNumb;
     }
 
     public BigDecimal getRealCapital() {

@@ -3,6 +3,7 @@ package com.beitu.saas.channel.service.impl;
 import com.beitu.saas.channel.client.SaasChannelRiskSettingsService;
 import com.beitu.saas.channel.dao.SaasChannelRiskSettingsDao;
 import com.beitu.saas.channel.entity.SaasChannelRiskSettingsEntity;
+import com.beitu.saas.channel.enums.RiskModuleEnum;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
 import com.fqgj.log.enhance.Module;
@@ -21,7 +22,6 @@ import java.util.List;
 @Service
 public class SaasChannelRiskSettingsServiceImpl extends AbstractBaseService implements SaasChannelRiskSettingsService {
 
-
     @Autowired
     private SaasChannelRiskSettingsDao saasChannelRiskSettingsDao;
 
@@ -34,6 +34,17 @@ public class SaasChannelRiskSettingsServiceImpl extends AbstractBaseService impl
     public void deleteRiskSettingsByChannelCode(String channelCode) {
         saasChannelRiskSettingsDao.deleteRiskSettingsByChannelCode(channelCode);
     }
+
+    @Override
+    public SaasChannelRiskSettingsEntity createDefaultChannelRiskSettings(String channelCode) {
+        SaasChannelRiskSettingsEntity entity = new SaasChannelRiskSettingsEntity();
+        entity.setChannelCode(channelCode)
+                .setModuleCode(RiskModuleEnum.APPLICATION.getModuleCode())
+                .setRequired(1);
+        saasChannelRiskSettingsDao.insert(entity);
+        return entity;
+    }
+
 }
 
 

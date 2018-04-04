@@ -1,14 +1,15 @@
 package com.beitu.saas.rest.controller.order;
 
+import com.beitu.saas.app.annotations.HasPermission;
 import com.beitu.saas.app.api.ApiResponse;
 import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.api.ModuleApiResponse;
 import com.beitu.saas.app.application.order.OrderApplication;
 import com.beitu.saas.app.application.order.OrderBillDetailApplication;
 import com.beitu.saas.app.application.order.vo.QueryOrderBillDetailVo;
-import com.beitu.saas.app.application.order.vo.QueryOrderVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.auth.entity.SaasAdmin;
+import com.beitu.saas.common.consts.ButtonPermissionConsts;
 import com.beitu.saas.order.enums.OrderStatusEnum;
 import com.beitu.saas.rest.controller.order.request.*;
 import com.beitu.saas.rest.controller.order.response.AfterLendOrderDetailResponse;
@@ -44,7 +45,7 @@ public class AfterLendManageController {
 
     @RequestMapping(value = "/query", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "待放款订单查询", response = AfterLendOrderListResponse.class)
+    @ApiOperation(value = "贷后管理订单查询", response = AfterLendOrderListResponse.class)
     public ModuleApiResponse<AfterLendOrderListResponse> query(@RequestBody @Valid AfterLendOrderQueryRequest req, Page page) {
         SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
         QueryOrderBillDetailVo queryOrderBillDetailVo = new QueryOrderBillDetailVo();
@@ -55,28 +56,29 @@ public class AfterLendManageController {
 
     @RequestMapping(value = "/detail", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "待放款订单详情查看", response = AfterLendOrderDetailResponse.class)
+    @ApiOperation(value = "贷后管理订单详情查看", response = AfterLendOrderDetailResponse.class)
     public DataApiResponse<AfterLendOrderDetailResponse> detail(@RequestBody @Valid AfterLendOrderDetailRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.updateOrderStatus(adminCode, req.getOrderNumb(), OrderStatusEnum.IN_FINAL_REVIEWER, null);
         AfterLendOrderDetailResponse response = new AfterLendOrderDetailResponse();
         response.setOrderNumb(req.getOrderNumb());
         return new DataApiResponse<>(response);
     }
 
+    @HasPermission(permissionKey = ButtonPermissionConsts.EXTEND)
     @RequestMapping(value = "/extend", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "展期", response = ApiResponse.class)
-    public ApiResponse extend(@RequestBody @Valid AfterLendManagerOperateOrderRequest req) {
+    public ApiResponse extend(@RequestBody @Valid AfterLendManagerExtendOrderRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
         orderApplication.extendOrder(adminCode, req.getOrderNumb(), req.getRepaymentDt(), req.getExtendInterestRatio());
         return new ApiResponse("操作成功");
     }
 
+    @HasPermission(permissionKey = ButtonPermissionConsts.DESTROY)
     @RequestMapping(value = "/destroy", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "核销", response = ApiResponse.class)
-    public ApiResponse destroy(@RequestBody @Valid AfterLendManagerOperateOrderRequest req) {
+    public ApiResponse destroy(@RequestBody @Valid AfterLendManagerDestroyOrderRequest req) {
         String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
         orderApplication.destroyOrder(adminCode, req.getOrderNumb());
         return new ApiResponse("操作成功");

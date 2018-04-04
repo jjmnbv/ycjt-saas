@@ -2,16 +2,21 @@ package com.beitu.saas.rest.controller.auth;
 
 import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.api.DataApiResponse;
+import com.beitu.saas.app.application.SendApplication;
 import com.beitu.saas.app.application.auth.AdminInfoApplication;
+import com.beitu.saas.app.application.auth.MerchantApplication;
 import com.beitu.saas.app.application.auth.RoleApplication;
 import com.beitu.saas.app.common.RequestBasicInfo;
 import com.beitu.saas.app.common.RequestLocalInfo;
+import com.beitu.saas.app.enums.SaasSmsTypeEnum;
 import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.auth.entity.SaasAdminRole;
 import com.beitu.saas.auth.entity.SaasRole;
+import com.beitu.saas.auth.enums.AdminErrorEnum;
 import com.beitu.saas.auth.service.*;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.consts.TimeConsts;
+import com.beitu.saas.common.utils.NetworkUtil;
 import com.beitu.saas.rest.controller.auth.request.AddAdminRequest;
 import com.beitu.saas.rest.controller.auth.request.AdminLoginRequest;
 import com.beitu.saas.rest.controller.auth.request.ResetPasswordRequest;
@@ -27,10 +32,7 @@ import com.fqgj.common.api.Response;
 import com.fqgj.common.api.annotations.ParamsValidate;
 import com.fqgj.common.api.exception.ApiErrorException;
 import com.fqgj.common.entity.BaseEntity;
-import com.fqgj.common.utils.DateUtil;
-import com.fqgj.common.utils.GenerOrderNoUtil;
-import com.fqgj.common.utils.MD5;
-import com.fqgj.common.utils.StringUtils;
+import com.fqgj.common.utils.*;
 import com.fqgj.exception.common.ApplicationException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -41,10 +43,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author xiaochong
@@ -80,23 +79,37 @@ public class AdminController {
     @Autowired
     private RoleApplication roleApplication;
 
+    @Autowired
+    private SendApplication sendApplication;
+
+    @Autowired
+    private MerchantApplication merchantApplication;
+
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ParamsValidate
     @VisitorAccessible
     @ApiOperation(value = "登录")
     public Response login(@RequestBody AdminLoginRequest adminLoginRequest, HttpServletRequest request) throws IOException {
         //TODO 校验验证码
-        String verifyCode = redisClient.get(RedisKeyConsts.H5_SAVE_LOGIN_VERIFYCODE_KEY, adminLoginRequest.getMobile());
-        if (StringUtils.isEmpty(verifyCode)) {
-            throw new ApiErrorException(SmsErrorCodeEnum.VERIFY_CODE_FAILURE);
-        }
-        if (!verifyCode.equals(adminLoginRequest.getVerifyCode())) {
-            throw new ApiErrorException(SmsErrorCodeEnum.INPUT_WRONG_VERIFY_CODE);
-        }
         SaasAdmin saasAdmin = saasAdminService.login(adminLoginRequest.getMobile(), adminLoginRequest.getPassword());
+        if (StringUtils.isEmpty(adminLoginRequest.getVerifyCode())) {
+            if (!saasAdminLoginLogService.equalLoginIp(saasAdmin.getCode(), NetworkUtil.getIpAddress(request))) {
+                throw new ApiErrorException(AdminErrorEnum.SHOW_VERIFYCODE);
+            }
+        }
         String oldToken = redisClient.get(RedisKeyConsts.SAAS_TOKEN_KEY, saasAdmin.getCode());
         if (StringUtils.isNotEmpty(oldToken)) {
+            Map map = new HashMap(2) {{
+                put("account_phone", saasAdmin.getMobile());
+            }};
+            sendApplication.sendNotifyMessage(saasAdmin.getMerchantCode(), saasAdmin.getMobile(), map, SaasSmsTypeEnum.SAAS_0019);
             redisClient.del(RedisKeyConsts.SAAS_TOKEN_KEY, oldToken);
+        }
+        String verifyCode = redisClient.get(RedisKeyConsts.H5_SAVE_LOGIN_VERIFYCODE_KEY, adminLoginRequest.getMobile());
+        if (StringUtils.isNotEmpty(verifyCode)) {
+            if (!verifyCode.equals(adminLoginRequest.getVerifyCode())) {
+                throw new ApiErrorException(SmsErrorCodeEnum.INPUT_WRONG_VERIFY_CODE);
+            }
         }
         saasAdminLoginLogService.addAdminLoginLog(request, saasAdmin.getCode());
         String token = MD5.md5(UUID.randomUUID().toString());
@@ -128,10 +141,14 @@ public class AdminController {
     @ParamsValidate
     @ApiOperation("新增用户")
     public Response addAdmin(@RequestBody AddAdminRequest addAdminRequest) {
+        String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
+        if (!merchantApplication.canAddAccount(merchantCode)) {
+            throw new ApiErrorException("创建账户个数到底上限,请联系软件服务商");
+        }
         SaasAdmin saasAdmin = new SaasAdmin();
         BeanUtils.copyProperties(addAdminRequest, saasAdmin);
         saasAdmin.setPassword(MD5.md5(addAdminRequest.getPassword())).setMerchantCode(GenerOrderNoUtil.generateOrderNo());
-        saasAdmin.setEnable(true).setMerchantCode(RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode());
+        saasAdmin.setEnable(true).setMerchantCode(merchantCode);
         saasAdmin.setDefault(false);
         saasAdmin.setCreateName(RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getName());
         adminInfoApplication.addAdminAndRole(saasAdmin, addAdminRequest.getRoleId());
@@ -145,6 +162,14 @@ public class AdminController {
         saasAdmin.setEnable(enable);
         saasAdmin.setId(adminId);
         boolean success = saasAdminService.updateById(saasAdmin) > 0;
+        if (enable == false) {
+            SaasAdmin entity = (SaasAdmin) saasAdminService.selectById(adminId);
+            String oldToken = redisClient.get(RedisKeyConsts.SAAS_TOKEN_KEY, entity.getCode());
+            if (StringUtils.isNotEmpty(oldToken)) {
+                redisClient.del(RedisKeyConsts.SAAS_TOKEN_KEY, oldToken);
+                redisClient.del(RedisKeyConsts.SAAS_TOKEN_KEY, entity.getCode());
+            }
+        }
         if (!success) {
             throw new ApplicationException("账户状态更新失败");
         }
@@ -200,11 +225,15 @@ public class AdminController {
             BeanUtils.copyProperties(admin, response);
             response.setAdminId(admin.getId());
             response.setCreateTime(DateUtil.convertDateToString(admin.getGmtCreate()));
-            SaasAdminRole saasAdminRole = (SaasAdminRole) saasAdminRoleService.selectByParams(new HashMap<String, Object>() {{
+
+            List list1 = saasAdminRoleService.selectByParams(new HashMap<String, Object>() {{
                 put("adminCode", admin.getCode());
                 put("deleted", false);
-            }}).get(0);
-            response.setRoleName(((SaasRole) saasRoleService.selectById(saasAdminRole.getRoleId())).getName());
+            }});
+            if (CollectionUtils.isNotEmpty(list1)) {
+                SaasAdminRole saasAdminRole = (SaasAdminRole) list1.get(0);
+                response.setRoleName(((SaasRole) saasRoleService.selectById(saasAdminRole.getRoleId())).getName());
+            }
             listResponses.add(response);
         });
         return Response.ok().putData(new HashMap<String, Object>(2) {{
@@ -214,18 +243,17 @@ public class AdminController {
     }
 
 
-
     @RequestMapping(value = "/detail/{adminId}", method = RequestMethod.GET)
     @ParamsValidate
     @ApiOperation(value = "账户详情", response = AdminDetailResponse.class)
     public Response list(@PathVariable("adminId") Long adminId) {
         String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
         AdminDetailResponse response = new AdminDetailResponse();
-        SaasAdmin saasAdmin = (SaasAdmin)saasAdminService.selectById(adminId);
-        if (!merchantCode.equals(saasAdmin.getMerchantCode())){
+        SaasAdmin saasAdmin = (SaasAdmin) saasAdminService.selectById(adminId);
+        if (!merchantCode.equals(saasAdmin.getMerchantCode())) {
             throw new ApiErrorException("请求账户详情非法");
         }
-        BeanUtils.copyProperties(saasAdmin,response);
+        BeanUtils.copyProperties(saasAdmin, response);
         response.setAdminId(saasAdmin.getId());
         SaasRole saasRole = roleApplication.getRoleByAdminCode(saasAdmin.getCode());
         response.setRoleId(saasRole.getId());

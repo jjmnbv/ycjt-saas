@@ -24,6 +24,9 @@ public class UserLoginRequest extends ParamsObject {
     @NotBlank(message = "验证码不能为空")
     private String verifyCode;
 
+    @ApiModelProperty(value = "手机操作系统")
+    private String phoneSystem;
+
     public String getMobile() {
         return mobile;
     }
@@ -38,6 +41,14 @@ public class UserLoginRequest extends ParamsObject {
 
     public void setVerifyCode(String verifyCode) {
         this.verifyCode = verifyCode;
+    }
+
+    public String getPhoneSystem() {
+        return phoneSystem;
+    }
+
+    public void setPhoneSystem(String phoneSystem) {
+        this.phoneSystem = phoneSystem;
     }
 
     @Override

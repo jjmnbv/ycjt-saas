@@ -2,24 +2,35 @@ package com.beitu.saas.app.application.borrower;
 
 import com.beitu.saas.app.application.borrower.vo.BorrowerInfoVo;
 import com.beitu.saas.app.application.channel.SaasChannelApplication;
+import com.beitu.saas.borrower.client.SaasBorrowerLoginLogService;
 import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
 import com.beitu.saas.borrower.client.SaasBorrowerService;
 import com.beitu.saas.borrower.client.SaasBorrowerTokenService;
+import com.beitu.saas.borrower.domain.SaasBorrowerLoginLogVo;
 import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
 import com.beitu.saas.borrower.domain.SaasBorrowerVo;
 import com.beitu.saas.borrower.entity.SaasBorrower;
+import com.beitu.saas.borrower.entity.SaasBorrowerLoginLog;
+import com.beitu.saas.borrower.enums.BorrowerErrorCodeEnum;
 import com.beitu.saas.channel.domain.SaasH5ChannelVo;
 import com.beitu.saas.channel.enums.ChannelErrorCodeEnum;
 import com.beitu.saas.common.consts.RedisKeyConsts;
+import com.beitu.saas.common.utils.MobileUtil;
 import com.beitu.saas.common.utils.identityNumber.vo.IdcardInfoExtractor;
+import com.beitu.saas.common.utils.location.BDLocationUtils;
 import com.fqgj.base.services.redis.RedisClient;
 import com.fqgj.base.services.redis.TimeConsts;
 import com.fqgj.common.utils.CollectionUtils;
+import com.fqgj.common.utils.HttpUtil;
+import com.fqgj.common.utils.JSONUtils;
 import com.fqgj.common.utils.StringUtils;
 import com.fqgj.exception.common.ApplicationException;
+import com.fqgj.log.factory.LogFactory;
+import com.fqgj.log.interfaces.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.net.util.IPAddressUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,11 +44,16 @@ import java.util.stream.Collectors;
 @Service
 public class BorrowerApplication {
 
+    private static final Log LOG = LogFactory.getLog(BorrowerApplication.class);
+
     @Autowired
     private SaasBorrowerTokenService saasBorrowerTokenService;
 
     @Autowired
     private SaasBorrowerService saasBorrowerService;
+
+    @Autowired
+    private SaasBorrowerLoginLogService saasBorrowerLoginLogService;
 
     @Autowired
     private SaasChannelApplication saasChannelApplication;
@@ -57,7 +73,7 @@ public class BorrowerApplication {
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
-    public String login(String mobile, String channelCode) {
+    public String login(String mobile, String channelCode, String phoneSystem, String ip) {
         SaasH5ChannelVo saasH5ChannelVo = saasChannelApplication.getSaasChannelBychannelCode(channelCode);
         if (saasH5ChannelVo == null) {
             throw new ApplicationException(ChannelErrorCodeEnum.DISABLE_CHANNEL);
@@ -77,8 +93,46 @@ public class BorrowerApplication {
             borrowerCode = saasBorrower.getBorrowerCode();
             token = saasBorrowerTokenService.create(saasBorrower.getBorrowerCode(), saasH5ChannelVo.getMerchantCode()).getToken();
         }
+
+        if (StringUtils.isNotEmpty(ip)) {
+            SaasBorrowerLoginLog saasBorrowerLoginLog = new SaasBorrowerLoginLog();
+            saasBorrowerLoginLog.setMerchantCode(saasH5ChannelVo.getMerchantCode());
+            saasBorrowerLoginLog.setChannelCode(channelCode);
+            saasBorrowerLoginLog.setBorrowerCode(borrowerCode);
+            saasBorrowerLoginLog.setPhoneSystem(phoneSystem);
+            saasBorrowerLoginLog.setLoginIp(ip);
+            try {
+                saasBorrowerLoginLog.setLoginIpAddress(BDLocationUtils.getGeoInfoByIpAddress(ip).get("address"));
+            } catch (Exception e) {
+                LOG.warn("........根据IP({})获取地址失败........", ip);
+            }
+            saasBorrowerLoginLogService.create(saasBorrowerLoginLog);
+        }
+
         redisClient.set(RedisKeyConsts.SAAS_TOKEN_KEY, borrowerCode, TimeConsts.AN_HOUR, token);
         return token;
+    }
+
+    @Transactional(rollbackFor = RuntimeException.class)
+    public String createBorrower(String mobile, String channelCode, String merchantCode) {
+        if (channelCode == null) {
+            throw new ApplicationException(ChannelErrorCodeEnum.DISABLE_CHANNEL);
+        }
+        if (!MobileUtil.isMobile(mobile)) {
+            throw new ApplicationException(BorrowerErrorCodeEnum.ILLEGAL_MOBILE);
+        }
+        SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByMobileAndMerchantCode(mobile, merchantCode);
+        if (saasBorrowerVo == null) {
+            saasBorrowerVo = new SaasBorrowerVo();
+            saasBorrowerVo.setMerchantCode(merchantCode);
+            saasBorrowerVo.setChannelCode(channelCode);
+            saasBorrowerVo.setMobile(mobile);
+            SaasBorrower saasBorrower = saasBorrowerService.create(saasBorrowerVo);
+            String borrowerCode = saasBorrower.getBorrowerCode();
+            saasBorrowerTokenService.create(saasBorrower.getBorrowerCode(), merchantCode);
+            return borrowerCode;
+        }
+        return saasBorrowerVo.getBorrowerCode();
     }
 
     public Boolean needRealName(String borrowerCode) {

@@ -7,7 +7,7 @@ package com.beitu.saas.intergration.esign.param;
  */
 public class LicenseContractSignParam {
 
-    private Long userId;
+    private String userCode;
 
     private String userAccountId;
 
@@ -15,12 +15,12 @@ public class LicenseContractSignParam {
 
     private String srcPdf;
 
-    public Long getUserId() {
-        return userId;
+    public String getUserCode() {
+        return userCode;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUserCode(String userCode) {
+        this.userCode = userCode;
     }
 
     public String getUserAccountId() {
