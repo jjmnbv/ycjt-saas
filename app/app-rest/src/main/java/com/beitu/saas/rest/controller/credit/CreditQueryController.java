@@ -117,6 +117,15 @@ public class CreditQueryController {
         return new DataApiResponse<>(new OrderCollectionCommentQueryResponse(collectionCommentListVoList));
     }
 
+    @RequestMapping(value = "/carrier/info", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "运营商信息", response = OrderCollectionCommentQueryResponse.class)
+    public DataApiResponse<OrderCollectionCommentQueryResponse> getCarrierInfo(@RequestBody @Valid CreditQueryRequest req) {
+        String orderNumb = req.getOrderNumb();
+        List<CollectionCommentListVo> collectionCommentListVoList = collectionApplication.getAllCollectionCommentByOrderNumb(orderNumb);
+        return new DataApiResponse<>(new OrderCollectionCommentQueryResponse(collectionCommentListVoList));
+    }
+
     private String getBorrowerCodeByOrderNumb(String orderNumb) {
         SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
         if (saasOrderVo == null) {
