@@ -2,6 +2,8 @@ package com.beitu.saas.app.application.credit;
 
 import com.beitu.saas.app.application.credit.pojo.JuxinliCallbackDataPojo;
 import com.beitu.saas.app.enums.SaasLoanPlatformEnum;
+import com.beitu.saas.borrower.client.SaasBorrowerLoanCrawlService;
+import com.beitu.saas.borrower.domain.SaasBorrowerLoanCrawlVo;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.consts.TimeConsts;
@@ -52,6 +54,9 @@ public class LoanPlatformApplication {
     
     @Autowired
     private RiskIntergrationService riskIntergrationService;
+    
+    @Autowired
+    private SaasBorrowerLoanCrawlService saasBorrowerLoanCrawlService;
     
     public String getLoanPlatformUrl(String borrowerCode, String channelCode, SaasLoanPlatformEnum saasLoanPlatformEnum) {
         String userCode = borrowerCode;
@@ -119,18 +124,10 @@ public class LoanPlatformApplication {
         SaasLoanPlatformEnum platformEnum = SaasLoanPlatformEnum.getByWebsite(pojo.getWebsite());
         String userCode = getUserCodeFromTaskId(pojo.getTaskId());
         String url = uploadLoanPlatformData(userCode, platformEnum, dto.getData());
-        LOGGER.info(url);
-    
-//        pojo.getTaskId();
-//        pojo.getToken();
-//
-//
-//
-//        UserCarrierVo userCarrierVo = new UserCarrierVo(Long.valueOf(userId), typeEnum.getType() + 10, carrierUrl);
-//        userCarrierService.addUserCarrier(userCarrierVo);
-        
-        
-        
+        SaasBorrowerLoanCrawlVo vo = new SaasBorrowerLoanCrawlVo(userCode, pojo.getTaskId(), pojo.getToken(), platformEnum.getCode(), url);
+        if (!saasBorrowerLoanCrawlService.addSaasBorrowerLoanCrawl(vo)) {
+            return "数据库结果写入失败";
+        }
         redisClient.del(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, userCode, pojo.getWebsite());
         return null;
     }
@@ -224,7 +221,7 @@ public class LoanPlatformApplication {
         if (configUtil.isServerTest()) {
             loanPlatformUrl += "test/";
         }
-        String userTime = userCode + "_" + new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        String userTime = "saas_" + userCode + "_" + new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         loanPlatformUrl += platformEnum.getWebsite() + "_" + userTime + "_" + MD5.md5(userTime + System.currentTimeMillis()) + ".json";
         return ossService.uploadFile(loanPlatformUrl, data);
     }
