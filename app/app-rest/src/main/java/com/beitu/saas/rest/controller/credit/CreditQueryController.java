@@ -103,13 +103,24 @@ public class CreditQueryController {
     public DataApiResponse<OrderDetailQueryResponse> getOrderDetail(@RequestBody @Valid CreditQueryRequest req) {
         String orderNumb = req.getOrderNumb();
         List<SaasOrderDetailVo> saasOrderDetailVoList = orderBillDetailApplication.getAllOrderBillDetailByOrderNumb(orderNumb);
-        return new DataApiResponse<>(new OrderDetailQueryResponse(saasOrderDetailVoList));
+        String viewContractUrl = "";
+        String downloadContractUrl = "";
+        return new DataApiResponse<>(new OrderDetailQueryResponse(saasOrderDetailVoList, viewContractUrl, downloadContractUrl));
     }
 
     @RequestMapping(value = "/collection/log", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "催收记录", response = OrderCollectionCommentQueryResponse.class)
     public DataApiResponse<OrderCollectionCommentQueryResponse> listCollectionLog(@RequestBody @Valid CreditQueryRequest req) {
+        String orderNumb = req.getOrderNumb();
+        List<CollectionCommentListVo> collectionCommentListVoList = collectionApplication.getAllCollectionCommentByOrderNumb(orderNumb);
+        return new DataApiResponse<>(new OrderCollectionCommentQueryResponse(collectionCommentListVoList));
+    }
+
+    @RequestMapping(value = "/carrier/info", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "运营商信息", response = OrderCollectionCommentQueryResponse.class)
+    public DataApiResponse<OrderCollectionCommentQueryResponse> getCarrierInfo(@RequestBody @Valid CreditQueryRequest req) {
         String orderNumb = req.getOrderNumb();
         List<CollectionCommentListVo> collectionCommentListVoList = collectionApplication.getAllCollectionCommentByOrderNumb(orderNumb);
         return new DataApiResponse<>(new OrderCollectionCommentQueryResponse(collectionCommentListVoList));

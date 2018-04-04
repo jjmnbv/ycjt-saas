@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.beitu.saas.borrower.dao.impl.SaasBorrowerRealInfoDaoImpl">
-    <resultMap id="BaseResultMap" type="com.beitu.saas.borrower.entity.SaasBorrowerRealInfo">
+<mapper namespace="com.beitu.saas.borrower.dao.impl.SaasBorrowerLoanCrawlDaoImpl">
+    <resultMap id="BaseResultMap" type="com.beitu.saas.borrower.entity.SaasBorrowerLoanCrawl">
         <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode"/>
         <result column="borrower_code" jdbcType="VARCHAR" property="borrowerCode"/>
-        <result column="name" jdbcType="VARCHAR" property="name"/>
-        <result column="identity_code" jdbcType="VARCHAR" property="identityCode"/>
-        <result column="gender" jdbcType="TINYINT" property="gender"/>
-        <result column="native_place" jdbcType="VARCHAR" property="nativePlace"/>
+        <result column="task_id" jdbcType="VARCHAR" property="taskId"/>
+        <result column="token" jdbcType="VARCHAR" property="token"/>
+        <result column="platform" jdbcType="SMALLINT" property="platform"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
         <result column="deleted" jdbcType="BIT" property="deleted"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
         <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
@@ -17,12 +16,11 @@
 
     <sql id="Base_Column_List">
     id,
-    merchant_code,
     borrower_code,
-    `name`,
-    identity_code,
-    gender,
-    native_place,
+    task_id,
+    token,
+    platform,
+    url,
     deleted,
     gmt_modified,
     gmt_create
@@ -32,31 +30,28 @@
             resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from saas_borrower_real_info
+        from saas_borrower_loan_crawl
         where id = #{id,jdbcType=BIGINT}
     </select>
 
     <insert id="insert" keyColumn="id" keyProperty="id"
-            parameterType="com.beitu.saas.borrower.entity.SaasBorrowerRealInfo" useGeneratedKeys="true">
-        insert into saas_borrower_real_info
+            parameterType="com.beitu.saas.borrower.entity.SaasBorrowerLoanCrawl" useGeneratedKeys="true">
+        insert into saas_borrower_loan_crawl
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="merchantCode !=null">
-                merchant_code,
-            </if>
             <if test="borrowerCode !=null">
                 borrower_code,
             </if>
-            <if test="name !=null">
-                `name`,
+            <if test="taskId !=null">
+                task_id,
             </if>
-            <if test="identityCode !=null">
-                identity_code,
+            <if test="token !=null">
+                token,
             </if>
-            <if test="gender !=null">
-                gender,
+            <if test="platform !=null">
+                platform,
             </if>
-            <if test="nativePlace !=null">
-                native_place,
+            <if test="url !=null">
+                url,
             </if>
             <if test="deleted !=null">
                 deleted,
@@ -69,23 +64,20 @@
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="merchantCode != null">
-                #{merchantCode,jdbcType=VARCHAR},
-            </if>
             <if test="borrowerCode != null">
                 #{borrowerCode,jdbcType=VARCHAR},
             </if>
-            <if test="name != null">
-                #{name,jdbcType=VARCHAR},
+            <if test="taskId != null">
+                #{taskId,jdbcType=VARCHAR},
             </if>
-            <if test="identityCode != null">
-                #{identityCode,jdbcType=VARCHAR},
+            <if test="token != null">
+                #{token,jdbcType=VARCHAR},
             </if>
-            <if test="gender != null">
-                #{gender,jdbcType=TINYINT},
+            <if test="platform != null">
+                #{platform,jdbcType=SMALLINT},
             </if>
-            <if test="nativePlace != null">
-                #{nativePlace,jdbcType=VARCHAR},
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
             </if>
             <if test="deleted != null">
                 #{deleted,jdbcType=BIT},
@@ -99,26 +91,23 @@
         </trim>
     </insert>
 
-    <update id="updateByPrimaryKey" parameterType="com.beitu.saas.borrower.entity.SaasBorrowerRealInfo">
-        update saas_borrower_real_info
+    <update id="updateByPrimaryKey" parameterType="com.beitu.saas.borrower.entity.SaasBorrowerLoanCrawl">
+        update saas_borrower_loan_crawl
         <set>
-            <if test="merchantCode !=null">
-                merchant_code = #{merchantCode,jdbcType=VARCHAR},
-            </if>
             <if test="borrowerCode !=null">
                 borrower_code = #{borrowerCode,jdbcType=VARCHAR},
             </if>
-            <if test="name !=null">
-                `name` = #{name,jdbcType=VARCHAR},
+            <if test="taskId !=null">
+                task_id = #{taskId,jdbcType=VARCHAR},
             </if>
-            <if test="identityCode !=null">
-                identity_code = #{identityCode,jdbcType=VARCHAR},
+            <if test="token !=null">
+                token = #{token,jdbcType=VARCHAR},
             </if>
-            <if test="gender !=null">
-                gender = #{gender,jdbcType=TINYINT},
+            <if test="platform !=null">
+                platform = #{platform,jdbcType=SMALLINT},
             </if>
-            <if test="nativePlace !=null">
-                native_place = #{nativePlace,jdbcType=VARCHAR},
+            <if test="url !=null">
+                url = #{url,jdbcType=VARCHAR},
             </if>
             <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},
@@ -131,7 +120,7 @@
     </update>
 
     <update id="deleteByPrimaryKey">
-        update  saas_borrower_real_info
+        update  saas_borrower_loan_crawl
         set deleted = 1
         where id = #{id,jdbcType=BIGINT}
     </update>
@@ -151,28 +140,25 @@
     <select id="selectByParams" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from saas_borrower_real_info
+        from saas_borrower_loan_crawl
         <trim prefix="where" prefixOverrides="and|or">
             <if test="id !=null">
                 and id = #{id,jdbcType=BIGINT}
             </if>
-            <if test="merchantCode !=null">
-                and merchant_code = #{merchantCode,jdbcType=VARCHAR}
-            </if>
             <if test="borrowerCode !=null">
                 and borrower_code = #{borrowerCode,jdbcType=VARCHAR}
             </if>
-            <if test="name !=null">
-                and `name` = #{name,jdbcType=VARCHAR}
+            <if test="taskId !=null">
+                and task_id = #{taskId,jdbcType=VARCHAR}
             </if>
-            <if test="identityCode !=null">
-                and identity_code = #{identityCode,jdbcType=VARCHAR}
+            <if test="token !=null">
+                and token = #{token,jdbcType=VARCHAR}
             </if>
-            <if test="gender !=null">
-                and gender = #{gender,jdbcType=TINYINT}
+            <if test="platform !=null">
+                and platform = #{platform,jdbcType=SMALLINT}
             </if>
-            <if test="nativePlace !=null">
-                and native_place = #{nativePlace,jdbcType=VARCHAR}
+            <if test="url !=null">
+                and url = #{url,jdbcType=VARCHAR}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}
@@ -187,28 +173,25 @@
         <include refid="paging"/>
     </select>
     <select id="queryTotal" resultType="INTEGER">
-        select count(*) from saas_borrower_real_info
+        select count(*) from saas_borrower_loan_crawl
         <trim prefix="where" prefixOverrides="and|or">
             <if test="id !=null">
                 and id = #{id,jdbcType=BIGINT}
             </if>
-            <if test="merchantCode !=null">
-                and merchant_code = #{merchantCode,jdbcType=VARCHAR}
-            </if>
             <if test="borrowerCode !=null">
                 and borrower_code = #{borrowerCode,jdbcType=VARCHAR}
             </if>
-            <if test="name !=null">
-                and `name` = #{name,jdbcType=VARCHAR}
+            <if test="taskId !=null">
+                and task_id = #{taskId,jdbcType=VARCHAR}
             </if>
-            <if test="identityCode !=null">
-                and identity_code = #{identityCode,jdbcType=VARCHAR}
+            <if test="token !=null">
+                and token = #{token,jdbcType=VARCHAR}
             </if>
-            <if test="gender !=null">
-                and gender = #{gender,jdbcType=TINYINT}
+            <if test="platform !=null">
+                and platform = #{platform,jdbcType=SMALLINT}
             </if>
-            <if test="nativePlace !=null">
-                and native_place = #{nativePlace,jdbcType=VARCHAR}
+            <if test="url !=null">
+                and url = #{url,jdbcType=VARCHAR}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}

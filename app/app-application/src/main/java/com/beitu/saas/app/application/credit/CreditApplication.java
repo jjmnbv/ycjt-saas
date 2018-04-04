@@ -1,6 +1,7 @@
 package com.beitu.saas.app.application.credit;
 
 import com.beitu.saas.app.api.ApiResponse;
+import com.beitu.saas.app.application.SendApplication;
 import com.beitu.saas.app.application.channel.SaasChannelApplication;
 import com.beitu.saas.app.application.credit.vo.CreditModuleListVo;
 import com.beitu.saas.app.application.order.OrderApplication;
@@ -79,6 +80,9 @@ public class CreditApplication {
     @Autowired
     private SaasOrderService saasOrderService;
 
+    @Autowired
+    private SendApplication sendApplication;
+
     public List<CreditModuleListVo> listCreditModule(String channelCode, String borrowerCode) {
         List<SaasChannelRiskSettingsVo> saasChannelRiskSettingsVoList = saasChannelApplication.getSaasChannelRiskSettingsByChannelCode(channelCode);
         if (CollectionUtils.isEmpty(saasChannelRiskSettingsVoList)) {
@@ -151,11 +155,11 @@ public class CreditApplication {
      * @param identityCode 用户身份证号码
      * @return
      */
-    public Boolean userRealNameAuth(String borrowerCode, String name, String identityCode) {
+    public Boolean userRealNameAuth(String merchantCode, String borrowerCode, String name, String identityCode) {
         if (!realNameAuth(name, identityCode)) {
             return Boolean.FALSE;
         }
-        saasBorrowerRealInfoService.create(borrowerCode, name, identityCode);
+        saasBorrowerRealInfoService.create(merchantCode, borrowerCode, name, identityCode);
         return Boolean.TRUE;
     }
 
@@ -203,7 +207,7 @@ public class CreditApplication {
                 orderApplication.updateOrderStatus(borrowerCode, orderNumb, OrderStatusEnum.SUBMIT_PRELIMINARY_REVIEW, "初审驳回后再提交");
                 return new ApiResponse("提交成功");
             } else if (orderStatusEnum.equals(OrderStatusEnum.FINAL_REVIEWER_REJECT)) {
-                orderApplication.updateOrderStatus(borrowerCode, orderNumb, OrderStatusEnum.SUBMIT_PRELIMINARY_REVIEW, "复审驳回后再提交");
+                orderApplication.updateOrderStatus(borrowerCode, orderNumb, OrderStatusEnum.SUBMIT_FINAL_REVIEW, "复审驳回后再提交");
                 return new ApiResponse("提交成功");
             }
             return new ApiResponse(OrderErrorCodeEnum.ERROR_ORDER_NUMB);
@@ -242,19 +246,19 @@ public class CreditApplication {
     }
 
     private void submitApplication(String borrowerCode, String orderNumb, String channelCode, Integer required) {
-        SaasOrderApplicationVo saasOrderApplicationVo = saasOrderApplicationService.getByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
+        SaasOrderApplicationVo saasOrderApplicationVo = saasOrderApplicationService.getByBorrowerCodeAndOrderNumb(borrowerCode, null);
         if (saasOrderApplicationVo == null) {
             if (SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
                 throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_APPLICATION_INFO);
             }
             return;
         }
-        saasOrderApplicationService.deleteById(saasOrderApplicationVo.getSaasOrderApplicationId());
+        saasOrderApplicationService.updateOrderNumbByBorrowerCode(orderNumb, borrowerCode);
         orderApplication.createOrder(saasOrderApplicationVo, orderNumb, channelCode);
     }
 
     private void submitPersonalInfo(String borrowerCode, String orderNumb, Integer required) {
-        if (saasBorrowerPersonalInfoService.countByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb) == 0) {
+        if (saasBorrowerPersonalInfoService.countByBorrowerCodeAndOrderNumb(borrowerCode, null) == 0) {
             if (SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
                 throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_PERSONAL_INFO);
             }
@@ -266,7 +270,7 @@ public class CreditApplication {
     }
 
     private void submitEmergentContact(String borrowerCode, String orderNumb, Integer required) {
-        if (saasBorrowerEmergentContactService.countByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb) == 0) {
+        if (saasBorrowerEmergentContactService.countByBorrowerCodeAndOrderNumb(borrowerCode, null) == 0) {
             if (SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
                 throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_EMERGENT_CONTACT);
             }
@@ -278,7 +282,7 @@ public class CreditApplication {
     }
 
     private void submitWorkInfo(String borrowerCode, String orderNumb, Integer required) {
-        if (saasBorrowerWorkInfoService.countByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb) == 0) {
+        if (saasBorrowerWorkInfoService.countByBorrowerCodeAndOrderNumb(borrowerCode, null) == 0) {
             if (SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
                 throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_WORK_INFO);
             }
@@ -290,7 +294,7 @@ public class CreditApplication {
     }
 
     private void submitIdentityInfo(String borrowerCode, String orderNumb, Integer required) {
-        if (saasBorrowerIdentityInfoService.countByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb) == 0) {
+        if (saasBorrowerIdentityInfoService.countByBorrowerCodeAndOrderNumb(borrowerCode, null) == 0) {
             if (SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
                 throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_IDENTITY_INFO);
             }

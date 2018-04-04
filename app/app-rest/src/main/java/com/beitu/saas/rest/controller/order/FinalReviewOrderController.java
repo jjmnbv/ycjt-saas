@@ -1,5 +1,6 @@
 package com.beitu.saas.rest.controller.order;
 
+import com.beitu.saas.app.annotations.HasPermission;
 import com.beitu.saas.app.api.ApiResponse;
 import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.api.ModuleApiResponse;
@@ -7,6 +8,7 @@ import com.beitu.saas.app.application.order.OrderApplication;
 import com.beitu.saas.app.application.order.vo.QueryOrderVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.auth.entity.SaasAdmin;
+import com.beitu.saas.common.consts.ButtonPermissionConsts;
 import com.beitu.saas.order.enums.OrderStatusEnum;
 import com.beitu.saas.rest.controller.order.request.FinalOrderDetailRequest;
 import com.beitu.saas.rest.controller.order.request.FinalOrderQueryRequest;
@@ -54,6 +56,7 @@ public class FinalReviewOrderController {
         return new ModuleApiResponse(new FinalOrderListResponse(orderApplication.listFinalReviewOrder(queryOrderVo, page)), page);
     }
 
+    @HasPermission(permissionKey = ButtonPermissionConsts.FINAL_REVIEWER_REMARKS)
     @RequestMapping(value = "/remark/save", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "复审订单备注保存", response = ApiResponse.class)
@@ -74,6 +77,7 @@ public class FinalReviewOrderController {
         return new DataApiResponse<>(response);
     }
 
+    @HasPermission(permissionKey = ButtonPermissionConsts.FINAL_REVIEWER_GET_ORDER)
     @RequestMapping(value = "/order/get", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "复审领单", response = ApiResponse.class)
@@ -83,6 +87,7 @@ public class FinalReviewOrderController {
         return new ApiResponse("操作成功");
     }
 
+    @HasPermission(permissionKey = ButtonPermissionConsts.FINAL_REVIEWER_PASS)
     @RequestMapping(value = "/agree", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "通过复审", response = ApiResponse.class)
@@ -92,6 +97,7 @@ public class FinalReviewOrderController {
         return new ApiResponse("操作成功");
     }
 
+    @HasPermission(permissionKey = ButtonPermissionConsts.FINAL_REVIEWER_REJECT)
     @RequestMapping(value = "/reject", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "复审驳回", response = ApiResponse.class)
@@ -101,6 +107,7 @@ public class FinalReviewOrderController {
         return new ApiResponse("操作成功");
     }
 
+    @HasPermission(permissionKey = ButtonPermissionConsts.FINAL_REVIEWER_REFUSE)
     @RequestMapping(value = "/refuse", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "复审拒绝", response = ApiResponse.class)

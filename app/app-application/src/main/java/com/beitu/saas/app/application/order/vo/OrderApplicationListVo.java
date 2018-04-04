@@ -9,7 +9,6 @@ import io.swagger.annotations.ApiModelProperty;
  * @create 2018/4/4 上午11:44
  * @description
  */
-@ApiModel(value = "进件订单信息")
 public class OrderApplicationListVo implements ResponseData {
 
     @ApiModelProperty(value = "申请日期")

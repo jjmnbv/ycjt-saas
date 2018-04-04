@@ -72,9 +72,10 @@ public class SaasBorrowerRealInfoServiceImpl extends AbstractBaseService impleme
     }
 
     @Override
-    public SaasBorrowerRealInfo create(String borrowerCode, String name, String identityCode) {
+    public SaasBorrowerRealInfo create(String merchantCode, String borrowerCode, String name, String identityCode) {
         SaasBorrowerRealInfo saasBorrowerRealInfo = new SaasBorrowerRealInfo();
         saasBorrowerRealInfo.setBorrowerCode(borrowerCode);
+        saasBorrowerRealInfo.setMerchantCode(merchantCode);
         saasBorrowerRealInfo.setName(name);
         saasBorrowerRealInfo.setIdentityCode(identityCode);
         IdcardInfoExtractor idcardInfoExtractor = new IdcardInfoExtractor(identityCode);
