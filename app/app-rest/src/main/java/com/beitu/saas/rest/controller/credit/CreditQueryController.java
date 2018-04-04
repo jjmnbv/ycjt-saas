@@ -99,7 +99,7 @@ public class CreditQueryController {
 
     @RequestMapping(value = "/order/detail", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "订单详情", response = OrderApplicationQueryResponse.class)
+    @ApiOperation(value = "订单详情", response = OrderDetailQueryResponse.class)
     public DataApiResponse<OrderDetailQueryResponse> getOrderDetail(@RequestBody @Valid CreditQueryRequest req) {
         String orderNumb = req.getOrderNumb();
         List<SaasOrderDetailVo> saasOrderDetailVoList = orderBillDetailApplication.getAllOrderBillDetailByOrderNumb(orderNumb);
@@ -119,11 +119,10 @@ public class CreditQueryController {
 
     @RequestMapping(value = "/carrier/info", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "运营商信息", response = OrderCollectionCommentQueryResponse.class)
-    public DataApiResponse<OrderCollectionCommentQueryResponse> getCarrierInfo(@RequestBody @Valid CreditQueryRequest req) {
+    @ApiOperation(value = "运营商信息", response = CarrierInfoQueryResponse.class)
+    public DataApiResponse<CarrierInfoQueryResponse> getCarrierInfo(@RequestBody @Valid CreditQueryRequest req) {
         String orderNumb = req.getOrderNumb();
-        List<CollectionCommentListVo> collectionCommentListVoList = collectionApplication.getAllCollectionCommentByOrderNumb(orderNumb);
-        return new DataApiResponse<>(new OrderCollectionCommentQueryResponse(collectionCommentListVoList));
+        return new DataApiResponse<>(new CarrierInfoQueryResponse());
     }
 
     private String getBorrowerCodeByOrderNumb(String orderNumb) {

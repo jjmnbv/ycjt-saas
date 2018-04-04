@@ -100,6 +100,7 @@ public class SaasController {
         return new DataApiResponse<>(new SaasCreateBorrowerSuccessResponse(borrowerCode));
     }
 
+    @ParamsValidate
     @RequestMapping(value = "/credit/apply/info/save", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "保存风控模块申请表信息", response = ApiResponse.class)

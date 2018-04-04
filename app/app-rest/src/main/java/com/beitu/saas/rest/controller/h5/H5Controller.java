@@ -224,6 +224,7 @@ public class H5Controller {
         return new DataApiResponse<>(response);
     }
 
+    @ParamsValidate
     @RequestMapping(value = "/credit/apply/info/save", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "保存风控模块申请表信息", response = ApiResponse.class)
@@ -377,6 +378,7 @@ public class H5Controller {
         return new DataApiResponse<>(new CreditEmergentContactResponse(saasBorrowerEmergentContactVo));
     }
 
+    @ParamsValidate
     @RequestMapping(value = "/credit/emergent/contact/save", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "保存风控模块紧急联系人信息", response = ApiResponse.class)

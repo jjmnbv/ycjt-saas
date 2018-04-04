@@ -57,7 +57,9 @@ public class OrderStatusHistoryApplication {
             orderStatusHistoryListVo.setOperatorName(saasBorrowerRealInfoVo.getName());
         } else {
             SaasAdmin saasAdmin = saasAdminService.getSaasAdminByAdminCode(saasOrderStatusHistoryVo.getOperatorCode());
-            orderStatusHistoryListVo.setOperatorName(saasAdmin.getName());
+            if (saasAdmin != null) {
+                orderStatusHistoryListVo.setOperatorName(saasAdmin.getName());
+            }
         }
         StringBuilder operatorContent = new StringBuilder();
         if (saasOrderStatusHistoryVo.getCurrentOrderStatus() != null) {

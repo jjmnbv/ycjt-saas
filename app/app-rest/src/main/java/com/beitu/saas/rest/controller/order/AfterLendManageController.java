@@ -15,6 +15,7 @@ import com.beitu.saas.rest.controller.order.request.*;
 import com.beitu.saas.rest.controller.order.response.AfterLendOrderDetailResponse;
 import com.beitu.saas.rest.controller.order.response.AfterLendOrderListResponse;
 import com.fqgj.common.api.Page;
+import com.fqgj.common.api.annotations.ParamsValidate;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
@@ -64,6 +65,7 @@ public class AfterLendManageController {
         return new DataApiResponse<>(response);
     }
 
+    @ParamsValidate
     @HasPermission(permissionKey = ButtonPermissionConsts.EXTEND)
     @RequestMapping(value = "/extend", method = RequestMethod.POST)
     @ResponseBody

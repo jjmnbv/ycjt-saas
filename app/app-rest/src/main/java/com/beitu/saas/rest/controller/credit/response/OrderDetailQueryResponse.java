@@ -1,13 +1,11 @@
 package com.beitu.saas.rest.controller.credit.response;
 
-import com.beitu.saas.app.application.order.vo.OrderApplicationListVo;
 import com.beitu.saas.app.application.order.vo.SaasOrderDetailVo;
 import com.beitu.saas.risk.helpers.CollectionUtils;
 import com.fqgj.common.api.ResponseData;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,7 +15,7 @@ import java.util.stream.Collectors;
  * @create 2018/4/4 上午11:12
  * @description
  */
-@ApiModel(value = "历史进件列表")
+@ApiModel(value = "订单详情")
 public class OrderDetailQueryResponse implements ResponseData {
 
     @ApiModelProperty(value = "查看合同URL")
