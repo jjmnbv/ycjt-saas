@@ -52,8 +52,8 @@ public class SaasCollectionOrderServiceImpl extends AbstractBaseService implemen
         if (null != collectionOrderQueryParam.getOverdueDaysType()) {
             OverdueTimeEnums timeEnums = OverdueTimeEnums.getEnum(collectionOrderQueryParam.getOverdueDaysType());
             if (null != timeEnums) {
-                collectionOrderQueryParam.setOverdueStartDate(DateUtil.getDate(DateUtil.addDate(new Date(), -timeEnums.getStart()), "yyyy-MM-dd"));
-                collectionOrderQueryParam.setOverdueEndDate(DateUtil.getDate(DateUtil.addDate(new Date(), -timeEnums.getEnd()), "yyyy-MM-dd"));
+                collectionOrderQueryParam.setOverdueStartDate(DateUtil.getDate(DateUtil.addDate(new Date(), -timeEnums.getEnd()), "yyyy-MM-dd"));
+                collectionOrderQueryParam.setOverdueEndDate(DateUtil.getDate(DateUtil.addDate(new Date(), -timeEnums.getStart()), "yyyy-MM-dd"));
 
             }
         }

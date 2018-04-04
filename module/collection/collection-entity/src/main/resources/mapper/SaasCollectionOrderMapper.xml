@@ -13,12 +13,12 @@
                     and sbri.name = #{collectionOrderQueryParam.name,jdbcType=VARCHAR}
                 </if>
                 <if test="collectionOrderQueryParam.identityCode != null">
-                    and sbri.identityCode = #{collectionOrderQueryParam.identityCode,jdbcType=VARCHAR}
+                    and sbri.identity_code = #{collectionOrderQueryParam.identityCode,jdbcType=VARCHAR}
                 </if>
                 <if test="collectionOrderQueryParam.channelCode != null">
-                    and so.channelCode = #{collectionOrderQueryParam.channelCode,jdbcType=VARCHAR}
+                    and so.channel_code = #{collectionOrderQueryParam.channelCode,jdbcType=VARCHAR}
                 </if>
-                <if test="collectionOrderQueryParam.overdueStartDate != null and collectionOrderQueryParam.overdueStartEndDate != null">
+                <if test="collectionOrderQueryParam.overdueStartDate != null and collectionOrderQueryParam.overdueEndDate != null">
                     and date_format(so.repayment_dt, '%Y-%m-%d') &gt;=
                     #{collectionOrderQueryParam.overdueStartDate,jdbcType=VARCHAR}
                     and date_format(so.repayment_dt, '%Y-%m-%d') &lt;
@@ -78,13 +78,15 @@
 
 
     <select id="queryTotalCollectionOrderListCount" parameterType="map" resultType="INTEGER">
-        select count(*)
+        SELECT COUNT(*) from (
+        select
+        sco.order_no orderNo
         from saas_collection_order sco
         left join saas_order so on sco.order_no=so.order_numb
         left join saas_borrower sb on so.borrower_code=sb.borrower_code
         left join saas_borrower_real_info sbri on so.borrower_code=sbri.borrower_code
         left join saas_channel sc on so.channel_code=sc.channel_code
-        <include refid="Param_collection_order_Where_Clause"/>
+        <include refid="Param_collection_order_Where_Clause"/>)t
     </select>
 
 
