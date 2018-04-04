@@ -100,7 +100,8 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
         if (OrderStatusEnum.PRELIMINARY_REVIEWER_REJECT.getCode().equals(saasOrder.getOrderStatus())
                 || OrderStatusEnum.PRELIMINARY_REVIEWER_REFUSE.getCode().equals(saasOrder.getOrderStatus())
                 || OrderStatusEnum.FINAL_REVIEWER_REJECT.getCode().equals(saasOrder.getOrderStatus())
-                || OrderStatusEnum.FINAL_REVIEWER_REFUSE.getCode().equals(saasOrder.getOrderStatus())) {
+                || OrderStatusEnum.FINAL_REVIEWER_REFUSE.getCode().equals(saasOrder.getOrderStatus())
+                || OrderStatusEnum.LOAN_LENDER_REFUSE.getCode().equals(saasOrder.getOrderStatus())) {
             return Boolean.FALSE;
         }
         return Boolean.TRUE;
