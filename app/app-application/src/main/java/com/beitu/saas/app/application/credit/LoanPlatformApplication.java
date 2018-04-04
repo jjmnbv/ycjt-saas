@@ -119,7 +119,7 @@ public class LoanPlatformApplication {
         SaasLoanPlatformEnum platformEnum = SaasLoanPlatformEnum.getByWebsite(pojo.getWebsite());
         String userCode = getUserCodeFromTaskId(pojo.getTaskId());
         String url = uploadLoanPlatformData(userCode, platformEnum, dto.getData());
-    
+        LOGGER.info(url);
     
 //        pojo.getTaskId();
 //        pojo.getToken();
