@@ -117,6 +117,19 @@ public class SaasAdminServiceImpl extends AbstractBaseService implements SaasAdm
         }});
     }
 
+    @Override
+    public SaasAdmin getDefaultAdminByMerchantCode(String merchantCode){
+        List list = this.selectByParams(new HashMap(4) {{
+            put("merchantCode", merchantCode);
+            put("isDefault", true);
+            put("deleted", false);
+        }});
+        if (CollectionUtils.isNotEmpty(list)){
+            return (SaasAdmin) list.get(0);
+        }
+        return null;
+    }
+
 
 }
 
