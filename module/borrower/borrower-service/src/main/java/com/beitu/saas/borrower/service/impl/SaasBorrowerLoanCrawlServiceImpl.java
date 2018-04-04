@@ -1,14 +1,11 @@
 package com.beitu.saas.borrower.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.beitu.saas.borrower.client.SaasBorrowerLoanCrawlService;
 import com.beitu.saas.borrower.dao.SaasBorrowerLoanCrawlDao;
 import com.beitu.saas.borrower.domain.SaasBorrowerLoanCrawlVo;
 import com.beitu.saas.borrower.entity.SaasBorrowerLoanCrawl;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
-import com.fqgj.log.factory.LogFactory;
-import com.fqgj.log.interfaces.Log;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +24,10 @@ public class SaasBorrowerLoanCrawlServiceImpl extends AbstractBaseService implem
     @Autowired
     private SaasBorrowerLoanCrawlDao saasBorrowerLoanCrawlDao;
     
-    private static final Log LOGGER = LogFactory.getLog(SaasBorrowerLoanCrawlServiceImpl.class);
-    
     @Override
     public Boolean addSaasBorrowerLoanCrawl(SaasBorrowerLoanCrawlVo saasBorrowerLoanCrawlVo) {
         SaasBorrowerLoanCrawl entity = new SaasBorrowerLoanCrawl();
         BeanUtils.copyProperties(saasBorrowerLoanCrawlVo, entity);
-        LOGGER.info(JSON.toJSONString(entity));
         return create(entity) != null;
     }
 }
