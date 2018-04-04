@@ -8,6 +8,7 @@ import com.beitu.saas.app.application.order.OrderApplication;
 import com.beitu.saas.order.client.SaasOrderService;
 import com.beitu.saas.order.domain.SaasOrderVo;
 import com.beitu.saas.order.enums.OrderErrorCodeEnum;
+import com.beitu.saas.rest.controller.credit.request.CreditQueryRequest;
 import com.beitu.saas.rest.controller.credit.request.UserBaseInfoQueryRequest;
 import com.beitu.saas.rest.controller.credit.response.UserBaseInfoResponse;
 import com.fqgj.exception.common.ApplicationException;
@@ -53,6 +54,17 @@ public class CreditQueryController {
 
         return new DataApiResponse<>(new UserBaseInfoResponse(borrowerPersonalInfoVo, borrowerIdentityInfoVo, borrowerWorkInfoVo, borrowerEmergentContactVo, borrowerLivingAreaVo));
     }
+
+    @RequestMapping(value = "/order/log", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "订单操作记录", response = UserBaseInfoResponse.class)
+    public DataApiResponse<UserBaseInfoResponse> listOrderLog(@RequestBody @Valid CreditQueryRequest req) {
+        String orderNumb = req.getOrderNumb();
+        String borrowerCode = getBorrowerCodeByOrderNumb(orderNumb);
+
+        return new DataApiResponse<>(new UserBaseInfoResponse(borrowerPersonalInfoVo, borrowerIdentityInfoVo, borrowerWorkInfoVo, borrowerEmergentContactVo, borrowerLivingAreaVo));
+    }
+
 
     private String getBorrowerCodeByOrderNumb(String orderNumb) {
         SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
