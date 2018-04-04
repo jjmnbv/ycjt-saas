@@ -162,6 +162,14 @@ public class AdminController {
         saasAdmin.setEnable(enable);
         saasAdmin.setId(adminId);
         boolean success = saasAdminService.updateById(saasAdmin) > 0;
+        if (enable == false) {
+            SaasAdmin entity = (SaasAdmin) saasAdminService.selectById(adminId);
+            String oldToken = redisClient.get(RedisKeyConsts.SAAS_TOKEN_KEY, entity.getCode());
+            if (StringUtils.isNotEmpty(oldToken)) {
+                redisClient.del(RedisKeyConsts.SAAS_TOKEN_KEY, oldToken);
+                redisClient.del(RedisKeyConsts.SAAS_TOKEN_KEY, entity.getCode());
+            }
+        }
         if (!success) {
             throw new ApplicationException("账户状态更新失败");
         }
