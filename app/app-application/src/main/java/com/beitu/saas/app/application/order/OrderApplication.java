@@ -651,7 +651,7 @@ public class OrderApplication {
         updateSaasOrder.setTermUrl(contractApplication.borrowerDoExtendContractSign(operatorCode, saasOrderVo.getSaasOrderId()));
         saasOrderService.updateById(updateSaasOrder);
 
-        SaasOrder oldSaasOrder = saasOrderService.selectById(saasOrderVo.getSaasOrderId());
+        SaasOrder oldSaasOrder = saasOrderService.selectById(saasOrderVo.getRelationOrderId());
         saasOrderService.updateOrderStatus(oldSaasOrder.getId(), oldSaasOrder.getVersion(), OrderStatusEnum.getEnumByCode(oldSaasOrder.getOrderStatus()), OrderStatusEnum.IN_EXTEND);
 
         orderBillDetailApplication.createOrderBillDetail(orderNumb);
