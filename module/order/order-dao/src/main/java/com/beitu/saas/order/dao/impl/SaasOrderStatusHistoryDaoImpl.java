@@ -19,7 +19,14 @@ import java.util.Map;
 public class SaasOrderStatusHistoryDaoImpl extends AbstractBaseMapper<SaasOrderStatusHistory> implements SaasOrderStatusHistoryDao {
 
     @Override
-    public SaasOrderStatusHistory selectOrderStatusHistoryByOrderNumb(String orderNumb) {
+    public SaasOrderStatusHistory selectLatestOrderStatusHistoryByOrderNumb(String orderNumb) {
+        Map<String, Object> map = new HashMap<>(2);
+        map.put("orderNumb", orderNumb);
+        return getSqlSession().selectOne(this.getStatement("selectLatestOrderStatusHistoryByOrderNumb"), map);
+    }
+
+    @Override
+    public List<SaasOrderStatusHistory> selectOrderStatusHistoryByOrderNumb(String orderNumb) {
         Map<String, Object> map = new HashMap<>(2);
         map.put("orderNumb", orderNumb);
         return getSqlSession().selectOne(this.getStatement("selectOrderStatusHistoryByOrderNumb"), map);

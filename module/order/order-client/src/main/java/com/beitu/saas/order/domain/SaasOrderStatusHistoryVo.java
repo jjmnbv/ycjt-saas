@@ -5,6 +5,7 @@ import com.fqgj.common.api.ResponseData;
 import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * User: jungle
@@ -39,6 +40,8 @@ public class SaasOrderStatusHistoryVo implements ResponseData, Serializable {
      * 备注
      */
     private String remark;
+
+    private Date gmtCreate;
 
     public Long getSaasOrderStatusHistoryId() {
         return saasOrderStatusHistoryId;
@@ -95,6 +98,14 @@ public class SaasOrderStatusHistoryVo implements ResponseData, Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
     }
 
     public static SaasOrderStatusHistoryVo convertEntityToVO(SaasOrderStatusHistory saasOrderStatusHistory) {

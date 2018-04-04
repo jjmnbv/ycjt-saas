@@ -1,8 +1,11 @@
 package com.beitu.saas.order.client;
 
+import com.beitu.saas.order.domain.SaasOrderStatusHistoryVo;
 import com.beitu.saas.order.entity.SaasOrderStatusHistory;
 import com.fqgj.common.base.BaseService;
 import com.fqgj.common.entity.BaseEntity;
+
+import java.util.List;
 
 /**
  * User: jungle
@@ -11,7 +14,9 @@ import com.fqgj.common.entity.BaseEntity;
  */
 public interface SaasOrderStatusHistoryService<T extends BaseEntity> extends BaseService<T> {
 
-    SaasOrderStatusHistory getOrderStatusHistoryByOrderNumb(String orderNumb);
+    SaasOrderStatusHistoryVo getLatestOrderStatusHistoryByOrderNumb(String orderNumb);
+
+    List<SaasOrderStatusHistoryVo> listOrderStatusHistoryByOrderNumb(String orderNumb);
 
     String getLoanLendRemark(String orderNumb);
 
