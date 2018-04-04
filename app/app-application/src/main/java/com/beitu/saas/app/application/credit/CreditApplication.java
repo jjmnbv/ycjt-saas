@@ -242,10 +242,6 @@ public class CreditApplication {
                     break;
             }
         });
-
-
-
-        sendApplication.sendNotifyMessage();
         return new ApiResponse("提交成功");
     }
 
