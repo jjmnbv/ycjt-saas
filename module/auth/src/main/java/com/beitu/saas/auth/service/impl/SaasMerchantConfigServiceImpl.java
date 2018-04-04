@@ -69,20 +69,20 @@ public class SaasMerchantConfigServiceImpl extends AbstractBaseService implement
     @Override
     public Boolean updateContractConfig(String merchantCode, Integer type) {
         SaasMerchantConfig saasMerchantConfig = new SaasMerchantConfig();
-        saasMerchantConfig.setMerchantCode(merchantCode);
         saasMerchantConfig.setConfigEnum(type.toString());
-        List list = this.selectByParams(new HashMap<String, Object>() {{
+        List<SaasMerchantConfig> list = this.selectByParams(new HashMap<String, Object>() {{
             put("merchantCode", merchantCode);
             put("configType", MerchantConfigTypeEnum.CONTRACT_CONFIG.getKey());
 
         }});
         if (CollectionUtils.isEmpty(list)) {
+            saasMerchantConfig.setMerchantCode(merchantCode);
             saasMerchantConfig.setConfigType(MerchantConfigTypeEnum.CONTRACT_CONFIG.getKey().longValue());
             saasMerchantConfigDao.insert(saasMerchantConfig);
             return true;
         }
-
-        return saasMerchantConfigDao.updateByMerchantCode(saasMerchantConfig) > 0;
+        saasMerchantConfig.setId(list.get(0).getId());
+        return saasMerchantConfigDao.updateByPrimaryKey(saasMerchantConfig) > 0;
     }
 
     @Override
