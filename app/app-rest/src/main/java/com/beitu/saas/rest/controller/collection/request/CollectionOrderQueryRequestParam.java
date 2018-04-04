@@ -13,7 +13,7 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "催收列表查询条件")
 public class CollectionOrderQueryRequestParam {
 
-    @ApiModelProperty(value = "逾期类型")
+    @ApiModelProperty(value = "逾期类型: 1-今日到期,2-逾期三天,...,8-90天以上")
     private Integer overdueDaysType;
 
     @ApiModelProperty(value = "借款人手机号码")

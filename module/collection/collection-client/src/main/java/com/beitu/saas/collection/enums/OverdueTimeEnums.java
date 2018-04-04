@@ -13,7 +13,8 @@ public enum OverdueTimeEnums {
     ONE_TO_FIFTEEN(4, 0, 15, "0-15天"),
     FIFTEEN_TO_THIRTY(5, 15, 30, "15-30天"),
     THIRTY_TO_SIXTY(6, 30, 60, "30-60天"),
-    SIXTY_TO_NINETY(7, 60, 90, "60-90天");
+    SIXTY_TO_NINETY(7, 60, 90, "60-90天"),
+    MORE_THAN_NINETY(8, 90, 10000, "90天以上");
 
     private Integer type;
 
