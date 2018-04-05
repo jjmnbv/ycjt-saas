@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiModel;
  * @create 2018/3/30 下午5:02
  * @description
  */
-@ApiModel(value = "获取多平台借贷信息")
+@ApiModel(value = "多平台借贷爬取URL返回数据")
 public class LoanPlatformUrlResponse implements ResponseData {
 
     private String jumpUrl;

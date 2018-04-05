@@ -39,11 +39,13 @@ public class LoanPlatformController {
     
     @RequestMapping(value = "/get/url", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "获取多平台借贷URL", response = LoanPlatformUrlResponse.class)
+    @ApiOperation(value = "获取多平台借贷爬取URL", response = LoanPlatformUrlResponse.class)
     public DataApiResponse<LoanPlatformUrlResponse> getLoanPlatformUrl(@RequestBody @Valid GetLoanPlatformUrlRequest req) {
         String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
         String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
-        return new DataApiResponse<>(new LoanPlatformUrlResponse(loanPlatformApplication.getLoanPlatformUrl(borrowerCode, channelCode, SaasLoanPlatformEnum.getByCode(req.getLoanPlatformType()))));
+        SaasLoanPlatformEnum platform = SaasLoanPlatformEnum.getByCode(req.getLoanPlatformType());
+        String url = loanPlatformApplication.getLoanPlatformUrl(borrowerCode, channelCode, platform);
+        return new DataApiResponse<>(new LoanPlatformUrlResponse(url));
     }
     
     /**
@@ -56,7 +58,7 @@ public class LoanPlatformController {
     @SignIgnore
     @ResponseBody
     @RequestMapping(value = "/juxinli/callback", consumes = "application/json", method = RequestMethod.POST)
-    public void loanPlatformCallback(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public void juxinliCallback(HttpServletRequest request, HttpServletResponse response) throws Exception {
         LOGGER.info("************************* 聚信立回调开始 *************************");
         request.setCharacterEncoding("UTF-8");
         String reqStr = IOUtils.toString(request.getInputStream(), "utf-8");
@@ -90,7 +92,7 @@ public class LoanPlatformController {
      */
     @SignIgnore
     @RequestMapping("/juxinli/crawling")
-    public String juxinliCrawlingCallback(HttpServletRequest request) {
+    public String juxinliCrawling(HttpServletRequest request) {
         String paramString = request.getParameter("param");
         return loanPlatformApplication.juxinliCrawlingProcess(paramString);
     }

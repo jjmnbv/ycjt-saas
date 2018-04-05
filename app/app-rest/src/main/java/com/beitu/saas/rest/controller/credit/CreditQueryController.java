@@ -1,20 +1,22 @@
 package com.beitu.saas.rest.controller.credit;
 
 import com.beitu.saas.app.api.DataApiResponse;
-import com.beitu.saas.app.application.borrower.BorrowerApplication;
 import com.beitu.saas.app.application.collection.CollectionApplication;
 import com.beitu.saas.app.application.collection.vo.CollectionCommentListVo;
 import com.beitu.saas.app.application.credit.BorrowerBaseInfoApplication;
+import com.beitu.saas.app.application.credit.LoanPlatformApplication;
 import com.beitu.saas.app.application.credit.vo.*;
-import com.beitu.saas.app.application.order.OrderApplication;
 import com.beitu.saas.app.application.order.OrderApplyApplication;
 import com.beitu.saas.app.application.order.OrderBillDetailApplication;
 import com.beitu.saas.app.application.order.OrderStatusHistoryApplication;
 import com.beitu.saas.app.application.order.vo.OrderApplicationListVo;
 import com.beitu.saas.app.application.order.vo.SaasOrderDetailVo;
+import com.beitu.saas.app.enums.SaasLoanPlatformEnum;
+import com.beitu.saas.intergration.risk.pojo.LoanPlatformQueryPojo;
 import com.beitu.saas.order.client.SaasOrderService;
 import com.beitu.saas.order.domain.SaasOrderVo;
 import com.beitu.saas.order.enums.OrderErrorCodeEnum;
+import com.beitu.saas.rest.controller.credit.request.CreditLoanPlatformRequest;
 import com.beitu.saas.rest.controller.credit.request.CreditQueryRequest;
 import com.beitu.saas.rest.controller.credit.request.UserBaseInfoQueryRequest;
 import com.beitu.saas.rest.controller.credit.response.*;
@@ -59,6 +61,9 @@ public class CreditQueryController {
 
     @Autowired
     private CollectionApplication collectionApplication;
+    
+    @Autowired
+    private LoanPlatformApplication loanPlatformApplication;
 
     @RequestMapping(value = "/base", method = RequestMethod.POST)
     @ResponseBody
@@ -115,6 +120,17 @@ public class CreditQueryController {
         String orderNumb = req.getOrderNumb();
         List<CollectionCommentListVo> collectionCommentListVoList = collectionApplication.getAllCollectionCommentByOrderNumb(orderNumb);
         return new DataApiResponse<>(new OrderCollectionCommentQueryResponse(collectionCommentListVoList));
+    }
+    
+    @RequestMapping(value = "/platform/data", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "多平台借贷爬取结果", response = LoanPlatformDataInfoResponse.class)
+    public DataApiResponse<LoanPlatformDataInfoResponse> getLoanPlatformData(@RequestBody @Valid CreditLoanPlatformRequest req) {
+        String orderNumb = req.getOrderNumb();
+        String borrowerCode = getBorrowerCodeByOrderNumb(orderNumb);
+        SaasLoanPlatformEnum platform = SaasLoanPlatformEnum.getByCode(req.getPlatform());
+        LoanPlatformQueryPojo pojo = loanPlatformApplication.getLoanPlatformData(borrowerCode, platform);
+        return new DataApiResponse<>(new LoanPlatformDataInfoResponse(pojo));
     }
 
     private String getBorrowerCodeByOrderNumb(String orderNumb) {

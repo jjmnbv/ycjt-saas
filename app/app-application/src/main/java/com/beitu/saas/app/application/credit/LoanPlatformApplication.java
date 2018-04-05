@@ -19,6 +19,8 @@ import com.beitu.saas.intergration.risk.param.LoanPlatformCrawlingParam;
 import com.beitu.saas.intergration.risk.param.LoanPlatformQueryParam;
 import com.beitu.saas.intergration.risk.param.LoanPlatformTaskIdPrefixParam;
 import com.beitu.saas.intergration.risk.param.LoanPlatformValidatePrefixParam;
+import com.beitu.saas.intergration.risk.pojo.LoanPlatformQueryPojo;
+import com.beitu.saas.order.client.SaasOrderService;
 import com.fqgj.base.services.redis.RedisClient;
 import com.fqgj.common.utils.JSONUtils;
 import com.fqgj.common.utils.MD5;
@@ -57,6 +59,9 @@ public class LoanPlatformApplication {
     
     @Autowired
     private SaasBorrowerLoanCrawlService saasBorrowerLoanCrawlService;
+    
+    @Autowired
+    private SaasOrderService saasOrderService;
     
     public String getLoanPlatformUrl(String borrowerCode, String channelCode, SaasLoanPlatformEnum saasLoanPlatformEnum) {
         String userCode = borrowerCode;
@@ -153,6 +158,23 @@ public class LoanPlatformApplication {
         redisClient.set(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, timestamp, TimeConsts.THREE_MINUTE, userCode, website);
         return "redirect:" + configUtil.getAddressURLPrefix() + configUtil.getH5AddressURLPrefix()
                 + "?channel=" + channelCode + "#/formList";
+    }
+    
+    public LoanPlatformQueryPojo getLoanPlatformData(String borrowerCode, SaasLoanPlatformEnum platformEnum) {
+        SaasBorrowerLoanCrawlVo vo = saasBorrowerLoanCrawlService.getSaasBorrowerLoanCrawl(borrowerCode, platformEnum.getCode());
+        if (vo == null) {
+            return null;
+        }
+        String data = ossService.getFileContent(vo.getUrl());
+        if (StringUtils.isEmpty(data)) {
+            return null;
+        }
+        LoanPlatformQueryPojo pojo = null;
+        try {
+            pojo = JSONUtils.json2pojoAndOffUnknownField(data, LoanPlatformQueryPojo.class);
+        } catch (Exception e) {
+        }
+        return pojo;
     }
     
     private Boolean validateSign(JuxinliCallbackDataPojo pojo) {
