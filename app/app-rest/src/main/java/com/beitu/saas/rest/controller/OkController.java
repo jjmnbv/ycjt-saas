@@ -15,6 +15,7 @@ import com.fqgj.log.factory.LogFactory;
 import com.fqgj.log.interfaces.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class OkController {
 
     private static final Log LOGGER = LogFactory.getLog(OkController.class);
-    
+
     @Autowired
     private RiskIntergrationService riskIntergrationService;
     @Autowired
@@ -52,13 +53,13 @@ public class OkController {
         param.setPlatformEnum(LoanPlatformEnum.WU_YOU_JIE_TIAO);
         LoanPlatformCrawlingDto dto = riskIntergrationService.loanPlatformCrawlingUrl(param);
         return JSON.toJSONString(dto);
-        
+
 //        LoanPlatformQueryParam param = new LoanPlatformQueryParam("964e45dd5f984d6ea2a2f4546973f8e9");
 //        LoanPlatformQueryDto dto = riskIntergrationService.loanPlatformQuery(param);
 //        return JSON.toJSONString(dto);
     }
 
-    @RequestMapping("/syncTask")
+    @RequestMapping(value = "/syncTask", method = RequestMethod.POST)
     @ResponseBody
     @VisitorAccessible
     @SignIgnore
