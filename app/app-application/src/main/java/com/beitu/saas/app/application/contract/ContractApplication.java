@@ -197,17 +197,12 @@ public class ContractApplication {
             throw new ApplicationException("请先进行签署授权");
         }
         SaasOrder saasOrder = saasOrderService.selectById(orderId);
-        BorrowerDoContractSignParam borrowerDoContractSignParam = new BorrowerDoContractSignParam();
         if (saasOrder == null || StringUtils.isEmpty(saasOrder.getTermUrl())) {
-            borrowerDoContractSignParam.setSrcPdfContent(contractCreateApplication.createLoanPdf(orderId));
+            String loanContractUrl = getLoanContractUrl(borrowerCode);
+            return ossService.uploadFile(loanContractUrl, new String(contractCreateApplication.createLoanPdf(orderId)));
         } else {
-            borrowerDoContractSignParam.setSrcPdfContent(ossService.getFileContent(saasOrder.getTermUrl()).getBytes());
+            return saasOrder.getTermUrl();
         }
-        borrowerDoContractSignParam.setBorrowerAccountId(saasUserEsignAuthorizationVo.getAccountId());
-        borrowerDoContractSignParam.setBorrowerSealData(ossService.getFileContent(saasUserEsignAuthorizationVo.getSealUrl()));
-        borrowerDoContractSignParam.setBorrowerCode(borrowerCode);
-        String loanContractUrl = getLoanContractUrl(borrowerCode);
-        return ossService.uploadFile(loanContractUrl, esignIntegrationService.borrowerDoContractSign(borrowerDoContractSignParam));
     }
 
     public String lenderDoLoanContractSign(String merchantCode, Long orderId) {
@@ -216,17 +211,12 @@ public class ContractApplication {
             throw new ApplicationException("请先进行签署授权");
         }
         SaasOrder saasOrder = saasOrderService.selectById(orderId);
-        LenderDoContractSignParam lenderDoContractSignParam = new LenderDoContractSignParam();
         if (saasOrder == null || StringUtils.isEmpty(saasOrder.getTermUrl())) {
-            lenderDoContractSignParam.setSrcPdfContent(contractCreateApplication.createLoanPdf(orderId));
+            String loanContractUrl = getLoanContractUrl(merchantCode);
+            return ossService.uploadFile(loanContractUrl, new String(contractCreateApplication.createLoanPdf(orderId)));
         } else {
-            lenderDoContractSignParam.setSrcPdfContent(ossService.getFileContent(saasOrder.getTermUrl()).getBytes());
+            return saasOrder.getTermUrl();
         }
-        lenderDoContractSignParam.setMerchantAccountId(saasUserEsignAuthorizationVo.getAccountId());
-        lenderDoContractSignParam.setMerchantSealData(ossService.getFileContent(saasUserEsignAuthorizationVo.getSealUrl()));
-        lenderDoContractSignParam.setMerchantCode(merchantCode);
-        String loanContractUrl = getLoanContractUrl(merchantCode);
-        return ossService.uploadFile(loanContractUrl, esignIntegrationService.lenderDoContractSign(lenderDoContractSignParam));
     }
 
     public String borrowerDoExtendContractSign(String borrowerCode, Long orderId) {
@@ -235,17 +225,12 @@ public class ContractApplication {
             throw new ApplicationException("请先进行签署授权");
         }
         SaasOrder saasOrder = saasOrderService.selectById(orderId);
-        BorrowerDoContractSignParam borrowerDoContractSignParam = new BorrowerDoContractSignParam();
         if (saasOrder == null || StringUtils.isEmpty(saasOrder.getTermUrl())) {
-            borrowerDoContractSignParam.setSrcPdfContent(contractCreateApplication.createExtendPdf(orderId));
+            String loanContractUrl = getLoanContractUrl(borrowerCode);
+            return ossService.uploadFile(loanContractUrl, new String(contractCreateApplication.createExtendPdf(orderId)));
         } else {
-            borrowerDoContractSignParam.setSrcPdfContent(ossService.getFileContent(saasOrder.getTermUrl()).getBytes());
+            return saasOrder.getTermUrl();
         }
-        borrowerDoContractSignParam.setBorrowerAccountId(saasUserEsignAuthorizationVo.getAccountId());
-        borrowerDoContractSignParam.setBorrowerSealData(ossService.getFileContent(saasUserEsignAuthorizationVo.getSealUrl()));
-        borrowerDoContractSignParam.setBorrowerCode(borrowerCode);
-        String loanContractUrl = getLoanContractUrl(borrowerCode);
-        return ossService.uploadFile(loanContractUrl, esignIntegrationService.borrowerDoContractSign(borrowerDoContractSignParam));
     }
 
     public String lenderDoExtendContractSign(String merchantCode, Long orderId) {
@@ -254,17 +239,12 @@ public class ContractApplication {
             throw new ApplicationException("请先进行签署授权");
         }
         SaasOrder saasOrder = saasOrderService.selectById(orderId);
-        LenderDoContractSignParam lenderDoContractSignParam = new LenderDoContractSignParam();
         if (saasOrder == null || StringUtils.isEmpty(saasOrder.getTermUrl())) {
-            lenderDoContractSignParam.setSrcPdfContent(contractCreateApplication.createExtendPdf(orderId));
+            String loanContractUrl = getLoanContractUrl(merchantCode);
+            return ossService.uploadFile(loanContractUrl, new String(contractCreateApplication.createExtendPdf(orderId)));
         } else {
-            lenderDoContractSignParam.setSrcPdfContent(ossService.getFileContent(saasOrder.getTermUrl()).getBytes());
+            return saasOrder.getTermUrl();
         }
-        lenderDoContractSignParam.setMerchantAccountId(saasUserEsignAuthorizationVo.getAccountId());
-        lenderDoContractSignParam.setMerchantSealData(ossService.getFileContent(saasUserEsignAuthorizationVo.getSealUrl()));
-        lenderDoContractSignParam.setMerchantCode(merchantCode);
-        String loanContractUrl = getLoanContractUrl(merchantCode);
-        return ossService.uploadFile(loanContractUrl, esignIntegrationService.lenderDoContractSign(lenderDoContractSignParam));
     }
 
 

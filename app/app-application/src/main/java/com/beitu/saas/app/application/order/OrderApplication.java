@@ -549,17 +549,14 @@ public class OrderApplication {
         if (StringUtils.isNotEmpty(saasOrderVo.getLoanLenderCode()) && !operatorCode.equals(saasOrderVo.getLoanLenderCode())) {
             throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
         }
-        String termUrl;
+        ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, operatorCode, saasOrderVo.getSaasOrderId(), ContractTypeEnum.LENDER_DO_LOAN_CONTRACT_SIGN));
         if (StringUtils.isNotEmpty(saasOrderVo.getTermUrl())) {
             updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.FOR_REIMBURSEMENT, null);
-            termUrl = contractApplication.lenderDoLoanContractSign(merchantCode, saasOrderVo.getSaasOrderId());
             orderBillDetailApplication.createOrderBillDetail(orderNumb, merchantCode);
         } else {
-            termUrl = contractApplication.lenderDoLoanContractSign(merchantCode, saasOrderVo.getSaasOrderId());
             updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.TO_CONFIRM_RECEIPT, null);
         }
         SaasOrder updateSaasOrder = new SaasOrder();
-        updateSaasOrder.setTermUrl(termUrl);
         updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
         updateSaasOrder.setLoanLenderCode(operatorCode);
         saasOrderService.updateById(updateSaasOrder);
@@ -621,8 +618,6 @@ public class OrderApplication {
         SaasOrder extendSaasOrder = new SaasOrder();
         BeanUtils.copyProperties(saasOrderVo, extendSaasOrder);
         extendSaasOrder.setTotalInterestRatio(extendInterestRatio);
-//        extendSaasOrder.setTermUrl(contractApplication.lenderDoExtendContractSign(saasOrderVo.getMerchantCode(), null));
-        extendSaasOrder.setTermUrl("test");
         extendSaasOrder.setExpireDate(DateUtil.getTodayOverTime());
         if (DateUtil.countDay(new Date(), saasOrderVo.getRepaymentDt()) > 0) {
             extendSaasOrder.setCreatedDt(DateUtil.addDate(new Date(), 1));
@@ -635,13 +630,14 @@ public class OrderApplication {
         extendSaasOrder.setRelationOrderId(saasOrderVo.getSaasOrderId());
         saasOrderService.create(extendSaasOrder);
 
+        ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, operatorCode, extendSaasOrder.getId(), ContractTypeEnum.LENDER_DO_EXTEND_CONTRACT_SIGN));
+
         SaasOrderStatusHistory saasOrderStatusHistory = new SaasOrderStatusHistory();
         saasOrderStatusHistory.setOrderId(extendSaasOrder.getId());
         saasOrderStatusHistory.setOrderNumb(extendSaasOrder.getOrderNumb());
         saasOrderStatusHistory.setUpdateOrderStatus(nextOrderStatus.getCode());
         saasOrderStatusHistory.setOperatorCode(operatorCode);
         saasOrderStatusHistoryService.create(saasOrderStatusHistory);
-
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
@@ -651,10 +647,8 @@ public class OrderApplication {
             throw new ApplicationException(OrderErrorCodeEnum.ILLEGAL_OPERATION_ORDER_STATUS);
         }
         updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.FOR_REIMBURSEMENT, null);
-        SaasOrder updateSaasOrder = new SaasOrder();
-        updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
-        updateSaasOrder.setTermUrl(contractApplication.borrowerDoExtendContractSign(operatorCode, saasOrderVo.getSaasOrderId()));
-        saasOrderService.updateById(updateSaasOrder);
+
+        ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, operatorCode, saasOrderVo.getSaasOrderId(), ContractTypeEnum.BORROWER_DO_EXTEND_CONTRACT_SIGN));
 
         SaasOrder oldSaasOrder = saasOrderService.selectById(saasOrderVo.getRelationOrderId());
         saasOrderService.updateOrderStatus(oldSaasOrder.getId(), oldSaasOrder.getVersion(), OrderStatusEnum.getEnumByCode(oldSaasOrder.getOrderStatus()), OrderStatusEnum.IN_EXTEND);
