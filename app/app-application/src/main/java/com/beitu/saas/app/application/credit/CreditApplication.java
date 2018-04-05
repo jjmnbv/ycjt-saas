@@ -195,7 +195,7 @@ public class CreditApplication {
      * @return
      */
     @Transactional(rollbackFor = RuntimeException.class)
-    public ApiResponse submitCreditInfo(String borrowerCode, String channelCode, String orderNumb) {
+    public ApiResponse submitCreditInfo(String merchantCode, String borrowerCode, String channelCode, String orderNumb) {
         List<SaasChannelRiskSettingsVo> saasChannelRiskSettingsVoList = saasChannelApplication.getSaasChannelRiskSettingsByChannelCode(channelCode);
         if (CollectionUtils.isEmpty(saasChannelRiskSettingsVoList)) {
             return new ApiResponse("提交手机号码成功");
@@ -204,10 +204,10 @@ public class CreditApplication {
             // 驳回订单再次进行提交操作
             OrderStatusEnum orderStatusEnum = saasOrderService.getOrderStatusByOrderNumb(orderNumb);
             if (orderStatusEnum.equals(OrderStatusEnum.PRELIMINARY_REVIEWER_REJECT)) {
-                orderApplication.updateOrderStatus(borrowerCode, orderNumb, OrderStatusEnum.SUBMIT_PRELIMINARY_REVIEW, "初审驳回后再提交");
+                orderApplication.updateOrderStatus(merchantCode, borrowerCode, orderNumb, OrderStatusEnum.SUBMIT_PRELIMINARY_REVIEW, "初审驳回后再提交");
                 return new ApiResponse("提交成功");
             } else if (orderStatusEnum.equals(OrderStatusEnum.FINAL_REVIEWER_REJECT)) {
-                orderApplication.updateOrderStatus(borrowerCode, orderNumb, OrderStatusEnum.SUBMIT_FINAL_REVIEW, "复审驳回后再提交");
+                orderApplication.updateOrderStatus(merchantCode, borrowerCode, orderNumb, OrderStatusEnum.SUBMIT_FINAL_REVIEW, "复审驳回后再提交");
                 return new ApiResponse("提交成功");
             }
             return new ApiResponse(OrderErrorCodeEnum.ERROR_ORDER_NUMB);

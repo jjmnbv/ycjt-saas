@@ -9,8 +9,10 @@ public class ContractConsts {
 
     public static final String AUTHORIZATION_PDF_PATH = ContractConsts.class.getClassLoader().getResource("").getPath() + "authorization.pdf";
 
-    public static final String LOAN_PDF_PATH = ContractConsts.class.getClassLoader().getResource("").getPath() + "licence.pdf";
+    public static final String LOAN_PDF_PATH = ContractConsts.class.getClassLoader().getResource("").getPath() + "borrowTerm.pdf";
 
     public static final String EXTEND_PDF_PATH = ContractConsts.class.getClassLoader().getResource("").getPath() + "extendTerm.pdf";
+
+    public static final String CONTRACT_INSCRIBE_DATE_PATTERN = "yyyy年MM月dd日";
 
 }

@@ -25,7 +25,7 @@ public class OrderCalculateApplication {
      */
     public BigDecimal getAmount(SaasOrderBillDetailVo saasOrderBillDetailVo) {
         BigDecimal lateInterest = BigDecimal.ZERO;
-        Integer lateDt = DateUtil.countDays(new Date(), saasOrderBillDetailVo.getRepaymentDt());
+        Integer lateDt = DateUtil.countDay(new Date(), saasOrderBillDetailVo.getRepaymentDt());
         if (lateDt > 0) {
             lateInterest = saasOrderBillDetailVo.getRealCapital().multiply(saasOrderBillDetailVo.getLateInterestRatio()).multiply(new BigDecimal(lateDt)).divide(new BigDecimal(365), 2, BigDecimal.ROUND_HALF_UP);
         }
@@ -40,7 +40,7 @@ public class OrderCalculateApplication {
      */
     public BigDecimal getAmount(SaasOrderVo saasOrderVo) {
         BigDecimal lateInterest = BigDecimal.ZERO;
-        Integer lateDt = DateUtil.countDays(new Date(), saasOrderVo.getRepaymentDt());
+        Integer lateDt = DateUtil.countDay(new Date(), saasOrderVo.getRepaymentDt());
         if (lateDt > 0) {
             lateInterest = saasOrderVo.getRealCapital().multiply(saasOrderVo.getLateInterestRatio()).multiply(new BigDecimal(lateDt)).divide(new BigDecimal(365), 2, BigDecimal.ROUND_HALF_UP);
         }
@@ -58,7 +58,7 @@ public class OrderCalculateApplication {
      */
     public BigDecimal getInterest(BigDecimal realCapital, BigDecimal totalInterestRatio, Date createdDt, Date repaymentDt) {
         BigDecimal interest = BigDecimal.ZERO;
-        Integer lendDt = DateUtil.countDays(repaymentDt, createdDt);
+        Integer lendDt = DateUtil.countDay(repaymentDt, createdDt);
         if (lendDt > 0) {
             interest = realCapital.multiply(totalInterestRatio).multiply(new BigDecimal(lendDt)).divide(new BigDecimal(365), 2, BigDecimal.ROUND_HALF_UP);
         }

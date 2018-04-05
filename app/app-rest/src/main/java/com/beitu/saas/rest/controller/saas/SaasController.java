@@ -209,7 +209,7 @@ public class SaasController {
         if (StringUtils.isEmpty(channelCode)) {
             return new DataApiResponse<>(ChannelErrorCodeEnum.DISABLE_CHANNEL);
         }
-        return creditApplication.submitCreditInfo(req.getBorrowerCode(), channelCode, null);
+        return creditApplication.submitCreditInfo(merchantCode, req.getBorrowerCode(), channelCode, null);
     }
 
 }

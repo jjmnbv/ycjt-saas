@@ -79,11 +79,12 @@
         order by id desc limit 1
     </select>
 
-    <select id="selectByOrderNumb" resultMap="BaseResultMap">
+    <select id="selectByOrderNumbAndMerchantCode" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from saas_order
         where order_numb = #{orderNumb,jdbcType=VARCHAR}
+        and merchant_code = #{merchantCode,jdbcType=VARCHAR}
         and deleted = false
         and expire_date <![CDATA[ >= ]]> NOW()
         order by id desc limit 1

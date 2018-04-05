@@ -58,8 +58,8 @@ public class ForLendingOrderController {
     @ResponseBody
     @ApiOperation(value = "待放款订单备注保存", response = ApiResponse.class)
     public ApiResponse saveRemark(@RequestBody @Valid LendingOrderRemarkSaveRequest req) {
-        String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.saveOrderRemark(adminCode, req.getOrderNumb(), req.getRemark());
+        SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
+        orderApplication.saveOrderRemark(saasAdmin.getMerchantCode(), saasAdmin.getCode(), req.getOrderNumb(), req.getRemark());
         return new ApiResponse("保存成功");
     }
 
@@ -67,7 +67,7 @@ public class ForLendingOrderController {
     @ResponseBody
     @ApiOperation(value = "待放款订单详情查看", response = LendingOrderDetailResponse.class)
     public DataApiResponse<LendingOrderDetailResponse> detail(@RequestBody @Valid LendingOrderDetailRequest req) {
-        String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
+        SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
         LendingOrderDetailResponse response = new LendingOrderDetailResponse();
         response.setOrderNumb(req.getOrderNumb());
         return new DataApiResponse<>(response);
@@ -88,8 +88,8 @@ public class ForLendingOrderController {
     @ResponseBody
     @ApiOperation(value = "放款拒绝", response = ApiResponse.class)
     public ApiResponse refuse(@RequestBody @Valid FinalReviewerOperateOrderRequest req) {
-        String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.lenderRefuse(adminCode, req.getOrderNumb());
+        SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
+        orderApplication.lenderRefuse(saasAdmin.getMerchantCode(), saasAdmin.getCode(), req.getOrderNumb());
         return new ApiResponse("操作成功");
     }
 

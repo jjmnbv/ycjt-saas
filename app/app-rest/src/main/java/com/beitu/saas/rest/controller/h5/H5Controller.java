@@ -6,6 +6,8 @@ import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.application.borrower.BorrowerApplication;
 import com.beitu.saas.app.application.channel.SaasChannelApplication;
 import com.beitu.saas.app.application.contract.ContractApplication;
+import com.beitu.saas.app.application.contract.enums.ContractTypeEnum;
+import com.beitu.saas.app.application.contract.thread.GenerateContractThread;
 import com.beitu.saas.app.application.credit.CreditApplication;
 import com.beitu.saas.app.application.credit.LoanPlatformApplication;
 import com.beitu.saas.app.application.credit.vo.BorrowerEmergentContactVo;
@@ -33,8 +35,10 @@ import com.beitu.saas.channel.domain.SaasH5ChannelVo;
 import com.beitu.saas.channel.enums.ChannelErrorCodeEnum;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.RedisKeyConsts;
+import com.beitu.saas.common.consts.TermUrlConsts;
 import com.beitu.saas.common.utils.DateUtil;
 import com.beitu.saas.common.utils.NetworkUtil;
+import com.beitu.saas.common.utils.ThreadPoolUtils;
 import com.beitu.saas.order.client.SaasOrderApplicationService;
 import com.beitu.saas.order.client.SaasOrderService;
 import com.beitu.saas.order.domain.SaasOrderApplicationVo;
@@ -152,7 +156,7 @@ public class H5Controller {
             throw new ApplicationException(ChannelErrorCodeEnum.DISABLE_CHANNEL);
         }
         SaasMerchantVo saasMerchantVo = saasMerchantService.getByMerchantCode(saasH5ChannelVo.getMerchantCode());
-        String headerTitle = "洋葱借条";
+        String headerTitle = "银柳SAAS";
         if (saasMerchantVo != null) {
             headerTitle = saasMerchantVo.getCompanyName();
         }
@@ -169,14 +173,6 @@ public class H5Controller {
         Integer applyType = orderApplication.getOrderApplyStatus(borrowerCode, channelCode).getCode();
         return new DataApiResponse<>(new UserHomeResponse(applyType));
     }
-
-//    @RequestMapping(value = "/user/apply/status", method = RequestMethod.POST)
-//    @ResponseBody
-//    @ApiOperation(value = "获取用户订单状态", response = UserOrderStatusResponse.class)
-//    public DataApiResponse<UserOrderStatusResponse> getBorrowerStatus() {
-//        // TODO
-//        return new DataApiResponse<>(new UserOrderStatusResponse(BorrowerOrderApplyStatusEnum.NO_SUBMIT.getType()));
-//    }
 
     @RequestMapping(value = "/credit/list", method = RequestMethod.POST)
     @ResponseBody
@@ -206,7 +202,7 @@ public class H5Controller {
 
         SaasOrderApplicationVo saasOrderApplicationVo = saasOrderApplicationService.getByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
         if (saasOrderApplicationVo != null) {
-            response.setBorrowingDuration(DateUtil.countDays(saasOrderApplicationVo.getRepaymentDt(), new Date()));
+            response.setBorrowingDuration(DateUtil.countDay(saasOrderApplicationVo.getRepaymentDt(), new Date()));
             response.setBorrowPurpose(saasOrderApplicationVo.getBorrowPurpose());
             response.setRealCapital(saasOrderApplicationVo.getRealCapital());
             response.setTotalInterestRatio(saasOrderApplicationVo.getTotalInterestRatio());
@@ -229,17 +225,10 @@ public class H5Controller {
     @ResponseBody
     @ApiOperation(value = "保存风控模块申请表信息", response = ApiResponse.class)
     public ApiResponse saveCreditApplyInfo(@RequestBody @Valid CreditSaveApplyInfoRequest req) {
-        String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
-        if (StringUtils.isEmpty(channelCode)) {
-            return new ApiResponse(ChannelErrorCodeEnum.DISABLE_CHANNEL);
-        }
-        SaasH5ChannelVo saasH5ChannelVo = saasChannelApplication.getSaasChannelBychannelCode(channelCode);
-        if (saasH5ChannelVo == null) {
-            throw new ApplicationException(ChannelErrorCodeEnum.DISABLE_CHANNEL);
-        }
-        String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
+        SaasBorrowerVo saasBorrowerVo = RequestLocalInfo.getCurrentAdmin().getSaasBorrower();
+        String borrowerCode = saasBorrowerVo.getBorrowerCode();
         if (StringUtils.isNotEmpty(req.getUserName()) && StringUtils.isNotEmpty(req.getIdentityCode())) {
-            if (!creditApplication.userRealNameAuth(saasH5ChannelVo.getMerchantCode(), borrowerCode, req.getUserName(), req.getIdentityCode())) {
+            if (!creditApplication.userRealNameAuth(saasBorrowerVo.getMerchantCode(), borrowerCode, req.getUserName(), req.getIdentityCode())) {
                 return new ApiResponse(BorrowerErrorCodeEnum.USER_PROFILE_REAL_NAME_FAILURE);
             }
         }
@@ -247,15 +236,15 @@ public class H5Controller {
             return new ApiResponse(BorrowerErrorCodeEnum.USER_PROFILE_NEED_REAL_NAME);
         }
         if (contractApplication.needDoLicenseContractSign(borrowerCode)) {
-            contractApplication.doLicenseContractSign(borrowerCode);
+            ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, borrowerCode, null, ContractTypeEnum.BORROWER_DO_AUTHORIZATION_CONTRACT_SIGN));
         }
-        String orderNumb = saasOrderService.getReviewerRefuseOrderNumb(borrowerCode, channelCode);
+        String orderNumb = saasOrderService.getReviewerRefuseOrderNumb(borrowerCode, saasBorrowerVo.getChannelCode());
 
         SaasOrderApplicationVo addOrderApplication = new SaasOrderApplicationVo();
         addOrderApplication.setBorrowerCode(borrowerCode);
         addOrderApplication.setOrderNumb(orderNumb);
-        addOrderApplication.setChannelCode(saasH5ChannelVo.getChannelCode());
-        addOrderApplication.setMerchantCode(saasH5ChannelVo.getMerchantCode());
+        addOrderApplication.setChannelCode(saasBorrowerVo.getChannelCode());
+        addOrderApplication.setMerchantCode(saasBorrowerVo.getMerchantCode());
         addOrderApplication.setRealCapital(req.getRealCapital());
         addOrderApplication.setTotalInterestRatio(req.getTotalInterestRatio().divide(new BigDecimal(100)));
         addOrderApplication.setRepaymentDt(DateUtil.addDate(new Date(), req.getBorrowingDuration()));
@@ -404,55 +393,39 @@ public class H5Controller {
     @ResponseBody
     @ApiOperation(value = "提交风控模块", response = ApiResponse.class)
     public ApiResponse submitCreditInfo() {
-
         String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
-        if (StringUtils.isEmpty(channelCode)) {
-            return new ApiResponse(ChannelErrorCodeEnum.DISABLE_CHANNEL);
-        }
-        SaasH5ChannelVo saasH5ChannelVo = saasChannelApplication.getSaasChannelBychannelCode(channelCode);
-        if (saasH5ChannelVo == null) {
-            return new ApiResponse(ChannelErrorCodeEnum.DISABLE_CHANNEL);
-        }
         SaasBorrowerVo saasBorrowerVo = RequestLocalInfo.getCurrentAdmin().getSaasBorrower();
-        if (!saasH5ChannelVo.getMerchantCode().equals(saasBorrowerVo.getMerchantCode())) {
-            return new ApiResponse(BorrowerErrorCodeEnum.NO_ACCESS_RIGHT);
-        }
 
         String orderNumb = saasOrderService.getReviewerRefuseOrderNumb(saasBorrowerVo.getBorrowerCode(), channelCode);
 
-        return creditApplication.submitCreditInfo(saasBorrowerVo.getBorrowerCode(), saasH5ChannelVo.getChannelCode(), orderNumb);
+        return creditApplication.submitCreditInfo(saasBorrowerVo.getMerchantCode(), saasBorrowerVo.getBorrowerCode(), channelCode, orderNumb);
     }
 
     @RequestMapping(value = "/order/list", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "用户账单列表", response = H5OrderListResponse.class)
     public DataApiResponse<H5OrderListResponse> listOrder() {
-        String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
-        if (StringUtils.isEmpty(channelCode)) {
-            return new DataApiResponse(ChannelErrorCodeEnum.DISABLE_CHANNEL);
-        }
-        SaasH5ChannelVo saasH5ChannelVo = saasChannelApplication.getSaasChannelBychannelCode(channelCode);
-        if (saasH5ChannelVo == null) {
-            return new DataApiResponse(ChannelErrorCodeEnum.DISABLE_CHANNEL);
-        }
         SaasBorrowerVo saasBorrowerVo = RequestLocalInfo.getCurrentAdmin().getSaasBorrower();
-        if (!saasH5ChannelVo.getMerchantCode().equals(saasBorrowerVo.getMerchantCode())) {
-            return new DataApiResponse(BorrowerErrorCodeEnum.NO_ACCESS_RIGHT);
-        }
-        return new DataApiResponse(new H5OrderListResponse(orderApplication.listH5Order(saasBorrowerVo.getBorrowerCode(), saasH5ChannelVo.getMerchantCode())));
+        return new DataApiResponse(new H5OrderListResponse(orderApplication.listH5Order(saasBorrowerVo.getBorrowerCode(), saasBorrowerVo.getMerchantCode())));
     }
 
     @RequestMapping(value = "/order/detail", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "用户订单详情", response = H5OrderDetailResponse.class)
     public DataApiResponse<H5OrderDetailResponse> getOrderDetail(@RequestBody @Valid QueryOrderDetailRequest req) {
-        OrderDetailVo orderDetailVo = orderApplication.getOrderDetailVoByOrderNumb(req.getOrderNumb());
+        String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getMerchantCode();
+        OrderDetailVo orderDetailVo = orderApplication.getOrderDetailVoByOrderNumbAndMerchantCode(req.getOrderNumb(), merchantCode);
         if (orderDetailVo == null) {
             return new DataApiResponse();
         }
         H5OrderDetailResponse response = new H5OrderDetailResponse();
         BeanUtils.copyProperties(orderDetailVo, response);
         response.setOrderNumb(req.getOrderNumb());
+        StringBuilder contractUrl = new StringBuilder();
+        contractUrl.append(configUtil.getAddressURLPrefix()).append(TermUrlConsts.pdfViewUrl)
+                .append("?file=").append(orderDetailVo.getTermUrl());
+        StringBuilder downloadContractUrl = new StringBuilder();
+        downloadContractUrl.append(configUtil.getAddressURLPrefix()).append(orderDetailVo.getTermUrl());
         if (OrderStatusEnum.TO_CONFIRM_RECEIPT.getCode().equals(orderDetailVo.getOrderStatus())) {
             response.setHeaderTitle("确认借款");
             if (contractApplication.needDoLicenseContractSign(orderDetailVo.getBorrowerCode())) {
@@ -460,14 +433,12 @@ public class H5Controller {
                 response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LICENSE_CONTRACT.getUrl());
                 response.setContract1DownloadUrl("");
                 response.setContractTitle2(SaasContractEnum.LOAN_CONTRACT.getMsg());
-//            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LOAN_CONTRACT.getUrl());
-                response.setContractUrl2("http://ycjt.oss-cn-hangzhou.aliyuncs.com/contract/20170715004158769001_753a5c94b2b8c5437778986c25baf22d.pdf");
-                response.setContract2DownloadUrl("http://ycjt.oss-cn-hangzhou.aliyuncs.com/contract/20170715004158769001_753a5c94b2b8c5437778986c25baf22d.pdf");
+                response.setContractUrl2(contractUrl.toString());
+                response.setContract2DownloadUrl(downloadContractUrl.toString());
             } else {
                 response.setContractTitle1(SaasContractEnum.LOAN_CONTRACT.getMsg());
-//            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LOAN_CONTRACT.getUrl());
-                response.setContractUrl1("http://ycjt.oss-cn-hangzhou.aliyuncs.com/contract/20170715004158769001_753a5c94b2b8c5437778986c25baf22d.pdf");
-                response.setContract1DownloadUrl("http://ycjt.oss-cn-hangzhou.aliyuncs.com/contract/20170715004158769001_753a5c94b2b8c5437778986c25baf22d.pdf");
+                response.setContractUrl1(contractUrl.toString());
+                response.setContract1DownloadUrl(downloadContractUrl.toString());
             }
             response.setVisible(Boolean.TRUE);
             response.setButtonTitle(H5OrderDetailButtonTypeEnum.CONFIRM_RECEIPT_BUTTON_TYPE.getMsg());
@@ -475,17 +446,16 @@ public class H5Controller {
         } else if (OrderStatusEnum.TO_CONFIRM_EXTEND.getCode().equals(orderDetailVo.getOrderStatus())) {
             response.setHeaderTitle("确认展期");
             response.setContractTitle1(SaasContractEnum.EXTEND_CONTRACT.getMsg());
-//            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.EXTEND_CONTRACT.getUrl());
-            response.setContractUrl1(orderDetailVo.getTermUrl());
+            response.setContractUrl1(contractUrl.toString());
+            response.setContract1DownloadUrl(downloadContractUrl.toString());
             response.setVisible(Boolean.TRUE);
             response.setButtonTitle(H5OrderDetailButtonTypeEnum.CONFIRM_EXTEND_BUTTON_TYPE.getMsg());
             response.setButtonType(H5OrderDetailButtonTypeEnum.CONFIRM_EXTEND_BUTTON_TYPE.getCode());
         } else {
             response.setVisible(Boolean.FALSE);
             response.setContractTitle1(SaasContractEnum.LOAN_CONTRACT.getMsg());
-            response.setContractUrl1("http://ycjt.oss-cn-hangzhou.aliyuncs.com/H5/pdfview/web/viewer.html?file=/contract/20170715004158769001_753a5c94b2b8c5437778986c25baf22d.pdf");
-            response.setContract1DownloadUrl("http://ycjt.oss-cn-hangzhou.aliyuncs.com/contract/20170715004158769001_753a5c94b2b8c5437778986c25baf22d.pdf");
-
+            response.setContractUrl1(contractUrl.toString());
+            response.setContract1DownloadUrl(downloadContractUrl.toString());
             response.setHeaderTitle("订单详情");
         }
         return new DataApiResponse(response);
@@ -503,10 +473,10 @@ public class H5Controller {
         SaasBorrowerVo saasBorrowerVo = RequestLocalInfo.getCurrentAdmin().getSaasBorrower();
         switch (h5OrderDetailButtonTypeEnum) {
             case CONFIRM_EXTEND_BUTTON_TYPE:
-                orderApplication.confirmExtend(saasBorrowerVo.getBorrowerCode(), orderNumb);
+                orderApplication.confirmExtend(saasBorrowerVo.getMerchantCode(), saasBorrowerVo.getBorrowerCode(), orderNumb);
                 return new ApiResponse("签署展期合同成功");
             case CONFIRM_RECEIPT_BUTTON_TYPE:
-                orderApplication.confirmReceipt(saasBorrowerVo.getBorrowerCode(), orderNumb);
+                orderApplication.confirmReceipt(saasBorrowerVo.getMerchantCode(), saasBorrowerVo.getBorrowerCode(), orderNumb);
                 return new ApiResponse("签署借款合同成功");
             default:
                 return new ApiResponse("操作成功");

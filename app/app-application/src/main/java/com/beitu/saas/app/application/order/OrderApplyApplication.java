@@ -62,7 +62,7 @@ public class OrderApplyApplication {
         orderApplicationListVo.setRealCapital(saasOrderApplication.getRealCapital().toString());
         orderApplicationListVo.setBorrowingDuration(DateUtil.countDay(saasOrderApplication.getRepaymentDt(), saasOrderApplication.getGmtCreate()) + "天");
         orderApplicationListVo.setBorrowerName(saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(saasOrderApplication.getBorrowerCode()).getName());
-        orderApplicationListVo.setBorrowerMobile(saasBorrowerService.getByBorrowerCode(saasOrderApplication.getBorrowerCode()).getMobile());
+        orderApplicationListVo.setBorrowerMobile(saasBorrowerService.getByMobileAndMerchantCode(saasOrderApplication.getBorrowerCode(), saasOrderApplication.getMerchantCode()).getMobile());
         orderApplicationListVo.setOrderStatus(saasOrderService.getOrderStatusByOrderNumb(saasOrderApplication.getOrderNumb()).getMsg());
         orderApplicationListVo.setRepaymentMethod("一次性还本付息");
         orderApplicationListVo.setChannelName(saasChannelService.getSaasChannelByChannelCode(saasOrderApplication.getChannelCode()).getChannelName());

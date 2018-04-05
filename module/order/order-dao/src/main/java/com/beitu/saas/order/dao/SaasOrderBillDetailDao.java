@@ -21,7 +21,7 @@ public interface SaasOrderBillDetailDao extends BaseMapper<SaasOrderBillDetail> 
 
     List<SaasOrderBillDetail> selectByBorrowerCodeAndMerchantCode(String borrowerCode, String merchantCode);
 
-    List<SaasOrderBillDetail> selectByOrderNumb(String orderNumb);
+    List<SaasOrderBillDetail> selectByOrderNumbAndMerchantCode(String orderNumb, String merchantCode);
 
     int countByConditions(Map<String, Object> conditions);
 

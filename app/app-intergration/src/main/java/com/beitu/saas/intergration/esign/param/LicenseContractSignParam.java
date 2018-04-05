@@ -13,7 +13,7 @@ public class LicenseContractSignParam {
 
     private String userSealData;
 
-    private String srcPdf;
+    private byte[] srcPdfContent;
 
     public String getUserCode() {
         return userCode;
@@ -39,12 +39,11 @@ public class LicenseContractSignParam {
         this.userSealData = userSealData;
     }
 
-    public String getSrcPdf() {
-        return srcPdf;
+    public byte[] getSrcPdfContent() {
+        return srcPdfContent;
     }
 
-    public void setSrcPdf(String srcPdf) {
-        this.srcPdf = srcPdf;
+    public void setSrcPdfContent(byte[] srcPdfContent) {
+        this.srcPdfContent = srcPdfContent;
     }
-
 }

@@ -138,8 +138,8 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
     }
 
     @Override
-    public SaasOrderVo getByOrderNumb(String orderNumb) {
-        return SaasOrderVo.convertEntityToVO(saasOrderDao.selectByOrderNumb(orderNumb));
+    public SaasOrderVo getByOrderNumbAndMerchantCode(String orderNumb, String merchantCode) {
+        return SaasOrderVo.convertEntityToVO(saasOrderDao.selectByOrderNumbAndMerchantCode(orderNumb, merchantCode));
     }
 
     @Override

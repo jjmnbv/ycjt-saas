@@ -81,9 +81,9 @@ public class CarrierController {
         String userId = request.getParameter("userId");
         String taskId = request.getParameter("outUniqueId");
         if (StringUtils.isNotEmpty(userId) && StringUtils.isNotEmpty(taskId)) {
-            SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCode(userId);
-            if (saasBorrowerVo != null) {
-                if (carrierApplication.carrierTaskAndUserMatch(userId, saasBorrowerVo.getMobile(), taskId)) {
+            String mobile = saasBorrowerService.getMobileByBorrowerCode(userId);
+            if (StringUtils.isNotEmpty(mobile)) {
+                if (carrierApplication.carrierTaskAndUserMatch(userId, mobile, taskId)) {
                     redisClient.set(RedisKeyConsts.H5_CARRIER_CRAWLING, taskId, TimeConsts.TEN_MINUTES, userId);
                 }
             }

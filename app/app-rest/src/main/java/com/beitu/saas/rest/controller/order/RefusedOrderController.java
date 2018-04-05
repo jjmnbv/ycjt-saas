@@ -1,6 +1,5 @@
 package com.beitu.saas.rest.controller.order;
 
-import com.beitu.saas.app.annotations.HasPermission;
 import com.beitu.saas.app.api.ApiResponse;
 import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.api.ModuleApiResponse;
@@ -8,8 +7,6 @@ import com.beitu.saas.app.application.order.OrderApplication;
 import com.beitu.saas.app.application.order.vo.QueryOrderVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.auth.entity.SaasAdmin;
-import com.beitu.saas.common.consts.ButtonPermissionConsts;
-import com.beitu.saas.order.enums.OrderStatusEnum;
 import com.beitu.saas.rest.controller.order.request.RefusedOrderDetailRequest;
 import com.beitu.saas.rest.controller.order.request.RefusedOrderQueryRequest;
 import com.beitu.saas.rest.controller.order.request.RefusedOrderRemarkSaveRequest;
@@ -56,8 +53,8 @@ public class RefusedOrderController {
     @ResponseBody
     @ApiOperation(value = "已拒订单备注保存", response = ApiResponse.class)
     public ApiResponse saveRemark(@RequestBody @Valid RefusedOrderRemarkSaveRequest req) {
-        String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.saveOrderRemark(adminCode, req.getOrderNumb(), req.getRemark());
+        SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
+        orderApplication.saveOrderRemark(saasAdmin.getMerchantCode(), saasAdmin.getCode(), req.getOrderNumb(), req.getRemark());
         return new ApiResponse("保存成功");
     }
 

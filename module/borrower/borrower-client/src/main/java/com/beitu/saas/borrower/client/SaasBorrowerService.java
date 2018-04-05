@@ -12,10 +12,14 @@ import com.fqgj.common.entity.BaseEntity;
  */
 public interface SaasBorrowerService<T extends BaseEntity> extends BaseService<T> {
 
-    SaasBorrowerVo getByBorrowerCode(String borrowerCode);
+    SaasBorrowerVo getByBorrowerCodeAndMerchantCode(String borrowerCode, String merchantCode);
 
-    SaasBorrowerVo getByMobileAndMerchantCode(String mobile,String merchantCode);
+    SaasBorrowerVo getByMobileAndMerchantCode(String mobile, String merchantCode);
 
     SaasBorrower create(SaasBorrowerVo saasBorrowerVo);
+
+    String getMobileByBorrowerCode(String borrowerCode);
+
+    Boolean isSaasBorrower(String userCode);
 
 }

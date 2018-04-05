@@ -71,7 +71,9 @@ public enum RestCodeEnum implements ErrorCodeEnum {
     CARRIER_CRAWL_ERROR(40000, "认证失败,请稍后再试！", HttpStatus.INTERNAL_SERVER_ERROR),
     CARRIER_VAILD_VERIFY_CODE_ERROR(40001, "校验验证码失败,请稍后再试！", HttpStatus.OK),
     CARRIEE_REBIND(40002, "运营商授权异常，请重试", HttpStatus.OK),
-    REPEAT_REQUEST(800, "正在处理中,请稍后重试", HttpStatus.OK);
+    REPEAT_REQUEST(800, "正在处理中,请稍后重试", HttpStatus.OK),
+    BORROWER_NOT_EXIST_ERROR(10001, "借款用户不存在", HttpStatus.OK),
+    MERCHANT_NOT_EXIST_ERROR(10002, "出借机构不存在", HttpStatus.OK);
 
     private Integer code;
     private String msg;
