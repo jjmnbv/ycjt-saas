@@ -423,7 +423,7 @@ public class H5Controller {
         response.setOrderNumb(req.getOrderNumb());
         StringBuilder contractUrl = new StringBuilder();
         contractUrl.append(configUtil.getAddressURLPrefix()).append(TermUrlConsts.pdfViewUrl)
-                .append("?file=").append(orderDetailVo.getTermUrl());
+                .append("?file=/").append(orderDetailVo.getTermUrl());
         StringBuilder downloadContractUrl = new StringBuilder();
         downloadContractUrl.append(configUtil.getAddressURLPrefix()).append(orderDetailVo.getTermUrl());
         if (OrderStatusEnum.TO_CONFIRM_RECEIPT.getCode().equals(orderDetailVo.getOrderStatus())) {
