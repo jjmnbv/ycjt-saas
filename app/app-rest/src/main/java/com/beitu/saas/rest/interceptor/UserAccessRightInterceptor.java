@@ -173,7 +173,7 @@ public class UserAccessRightInterceptor implements HandlerInterceptor {
             return false;
         }
         if (basicVO.getPlatform().equals("h5")) {
-            String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
+            String channelCode = requestUserInfo.getRequestBasicInfo().getChannel();
             if (StringUtils.isEmpty(channelCode)) {
                 throw new ApplicationException(ChannelErrorCodeEnum.DISABLE_CHANNEL);
             }
