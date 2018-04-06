@@ -11,7 +11,6 @@ import java.math.BigDecimal;
  * @create 2018/4/4 下午1:05
  * @description
  */
-@ApiModel(value = "订单账单详情")
 public class SaasOrderDetailVo implements ResponseData {
 
     @ApiModelProperty(value = "期数")

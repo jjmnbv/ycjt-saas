@@ -173,7 +173,7 @@ public class SaasChannelApplication {
      */
     public SaasH5ChannelVo getSaasChannelBychannelCode(String channelCode) {
         SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(channelCode);
-        if (saasChannelEntity.getChannelStatus() == ChannelStatusEnum.CLOSE.getType()) {
+        if (saasChannelEntity == null || ChannelStatusEnum.CLOSE.getType().equals(saasChannelEntity.getChannelStatus())) {
             return null;
         }
         return new SaasH5ChannelVo().setChannelCode(saasChannelEntity.getChannelCode())
@@ -220,8 +220,6 @@ public class SaasChannelApplication {
 
         return channelStatDetailVos;
     }
-
-
 
 
     /**

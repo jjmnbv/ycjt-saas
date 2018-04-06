@@ -88,7 +88,7 @@ public class SaasMerchantConfigServiceImpl extends AbstractBaseService implement
     @Override
     public Boolean updateSmsConfig(String merchantCode, Boolean enable, String bizCode) {
         SaasMerchantConfig saasMerchantConfig = new SaasMerchantConfig();
-        saasMerchantConfig.setDeleted(enable);
+        saasMerchantConfig.setDeleted(!enable);
         List<SaasMerchantConfig> list = this.selectByParams(new HashMap<String, Object>(4) {{
             put("merchantCode", merchantCode);
             put("configEnum", bizCode);

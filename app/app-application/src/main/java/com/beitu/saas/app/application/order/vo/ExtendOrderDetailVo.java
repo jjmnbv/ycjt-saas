@@ -9,7 +9,6 @@ import io.swagger.annotations.ApiModelProperty;
  * @create 2018/3/25 下午2:33
  * @description
  */
-@ApiModel(value = "展期订单详细信息")
 public class ExtendOrderDetailVo implements ResponseData {
 
     @ApiModelProperty(value = "展期提示")

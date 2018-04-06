@@ -15,6 +15,7 @@ import com.beitu.saas.borrower.enums.BorrowerErrorCodeEnum;
 import com.beitu.saas.channel.domain.SaasH5ChannelVo;
 import com.beitu.saas.channel.enums.ChannelErrorCodeEnum;
 import com.beitu.saas.common.consts.RedisKeyConsts;
+import com.beitu.saas.common.enums.RestCodeEnum;
 import com.beitu.saas.common.utils.MobileUtil;
 import com.beitu.saas.common.utils.identityNumber.vo.IdcardInfoExtractor;
 import com.beitu.saas.common.utils.location.BDLocationUtils;
@@ -63,14 +64,6 @@ public class BorrowerApplication {
 
     @Autowired
     private SaasBorrowerRealInfoService saasBorrowerRealInfoService;
-
-    public SaasBorrowerVo getBorrowerByAccessToken(String token) {
-        String borrowerCode = saasBorrowerTokenService.getBorrowerCodeByToken(token);
-        if (StringUtils.isEmpty(borrowerCode)) {
-            return null;
-        }
-        return saasBorrowerService.getByBorrowerCode(borrowerCode);
-    }
 
     @Transactional(rollbackFor = RuntimeException.class)
     public String login(String mobile, String channelCode, String phoneSystem, String ip) {
@@ -182,8 +175,13 @@ public class BorrowerApplication {
         return borrowerCodeList;
     }
 
-    public BorrowerInfoVo getBorrowerInfoVoByBorrowerCode(String borrowerCode) {
+    public BorrowerInfoVo getBorrowerInfoVoByBorrowerCode(String merchantCode, String borrowerCode) {
         BorrowerInfoVo borrowerInfoVo = new BorrowerInfoVo();
+        SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCodeAndMerchantCode(borrowerCode, merchantCode);
+        if (saasBorrowerVo == null) {
+            throw new ApplicationException(RestCodeEnum.BORROWER_NOT_EXIST_ERROR);
+        }
+        borrowerInfoVo.setBorrowerMobile(saasBorrowerVo.getMobile());
         SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode);
         if (saasBorrowerRealInfoVo != null) {
             borrowerInfoVo.setBorrowerName(saasBorrowerRealInfoVo.getName());
@@ -191,8 +189,6 @@ public class BorrowerApplication {
             borrowerInfoVo.setBorrowerAge(idcardInfoExtractor.getAge());
             borrowerInfoVo.setBorrowerGender(idcardInfoExtractor.getGender());
         }
-        SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCode(borrowerCode);
-        borrowerInfoVo.setBorrowerMobile(saasBorrowerVo.getMobile());
         return borrowerInfoVo;
     }
 

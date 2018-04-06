@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
  * Time: 20:58:19.353
  */
 @Module(value = "订单催收表服务模块")
-@NameSpace("SaasCollectionCommentDaoImpl")
+@NameSpace("com.beitu.saas.collection.dao.impl.SaasCollectionCommentDaoImpl")
 @Service
 public class SaasCollectionCommentServiceImpl extends AbstractBaseService implements SaasCollectionCommentService {
 

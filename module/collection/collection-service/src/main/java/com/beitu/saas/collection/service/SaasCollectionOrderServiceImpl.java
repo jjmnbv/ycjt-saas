@@ -25,7 +25,7 @@ import java.util.List;
  * Time: 20:58:19.362
  */
 @Module(value = "订单表服务模块")
-@NameSpace("SaasCollectionOrderDaoImpl")
+@NameSpace("com.beitu.saas.collection.dao.impl.SaasCollectionOrderDaoImpl")
 @Service
 public class SaasCollectionOrderServiceImpl extends AbstractBaseService implements SaasCollectionOrderService {
 

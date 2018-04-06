@@ -11,6 +11,7 @@ import com.beitu.saas.app.application.order.OrderBillDetailApplication;
 import com.beitu.saas.app.application.order.OrderStatusHistoryApplication;
 import com.beitu.saas.app.application.order.vo.OrderApplicationListVo;
 import com.beitu.saas.app.application.order.vo.SaasOrderDetailVo;
+import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.app.enums.SaasLoanPlatformEnum;
 import com.beitu.saas.intergration.risk.pojo.LoanPlatformQueryPojo;
 import com.beitu.saas.order.client.SaasOrderService;
@@ -69,15 +70,17 @@ public class CreditQueryController {
     @ResponseBody
     @ApiOperation(value = "借款人用户基础信息", response = UserBaseInfoResponse.class)
     public DataApiResponse<UserBaseInfoResponse> queryBaseInfo(@RequestBody @Valid UserBaseInfoQueryRequest req) {
+        String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
+
         String orderNumb = req.getOrderNumb();
-        String borrowerCode = getBorrowerCodeByOrderNumb(orderNumb);
+        String borrowerCode = getBorrowerCodeByOrderNumb(orderNumb, merchantCode);
 
         OrderApplicationListVo orderApplicationListVo = null;
         List<OrderApplicationListVo> orderApplicationListVoList = orderApplyApplication.listOrderApplicationByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
         if (CollectionUtils.isNotEmpty(orderApplicationListVoList)) {
             orderApplicationListVo = orderApplicationListVoList.get(0);
         }
-        BorrowerPersonalInfoVo borrowerPersonalInfoVo = borrowerBaseInfoApplication.getUserPersonalInfoVo(borrowerCode, orderNumb);
+        BorrowerPersonalInfoVo borrowerPersonalInfoVo = borrowerBaseInfoApplication.getUserPersonalInfoVo(merchantCode, borrowerCode, orderNumb);
         BorrowerIdentityInfoVo borrowerIdentityInfoVo = borrowerBaseInfoApplication.getUserIdentityInfoVo(borrowerCode, orderNumb);
         BorrowerWorkInfoVo borrowerWorkInfoVo = borrowerBaseInfoApplication.getUserWorkInfoVo(borrowerCode, orderNumb);
         BorrowerEmergentContactVo borrowerEmergentContactVo = borrowerBaseInfoApplication.getUserEmergentContactVo(borrowerCode, orderNumb);
@@ -98,16 +101,18 @@ public class CreditQueryController {
     @ResponseBody
     @ApiOperation(value = "订单进件记录", response = OrderApplicationQueryResponse.class)
     public DataApiResponse<OrderApplicationQueryResponse> listOrderApplication(@RequestBody @Valid CreditQueryRequest req) {
-        String borrowerCode = getBorrowerCodeByOrderNumb(req.getOrderNumb());
+        String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
+        String borrowerCode = getBorrowerCodeByOrderNumb(req.getOrderNumb(), merchantCode);
         return new DataApiResponse<>(new OrderApplicationQueryResponse(orderApplyApplication.listOrderApplicationByBorrowerCodeAndOrderNumb(borrowerCode, null)));
     }
 
     @RequestMapping(value = "/order/detail", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "订单详情", response = OrderApplicationQueryResponse.class)
+    @ApiOperation(value = "订单详情", response = OrderDetailQueryResponse.class)
     public DataApiResponse<OrderDetailQueryResponse> getOrderDetail(@RequestBody @Valid CreditQueryRequest req) {
         String orderNumb = req.getOrderNumb();
-        List<SaasOrderDetailVo> saasOrderDetailVoList = orderBillDetailApplication.getAllOrderBillDetailByOrderNumb(orderNumb);
+        String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
+        List<SaasOrderDetailVo> saasOrderDetailVoList = orderBillDetailApplication.getAllOrderBillDetailByOrderNumb(merchantCode, orderNumb);
         String viewContractUrl = "";
         String downloadContractUrl = "";
         return new DataApiResponse<>(new OrderDetailQueryResponse(saasOrderDetailVoList, viewContractUrl, downloadContractUrl));
@@ -118,7 +123,8 @@ public class CreditQueryController {
     @ApiOperation(value = "催收记录", response = OrderCollectionCommentQueryResponse.class)
     public DataApiResponse<OrderCollectionCommentQueryResponse> listCollectionLog(@RequestBody @Valid CreditQueryRequest req) {
         String orderNumb = req.getOrderNumb();
-        List<CollectionCommentListVo> collectionCommentListVoList = collectionApplication.getAllCollectionCommentByOrderNumb(orderNumb);
+        String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
+        List<CollectionCommentListVo> collectionCommentListVoList = collectionApplication.getAllCollectionCommentByOrderNumb(merchantCode, orderNumb);
         return new DataApiResponse<>(new OrderCollectionCommentQueryResponse(collectionCommentListVoList));
     }
     
@@ -133,8 +139,16 @@ public class CreditQueryController {
         return new DataApiResponse<>(new LoanPlatformDataInfoResponse(pojo));
     }
 
-    private String getBorrowerCodeByOrderNumb(String orderNumb) {
-        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
+    @RequestMapping(value = "/carrier/info", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "运营商信息", response = CarrierInfoQueryResponse.class)
+    public DataApiResponse<CarrierInfoQueryResponse> getCarrierInfo(@RequestBody @Valid CreditQueryRequest req) {
+        String orderNumb = req.getOrderNumb();
+        return new DataApiResponse<>(new CarrierInfoQueryResponse());
+    }
+
+    private String getBorrowerCodeByOrderNumb(String orderNumb, String merchantCode) {
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(orderNumb, merchantCode);
         if (saasOrderVo == null) {
             throw new ApplicationException(OrderErrorCodeEnum.ERROR_ORDER_NUMB);
         }

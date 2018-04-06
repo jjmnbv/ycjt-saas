@@ -99,7 +99,7 @@ public class ContractController {
             borrowerCode = saasOrderVo.getBorrowerCode();
             merchantCode = saasOrderVo.getMerchantCode();
         } else {
-            SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCode(userCode);
+            SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCodeAndMerchantCode(userCode, merchantCode);
             if (saasBorrowerVo != null) {
                 borrowerCode = saasBorrowerVo.getBorrowerCode();
             } else {
@@ -151,9 +151,8 @@ public class ContractController {
             throw new ApplicationException(RestCodeEnum.TOKEN_NOT_AVAILABLE);
         }
         UserLicenseContractInfoResponse response = new UserLicenseContractInfoResponse();
-        SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCode(userCode);
-        if (saasBorrowerVo != null) {
-            SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(saasBorrowerVo.getBorrowerCode());
+        if (saasBorrowerService.isSaasBorrower(userCode)) {
+            SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(userCode);
             response.setUserName(saasBorrowerRealInfoVo.getName());
             response.setUserCode("身份证号：" + saasBorrowerRealInfoVo.getIdentityCode());
             String sealUrl = contractApplication.getUserSealUrl(userCode);
@@ -215,9 +214,8 @@ public class ContractController {
             borrowerCode = saasOrderVo.getBorrowerCode();
             merchantCode = saasOrderVo.getMerchantCode();
         } else {
-            SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCode(userCode);
-            if (saasBorrowerVo != null) {
-                borrowerCode = saasBorrowerVo.getBorrowerCode();
+            if (saasBorrowerService.isSaasBorrower(userCode)) {
+                borrowerCode = userCode;
             } else {
                 SaasAdmin saasAdmin = saasAdminService.getSaasAdminByAdminCode(userCode);
                 if (saasAdmin != null) {

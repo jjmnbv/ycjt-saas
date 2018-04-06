@@ -5,7 +5,9 @@ import com.beitu.saas.app.annotations.HasPermission;
 import com.beitu.saas.app.annotations.IgnoreRepeatRequest;
 import com.beitu.saas.app.annotations.SignIgnore;
 import com.beitu.saas.app.annotations.VisitorAccessible;
+import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.application.auth.RoleApplication;
+import com.beitu.saas.app.application.channel.SaasChannelApplication;
 import com.beitu.saas.app.common.RequestBasicInfo;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.app.common.RequestUserInfo;
@@ -13,6 +15,9 @@ import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.auth.service.SaasAdminService;
 import com.beitu.saas.borrower.client.SaasBorrowerService;
 import com.beitu.saas.borrower.domain.SaasBorrowerVo;
+import com.beitu.saas.channel.client.SaasChannelService;
+import com.beitu.saas.channel.domain.SaasH5ChannelVo;
+import com.beitu.saas.channel.enums.ChannelErrorCodeEnum;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.enums.RestCodeEnum;
 import com.fqgj.base.services.redis.RedisClient;
@@ -53,6 +58,9 @@ public class UserAccessRightInterceptor implements HandlerInterceptor {
 
     @Autowired
     private RoleApplication roleApplication;
+
+    @Autowired
+    private SaasChannelApplication saasChannelApplication;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
@@ -165,7 +173,18 @@ public class UserAccessRightInterceptor implements HandlerInterceptor {
             return false;
         }
         if (basicVO.getPlatform().equals("h5")) {
-            SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCode(userCode);
+            String channelCode = requestUserInfo.getRequestBasicInfo().getChannel();
+            if (StringUtils.isEmpty(channelCode)) {
+                throw new ApplicationException(ChannelErrorCodeEnum.DISABLE_CHANNEL);
+            }
+            SaasH5ChannelVo saasH5ChannelVo = saasChannelApplication.getSaasChannelBychannelCode(channelCode);
+            if (saasH5ChannelVo == null) {
+                throw new ApplicationException(ChannelErrorCodeEnum.DISABLE_CHANNEL);
+            }
+            SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCodeAndMerchantCode(userCode, saasH5ChannelVo.getMerchantCode());
+            if (saasBorrowerVo == null) {
+                throw new ApplicationException(RestCodeEnum.TOKEN_NOT_AVAILABLE);
+            }
             requestUserInfo.setUser(saasBorrowerVo);
         } else if (basicVO.getPlatform().equals("web")) {
             SaasAdmin saasAdmin = saasAdminService.getSaasAdminByAdminCode(userCode);

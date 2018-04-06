@@ -475,6 +475,7 @@ public class ConfigUtil {
     public String getH5TianjiCarrierNotifyUrl() {
         return config.getProperty("carrier.tianji.notify.url", "");
     }
+
     /************* risk end *************/
 
     public String getH5AddressURLPrefix() {
@@ -524,13 +525,22 @@ public class ConfigUtil {
         return config.getProperty("integration.juxinli.api.key", "1a63efd927e04f18a2e7a15b0391dc98");
     }
 
-    public Boolean enableAddMerchant(){
-        return config.getBooleanProperty("enable.add.merchant",false);
+    public Boolean enableAddMerchant() {
+        return config.getBooleanProperty("enable.add.merchant", false);
 
     }
 
-    public int allowAccountNum(){
-        return config.getIntProperty("allow.account.num",20);
+    public int allowAccountNum() {
+        return config.getIntProperty("allow.account.num", 20);
+    }
+
+    /**
+     * 协议编号长度
+     *
+     * @return
+     */
+    public int getContractNumbLength() {
+        return config.getIntProperty("contract.number.length", 10);
     }
 
 }

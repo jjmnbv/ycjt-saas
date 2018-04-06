@@ -13,9 +13,7 @@ public class LenderDoContractSignParam {
 
     private String merchantSealData;
 
-    private byte[] srcContent;
-
-    private String srcPdf;
+    private byte[] srcPdfContent;
 
     public String getMerchantCode() {
         return merchantCode;
@@ -41,19 +39,12 @@ public class LenderDoContractSignParam {
         this.merchantSealData = merchantSealData;
     }
 
-    public byte[] getSrcContent() {
-        return srcContent;
+    public byte[] getSrcPdfContent() {
+        return srcPdfContent;
     }
 
-    public void setSrcContent(byte[] srcContent) {
-        this.srcContent = srcContent;
+    public void setSrcPdfContent(byte[] srcPdfContent) {
+        this.srcPdfContent = srcPdfContent;
     }
 
-    public String getSrcPdf() {
-        return srcPdf;
-    }
-
-    public void setSrcPdf(String srcPdf) {
-        this.srcPdf = srcPdf;
-    }
 }

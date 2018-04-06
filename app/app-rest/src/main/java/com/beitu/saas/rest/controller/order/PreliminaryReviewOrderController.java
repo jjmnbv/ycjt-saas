@@ -62,8 +62,8 @@ public class PreliminaryReviewOrderController {
     @ResponseBody
     @ApiOperation(value = "初审订单备注保存", response = ApiResponse.class)
     public ApiResponse saveRemark(@RequestBody @Valid PreliminaryOrderRemarkSaveRequest req) {
-        String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.saveOrderRemark(adminCode, req.getOrderNumb(), req.getRemark());
+        SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
+        orderApplication.saveOrderRemark(saasAdmin.getMerchantCode(), saasAdmin.getCode(), req.getOrderNumb(), req.getRemark());
         return new ApiResponse("保存成功");
     }
 
@@ -71,8 +71,8 @@ public class PreliminaryReviewOrderController {
     @ResponseBody
     @ApiOperation(value = "初审订单详情查看", response = PreliminaryOrderDetailResponse.class)
     public DataApiResponse<PreliminaryOrderDetailResponse> detail(@RequestBody @Valid PreliminaryOrderDetailRequest req) {
-        String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.updateOrderStatus(adminCode, req.getOrderNumb(), OrderStatusEnum.IN_PRELIMINARY_REVIEWER, null);
+        SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
+        orderApplication.updateOrderStatus(saasAdmin.getMerchantCode(), saasAdmin.getCode(), req.getOrderNumb(), OrderStatusEnum.IN_PRELIMINARY_REVIEWER, null);
         PreliminaryOrderDetailResponse response = new PreliminaryOrderDetailResponse();
         response.setOrderNumb(req.getOrderNumb());
         return new DataApiResponse<>(response);
@@ -83,8 +83,8 @@ public class PreliminaryReviewOrderController {
     @ResponseBody
     @ApiOperation(value = "初审领单", response = ApiResponse.class)
     public ApiResponse getOrder(@RequestBody @Valid PreliminaryReviewerOperateOrderRequest req) {
-        String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.preliminaryReviewerGetOrder(adminCode, req.getOrderNumb());
+        SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
+        orderApplication.preliminaryReviewerGetOrder(saasAdmin.getMerchantCode(), saasAdmin.getCode(), req.getOrderNumb());
         return new ApiResponse("操作成功");
     }
 
@@ -93,8 +93,8 @@ public class PreliminaryReviewOrderController {
     @ResponseBody
     @ApiOperation(value = "通过初审", response = ApiResponse.class)
     public ApiResponse agree(@RequestBody @Valid PreliminaryReviewerOperateOrderRequest req) {
-        String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.preliminaryReviewerAgree(adminCode, req.getOrderNumb());
+        SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
+        orderApplication.preliminaryReviewerAgree(saasAdmin.getMerchantCode(), saasAdmin.getCode(), req.getOrderNumb());
         return new ApiResponse("操作成功");
     }
 
@@ -103,8 +103,8 @@ public class PreliminaryReviewOrderController {
     @ResponseBody
     @ApiOperation(value = "初审驳回", response = ApiResponse.class)
     public ApiResponse reject(@RequestBody @Valid PreliminaryReviewerOperateOrderRequest req) {
-        String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.preliminaryReviewerReject(adminCode, req.getOrderNumb());
+        SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
+        orderApplication.preliminaryReviewerReject(saasAdmin.getMerchantCode(), saasAdmin.getCode(), req.getOrderNumb());
         return new ApiResponse("操作成功");
     }
 
@@ -113,8 +113,8 @@ public class PreliminaryReviewOrderController {
     @ResponseBody
     @ApiOperation(value = "初审拒绝", response = ApiResponse.class)
     public ApiResponse refuse(@RequestBody @Valid PreliminaryReviewerOperateOrderRequest req) {
-        String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.preliminaryReviewerRefuse(adminCode, req.getOrderNumb());
+        SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
+        orderApplication.preliminaryReviewerRefuse(saasAdmin.getMerchantCode(), saasAdmin.getCode(), req.getOrderNumb());
         return new ApiResponse("操作成功");
     }
 

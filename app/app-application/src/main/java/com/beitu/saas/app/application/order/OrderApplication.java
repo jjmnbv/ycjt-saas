@@ -4,6 +4,8 @@ import com.beitu.saas.app.application.SendApplication;
 import com.beitu.saas.app.application.borrower.BorrowerApplication;
 import com.beitu.saas.app.application.borrower.vo.BorrowerInfoVo;
 import com.beitu.saas.app.application.contract.ContractApplication;
+import com.beitu.saas.app.application.contract.enums.ContractTypeEnum;
+import com.beitu.saas.app.application.contract.thread.GenerateContractThread;
 import com.beitu.saas.app.application.order.vo.*;
 import com.beitu.saas.app.enums.BorrowerOrderApplyStatusEnum;
 import com.beitu.saas.app.enums.H5OrderBillDetailViewTypeEnum;
@@ -13,6 +15,7 @@ import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.consts.ChannelConsts;
 import com.beitu.saas.common.utils.DateUtil;
+import com.beitu.saas.common.utils.ThreadPoolUtils;
 import com.beitu.saas.finance.client.SaasMerchantBalanceInfoService;
 import com.beitu.saas.finance.client.SaasMerchantCreditInfoService;
 import com.beitu.saas.finance.client.SaasMerchantSmsInfoService;
@@ -158,7 +161,7 @@ public class OrderApplication {
         return results;
     }
 
-    public OrderDetailVo getOrderDetailVoByOrderNumb(String orderNumb) {
+    public OrderDetailVo getOrderDetailVoByOrderNumbAndMerchantCode(String merchantCode, String orderNumb) {
         List<SaasOrderVo> saasOrderVoList = saasOrderService.listEffectiveOrderByOrderNumb(orderNumb);
         if (CollectionUtils.isEmpty(saasOrderVoList)) {
             return null;
@@ -176,13 +179,15 @@ public class OrderApplication {
                 saasOrderVo.setOrderStatus(OrderStatusEnum.TO_CONFIRM_EXTEND.getCode());
             }
             orderDetailVo = convertSaasOrderVo2OrderDetailVo(saasOrderVo);
-            SaasOrderBillDetailVo saasOrderBillDetailVo = saasOrderBillDetailService.getVisibleOrderBillDetailByOrderNumb(orderNumb);
+            SaasOrderBillDetailVo saasOrderBillDetailVo = saasOrderBillDetailService.getVisibleOrderBillDetailByOrderNumbAndMerchantCode(orderNumb, merchantCode);
             orderDetailVo.setAmount(orderCalculateApplication.getAmount(saasOrderBillDetailVo).toString());
             orderDetailVo.setRepaymentDt(DateUtil.getDate(saasOrderBillDetailVo.getRepaymentDt()));
         }
         SaasBorrowerRealInfoVo realInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(saasOrderVo.getBorrowerCode());
-        orderDetailVo.setBorrowerName(realInfoVo.getName());
-        orderDetailVo.setBorrowerIdentityCode(realInfoVo.getIdentityCode());
+        if (realInfoVo != null) {
+            orderDetailVo.setBorrowerName(realInfoVo.getName());
+            orderDetailVo.setBorrowerIdentityCode(realInfoVo.getIdentityCode());
+        }
 
         if (OrderStatusEnum.TO_CONFIRM_EXTEND.getCode().equals(orderDetailVo.getOrderStatus())) {
             saasOrderVo = saasOrderVoList.get(saasOrderVoList.size() - 1);
@@ -209,8 +214,8 @@ public class OrderApplication {
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
-    public void saveOrderRemark(String operatorCode, String orderNumb, String remark) {
-        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
+    public void saveOrderRemark(String merchantCode, String operatorCode, String orderNumb, String remark) {
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(merchantCode, orderNumb);
         if (StringUtils.isEmpty(remark)) {
             if (StringUtils.isEmpty(saasOrderVo.getRemark())) {
                 return;
@@ -234,8 +239,8 @@ public class OrderApplication {
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
-    public void updateOrderStatus(String operatorCode, String orderNumb, OrderStatusEnum updateOrderStatus, String remark) {
-        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
+    public void updateOrderStatus(String merchantCode, String operatorCode, String orderNumb, OrderStatusEnum updateOrderStatus, String remark) {
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(orderNumb, merchantCode);
 
         OrderStatusEnum nextOrderStatus = OrderStatusEnum.getEnumByCode(updateOrderStatus.getCode());
         OrderStatusEnum currentOrderStatus = OrderStatusEnum.getEnumByCode(saasOrderVo.getOrderStatus());
@@ -434,7 +439,7 @@ public class OrderApplication {
         orderListVo.setOrderStatus(OrderStatusEnum.getEnumByCode(saasOrderVo.getOrderStatus()).getMsg());
         orderListVo.setRemark(saasOrderVo.getRemark());
         orderListVo.setBorrowingDuration(DateUtil.countDay(saasOrderVo.getRepaymentDt(), saasOrderVo.getCreatedDt()) + "天");
-        BorrowerInfoVo borrowerInfoVo = borrowerApplication.getBorrowerInfoVoByBorrowerCode(saasOrderVo.getBorrowerCode());
+        BorrowerInfoVo borrowerInfoVo = borrowerApplication.getBorrowerInfoVoByBorrowerCode(saasOrderVo.getMerchantCode(), saasOrderVo.getBorrowerCode());
         BeanUtils.copyProperties(borrowerInfoVo, orderListVo);
         orderListVo.setChannelName(saasChannelService.getSaasChannelByChannelCode(saasOrderVo.getChannelCode()).getChannelName());
         if (StringUtils.isNotEmpty(saasOrderVo.getPreliminaryReviewerCode())) {
@@ -447,8 +452,8 @@ public class OrderApplication {
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
-    public void preliminaryReviewerGetOrder(String operatorCode, String orderNumb) {
-        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
+    public void preliminaryReviewerGetOrder(String merchantCode, String operatorCode, String orderNumb) {
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(orderNumb, merchantCode);
         if (StringUtils.isNotEmpty(saasOrderVo.getPreliminaryReviewerCode()) && !operatorCode.equals(saasOrderVo.getPreliminaryReviewerCode())) {
             throw new ApplicationException(OrderErrorCodeEnum.ORDER_BEING_SINGLE);
         }
@@ -458,12 +463,12 @@ public class OrderApplication {
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
-    public void preliminaryReviewerRefuse(String operatorCode, String orderNumb) {
-        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
+    public void preliminaryReviewerRefuse(String merchantCode, String operatorCode, String orderNumb) {
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(orderNumb, merchantCode);
         if (StringUtils.isNotEmpty(saasOrderVo.getPreliminaryReviewerCode()) && !operatorCode.equals(saasOrderVo.getPreliminaryReviewerCode())) {
             throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
         }
-        updateOrderStatus(operatorCode, orderNumb, OrderStatusEnum.PRELIMINARY_REVIEWER_REFUSE, null);
+        updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.PRELIMINARY_REVIEWER_REFUSE, null);
         SaasOrder updateSaasOrder = new SaasOrder();
         updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
         updateSaasOrder.setPreliminaryReviewerCode(operatorCode);
@@ -471,21 +476,21 @@ public class OrderApplication {
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
-    public void preliminaryReviewerReject(String operatorCode, String orderNumb) {
-        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
+    public void preliminaryReviewerReject(String merchantCode, String operatorCode, String orderNumb) {
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(orderNumb, merchantCode);
         if (StringUtils.isNotEmpty(saasOrderVo.getPreliminaryReviewerCode()) && !operatorCode.equals(saasOrderVo.getPreliminaryReviewerCode())) {
             throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
         }
-        updateOrderStatus(operatorCode, orderNumb, OrderStatusEnum.PRELIMINARY_REVIEWER_REJECT, null);
+        updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.PRELIMINARY_REVIEWER_REJECT, null);
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
-    public void preliminaryReviewerAgree(String operatorCode, String orderNumb) {
-        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
+    public void preliminaryReviewerAgree(String merchantCode, String operatorCode, String orderNumb) {
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(orderNumb, merchantCode);
         if (StringUtils.isNotEmpty(saasOrderVo.getPreliminaryReviewerCode()) && !operatorCode.equals(saasOrderVo.getPreliminaryReviewerCode())) {
             throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
         }
-        updateOrderStatus(operatorCode, orderNumb, OrderStatusEnum.SUBMIT_FINAL_REVIEW, null);
+        updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.SUBMIT_FINAL_REVIEW, null);
         SaasOrder updateSaasOrder = new SaasOrder();
         updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
         updateSaasOrder.setPreliminaryReviewerCode(operatorCode);
@@ -493,8 +498,8 @@ public class OrderApplication {
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
-    public void finalReviewerGetOrder(String operatorCode, String orderNumb) {
-        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
+    public void finalReviewerGetOrder(String merchantCode, String operatorCode, String orderNumb) {
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(orderNumb, merchantCode);
         if (StringUtils.isNotEmpty(saasOrderVo.getFinalReviewerCode()) && !operatorCode.equals(saasOrderVo.getFinalReviewerCode())) {
             throw new ApplicationException(OrderErrorCodeEnum.ORDER_BEING_SINGLE);
         }
@@ -504,12 +509,12 @@ public class OrderApplication {
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
-    public void finalReviewerRefuse(String operatorCode, String orderNumb) {
-        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
+    public void finalReviewerRefuse(String merchantCode, String operatorCode, String orderNumb) {
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(orderNumb, merchantCode);
         if (StringUtils.isNotEmpty(saasOrderVo.getFinalReviewerCode()) && !operatorCode.equals(saasOrderVo.getFinalReviewerCode())) {
             throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
         }
-        updateOrderStatus(operatorCode, orderNumb, OrderStatusEnum.FINAL_REVIEWER_REFUSE, null);
+        updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.FINAL_REVIEWER_REFUSE, null);
         SaasOrder updateSaasOrder = new SaasOrder();
         updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
         updateSaasOrder.setFinalReviewerCode(operatorCode);
@@ -517,21 +522,21 @@ public class OrderApplication {
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
-    public void finalReviewerReject(String operatorCode, String orderNumb) {
-        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
+    public void finalReviewerReject(String merchantCode, String operatorCode, String orderNumb) {
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(orderNumb, merchantCode);
         if (StringUtils.isNotEmpty(saasOrderVo.getFinalReviewerCode()) && !operatorCode.equals(saasOrderVo.getFinalReviewerCode())) {
             throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
         }
-        updateOrderStatus(operatorCode, orderNumb, OrderStatusEnum.FINAL_REVIEWER_REJECT, null);
+        updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.FINAL_REVIEWER_REJECT, null);
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
-    public void finalReviewerAgree(String operatorCode, String orderNumb) {
-        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
+    public void finalReviewerAgree(String merchantCode, String operatorCode, String orderNumb) {
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(orderNumb, merchantCode);
         if (StringUtils.isNotEmpty(saasOrderVo.getFinalReviewerCode()) && !operatorCode.equals(saasOrderVo.getFinalReviewerCode())) {
             throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
         }
-        updateOrderStatus(operatorCode, orderNumb, OrderStatusEnum.SUBMIT_LOAN_LENDER, null);
+        updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.SUBMIT_LOAN_LENDER, null);
         SaasOrder updateSaasOrder = new SaasOrder();
         updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
         updateSaasOrder.setFinalReviewerCode(operatorCode);
@@ -540,33 +545,30 @@ public class OrderApplication {
 
     @Transactional(rollbackFor = RuntimeException.class)
     public void lenderAgree(String merchantCode, String operatorCode, String orderNumb) {
-        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(orderNumb, merchantCode);
         if (StringUtils.isNotEmpty(saasOrderVo.getLoanLenderCode()) && !operatorCode.equals(saasOrderVo.getLoanLenderCode())) {
             throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
         }
-        String termUrl;
+        ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, operatorCode, saasOrderVo.getSaasOrderId(), ContractTypeEnum.LENDER_DO_LOAN_CONTRACT_SIGN));
         if (StringUtils.isNotEmpty(saasOrderVo.getTermUrl())) {
-            updateOrderStatus(operatorCode, orderNumb, OrderStatusEnum.FOR_REIMBURSEMENT, null);
-            termUrl = contractApplication.lenderDoLoanContractSign(merchantCode, saasOrderVo.getSaasOrderId());
-            orderBillDetailApplication.createOrderBillDetail(orderNumb);
+            updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.FOR_REIMBURSEMENT, null);
+            orderBillDetailApplication.createOrderBillDetail(orderNumb, merchantCode);
         } else {
-            termUrl = contractApplication.lenderDoLoanContractSign(merchantCode, saasOrderVo.getSaasOrderId());
-            updateOrderStatus(operatorCode, orderNumb, OrderStatusEnum.TO_CONFIRM_RECEIPT, null);
+            updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.TO_CONFIRM_RECEIPT, null);
         }
         SaasOrder updateSaasOrder = new SaasOrder();
-        updateSaasOrder.setTermUrl(termUrl);
         updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
         updateSaasOrder.setLoanLenderCode(operatorCode);
         saasOrderService.updateById(updateSaasOrder);
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
-    public void lenderRefuse(String operatorCode, String orderNumb) {
-        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
+    public void lenderRefuse(String merchantCode, String operatorCode, String orderNumb) {
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(orderNumb, merchantCode);
         if (StringUtils.isNotEmpty(saasOrderVo.getLoanLenderCode()) && !operatorCode.equals(saasOrderVo.getLoanLenderCode())) {
             throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
         }
-        updateOrderStatus(operatorCode, orderNumb, OrderStatusEnum.LOAN_LENDER_REFUSE, null);
+        updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.LOAN_LENDER_REFUSE, null);
         SaasOrder updateSaasOrder = new SaasOrder();
         updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
         updateSaasOrder.setLoanLenderCode(operatorCode);
@@ -574,7 +576,7 @@ public class OrderApplication {
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
-    public void confirmReceipt(String operatorCode, String orderNumb) {
+    public void confirmReceipt(String merchantCode, String operatorCode, String orderNumb) {
         SaasOrderVo saasOrderVo = saasOrderService.getConfirmReceiptOrderByOrderNumb(orderNumb);
         if (saasOrderVo == null) {
             throw new ApplicationException(OrderErrorCodeEnum.ORDER_FAILURE);
@@ -584,23 +586,25 @@ public class OrderApplication {
             throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
         }
         if (contractApplication.needDoLicenseContractSign(borrowerCode)) {
-            contractApplication.doLicenseContractSign(borrowerCode);
+            //生成授权合同
+            ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, borrowerCode, null, ContractTypeEnum.BORROWER_DO_AUTHORIZATION_CONTRACT_SIGN));
         }
-        updateOrderStatus(operatorCode, orderNumb, OrderStatusEnum.FOR_REIMBURSEMENT, null);
+        ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, borrowerCode, saasOrderVo.getSaasOrderId(), ContractTypeEnum.BORROWER_DO_LOAN_CONTRACT_SIGN));
+        updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.FOR_REIMBURSEMENT, null);
         String termUrl = contractApplication.borrowerDoLoanContractSign(borrowerCode, saasOrderVo.getSaasOrderId());
         SaasOrder updateSaasOrder = new SaasOrder();
         updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
         updateSaasOrder.setTermUrl(termUrl);
         saasOrderService.updateById(updateSaasOrder);
-        orderBillDetailApplication.createOrderBillDetail(orderNumb);
+        orderBillDetailApplication.createOrderBillDetail(orderNumb, merchantCode);
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
-    public void extendOrder(String operatorCode, String orderNumb, Date repaymentDt, BigDecimal extendInterestRatio) {
-        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
+    public void extendOrder(String merchantCode, String operatorCode, String orderNumb, Date repaymentDt, BigDecimal extendInterestRatio) {
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(orderNumb, merchantCode);
 
-        if (DateUtil.countDays(saasOrderVo.getRepaymentDt(), repaymentDt) > 0
-                || DateUtil.countDays(new Date(), repaymentDt) > 0) {
+        if (DateUtil.countDay(saasOrderVo.getRepaymentDt(), repaymentDt) > 0
+                || DateUtil.countDay(new Date(), repaymentDt) > 0) {
             LOG.warn("......应还日期非法.......展期结束日期:{};订单应还日期:{}", DateUtil.getDate(repaymentDt), DateUtil.getDate(saasOrderVo.getRepaymentDt()));
             throw new ApplicationException(OrderErrorCodeEnum.ILLEGAL_REPAYMENTDATE);
         }
@@ -614,10 +618,8 @@ public class OrderApplication {
         SaasOrder extendSaasOrder = new SaasOrder();
         BeanUtils.copyProperties(saasOrderVo, extendSaasOrder);
         extendSaasOrder.setTotalInterestRatio(extendInterestRatio);
-//        extendSaasOrder.setTermUrl(contractApplication.lenderDoExtendContractSign(saasOrderVo.getMerchantCode(), null));
-        extendSaasOrder.setTermUrl("test");
         extendSaasOrder.setExpireDate(DateUtil.getTodayOverTime());
-        if (DateUtil.countDays(new Date(), saasOrderVo.getRepaymentDt()) > 0) {
+        if (DateUtil.countDay(new Date(), saasOrderVo.getRepaymentDt()) > 0) {
             extendSaasOrder.setCreatedDt(DateUtil.addDate(new Date(), 1));
         } else {
             extendSaasOrder.setCreatedDt(DateUtil.addDate(saasOrderVo.getRepaymentDt(), 1));
@@ -628,37 +630,36 @@ public class OrderApplication {
         extendSaasOrder.setRelationOrderId(saasOrderVo.getSaasOrderId());
         saasOrderService.create(extendSaasOrder);
 
+        ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, operatorCode, extendSaasOrder.getId(), ContractTypeEnum.LENDER_DO_EXTEND_CONTRACT_SIGN));
+
         SaasOrderStatusHistory saasOrderStatusHistory = new SaasOrderStatusHistory();
         saasOrderStatusHistory.setOrderId(extendSaasOrder.getId());
         saasOrderStatusHistory.setOrderNumb(extendSaasOrder.getOrderNumb());
         saasOrderStatusHistory.setUpdateOrderStatus(nextOrderStatus.getCode());
         saasOrderStatusHistory.setOperatorCode(operatorCode);
         saasOrderStatusHistoryService.create(saasOrderStatusHistory);
-
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
-    public void confirmExtend(String operatorCode, String orderNumb) {
-        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
+    public void confirmExtend(String merchantCode, String operatorCode, String orderNumb) {
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(orderNumb, merchantCode);
         if (!OrderStatusEnum.TO_CONFIRM_EXTEND.getCode().equals(saasOrderVo.getOrderStatus())) {
             throw new ApplicationException(OrderErrorCodeEnum.ILLEGAL_OPERATION_ORDER_STATUS);
         }
-        updateOrderStatus(operatorCode, orderNumb, OrderStatusEnum.FOR_REIMBURSEMENT, null);
-        SaasOrder updateSaasOrder = new SaasOrder();
-        updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
-        updateSaasOrder.setTermUrl(contractApplication.borrowerDoExtendContractSign(operatorCode, saasOrderVo.getSaasOrderId()));
-        saasOrderService.updateById(updateSaasOrder);
+        updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.FOR_REIMBURSEMENT, null);
 
-        SaasOrder oldSaasOrder = saasOrderService.selectById(saasOrderVo.getSaasOrderId());
+        ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, operatorCode, saasOrderVo.getSaasOrderId(), ContractTypeEnum.BORROWER_DO_EXTEND_CONTRACT_SIGN));
+
+        SaasOrder oldSaasOrder = saasOrderService.selectById(saasOrderVo.getRelationOrderId());
         saasOrderService.updateOrderStatus(oldSaasOrder.getId(), oldSaasOrder.getVersion(), OrderStatusEnum.getEnumByCode(oldSaasOrder.getOrderStatus()), OrderStatusEnum.IN_EXTEND);
 
-        orderBillDetailApplication.createOrderBillDetail(orderNumb);
+        orderBillDetailApplication.createOrderBillDetail(orderNumb, merchantCode);
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
-    public void destroyOrder(String operatorCode, String orderNumb) {
-        updateOrderStatus(operatorCode, orderNumb, OrderStatusEnum.HAS_BEEN_DESTROY, null);
-        orderBillDetailApplication.destroyOrderBillDetail(orderNumb);
+    public void destroyOrder(String merchantCode, String operatorCode, String orderNumb) {
+        updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.HAS_BEEN_DESTROY, null);
+        orderBillDetailApplication.destroyOrderBillDetail(orderNumb, merchantCode);
     }
 
 }

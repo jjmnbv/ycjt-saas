@@ -100,7 +100,8 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
         if (OrderStatusEnum.PRELIMINARY_REVIEWER_REJECT.getCode().equals(saasOrder.getOrderStatus())
                 || OrderStatusEnum.PRELIMINARY_REVIEWER_REFUSE.getCode().equals(saasOrder.getOrderStatus())
                 || OrderStatusEnum.FINAL_REVIEWER_REJECT.getCode().equals(saasOrder.getOrderStatus())
-                || OrderStatusEnum.FINAL_REVIEWER_REFUSE.getCode().equals(saasOrder.getOrderStatus())) {
+                || OrderStatusEnum.FINAL_REVIEWER_REFUSE.getCode().equals(saasOrder.getOrderStatus())
+                || OrderStatusEnum.LOAN_LENDER_REFUSE.getCode().equals(saasOrder.getOrderStatus())) {
             return Boolean.FALSE;
         }
         return Boolean.TRUE;
@@ -137,8 +138,8 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
     }
 
     @Override
-    public SaasOrderVo getByOrderNumb(String orderNumb) {
-        return SaasOrderVo.convertEntityToVO(saasOrderDao.selectByOrderNumb(orderNumb));
+    public SaasOrderVo getByOrderNumbAndMerchantCode(String orderNumb, String merchantCode) {
+        return SaasOrderVo.convertEntityToVO(saasOrderDao.selectByOrderNumbAndMerchantCode(orderNumb, merchantCode));
     }
 
     @Override

@@ -112,11 +112,7 @@ public class EsignIntegrationServiceImpl implements EsignIntegrationService {
             throw new ApplicationException("用户印章数据丢失");
         }
         SignPDFStreamBean signPDFStreamBean = new SignPDFStreamBean();
-        if (borrowerDoContractSignParam.getSrcContent() == null) {
-            platformDoContractSign(borrowerDoContractSignParam.getSrcPdf(), signPDFStreamBean);
-        } else {
-            signPDFStreamBean.setStream(borrowerDoContractSignParam.getSrcContent());
-        }
+        signPDFStreamBean.setStream(borrowerDoContractSignParam.getSrcPdfContent());
         SignType signType = SignType.Key;
         PosBean posBean = setKeyPosBean("乙方：", 200, 5, 60);
         UserSignService userSignService = UserSignServiceFactory.instance();
@@ -133,11 +129,7 @@ public class EsignIntegrationServiceImpl implements EsignIntegrationService {
             throw new ApplicationException("机构印章数据丢失");
         }
         SignPDFStreamBean signPDFStreamBean = new SignPDFStreamBean();
-        if (lenderDoContractSignParam.getSrcContent() == null) {
-            platformDoContractSign(lenderDoContractSignParam.getSrcPdf(), signPDFStreamBean);
-        } else {
-            signPDFStreamBean.setStream(lenderDoContractSignParam.getSrcContent());
-        }
+        signPDFStreamBean.setStream(lenderDoContractSignParam.getSrcPdfContent());
         SignType signType = SignType.Key;
         PosBean posBean = setKeyPosBean("甲方：", 200, 5, 60);
         UserSignService userSignService = UserSignServiceFactory.instance();
@@ -149,22 +141,6 @@ public class EsignIntegrationServiceImpl implements EsignIntegrationService {
         return new String(finalResult.getStream());
     }
 
-    private void platformDoContractSign(String srcPdf, SignPDFStreamBean signPDFStreamBean) {
-        // 设置签署印章，www.tsign.cn官网设置的默认签名sealId = 0
-        int sealId = 0;
-        // 签章类型：关键字签章
-        SignType signType = SignType.Key;
-        signPDFStreamBean.setStream(FileHelper.getBytes(srcPdf));
-        PosBean posBean = setKeyPosBean("丙方：", 260, -35, 160);
-        SelfSignService selfSignService = SelfSignServiceFactory.instance();
-        FileDigestSignResult platformSignResult = selfSignService.localSignPdf(signPDFStreamBean, posBean, sealId, signType);
-        if (0 != platformSignResult.getErrCode()) {
-            LOGGER.error("平台自身PDF摘要签署（文件流）失败，errCode=" + platformSignResult.getErrCode() + " msg=" + platformSignResult.getMsg());
-            throw new ApplicationException("签署文件丢失，请联系管理员");
-        }
-        signPDFStreamBean.setStream(platformSignResult.getStream());
-    }
-
     @Override
     public String doLicenseContractSign(LicenseContractSignParam licenseContractSignParam) {
         if (StringUtils.isEmpty(licenseContractSignParam.getUserSealData())) {
@@ -174,7 +150,7 @@ public class EsignIntegrationServiceImpl implements EsignIntegrationService {
         int sealId = 0;
         // 签章类型：关键字签章
         SignPDFStreamBean signPDFStreamBean = new SignPDFStreamBean();
-        signPDFStreamBean.setStream(FileHelper.getBytes(licenseContractSignParam.getSrcPdf()));
+        signPDFStreamBean.setStream(licenseContractSignParam.getSrcPdfContent());
         SignType signType = SignType.Single;
         PosBean posBean = setXYPosBean("1", 100, 250, 140);
         SelfSignService selfSignService = SelfSignServiceFactory.instance();

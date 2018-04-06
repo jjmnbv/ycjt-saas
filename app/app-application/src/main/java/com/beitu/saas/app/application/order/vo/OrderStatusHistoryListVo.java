@@ -9,7 +9,6 @@ import io.swagger.annotations.ApiModelProperty;
  * @create 2018/4/4 上午11:16
  * @description
  */
-@ApiModel(value = "操作记录信息")
 public class OrderStatusHistoryListVo implements ResponseData {
 
     @ApiModelProperty(value = "操作时间")

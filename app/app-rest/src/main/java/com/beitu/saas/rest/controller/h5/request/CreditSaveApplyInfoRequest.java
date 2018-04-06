@@ -107,7 +107,7 @@ public class CreditSaveApplyInfoRequest extends ParamsObject {
         if (this.borrowingDuration < 0 || this.borrowingDuration > 366) {
             throw new ApiIllegalArgumentException("借款天数不正确");
         }
-        if (this.realCapital.compareTo(new BigDecimal("100")) < 0 || this.realCapital.compareTo(new BigDecimal("100000")) > 0) {
+        if (this.realCapital.compareTo(new BigDecimal("100")) < 0 || this.realCapital.compareTo(new BigDecimal("200000")) > 0) {
             throw new ApiIllegalArgumentException("借款金额不正确");
         }
         if (this.totalInterestRatio.compareTo(new BigDecimal("0")) < 0 || this.totalInterestRatio.compareTo(new BigDecimal("24")) > 0) {

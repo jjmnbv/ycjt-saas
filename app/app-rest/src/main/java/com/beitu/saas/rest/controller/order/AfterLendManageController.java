@@ -15,6 +15,7 @@ import com.beitu.saas.rest.controller.order.request.*;
 import com.beitu.saas.rest.controller.order.response.AfterLendOrderDetailResponse;
 import com.beitu.saas.rest.controller.order.response.AfterLendOrderListResponse;
 import com.fqgj.common.api.Page;
+import com.fqgj.common.api.annotations.ParamsValidate;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 
 /**
  * @author linanjun
@@ -64,13 +66,14 @@ public class AfterLendManageController {
         return new DataApiResponse<>(response);
     }
 
+    @ParamsValidate
     @HasPermission(permissionKey = ButtonPermissionConsts.EXTEND)
     @RequestMapping(value = "/extend", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "展期", response = ApiResponse.class)
     public ApiResponse extend(@RequestBody @Valid AfterLendManagerExtendOrderRequest req) {
-        String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.extendOrder(adminCode, req.getOrderNumb(), req.getRepaymentDt(), req.getExtendInterestRatio());
+        SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
+        orderApplication.extendOrder(saasAdmin.getMerchantCode(), saasAdmin.getCode(), req.getOrderNumb(), req.getRepaymentDt(), req.getExtendInterestRatio().divide(new BigDecimal("100")));
         return new ApiResponse("操作成功");
     }
 
@@ -79,8 +82,8 @@ public class AfterLendManageController {
     @ResponseBody
     @ApiOperation(value = "核销", response = ApiResponse.class)
     public ApiResponse destroy(@RequestBody @Valid AfterLendManagerDestroyOrderRequest req) {
-        String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.destroyOrder(adminCode, req.getOrderNumb());
+        SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
+        orderApplication.destroyOrder(saasAdmin.getMerchantCode(), saasAdmin.getCode(), req.getOrderNumb());
         return new ApiResponse("操作成功");
     }
 

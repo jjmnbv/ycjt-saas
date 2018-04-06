@@ -21,7 +21,7 @@ public interface SaasOrderBillDetailService<T extends BaseEntity> extends BaseSe
 
     List<SaasOrderBillDetailVo> listByBorrowerCodeAndMerchantCode(String borrowerCode, String merchantCode);
 
-    List<SaasOrderBillDetailVo> listByOrderNumb(String orderNumb);
+    List<SaasOrderBillDetailVo> listByOrderNumbAndMerchantCode(String orderNumb, String merchantCode);
 
     List<SaasOrderBillDetailVo> listByQueryOrderBillDetailVoAndPage(QuerySaasOrderBillDetailVo querySaasOrderBillDetailVo, Page page);
 
@@ -33,6 +33,6 @@ public interface SaasOrderBillDetailService<T extends BaseEntity> extends BaseSe
 
     List<OverdueOrderVo> getOverdueOrderListByPage(String merchantCode, Page page);
 
-    SaasOrderBillDetailVo getVisibleOrderBillDetailByOrderNumb(String orderNumb);
+    SaasOrderBillDetailVo getVisibleOrderBillDetailByOrderNumbAndMerchantCode(String orderNumb, String merchantCode);
 
 }

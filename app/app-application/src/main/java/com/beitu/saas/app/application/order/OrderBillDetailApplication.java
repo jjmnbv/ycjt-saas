@@ -3,7 +3,6 @@ package com.beitu.saas.app.application.order;
 import com.beitu.saas.app.application.borrower.BorrowerApplication;
 import com.beitu.saas.app.application.borrower.vo.BorrowerInfoVo;
 import com.beitu.saas.app.application.order.vo.QueryOrderBillDetailVo;
-import com.beitu.saas.app.application.order.vo.QueryOrderVo;
 import com.beitu.saas.app.application.order.vo.SaasOrderBillDetailListVo;
 import com.beitu.saas.app.application.order.vo.SaasOrderDetailVo;
 import com.beitu.saas.app.enums.QueryRepaymentDtEnum;
@@ -13,20 +12,20 @@ import com.beitu.saas.order.client.SaasOrderBillDetailService;
 import com.beitu.saas.order.client.SaasOrderService;
 import com.beitu.saas.order.client.SaasOrderStatusHistoryService;
 import com.beitu.saas.order.domain.QuerySaasOrderBillDetailVo;
-import com.beitu.saas.order.domain.QuerySaasOrderVo;
 import com.beitu.saas.order.domain.SaasOrderBillDetailVo;
 import com.beitu.saas.order.domain.SaasOrderVo;
 import com.beitu.saas.order.entity.SaasOrderBillDetail;
 import com.beitu.saas.order.enums.OrderStatusEnum;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.utils.CollectionUtils;
+import com.fqgj.log.factory.LogFactory;
+import com.fqgj.log.interfaces.Log;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -37,6 +36,8 @@ import java.util.List;
  */
 @Service
 public class OrderBillDetailApplication {
+
+    private static final Log LOGGER = LogFactory.getLog(OrderBillDetailApplication.class);
 
     @Autowired
     private SaasOrderBillDetailService saasOrderBillDetailService;
@@ -129,7 +130,7 @@ public class OrderBillDetailApplication {
         saasOrderBillDetailListVo.setExtend(saasOrderBillDetailVo.getRelationOrderBillDetailId() != null);
         saasOrderBillDetailListVo.setOverdueDuration(DateUtil.countDay(new Date(), saasOrderBillDetailVo.getRepaymentDt()));
 
-        BorrowerInfoVo borrowerInfoVo = borrowerApplication.getBorrowerInfoVoByBorrowerCode(saasOrderBillDetailVo.getBorrowerCode());
+        BorrowerInfoVo borrowerInfoVo = borrowerApplication.getBorrowerInfoVoByBorrowerCode(saasOrderBillDetailVo.getMerchantCode(), saasOrderBillDetailVo.getBorrowerCode());
         BeanUtils.copyProperties(borrowerInfoVo, saasOrderBillDetailListVo);
 
         saasOrderBillDetailListVo.setLoanLendRemark(saasOrderStatusHistoryService.getLoanLendRemark(saasOrderBillDetailVo.getOrderNumb()));
@@ -149,7 +150,7 @@ public class OrderBillDetailApplication {
         saasOrderBillDetailListVo.setExtend(saasOrderVo.getRelationOrderId() != null);
         saasOrderBillDetailListVo.setOverdueDuration(DateUtil.countDay(new Date(), saasOrderVo.getRepaymentDt()));
 
-        BorrowerInfoVo borrowerInfoVo = borrowerApplication.getBorrowerInfoVoByBorrowerCode(saasOrderVo.getBorrowerCode());
+        BorrowerInfoVo borrowerInfoVo = borrowerApplication.getBorrowerInfoVoByBorrowerCode(saasOrderVo.getMerchantCode(), saasOrderVo.getBorrowerCode());
         BeanUtils.copyProperties(borrowerInfoVo, saasOrderBillDetailListVo);
 
         saasOrderBillDetailListVo.setLoanLendRemark(saasOrderStatusHistoryService.getLoanLendRemark(saasOrderVo.getOrderNumb()));
@@ -159,8 +160,8 @@ public class OrderBillDetailApplication {
         return saasOrderBillDetailListVo;
     }
 
-    public void createOrderBillDetail(String orderNumb) {
-        SaasOrderBillDetailVo saasOrderBillDetailVo = saasOrderBillDetailService.getVisibleOrderBillDetailByOrderNumb(orderNumb);
+    public void createOrderBillDetail(String orderNumb, String merchantCode) {
+        SaasOrderBillDetailVo saasOrderBillDetailVo = saasOrderBillDetailService.getVisibleOrderBillDetailByOrderNumbAndMerchantCode(orderNumb, merchantCode);
         SaasOrderBillDetail addSaasOrderBillDetail = new SaasOrderBillDetail();
         if (saasOrderBillDetailVo != null) {
             BigDecimal amount = orderCalculateApplication.getAmount(saasOrderBillDetailVo);
@@ -177,7 +178,7 @@ public class OrderBillDetailApplication {
             addSaasOrderBillDetail.setNeedPayInterest(amount.subtract(saasOrderBillDetailVo.getRealCapital()));
             addSaasOrderBillDetail.setRelationOrderBillDetailId(saasOrderBillDetailVo.getSaasOrderBillDetailId());
         }
-        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumb(orderNumb);
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(orderNumb, merchantCode);
         addSaasOrderBillDetail.setOrderNumb(orderNumb);
         addSaasOrderBillDetail.setMerchantCode(saasOrderVo.getMerchantCode());
         addSaasOrderBillDetail.setChannelCode(saasOrderVo.getChannelCode());
@@ -194,8 +195,8 @@ public class OrderBillDetailApplication {
         saasOrderBillDetailService.create(addSaasOrderBillDetail);
     }
 
-    public void destroyOrderBillDetail(String orderNumb) {
-        SaasOrderBillDetailVo saasOrderBillDetailVo = saasOrderBillDetailService.getVisibleOrderBillDetailByOrderNumb(orderNumb);
+    public void destroyOrderBillDetail(String orderNumb, String merchantCode) {
+        SaasOrderBillDetailVo saasOrderBillDetailVo = saasOrderBillDetailService.getVisibleOrderBillDetailByOrderNumbAndMerchantCode(orderNumb, merchantCode);
         BigDecimal amount = orderCalculateApplication.getAmount(saasOrderBillDetailVo);
         SaasOrderBillDetail updateSaasOrderBillDetail = new SaasOrderBillDetail();
         updateSaasOrderBillDetail.setId(saasOrderBillDetailVo.getSaasOrderBillDetailId());
@@ -208,8 +209,8 @@ public class OrderBillDetailApplication {
         saasOrderBillDetailService.updateById(updateSaasOrderBillDetail);
     }
 
-    public List<SaasOrderDetailVo> getAllOrderBillDetailByOrderNumb(String orderNumb) {
-        List<SaasOrderBillDetailVo> saasOrderBillDetailVoList = saasOrderBillDetailService.listByOrderNumb(orderNumb);
+    public List<SaasOrderDetailVo> getAllOrderBillDetailByOrderNumb(String orderNumb, String merchantCode) {
+        List<SaasOrderBillDetailVo> saasOrderBillDetailVoList = saasOrderBillDetailService.listByOrderNumbAndMerchantCode(orderNumb, merchantCode);
         if (CollectionUtils.isEmpty(saasOrderBillDetailVoList)) {
             return null;
         }
@@ -226,7 +227,7 @@ public class OrderBillDetailApplication {
             saasOrderDetailVo.setCapital(saasOrderBillDetailVo.getRealCapital().toString());
             saasOrderDetailVo.setCreatedDate(DateUtil.getDate(saasOrderBillDetailVo.getGmtCreate()));
             saasOrderDetailVo.setRepaymentDate(DateUtil.getDate(saasOrderBillDetailVo.getRepaymentDt()));
-            saasOrderDetailVo.setBorrowingDuration(DateUtil.countDays(saasOrderBillDetailVo.getRepaymentDt(), saasOrderBillDetailVo.getGmtCreate()));
+            saasOrderDetailVo.setBorrowingDuration(DateUtil.countDay(saasOrderBillDetailVo.getRepaymentDt(), saasOrderBillDetailVo.getGmtCreate()));
             saasOrderDetailVo.setTotalInterestRatio(orderCalculateApplication.getInterestRatio(saasOrderBillDetailVo.getTotalInterestRatio()));
             saasOrderDetailVo.setInterest(saasOrderBillDetailVo.getInterest().toString());
             if (saasOrderBillDetailVo.getAmount() == null) {
@@ -238,15 +239,15 @@ public class OrderBillDetailApplication {
                 try {
                     lastSaasOrderDetailVo.setOverdueDuration(DateUtil.countDays(saasOrderDetailVo.getCreatedDate(), lastSaasOrderDetailVo.getRepaymentDate()));
                 } catch (Exception e) {
-
+                    LOGGER.warn(".....订单日期转换失败.....失败原因：{}，订单CODE：{}；订单创建日期：{}；订单应还日期：{}", e.getMessage(), saasOrderDetailVo.getOrderNumb(), saasOrderDetailVo.getCreatedDate(), lastSaasOrderDetailVo.getRepaymentDate());
                 }
             }
             if (i == saasOrderBillDetailVoList.size() - 1) {
                 Integer overdueDuration;
                 if (saasOrderBillDetailVo.getActualDestroyDt() != null) {
-                    overdueDuration = DateUtil.countDays(saasOrderBillDetailVo.getActualDestroyDt(), saasOrderBillDetailVo.getRepaymentDt());
+                    overdueDuration = DateUtil.countDay(saasOrderBillDetailVo.getActualDestroyDt(), saasOrderBillDetailVo.getRepaymentDt());
                 } else {
-                    overdueDuration = DateUtil.countDays(new Date(), saasOrderBillDetailVo.getRepaymentDt());
+                    overdueDuration = DateUtil.countDay(new Date(), saasOrderBillDetailVo.getRepaymentDt());
                 }
                 if (overdueDuration < 0) {
                     overdueDuration = 0;

@@ -53,12 +53,12 @@
         and deleted = false and visible = true
     </select>
 
-    <select id="selectByOrderNumb" parameterType="java.lang.String"
-            resultMap="BaseResultMap">
+    <select id="selectByOrderNumbAndMerchantCode" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from saas_order_bill_detail
-        where order_numb = #{orderNumb,jdbcType=VARCHAR} and deleted = false
+        where order_numb = #{orderNumb,jdbcType=VARCHAR} and merchant_code = #{merchantCode,jdbcType=VARCHAR} and
+        deleted = false
     </select>
 
 

@@ -11,8 +11,6 @@ import com.fqgj.common.entity.BaseEntity;
  */
 public interface SaasBorrowerTokenService<T extends BaseEntity> extends BaseService<T> {
 
-    String getBorrowerCodeByToken(String token);
-
     SaasBorrowerToken create(String borrowerCode, String merchantCode);
 
     SaasBorrowerToken refreshToken(String borrowerCode, String merchantCode);

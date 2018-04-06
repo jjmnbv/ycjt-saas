@@ -11,7 +11,6 @@ import java.util.List;
  * @create 2018/3/26 下午9:59
  * @description
  */
-@ApiModel(value = "订单详细信息")
 public class OrderDetailVo implements ResponseData {
 
     @ApiModelProperty(value = "订单号")

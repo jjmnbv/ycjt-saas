@@ -63,7 +63,11 @@
         FROM
         saas_collection_order sco
         LEFT JOIN
-        saas_order so ON sco.order_no = so.order_numb
+        (SELECT s1.*
+        FROM saas_order s1 LEFT JOIN saas_order s2
+        ON (s1.order_numb = s2.order_numb AND s1.id &lt; s2.id)
+        WHERE s2.id IS NULL)
+        so ON sco.order_no = so.order_numb
         LEFT JOIN
         saas_borrower sb ON so.borrower_code = sb.borrower_code
         LEFT JOIN

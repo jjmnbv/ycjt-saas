@@ -91,7 +91,7 @@
         <property name="defaultEncoding" value="utf-8"/>
         <!-- 文件限制5M -->
         <property name="maxUploadSize" value="5242880"/>
-        <property name="maxInMemorySize" value="4096"/>
+        <property name="maxInMemorySize" value="524288"/>
         <property name="resolveLazily" value="true"/>
     </bean>
 

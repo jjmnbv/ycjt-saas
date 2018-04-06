@@ -92,14 +92,16 @@ public class SaasController {
             return new DataApiResponse<>(ChannelErrorCodeEnum.DISABLE_CHANNEL);
         }
         String borrowerCode = borrowerApplication.createBorrower(req.getMobile(), channelCode, merchantCode);
+        if (!creditApplication.userRealNameAuth(merchantCode, borrowerCode, req.getName(), req.getIdentityCode())) {
+            return new DataApiResponse(BorrowerErrorCodeEnum.USER_PROFILE_REAL_NAME_FAILURE);
+        }
         if (borrowerApplication.needRealName(borrowerCode)) {
-            if (!creditApplication.userRealNameAuth(merchantCode, borrowerCode, req.getName(), req.getIdentityCode())) {
-                return new DataApiResponse(BorrowerErrorCodeEnum.USER_PROFILE_REAL_NAME_FAILURE);
-            }
+            return new DataApiResponse(BorrowerErrorCodeEnum.USER_PROFILE_NEED_REAL_NAME);
         }
         return new DataApiResponse<>(new SaasCreateBorrowerSuccessResponse(borrowerCode));
     }
 
+    @ParamsValidate
     @RequestMapping(value = "/credit/apply/info/save", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "保存风控模块申请表信息", response = ApiResponse.class)
@@ -208,7 +210,7 @@ public class SaasController {
         if (StringUtils.isEmpty(channelCode)) {
             return new DataApiResponse<>(ChannelErrorCodeEnum.DISABLE_CHANNEL);
         }
-        return creditApplication.submitCreditInfo(req.getBorrowerCode(), channelCode, null);
+        return creditApplication.submitCreditInfo(merchantCode, req.getBorrowerCode(), channelCode, null);
     }
 
 }

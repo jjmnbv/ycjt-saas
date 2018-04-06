@@ -80,17 +80,16 @@ public class CarrierController {
     public String crawlingNotify(HttpServletRequest request) {
         String userId = request.getParameter("userId");
         String taskId = request.getParameter("outUniqueId");
-        String success = "false";
         if (StringUtils.isNotEmpty(userId) && StringUtils.isNotEmpty(taskId)) {
-            SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCode(userId);
-            if (saasBorrowerVo != null) {
-                if (carrierApplication.carrierTaskAndUserMatch(userId, saasBorrowerVo.getMobile(), taskId)) {
+            String mobile = saasBorrowerService.getMobileByBorrowerCode(userId);
+            if (StringUtils.isNotEmpty(mobile)) {
+                if (carrierApplication.carrierTaskAndUserMatch(userId, mobile, taskId)) {
                     redisClient.set(RedisKeyConsts.H5_CARRIER_CRAWLING, taskId, TimeConsts.TEN_MINUTES, userId);
-                    success = "true";
                 }
             }
         }
-        return "redirect:" + configUtil.getAddressURLPrefix() + UserProfileConsts.H5_CARRIER_RESULT_URL + "?success=" + success;
+        return "redirect:" + configUtil.getAddressURLPrefix() + configUtil.getH5AddressURLPrefix()
+                + "#/thirdLoading";
     }
 
     @SignIgnore
