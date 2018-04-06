@@ -133,7 +133,7 @@ public class CreditQueryController {
     @ApiOperation(value = "多平台借贷爬取结果", response = LoanPlatformDataInfoResponse.class)
     public DataApiResponse<LoanPlatformDataInfoResponse> getLoanPlatformData(@RequestBody @Valid CreditLoanPlatformRequest req) {
         String orderNumb = req.getOrderNumb();
-        String borrowerCode = getBorrowerCodeByOrderNumb(orderNumb);
+        String borrowerCode = getBorrowerCodeByOrderNumb(orderNumb,"");
         SaasLoanPlatformEnum platform = SaasLoanPlatformEnum.getByCode(req.getPlatform());
         LoanPlatformQueryPojo pojo = loanPlatformApplication.getLoanPlatformData(borrowerCode, platform);
         return new DataApiResponse<>(new LoanPlatformDataInfoResponse(pojo));
