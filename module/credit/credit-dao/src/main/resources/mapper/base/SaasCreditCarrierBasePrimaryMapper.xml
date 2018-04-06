@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beitu.saas.credit.dao.impl.SaasCreditCarrierBaseDaoImpl">
+    <resultMap id="BaseResultMap" type="com.beitu.saas.credit.entity.SaasCreditCarrierBase">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="record_id" jdbcType="BIGINT" property="recordId"/>
+        <result column="carrier_type" jdbcType="VARCHAR" property="carrierType"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="identity_no" jdbcType="VARCHAR" property="identityNo"/>
+        <result column="balance" jdbcType="DECIMAL" property="balance"/>
+        <result column="province" jdbcType="VARCHAR" property="province"/>
+        <result column="plan_name" jdbcType="VARCHAR" property="planName"/>
+        <result column="register_time" jdbcType="TIMESTAMP" property="registerTime"/>
+        <result column="deleted" jdbcType="BIT" property="deleted"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id,
+    record_id,
+    carrier_type,
+    mobile,
+    name,
+    identity_no,
+    balance,
+    province,
+    plan_name,
+    register_time,
+    deleted,
+    gmt_modified,
+    gmt_create
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Long"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_credit_carrier_base
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" keyColumn="id" keyProperty="id"
+            parameterType="com.beitu.saas.credit.entity.SaasCreditCarrierBase" useGeneratedKeys="true">
+        insert into saas_credit_carrier_base
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="recordId !=null">
+                record_id,
+                </if>
+                <if test="carrierType !=null">
+                carrier_type,
+                </if>
+                <if test="mobile !=null">
+                mobile,
+                </if>
+                <if test="name !=null">
+                name,
+                </if>
+                <if test="identityNo !=null">
+                identity_no,
+                </if>
+                <if test="balance !=null">
+                balance,
+                </if>
+                <if test="province !=null">
+                province,
+                </if>
+                <if test="planName !=null">
+                plan_name,
+                </if>
+                <if test="registerTime !=null">
+                register_time,
+                </if>
+                <if test="deleted !=null">
+                deleted,
+                </if>
+                <if test="gmtModified !=null">
+                gmt_modified,
+                </if>
+                <if test="gmtCreate !=null">
+                gmt_create,
+                </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="recordId != null">
+                    #{recordId,jdbcType=BIGINT},
+                </if>
+                <if test="carrierType != null">
+                    #{carrierType,jdbcType=VARCHAR},
+                </if>
+                <if test="mobile != null">
+                    #{mobile,jdbcType=VARCHAR},
+                </if>
+                <if test="name != null">
+                    #{name,jdbcType=VARCHAR},
+                </if>
+                <if test="identityNo != null">
+                    #{identityNo,jdbcType=VARCHAR},
+                </if>
+                <if test="balance != null">
+                    #{balance,jdbcType=DECIMAL},
+                </if>
+                <if test="province != null">
+                    #{province,jdbcType=VARCHAR},
+                </if>
+                <if test="planName != null">
+                    #{planName,jdbcType=VARCHAR},
+                </if>
+                <if test="registerTime != null">
+                    #{registerTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="deleted != null">
+                    #{deleted,jdbcType=BIT},
+                </if>
+                <if test="gmtModified != null">
+                    #{gmtModified,jdbcType=TIMESTAMP},
+                </if>
+                <if test="gmtCreate != null">
+                    #{gmtCreate,jdbcType=TIMESTAMP},
+                </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.beitu.saas.credit.entity.SaasCreditCarrierBase">
+        update saas_credit_carrier_base
+        <set>
+                <if test="recordId !=null">
+                record_id = #{recordId,jdbcType=BIGINT},
+                </if>
+                <if test="carrierType !=null">
+                carrier_type = #{carrierType,jdbcType=VARCHAR},
+                </if>
+                <if test="mobile !=null">
+                mobile = #{mobile,jdbcType=VARCHAR},
+                </if>
+                <if test="name !=null">
+                name = #{name,jdbcType=VARCHAR},
+                </if>
+                <if test="identityNo !=null">
+                identity_no = #{identityNo,jdbcType=VARCHAR},
+                </if>
+                <if test="balance !=null">
+                balance = #{balance,jdbcType=DECIMAL},
+                </if>
+                <if test="province !=null">
+                province = #{province,jdbcType=VARCHAR},
+                </if>
+                <if test="planName !=null">
+                plan_name = #{planName,jdbcType=VARCHAR},
+                </if>
+                <if test="registerTime !=null">
+                register_time = #{registerTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="deleted !=null">
+                deleted = #{deleted,jdbcType=BIT},
+                </if>
+                <if test="gmtModified !=null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+                </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteByPrimaryKey">
+        update  saas_credit_carrier_base
+        set deleted = 1
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <sql id="paginationSql">
+        <if test="page != null">
+            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+        </if>
+    </sql>
+
+    <sql id="paging">
+        <if test="offset != null and limit != null">
+            limit #{offset},#{limit}
+        </if>
+    </sql>
+
+    <select id="selectByParams" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_credit_carrier_base
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="recordId !=null">
+                and record_id = #{recordId,jdbcType=BIGINT}
+            </if>
+            <if test="carrierType !=null">
+                and carrier_type = #{carrierType,jdbcType=VARCHAR}
+            </if>
+            <if test="mobile !=null">
+                and mobile = #{mobile,jdbcType=VARCHAR}
+            </if>
+            <if test="name !=null">
+                and name = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="identityNo !=null">
+                and identity_no = #{identityNo,jdbcType=VARCHAR}
+            </if>
+            <if test="balance !=null">
+                and balance = #{balance,jdbcType=DECIMAL}
+            </if>
+            <if test="province !=null">
+                and province = #{province,jdbcType=VARCHAR}
+            </if>
+            <if test="planName !=null">
+                and plan_name = #{planName,jdbcType=VARCHAR}
+            </if>
+            <if test="registerTime !=null">
+                and register_time = #{registerTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+        <include refid="paging"/>
+    </select>
+    <select id="queryTotal" resultType="INTEGER">
+        select count(*) from saas_credit_carrier_base
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="recordId !=null">
+                and record_id = #{recordId,jdbcType=BIGINT}
+            </if>
+            <if test="carrierType !=null">
+                and carrier_type = #{carrierType,jdbcType=VARCHAR}
+            </if>
+            <if test="mobile !=null">
+                and mobile = #{mobile,jdbcType=VARCHAR}
+            </if>
+            <if test="name !=null">
+                and name = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="identityNo !=null">
+                and identity_no = #{identityNo,jdbcType=VARCHAR}
+            </if>
+            <if test="balance !=null">
+                and balance = #{balance,jdbcType=DECIMAL}
+            </if>
+            <if test="province !=null">
+                and province = #{province,jdbcType=VARCHAR}
+            </if>
+            <if test="planName !=null">
+                and plan_name = #{planName,jdbcType=VARCHAR}
+            </if>
+            <if test="registerTime !=null">
+                and register_time = #{registerTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </select>
+</mapper>

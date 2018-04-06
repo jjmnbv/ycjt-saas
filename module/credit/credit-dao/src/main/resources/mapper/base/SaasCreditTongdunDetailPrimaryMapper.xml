@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beitu.saas.credit.dao.impl.SaasCreditTongdunDetailDaoImpl">
+    <resultMap id="BaseResultMap" type="com.beitu.saas.credit.entity.SaasCreditTongdunDetail">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="record_id" jdbcType="BIGINT" property="recordId"/>
+        <result column="report_id" jdbcType="VARCHAR" property="reportId"/>
+        <result column="tongdun_report" jdbcType="LONGVARCHAR" property="tongdunReport"/>
+        <result column="final_score" jdbcType="VARCHAR" property="finalScore"/>
+        <result column="final_decision" jdbcType="VARCHAR" property="finalDecision"/>
+        <result column="item_name" jdbcType="LONGVARCHAR" property="itemName"/>
+        <result column="report_time" jdbcType="TIMESTAMP" property="reportTime"/>
+        <result column="deleted" jdbcType="BIT" property="deleted"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id,
+    record_id,
+    report_id,
+    tongdun_report,
+    final_score,
+    final_decision,
+    item_name,
+    report_time,
+    deleted,
+    gmt_modified,
+    gmt_create
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Long"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_credit_tongdun_detail
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" keyColumn="id" keyProperty="id"
+            parameterType="com.beitu.saas.credit.entity.SaasCreditTongdunDetail" useGeneratedKeys="true">
+        insert into saas_credit_tongdun_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="recordId !=null">
+                record_id,
+                </if>
+                <if test="reportId !=null">
+                report_id,
+                </if>
+                <if test="tongdunReport !=null">
+                tongdun_report,
+                </if>
+                <if test="finalScore !=null">
+                final_score,
+                </if>
+                <if test="finalDecision !=null">
+                final_decision,
+                </if>
+                <if test="itemName !=null">
+                item_name,
+                </if>
+                <if test="reportTime !=null">
+                report_time,
+                </if>
+                <if test="deleted !=null">
+                deleted,
+                </if>
+                <if test="gmtModified !=null">
+                gmt_modified,
+                </if>
+                <if test="gmtCreate !=null">
+                gmt_create,
+                </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="recordId != null">
+                    #{recordId,jdbcType=BIGINT},
+                </if>
+                <if test="reportId != null">
+                    #{reportId,jdbcType=VARCHAR},
+                </if>
+                <if test="tongdunReport != null">
+                    #{tongdunReport,jdbcType=LONGVARCHAR},
+                </if>
+                <if test="finalScore != null">
+                    #{finalScore,jdbcType=VARCHAR},
+                </if>
+                <if test="finalDecision != null">
+                    #{finalDecision,jdbcType=VARCHAR},
+                </if>
+                <if test="itemName != null">
+                    #{itemName,jdbcType=LONGVARCHAR},
+                </if>
+                <if test="reportTime != null">
+                    #{reportTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="deleted != null">
+                    #{deleted,jdbcType=BIT},
+                </if>
+                <if test="gmtModified != null">
+                    #{gmtModified,jdbcType=TIMESTAMP},
+                </if>
+                <if test="gmtCreate != null">
+                    #{gmtCreate,jdbcType=TIMESTAMP},
+                </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.beitu.saas.credit.entity.SaasCreditTongdunDetail">
+        update saas_credit_tongdun_detail
+        <set>
+                <if test="recordId !=null">
+                record_id = #{recordId,jdbcType=BIGINT},
+                </if>
+                <if test="reportId !=null">
+                report_id = #{reportId,jdbcType=VARCHAR},
+                </if>
+                <if test="tongdunReport !=null">
+                tongdun_report = #{tongdunReport,jdbcType=LONGVARCHAR},
+                </if>
+                <if test="finalScore !=null">
+                final_score = #{finalScore,jdbcType=VARCHAR},
+                </if>
+                <if test="finalDecision !=null">
+                final_decision = #{finalDecision,jdbcType=VARCHAR},
+                </if>
+                <if test="itemName !=null">
+                item_name = #{itemName,jdbcType=LONGVARCHAR},
+                </if>
+                <if test="reportTime !=null">
+                report_time = #{reportTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="deleted !=null">
+                deleted = #{deleted,jdbcType=BIT},
+                </if>
+                <if test="gmtModified !=null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+                </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteByPrimaryKey">
+        update  saas_credit_tongdun_detail
+        set deleted = 1
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <sql id="paginationSql">
+        <if test="page != null">
+            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+        </if>
+    </sql>
+
+    <sql id="paging">
+        <if test="offset != null and limit != null">
+            limit #{offset},#{limit}
+        </if>
+    </sql>
+
+    <select id="selectByParams" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_credit_tongdun_detail
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="recordId !=null">
+                and record_id = #{recordId,jdbcType=BIGINT}
+            </if>
+            <if test="reportId !=null">
+                and report_id = #{reportId,jdbcType=VARCHAR}
+            </if>
+            <if test="tongdunReport !=null">
+                and tongdun_report = #{tongdunReport,jdbcType=LONGVARCHAR}
+            </if>
+            <if test="finalScore !=null">
+                and final_score = #{finalScore,jdbcType=VARCHAR}
+            </if>
+            <if test="finalDecision !=null">
+                and final_decision = #{finalDecision,jdbcType=VARCHAR}
+            </if>
+            <if test="itemName !=null">
+                and item_name = #{itemName,jdbcType=LONGVARCHAR}
+            </if>
+            <if test="reportTime !=null">
+                and report_time = #{reportTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+        <include refid="paging"/>
+    </select>
+    <select id="queryTotal" resultType="INTEGER">
+        select count(*) from saas_credit_tongdun_detail
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="recordId !=null">
+                and record_id = #{recordId,jdbcType=BIGINT}
+            </if>
+            <if test="reportId !=null">
+                and report_id = #{reportId,jdbcType=VARCHAR}
+            </if>
+            <if test="tongdunReport !=null">
+                and tongdun_report = #{tongdunReport,jdbcType=LONGVARCHAR}
+            </if>
+            <if test="finalScore !=null">
+                and final_score = #{finalScore,jdbcType=VARCHAR}
+            </if>
+            <if test="finalDecision !=null">
+                and final_decision = #{finalDecision,jdbcType=VARCHAR}
+            </if>
+            <if test="itemName !=null">
+                and item_name = #{itemName,jdbcType=LONGVARCHAR}
+            </if>
+            <if test="reportTime !=null">
+                and report_time = #{reportTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </select>
+</mapper>

@@ -8,7 +8,6 @@ import com.beitu.saas.app.application.order.OrderApplication;
 import com.beitu.saas.app.enums.BorrowerInfoApplyStatusEnum;
 import com.beitu.saas.borrower.client.*;
 import com.beitu.saas.borrower.enums.BorrowerErrorCodeEnum;
-import com.beitu.saas.channel.consts.ChannelConsts;
 import com.beitu.saas.channel.domain.SaasChannelRiskSettingsVo;
 import com.beitu.saas.channel.enums.ChannelErrorCodeEnum;
 import com.beitu.saas.channel.enums.RiskModuleEnum;
@@ -21,12 +20,13 @@ import com.beitu.saas.intergration.user.param.UserNameIdNoValidationParam;
 import com.beitu.saas.order.client.SaasOrderApplicationService;
 import com.beitu.saas.order.client.SaasOrderService;
 import com.beitu.saas.order.domain.SaasOrderApplicationVo;
-import com.beitu.saas.order.domain.SaasOrderVo;
 import com.beitu.saas.order.enums.OrderErrorCodeEnum;
 import com.beitu.saas.order.enums.OrderStatusEnum;
 import com.fqgj.base.services.redis.RedisClient;
 import com.fqgj.common.utils.CollectionUtils;
 import com.fqgj.exception.common.ApplicationException;
+import com.fqgj.log.factory.LogFactory;
+import com.fqgj.log.interfaces.Log;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,6 +43,8 @@ import java.util.Objects;
  */
 @Service
 public class CreditApplication {
+
+    private static final Log LOGGER = LogFactory.getLog(CreditApplication.class);
 
     @Autowired
     private RedisClient redisClient;
@@ -319,5 +321,57 @@ public class CreditApplication {
             return;
         }
     }
+
+    @Transactional
+    public void creditQueryPost(Long userId) {
+        if (!userProfileApplication.allActionComplete(userId)) {
+            throw new ApplicationException(CreditErrorCodeEnum.CREDIT_PROFILE_NOT_COMPLETE);
+        }
+
+        String key = RedisKeyConsts.CREDIT_REPORT_PREFIX + userId;
+        if (null != redisClient.get(key)) {
+            return;
+        }
+
+        redisClient.set(key, userId, TimeConsts.ONE_MINUTE);
+        Long queryId = userCreditQueryService.addUserCreditQuery(new UserCreditQueryVo(userId));
+        UserVo userVo = userService.getUserInfoByUserId(userId);
+        UserZmCreditVo userZmCreditVo = userZmCreditService.getUserZmCreditByUserId(userId);
+        CreditQueryInfoVo creditQueryInfoVo = BeanConvertUtil.getCreditQueryInfoVo(userId, queryId, userVo.getMobile(), userZmCreditVo);
+
+        try {
+            carrrierReportAsynService.generateCarrierReport(queryId, userId);
+            userCarrierService.userCarrierGenerated(userId);
+        } catch (Exception e) {
+            LogFactory.getLog(CreditApplication.class).error("******* 运营商报告生成异常 ******* 异常：", e);
+        }
+        try {
+            dunningReportAsynService.generateDunningReport(queryId, userId);
+        } catch (Exception e) {
+            LogFactory.getLog(CreditApplication.class).error("******* 催收报告生成异常 ******* 异常：", e);
+        }
+        try {
+            contactReportAsynService.asyncGenerateContactReport(queryId, userId);
+        } catch (Exception e) {
+            LogFactory.getLog(CreditApplication.class).error("******* 通讯录报告生成异常 ******* 异常：", e);
+        }
+        if (configUtil.getZmScoreSwitch()) {
+            try {
+                queryZmxyntiFraudSubscription(queryId, userId);
+            } catch (Exception e) {
+                LogFactory.getLog(CreditApplication.class).error("******* 芝麻信用报告获取异常 ******* 异常：", e);
+            }
+        }
+        try {
+            creditTongdunDetailApplication.saveTongdunCreditInfo(creditQueryInfoVo);
+        } catch (Exception e) {
+            LogFactory.getLog(CreditApplication.class).error("******* 同盾报告获取异常 ******* 异常：", e);
+        }
+        userCreditQueryService.userCreditQuerySuccess(queryId);
+        reportQueryApplication.handleOrderConsume(userId, queryId);
+        redisClient.del(key);
+        orderApplication.updateOrderToBeAgreed(userId);
+    }
+
 
 }
