@@ -92,10 +92,11 @@ public class SaasController {
             return new DataApiResponse<>(ChannelErrorCodeEnum.DISABLE_CHANNEL);
         }
         String borrowerCode = borrowerApplication.createBorrower(req.getMobile(), channelCode, merchantCode);
+        if (!creditApplication.userRealNameAuth(merchantCode, borrowerCode, req.getName(), req.getIdentityCode())) {
+            return new DataApiResponse(BorrowerErrorCodeEnum.USER_PROFILE_REAL_NAME_FAILURE);
+        }
         if (borrowerApplication.needRealName(borrowerCode)) {
-            if (!creditApplication.userRealNameAuth(merchantCode, borrowerCode, req.getName(), req.getIdentityCode())) {
-                return new DataApiResponse(BorrowerErrorCodeEnum.USER_PROFILE_REAL_NAME_FAILURE);
-            }
+            return new DataApiResponse(BorrowerErrorCodeEnum.USER_PROFILE_NEED_REAL_NAME);
         }
         return new DataApiResponse<>(new SaasCreateBorrowerSuccessResponse(borrowerCode));
     }
