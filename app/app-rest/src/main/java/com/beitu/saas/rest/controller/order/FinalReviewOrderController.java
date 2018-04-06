@@ -61,8 +61,8 @@ public class FinalReviewOrderController {
     @ResponseBody
     @ApiOperation(value = "复审订单备注保存", response = ApiResponse.class)
     public ApiResponse saveRemark(@RequestBody @Valid FinalOrderRemarkSaveRequest req) {
-        String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.saveOrderRemark(adminCode, req.getOrderNumb(), req.getRemark());
+        SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
+        orderApplication.saveOrderRemark(saasAdmin.getMerchantCode(), saasAdmin.getCode(), req.getOrderNumb(), req.getRemark());
         return new ApiResponse("保存成功");
     }
 
@@ -70,8 +70,8 @@ public class FinalReviewOrderController {
     @ResponseBody
     @ApiOperation(value = "复审订单详情查看", response = FinalOrderDetailResponse.class)
     public DataApiResponse<FinalOrderDetailResponse> detail(@RequestBody @Valid FinalOrderDetailRequest req) {
-        String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.updateOrderStatus(adminCode, req.getOrderNumb(), OrderStatusEnum.IN_FINAL_REVIEWER, null);
+        SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
+        orderApplication.updateOrderStatus(saasAdmin.getMerchantCode(), saasAdmin.getCode(), req.getOrderNumb(), OrderStatusEnum.IN_FINAL_REVIEWER, null);
         FinalOrderDetailResponse response = new FinalOrderDetailResponse();
         response.setOrderNumb(req.getOrderNumb());
         return new DataApiResponse<>(response);
@@ -82,8 +82,8 @@ public class FinalReviewOrderController {
     @ResponseBody
     @ApiOperation(value = "复审领单", response = ApiResponse.class)
     public ApiResponse getOrder(@RequestBody @Valid FinalReviewerOperateOrderRequest req) {
-        String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.finalReviewerGetOrder(adminCode, req.getOrderNumb());
+        SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
+        orderApplication.finalReviewerGetOrder(saasAdmin.getMerchantCode(), saasAdmin.getCode(), req.getOrderNumb());
         return new ApiResponse("操作成功");
     }
 
@@ -92,8 +92,8 @@ public class FinalReviewOrderController {
     @ResponseBody
     @ApiOperation(value = "通过复审", response = ApiResponse.class)
     public ApiResponse agree(@RequestBody @Valid FinalReviewerOperateOrderRequest req) {
-        String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.finalReviewerAgree(adminCode, req.getOrderNumb());
+        SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
+        orderApplication.finalReviewerAgree(saasAdmin.getMerchantCode(), saasAdmin.getCode(), req.getOrderNumb());
         return new ApiResponse("操作成功");
     }
 
@@ -102,8 +102,8 @@ public class FinalReviewOrderController {
     @ResponseBody
     @ApiOperation(value = "复审驳回", response = ApiResponse.class)
     public ApiResponse reject(@RequestBody @Valid FinalReviewerOperateOrderRequest req) {
-        String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.finalReviewerReject(adminCode, req.getOrderNumb());
+        SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
+        orderApplication.finalReviewerReject(saasAdmin.getMerchantCode(), saasAdmin.getCode(), req.getOrderNumb());
         return new ApiResponse("操作成功");
     }
 
@@ -112,8 +112,8 @@ public class FinalReviewOrderController {
     @ResponseBody
     @ApiOperation(value = "复审拒绝", response = ApiResponse.class)
     public ApiResponse refuse(@RequestBody @Valid FinalReviewerOperateOrderRequest req) {
-        String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.finalReviewerRefuse(adminCode, req.getOrderNumb());
+        SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
+        orderApplication.finalReviewerRefuse(saasAdmin.getMerchantCode(), saasAdmin.getCode(), req.getOrderNumb());
         return new ApiResponse("操作成功");
     }
 

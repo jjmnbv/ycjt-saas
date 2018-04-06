@@ -45,7 +45,7 @@ public interface SaasOrderService<T extends BaseEntity> extends BaseService<T> {
 
     List<SaasOrderVo> listByQuerySaasOrderVoAndPage(QuerySaasOrderVo querySaasOrderVo, Page page);
 
-    SaasOrderVo getByOrderNumb(String orderNumb);
+    SaasOrderVo getByOrderNumbAndMerchantCode(String orderNumb, String merchantCode);
 
     Boolean updateOrderStatus(Long orderId, Long version, OrderStatusEnum currentOrderStatus, OrderStatusEnum updateOrderStatus);
 

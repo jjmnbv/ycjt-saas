@@ -8,6 +8,7 @@ package com.beitu.saas.collection.param;
  * Time: 下午1:36
  */
 public class CollectionOrderQueryParam {
+
     private String overdueStartDate;  //N天前
     private String overdueEndDate;  //当前天数
     private Integer overdueDaysType;
@@ -15,6 +16,7 @@ public class CollectionOrderQueryParam {
     private String name;
     private String identityCode;
     private String channelCode;
+    private String merchantCode;
 
     public String getOverdueStartDate() {
         return overdueStartDate;
@@ -77,5 +79,13 @@ public class CollectionOrderQueryParam {
     public CollectionOrderQueryParam setChannelCode(String channelCode) {
         this.channelCode = channelCode;
         return this;
+    }
+
+    public String getMerchantCode() {
+        return merchantCode;
+    }
+
+    public void setMerchantCode(String merchantCode) {
+        this.merchantCode = merchantCode;
     }
 }

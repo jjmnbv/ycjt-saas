@@ -45,8 +45,8 @@ public class SaasOrderBillDetailServiceImpl extends AbstractBaseService implemen
     }
 
     @Override
-    public List<SaasOrderBillDetailVo> listByOrderNumb(String orderNumb) {
-        List<SaasOrderBillDetail> saasOrderBillDetailList = saasOrderBillDetailDao.selectByOrderNumb(orderNumb);
+    public List<SaasOrderBillDetailVo> listByOrderNumbAndMerchantCode(String orderNumb, String merchantCode) {
+        List<SaasOrderBillDetail> saasOrderBillDetailList = saasOrderBillDetailDao.selectByOrderNumbAndMerchantCode(orderNumb, merchantCode);
         if (CollectionUtils.isEmpty(saasOrderBillDetailList)) {
             return null;
         }
@@ -113,9 +113,10 @@ public class SaasOrderBillDetailServiceImpl extends AbstractBaseService implemen
     }
 
     @Override
-    public SaasOrderBillDetailVo getVisibleOrderBillDetailByOrderNumb(String orderNumb) {
+    public SaasOrderBillDetailVo getVisibleOrderBillDetailByOrderNumbAndMerchantCode(String orderNumb, String merchantCode) {
         List<SaasOrderBillDetail> saasOrderBillDetailList = saasOrderBillDetailDao.selectByParams(new HashMap<String, Object>(4) {{
             put("orderNumb", orderNumb);
+            put("merchantCode", merchantCode);
             put("visible", Boolean.TRUE);
             put("deleted", Boolean.FALSE);
         }});

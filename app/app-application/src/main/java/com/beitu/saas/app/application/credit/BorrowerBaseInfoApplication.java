@@ -67,9 +67,9 @@ public class BorrowerBaseInfoApplication {
         return borrowerOrderApplicationVo;
     }
 
-    public BorrowerPersonalInfoVo getUserPersonalInfoVo(String borrowerCode, String orderNumb) {
+    public BorrowerPersonalInfoVo getUserPersonalInfoVo(String merchantCode, String borrowerCode, String orderNumb) {
         BorrowerPersonalInfoVo borrowerPersonalInfoVo = new BorrowerPersonalInfoVo();
-        SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCode(borrowerCode);
+        SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCodeAndMerchantCode(borrowerCode, merchantCode);
         if (saasBorrowerVo == null) {
 
         }

@@ -28,9 +28,10 @@ public class SaasBorrowerServiceImpl extends AbstractBaseService implements Saas
     private SaasBorrowerDao saasBorrowerDao;
 
     @Override
-    public SaasBorrowerVo getByBorrowerCode(String borrowerCode) {
+    public SaasBorrowerVo getByBorrowerCodeAndMerchantCode(String borrowerCode, String merchantCode) {
         List<SaasBorrower> saasBorrowerList = saasBorrowerDao.selectByParams(new HashMap<String, Object>(4) {{
             put("borrowerCode", borrowerCode);
+            put("merchantCode", merchantCode);
             put("deleted", Boolean.FALSE);
         }});
         if (CollectionUtils.isEmpty(saasBorrowerList)) {
@@ -55,6 +56,30 @@ public class SaasBorrowerServiceImpl extends AbstractBaseService implements Saas
     @Override
     public SaasBorrower create(SaasBorrowerVo saasBorrowerVo) {
         return saasBorrowerDao.insert(SaasBorrowerVo.convertVOToEntity(saasBorrowerVo));
+    }
+
+    @Override
+    public String getMobileByBorrowerCode(String borrowerCode) {
+        List<SaasBorrower> saasBorrowerList = saasBorrowerDao.selectByParams(new HashMap<String, Object>(2) {{
+            put("borrowerCode", borrowerCode);
+            put("deleted", Boolean.FALSE);
+        }});
+        if (CollectionUtils.isEmpty(saasBorrowerList)) {
+            return null;
+        }
+        return saasBorrowerList.get(0).getMobile();
+    }
+
+    @Override
+    public Boolean isSaasBorrower(String userCode) {
+        List<SaasBorrower> saasBorrowerList = saasBorrowerDao.selectByParams(new HashMap<String, Object>(2) {{
+            put("borrowerCode", userCode);
+            put("deleted", Boolean.FALSE);
+        }});
+        if (CollectionUtils.isEmpty(saasBorrowerList)) {
+            return Boolean.FALSE;
+        }
+        return Boolean.TRUE;
     }
 }
 

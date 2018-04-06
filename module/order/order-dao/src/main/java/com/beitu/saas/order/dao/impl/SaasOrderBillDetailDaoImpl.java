@@ -32,8 +32,11 @@ public class SaasOrderBillDetailDaoImpl extends AbstractBaseMapper<SaasOrderBill
     }
 
     @Override
-    public List<SaasOrderBillDetail> selectByOrderNumb(String orderNumb) {
-        return this.getSqlSession().selectList(this.getStatement(".selectByOrderNumb"), orderNumb);
+    public List<SaasOrderBillDetail> selectByOrderNumbAndMerchantCode(String orderNumb, String merchantCode) {
+        Map<String, Object> params = new HashMap<>(4);
+        params.put("orderNumb", orderNumb);
+        params.put("merchantCode", merchantCode);
+        return this.getSqlSession().selectList(this.getStatement(".selectByOrderNumbAndMerchantCode"), params);
     }
 
     @Override
@@ -58,7 +61,8 @@ public class SaasOrderBillDetailDaoImpl extends AbstractBaseMapper<SaasOrderBill
     public List<LoanStateDetailVo> selectLoanStatDetailList(String merchantCode) {
         Map<String, Object> params = new HashMap<>(4);
         params.put("merchantCode", merchantCode);
-        return this.getSqlSession().selectList(this.getStatement(".selectLoanStatDetailList"), params);    }
+        return this.getSqlSession().selectList(this.getStatement(".selectLoanStatDetailList"), params);
+    }
 
     @Override
     public List<NoRepayOrderVo> selectNoRepayOrder(String merchantCode, Page page) {

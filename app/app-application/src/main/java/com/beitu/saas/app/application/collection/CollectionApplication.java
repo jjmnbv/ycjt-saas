@@ -53,7 +53,7 @@ public class CollectionApplication {
         List<CollectionOrderInfoDetailVo> collectionOrderInfoDetailVos = saasCollectionOrderService.getCollectionOrderListByPage(collectionOrderQueryParam, page);
 
         collectionOrderInfoDetailVos.stream().forEach(x -> {
-            SaasOrderBillDetailVo saasOrderBillDetailVo = saasOrderBillDetailService.getVisibleOrderBillDetailByOrderNumb(x.getOrderNo());
+            SaasOrderBillDetailVo saasOrderBillDetailVo = saasOrderBillDetailService.getVisibleOrderBillDetailByOrderNumbAndMerchantCode(x.getOrderNo(), collectionOrderQueryParam.getMerchantCode());
             x.setShouldRepayCapital(orderCalculateApplication.getAmount(saasOrderBillDetailVo));
         });
 
@@ -67,7 +67,7 @@ public class CollectionApplication {
         return collectionOrderListVos;
     }
 
-    public List<CollectionCommentListVo> getAllCollectionCommentByOrderNumb(String orderNumb) {
+    public List<CollectionCommentListVo> getAllCollectionCommentByOrderNumb(String merchantCode, String orderNumb) {
         List<SaasCollectionCommentEntity> saasCollectionCommentEntityList = saasCollectionCommentService.selectByParams(new HashMap<String, Object>(4) {{
             put("orderNo", orderNumb);
             put("deleted", Boolean.FALSE);

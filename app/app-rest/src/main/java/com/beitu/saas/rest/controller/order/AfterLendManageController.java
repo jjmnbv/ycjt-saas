@@ -72,8 +72,8 @@ public class AfterLendManageController {
     @ResponseBody
     @ApiOperation(value = "展期", response = ApiResponse.class)
     public ApiResponse extend(@RequestBody @Valid AfterLendManagerExtendOrderRequest req) {
-        String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.extendOrder(adminCode, req.getOrderNumb(), req.getRepaymentDt(), req.getExtendInterestRatio().divide(new BigDecimal("100")));
+        SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
+        orderApplication.extendOrder(saasAdmin.getMerchantCode(), saasAdmin.getCode(), req.getOrderNumb(), req.getRepaymentDt(), req.getExtendInterestRatio().divide(new BigDecimal("100")));
         return new ApiResponse("操作成功");
     }
 
@@ -82,8 +82,8 @@ public class AfterLendManageController {
     @ResponseBody
     @ApiOperation(value = "核销", response = ApiResponse.class)
     public ApiResponse destroy(@RequestBody @Valid AfterLendManagerDestroyOrderRequest req) {
-        String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-        orderApplication.destroyOrder(adminCode, req.getOrderNumb());
+        SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
+        orderApplication.destroyOrder(saasAdmin.getMerchantCode(), saasAdmin.getCode(), req.getOrderNumb());
         return new ApiResponse("操作成功");
     }
 

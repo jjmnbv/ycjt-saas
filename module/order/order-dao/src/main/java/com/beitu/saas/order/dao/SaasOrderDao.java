@@ -20,7 +20,7 @@ public interface SaasOrderDao extends BaseMapper<SaasOrder> {
 
     SaasOrder selectByBorrowerCodeAndChannelCode(String borrowerCode, String channelCode);
 
-    SaasOrder selectByOrderNumb(String orderNumb);
+    SaasOrder selectByOrderNumbAndMerchantCode(String orderNumb, String merchantCode);
 
     int updateOrderStatus(Map<String, Object> params);
 
