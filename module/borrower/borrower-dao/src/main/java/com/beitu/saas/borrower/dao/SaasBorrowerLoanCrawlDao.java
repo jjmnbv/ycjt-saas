@@ -10,5 +10,7 @@ import com.beitu.saas.borrower.entity.SaasBorrowerLoanCrawl;
  */
 
 public interface SaasBorrowerLoanCrawlDao extends BaseMapper<SaasBorrowerLoanCrawl> {
-
+    
+    SaasBorrowerLoanCrawl selectByBorrowerCodeAndPlatform(String borrowerCode, Integer platform);
+    
 }

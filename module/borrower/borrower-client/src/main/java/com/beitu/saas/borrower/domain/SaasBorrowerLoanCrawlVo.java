@@ -1,6 +1,8 @@
 package com.beitu.saas.borrower.domain;
 
+import com.beitu.saas.borrower.entity.SaasBorrowerLoanCrawl;
 import com.fqgj.common.api.ResponseData;
+import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -34,6 +36,9 @@ public class SaasBorrowerLoanCrawlVo implements ResponseData, Serializable {
      * 借贷平台爬虫数据存储地址
      */
     private String url;
+    
+    public SaasBorrowerLoanCrawlVo() {
+    }
     
     public SaasBorrowerLoanCrawlVo(String borrowerCode, String taskId, String token, Integer platform, String url) {
         this.borrowerCode = borrowerCode;
@@ -90,5 +95,15 @@ public class SaasBorrowerLoanCrawlVo implements ResponseData, Serializable {
     
     public void setUrl(String url) {
         this.url = url;
+    }
+    
+    public static SaasBorrowerLoanCrawlVo convertEntityToVO(SaasBorrowerLoanCrawl entity) {
+        if (entity == null) {
+            return null;
+        }
+        SaasBorrowerLoanCrawlVo vo = new SaasBorrowerLoanCrawlVo();
+        BeanUtils.copyProperties(entity, vo);
+        vo.setSaasBorrowerLoanCrawlId(entity.getId());
+        return vo;
     }
 }

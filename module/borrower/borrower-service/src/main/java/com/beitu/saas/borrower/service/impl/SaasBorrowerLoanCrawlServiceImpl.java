@@ -30,6 +30,12 @@ public class SaasBorrowerLoanCrawlServiceImpl extends AbstractBaseService implem
         BeanUtils.copyProperties(saasBorrowerLoanCrawlVo, entity);
         return create(entity) != null;
     }
+    
+    @Override
+    public SaasBorrowerLoanCrawlVo getSaasBorrowerLoanCrawl(String borrowerCode, Integer platform) {
+        SaasBorrowerLoanCrawl entity = saasBorrowerLoanCrawlDao.selectByBorrowerCodeAndPlatform(borrowerCode, platform);
+        return SaasBorrowerLoanCrawlVo.convertEntityToVO(entity);
+    }
 }
 
 

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.beitu.saas.app.annotations.SignIgnore;
 import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.application.credit.CreditApplication;
+import com.beitu.saas.app.application.credit.LoanPlatformApplication;
 import com.beitu.saas.app.application.finance.SaasConsumeDayStatApplication;
 import com.beitu.saas.intergration.risk.RiskIntergrationService;
 import com.beitu.saas.intergration.risk.dto.LoanPlatformCrawlingDto;
@@ -31,6 +32,10 @@ public class OkController {
 
     @Autowired
     private RiskIntergrationService riskIntergrationService;
+    
+    @Autowired
+    private LoanPlatformApplication loanPlatformApplication;
+
     @Autowired
     private SaasConsumeDayStatApplication saasConsumeDayStatApplication;
 
@@ -47,16 +52,7 @@ public class OkController {
     @VisitorAccessible
     @SignIgnore
     public String stat() {
-        LoanPlatformCrawlingParam param = new LoanPlatformCrawlingParam();
-        param.setTaskId("jdfsklajkfjalsjfadslfksdj");
-        param.setJumpUrl("https://www.baidu.com");
-        param.setPlatformEnum(LoanPlatformEnum.WU_YOU_JIE_TIAO);
-        LoanPlatformCrawlingDto dto = riskIntergrationService.loanPlatformCrawlingUrl(param);
-        return JSON.toJSONString(dto);
-
-//        LoanPlatformQueryParam param = new LoanPlatformQueryParam("964e45dd5f984d6ea2a2f4546973f8e9");
-//        LoanPlatformQueryDto dto = riskIntergrationService.loanPlatformQuery(param);
-//        return JSON.toJSONString(dto);
+        return null;
     }
 
     @RequestMapping(value = "/syncTask", method = RequestMethod.POST)

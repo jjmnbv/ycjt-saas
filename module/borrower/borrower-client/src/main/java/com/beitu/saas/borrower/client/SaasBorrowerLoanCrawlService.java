@@ -13,4 +13,6 @@ public interface SaasBorrowerLoanCrawlService<T extends BaseEntity> extends Base
     
     Boolean addSaasBorrowerLoanCrawl(SaasBorrowerLoanCrawlVo saasBorrowerLoanCrawlVo);
     
+    SaasBorrowerLoanCrawlVo getSaasBorrowerLoanCrawl(String borrowerCode, Integer platform);
+    
 }
