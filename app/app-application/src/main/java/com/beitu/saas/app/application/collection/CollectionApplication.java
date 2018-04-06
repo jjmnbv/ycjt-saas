@@ -24,6 +24,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,7 +57,13 @@ public class CollectionApplication {
 
         collectionOrderInfoDetailVos.stream().forEach(x -> {
             SaasOrderBillDetailVo saasOrderBillDetailVo = saasOrderBillDetailService.getVisibleOrderBillDetailByOrderNumbAndMerchantCode(x.getOrderNo(), collectionOrderQueryParam.getMerchantCode());
-            x.setShouldRepayCapital(orderCalculateApplication.getAmount(saasOrderBillDetailVo));
+            BigDecimal shouldAmount = BigDecimal.ZERO;
+            try {
+                shouldAmount = orderCalculateApplication.getAmount(saasOrderBillDetailVo);
+            } catch (Exception e) {
+                LOGGER.info("清算应还金额出错,异常原因:{} ", e);
+            }
+            x.setShouldRepayCapital(shouldAmount);
         });
 
         List<CollectionOrderListVo> collectionOrderListVos = new ArrayList<>();
