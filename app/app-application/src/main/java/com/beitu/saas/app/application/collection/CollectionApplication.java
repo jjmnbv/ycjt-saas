@@ -5,7 +5,9 @@ import com.beitu.saas.app.application.collection.vo.CollectionOrderListVo;
 import com.beitu.saas.app.application.order.OrderCalculateApplication;
 import com.beitu.saas.collection.client.SaasCollectionCommentService;
 import com.beitu.saas.collection.client.SaasCollectionOrderService;
+import com.beitu.saas.collection.domain.OverdueInfoVo;
 import com.beitu.saas.collection.entity.SaasCollectionCommentEntity;
+import com.beitu.saas.collection.enums.OverdueTimeEnum;
 import com.beitu.saas.collection.param.CollectionOrderQueryParam;
 import com.beitu.saas.collection.vo.CollectionOrderInfoDetailVo;
 import com.beitu.saas.common.utils.DateUtil;
@@ -89,6 +91,22 @@ public class CollectionApplication {
         collectionCommentListVo.setCollectionName(saasCollectionCommentEntity.getName());
         collectionCommentListVo.setCollectionMobile(saasCollectionCommentEntity.getMobile());
         return collectionCommentListVo;
+    }
+
+    /**
+     * 获取预期天数参数
+     *
+     * @return
+     */
+    public List<OverdueInfoVo> getOverdueTimeVoList() {
+        List<OverdueInfoVo> vos = new ArrayList<>();
+        for (OverdueTimeEnum enums : OverdueTimeEnum.values()) {
+            OverdueInfoVo vo = new OverdueInfoVo();
+            vo.setType(enums.getType());
+            vo.setDesc(enums.getDesc());
+            vos.add(vo);
+        }
+        return vos;
     }
 
 }
