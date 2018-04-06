@@ -6,15 +6,16 @@ package com.beitu.saas.collection.enums;
  * @Author watson
  * @Create 2017/5/3 0003下午 2:20
  */
-public enum OverdueTimeEnums {
-    TODAY(1, 0, 1, "1"),
-    THREE_DAY(2, 2, 3, "3天"),
-    SEVEN_DAY(3, 6, 7, "7天"),
-    ONE_TO_FIFTEEN(4, 0, 15, "0-15天"),
-    FIFTEEN_TO_THIRTY(5, 15, 30, "15-30天"),
-    THIRTY_TO_SIXTY(6, 30, 60, "30-60天"),
-    SIXTY_TO_NINETY(7, 60, 90, "60-90天"),
-    MORE_THAN_NINETY(8, 90, 10000, "90天以上");
+public enum OverdueTimeEnum {
+    ALL(0, 0, 0, "全部"),
+    TODAY(1, 0, 1, "今日到期"),
+    THREE_DAY(2, 2, 3, "逾期3天"),
+    SEVEN_DAY(3, 6, 7, "逾期7天"),
+    ONE_TO_FIFTEEN(4, 10, 15, "逾期10-15天"),
+    FIFTEEN_TO_THIRTY(5, 15, 30, "逾期15-30天"),
+    THIRTY_TO_SIXTY(6, 30, 60, "逾期30-60天"),
+    SIXTY_TO_NINETY(7, 60, 90, "逾期60-90天"),
+    MORE_THAN_NINETY(8, 90, 10000, "逾期90天以上");
 
     private Integer type;
 
@@ -24,7 +25,7 @@ public enum OverdueTimeEnums {
 
     private String desc;
 
-    OverdueTimeEnums(Integer type, Integer start, Integer end, String desc) {
+    OverdueTimeEnum(Integer type, Integer start, Integer end, String desc) {
         this.type = type;
         this.start = start;
         this.end = end;
@@ -64,9 +65,11 @@ public enum OverdueTimeEnums {
     }
 
 
-    public static OverdueTimeEnums getEnum(Integer type) {
-        for (OverdueTimeEnums item : OverdueTimeEnums.values()) {
-            if (item.type.equals(type)) {
+    public static OverdueTimeEnum getEnum(Integer type) {
+        for (OverdueTimeEnum item : OverdueTimeEnum.values()) {
+            if (type == 0) {
+                return null;
+            } else if (item.type.equals(type)) {
                 return item;
             }
         }
