@@ -46,119 +46,119 @@
             parameterType="com.beitu.saas.credit.entity.SaasCreditDunning" useGeneratedKeys="true">
         insert into saas_credit_dunning
         <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="merchantCode !=null">
+            <if test="merchantCode !=null">
                 merchant_code,
-                </if>
-                <if test="borrowerCode !=null">
+            </if>
+            <if test="borrowerCode !=null">
                 borrower_code,
-                </if>
-                <if test="carrierId !=null">
+            </if>
+            <if test="carrierId !=null">
                 carrier_id,
-                </if>
-                <if test="sid !=null">
+            </if>
+            <if test="sid !=null">
                 sid,
-                </if>
-                <if test="mobile !=null">
+            </if>
+            <if test="mobile !=null">
                 mobile,
-                </if>
-                <if test="totalNum !=null">
+            </if>
+            <if test="totalNum !=null">
                 total_num,
-                </if>
-                <if test="effectiveNum !=null">
+            </if>
+            <if test="effectiveNum !=null">
                 effective_num,
-                </if>
-                <if test="url !=null">
+            </if>
+            <if test="url !=null">
                 url,
-                </if>
-                <if test="success !=null">
+            </if>
+            <if test="success !=null">
                 success,
-                </if>
-                <if test="deleted !=null">
+            </if>
+            <if test="deleted !=null">
                 deleted,
-                </if>
-                <if test="gmtModified !=null">
+            </if>
+            <if test="gmtModified !=null">
                 gmt_modified,
-                </if>
-                <if test="gmtCreate !=null">
+            </if>
+            <if test="gmtCreate !=null">
                 gmt_create,
-                </if>
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-                <if test="merchantCode != null">
-                    #{merchantCode,jdbcType=VARCHAR},
-                </if>
-                <if test="borrowerCode != null">
-                    #{borrowerCode,jdbcType=VARCHAR},
-                </if>
-                <if test="carrierId != null">
-                    #{carrierId,jdbcType=BIGINT},
-                </if>
-                <if test="sid != null">
-                    #{sid,jdbcType=VARCHAR},
-                </if>
-                <if test="mobile != null">
-                    #{mobile,jdbcType=VARCHAR},
-                </if>
-                <if test="totalNum != null">
-                    #{totalNum,jdbcType=INTEGER},
-                </if>
-                <if test="effectiveNum != null">
-                    #{effectiveNum,jdbcType=INTEGER},
-                </if>
-                <if test="url != null">
-                    #{url,jdbcType=VARCHAR},
-                </if>
-                <if test="success != null">
-                    #{success,jdbcType=BIT},
-                </if>
-                <if test="deleted != null">
-                    #{deleted,jdbcType=BIT},
-                </if>
-                <if test="gmtModified != null">
-                    #{gmtModified,jdbcType=TIMESTAMP},
-                </if>
-                <if test="gmtCreate != null">
-                    #{gmtCreate,jdbcType=TIMESTAMP},
-                </if>
+            <if test="merchantCode != null">
+                #{merchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="borrowerCode != null">
+                #{borrowerCode,jdbcType=VARCHAR},
+            </if>
+            <if test="carrierId != null">
+                #{carrierId,jdbcType=BIGINT},
+            </if>
+            <if test="sid != null">
+                #{sid,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null">
+                #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="totalNum != null">
+                #{totalNum,jdbcType=INTEGER},
+            </if>
+            <if test="effectiveNum != null">
+                #{effectiveNum,jdbcType=INTEGER},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="success != null">
+                #{success,jdbcType=BIT},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
         </trim>
     </insert>
 
     <update id="updateByPrimaryKey" parameterType="com.beitu.saas.credit.entity.SaasCreditDunning">
         update saas_credit_dunning
         <set>
-                <if test="merchantCode !=null">
+            <if test="merchantCode !=null">
                 merchant_code = #{merchantCode,jdbcType=VARCHAR},
-                </if>
-                <if test="borrowerCode !=null">
+            </if>
+            <if test="borrowerCode !=null">
                 borrower_code = #{borrowerCode,jdbcType=VARCHAR},
-                </if>
-                <if test="carrierId !=null">
+            </if>
+            <if test="carrierId !=null">
                 carrier_id = #{carrierId,jdbcType=BIGINT},
-                </if>
-                <if test="sid !=null">
+            </if>
+            <if test="sid !=null">
                 sid = #{sid,jdbcType=VARCHAR},
-                </if>
-                <if test="mobile !=null">
+            </if>
+            <if test="mobile !=null">
                 mobile = #{mobile,jdbcType=VARCHAR},
-                </if>
-                <if test="totalNum !=null">
+            </if>
+            <if test="totalNum !=null">
                 total_num = #{totalNum,jdbcType=INTEGER},
-                </if>
-                <if test="effectiveNum !=null">
+            </if>
+            <if test="effectiveNum !=null">
                 effective_num = #{effectiveNum,jdbcType=INTEGER},
-                </if>
-                <if test="url !=null">
+            </if>
+            <if test="url !=null">
                 url = #{url,jdbcType=VARCHAR},
-                </if>
-                <if test="success !=null">
+            </if>
+            <if test="success !=null">
                 success = #{success,jdbcType=BIT},
-                </if>
-                <if test="deleted !=null">
+            </if>
+            <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},
-                </if>
-                <if test="gmtModified !=null">
+            </if>
+            <if test="gmtModified !=null">
                 gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-                </if>
+            </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
@@ -171,7 +171,7 @@
 
     <sql id="paginationSql">
         <if test="page != null">
-            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+            limit #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
         </if>
     </sql>
 

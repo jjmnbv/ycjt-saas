@@ -3,6 +3,8 @@ CREATE TABLE `saas_credit_tongdun` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '表ID',
   `merchant_code` varchar(32) NOT NULL COMMENT '机构码',
   `borrower_code` varchar(32) NOT NULL COMMENT '用户码',
+  `mobile` varchar(15) NOT NULL COMMENT '用户手机号',
+  `identity_code` varchar(32) NOT NULL COMMENT '用户身份证号码',
   `report_id` varchar(40) NOT NULL COMMENT ' 同盾流水编号',
   `success` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否查询成功',
   `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
@@ -10,8 +12,7 @@ CREATE TABLE `saas_credit_tongdun` (
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`),
   KEY `idx_merchant_code` (`merchant_code`),
-  KEY `idy_borrower_code` (`borrower_code`),
-  KEY `idz_report_id` (`report_id`)
+  KEY `idy_borrower_code` (`borrower_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='SAAS同盾信用记录查询表';
 
 DROP TABLE IF EXISTS `saas_credit_tongdun_detail`;

@@ -6,114 +6,114 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
-* User: jungle
-* Date: 2018-04-06
-* Time: 18:11:44.646
-* TableDesc:运营商报告账单详情表
-*/
-public class SaasCreditCarrierBill extends BaseEntity{
+ * User: jungle
+ * Date: 2018-04-06
+ * Time: 18:11:44.646
+ * TableDesc:运营商报告账单详情表
+ */
+public class SaasCreditCarrierBill extends BaseEntity {
     /**
-    *运营商报告查询表ID
-    */
+     * 运营商报告查询表ID
+     */
     private Long recordId;
     /**
-    *账单时间
-    */
+     * 账单时间
+     */
     private Date billDate;
     /**
-    *月基本费
-    */
+     * 月基本费
+     */
     private BigDecimal baseFee;
     /**
-    *月消费
-    */
+     * 月消费
+     */
     private BigDecimal totalFee;
     /**
-    *呼出次数
-    */
+     * 呼出次数
+     */
     private Integer callingTime;
     /**
-    *呼入次数
-    */
+     * 呼入次数
+     */
     private Integer calledTime;
     /**
-    *呼出时长（分）
-    */
+     * 呼出时长（分）
+     */
     private Integer callingDuration;
     /**
-    *呼入时长（分）
-    */
+     * 呼入时长（分）
+     */
     private Integer calledDuration;
 
 
-    public  Long getRecordId(){
+    public Long getRecordId() {
         return this.recordId;
     }
 
-    public  SaasCreditCarrierBill setRecordId(Long recordId){
+    public SaasCreditCarrierBill setRecordId(Long recordId) {
         this.recordId = recordId;
         return this;
     }
 
-    public  Date getBillDate(){
+    public Date getBillDate() {
         return this.billDate;
     }
 
-    public  SaasCreditCarrierBill setBillDate(Date billDate){
+    public SaasCreditCarrierBill setBillDate(Date billDate) {
         this.billDate = billDate;
         return this;
     }
 
-    public  BigDecimal getBaseFee(){
+    public BigDecimal getBaseFee() {
         return this.baseFee;
     }
 
-    public  SaasCreditCarrierBill setBaseFee(BigDecimal baseFee){
+    public SaasCreditCarrierBill setBaseFee(BigDecimal baseFee) {
         this.baseFee = baseFee;
         return this;
     }
 
-    public  BigDecimal getTotalFee(){
+    public BigDecimal getTotalFee() {
         return this.totalFee;
     }
 
-    public  SaasCreditCarrierBill setTotalFee(BigDecimal totalFee){
+    public SaasCreditCarrierBill setTotalFee(BigDecimal totalFee) {
         this.totalFee = totalFee;
         return this;
     }
 
-    public  Integer getCallingTime(){
+    public Integer getCallingTime() {
         return this.callingTime;
     }
 
-    public  SaasCreditCarrierBill setCallingTime(Integer callingTime){
+    public SaasCreditCarrierBill setCallingTime(Integer callingTime) {
         this.callingTime = callingTime;
         return this;
     }
 
-    public  Integer getCalledTime(){
+    public Integer getCalledTime() {
         return this.calledTime;
     }
 
-    public  SaasCreditCarrierBill setCalledTime(Integer calledTime){
+    public SaasCreditCarrierBill setCalledTime(Integer calledTime) {
         this.calledTime = calledTime;
         return this;
     }
 
-    public  Integer getCallingDuration(){
+    public Integer getCallingDuration() {
         return this.callingDuration;
     }
 
-    public  SaasCreditCarrierBill setCallingDuration(Integer callingDuration){
+    public SaasCreditCarrierBill setCallingDuration(Integer callingDuration) {
         this.callingDuration = callingDuration;
         return this;
     }
 
-    public  Integer getCalledDuration(){
+    public Integer getCalledDuration() {
         return this.calledDuration;
     }
 
-    public  SaasCreditCarrierBill setCalledDuration(Integer calledDuration){
+    public SaasCreditCarrierBill setCalledDuration(Integer calledDuration) {
         this.calledDuration = calledDuration;
         return this;
     }

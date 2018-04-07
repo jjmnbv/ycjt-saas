@@ -7,6 +7,7 @@ package com.beitu.saas.credit.enums;
  * Time: 下午7:49
  */
 public enum CreditContactRelationTypeEnum {
+
     RELATIVE_CONTACT(10, "亲戚"),
     RISK_CONTACT(20, "异常"),
     EMERGENCY_CONTACT(30, "紧急联系人");

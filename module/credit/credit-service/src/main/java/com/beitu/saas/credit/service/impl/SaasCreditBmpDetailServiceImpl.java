@@ -1,11 +1,15 @@
 package com.beitu.saas.credit.service.impl;
 import com.beitu.saas.credit.client.SaasCreditBmpDetailService;
 import com.beitu.saas.credit.dao.SaasCreditBmpDetailDao;
+import com.beitu.saas.credit.domain.SaasCreditBmpDetailVo;
+import com.beitu.saas.credit.entity.SaasCreditBmpDetail;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.fqgj.log.enhance.Module;
+
+import java.util.List;
 
 /**
 * User: jungle
@@ -19,6 +23,16 @@ public class SaasCreditBmpDetailServiceImpl extends AbstractBaseService implemen
 
     @Autowired
     private SaasCreditBmpDetailDao saasCreditBmpDetailDao;
+
+    @Override
+    public SaasCreditBmpDetail addSaasCreditBmpDetail(SaasCreditBmpDetailVo saasCreditBmpDetailVo) {
+        return null;
+    }
+
+    @Override
+    public List<SaasCreditBmpDetailVo> listByRecordId(Long recordId) {
+        return null;
+    }
 }
 
 

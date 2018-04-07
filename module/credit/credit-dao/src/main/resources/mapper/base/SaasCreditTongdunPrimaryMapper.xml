@@ -6,6 +6,8 @@
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode"/>
         <result column="borrower_code" jdbcType="VARCHAR" property="borrowerCode"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="identity_code" jdbcType="VARCHAR" property="identityCode"/>
         <result column="report_id" jdbcType="VARCHAR" property="reportId"/>
         <result column="success" jdbcType="BIT" property="success"/>
         <result column="deleted" jdbcType="BIT" property="deleted"/>
@@ -17,6 +19,8 @@
     id,
     merchant_code,
     borrower_code,
+    mobile,
+    identity_code,
     report_id,
     success,
     deleted,
@@ -36,74 +40,92 @@
             parameterType="com.beitu.saas.credit.entity.SaasCreditTongdun" useGeneratedKeys="true">
         insert into saas_credit_tongdun
         <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="merchantCode !=null">
+            <if test="merchantCode !=null">
                 merchant_code,
-                </if>
-                <if test="borrowerCode !=null">
+            </if>
+            <if test="borrowerCode !=null">
                 borrower_code,
-                </if>
-                <if test="reportId !=null">
+            </if>
+            <if test="mobile !=null">
+                mobile,
+            </if>
+            <if test="identityCode !=null">
+                identity_code,
+            </if>
+            <if test="reportId !=null">
                 report_id,
-                </if>
-                <if test="success !=null">
+            </if>
+            <if test="success !=null">
                 success,
-                </if>
-                <if test="deleted !=null">
+            </if>
+            <if test="deleted !=null">
                 deleted,
-                </if>
-                <if test="gmtModified !=null">
+            </if>
+            <if test="gmtModified !=null">
                 gmt_modified,
-                </if>
-                <if test="gmtCreate !=null">
+            </if>
+            <if test="gmtCreate !=null">
                 gmt_create,
-                </if>
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-                <if test="merchantCode != null">
-                    #{merchantCode,jdbcType=VARCHAR},
-                </if>
-                <if test="borrowerCode != null">
-                    #{borrowerCode,jdbcType=VARCHAR},
-                </if>
-                <if test="reportId != null">
-                    #{reportId,jdbcType=VARCHAR},
-                </if>
-                <if test="success != null">
-                    #{success,jdbcType=BIT},
-                </if>
-                <if test="deleted != null">
-                    #{deleted,jdbcType=BIT},
-                </if>
-                <if test="gmtModified != null">
-                    #{gmtModified,jdbcType=TIMESTAMP},
-                </if>
-                <if test="gmtCreate != null">
-                    #{gmtCreate,jdbcType=TIMESTAMP},
-                </if>
+            <if test="merchantCode != null">
+                #{merchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="borrowerCode != null">
+                #{borrowerCode,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null">
+                #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="identityCode != null">
+                #{identityCode,jdbcType=VARCHAR},
+            </if>
+            <if test="reportId != null">
+                #{reportId,jdbcType=VARCHAR},
+            </if>
+            <if test="success != null">
+                #{success,jdbcType=BIT},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
         </trim>
     </insert>
 
     <update id="updateByPrimaryKey" parameterType="com.beitu.saas.credit.entity.SaasCreditTongdun">
         update saas_credit_tongdun
         <set>
-                <if test="merchantCode !=null">
+            <if test="merchantCode !=null">
                 merchant_code = #{merchantCode,jdbcType=VARCHAR},
-                </if>
-                <if test="borrowerCode !=null">
+            </if>
+            <if test="borrowerCode !=null">
                 borrower_code = #{borrowerCode,jdbcType=VARCHAR},
-                </if>
-                <if test="reportId !=null">
+            </if>
+            <if test="mobile !=null">
+                mobile = #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="identityCode !=null">
+                identity_code = #{identityCode,jdbcType=VARCHAR},
+            </if>
+            <if test="reportId !=null">
                 report_id = #{reportId,jdbcType=VARCHAR},
-                </if>
-                <if test="success !=null">
+            </if>
+            <if test="success !=null">
                 success = #{success,jdbcType=BIT},
-                </if>
-                <if test="deleted !=null">
+            </if>
+            <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},
-                </if>
-                <if test="gmtModified !=null">
+            </if>
+            <if test="gmtModified !=null">
                 gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-                </if>
+            </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
@@ -116,7 +138,7 @@
 
     <sql id="paginationSql">
         <if test="page != null">
-            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+            limit #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
         </if>
     </sql>
 
@@ -139,6 +161,12 @@
             </if>
             <if test="borrowerCode !=null">
                 and borrower_code = #{borrowerCode,jdbcType=VARCHAR}
+            </if>
+            <if test="mobile !=null">
+                and mobile = #{mobile,jdbcType=VARCHAR}
+            </if>
+            <if test="identityCode !=null">
+                and identity_code = #{identityCode,jdbcType=VARCHAR}
             </if>
             <if test="reportId !=null">
                 and report_id = #{reportId,jdbcType=VARCHAR}
@@ -169,6 +197,12 @@
             </if>
             <if test="borrowerCode !=null">
                 and borrower_code = #{borrowerCode,jdbcType=VARCHAR}
+            </if>
+            <if test="mobile !=null">
+                and mobile = #{mobile,jdbcType=VARCHAR}
+            </if>
+            <if test="identityCode !=null">
+                and identity_code = #{identityCode,jdbcType=VARCHAR}
             </if>
             <if test="reportId !=null">
                 and report_id = #{reportId,jdbcType=VARCHAR}

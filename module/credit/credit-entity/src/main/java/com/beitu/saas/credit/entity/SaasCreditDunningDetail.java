@@ -5,218 +5,218 @@ import com.fqgj.common.entity.BaseEntity;
 import java.math.BigDecimal;
 
 /**
-* User: jungle
-* Date: 2018-04-06
-* Time: 18:11:44.667
-* TableDesc:用户催收数据详情表
-*/
-public class SaasCreditDunningDetail extends BaseEntity{
+ * User: jungle
+ * Date: 2018-04-06
+ * Time: 18:11:44.667
+ * TableDesc:用户催收数据详情表
+ */
+public class SaasCreditDunningDetail extends BaseEntity {
     /**
-    *用户催收数据查询表ID
-    */
+     * 用户催收数据查询表ID
+     */
     private Long recordId;
     /**
-    *电话邦催收数据查询唯一标识
-    */
+     * 电话邦催收数据查询唯一标识
+     */
     private String sid;
     /**
-    *总通话号码数
-    */
+     * 总通话号码数
+     */
     private Integer callTelTotalNums;
     /**
-    *总通话次数
-    */
+     * 总通话次数
+     */
     private Integer callTotalTimes;
     /**
-    *主叫次数
-    */
+     * 主叫次数
+     */
     private Integer callOutTimes;
     /**
-    *被叫次数
-    */
+     * 被叫次数
+     */
     private Integer callInTimes;
     /**
-    *通话总时长
-    */
+     * 通话总时长
+     */
     private Integer callTotalDuration;
     /**
-    *通话平均时长
-    */
+     * 通话平均时长
+     */
     private BigDecimal callAvgDuration;
     /**
-    *主叫总时长
-    */
+     * 主叫总时长
+     */
     private Integer callOutDuration;
     /**
-    *被叫总时长
-    */
+     * 被叫总时长
+     */
     private Integer callInDuration;
     /**
-    *通话时长低于15秒的次数
-    */
+     * 通话时长低于15秒的次数
+     */
     private Integer callDurationBelow15;
     /**
-    *通话时长15-30秒的次数
-    */
+     * 通话时长15-30秒的次数
+     */
     private Integer callDurationBetween15and30;
     /**
-    *通话时长60秒以上的次数
-    */
+     * 通话时长60秒以上的次数
+     */
     private Integer callDurationAbove60;
     /**
-    *首次通话时间
-    */
+     * 首次通话时间
+     */
     private String firstCallTime;
     /**
-    *最近一次通话时间
-    */
+     * 最近一次通话时间
+     */
     private String lastCallTime;
     /**
-    *类型:10-总览催收,11-总览疑似催收,20-近一周催收,21-近一周疑似催收,30-近两周催收,31-近两周疑似催收,40-近三周催收,41-近三周疑似催收,50-近30天催收,51-近30天疑似催收,60-近30至60天催收,61-近30至60
-    */
+     * 类型:10-总览催收,11-总览疑似催收,20-近一周催收,21-近一周疑似催收,30-近两周催收,31-近两周疑似催收,40-近三周催收,41-近三周疑似催收,50-近30天催收,51-近30天疑似催收,60-近30至60天催收,61-近30至60
+     */
     private Integer type;
 
 
-    public  Long getRecordId(){
+    public Long getRecordId() {
         return this.recordId;
     }
 
-    public  SaasCreditDunningDetail setRecordId(Long recordId){
+    public SaasCreditDunningDetail setRecordId(Long recordId) {
         this.recordId = recordId;
         return this;
     }
 
-    public  String getSid(){
+    public String getSid() {
         return this.sid;
     }
 
-    public  SaasCreditDunningDetail setSid(String sid){
+    public SaasCreditDunningDetail setSid(String sid) {
         this.sid = sid;
         return this;
     }
 
-    public  Integer getCallTelTotalNums(){
+    public Integer getCallTelTotalNums() {
         return this.callTelTotalNums;
     }
 
-    public  SaasCreditDunningDetail setCallTelTotalNums(Integer callTelTotalNums){
+    public SaasCreditDunningDetail setCallTelTotalNums(Integer callTelTotalNums) {
         this.callTelTotalNums = callTelTotalNums;
         return this;
     }
 
-    public  Integer getCallTotalTimes(){
+    public Integer getCallTotalTimes() {
         return this.callTotalTimes;
     }
 
-    public  SaasCreditDunningDetail setCallTotalTimes(Integer callTotalTimes){
+    public SaasCreditDunningDetail setCallTotalTimes(Integer callTotalTimes) {
         this.callTotalTimes = callTotalTimes;
         return this;
     }
 
-    public  Integer getCallOutTimes(){
+    public Integer getCallOutTimes() {
         return this.callOutTimes;
     }
 
-    public  SaasCreditDunningDetail setCallOutTimes(Integer callOutTimes){
+    public SaasCreditDunningDetail setCallOutTimes(Integer callOutTimes) {
         this.callOutTimes = callOutTimes;
         return this;
     }
 
-    public  Integer getCallInTimes(){
+    public Integer getCallInTimes() {
         return this.callInTimes;
     }
 
-    public  SaasCreditDunningDetail setCallInTimes(Integer callInTimes){
+    public SaasCreditDunningDetail setCallInTimes(Integer callInTimes) {
         this.callInTimes = callInTimes;
         return this;
     }
 
-    public  Integer getCallTotalDuration(){
+    public Integer getCallTotalDuration() {
         return this.callTotalDuration;
     }
 
-    public  SaasCreditDunningDetail setCallTotalDuration(Integer callTotalDuration){
+    public SaasCreditDunningDetail setCallTotalDuration(Integer callTotalDuration) {
         this.callTotalDuration = callTotalDuration;
         return this;
     }
 
-    public  BigDecimal getCallAvgDuration(){
+    public BigDecimal getCallAvgDuration() {
         return this.callAvgDuration;
     }
 
-    public  SaasCreditDunningDetail setCallAvgDuration(BigDecimal callAvgDuration){
+    public SaasCreditDunningDetail setCallAvgDuration(BigDecimal callAvgDuration) {
         this.callAvgDuration = callAvgDuration;
         return this;
     }
 
-    public  Integer getCallOutDuration(){
+    public Integer getCallOutDuration() {
         return this.callOutDuration;
     }
 
-    public  SaasCreditDunningDetail setCallOutDuration(Integer callOutDuration){
+    public SaasCreditDunningDetail setCallOutDuration(Integer callOutDuration) {
         this.callOutDuration = callOutDuration;
         return this;
     }
 
-    public  Integer getCallInDuration(){
+    public Integer getCallInDuration() {
         return this.callInDuration;
     }
 
-    public  SaasCreditDunningDetail setCallInDuration(Integer callInDuration){
+    public SaasCreditDunningDetail setCallInDuration(Integer callInDuration) {
         this.callInDuration = callInDuration;
         return this;
     }
 
-    public  Integer getCallDurationBelow15(){
+    public Integer getCallDurationBelow15() {
         return this.callDurationBelow15;
     }
 
-    public  SaasCreditDunningDetail setCallDurationBelow15(Integer callDurationBelow15){
+    public SaasCreditDunningDetail setCallDurationBelow15(Integer callDurationBelow15) {
         this.callDurationBelow15 = callDurationBelow15;
         return this;
     }
 
-    public  Integer getCallDurationBetween15and30(){
+    public Integer getCallDurationBetween15and30() {
         return this.callDurationBetween15and30;
     }
 
-    public  SaasCreditDunningDetail setCallDurationBetween15and30(Integer callDurationBetween15and30){
+    public SaasCreditDunningDetail setCallDurationBetween15and30(Integer callDurationBetween15and30) {
         this.callDurationBetween15and30 = callDurationBetween15and30;
         return this;
     }
 
-    public  Integer getCallDurationAbove60(){
+    public Integer getCallDurationAbove60() {
         return this.callDurationAbove60;
     }
 
-    public  SaasCreditDunningDetail setCallDurationAbove60(Integer callDurationAbove60){
+    public SaasCreditDunningDetail setCallDurationAbove60(Integer callDurationAbove60) {
         this.callDurationAbove60 = callDurationAbove60;
         return this;
     }
 
-    public  String getFirstCallTime(){
+    public String getFirstCallTime() {
         return this.firstCallTime;
     }
 
-    public  SaasCreditDunningDetail setFirstCallTime(String firstCallTime){
+    public SaasCreditDunningDetail setFirstCallTime(String firstCallTime) {
         this.firstCallTime = firstCallTime;
         return this;
     }
 
-    public  String getLastCallTime(){
+    public String getLastCallTime() {
         return this.lastCallTime;
     }
 
-    public  SaasCreditDunningDetail setLastCallTime(String lastCallTime){
+    public SaasCreditDunningDetail setLastCallTime(String lastCallTime) {
         this.lastCallTime = lastCallTime;
         return this;
     }
 
-    public  Integer getType(){
+    public Integer getType() {
         return this.type;
     }
 
-    public  SaasCreditDunningDetail setType(Integer type){
+    public SaasCreditDunningDetail setType(Integer type) {
         this.type = type;
         return this;
     }

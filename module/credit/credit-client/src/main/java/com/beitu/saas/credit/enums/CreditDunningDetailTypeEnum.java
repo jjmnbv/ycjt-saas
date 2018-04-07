@@ -7,6 +7,7 @@ package com.beitu.saas.credit.enums;
  * Time: 下午7:49
  */
 public enum CreditDunningDetailTypeEnum {
+
     OVER_VIEW(10, "总览催收"),
     OVER_VIEW_NOT_SURE(11, "总览疑似催收"),
     LAST_WEEK(20, "近一周催收"),

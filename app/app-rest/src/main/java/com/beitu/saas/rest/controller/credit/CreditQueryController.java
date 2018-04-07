@@ -4,7 +4,9 @@ import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.application.collection.CollectionApplication;
 import com.beitu.saas.app.application.collection.vo.CollectionCommentListVo;
 import com.beitu.saas.app.application.credit.BorrowerBaseInfoApplication;
+import com.beitu.saas.app.application.credit.CarrierReportApplication;
 import com.beitu.saas.app.application.credit.LoanPlatformApplication;
+import com.beitu.saas.app.application.credit.TongdunReportApplication;
 import com.beitu.saas.app.application.credit.vo.*;
 import com.beitu.saas.app.application.order.OrderApplyApplication;
 import com.beitu.saas.app.application.order.OrderBillDetailApplication;
@@ -71,6 +73,12 @@ public class CreditQueryController {
 
     @Autowired
     private ConfigUtil configUtil;
+
+    @Autowired
+    private CarrierReportApplication carrierReportApplication;
+
+    @Autowired
+    private TongdunReportApplication tongdunReportApplication;
 
     @RequestMapping(value = "/base", method = RequestMethod.POST)
     @ResponseBody
@@ -153,12 +161,24 @@ public class CreditQueryController {
         return new DataApiResponse<>(new LoanPlatformDataInfoResponse(pojo));
     }
 
-    @RequestMapping(value = "/carrier/info", method = RequestMethod.POST)
+    @RequestMapping(value = "/carrier/data", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "运营商信息", response = CarrierInfoQueryResponse.class)
-    public DataApiResponse<CarrierInfoQueryResponse> getCarrierInfo(@RequestBody @Valid CreditQueryRequest req) {
+    @ApiOperation(value = "运营商信息", response = CreditCarrierReportVo.class)
+    public DataApiResponse<CreditCarrierReportVo> getCarrierData(@RequestBody @Valid CreditQueryRequest req) {
         String orderNumb = req.getOrderNumb();
-        return new DataApiResponse<>(new CarrierInfoQueryResponse());
+        String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
+        String borrowerCode = getBorrowerCodeByOrderNumbAndMerchantCode(orderNumb, merchantCode);
+        return new DataApiResponse<>(carrierReportApplication.getCarrierReportByMerchantCodeAndBorrowerCode(merchantCode, borrowerCode));
+    }
+
+    @RequestMapping(value = "/black/data", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "网贷黑名单信息", response = TongdunReportVo.class)
+    public DataApiResponse<TongdunReportVo> getBlackData(@RequestBody @Valid CreditQueryRequest req) {
+        String orderNumb = req.getOrderNumb();
+        String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
+        String borrowerCode = getBorrowerCodeByOrderNumbAndMerchantCode(orderNumb, merchantCode);
+        return new DataApiResponse<>(tongdunReportApplication.getTongdunReport(merchantCode, borrowerCode));
     }
 
     private String getBorrowerCodeByOrderNumbAndMerchantCode(String orderNumb, String merchantCode) {

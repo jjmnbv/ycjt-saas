@@ -1,11 +1,15 @@
 package com.beitu.saas.credit.service.impl;
 import com.beitu.saas.credit.client.SaasCreditDunningDetailService;
 import com.beitu.saas.credit.dao.SaasCreditDunningDetailDao;
+import com.beitu.saas.credit.domain.SaasCreditDunningDetailVo;
+import com.beitu.saas.credit.enums.CreditDunningDetailTypeEnum;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.fqgj.log.enhance.Module;
+
+import java.util.List;
 
 /**
 * User: jungle
@@ -17,9 +21,18 @@ import com.fqgj.log.enhance.Module;
 @Service
 public class SaasCreditDunningDetailServiceImpl extends AbstractBaseService implements SaasCreditDunningDetailService {
 
-
     @Autowired
     private SaasCreditDunningDetailDao saasCreditDunningDetailDao;
+
+    @Override
+    public void batchAddSaasCreditDunningDetail(List list) {
+
+    }
+
+    @Override
+    public List<SaasCreditDunningDetailVo> listByRecordId(Long recordId, CreditDunningDetailTypeEnum dunningDetailTypeEnum) {
+        return null;
+    }
 }
 
 

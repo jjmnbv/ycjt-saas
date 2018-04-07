@@ -1,48 +1,54 @@
 package com.beitu.saas.credit.domain;
+
+import com.beitu.saas.credit.entity.SaasCreditCarrierBill;
+import com.beitu.saas.credit.entity.SaasCreditDunning;
 import com.fqgj.common.api.ResponseData;
+import org.springframework.beans.BeanUtils;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+
 /**
-* User: jungle
-* Date: 2018-04-06
-* Time: 18:11:44.648
-*/
-public class SaasCreditCarrierBillVo implements ResponseData,Serializable{
+ * User: jungle
+ * Date: 2018-04-06
+ * Time: 18:11:44.648
+ */
+public class SaasCreditCarrierBillVo implements ResponseData, Serializable {
 
     private Long saasCreditCarrierBillId;
 
     /**
-    *运营商报告查询表ID
-    */
+     * 运营商报告查询表ID
+     */
     private Long recordId;
     /**
-    *账单时间
-    */
+     * 账单时间
+     */
     private Date billDate;
     /**
-    *月基本费
-    */
+     * 月基本费
+     */
     private BigDecimal baseFee;
     /**
-    *月消费
-    */
+     * 月消费
+     */
     private BigDecimal totalFee;
     /**
-    *呼出次数
-    */
+     * 呼出次数
+     */
     private Integer callingTime;
     /**
-    *呼入次数
-    */
+     * 呼入次数
+     */
     private Integer calledTime;
     /**
-    *呼出时长（分）
-    */
+     * 呼出时长（分）
+     */
     private Integer callingDuration;
     /**
-    *呼入时长（分）
-    */
+     * 呼入时长（分）
+     */
     private Integer calledDuration;
 
     public Long getSaasCreditCarrierBillId() {
@@ -54,68 +60,88 @@ public class SaasCreditCarrierBillVo implements ResponseData,Serializable{
     }
 
 
-
-    public  Long getRecordId(){
+    public Long getRecordId() {
         return this.recordId;
     }
 
-    public  void setRecordId(Long recordId){
+    public void setRecordId(Long recordId) {
         this.recordId = recordId;
     }
 
-    public  Date getBillDate(){
+    public Date getBillDate() {
         return this.billDate;
     }
 
-    public  void setBillDate(Date billDate){
+    public void setBillDate(Date billDate) {
         this.billDate = billDate;
     }
 
-    public  BigDecimal getBaseFee(){
+    public BigDecimal getBaseFee() {
         return this.baseFee;
     }
 
-    public  void setBaseFee(BigDecimal baseFee){
+    public void setBaseFee(BigDecimal baseFee) {
         this.baseFee = baseFee;
     }
 
-    public  BigDecimal getTotalFee(){
+    public BigDecimal getTotalFee() {
         return this.totalFee;
     }
 
-    public  void setTotalFee(BigDecimal totalFee){
+    public void setTotalFee(BigDecimal totalFee) {
         this.totalFee = totalFee;
     }
 
-    public  Integer getCallingTime(){
+    public Integer getCallingTime() {
         return this.callingTime;
     }
 
-    public  void setCallingTime(Integer callingTime){
+    public void setCallingTime(Integer callingTime) {
         this.callingTime = callingTime;
     }
 
-    public  Integer getCalledTime(){
+    public Integer getCalledTime() {
         return this.calledTime;
     }
 
-    public  void setCalledTime(Integer calledTime){
+    public void setCalledTime(Integer calledTime) {
         this.calledTime = calledTime;
     }
 
-    public  Integer getCallingDuration(){
+    public Integer getCallingDuration() {
         return this.callingDuration;
     }
 
-    public  void setCallingDuration(Integer callingDuration){
+    public void setCallingDuration(Integer callingDuration) {
         this.callingDuration = callingDuration;
     }
 
-    public  Integer getCalledDuration(){
+    public Integer getCalledDuration() {
         return this.calledDuration;
     }
 
-    public  void setCalledDuration(Integer calledDuration){
+    public void setCalledDuration(Integer calledDuration) {
         this.calledDuration = calledDuration;
     }
+
+    public static SaasCreditCarrierBillVo convertEntityToVO(SaasCreditCarrierBill saasCreditCarrierBill) {
+        if (saasCreditCarrierBill == null) {
+            return null;
+        }
+        SaasCreditCarrierBillVo saasCreditCarrierBillVo = new SaasCreditCarrierBillVo();
+        BeanUtils.copyProperties(saasCreditCarrierBill, saasCreditCarrierBillVo);
+        saasCreditCarrierBillVo.setSaasCreditCarrierBillId(saasCreditCarrierBill.getId());
+        return saasCreditCarrierBillVo;
+    }
+
+    public static SaasCreditCarrierBill convertVOToEntity(SaasCreditCarrierBillVo saasCreditCarrierBillVo) {
+        if (saasCreditCarrierBillVo == null) {
+            return null;
+        }
+        SaasCreditCarrierBill saasCreditCarrierBill = new SaasCreditCarrierBill();
+        BeanUtils.copyProperties(saasCreditCarrierBillVo, saasCreditCarrierBill);
+        saasCreditCarrierBill.setId(saasCreditCarrierBillVo.getSaasCreditCarrierBillId());
+        return saasCreditCarrierBill;
+    }
+
 }

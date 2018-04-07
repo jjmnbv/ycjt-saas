@@ -38,83 +38,83 @@
             parameterType="com.beitu.saas.credit.entity.SaasCreditBmp" useGeneratedKeys="true">
         insert into saas_credit_bmp
         <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="merchantCode !=null">
+            <if test="merchantCode !=null">
                 merchant_code,
-                </if>
-                <if test="borrowerCode !=null">
+            </if>
+            <if test="borrowerCode !=null">
                 borrower_code,
-                </if>
-                <if test="sid !=null">
+            </if>
+            <if test="sid !=null">
                 sid,
-                </if>
-                <if test="url !=null">
+            </if>
+            <if test="url !=null">
                 url,
-                </if>
-                <if test="success !=null">
+            </if>
+            <if test="success !=null">
                 success,
-                </if>
-                <if test="deleted !=null">
+            </if>
+            <if test="deleted !=null">
                 deleted,
-                </if>
-                <if test="gmtModified !=null">
+            </if>
+            <if test="gmtModified !=null">
                 gmt_modified,
-                </if>
-                <if test="gmtCreate !=null">
+            </if>
+            <if test="gmtCreate !=null">
                 gmt_create,
-                </if>
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-                <if test="merchantCode != null">
-                    #{merchantCode,jdbcType=VARCHAR},
-                </if>
-                <if test="borrowerCode != null">
-                    #{borrowerCode,jdbcType=VARCHAR},
-                </if>
-                <if test="sid != null">
-                    #{sid,jdbcType=VARCHAR},
-                </if>
-                <if test="url != null">
-                    #{url,jdbcType=VARCHAR},
-                </if>
-                <if test="success != null">
-                    #{success,jdbcType=BIT},
-                </if>
-                <if test="deleted != null">
-                    #{deleted,jdbcType=BIT},
-                </if>
-                <if test="gmtModified != null">
-                    #{gmtModified,jdbcType=TIMESTAMP},
-                </if>
-                <if test="gmtCreate != null">
-                    #{gmtCreate,jdbcType=TIMESTAMP},
-                </if>
+            <if test="merchantCode != null">
+                #{merchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="borrowerCode != null">
+                #{borrowerCode,jdbcType=VARCHAR},
+            </if>
+            <if test="sid != null">
+                #{sid,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="success != null">
+                #{success,jdbcType=BIT},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
         </trim>
     </insert>
 
     <update id="updateByPrimaryKey" parameterType="com.beitu.saas.credit.entity.SaasCreditBmp">
         update saas_credit_bmp
         <set>
-                <if test="merchantCode !=null">
+            <if test="merchantCode !=null">
                 merchant_code = #{merchantCode,jdbcType=VARCHAR},
-                </if>
-                <if test="borrowerCode !=null">
+            </if>
+            <if test="borrowerCode !=null">
                 borrower_code = #{borrowerCode,jdbcType=VARCHAR},
-                </if>
-                <if test="sid !=null">
+            </if>
+            <if test="sid !=null">
                 sid = #{sid,jdbcType=VARCHAR},
-                </if>
-                <if test="url !=null">
+            </if>
+            <if test="url !=null">
                 url = #{url,jdbcType=VARCHAR},
-                </if>
-                <if test="success !=null">
+            </if>
+            <if test="success !=null">
                 success = #{success,jdbcType=BIT},
-                </if>
-                <if test="deleted !=null">
+            </if>
+            <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},
-                </if>
-                <if test="gmtModified !=null">
+            </if>
+            <if test="gmtModified !=null">
                 gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-                </if>
+            </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
@@ -127,7 +127,7 @@
 
     <sql id="paginationSql">
         <if test="page != null">
-            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+            limit #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
         </if>
     </sql>
 

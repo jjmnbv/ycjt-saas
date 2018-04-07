@@ -10,6 +10,7 @@ import java.util.List;
  * Time: 下午7:49
  */
 public enum CreditBmpDetailTagEnum {
+
     BANK(1, "银行"),
     INSURANCE(2, "保险"),
     STOCK(3, "证券"),

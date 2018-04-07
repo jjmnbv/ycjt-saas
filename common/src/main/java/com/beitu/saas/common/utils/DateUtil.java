@@ -411,6 +411,14 @@ public class DateUtil {
         return c.getTime();
     }
 
+    public static Boolean isExceedOneDay(Date date) {
+        if (date == null) {
+            return null;
+        }
+        long delta = System.currentTimeMillis() - date.getTime();
+        return delta >= (24 * 3600 * 1000);
+    }
+
     /**
      * 日期相减
      *

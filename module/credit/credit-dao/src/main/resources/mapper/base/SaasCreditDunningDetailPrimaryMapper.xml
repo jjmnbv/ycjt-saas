@@ -60,182 +60,182 @@
             parameterType="com.beitu.saas.credit.entity.SaasCreditDunningDetail" useGeneratedKeys="true">
         insert into saas_credit_dunning_detail
         <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="recordId !=null">
+            <if test="recordId !=null">
                 record_id,
-                </if>
-                <if test="sid !=null">
+            </if>
+            <if test="sid !=null">
                 sid,
-                </if>
-                <if test="callTelTotalNums !=null">
+            </if>
+            <if test="callTelTotalNums !=null">
                 call_tel_total_nums,
-                </if>
-                <if test="callTotalTimes !=null">
+            </if>
+            <if test="callTotalTimes !=null">
                 call_total_times,
-                </if>
-                <if test="callOutTimes !=null">
+            </if>
+            <if test="callOutTimes !=null">
                 call_out_times,
-                </if>
-                <if test="callInTimes !=null">
+            </if>
+            <if test="callInTimes !=null">
                 call_in_times,
-                </if>
-                <if test="callTotalDuration !=null">
+            </if>
+            <if test="callTotalDuration !=null">
                 call_total_duration,
-                </if>
-                <if test="callAvgDuration !=null">
+            </if>
+            <if test="callAvgDuration !=null">
                 call_avg_duration,
-                </if>
-                <if test="callOutDuration !=null">
+            </if>
+            <if test="callOutDuration !=null">
                 call_out_duration,
-                </if>
-                <if test="callInDuration !=null">
+            </if>
+            <if test="callInDuration !=null">
                 call_in_duration,
-                </if>
-                <if test="callDurationBelow15 !=null">
+            </if>
+            <if test="callDurationBelow15 !=null">
                 call_duration_below15,
-                </if>
-                <if test="callDurationBetween15and30 !=null">
+            </if>
+            <if test="callDurationBetween15and30 !=null">
                 call_duration_between15and30,
-                </if>
-                <if test="callDurationAbove60 !=null">
+            </if>
+            <if test="callDurationAbove60 !=null">
                 call_duration_above60,
-                </if>
-                <if test="firstCallTime !=null">
+            </if>
+            <if test="firstCallTime !=null">
                 first_call_time,
-                </if>
-                <if test="lastCallTime !=null">
+            </if>
+            <if test="lastCallTime !=null">
                 last_call_time,
-                </if>
-                <if test="type !=null">
+            </if>
+            <if test="type !=null">
                 type,
-                </if>
-                <if test="deleted !=null">
+            </if>
+            <if test="deleted !=null">
                 deleted,
-                </if>
-                <if test="gmtModified !=null">
+            </if>
+            <if test="gmtModified !=null">
                 gmt_modified,
-                </if>
-                <if test="gmtCreate !=null">
+            </if>
+            <if test="gmtCreate !=null">
                 gmt_create,
-                </if>
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-                <if test="recordId != null">
-                    #{recordId,jdbcType=BIGINT},
-                </if>
-                <if test="sid != null">
-                    #{sid,jdbcType=VARCHAR},
-                </if>
-                <if test="callTelTotalNums != null">
-                    #{callTelTotalNums,jdbcType=INTEGER},
-                </if>
-                <if test="callTotalTimes != null">
-                    #{callTotalTimes,jdbcType=INTEGER},
-                </if>
-                <if test="callOutTimes != null">
-                    #{callOutTimes,jdbcType=INTEGER},
-                </if>
-                <if test="callInTimes != null">
-                    #{callInTimes,jdbcType=INTEGER},
-                </if>
-                <if test="callTotalDuration != null">
-                    #{callTotalDuration,jdbcType=INTEGER},
-                </if>
-                <if test="callAvgDuration != null">
-                    #{callAvgDuration,jdbcType=DECIMAL},
-                </if>
-                <if test="callOutDuration != null">
-                    #{callOutDuration,jdbcType=INTEGER},
-                </if>
-                <if test="callInDuration != null">
-                    #{callInDuration,jdbcType=INTEGER},
-                </if>
-                <if test="callDurationBelow15 != null">
-                    #{callDurationBelow15,jdbcType=INTEGER},
-                </if>
-                <if test="callDurationBetween15and30 != null">
-                    #{callDurationBetween15and30,jdbcType=INTEGER},
-                </if>
-                <if test="callDurationAbove60 != null">
-                    #{callDurationAbove60,jdbcType=INTEGER},
-                </if>
-                <if test="firstCallTime != null">
-                    #{firstCallTime,jdbcType=VARCHAR},
-                </if>
-                <if test="lastCallTime != null">
-                    #{lastCallTime,jdbcType=VARCHAR},
-                </if>
-                <if test="type != null">
-                    #{type,jdbcType=TINYINT},
-                </if>
-                <if test="deleted != null">
-                    #{deleted,jdbcType=BIT},
-                </if>
-                <if test="gmtModified != null">
-                    #{gmtModified,jdbcType=TIMESTAMP},
-                </if>
-                <if test="gmtCreate != null">
-                    #{gmtCreate,jdbcType=TIMESTAMP},
-                </if>
+            <if test="recordId != null">
+                #{recordId,jdbcType=BIGINT},
+            </if>
+            <if test="sid != null">
+                #{sid,jdbcType=VARCHAR},
+            </if>
+            <if test="callTelTotalNums != null">
+                #{callTelTotalNums,jdbcType=INTEGER},
+            </if>
+            <if test="callTotalTimes != null">
+                #{callTotalTimes,jdbcType=INTEGER},
+            </if>
+            <if test="callOutTimes != null">
+                #{callOutTimes,jdbcType=INTEGER},
+            </if>
+            <if test="callInTimes != null">
+                #{callInTimes,jdbcType=INTEGER},
+            </if>
+            <if test="callTotalDuration != null">
+                #{callTotalDuration,jdbcType=INTEGER},
+            </if>
+            <if test="callAvgDuration != null">
+                #{callAvgDuration,jdbcType=DECIMAL},
+            </if>
+            <if test="callOutDuration != null">
+                #{callOutDuration,jdbcType=INTEGER},
+            </if>
+            <if test="callInDuration != null">
+                #{callInDuration,jdbcType=INTEGER},
+            </if>
+            <if test="callDurationBelow15 != null">
+                #{callDurationBelow15,jdbcType=INTEGER},
+            </if>
+            <if test="callDurationBetween15and30 != null">
+                #{callDurationBetween15and30,jdbcType=INTEGER},
+            </if>
+            <if test="callDurationAbove60 != null">
+                #{callDurationAbove60,jdbcType=INTEGER},
+            </if>
+            <if test="firstCallTime != null">
+                #{firstCallTime,jdbcType=VARCHAR},
+            </if>
+            <if test="lastCallTime != null">
+                #{lastCallTime,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=TINYINT},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
         </trim>
     </insert>
 
     <update id="updateByPrimaryKey" parameterType="com.beitu.saas.credit.entity.SaasCreditDunningDetail">
         update saas_credit_dunning_detail
         <set>
-                <if test="recordId !=null">
+            <if test="recordId !=null">
                 record_id = #{recordId,jdbcType=BIGINT},
-                </if>
-                <if test="sid !=null">
+            </if>
+            <if test="sid !=null">
                 sid = #{sid,jdbcType=VARCHAR},
-                </if>
-                <if test="callTelTotalNums !=null">
+            </if>
+            <if test="callTelTotalNums !=null">
                 call_tel_total_nums = #{callTelTotalNums,jdbcType=INTEGER},
-                </if>
-                <if test="callTotalTimes !=null">
+            </if>
+            <if test="callTotalTimes !=null">
                 call_total_times = #{callTotalTimes,jdbcType=INTEGER},
-                </if>
-                <if test="callOutTimes !=null">
+            </if>
+            <if test="callOutTimes !=null">
                 call_out_times = #{callOutTimes,jdbcType=INTEGER},
-                </if>
-                <if test="callInTimes !=null">
+            </if>
+            <if test="callInTimes !=null">
                 call_in_times = #{callInTimes,jdbcType=INTEGER},
-                </if>
-                <if test="callTotalDuration !=null">
+            </if>
+            <if test="callTotalDuration !=null">
                 call_total_duration = #{callTotalDuration,jdbcType=INTEGER},
-                </if>
-                <if test="callAvgDuration !=null">
+            </if>
+            <if test="callAvgDuration !=null">
                 call_avg_duration = #{callAvgDuration,jdbcType=DECIMAL},
-                </if>
-                <if test="callOutDuration !=null">
+            </if>
+            <if test="callOutDuration !=null">
                 call_out_duration = #{callOutDuration,jdbcType=INTEGER},
-                </if>
-                <if test="callInDuration !=null">
+            </if>
+            <if test="callInDuration !=null">
                 call_in_duration = #{callInDuration,jdbcType=INTEGER},
-                </if>
-                <if test="callDurationBelow15 !=null">
+            </if>
+            <if test="callDurationBelow15 !=null">
                 call_duration_below15 = #{callDurationBelow15,jdbcType=INTEGER},
-                </if>
-                <if test="callDurationBetween15and30 !=null">
+            </if>
+            <if test="callDurationBetween15and30 !=null">
                 call_duration_between15and30 = #{callDurationBetween15and30,jdbcType=INTEGER},
-                </if>
-                <if test="callDurationAbove60 !=null">
+            </if>
+            <if test="callDurationAbove60 !=null">
                 call_duration_above60 = #{callDurationAbove60,jdbcType=INTEGER},
-                </if>
-                <if test="firstCallTime !=null">
+            </if>
+            <if test="firstCallTime !=null">
                 first_call_time = #{firstCallTime,jdbcType=VARCHAR},
-                </if>
-                <if test="lastCallTime !=null">
+            </if>
+            <if test="lastCallTime !=null">
                 last_call_time = #{lastCallTime,jdbcType=VARCHAR},
-                </if>
-                <if test="type !=null">
+            </if>
+            <if test="type !=null">
                 type = #{type,jdbcType=TINYINT},
-                </if>
-                <if test="deleted !=null">
+            </if>
+            <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},
-                </if>
-                <if test="gmtModified !=null">
+            </if>
+            <if test="gmtModified !=null">
                 gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-                </if>
+            </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
@@ -248,7 +248,7 @@
 
     <sql id="paginationSql">
         <if test="page != null">
-            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+            limit #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
         </if>
     </sql>
 

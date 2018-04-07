@@ -23,7 +23,7 @@
     record_id,
     carrier_type,
     mobile,
-    name,
+    `name`,
     identity_no,
     balance,
     province,
@@ -46,119 +46,119 @@
             parameterType="com.beitu.saas.credit.entity.SaasCreditCarrierBase" useGeneratedKeys="true">
         insert into saas_credit_carrier_base
         <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="recordId !=null">
+            <if test="recordId !=null">
                 record_id,
-                </if>
-                <if test="carrierType !=null">
+            </if>
+            <if test="carrierType !=null">
                 carrier_type,
-                </if>
-                <if test="mobile !=null">
+            </if>
+            <if test="mobile !=null">
                 mobile,
-                </if>
-                <if test="name !=null">
-                name,
-                </if>
-                <if test="identityNo !=null">
+            </if>
+            <if test="name !=null">
+                `name`,
+            </if>
+            <if test="identityNo !=null">
                 identity_no,
-                </if>
-                <if test="balance !=null">
+            </if>
+            <if test="balance !=null">
                 balance,
-                </if>
-                <if test="province !=null">
+            </if>
+            <if test="province !=null">
                 province,
-                </if>
-                <if test="planName !=null">
+            </if>
+            <if test="planName !=null">
                 plan_name,
-                </if>
-                <if test="registerTime !=null">
+            </if>
+            <if test="registerTime !=null">
                 register_time,
-                </if>
-                <if test="deleted !=null">
+            </if>
+            <if test="deleted !=null">
                 deleted,
-                </if>
-                <if test="gmtModified !=null">
+            </if>
+            <if test="gmtModified !=null">
                 gmt_modified,
-                </if>
-                <if test="gmtCreate !=null">
+            </if>
+            <if test="gmtCreate !=null">
                 gmt_create,
-                </if>
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-                <if test="recordId != null">
-                    #{recordId,jdbcType=BIGINT},
-                </if>
-                <if test="carrierType != null">
-                    #{carrierType,jdbcType=VARCHAR},
-                </if>
-                <if test="mobile != null">
-                    #{mobile,jdbcType=VARCHAR},
-                </if>
-                <if test="name != null">
-                    #{name,jdbcType=VARCHAR},
-                </if>
-                <if test="identityNo != null">
-                    #{identityNo,jdbcType=VARCHAR},
-                </if>
-                <if test="balance != null">
-                    #{balance,jdbcType=DECIMAL},
-                </if>
-                <if test="province != null">
-                    #{province,jdbcType=VARCHAR},
-                </if>
-                <if test="planName != null">
-                    #{planName,jdbcType=VARCHAR},
-                </if>
-                <if test="registerTime != null">
-                    #{registerTime,jdbcType=TIMESTAMP},
-                </if>
-                <if test="deleted != null">
-                    #{deleted,jdbcType=BIT},
-                </if>
-                <if test="gmtModified != null">
-                    #{gmtModified,jdbcType=TIMESTAMP},
-                </if>
-                <if test="gmtCreate != null">
-                    #{gmtCreate,jdbcType=TIMESTAMP},
-                </if>
+            <if test="recordId != null">
+                #{recordId,jdbcType=BIGINT},
+            </if>
+            <if test="carrierType != null">
+                #{carrierType,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null">
+                #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="identityNo != null">
+                #{identityNo,jdbcType=VARCHAR},
+            </if>
+            <if test="balance != null">
+                #{balance,jdbcType=DECIMAL},
+            </if>
+            <if test="province != null">
+                #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="planName != null">
+                #{planName,jdbcType=VARCHAR},
+            </if>
+            <if test="registerTime != null">
+                #{registerTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
         </trim>
     </insert>
 
     <update id="updateByPrimaryKey" parameterType="com.beitu.saas.credit.entity.SaasCreditCarrierBase">
         update saas_credit_carrier_base
         <set>
-                <if test="recordId !=null">
+            <if test="recordId !=null">
                 record_id = #{recordId,jdbcType=BIGINT},
-                </if>
-                <if test="carrierType !=null">
+            </if>
+            <if test="carrierType !=null">
                 carrier_type = #{carrierType,jdbcType=VARCHAR},
-                </if>
-                <if test="mobile !=null">
+            </if>
+            <if test="mobile !=null">
                 mobile = #{mobile,jdbcType=VARCHAR},
-                </if>
-                <if test="name !=null">
-                name = #{name,jdbcType=VARCHAR},
-                </if>
-                <if test="identityNo !=null">
+            </if>
+            <if test="name !=null">
+                `name` = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="identityNo !=null">
                 identity_no = #{identityNo,jdbcType=VARCHAR},
-                </if>
-                <if test="balance !=null">
+            </if>
+            <if test="balance !=null">
                 balance = #{balance,jdbcType=DECIMAL},
-                </if>
-                <if test="province !=null">
+            </if>
+            <if test="province !=null">
                 province = #{province,jdbcType=VARCHAR},
-                </if>
-                <if test="planName !=null">
+            </if>
+            <if test="planName !=null">
                 plan_name = #{planName,jdbcType=VARCHAR},
-                </if>
-                <if test="registerTime !=null">
+            </if>
+            <if test="registerTime !=null">
                 register_time = #{registerTime,jdbcType=TIMESTAMP},
-                </if>
-                <if test="deleted !=null">
+            </if>
+            <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},
-                </if>
-                <if test="gmtModified !=null">
+            </if>
+            <if test="gmtModified !=null">
                 gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-                </if>
+            </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
@@ -171,7 +171,7 @@
 
     <sql id="paginationSql">
         <if test="page != null">
-            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+            limit #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
         </if>
     </sql>
 
@@ -199,7 +199,7 @@
                 and mobile = #{mobile,jdbcType=VARCHAR}
             </if>
             <if test="name !=null">
-                and name = #{name,jdbcType=VARCHAR}
+                and `name` = #{name,jdbcType=VARCHAR}
             </if>
             <if test="identityNo !=null">
                 and identity_no = #{identityNo,jdbcType=VARCHAR}
@@ -244,7 +244,7 @@
                 and mobile = #{mobile,jdbcType=VARCHAR}
             </if>
             <if test="name !=null">
-                and name = #{name,jdbcType=VARCHAR}
+                and `name` = #{name,jdbcType=VARCHAR}
             </if>
             <if test="identityNo !=null">
                 and identity_no = #{identityNo,jdbcType=VARCHAR}

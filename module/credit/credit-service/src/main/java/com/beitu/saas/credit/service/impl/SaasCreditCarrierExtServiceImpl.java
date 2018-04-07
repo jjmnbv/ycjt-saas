@@ -1,6 +1,8 @@
 package com.beitu.saas.credit.service.impl;
 import com.beitu.saas.credit.client.SaasCreditCarrierExtService;
 import com.beitu.saas.credit.dao.SaasCreditCarrierExtDao;
+import com.beitu.saas.credit.domain.SaasCreditCarrierExtVo;
+import com.beitu.saas.credit.entity.SaasCreditCarrierExt;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
 import org.springframework.stereotype.Service;
@@ -17,9 +19,23 @@ import com.fqgj.log.enhance.Module;
 @Service
 public class SaasCreditCarrierExtServiceImpl extends AbstractBaseService implements SaasCreditCarrierExtService {
 
-
     @Autowired
     private SaasCreditCarrierExtDao saasCreditCarrierExtDao;
+
+    @Override
+    public SaasCreditCarrierExt addSaasCreditCarrierExt(SaasCreditCarrierExtVo saasCreditCarrierExtVo) {
+        return null;
+    }
+
+    @Override
+    public SaasCreditCarrierExtVo getByRecordId(Long recordId) {
+        return null;
+    }
+
+    @Override
+    public Boolean updateSuccess(Long id) {
+        return null;
+    }
 }
 
 

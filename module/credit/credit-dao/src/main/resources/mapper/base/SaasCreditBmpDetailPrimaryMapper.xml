@@ -33,7 +33,7 @@
     id,
     record_id,
     dhb_id,
-    name,
+    `name`,
     teldesc,
     teltype,
     telnum,
@@ -68,218 +68,218 @@
             parameterType="com.beitu.saas.credit.entity.SaasCreditBmpDetail" useGeneratedKeys="true">
         insert into saas_credit_bmp_detail
         <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="recordId !=null">
+            <if test="recordId !=null">
                 record_id,
-                </if>
-                <if test="dhbId !=null">
+            </if>
+            <if test="dhbId !=null">
                 dhb_id,
-                </if>
-                <if test="name !=null">
-                name,
-                </if>
-                <if test="teldesc !=null">
+            </if>
+            <if test="name !=null">
+                `name`,
+            </if>
+            <if test="teldesc !=null">
                 teldesc,
-                </if>
-                <if test="teltype !=null">
+            </if>
+            <if test="teltype !=null">
                 teltype,
-                </if>
-                <if test="telnum !=null">
+            </if>
+            <if test="telnum !=null">
                 telnum,
-                </if>
-                <if test="telrank !=null">
+            </if>
+            <if test="telrank !=null">
                 telrank,
-                </if>
-                <if test="country !=null">
+            </if>
+            <if test="country !=null">
                 country,
-                </if>
-                <if test="cityId !=null">
+            </if>
+            <if test="cityId !=null">
                 city_id,
-                </if>
-                <if test="logo !=null">
+            </if>
+            <if test="logo !=null">
                 logo,
-                </if>
-                <if test="slogan !=null">
+            </if>
+            <if test="slogan !=null">
                 slogan,
-                </if>
-                <if test="image !=null">
+            </if>
+            <if test="image !=null">
                 image,
-                </if>
-                <if test="addr !=null">
+            </if>
+            <if test="addr !=null">
                 addr,
-                </if>
-                <if test="web !=null">
+            </if>
+            <if test="web !=null">
                 web,
-                </if>
-                <if test="url !=null">
+            </if>
+            <if test="url !=null">
                 url,
-                </if>
-                <if test="flagType !=null">
+            </if>
+            <if test="flagType !=null">
                 flag_type,
-                </if>
-                <if test="flagNum !=null">
+            </if>
+            <if test="flagNum !=null">
                 flag_num,
-                </if>
-                <if test="flagFid !=null">
+            </if>
+            <if test="flagFid !=null">
                 flag_fid,
-                </if>
-                <if test="catnames !=null">
+            </if>
+            <if test="catnames !=null">
                 catnames,
-                </if>
-                <if test="itagIds !=null">
+            </if>
+            <if test="itagIds !=null">
                 itag_ids,
-                </if>
-                <if test="deleted !=null">
+            </if>
+            <if test="deleted !=null">
                 deleted,
-                </if>
-                <if test="gmtModified !=null">
+            </if>
+            <if test="gmtModified !=null">
                 gmt_modified,
-                </if>
-                <if test="gmtCreate !=null">
+            </if>
+            <if test="gmtCreate !=null">
                 gmt_create,
-                </if>
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-                <if test="recordId != null">
-                    #{recordId,jdbcType=BIGINT},
-                </if>
-                <if test="dhbId != null">
-                    #{dhbId,jdbcType=VARCHAR},
-                </if>
-                <if test="name != null">
-                    #{name,jdbcType=VARCHAR},
-                </if>
-                <if test="teldesc != null">
-                    #{teldesc,jdbcType=VARCHAR},
-                </if>
-                <if test="teltype != null">
-                    #{teltype,jdbcType=TINYINT},
-                </if>
-                <if test="telnum != null">
-                    #{telnum,jdbcType=VARCHAR},
-                </if>
-                <if test="telrank != null">
-                    #{telrank,jdbcType=TINYINT},
-                </if>
-                <if test="country != null">
-                    #{country,jdbcType=INTEGER},
-                </if>
-                <if test="cityId != null">
-                    #{cityId,jdbcType=INTEGER},
-                </if>
-                <if test="logo != null">
-                    #{logo,jdbcType=VARCHAR},
-                </if>
-                <if test="slogan != null">
-                    #{slogan,jdbcType=VARCHAR},
-                </if>
-                <if test="image != null">
-                    #{image,jdbcType=VARCHAR},
-                </if>
-                <if test="addr != null">
-                    #{addr,jdbcType=VARCHAR},
-                </if>
-                <if test="web != null">
-                    #{web,jdbcType=VARCHAR},
-                </if>
-                <if test="url != null">
-                    #{url,jdbcType=VARCHAR},
-                </if>
-                <if test="flagType != null">
-                    #{flagType,jdbcType=VARCHAR},
-                </if>
-                <if test="flagNum != null">
-                    #{flagNum,jdbcType=INTEGER},
-                </if>
-                <if test="flagFid != null">
-                    #{flagFid,jdbcType=INTEGER},
-                </if>
-                <if test="catnames != null">
-                    #{catnames,jdbcType=VARCHAR},
-                </if>
-                <if test="itagIds != null">
-                    #{itagIds,jdbcType=VARCHAR},
-                </if>
-                <if test="deleted != null">
-                    #{deleted,jdbcType=BIT},
-                </if>
-                <if test="gmtModified != null">
-                    #{gmtModified,jdbcType=TIMESTAMP},
-                </if>
-                <if test="gmtCreate != null">
-                    #{gmtCreate,jdbcType=TIMESTAMP},
-                </if>
+            <if test="recordId != null">
+                #{recordId,jdbcType=BIGINT},
+            </if>
+            <if test="dhbId != null">
+                #{dhbId,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="teldesc != null">
+                #{teldesc,jdbcType=VARCHAR},
+            </if>
+            <if test="teltype != null">
+                #{teltype,jdbcType=TINYINT},
+            </if>
+            <if test="telnum != null">
+                #{telnum,jdbcType=VARCHAR},
+            </if>
+            <if test="telrank != null">
+                #{telrank,jdbcType=TINYINT},
+            </if>
+            <if test="country != null">
+                #{country,jdbcType=INTEGER},
+            </if>
+            <if test="cityId != null">
+                #{cityId,jdbcType=INTEGER},
+            </if>
+            <if test="logo != null">
+                #{logo,jdbcType=VARCHAR},
+            </if>
+            <if test="slogan != null">
+                #{slogan,jdbcType=VARCHAR},
+            </if>
+            <if test="image != null">
+                #{image,jdbcType=VARCHAR},
+            </if>
+            <if test="addr != null">
+                #{addr,jdbcType=VARCHAR},
+            </if>
+            <if test="web != null">
+                #{web,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="flagType != null">
+                #{flagType,jdbcType=VARCHAR},
+            </if>
+            <if test="flagNum != null">
+                #{flagNum,jdbcType=INTEGER},
+            </if>
+            <if test="flagFid != null">
+                #{flagFid,jdbcType=INTEGER},
+            </if>
+            <if test="catnames != null">
+                #{catnames,jdbcType=VARCHAR},
+            </if>
+            <if test="itagIds != null">
+                #{itagIds,jdbcType=VARCHAR},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
         </trim>
     </insert>
 
     <update id="updateByPrimaryKey" parameterType="com.beitu.saas.credit.entity.SaasCreditBmpDetail">
         update saas_credit_bmp_detail
         <set>
-                <if test="recordId !=null">
+            <if test="recordId !=null">
                 record_id = #{recordId,jdbcType=BIGINT},
-                </if>
-                <if test="dhbId !=null">
+            </if>
+            <if test="dhbId !=null">
                 dhb_id = #{dhbId,jdbcType=VARCHAR},
-                </if>
-                <if test="name !=null">
-                name = #{name,jdbcType=VARCHAR},
-                </if>
-                <if test="teldesc !=null">
+            </if>
+            <if test="name !=null">
+                `name` = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="teldesc !=null">
                 teldesc = #{teldesc,jdbcType=VARCHAR},
-                </if>
-                <if test="teltype !=null">
+            </if>
+            <if test="teltype !=null">
                 teltype = #{teltype,jdbcType=TINYINT},
-                </if>
-                <if test="telnum !=null">
+            </if>
+            <if test="telnum !=null">
                 telnum = #{telnum,jdbcType=VARCHAR},
-                </if>
-                <if test="telrank !=null">
+            </if>
+            <if test="telrank !=null">
                 telrank = #{telrank,jdbcType=TINYINT},
-                </if>
-                <if test="country !=null">
+            </if>
+            <if test="country !=null">
                 country = #{country,jdbcType=INTEGER},
-                </if>
-                <if test="cityId !=null">
+            </if>
+            <if test="cityId !=null">
                 city_id = #{cityId,jdbcType=INTEGER},
-                </if>
-                <if test="logo !=null">
+            </if>
+            <if test="logo !=null">
                 logo = #{logo,jdbcType=VARCHAR},
-                </if>
-                <if test="slogan !=null">
+            </if>
+            <if test="slogan !=null">
                 slogan = #{slogan,jdbcType=VARCHAR},
-                </if>
-                <if test="image !=null">
+            </if>
+            <if test="image !=null">
                 image = #{image,jdbcType=VARCHAR},
-                </if>
-                <if test="addr !=null">
+            </if>
+            <if test="addr !=null">
                 addr = #{addr,jdbcType=VARCHAR},
-                </if>
-                <if test="web !=null">
+            </if>
+            <if test="web !=null">
                 web = #{web,jdbcType=VARCHAR},
-                </if>
-                <if test="url !=null">
+            </if>
+            <if test="url !=null">
                 url = #{url,jdbcType=VARCHAR},
-                </if>
-                <if test="flagType !=null">
+            </if>
+            <if test="flagType !=null">
                 flag_type = #{flagType,jdbcType=VARCHAR},
-                </if>
-                <if test="flagNum !=null">
+            </if>
+            <if test="flagNum !=null">
                 flag_num = #{flagNum,jdbcType=INTEGER},
-                </if>
-                <if test="flagFid !=null">
+            </if>
+            <if test="flagFid !=null">
                 flag_fid = #{flagFid,jdbcType=INTEGER},
-                </if>
-                <if test="catnames !=null">
+            </if>
+            <if test="catnames !=null">
                 catnames = #{catnames,jdbcType=VARCHAR},
-                </if>
-                <if test="itagIds !=null">
+            </if>
+            <if test="itagIds !=null">
                 itag_ids = #{itagIds,jdbcType=VARCHAR},
-                </if>
-                <if test="deleted !=null">
+            </if>
+            <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},
-                </if>
-                <if test="gmtModified !=null">
+            </if>
+            <if test="gmtModified !=null">
                 gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-                </if>
+            </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
@@ -292,7 +292,7 @@
 
     <sql id="paginationSql">
         <if test="page != null">
-            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+            limit #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
         </if>
     </sql>
 
@@ -317,7 +317,7 @@
                 and dhb_id = #{dhbId,jdbcType=VARCHAR}
             </if>
             <if test="name !=null">
-                and name = #{name,jdbcType=VARCHAR}
+                and `name` = #{name,jdbcType=VARCHAR}
             </if>
             <if test="teldesc !=null">
                 and teldesc = #{teldesc,jdbcType=VARCHAR}
@@ -395,7 +395,7 @@
                 and dhb_id = #{dhbId,jdbcType=VARCHAR}
             </if>
             <if test="name !=null">
-                and name = #{name,jdbcType=VARCHAR}
+                and `name` = #{name,jdbcType=VARCHAR}
             </if>
             <if test="teldesc !=null">
                 and teldesc = #{teldesc,jdbcType=VARCHAR}

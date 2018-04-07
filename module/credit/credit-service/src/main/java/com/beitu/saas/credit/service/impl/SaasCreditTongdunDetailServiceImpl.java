@@ -1,6 +1,8 @@
 package com.beitu.saas.credit.service.impl;
 import com.beitu.saas.credit.client.SaasCreditTongdunDetailService;
 import com.beitu.saas.credit.dao.SaasCreditTongdunDetailDao;
+import com.beitu.saas.credit.domain.SaasCreditTongdunDetailVo;
+import com.beitu.saas.credit.entity.SaasCreditTongdunDetail;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
 import org.springframework.stereotype.Service;
@@ -17,9 +19,18 @@ import com.fqgj.log.enhance.Module;
 @Service
 public class SaasCreditTongdunDetailServiceImpl extends AbstractBaseService implements SaasCreditTongdunDetailService {
 
-
     @Autowired
     private SaasCreditTongdunDetailDao saasCreditTongdunDetailDao;
+
+    @Override
+    public SaasCreditTongdunDetail addSaasCreditTongdunDetail(SaasCreditTongdunDetailVo saasCreditTongdunDetailVo) {
+        return null;
+    }
+
+    @Override
+    public SaasCreditTongdunDetailVo getByRecordId(Long recordId) {
+        return null;
+    }
 }
 
 

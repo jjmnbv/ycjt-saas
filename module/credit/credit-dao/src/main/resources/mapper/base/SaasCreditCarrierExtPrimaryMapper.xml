@@ -42,101 +42,101 @@
             parameterType="com.beitu.saas.credit.entity.SaasCreditCarrierExt" useGeneratedKeys="true">
         insert into saas_credit_carrier_ext
         <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="recordId !=null">
+            <if test="recordId !=null">
                 record_id,
-                </if>
-                <if test="activeRegion !=null">
+            </if>
+            <if test="activeRegion !=null">
                 activeRegion,
-                </if>
-                <if test="registerRegion !=null">
+            </if>
+            <if test="registerRegion !=null">
                 registerRegion,
-                </if>
-                <if test="mostContactRegion !=null">
+            </if>
+            <if test="mostContactRegion !=null">
                 mostContactRegion,
-                </if>
-                <if test="interactionCount !=null">
+            </if>
+            <if test="interactionCount !=null">
                 interactionCount,
-                </if>
-                <if test="totalDuration !=null">
+            </if>
+            <if test="totalDuration !=null">
                 totalDuration,
-                </if>
-                <if test="nightDuration !=null">
+            </if>
+            <if test="nightDuration !=null">
                 nightDuration,
-                </if>
-                <if test="deleted !=null">
+            </if>
+            <if test="deleted !=null">
                 deleted,
-                </if>
-                <if test="gmtModified !=null">
+            </if>
+            <if test="gmtModified !=null">
                 gmt_modified,
-                </if>
-                <if test="gmtCreate !=null">
+            </if>
+            <if test="gmtCreate !=null">
                 gmt_create,
-                </if>
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-                <if test="recordId != null">
-                    #{recordId,jdbcType=BIGINT},
-                </if>
-                <if test="activeRegion != null">
-                    #{activeRegion,jdbcType=VARCHAR},
-                </if>
-                <if test="registerRegion != null">
-                    #{registerRegion,jdbcType=VARCHAR},
-                </if>
-                <if test="mostContactRegion != null">
-                    #{mostContactRegion,jdbcType=VARCHAR},
-                </if>
-                <if test="interactionCount != null">
-                    #{interactionCount,jdbcType=INTEGER},
-                </if>
-                <if test="totalDuration != null">
-                    #{totalDuration,jdbcType=INTEGER},
-                </if>
-                <if test="nightDuration != null">
-                    #{nightDuration,jdbcType=INTEGER},
-                </if>
-                <if test="deleted != null">
-                    #{deleted,jdbcType=BIT},
-                </if>
-                <if test="gmtModified != null">
-                    #{gmtModified,jdbcType=TIMESTAMP},
-                </if>
-                <if test="gmtCreate != null">
-                    #{gmtCreate,jdbcType=TIMESTAMP},
-                </if>
+            <if test="recordId != null">
+                #{recordId,jdbcType=BIGINT},
+            </if>
+            <if test="activeRegion != null">
+                #{activeRegion,jdbcType=VARCHAR},
+            </if>
+            <if test="registerRegion != null">
+                #{registerRegion,jdbcType=VARCHAR},
+            </if>
+            <if test="mostContactRegion != null">
+                #{mostContactRegion,jdbcType=VARCHAR},
+            </if>
+            <if test="interactionCount != null">
+                #{interactionCount,jdbcType=INTEGER},
+            </if>
+            <if test="totalDuration != null">
+                #{totalDuration,jdbcType=INTEGER},
+            </if>
+            <if test="nightDuration != null">
+                #{nightDuration,jdbcType=INTEGER},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
         </trim>
     </insert>
 
     <update id="updateByPrimaryKey" parameterType="com.beitu.saas.credit.entity.SaasCreditCarrierExt">
         update saas_credit_carrier_ext
         <set>
-                <if test="recordId !=null">
+            <if test="recordId !=null">
                 record_id = #{recordId,jdbcType=BIGINT},
-                </if>
-                <if test="activeRegion !=null">
+            </if>
+            <if test="activeRegion !=null">
                 activeRegion = #{activeRegion,jdbcType=VARCHAR},
-                </if>
-                <if test="registerRegion !=null">
+            </if>
+            <if test="registerRegion !=null">
                 registerRegion = #{registerRegion,jdbcType=VARCHAR},
-                </if>
-                <if test="mostContactRegion !=null">
+            </if>
+            <if test="mostContactRegion !=null">
                 mostContactRegion = #{mostContactRegion,jdbcType=VARCHAR},
-                </if>
-                <if test="interactionCount !=null">
+            </if>
+            <if test="interactionCount !=null">
                 interactionCount = #{interactionCount,jdbcType=INTEGER},
-                </if>
-                <if test="totalDuration !=null">
+            </if>
+            <if test="totalDuration !=null">
                 totalDuration = #{totalDuration,jdbcType=INTEGER},
-                </if>
-                <if test="nightDuration !=null">
+            </if>
+            <if test="nightDuration !=null">
                 nightDuration = #{nightDuration,jdbcType=INTEGER},
-                </if>
-                <if test="deleted !=null">
+            </if>
+            <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},
-                </if>
-                <if test="gmtModified !=null">
+            </if>
+            <if test="gmtModified !=null">
                 gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-                </if>
+            </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
@@ -149,7 +149,7 @@
 
     <sql id="paginationSql">
         <if test="page != null">
-            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+            limit #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
         </if>
     </sql>
 

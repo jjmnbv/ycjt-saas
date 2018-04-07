@@ -42,101 +42,101 @@
             parameterType="com.beitu.saas.credit.entity.SaasCreditTongdunDetail" useGeneratedKeys="true">
         insert into saas_credit_tongdun_detail
         <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="recordId !=null">
+            <if test="recordId !=null">
                 record_id,
-                </if>
-                <if test="reportId !=null">
+            </if>
+            <if test="reportId !=null">
                 report_id,
-                </if>
-                <if test="tongdunReport !=null">
+            </if>
+            <if test="tongdunReport !=null">
                 tongdun_report,
-                </if>
-                <if test="finalScore !=null">
+            </if>
+            <if test="finalScore !=null">
                 final_score,
-                </if>
-                <if test="finalDecision !=null">
+            </if>
+            <if test="finalDecision !=null">
                 final_decision,
-                </if>
-                <if test="itemName !=null">
+            </if>
+            <if test="itemName !=null">
                 item_name,
-                </if>
-                <if test="reportTime !=null">
+            </if>
+            <if test="reportTime !=null">
                 report_time,
-                </if>
-                <if test="deleted !=null">
+            </if>
+            <if test="deleted !=null">
                 deleted,
-                </if>
-                <if test="gmtModified !=null">
+            </if>
+            <if test="gmtModified !=null">
                 gmt_modified,
-                </if>
-                <if test="gmtCreate !=null">
+            </if>
+            <if test="gmtCreate !=null">
                 gmt_create,
-                </if>
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-                <if test="recordId != null">
-                    #{recordId,jdbcType=BIGINT},
-                </if>
-                <if test="reportId != null">
-                    #{reportId,jdbcType=VARCHAR},
-                </if>
-                <if test="tongdunReport != null">
-                    #{tongdunReport,jdbcType=LONGVARCHAR},
-                </if>
-                <if test="finalScore != null">
-                    #{finalScore,jdbcType=VARCHAR},
-                </if>
-                <if test="finalDecision != null">
-                    #{finalDecision,jdbcType=VARCHAR},
-                </if>
-                <if test="itemName != null">
-                    #{itemName,jdbcType=LONGVARCHAR},
-                </if>
-                <if test="reportTime != null">
-                    #{reportTime,jdbcType=TIMESTAMP},
-                </if>
-                <if test="deleted != null">
-                    #{deleted,jdbcType=BIT},
-                </if>
-                <if test="gmtModified != null">
-                    #{gmtModified,jdbcType=TIMESTAMP},
-                </if>
-                <if test="gmtCreate != null">
-                    #{gmtCreate,jdbcType=TIMESTAMP},
-                </if>
+            <if test="recordId != null">
+                #{recordId,jdbcType=BIGINT},
+            </if>
+            <if test="reportId != null">
+                #{reportId,jdbcType=VARCHAR},
+            </if>
+            <if test="tongdunReport != null">
+                #{tongdunReport,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="finalScore != null">
+                #{finalScore,jdbcType=VARCHAR},
+            </if>
+            <if test="finalDecision != null">
+                #{finalDecision,jdbcType=VARCHAR},
+            </if>
+            <if test="itemName != null">
+                #{itemName,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="reportTime != null">
+                #{reportTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
         </trim>
     </insert>
 
     <update id="updateByPrimaryKey" parameterType="com.beitu.saas.credit.entity.SaasCreditTongdunDetail">
         update saas_credit_tongdun_detail
         <set>
-                <if test="recordId !=null">
+            <if test="recordId !=null">
                 record_id = #{recordId,jdbcType=BIGINT},
-                </if>
-                <if test="reportId !=null">
+            </if>
+            <if test="reportId !=null">
                 report_id = #{reportId,jdbcType=VARCHAR},
-                </if>
-                <if test="tongdunReport !=null">
+            </if>
+            <if test="tongdunReport !=null">
                 tongdun_report = #{tongdunReport,jdbcType=LONGVARCHAR},
-                </if>
-                <if test="finalScore !=null">
+            </if>
+            <if test="finalScore !=null">
                 final_score = #{finalScore,jdbcType=VARCHAR},
-                </if>
-                <if test="finalDecision !=null">
+            </if>
+            <if test="finalDecision !=null">
                 final_decision = #{finalDecision,jdbcType=VARCHAR},
-                </if>
-                <if test="itemName !=null">
+            </if>
+            <if test="itemName !=null">
                 item_name = #{itemName,jdbcType=LONGVARCHAR},
-                </if>
-                <if test="reportTime !=null">
+            </if>
+            <if test="reportTime !=null">
                 report_time = #{reportTime,jdbcType=TIMESTAMP},
-                </if>
-                <if test="deleted !=null">
+            </if>
+            <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},
-                </if>
-                <if test="gmtModified !=null">
+            </if>
+            <if test="gmtModified !=null">
                 gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-                </if>
+            </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
@@ -149,7 +149,7 @@
 
     <sql id="paginationSql">
         <if test="page != null">
-            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+            limit #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
         </if>
     </sql>
 

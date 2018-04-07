@@ -7,6 +7,7 @@ package com.beitu.saas.credit.enums;
  * Time: 下午7:49
  */
 public enum CreditCarrierRecordTypeEnum {
+
     HIGH_FREQ(10, "高频联系人记录"),
     MERCHANT(20, "商户通话记录"),
     ACTIVE_REGION(30, "通话活跃记录"),

@@ -43,7 +43,8 @@
                     <controller>controller</controller>
                     <!--#多个表逗号分割,all:全部表;borrower,article-->
                     <tables>
-                        saas_credit_tongdun,saas_credit_tongdun_detail,saas_credit_dunning,saas_credit_dunning_detail,saas_credit_bmp,saas_credit_bmp_detail,saas_credit_carrier,saas_credit_carrier_base,saas_credit_carrier_bill,saas_credit_carrier_ext,saas_credit_carrier_record
+                        saas_credit_tongdun
+                        <!--saas_credit_tongdun,saas_credit_tongdun_detail,saas_credit_dunning,saas_credit_dunning_detail,saas_credit_bmp,saas_credit_bmp_detail,saas_credit_carrier,saas_credit_carrier_base,saas_credit_carrier_bill,saas_credit_carrier_ext,saas_credit_carrier_record-->
                     </tables>
                     <!--#多个模块逗号分割,生成什么模块all:全部模块;controller,domain,bean,dao,daoImpl,com.beitu.saas.borrower.service,serviceImpl,baseMapper,mapper-->
                     <generatorModules>dao,daoImpl,mapper,baseMapper,bean,service,serviceImpl,domain</generatorModules>

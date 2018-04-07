@@ -1,11 +1,14 @@
 package com.beitu.saas.credit.service.impl;
 import com.beitu.saas.credit.client.SaasCreditCarrierBillService;
 import com.beitu.saas.credit.dao.SaasCreditCarrierBillDao;
+import com.beitu.saas.credit.domain.SaasCreditCarrierBillVo;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.fqgj.log.enhance.Module;
+
+import java.util.List;
 
 /**
 * User: jungle
@@ -17,9 +20,18 @@ import com.fqgj.log.enhance.Module;
 @Service
 public class SaasCreditCarrierBillServiceImpl extends AbstractBaseService implements SaasCreditCarrierBillService {
 
-
     @Autowired
     private SaasCreditCarrierBillDao saasCreditCarrierBillDao;
+
+    @Override
+    public void batchAddSaasCreditCarrierBill(List list) {
+
+    }
+
+    @Override
+    public List<SaasCreditCarrierBillVo> listByRecordId(Long recordId) {
+        return null;
+    }
 }
 
 

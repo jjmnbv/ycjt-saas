@@ -44,110 +44,110 @@
             parameterType="com.beitu.saas.credit.entity.SaasCreditCarrierBill" useGeneratedKeys="true">
         insert into saas_credit_carrier_bill
         <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="recordId !=null">
+            <if test="recordId !=null">
                 record_id,
-                </if>
-                <if test="billDate !=null">
+            </if>
+            <if test="billDate !=null">
                 bill_date,
-                </if>
-                <if test="baseFee !=null">
+            </if>
+            <if test="baseFee !=null">
                 base_fee,
-                </if>
-                <if test="totalFee !=null">
+            </if>
+            <if test="totalFee !=null">
                 total_fee,
-                </if>
-                <if test="callingTime !=null">
+            </if>
+            <if test="callingTime !=null">
                 calling_time,
-                </if>
-                <if test="calledTime !=null">
+            </if>
+            <if test="calledTime !=null">
                 called_time,
-                </if>
-                <if test="callingDuration !=null">
+            </if>
+            <if test="callingDuration !=null">
                 calling_duration,
-                </if>
-                <if test="calledDuration !=null">
+            </if>
+            <if test="calledDuration !=null">
                 called_duration,
-                </if>
-                <if test="deleted !=null">
+            </if>
+            <if test="deleted !=null">
                 deleted,
-                </if>
-                <if test="gmtModified !=null">
+            </if>
+            <if test="gmtModified !=null">
                 gmt_modified,
-                </if>
-                <if test="gmtCreate !=null">
+            </if>
+            <if test="gmtCreate !=null">
                 gmt_create,
-                </if>
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-                <if test="recordId != null">
-                    #{recordId,jdbcType=BIGINT},
-                </if>
-                <if test="billDate != null">
-                    #{billDate,jdbcType=DATE},
-                </if>
-                <if test="baseFee != null">
-                    #{baseFee,jdbcType=DECIMAL},
-                </if>
-                <if test="totalFee != null">
-                    #{totalFee,jdbcType=DECIMAL},
-                </if>
-                <if test="callingTime != null">
-                    #{callingTime,jdbcType=INTEGER},
-                </if>
-                <if test="calledTime != null">
-                    #{calledTime,jdbcType=INTEGER},
-                </if>
-                <if test="callingDuration != null">
-                    #{callingDuration,jdbcType=INTEGER},
-                </if>
-                <if test="calledDuration != null">
-                    #{calledDuration,jdbcType=INTEGER},
-                </if>
-                <if test="deleted != null">
-                    #{deleted,jdbcType=BIT},
-                </if>
-                <if test="gmtModified != null">
-                    #{gmtModified,jdbcType=TIMESTAMP},
-                </if>
-                <if test="gmtCreate != null">
-                    #{gmtCreate,jdbcType=TIMESTAMP},
-                </if>
+            <if test="recordId != null">
+                #{recordId,jdbcType=BIGINT},
+            </if>
+            <if test="billDate != null">
+                #{billDate,jdbcType=DATE},
+            </if>
+            <if test="baseFee != null">
+                #{baseFee,jdbcType=DECIMAL},
+            </if>
+            <if test="totalFee != null">
+                #{totalFee,jdbcType=DECIMAL},
+            </if>
+            <if test="callingTime != null">
+                #{callingTime,jdbcType=INTEGER},
+            </if>
+            <if test="calledTime != null">
+                #{calledTime,jdbcType=INTEGER},
+            </if>
+            <if test="callingDuration != null">
+                #{callingDuration,jdbcType=INTEGER},
+            </if>
+            <if test="calledDuration != null">
+                #{calledDuration,jdbcType=INTEGER},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
         </trim>
     </insert>
 
     <update id="updateByPrimaryKey" parameterType="com.beitu.saas.credit.entity.SaasCreditCarrierBill">
         update saas_credit_carrier_bill
         <set>
-                <if test="recordId !=null">
+            <if test="recordId !=null">
                 record_id = #{recordId,jdbcType=BIGINT},
-                </if>
-                <if test="billDate !=null">
+            </if>
+            <if test="billDate !=null">
                 bill_date = #{billDate,jdbcType=DATE},
-                </if>
-                <if test="baseFee !=null">
+            </if>
+            <if test="baseFee !=null">
                 base_fee = #{baseFee,jdbcType=DECIMAL},
-                </if>
-                <if test="totalFee !=null">
+            </if>
+            <if test="totalFee !=null">
                 total_fee = #{totalFee,jdbcType=DECIMAL},
-                </if>
-                <if test="callingTime !=null">
+            </if>
+            <if test="callingTime !=null">
                 calling_time = #{callingTime,jdbcType=INTEGER},
-                </if>
-                <if test="calledTime !=null">
+            </if>
+            <if test="calledTime !=null">
                 called_time = #{calledTime,jdbcType=INTEGER},
-                </if>
-                <if test="callingDuration !=null">
+            </if>
+            <if test="callingDuration !=null">
                 calling_duration = #{callingDuration,jdbcType=INTEGER},
-                </if>
-                <if test="calledDuration !=null">
+            </if>
+            <if test="calledDuration !=null">
                 called_duration = #{calledDuration,jdbcType=INTEGER},
-                </if>
-                <if test="deleted !=null">
+            </if>
+            <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},
-                </if>
-                <if test="gmtModified !=null">
+            </if>
+            <if test="gmtModified !=null">
                 gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-                </if>
+            </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
@@ -160,7 +160,7 @@
 
     <sql id="paginationSql">
         <if test="page != null">
-            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+            limit #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
         </if>
     </sql>
 
