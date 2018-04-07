@@ -87,16 +87,17 @@ public class TongdunAsyncApplication {
         if (saasCreditTongdunVo != null) {
             Boolean isExceedOneDay = DateUtil.isExceedOneDay(saasCreditTongdunVo.getGmtCreate());
             if (isExceedOneDay != null && !isExceedOneDay) {
-                SaasCreditTongdun addCreditTongdun = new SaasCreditTongdun();
-                addCreditTongdun.setMerchantCode(merchantCode);
-                addCreditTongdun.setBorrowerCode(borrowerCode);
-                addCreditTongdun.setReportId(saasCreditTongdunVo.getReportId());
-                addCreditTongdun.setSuccess(Boolean.TRUE);
-                Long recordId = saasCreditTongdunService.create(addCreditTongdun).getId();
+                SaasCreditTongdunVo addCreditTongdunVo = new SaasCreditTongdunVo();
+                addCreditTongdunVo.setMerchantCode(merchantCode);
+                addCreditTongdunVo.setBorrowerCode(borrowerCode);
+                addCreditTongdunVo.setMobile(saasBorrowerVo.getMobile());
+                addCreditTongdunVo.setIdentityCode(saasBorrowerRealInfoVo.getIdentityCode());
+                addCreditTongdunVo.setReportId(saasCreditTongdunVo.getReportId());
+                addCreditTongdunVo.setSuccess(Boolean.TRUE);
+                Long recordId = saasCreditTongdunService.addSaasCreditTongdun(addCreditTongdunVo).getId();
                 SaasCreditTongdunDetailVo saasCreditTongdunDetailVo = saasCreditTongdunDetailService.getByRecordId(saasCreditTongdunVo.getSaasCreditTongdunId());
-                SaasCreditTongdunDetail saasCreditTongdunDetail = SaasCreditTongdunDetailVo.convertVOToEntity(saasCreditTongdunDetailVo);
-                saasCreditTongdunDetail.setRecordId(recordId);
-                saasCreditTongdunDetailService.create(saasCreditTongdunDetail);
+                saasCreditTongdunDetailVo.setRecordId(recordId);
+                saasCreditTongdunDetailService.addSaasCreditTongdunDetail(saasCreditTongdunDetailVo);
                 return;
             }
         }

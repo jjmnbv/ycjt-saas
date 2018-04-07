@@ -11,6 +11,7 @@ import com.beitu.saas.credit.client.SaasCreditCarrierService;
 import com.beitu.saas.credit.client.SaasCreditDunningDetailService;
 import com.beitu.saas.credit.client.SaasCreditDunningService;
 import com.beitu.saas.credit.domain.SaasCreditCarrierVo;
+import com.beitu.saas.credit.domain.SaasCreditDunningVo;
 import com.beitu.saas.credit.entity.SaasCreditDunning;
 import com.beitu.saas.credit.enums.CreditDunningDetailTypeEnum;
 import com.beitu.saas.credit.enums.CreditErrorCodeEnum;
@@ -67,18 +68,18 @@ public class DunningAsyncApplication {
             throw new ApplicationException(CreditErrorCodeEnum.CREDIT_DUNNING_GENERATE_ERROR, "电话邦结果JSON序列化失败");
         }
         Long recordId = null;
-        SaasCreditDunning saasCreditDunning = new SaasCreditDunning();
+        SaasCreditDunningVo saasCreditDunningVo = new SaasCreditDunningVo();
         if (resultVo != null && resultVo.getData() != null) {
-            saasCreditDunning.setMerchantCode(merchantCode);
-            saasCreditDunning.setBorrowerCode(borrowerCode);
-            saasCreditDunning.setCarrierId(saasCreditCarrierVo.getSaasCreditCarrierId());
-            saasCreditDunning.setSid(resultVo.getData().getSid());
-            saasCreditDunning.setMobile(resultVo.getData().getTel());
-            saasCreditDunning.setTotalNum(resultVo.getData().getTotalNum());
-            saasCreditDunning.setEffectiveNum(resultVo.getData().getEffectiveNum());
+            saasCreditDunningVo.setMerchantCode(merchantCode);
+            saasCreditDunningVo.setBorrowerCode(borrowerCode);
+            saasCreditDunningVo.setCarrierId(saasCreditCarrierVo.getSaasCreditCarrierId());
+            saasCreditDunningVo.setSid(resultVo.getData().getSid());
+            saasCreditDunningVo.setMobile(resultVo.getData().getTel());
+            saasCreditDunningVo.setTotalNum(resultVo.getData().getTotalNum());
+            saasCreditDunningVo.setEffectiveNum(resultVo.getData().getEffectiveNum());
             String url = uploadDunningData(borrowerCode, result);
-            saasCreditDunning.setUrl(url);
-            recordId = saasCreditDunningService.create(saasCreditDunning).getId();
+            saasCreditDunningVo.setUrl(url);
+            recordId = saasCreditDunningService.addSaasCreditDunning(saasCreditDunningVo).getId();
         }
         if (recordId == null) {
             throw new ApplicationException(CreditErrorCodeEnum.CREDIT_DUNNING_GENERATE_ERROR, "credit_dunning插入失败");
