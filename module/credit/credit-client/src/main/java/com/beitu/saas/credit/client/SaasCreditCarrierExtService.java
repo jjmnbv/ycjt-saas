@@ -16,6 +16,4 @@ public interface SaasCreditCarrierExtService<T extends BaseEntity> extends BaseS
 
     SaasCreditCarrierExtVo getByRecordId(Long recordId);
 
-    Boolean updateSuccess(Long id);
-
 }

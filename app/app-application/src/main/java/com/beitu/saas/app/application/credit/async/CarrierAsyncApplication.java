@@ -123,9 +123,8 @@ public class CarrierAsyncApplication {
 
     private void generateCarrierExtReport(CarriersVo carriersVo, Long recordId) {
         SaasCreditCarrierExtVo saasCreditCarrierExtVo = getSaasCreditCarrierExtVo(carriersVo);
-        SaasCreditCarrierExt saasCreditCarrierExt = SaasCreditCarrierExtVo.convertVOToEntity(saasCreditCarrierExtVo);
-        saasCreditCarrierExt.setRecordId(recordId);
-        saasCreditCarrierExtService.create(saasCreditCarrierExt);
+        saasCreditCarrierExtVo.setRecordId(recordId);
+        saasCreditCarrierExtService.addSaasCreditCarrierExt(saasCreditCarrierExtVo);
     }
 
     private void generateCarrierRecordReport(CarriersVo carriersVo, Long recordId) {

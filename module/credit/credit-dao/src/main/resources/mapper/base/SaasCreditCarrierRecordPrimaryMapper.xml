@@ -30,7 +30,7 @@
     calling_duration,
     called_duration,
     total_duration,
-    type,
+    `type`,
     deleted,
     gmt_modified,
     gmt_create
@@ -76,7 +76,7 @@
                 total_duration,
             </if>
             <if test="type !=null">
-                type,
+                `type`,
             </if>
             <if test="deleted !=null">
                 deleted,
@@ -162,7 +162,7 @@
                 total_duration = #{totalDuration,jdbcType=INTEGER},
             </if>
             <if test="type !=null">
-                type = #{type,jdbcType=TINYINT},
+                `type` = #{type,jdbcType=TINYINT},
             </if>
             <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},
@@ -228,7 +228,7 @@
                 and total_duration = #{totalDuration,jdbcType=INTEGER}
             </if>
             <if test="type !=null">
-                and type = #{type,jdbcType=TINYINT}
+                and `type` = #{type,jdbcType=TINYINT}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}
@@ -276,7 +276,7 @@
                 and total_duration = #{totalDuration,jdbcType=INTEGER}
             </if>
             <if test="type !=null">
-                and type = #{type,jdbcType=TINYINT}
+                and `type` = #{type,jdbcType=TINYINT}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}

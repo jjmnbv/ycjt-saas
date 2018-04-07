@@ -6,9 +6,13 @@ import com.beitu.saas.credit.domain.SaasCreditDunningVo;
 import com.beitu.saas.credit.entity.SaasCreditDunning;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.fqgj.common.utils.CollectionUtils;
 import com.fqgj.log.enhance.Module;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * User: jungle
@@ -25,12 +29,20 @@ public class SaasCreditDunningServiceImpl extends AbstractBaseService implements
 
     @Override
     public SaasCreditDunningVo getByMerchantCodeAndBorrowerCode(String merchantCode, String borrowerCode) {
-        return null;
+        List<SaasCreditDunning> saasCreditDunningList = saasCreditDunningDao.selectByParams(new HashMap<String, Object>(4) {{
+            put("merchantCode", merchantCode);
+            put("borrowerCode", borrowerCode);
+            put("deleted", Boolean.FALSE);
+        }});
+        if (CollectionUtils.isEmpty(saasCreditDunningList)) {
+            return null;
+        }
+        return SaasCreditDunningVo.convertEntityToVO(saasCreditDunningList.get(0));
     }
 
     @Override
     public SaasCreditDunning addSaasCreditDunning(SaasCreditDunningVo saasCreditDunningVo) {
-        return null;
+        return saasCreditDunningDao.insert(SaasCreditDunningVo.convertVOToEntity(saasCreditDunningVo));
     }
 
     @Override

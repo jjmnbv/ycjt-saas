@@ -42,7 +42,7 @@
     call_duration_above60,
     first_call_time,
     last_call_time,
-    type,
+    `type`,
     deleted,
     gmt_modified,
     gmt_create
@@ -106,7 +106,7 @@
                 last_call_time,
             </if>
             <if test="type !=null">
-                type,
+                `type`,
             </if>
             <if test="deleted !=null">
                 deleted,
@@ -228,7 +228,7 @@
                 last_call_time = #{lastCallTime,jdbcType=VARCHAR},
             </if>
             <if test="type !=null">
-                type = #{type,jdbcType=TINYINT},
+                `type` = #{type,jdbcType=TINYINT},
             </if>
             <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},
@@ -312,7 +312,7 @@
                 and last_call_time = #{lastCallTime,jdbcType=VARCHAR}
             </if>
             <if test="type !=null">
-                and type = #{type,jdbcType=TINYINT}
+                and `type` = #{type,jdbcType=TINYINT}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}
@@ -378,7 +378,7 @@
                 and last_call_time = #{lastCallTime,jdbcType=VARCHAR}
             </if>
             <if test="type !=null">
-                and type = #{type,jdbcType=TINYINT}
+                and `type` = #{type,jdbcType=TINYINT}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}
