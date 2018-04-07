@@ -71,7 +71,6 @@ public class CarrierApplication {
     @Autowired
     private DunningReportApplication dunningReportApplication;
 
-
     public String getCarrierH5Url(String borrowerCode, String mobile) {
         String taskId = redisClient.get(RedisKeyConsts.H5_CARRIER_CRAWLING, borrowerCode + "");
         if (StringUtils.isNotEmpty(taskId)) {

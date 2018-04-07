@@ -58,7 +58,7 @@ public class DunningAsyncApplication {
         if (saasCreditCarrierVo == null) {
             throw new ApplicationException(CreditErrorCodeEnum.CREDIT_CARRIER_DATA_LACK);
         }
-        if (saasCreditCarrierVo.getSuccess()) {
+        if (saasCreditDunningService.effectivenessCreditDunning(borrowerCode)) {
             return;
         }
         String result = dianhuaHandler.getDunningVo(saasCreditCarrierVo.getUrl());
@@ -78,6 +78,7 @@ public class DunningAsyncApplication {
             saasCreditDunningVo.setMobile(resultVo.getData().getTel());
             saasCreditDunningVo.setTotalNum(resultVo.getData().getTotalNum());
             saasCreditDunningVo.setEffectiveNum(resultVo.getData().getEffectiveNum());
+            saasCreditDunningVo.setSuccess(Boolean.FALSE);
             String url = uploadDunningData(borrowerCode, result);
             saasCreditDunningVo.setUrl(url);
             recordId = saasCreditDunningService.addSaasCreditDunning(saasCreditDunningVo).getId();

@@ -245,38 +245,6 @@ CREATE TABLE `saas_borrower_work_info` (
   KEY `idy_order_numb` (`order_numb`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='SAAS借款人工作信息表';
 
-DROP TABLE IF EXISTS `saas_borrower_carrier`;
-CREATE TABLE `saas_borrower_carrier` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '表ID',
-  `borrower_code` varchar(32) NOT NULL COMMENT '借款人CODE',
-  `url` varchar(128) NOT NULL COMMENT '运营商数据存储地址',
-  `mobile` varchar(16) DEFAULT NULL COMMENT '手机号',
-  `expire_date` datetime DEFAULT NULL COMMENT '过期时间',
-  `success` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否成功',
-  `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
-  `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后修改时间',
-  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  PRIMARY KEY (`id`),
-  KEY `idx_borrower_code` (`borrower_code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='SAAS借款人运营商报告信息表';
-
-DROP TABLE IF EXISTS `saas_borrower_carrier_ext`;
-CREATE TABLE `saas_borrower_carrier_ext` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '表ID',
-  `borrower_code` varchar(32) NOT NULL COMMENT '借款人CODE',
-  `activeRegion` varchar(128) NOT NULL COMMENT '活跃地区',
-  `registerRegion` varchar(128) NOT NULL COMMENT '入网地区',
-  `mostContactRegion` varchar(128) NOT NULL COMMENT '联系人最多地区',
-  `interactionCount` int(11) unsigned NOT NULL COMMENT '互通联系人数量',
-  `totalDuration` int(11) unsigned NOT NULL COMMENT '总通话时长',
-  `nightDuration` int(11) unsigned NOT NULL COMMENT '夜间通话时长',
-  `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
-  `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后修改时间',
-  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  PRIMARY KEY (`id`),
-  KEY `idx_borrower_code` (`borrower_code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='SAAS借款人运营商报告扩充资料表';
-
 DROP TABLE IF EXISTS `saas_user_esign_authorization`;
 CREATE TABLE `saas_user_esign_authorization` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '表ID',

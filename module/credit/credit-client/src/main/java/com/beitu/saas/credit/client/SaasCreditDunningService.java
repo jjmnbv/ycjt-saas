@@ -14,6 +14,8 @@ public interface SaasCreditDunningService<T extends BaseEntity> extends BaseServ
 
     SaasCreditDunning addSaasCreditDunning(SaasCreditDunningVo saasCreditDunningVo);
 
+    Boolean effectivenessCreditDunning(String borrowerCode);
+
     SaasCreditDunningVo getByMerchantCodeAndBorrowerCode(String merchantCode, String borrowerCode);
 
     Boolean updateSuccess(Long id);

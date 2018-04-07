@@ -42,33 +42,33 @@ import java.util.Objects;
  */
 @Component
 public class LoanPlatformApplication {
-    
+
     private static final Log LOGGER = LogFactory.getLog(LoanPlatformApplication.class);
-    
+
     @Autowired
     private ConfigUtil configUtil;
-    
+
     @Autowired
     private RedisClient redisClient;
-    
+
     @Autowired
     private OSSService ossService;
-    
+
     @Autowired
     private RiskIntergrationService riskIntergrationService;
-    
+
     @Autowired
     private SaasBorrowerLoanCrawlService saasBorrowerLoanCrawlService;
-    
-    @Autowired
-    private SaasOrderService saasOrderService;
-    
+
     public String getLoanPlatformUrl(String borrowerCode, String channelCode, SaasLoanPlatformEnum saasLoanPlatformEnum) {
         String userCode = borrowerCode;
         String website = saasLoanPlatformEnum.getWebsite();
         String value = redisClient.get(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, userCode, website);
         if (StringUtils.isNotEmpty(value)) {
             throw new ApplicationException("正在认证中,请稍后再试");
+        }
+        if (saasBorrowerLoanCrawlService.effectivenessLoanCrawl(borrowerCode, saasLoanPlatformEnum.getCode())) {
+            throw new ApplicationException("已认证，无需重复认证");
         }
         LoanPlatformCrawlingParam param = new LoanPlatformCrawlingParam();
         LoanPlatformEnum platformEnum = LoanPlatformEnum.getByCode(saasLoanPlatformEnum.getCode());
@@ -80,7 +80,7 @@ public class LoanPlatformApplication {
         }
         String taskId = prefixDto.getPrefix() + "_" + borrowerCode;
         param.setTaskId(taskId);
-        
+
         StringBuilder urlSb = new StringBuilder();
         urlSb.append(configUtil.getApiWebPath() + "/credit/loan/platform/juxinli/crawling?param=");
         urlSb.append(taskId + "_");
@@ -88,7 +88,7 @@ public class LoanPlatformApplication {
         urlSb.append(prefixDto.getTimestamp() + "_");
         urlSb.append(channelCode);
         param.setJumpUrl(urlSb.toString());
-        
+
         LOGGER.info("得到{}借贷平台地址......taskId:{};borrowerCode:{}", saasLoanPlatformEnum.getMsg(), taskId, borrowerCode);
         LoanPlatformCrawlingDto resultDto = riskIntergrationService.loanPlatformCrawlingUrl(param);
         if (!Objects.equals(LoanPlatformCrawlingCodeEnum.SUCCESS.getCode(), resultDto.getCode())) {
@@ -97,7 +97,7 @@ public class LoanPlatformApplication {
         }
         return resultDto.getUrl();
     }
-    
+
     public String juxinliCallbackProcess(String requestString) {
         JuxinliCallbackDataPojo pojo;
         try {
@@ -125,7 +125,7 @@ public class LoanPlatformApplication {
         if (!Objects.equals(LoanPlatformQueryCodeEnum.SUCCESS.getCode(), dto.getCode())) {
             return "查询" + pojo.getWebsite() + "借贷平台爬虫结果失败......taskId:" + pojo.getTaskId() + ";msg:" + dto.getMsg();
         }
-        
+
         SaasLoanPlatformEnum platformEnum = SaasLoanPlatformEnum.getByWebsite(pojo.getWebsite());
         String userCode = getUserCodeFromTaskId(pojo.getTaskId());
         String url = uploadLoanPlatformData(userCode, platformEnum, dto.getData());
@@ -136,7 +136,7 @@ public class LoanPlatformApplication {
         redisClient.del(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, userCode, pojo.getWebsite());
         return null;
     }
-    
+
     public String juxinliCrawlingProcess(String paramString) {
         String taskId = null;
         String website = null;
@@ -159,7 +159,7 @@ public class LoanPlatformApplication {
         return "redirect:" + configUtil.getAddressURLPrefix() + configUtil.getH5AddressURLPrefix()
                 + "?channel=" + channelCode + "#/thirdLoading";
     }
-    
+
     public LoanPlatformQueryPojo getLoanPlatformData(String borrowerCode, SaasLoanPlatformEnum platformEnum) {
         SaasBorrowerLoanCrawlVo vo = saasBorrowerLoanCrawlService.getSaasBorrowerLoanCrawl(borrowerCode, platformEnum.getCode());
         if (vo == null) {
@@ -176,7 +176,7 @@ public class LoanPlatformApplication {
         }
         return pojo;
     }
-    
+
     private Boolean validateSign(JuxinliCallbackDataPojo pojo) {
         String orgId = configUtil.getJuXinLiOrgId();
         String apiKey = configUtil.getJuXinLiApiKey();
@@ -184,7 +184,7 @@ public class LoanPlatformApplication {
         String sign = pojo.getSign();
         return Objects.equals(sign, MD5.md5(orgId + apiKey + token));
     }
-    
+
     private Boolean validateTaskIdPrefix(JuxinliCallbackDataPojo pojo) {
         String taskId = pojo.getTaskId();
         String prefix = getPrefixFromTaskId(taskId);
@@ -197,7 +197,7 @@ public class LoanPlatformApplication {
         }
         return Boolean.TRUE;
     }
-    
+
     private String pollingRedisTimestamp(String userCode, String website) {
         String timestamp = null;
         for (int i = 0; i < 40; i++) {
@@ -213,7 +213,7 @@ public class LoanPlatformApplication {
         }
         return timestamp;
     }
-    
+
     private String getPrefixFromTaskId(String taskId) {
         if (StringUtils.isEmpty(taskId)) {
             return null;
@@ -225,7 +225,7 @@ public class LoanPlatformApplication {
         }
         return prefix;
     }
-    
+
     private String getUserCodeFromTaskId(String taskId) {
         if (StringUtils.isEmpty(taskId)) {
             return null;
@@ -237,7 +237,7 @@ public class LoanPlatformApplication {
         }
         return userCode;
     }
-    
+
     private String uploadLoanPlatformData(String userCode, SaasLoanPlatformEnum platformEnum, String data) {
         String loanPlatformUrl = "loanPlatformData/";
         if (configUtil.isServerTest()) {
@@ -247,5 +247,5 @@ public class LoanPlatformApplication {
         loanPlatformUrl += platformEnum.getWebsite() + "_" + userTime + "_" + MD5.md5(userTime + System.currentTimeMillis()) + ".json";
         return ossService.uploadFile(loanPlatformUrl, data);
     }
-    
+
 }

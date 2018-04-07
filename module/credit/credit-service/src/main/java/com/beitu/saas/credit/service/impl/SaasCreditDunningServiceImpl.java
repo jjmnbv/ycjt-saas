@@ -1,5 +1,6 @@
 package com.beitu.saas.credit.service.impl;
 
+import com.beitu.saas.common.utils.DateUtil;
 import com.beitu.saas.credit.client.SaasCreditDunningService;
 import com.beitu.saas.credit.dao.SaasCreditDunningDao;
 import com.beitu.saas.credit.domain.SaasCreditDunningVo;
@@ -38,6 +39,22 @@ public class SaasCreditDunningServiceImpl extends AbstractBaseService implements
             return null;
         }
         return SaasCreditDunningVo.convertEntityToVO(saasCreditDunningList.get(saasCreditDunningList.size() - 1));
+    }
+
+    @Override
+    public Boolean effectivenessCreditDunning(String borrowerCode) {
+        List<SaasCreditDunning> saasCreditDunningList = saasCreditDunningDao.selectByParams(new HashMap<String, Object>(4) {{
+            put("borrowerCode", borrowerCode);
+            put("deleted", Boolean.FALSE);
+        }});
+        if (CollectionUtils.isEmpty(saasCreditDunningList)) {
+            return Boolean.FALSE;
+        }
+        SaasCreditDunning latestSaasCreditDunning = saasCreditDunningList.get(saasCreditDunningList.size() - 1);
+        if (latestSaasCreditDunning.getSuccess() && DateUtil.isExceedOneMonth(latestSaasCreditDunning.getGmtCreate())) {
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
     }
 
     @Override
