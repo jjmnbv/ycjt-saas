@@ -178,16 +178,8 @@ public class H5Controller {
     @ResponseBody
     @ApiOperation(value = "风控项列表获取", response = CreditModuleListResponse.class)
     public DataApiResponse<CreditModuleListResponse> listCreditModule() {
-        String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
-        if (StringUtils.isEmpty(channelCode)) {
-            return new DataApiResponse<>(ChannelErrorCodeEnum.DISABLE_CHANNEL);
-        }
-        SaasH5ChannelVo saasH5ChannelVo = saasChannelApplication.getSaasChannelBychannelCode(channelCode);
-        if (saasH5ChannelVo == null) {
-            throw new ApplicationException(ChannelErrorCodeEnum.DISABLE_CHANNEL);
-        }
-        String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
-        return new DataApiResponse<>(new CreditModuleListResponse(creditApplication.listCreditModule(channelCode, borrowerCode)));
+        SaasBorrowerVo saasBorrowerVo = RequestLocalInfo.getCurrentAdmin().getSaasBorrower();
+        return new DataApiResponse<>(new CreditModuleListResponse(creditApplication.listCreditModule(saasBorrowerVo.getMerchantCode(),saasBorrowerVo.getChannelCode(), saasBorrowerVo.getBorrowerCode())));
     }
 
     @RequestMapping(value = "/credit/apply/info/get", method = RequestMethod.POST)

@@ -42,7 +42,7 @@ public class SaasCreditBmpServiceImpl extends AbstractBaseService implements Saa
         if (CollectionUtils.isEmpty(saasCreditBmpList)) {
             return null;
         }
-        return SaasCreditBmpVo.convertEntityToVO(saasCreditBmpList.get(0));
+        return SaasCreditBmpVo.convertEntityToVO(saasCreditBmpList.get(saasCreditBmpList.size() - 1));
     }
 
     @Override

@@ -41,7 +41,7 @@ public class SaasCreditTongdunDetailServiceImpl extends AbstractBaseService impl
         if (CollectionUtils.isEmpty(saasCreditTongdunDetailList)) {
             return null;
         }
-        return SaasCreditTongdunDetailVo.convertEntityToVO(saasCreditTongdunDetailList.get(0));
+        return SaasCreditTongdunDetailVo.convertEntityToVO(saasCreditTongdunDetailList.get(saasCreditTongdunDetailList.size() - 1));
     }
 }
 

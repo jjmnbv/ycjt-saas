@@ -2,6 +2,7 @@ package com.beitu.saas.app.application.credit.async;
 
 import com.beitu.saas.app.application.credit.vo.CreditDunningDetailVo;
 import com.beitu.saas.common.config.ConfigUtil;
+import com.beitu.saas.common.enums.RestCodeEnum;
 import com.beitu.saas.common.handle.dianhua.DianhuaHandler;
 import com.beitu.saas.common.handle.dianhua.domain.DunningDataVo;
 import com.beitu.saas.common.handle.dianhua.domain.DunningResultVo;
@@ -89,7 +90,7 @@ public class DunningAsyncApplication {
             saasCreditDunningDetailService.batchAddSaasCreditDunningDetail(list);
         }
         if (!saasCreditDunningService.updateSuccess(recordId)) {
-
+            throw new ApplicationException(CreditErrorCodeEnum.UPDATE_FAILURE);
         }
     }
 

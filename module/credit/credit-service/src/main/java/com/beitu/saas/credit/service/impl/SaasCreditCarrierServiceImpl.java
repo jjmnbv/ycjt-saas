@@ -1,5 +1,6 @@
 package com.beitu.saas.credit.service.impl;
 
+import com.beitu.saas.common.utils.DateUtil;
 import com.beitu.saas.credit.client.SaasCreditCarrierService;
 import com.beitu.saas.credit.dao.SaasCreditCarrierDao;
 import com.beitu.saas.credit.domain.SaasCreditCarrierVo;
@@ -33,6 +34,22 @@ public class SaasCreditCarrierServiceImpl extends AbstractBaseService implements
     }
 
     @Override
+    public Boolean effectivenessCreditCarrier(String borrowerCode) {
+        List<SaasCreditCarrier> saasCreditCarrierList = saasCreditCarrierDao.selectByParams(new HashMap<String, Object>(4) {{
+            put("borrowerCode", borrowerCode);
+            put("deleted", Boolean.FALSE);
+        }});
+        if (CollectionUtils.isEmpty(saasCreditCarrierList)) {
+            return Boolean.FALSE;
+        }
+        SaasCreditCarrier saasCreditCarrier = saasCreditCarrierList.get(saasCreditCarrierList.size() - 1);
+        if (saasCreditCarrier.getSuccess() && DateUtil.isExceedOneMonth(saasCreditCarrier.getGmtCreate())) {
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
+    }
+
+    @Override
     public SaasCreditCarrierVo getByMerchantCodeAndBorrowerCode(String merchantCode, String borrowerCode) {
         List<SaasCreditCarrier> saasCreditCarrierList = saasCreditCarrierDao.selectByParams(new HashMap<String, Object>(4) {{
             put("merchantCode", merchantCode);
@@ -42,7 +59,7 @@ public class SaasCreditCarrierServiceImpl extends AbstractBaseService implements
         if (CollectionUtils.isEmpty(saasCreditCarrierList)) {
             return null;
         }
-        return SaasCreditCarrierVo.convertEntityToVO(saasCreditCarrierList.get(0));
+        return SaasCreditCarrierVo.convertEntityToVO(saasCreditCarrierList.get(saasCreditCarrierList.size() - 1));
     }
 
     @Override

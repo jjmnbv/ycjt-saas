@@ -37,7 +37,7 @@ public class SaasCreditDunningServiceImpl extends AbstractBaseService implements
         if (CollectionUtils.isEmpty(saasCreditDunningList)) {
             return null;
         }
-        return SaasCreditDunningVo.convertEntityToVO(saasCreditDunningList.get(0));
+        return SaasCreditDunningVo.convertEntityToVO(saasCreditDunningList.get(saasCreditDunningList.size() - 1));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.beitu.saas.credit.service.impl;
 
+import com.beitu.saas.common.utils.DateUtil;
 import com.beitu.saas.credit.client.SaasCreditTongdunService;
 import com.beitu.saas.credit.dao.SaasCreditTongdunDao;
 import com.beitu.saas.credit.domain.SaasCreditTongdunVo;
@@ -33,6 +34,22 @@ public class SaasCreditTongdunServiceImpl extends AbstractBaseService implements
     }
 
     @Override
+    public Boolean effectivenessCreditTongdun(String borrowerCode) {
+        List<SaasCreditTongdun> saasCreditTongdunList = saasCreditTongdunDao.selectByParams(new HashMap<String, Object>(4) {{
+            put("borrowerCode", borrowerCode);
+            put("deleted", Boolean.FALSE);
+        }});
+        if (CollectionUtils.isEmpty(saasCreditTongdunList)) {
+            return Boolean.FALSE;
+        }
+        SaasCreditTongdun latestSaasCreditTongdun = saasCreditTongdunList.get(saasCreditTongdunList.size() - 1);
+        if (latestSaasCreditTongdun.getSuccess() && DateUtil.isExceedOneMonth(latestSaasCreditTongdun.getGmtCreate())) {
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
+    }
+
+    @Override
     public SaasCreditTongdunVo getByMerchantCodeAndBorrowerCode(String merchantCode, String borrowerCode) {
         List<SaasCreditTongdun> saasCreditTongdunList = saasCreditTongdunDao.selectByParams(new HashMap<String, Object>(4) {{
             put("merchantCode", merchantCode);
@@ -42,11 +59,11 @@ public class SaasCreditTongdunServiceImpl extends AbstractBaseService implements
         if (CollectionUtils.isEmpty(saasCreditTongdunList)) {
             return null;
         }
-        return SaasCreditTongdunVo.convertEntityToVO(saasCreditTongdunList.get(0));
+        return SaasCreditTongdunVo.convertEntityToVO(saasCreditTongdunList.get(saasCreditTongdunList.size() - 1));
     }
 
     @Override
-    public SaasCreditTongdunVo getByMobileAndIdentityCode(String mobile, String identityCode) {
+    public SaasCreditTongdunVo getEffectivenessByMobileAndIdentityCode(String mobile, String identityCode) {
         List<SaasCreditTongdun> saasCreditTongdunList = saasCreditTongdunDao.selectByParams(new HashMap<String, Object>(4) {{
             put("mobile", mobile);
             put("identityCode", identityCode);
@@ -55,7 +72,11 @@ public class SaasCreditTongdunServiceImpl extends AbstractBaseService implements
         if (CollectionUtils.isEmpty(saasCreditTongdunList)) {
             return null;
         }
-        return SaasCreditTongdunVo.convertEntityToVO(saasCreditTongdunList.get(0));
+        SaasCreditTongdun latestSaasCreditTongdun = saasCreditTongdunList.get(saasCreditTongdunList.size() - 1);
+        if (latestSaasCreditTongdun.getSuccess() && DateUtil.isExceedOneDay(latestSaasCreditTongdun.getGmtCreate())) {
+            return SaasCreditTongdunVo.convertEntityToVO(latestSaasCreditTongdun);
+        }
+        return null;
     }
 
     @Override

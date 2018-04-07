@@ -17,6 +17,7 @@ import com.beitu.saas.credit.domain.SaasCreditTongdunDetailVo;
 import com.beitu.saas.credit.domain.SaasCreditTongdunVo;
 import com.beitu.saas.credit.entity.SaasCreditTongdun;
 import com.beitu.saas.credit.entity.SaasCreditTongdunDetail;
+import com.beitu.saas.credit.enums.CreditErrorCodeEnum;
 import com.beitu.saas.risk.client.service.TripleSubscriptionService;
 import com.beitu.saas.risk.domain.enums.triple.TripleServiceTypeEnum;
 import com.beitu.saas.risk.domain.platform.tongdun.TripleTongDunReportQueryOutput;
@@ -83,23 +84,20 @@ public class TongdunAsyncApplication {
         if (hasSaasCreditTongdunVo != null && hasSaasCreditTongdunVo.getSuccess()) {
             return;
         }
-        SaasCreditTongdunVo saasCreditTongdunVo = saasCreditTongdunService.getByMobileAndIdentityCode(saasBorrowerVo.getMobile(), saasBorrowerRealInfoVo.getIdentityCode());
+        SaasCreditTongdunVo saasCreditTongdunVo = saasCreditTongdunService.getEffectivenessByMobileAndIdentityCode(saasBorrowerVo.getMobile(), saasBorrowerRealInfoVo.getIdentityCode());
         if (saasCreditTongdunVo != null) {
-            Boolean isExceedOneDay = DateUtil.isExceedOneDay(saasCreditTongdunVo.getGmtCreate());
-            if (isExceedOneDay != null && !isExceedOneDay) {
-                SaasCreditTongdunVo addCreditTongdunVo = new SaasCreditTongdunVo();
-                addCreditTongdunVo.setMerchantCode(merchantCode);
-                addCreditTongdunVo.setBorrowerCode(borrowerCode);
-                addCreditTongdunVo.setMobile(saasBorrowerVo.getMobile());
-                addCreditTongdunVo.setIdentityCode(saasBorrowerRealInfoVo.getIdentityCode());
-                addCreditTongdunVo.setReportId(saasCreditTongdunVo.getReportId());
-                addCreditTongdunVo.setSuccess(Boolean.TRUE);
-                Long recordId = saasCreditTongdunService.addSaasCreditTongdun(addCreditTongdunVo).getId();
-                SaasCreditTongdunDetailVo saasCreditTongdunDetailVo = saasCreditTongdunDetailService.getByRecordId(saasCreditTongdunVo.getSaasCreditTongdunId());
-                saasCreditTongdunDetailVo.setRecordId(recordId);
-                saasCreditTongdunDetailService.addSaasCreditTongdunDetail(saasCreditTongdunDetailVo);
-                return;
-            }
+            SaasCreditTongdunVo addCreditTongdunVo = new SaasCreditTongdunVo();
+            addCreditTongdunVo.setMerchantCode(merchantCode);
+            addCreditTongdunVo.setBorrowerCode(borrowerCode);
+            addCreditTongdunVo.setMobile(saasBorrowerVo.getMobile());
+            addCreditTongdunVo.setIdentityCode(saasBorrowerRealInfoVo.getIdentityCode());
+            addCreditTongdunVo.setReportId(saasCreditTongdunVo.getReportId());
+            addCreditTongdunVo.setSuccess(Boolean.TRUE);
+            Long recordId = saasCreditTongdunService.addSaasCreditTongdun(addCreditTongdunVo).getId();
+            SaasCreditTongdunDetailVo saasCreditTongdunDetailVo = saasCreditTongdunDetailService.getByRecordId(saasCreditTongdunVo.getSaasCreditTongdunId());
+            saasCreditTongdunDetailVo.setRecordId(recordId);
+            saasCreditTongdunDetailService.addSaasCreditTongdunDetail(saasCreditTongdunDetailVo);
+            return;
         }
         TripleTongdunReportIdInput tripleTongdunReportIdInput = new TripleTongdunReportIdInput();
         tripleTongdunReportIdInput.setIdCard(saasBorrowerRealInfoVo.getIdentityCode()).setMobile(saasBorrowerVo.getMobile()).setRealName(saasBorrowerRealInfoVo.getName());
@@ -124,7 +122,7 @@ public class TongdunAsyncApplication {
         }
     }
 
-    public void generateTongdunDetail(String reportId, Long recordId) {
+    private void generateTongdunDetail(String reportId, Long recordId) {
         TripleTongdunReportQueryInput tripleTongdunReportQueryInput = new TripleTongdunReportQueryInput();
         tripleTongdunReportQueryInput.setReportId(reportId);
         TripleServiceResult response = tripleSubscriptionService.getTripleServiceResult(ProductTypeEnum.YCJT, TripleServiceTypeEnum.TONGDUN_REPORT_QUERY, tripleTongdunReportQueryInput);
@@ -138,7 +136,9 @@ public class TongdunAsyncApplication {
         if (tongDunVo != null && StringUtils.isNotEmpty(tongDunVo.getFinalScore())) {
             SaasCreditTongdunDetail creditTongdunDetail = transform(tongDunVo, reportId, recordId);
             saasCreditTongdunDetailService.create(creditTongdunDetail);
-            saasCreditTongdunService.updateSuccess(recordId);
+            if (!saasCreditTongdunService.updateSuccess(recordId)) {
+                throw new ApplicationException(CreditErrorCodeEnum.UPDATE_FAILURE);
+            }
         } else if (tongDunVo != null) {
             LOGGER.error("reportId:{},查询出的同盾分为null", reportId);
         } else {

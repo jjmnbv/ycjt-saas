@@ -41,7 +41,7 @@ public class SaasCreditCarrierExtServiceImpl extends AbstractBaseService impleme
         if (CollectionUtils.isEmpty(saasCreditCarrierExtList)) {
             return null;
         }
-        return SaasCreditCarrierExtVo.convertEntityToVO(saasCreditCarrierExtList.get(0));
+        return SaasCreditCarrierExtVo.convertEntityToVO(saasCreditCarrierExtList.get(saasCreditCarrierExtList.size() - 1));
     }
 
 }

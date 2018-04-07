@@ -14,9 +14,11 @@ public interface SaasCreditTongdunService<T extends BaseEntity> extends BaseServ
 
     SaasCreditTongdun addSaasCreditTongdun(SaasCreditTongdunVo saasCreditTongdunVo);
 
+    Boolean effectivenessCreditTongdun(String borrowerCode);
+
     SaasCreditTongdunVo getByMerchantCodeAndBorrowerCode(String merchantCode, String borrowerCode);
 
-    SaasCreditTongdunVo getByMobileAndIdentityCode(String mobile, String identityCode);
+    SaasCreditTongdunVo getEffectivenessByMobileAndIdentityCode(String mobile, String identityCode);
 
     Boolean updateSuccess(Long id);
 

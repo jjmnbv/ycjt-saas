@@ -23,46 +23,47 @@ public enum CreditErrorCodeEnum implements ErrorCodeEnum, MsgCodeEnum {
     CREDIT_BMP_GENERATE_ERROR(91012, "电话匹配报告生成异常", HttpStatus.OK),
     CREDIT_DS_SERVICE_DOWN(91013, "服务不可用", HttpStatus.OK),
     CREDIT_DS_SERVICE_BUSY(91014, "服务调用过于频繁", HttpStatus.OK),
-    CREDIT_REPORT_NOT_EXIST(91015, "用户未生成报告", HttpStatus.OK)
-    ;
-    
+    CREDIT_REPORT_NOT_EXIST(91015, "用户未生成报告", HttpStatus.OK),
+    CREDIT_CARRIER_REPORT_EXIST(91016, "运营商已认证，无需重新认证", HttpStatus.OK),
+    UPDATE_FAILURE(91017, "发生未知错误导致更新失败", HttpStatus.OK);
+
     private Integer code;
-    
+
     private String msg;
-    
+
     private HttpStatus httpStatus;
-    
+
     CreditErrorCodeEnum(Integer code, String msg, HttpStatus httpStatus) {
         this.code = code;
         this.msg = msg;
         this.httpStatus = httpStatus;
     }
-    
+
     @Override
     public Integer getCode() {
         return code;
     }
-    
+
     public CreditErrorCodeEnum setCode(Integer code) {
         this.code = code;
         return this;
     }
-    
+
     @Override
     public String getMsg() {
         return msg;
     }
-    
+
     public CreditErrorCodeEnum setMsg(String msg) {
         this.msg = msg;
         return this;
     }
-    
+
 
     public HttpStatus getHttpStatus() {
         return httpStatus;
     }
-    
+
     public CreditErrorCodeEnum setHttpStatus(HttpStatus httpStatus) {
         this.httpStatus = httpStatus;
         return this;

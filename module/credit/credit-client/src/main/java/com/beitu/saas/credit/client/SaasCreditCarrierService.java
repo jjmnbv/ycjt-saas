@@ -14,6 +14,8 @@ public interface SaasCreditCarrierService<T extends BaseEntity> extends BaseServ
 
     SaasCreditCarrier addSaasCreditCarrier(SaasCreditCarrierVo saasCreditCarrierVo);
 
+    Boolean effectivenessCreditCarrier(String borrowerCode);
+
     SaasCreditCarrierVo getByMerchantCodeAndBorrowerCode(String merchantCode, String borrowerCode);
 
     Boolean updateSuccess(Long id);

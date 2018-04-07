@@ -70,7 +70,9 @@ public class CarrierAsyncApplication {
         generateCarrierExtReport(carriersVo, recordId);
         generateCarrierRecordReport(carriersVo, recordId);
 
-        saasCreditCarrierService.updateSuccess(recordId);
+        if (!saasCreditCarrierService.updateSuccess(recordId)) {
+            throw new ApplicationException(CreditErrorCodeEnum.UPDATE_FAILURE);
+        }
     }
 
     private void generateCarrierBaseReport(CarriersVo carriersVo, Long recordId) {
