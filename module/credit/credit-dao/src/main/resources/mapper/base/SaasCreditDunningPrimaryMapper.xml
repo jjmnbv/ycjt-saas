@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beitu.saas.credit.dao.impl.SaasCreditDunningDaoImpl">
+    <resultMap id="BaseResultMap" type="com.beitu.saas.credit.entity.SaasCreditDunning">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode"/>
+        <result column="borrower_code" jdbcType="VARCHAR" property="borrowerCode"/>
+        <result column="carrier_id" jdbcType="BIGINT" property="carrierId"/>
+        <result column="sid" jdbcType="VARCHAR" property="sid"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="total_num" jdbcType="INTEGER" property="totalNum"/>
+        <result column="effective_num" jdbcType="INTEGER" property="effectiveNum"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="success" jdbcType="BIT" property="success"/>
+        <result column="deleted" jdbcType="BIT" property="deleted"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id,
+    merchant_code,
+    borrower_code,
+    carrier_id,
+    sid,
+    mobile,
+    total_num,
+    effective_num,
+    url,
+    success,
+    deleted,
+    gmt_modified,
+    gmt_create
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Long"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_credit_dunning
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" keyColumn="id" keyProperty="id"
+            parameterType="com.beitu.saas.credit.entity.SaasCreditDunning" useGeneratedKeys="true">
+        insert into saas_credit_dunning
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="merchantCode !=null">
+                merchant_code,
+            </if>
+            <if test="borrowerCode !=null">
+                borrower_code,
+            </if>
+            <if test="carrierId !=null">
+                carrier_id,
+            </if>
+            <if test="sid !=null">
+                sid,
+            </if>
+            <if test="mobile !=null">
+                mobile,
+            </if>
+            <if test="totalNum !=null">
+                total_num,
+            </if>
+            <if test="effectiveNum !=null">
+                effective_num,
+            </if>
+            <if test="url !=null">
+                url,
+            </if>
+            <if test="success !=null">
+                success,
+            </if>
+            <if test="deleted !=null">
+                deleted,
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified,
+            </if>
+            <if test="gmtCreate !=null">
+                gmt_create,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="merchantCode != null">
+                #{merchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="borrowerCode != null">
+                #{borrowerCode,jdbcType=VARCHAR},
+            </if>
+            <if test="carrierId != null">
+                #{carrierId,jdbcType=BIGINT},
+            </if>
+            <if test="sid != null">
+                #{sid,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null">
+                #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="totalNum != null">
+                #{totalNum,jdbcType=INTEGER},
+            </if>
+            <if test="effectiveNum != null">
+                #{effectiveNum,jdbcType=INTEGER},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="success != null">
+                #{success,jdbcType=BIT},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.beitu.saas.credit.entity.SaasCreditDunning">
+        update saas_credit_dunning
+        <set>
+            <if test="merchantCode !=null">
+                merchant_code = #{merchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="borrowerCode !=null">
+                borrower_code = #{borrowerCode,jdbcType=VARCHAR},
+            </if>
+            <if test="carrierId !=null">
+                carrier_id = #{carrierId,jdbcType=BIGINT},
+            </if>
+            <if test="sid !=null">
+                sid = #{sid,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile !=null">
+                mobile = #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="totalNum !=null">
+                total_num = #{totalNum,jdbcType=INTEGER},
+            </if>
+            <if test="effectiveNum !=null">
+                effective_num = #{effectiveNum,jdbcType=INTEGER},
+            </if>
+            <if test="url !=null">
+                url = #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="success !=null">
+                success = #{success,jdbcType=BIT},
+            </if>
+            <if test="deleted !=null">
+                deleted = #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteByPrimaryKey">
+        update  saas_credit_dunning
+        set deleted = 1
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <sql id="paginationSql">
+        <if test="page != null">
+            limit #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+        </if>
+    </sql>
+
+    <sql id="paging">
+        <if test="offset != null and limit != null">
+            limit #{offset},#{limit}
+        </if>
+    </sql>
+
+    <select id="selectByParams" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_credit_dunning
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="merchantCode !=null">
+                and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+            </if>
+            <if test="borrowerCode !=null">
+                and borrower_code = #{borrowerCode,jdbcType=VARCHAR}
+            </if>
+            <if test="carrierId !=null">
+                and carrier_id = #{carrierId,jdbcType=BIGINT}
+            </if>
+            <if test="sid !=null">
+                and sid = #{sid,jdbcType=VARCHAR}
+            </if>
+            <if test="mobile !=null">
+                and mobile = #{mobile,jdbcType=VARCHAR}
+            </if>
+            <if test="totalNum !=null">
+                and total_num = #{totalNum,jdbcType=INTEGER}
+            </if>
+            <if test="effectiveNum !=null">
+                and effective_num = #{effectiveNum,jdbcType=INTEGER}
+            </if>
+            <if test="url !=null">
+                and url = #{url,jdbcType=VARCHAR}
+            </if>
+            <if test="success !=null">
+                and success = #{success,jdbcType=BIT}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+        <include refid="paging"/>
+    </select>
+    <select id="queryTotal" resultType="INTEGER">
+        select count(*) from saas_credit_dunning
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="merchantCode !=null">
+                and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+            </if>
+            <if test="borrowerCode !=null">
+                and borrower_code = #{borrowerCode,jdbcType=VARCHAR}
+            </if>
+            <if test="carrierId !=null">
+                and carrier_id = #{carrierId,jdbcType=BIGINT}
+            </if>
+            <if test="sid !=null">
+                and sid = #{sid,jdbcType=VARCHAR}
+            </if>
+            <if test="mobile !=null">
+                and mobile = #{mobile,jdbcType=VARCHAR}
+            </if>
+            <if test="totalNum !=null">
+                and total_num = #{totalNum,jdbcType=INTEGER}
+            </if>
+            <if test="effectiveNum !=null">
+                and effective_num = #{effectiveNum,jdbcType=INTEGER}
+            </if>
+            <if test="url !=null">
+                and url = #{url,jdbcType=VARCHAR}
+            </if>
+            <if test="success !=null">
+                and success = #{success,jdbcType=BIT}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </select>
+</mapper>

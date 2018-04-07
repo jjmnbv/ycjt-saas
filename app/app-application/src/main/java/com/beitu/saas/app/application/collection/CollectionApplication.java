@@ -38,6 +38,7 @@ import java.util.List;
  */
 @Component
 public class CollectionApplication {
+
     private static final Log LOGGER = LogFactory.getLog(CollectionApplication.class);
 
     @Autowired

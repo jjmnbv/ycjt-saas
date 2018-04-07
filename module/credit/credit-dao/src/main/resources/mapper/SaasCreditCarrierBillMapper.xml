@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beitu.saas.credit.dao.impl.SaasCreditCarrierBillDaoImpl">
+
+    <insert id="batchAddSaasCreditCarrierBill" keyColumn="id" keyProperty="id"
+            parameterType="java.util.List" useGeneratedKeys="true">
+        insert into saas_credit_carrier_bill
+        (record_id,
+        bill_date,
+        base_fee,
+        total_fee,
+        calling_time,
+        called_time,
+        calling_duration,
+        called_duration,
+        deleted) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            <trim prefix="(" suffix=")">
+                #{item.recordId,jdbcType=BIGINT},
+                #{item.billDate,jdbcType=DATE},
+                #{item.baseFee,jdbcType=DECIMAL},
+                #{item.totalFee,jdbcType=DECIMAL},
+                #{item.callingTime,jdbcType=INTEGER},
+                #{item.calledTime,jdbcType=INTEGER},
+                #{item.callingDuration,jdbcType=INTEGER},
+                #{item.calledDuration,jdbcType=INTEGER},
+                #{item.deleted,jdbcType=BIT}
+            </trim>
+        </foreach>
+    </insert>
+
+</mapper>

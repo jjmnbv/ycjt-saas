@@ -10,9 +10,11 @@ import com.fqgj.common.entity.BaseEntity;
  * Time: 16:09:15.869
  */
 public interface SaasBorrowerLoanCrawlService<T extends BaseEntity> extends BaseService<T> {
-    
+
     Boolean addSaasBorrowerLoanCrawl(SaasBorrowerLoanCrawlVo saasBorrowerLoanCrawlVo);
-    
+
     SaasBorrowerLoanCrawlVo getSaasBorrowerLoanCrawl(String borrowerCode, Integer platform);
-    
+
+    Boolean effectivenessLoanCrawl(String borrowerCode, Integer platform);
+
 }

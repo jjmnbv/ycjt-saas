@@ -411,6 +411,22 @@ public class DateUtil {
         return c.getTime();
     }
 
+    public static Boolean isExceedOneDay(Date date) {
+        if (date == null) {
+            return null;
+        }
+        long delta = System.currentTimeMillis() - date.getTime();
+        return delta >= (24 * 3600 * 1000);
+    }
+
+    public static Boolean isExceedOneMonth(Date date) {
+        if (date == null) {
+            return null;
+        }
+        long delta = System.currentTimeMillis() - date.getTime();
+        return delta >= (30 * 24 * 3600 * 1000);
+    }
+
     /**
      * 日期相减
      *
@@ -1374,7 +1390,7 @@ public class DateUtil {
         c.setTime(sourceDate);
         Double mins = 60 * hour;
         int i = mins.intValue();
-        c.add(Calendar.MINUTE,i);
+        c.add(Calendar.MINUTE, i);
         return getDate(c.getTime(), "yyyy-MM-dd HH:mm");
     }
 

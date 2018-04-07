@@ -149,4 +149,14 @@
         </if>
     </select>
 
+    <select id="selectMainSaasOrderByOrderNumb" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_order
+        where deleted = false
+        and expire_date <![CDATA[ >= ]]> NOW()
+        and order_numb = #{orderNumb,jdbcType=VARCHAR}
+        and relation_order_id is null
+    </select>
+
 </mapper>

@@ -6,6 +6,7 @@ import com.beitu.saas.borrower.entity.SaasBorrowerLoanCrawl;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,13 +17,13 @@ import java.util.Map;
 
 @Repository
 public class SaasBorrowerLoanCrawlDaoImpl extends AbstractBaseMapper<SaasBorrowerLoanCrawl> implements SaasBorrowerLoanCrawlDao {
-    
+
     @Override
-    public SaasBorrowerLoanCrawl selectByBorrowerCodeAndPlatform(String borrowerCode, Integer platform) {
+    public List<SaasBorrowerLoanCrawl> selectByBorrowerCodeAndPlatform(String borrowerCode, Integer platform) {
         Map<String, Object> params = new HashMap<>(4);
         params.put("borrowerCode", borrowerCode);
         params.put("platform", platform);
-        return this.getSqlSession().selectOne(this.getStatement(".selectByBorrowerCodeAndPlatform"), params);
+        return this.getSqlSession().selectList(this.getStatement(".selectByBorrowerCodeAndPlatform"), params);
     }
-    
+
 }

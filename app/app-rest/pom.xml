@@ -184,6 +184,11 @@
             <artifactId>app-intergration</artifactId>
             <version>0.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.beitu.saas</groupId>
+            <artifactId>credit-service</artifactId>
+            <version>0.1</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>app-rest</finalName>
