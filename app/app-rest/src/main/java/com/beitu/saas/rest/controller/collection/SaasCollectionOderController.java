@@ -1,18 +1,23 @@
 package com.beitu.saas.rest.controller.collection;
 
 import com.beitu.saas.app.annotations.HasPermission;
+import com.beitu.saas.app.annotations.SignIgnore;
+import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.api.ApiResponse;
 import com.beitu.saas.app.application.collection.CollectionApplication;
 import com.beitu.saas.app.application.collection.vo.CollectionOrderListVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.collection.client.SaasCollectionCommentService;
+import com.beitu.saas.collection.domain.OverdueInfoVo;
 import com.beitu.saas.collection.param.CollectionCommentParam;
 import com.beitu.saas.collection.param.CollectionOrderQueryParam;
 import com.beitu.saas.common.consts.ButtonPermissionConsts;
 import com.beitu.saas.rest.controller.collection.request.AddCollectionOrderNoteRequest;
 import com.beitu.saas.rest.controller.collection.request.CollectionOrderQueryRequestParam;
 import com.beitu.saas.rest.controller.collection.response.CollectionOrderListResponse;
+import com.beitu.saas.rest.controller.collection.response.CollectionOverdueInfoResponse;
 import com.fqgj.common.api.Page;
+import com.fqgj.common.api.Response;
 import com.fqgj.common.response.ModuleResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -69,5 +74,18 @@ public class SaasCollectionOderController {
         String followUp = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
         saasCollectionCommentService.createCollectionComment(collectionCommentParam, followCode, followUp);
         return new ApiResponse("新增催记成功");
+    }
+
+
+    /**
+     * 催收模块下拉栏相关数据
+     *
+     * @return
+     */
+    @RequestMapping(value = "/overdueItem/query", method = RequestMethod.POST)
+    @ApiOperation(value = "催收模块下拉栏逾期参数查询", response = CollectionOverdueInfoResponse.class)
+    public Response getOverdueTimeVoList() {
+        List<OverdueInfoVo> overdueTimeVoList = collectionApplication.getOverdueTimeVoList();
+        return Response.ok().putData(new CollectionOverdueInfoResponse(overdueTimeVoList));
     }
 }
