@@ -2,9 +2,15 @@ package com.beitu.saas.app.application;
 
 import com.beitu.saas.app.enums.SaasSmsTypeEnum;
 import com.beitu.saas.auth.domain.SaasMerchantVo;
+import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.auth.entity.SaasMerchantConfig;
+import com.beitu.saas.auth.service.SaasAdminService;
 import com.beitu.saas.auth.service.SaasMerchantConfigService;
 import com.beitu.saas.auth.service.SaasMerchantService;
+import com.beitu.saas.borrower.client.SaasBorrowerService;
+import com.beitu.saas.borrower.domain.SaasBorrowerVo;
+import com.beitu.saas.channel.client.SaasChannelService;
+import com.beitu.saas.channel.entity.SaasChannelEntity;
 import com.beitu.saas.finance.client.SaasSmsHistoryService;
 import com.beitu.saas.sms.client.SmsMsgService;
 import com.beitu.saas.sms.enums.MessageSendErrorCodeEnum;
@@ -43,6 +49,15 @@ public class SendApplication {
     @Autowired
     private SaasSmsHistoryService saasSmsHistoryService;
 
+    @Autowired
+    private SaasAdminService saasAdminService;
+
+    @Autowired
+    private SaasBorrowerService saasBorrowerService;
+
+    @Autowired
+    private SaasChannelService saasChannelService;
+
 
     /**
      * 发送验证码
@@ -55,7 +70,7 @@ public class SendApplication {
         SingleSmsSendRequestRO ro = new SingleSmsSendRequestRO();
         ro.setPhone(mobile);
         ro.setBizCode(verifyCodeTypeEnum.getType());
-        ro.setReplaceParam(new HashMap<String, String>() {{
+        ro.setReplaceParam(new HashMap<String, String>(2) {{
             put("VERIFY_CODE", code);
             put("sign", "贝途科技");
         }});
@@ -66,6 +81,16 @@ public class SendApplication {
         }
     }
 
+    public void sendNotifyMessageByChannelCode(String merchantCode, String channelCode, Map map, SaasSmsTypeEnum saasSmsTypeEnum) {
+        SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(channelCode);
+        SaasAdmin saasAdmin = saasAdminService.getSaasAdminByAdminCode(saasChannelEntity.getChargePersonCode());
+        sendNotifyMessage(merchantCode, saasAdmin.getMobile(), map, saasSmsTypeEnum);
+    }
+
+    public void sendNotifyMessageByBorrowerCode(String merchantCode, String sendCode, Map map, SaasSmsTypeEnum saasSmsTypeEnum) {
+        SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCodeAndMerchantCode(sendCode, merchantCode);
+        sendNotifyMessage(merchantCode, saasBorrowerVo.getMobile(), map, saasSmsTypeEnum);
+    }
 
     public void sendNotifyMessage(String merchantCode, String mobile, Map map, SaasSmsTypeEnum saasSmsTypeEnum) {
         if (saasMerchantConfigService.hasSmsConfig(merchantCode, saasSmsTypeEnum.getBizCode())) {
