@@ -63,7 +63,7 @@ public class ContractCreateApplication {
     @Autowired
     private OrderCalculateApplication orderCalculateApplication;
 
-    public byte[] createAuthorizationPdf(String userCode) {
+    public void createAuthorizationPdf(String userCode, String createFilePath) {
         String name;
         String identityNo = null;
         String creditCode = null;
@@ -90,10 +90,10 @@ public class ContractCreateApplication {
         data.put("identityNo", identityNo);
         data.put("creditCode", creditCode);
         data.put("inscribeDate", DateUtil.getDate(new Date(), ContractConsts.CONTRACT_INSCRIBE_DATE_PATTERN));
-        return generateContract(ContractConsts.AUTHORIZATION_PDF_PATH, data);
+        generateContract(ContractConsts.AUTHORIZATION_PDF_PATH, createFilePath, data);
     }
 
-    public byte[] createLoanPdf(Long orderId) {
+    public void createLoanPdf(Long orderId, String createFilePath) {
         SaasOrder saasOrder = saasOrderService.selectById(orderId);
         if (saasOrder == null) {
             throw new ApplicationException(OrderErrorCodeEnum.ERROR_ORDER_NUMB);
@@ -125,10 +125,10 @@ public class ContractCreateApplication {
         data.put("repaymentDt", DateUtil.getDate(saasOrder.getRepaymentDt()));
         data.put("totalInterestRatio", orderCalculateApplication.getInterestRatio(saasOrder.getTotalInterestRatio()));
         data.put("inscribeDate", DateUtil.getDate(new Date(), ContractConsts.CONTRACT_INSCRIBE_DATE_PATTERN));
-        return generateContract(ContractConsts.LOAN_PDF_PATH, data);
+        generateContract(ContractConsts.LOAN_PDF_PATH, createFilePath, data);
     }
 
-    public byte[] createExtendPdf(Long orderId) {
+    public void createExtendPdf(Long orderId, String createFilePath) {
         SaasOrder saasOrder = saasOrderService.selectById(orderId);
         if (saasOrder == null) {
             throw new ApplicationException(OrderErrorCodeEnum.ERROR_ORDER_NUMB);
@@ -161,10 +161,10 @@ public class ContractCreateApplication {
         data.put("repaymentDt", DateUtil.getDate(saasOrder.getRepaymentDt()));
         data.put("totalInterestRatio", orderCalculateApplication.getInterestRatio(saasOrder.getTotalInterestRatio()));
         data.put("inscribeDate", DateUtil.getDate(new Date(), ContractConsts.CONTRACT_INSCRIBE_DATE_PATTERN));
-        return generateContract(ContractConsts.EXTEND_PDF_PATH, data);
+        generateContract(ContractConsts.EXTEND_PDF_PATH, createFilePath, data);
     }
 
-    private byte[] generateContract(String srcPdfFilePath, Map<String, String> data) {
+    private void generateContract(String srcPdfFilePath, String createFilePath, Map<String, String> data) {
         PdfStamper ps = null;
         ByteArrayOutputStream bos = null;
         OutputStream fos = null;
@@ -184,9 +184,8 @@ public class ContractCreateApplication {
             }
             ps.setFormFlattening(true);
             ps.close();
-            fos = new FileOutputStream(configUtil.getPdfPath() + OrderNoUtil.makeOrderNum() + ContractConsts.TEST_PDF_PATH);
+            fos = new FileOutputStream(createFilePath);
             fos.write(bos.toByteArray());
-            return bos.toByteArray();
         } catch (Exception e) {
             LOGGER.error("合同生成失败，失败原因：{}；文件路径：{}", e.getMessage(), srcPdfFilePath);
         } finally {
@@ -201,7 +200,6 @@ public class ContractCreateApplication {
 
             }
         }
-        return null;
     }
 
     private String getContractNumbByOrderId(Long orderId) {

@@ -15,7 +15,9 @@ import com.beitu.saas.finance.client.enums.CreditConsumeEnum;
 import com.beitu.saas.intergration.esign.EsignIntegrationService;
 import com.beitu.saas.intergration.esign.dto.AddOrganizeAccountSuccessDto;
 import com.beitu.saas.intergration.esign.dto.AddPersonAccountSuccessDto;
-import com.beitu.saas.intergration.esign.param.*;
+import com.beitu.saas.intergration.esign.param.LicenseContractSignParam;
+import com.beitu.saas.intergration.esign.param.OrganizeAccountParam;
+import com.beitu.saas.intergration.esign.param.PersonAccountParam;
 import com.beitu.saas.order.client.SaasOrderService;
 import com.beitu.saas.order.entity.SaasOrder;
 import com.beitu.saas.user.client.SaasUserEsignAuthorizationService;
@@ -26,7 +28,7 @@ import com.fqgj.exception.common.ApplicationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
+import java.io.*;
 
 /**
  * @Author linanjun
@@ -101,30 +103,7 @@ public class ContractApplication {
         }
         String accountId = addPersonAccountSuccessDto.getPersonAccountId();
         String sealData = addPersonAccountSuccessDto.getSealData();
-        String sealUrl = getSealUrl(borrowerCode);
-        ossService.uploadFile(sealUrl, sealData);
-//        LicenseContractSignParam licenseContractSignParam = new LicenseContractSignParam();
-//        licenseContractSignParam.setUserCode(borrowerCode);
-//        licenseContractSignParam.setUserAccountId(accountId);
-//        licenseContractSignParam.setUserSealData(sealData);
-//        licenseContractSignParam.setSrcPdfContent(contractCreateApplication.createAuthorizationPdf(borrowerCode));
-//        String content = esignIntegrationService.doLicenseContractSign(licenseContractSignParam);
-        String content = new String(contractCreateApplication.createAuthorizationPdf(borrowerCode));
-        SaasUserEsignAuthorizationVo saasUserEsignAuthorizationVo = saasUserEsignAuthorizationService.getByUserCode(borrowerCode);
-        if (saasUserEsignAuthorizationVo == null) {
-            saasUserEsignAuthorizationVo = new SaasUserEsignAuthorizationVo();
-            saasUserEsignAuthorizationVo.setUserCode(borrowerCode);
-            saasUserEsignAuthorizationVo.setAccountId(accountId);
-            saasUserEsignAuthorizationVo.setSealUrl(sealUrl);
-            saasUserEsignAuthorizationVo.setSuccess(Boolean.FALSE);
-            saasUserEsignAuthorizationVo.setSaasUserEsignAuthorizationId(saasUserEsignAuthorizationService.create(saasUserEsignAuthorizationVo).getId());
-        }
-        if (StringUtils.isNotEmpty(content)) {
-            saasCreditHistoryService.addExpenditureCreditHistory(saasBorrowerRealInfoVo.getMerchantCode(), saasBorrowerRealInfoVo.getName(), CreditConsumeEnum.ESIGN);
-
-            String authorizationUrl = ossService.uploadFile(getAuthorizationUrl(borrowerCode), content);
-            saasUserEsignAuthorizationService.updateSaasUserEsignAuthorization(saasUserEsignAuthorizationVo.getSaasUserEsignAuthorizationId(), authorizationUrl);
-        }
+        doEsignAuthorization(saasBorrowerRealInfoVo.getMerchantCode(), borrowerCode, saasBorrowerRealInfoVo.getName(), accountId, null, sealData);
     }
 
     /**
@@ -171,32 +150,71 @@ public class ContractApplication {
                 sealData = successDto.getSealData();
             }
         }
+        doEsignAuthorization(merchantCode, merchantCode, ContractConsts.DEFAULT_DO_LICENSE_CONTRACT_SIGN_OPERATOR_NAME, accountId, sealUrl, sealData);
+    }
+
+    private void doEsignAuthorization(String merchantCode, String userCode, String name, String accountId, String sealUrl, String sealData) {
         if (StringUtils.isEmpty(sealUrl)) {
             sealUrl = getSealUrl(merchantCode);
             ossService.uploadFile(sealUrl, sealData);
         }
-        LicenseContractSignParam licenseContractSignParam = new LicenseContractSignParam();
-        licenseContractSignParam.setUserCode(merchantCode);
-        licenseContractSignParam.setUserAccountId(accountId);
-        licenseContractSignParam.setUserSealData(sealData);
-        licenseContractSignParam.setSrcPdfContent(contractCreateApplication.createAuthorizationPdf(merchantCode));
-        String content = esignIntegrationService.doLicenseContractSign(licenseContractSignParam);
-        SaasUserEsignAuthorizationVo saasUserEsignAuthorizationVo = saasUserEsignAuthorizationService.getByUserCode(merchantCode);
+        String url = getAuthorizationUrl(userCode);
+        String createFilePath = configUtil.getPdfPath() + MD5.md5(OrderNoUtil.makeOrderNum()) + ".pdf";
+        contractCreateApplication.createAuthorizationPdf(userCode, createFilePath);
+        SaasUserEsignAuthorizationVo saasUserEsignAuthorizationVo = saasUserEsignAuthorizationService.getByUserCode(userCode);
         if (saasUserEsignAuthorizationVo == null) {
             saasUserEsignAuthorizationVo = new SaasUserEsignAuthorizationVo();
-            saasUserEsignAuthorizationVo.setUserCode(merchantCode);
+            saasUserEsignAuthorizationVo.setUserCode(userCode);
             saasUserEsignAuthorizationVo.setAccountId(accountId);
             saasUserEsignAuthorizationVo.setSealUrl(sealUrl);
             saasUserEsignAuthorizationVo.setSuccess(Boolean.FALSE);
             saasUserEsignAuthorizationVo.setSaasUserEsignAuthorizationId(saasUserEsignAuthorizationService.create(saasUserEsignAuthorizationVo).getId());
         }
-        if (StringUtils.isNotEmpty(content)) {
-            saasCreditHistoryService.addExpenditureCreditHistory(merchantCode, ContractConsts.DEFAULT_DO_LICENSE_CONTRACT_SIGN_OPERATOR_NAME, CreditConsumeEnum.ESIGN);
+        File file = new File(createFilePath);
+        byte[] pdfContent = null;
+        if (file.exists()) {
+            FileInputStream fis = null;
+            try {
+                fis = new FileInputStream(file);
+                pdfContent = new byte[(int) file.length()];
+                fis.read(pdfContent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            LicenseContractSignParam licenseContractSignParam = new LicenseContractSignParam();
+            licenseContractSignParam.setUserCode(merchantCode);
+            licenseContractSignParam.setUserAccountId(accountId);
+            licenseContractSignParam.setUserSealData(sealData);
+            licenseContractSignParam.setSrcPdfContent(pdfContent);
+            byte[] content = esignIntegrationService.doLicenseContractSign(licenseContractSignParam);
+            if (content == null) {
+                throw new ApplicationException("esign盖章失败");
+            }
+            InputStream inputStream = null;
+            try {
+                inputStream = new ByteArrayInputStream(content);
+                url = ossService.uploadFile(inputStream, inputStream.available(), url);
+                file.delete();
+            } catch (Exception e) {
+                throw new ApplicationException("上传文件失败");
+            } finally {
+                try {
+                    inputStream.close();
+                } catch (Exception e) {
 
-            String authorizationUrl = ossService.uploadFile(getAuthorizationUrl(merchantCode), content);
-            saasUserEsignAuthorizationService.updateSaasUserEsignAuthorization(saasUserEsignAuthorizationVo.getSaasUserEsignAuthorizationId(), authorizationUrl);
+                }
+            }
+            saasCreditHistoryService.addExpenditureCreditHistory(merchantCode, name, CreditConsumeEnum.ESIGN);
+            saasUserEsignAuthorizationService.updateSaasUserEsignAuthorization(saasUserEsignAuthorizationVo.getSaasUserEsignAuthorizationId(), url);
         }
     }
+
 
     /**
      * 借款人 签署 借款合同
@@ -211,8 +229,18 @@ public class ContractApplication {
         }
         SaasOrder saasOrder = saasOrderService.selectById(orderId);
         if (saasOrder == null || StringUtils.isEmpty(saasOrder.getTermUrl())) {
-            String loanContractUrl = getLoanContractUrl(borrowerCode);
-            return ossService.uploadFile(loanContractUrl, new String(contractCreateApplication.createLoanPdf(orderId)));
+            String url = getLoanContractUrl(borrowerCode);
+            String loanContractUrl = configUtil.getPdfPath() + MD5.md5(OrderNoUtil.makeOrderNum()) + ".pdf";
+            contractCreateApplication.createLoanPdf(orderId, loanContractUrl);
+            File file = new File(loanContractUrl);
+            try {
+                InputStream inputStream = new FileInputStream(file);
+                url = ossService.uploadFile(inputStream, inputStream.available(), url);
+                file.delete();
+                return url;
+            } catch (Exception e) {
+                throw new ApplicationException("上传文件失败");
+            }
         } else {
             return saasOrder.getTermUrl();
         }
@@ -225,8 +253,18 @@ public class ContractApplication {
         }
         SaasOrder saasOrder = saasOrderService.selectById(orderId);
         if (saasOrder == null || StringUtils.isEmpty(saasOrder.getTermUrl())) {
-            String loanContractUrl = getLoanContractUrl(merchantCode);
-            return ossService.uploadFile(loanContractUrl, new String(contractCreateApplication.createLoanPdf(orderId)));
+            String url = getLoanContractUrl(merchantCode);
+            String loanContractUrl = configUtil.getPdfPath() + MD5.md5(OrderNoUtil.makeOrderNum()) + ".pdf";
+            contractCreateApplication.createLoanPdf(orderId, loanContractUrl);
+            File file = new File(loanContractUrl);
+            try {
+                InputStream inputStream = new FileInputStream(file);
+                url = ossService.uploadFile(inputStream, inputStream.available(), url);
+                file.delete();
+                return url;
+            } catch (Exception e) {
+                throw new ApplicationException("上传文件失败");
+            }
         } else {
             return saasOrder.getTermUrl();
         }
@@ -239,8 +277,18 @@ public class ContractApplication {
         }
         SaasOrder saasOrder = saasOrderService.selectById(orderId);
         if (saasOrder == null || StringUtils.isEmpty(saasOrder.getTermUrl())) {
-            String loanContractUrl = getLoanContractUrl(borrowerCode);
-            return ossService.uploadFile(loanContractUrl, new String(contractCreateApplication.createExtendPdf(orderId)));
+            String url = getLoanContractUrl(borrowerCode);
+            String loanContractUrl = configUtil.getPdfPath() + MD5.md5(OrderNoUtil.makeOrderNum()) + ".pdf";
+            contractCreateApplication.createExtendPdf(orderId, loanContractUrl);
+            File file = new File(loanContractUrl);
+            try {
+                InputStream inputStream = new FileInputStream(file);
+                url = ossService.uploadFile(inputStream, inputStream.available(), url);
+                file.delete();
+                return url;
+            } catch (Exception e) {
+                throw new ApplicationException("上传文件失败");
+            }
         } else {
             return saasOrder.getTermUrl();
         }
@@ -253,8 +301,18 @@ public class ContractApplication {
         }
         SaasOrder saasOrder = saasOrderService.selectById(orderId);
         if (saasOrder == null || StringUtils.isEmpty(saasOrder.getTermUrl())) {
-            String loanContractUrl = getLoanContractUrl(merchantCode);
-            return ossService.uploadFile(loanContractUrl, new String(contractCreateApplication.createExtendPdf(orderId)));
+            String url = getLoanContractUrl(merchantCode);
+            String loanContractUrl = configUtil.getPdfPath() + MD5.md5(OrderNoUtil.makeOrderNum()) + ".pdf";
+            contractCreateApplication.createExtendPdf(orderId, loanContractUrl);
+            File file = new File(loanContractUrl);
+            try {
+                InputStream inputStream = new FileInputStream(file);
+                url = ossService.uploadFile(inputStream, inputStream.available(), url);
+                file.delete();
+                return url;
+            } catch (Exception e) {
+                throw new ApplicationException("上传文件失败");
+            }
         } else {
             return saasOrder.getTermUrl();
         }
