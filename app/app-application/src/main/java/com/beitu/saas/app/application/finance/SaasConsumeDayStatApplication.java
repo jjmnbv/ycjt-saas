@@ -76,10 +76,14 @@ public class SaasConsumeDayStatApplication {
 
             SaasMerchantCreditInfoEntity creditEntity = saasMerchantCreditInfoService.getCreditInfoByMerchantCode(merchantCode);
             SaasMerchantSmsInfoEntity smsEntity = saasMerchantSmsInfoService.getSmsInfoByMerchantCode(merchantCode);
-            Long clearCredit = creditEntity.getValue() - totalConsumeCreditCount;
-            Long clearSms = smsEntity.getValue() - totalConsumeSmsCount;
-            saasMerchantCreditInfoService.update(creditEntity.setValue(clearCredit));
-            saasMerchantSmsInfoService.update(smsEntity.setValue(clearSms));
+            if (creditEntity != null) {
+                Long clearCredit = creditEntity.getValue() - totalConsumeCreditCount;
+                saasMerchantCreditInfoService.update(creditEntity.setValue(clearCredit));
+            }
+            if (smsEntity != null) {
+                Long clearSms = smsEntity.getValue() - totalConsumeSmsCount;
+                saasMerchantSmsInfoService.update(smsEntity.setValue(clearSms));
+            }
         });
         LOGGER.info("== 机构号为: {}的日清算完成 ==", merchantCode);
     }
