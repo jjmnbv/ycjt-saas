@@ -74,4 +74,6 @@ public interface SaasOrderService<T extends BaseEntity> extends BaseService<T> {
 
     SaasOrderVo getConfirmReceiptOrderByOrderNumb(String orderNumb);
 
+    SaasOrderVo getMainSaasOrderByOrderNumb(String orderNumb);
+
 }

@@ -8,12 +8,13 @@ import com.beitu.saas.app.application.order.OrderApplication;
 import com.beitu.saas.app.enums.BorrowerInfoApplyStatusEnum;
 import com.beitu.saas.borrower.client.*;
 import com.beitu.saas.borrower.enums.BorrowerErrorCodeEnum;
-import com.beitu.saas.channel.consts.ChannelConsts;
 import com.beitu.saas.channel.domain.SaasChannelRiskSettingsVo;
 import com.beitu.saas.channel.enums.ChannelErrorCodeEnum;
 import com.beitu.saas.channel.enums.RiskModuleEnum;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.utils.OrderNoUtil;
+import com.beitu.saas.credit.client.SaasCreditCarrierService;
+import com.beitu.saas.credit.client.SaasCreditTongdunService;
 import com.beitu.saas.intergration.user.UserIntegrationService;
 import com.beitu.saas.intergration.user.dto.UserNameIdNoValidationDto;
 import com.beitu.saas.intergration.user.enums.UserNameIdNoValidationCodeEnum;
@@ -21,12 +22,13 @@ import com.beitu.saas.intergration.user.param.UserNameIdNoValidationParam;
 import com.beitu.saas.order.client.SaasOrderApplicationService;
 import com.beitu.saas.order.client.SaasOrderService;
 import com.beitu.saas.order.domain.SaasOrderApplicationVo;
-import com.beitu.saas.order.domain.SaasOrderVo;
 import com.beitu.saas.order.enums.OrderErrorCodeEnum;
 import com.beitu.saas.order.enums.OrderStatusEnum;
 import com.fqgj.base.services.redis.RedisClient;
 import com.fqgj.common.utils.CollectionUtils;
 import com.fqgj.exception.common.ApplicationException;
+import com.fqgj.log.factory.LogFactory;
+import com.fqgj.log.interfaces.Log;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,6 +45,8 @@ import java.util.Objects;
  */
 @Service
 public class CreditApplication {
+
+    private static final Log LOGGER = LogFactory.getLog(CreditApplication.class);
 
     @Autowired
     private RedisClient redisClient;
@@ -69,7 +73,13 @@ public class CreditApplication {
     private SaasBorrowerIdentityInfoService saasBorrowerIdentityInfoService;
 
     @Autowired
-    private SaasBorrowerCarrierService saasBorrowerCarrierService;
+    private SaasCreditCarrierService saasCreditCarrierService;
+
+    @Autowired
+    private CarrierReportApplication carrierReportApplication;
+
+    @Autowired
+    private DunningReportApplication dunningReportApplication;
 
     @Autowired
     private OrderApplication orderApplication;
@@ -81,9 +91,18 @@ public class CreditApplication {
     private SaasOrderService saasOrderService;
 
     @Autowired
+    private SaasBorrowerLoanCrawlService saasBorrowerLoanCrawlService;
+
+    @Autowired
+    private SaasCreditTongdunService saasCreditTongdunService;
+
+    @Autowired
+    private TongdunReportApplication tongdunReportApplication;
+
+    @Autowired
     private SendApplication sendApplication;
 
-    public List<CreditModuleListVo> listCreditModule(String channelCode, String borrowerCode) {
+    public List<CreditModuleListVo> listCreditModule(String merchantCode, String channelCode, String borrowerCode) {
         List<SaasChannelRiskSettingsVo> saasChannelRiskSettingsVoList = saasChannelApplication.getSaasChannelRiskSettingsByChannelCode(channelCode);
         if (CollectionUtils.isEmpty(saasChannelRiskSettingsVoList)) {
             throw new ApplicationException(ChannelErrorCodeEnum.CHANNEL_MODULE);
@@ -94,13 +113,13 @@ public class CreditApplication {
             CreditModuleListVo creditModuleListVo = new CreditModuleListVo();
             creditModuleListVo.setModuleCode(saasChannelRiskSettingsVo.getModuleCode());
             creditModuleListVo.setRequired(SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(saasChannelRiskSettingsVo.getRequired()));
-            creditModuleListVo.setApplyStatus(getInfoApplyStatus(borrowerCode, orderNumb, saasChannelRiskSettingsVo.getModuleCode()).getCode());
+            creditModuleListVo.setApplyStatus(getInfoApplyStatus(merchantCode, borrowerCode, orderNumb, saasChannelRiskSettingsVo.getModuleCode()).getCode());
             creditModuleListVoList.add(creditModuleListVo);
         });
         return creditModuleListVoList;
     }
 
-    private BorrowerInfoApplyStatusEnum getInfoApplyStatus(String borrowerCode, String orderNumb, String moduleCode) {
+    private BorrowerInfoApplyStatusEnum getInfoApplyStatus(String merchantCode, String borrowerCode, String orderNumb, String moduleCode) {
         RiskModuleEnum riskModuleEnum = RiskModuleEnum.getRiskModuleEnumByModuleCode(moduleCode);
         switch (riskModuleEnum) {
             case APPLICATION:
@@ -129,19 +148,22 @@ public class CreditApplication {
                 }
                 return BorrowerInfoApplyStatusEnum.FINISHED;
             case CARRIER_AUTHENTIC:
-                if (saasBorrowerCarrierService.countByBorrowerCode(borrowerCode) == 0) {
-                    return BorrowerInfoApplyStatusEnum.INCOMPLETE;
+                if (saasCreditCarrierService.effectivenessCreditCarrier(borrowerCode)) {
+                    return BorrowerInfoApplyStatusEnum.FINISHED;
                 }
                 String value = redisClient.get(RedisKeyConsts.H5_CARRIER_CRAWLING, borrowerCode);
                 if (value != null) {
                     return BorrowerInfoApplyStatusEnum.AUTHENTICATING;
                 }
-                return BorrowerInfoApplyStatusEnum.FINISHED;
+                return BorrowerInfoApplyStatusEnum.INCOMPLETE;
             case ZM_CREDIT:
                 return BorrowerInfoApplyStatusEnum.INCOMPLETE;
             case EB_INFO:
                 return BorrowerInfoApplyStatusEnum.INCOMPLETE;
             case PLATFORM_BORROW_CREDIT:
+                if (saasBorrowerLoanCrawlService.effectivenessLoanCrawl(borrowerCode, null)) {
+                    return BorrowerInfoApplyStatusEnum.FINISHED;
+                }
                 return BorrowerInfoApplyStatusEnum.INCOMPLETE;
         }
         return BorrowerInfoApplyStatusEnum.INCOMPLETE;
@@ -238,16 +260,18 @@ public class CreditApplication {
                     submitIdentityInfo(borrowerCode, newOrderNumb, saasChannelRiskSettingsVo.getRequired());
                     break;
                 case CARRIER_AUTHENTIC:
-                    submitCarrierAuthentic(borrowerCode, saasChannelRiskSettingsVo.getRequired());
+                    submitCarrierAuthentic(merchantCode, borrowerCode, saasChannelRiskSettingsVo.getRequired());
                     break;
                 case ZM_CREDIT:
                     break;
                 case EB_INFO:
                     break;
                 case PLATFORM_BORROW_CREDIT:
+                    submitPlatformCredit(borrowerCode, saasChannelRiskSettingsVo.getRequired());
                     break;
             }
         });
+        generateBlackData(merchantCode, borrowerCode);
         return new ApiResponse("提交成功");
     }
 
@@ -311,12 +335,27 @@ public class CreditApplication {
         }
     }
 
-    private void submitCarrierAuthentic(String borrowerCode, Integer required) {
-        if (saasBorrowerCarrierService.countByBorrowerCode(borrowerCode) == 0) {
+    private void submitCarrierAuthentic(String merchantCode, String borrowerCode, Integer required) {
+        carrierReportApplication.generateCarrierReport(merchantCode, borrowerCode);
+        dunningReportApplication.generateDunningReport(merchantCode, borrowerCode);
+        if (!saasCreditCarrierService.effectivenessCreditCarrier(borrowerCode)) {
             if (SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
                 throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_CARRIER_AUTHENTIC);
             }
-            return;
+        }
+    }
+
+    private void submitPlatformCredit(String borrowerCode, Integer required) {
+        if (!saasBorrowerLoanCrawlService.effectivenessLoanCrawl(borrowerCode, null)) {
+            if (SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
+                throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_PLATFORM_BORROW_CREDIT);
+            }
+        }
+    }
+
+    private void generateBlackData(String merchantCode, String borrowerCode) {
+        if (!saasCreditTongdunService.effectivenessCreditTongdun(borrowerCode)) {
+            tongdunReportApplication.generateTongdunReport(merchantCode, borrowerCode);
         }
     }
 

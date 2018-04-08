@@ -81,6 +81,19 @@ public class SaasBorrowerServiceImpl extends AbstractBaseService implements Saas
         }
         return Boolean.TRUE;
     }
+
+    @Override
+    public SaasBorrowerVo getByBorrowerCode(String borrowerCode) {
+        List<SaasBorrower> saasBorrowerList = saasBorrowerDao.selectByParams(new HashMap<String, Object>(2) {{
+            put("borrowerCode", borrowerCode);
+            put("deleted", Boolean.FALSE);
+        }});
+        if (CollectionUtils.isEmpty(saasBorrowerList)) {
+            return null;
+        }
+        return SaasBorrowerVo.convertEntityToVO(saasBorrowerList.get(0));
+    }
+
 }
 
 

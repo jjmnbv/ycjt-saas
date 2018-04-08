@@ -16,6 +16,7 @@
         <module>borrower</module>
         <module>channel</module>
         <module>collection</module>
+        <module>credit</module>
         <module>finance</module>
         <module>order</module>
         <module>risk</module>

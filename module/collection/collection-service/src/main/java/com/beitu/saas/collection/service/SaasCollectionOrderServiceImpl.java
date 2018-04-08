@@ -2,7 +2,7 @@ package com.beitu.saas.collection.service;
 
 import com.beitu.saas.collection.client.SaasCollectionOrderService;
 import com.beitu.saas.collection.enums.CollectionOrderStatusEnum;
-import com.beitu.saas.collection.enums.OverdueTimeEnums;
+import com.beitu.saas.collection.enums.OverdueTimeEnum;
 import com.beitu.saas.collection.param.CollectionOrderQueryParam;
 import com.beitu.saas.collection.dao.SaasCollectionOrderDao;
 import com.beitu.saas.collection.entity.SaasCollectionOrderEntity;
@@ -12,7 +12,6 @@ import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
 import com.fqgj.common.utils.DateUtil;
 import com.fqgj.log.enhance.Module;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,7 +49,7 @@ public class SaasCollectionOrderServiceImpl extends AbstractBaseService implemen
     @Override
     public List<CollectionOrderInfoDetailVo> getCollectionOrderListByPage(CollectionOrderQueryParam collectionOrderQueryParam, Page page) {
         if (null != collectionOrderQueryParam.getOverdueDaysType()) {
-            OverdueTimeEnums timeEnums = OverdueTimeEnums.getEnum(collectionOrderQueryParam.getOverdueDaysType());
+            OverdueTimeEnum timeEnums = OverdueTimeEnum.getEnum(collectionOrderQueryParam.getOverdueDaysType());
             if (null != timeEnums) {
                 collectionOrderQueryParam.setOverdueStartDate(DateUtil.getDate(DateUtil.addDate(new Date(), -timeEnums.getEnd()), "yyyy-MM-dd"));
                 collectionOrderQueryParam.setOverdueEndDate(DateUtil.getDate(DateUtil.addDate(new Date(), -timeEnums.getStart()), "yyyy-MM-dd"));

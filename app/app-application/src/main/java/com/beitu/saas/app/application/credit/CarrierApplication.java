@@ -2,18 +2,19 @@ package com.beitu.saas.app.application.credit;
 
 import com.alibaba.fastjson.JSON;
 import com.beitu.saas.app.application.credit.vo.CarrierH5CallbackVo;
-import com.beitu.saas.borrower.client.SaasBorrowerCarrierService;
 import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
-import com.beitu.saas.borrower.consts.UserProfileConsts;
+import com.beitu.saas.borrower.client.SaasBorrowerService;
 import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
-import com.beitu.saas.borrower.entity.SaasBorrowerCarrier;
+import com.beitu.saas.borrower.domain.SaasBorrowerVo;
 import com.beitu.saas.borrower.enums.BorrowerErrorCodeEnum;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.enums.ProductTypeEnum;
 import com.beitu.saas.common.enums.RestCodeEnum;
 import com.beitu.saas.common.handle.oss.OSSService;
-import com.beitu.saas.common.utils.DateUtil;
+import com.beitu.saas.credit.client.SaasCreditCarrierService;
+import com.beitu.saas.credit.domain.SaasCreditCarrierVo;
+import com.beitu.saas.credit.enums.CreditErrorCodeEnum;
 import com.beitu.saas.risk.client.service.TripleCarrierService;
 import com.beitu.saas.risk.domain.carrier.h5.enums.CarrierH5TypeEnum;
 import com.beitu.saas.risk.domain.carrier.h5.input.CarrierRequestUrlInput;
@@ -56,20 +57,31 @@ public class CarrierApplication {
     private ConfigUtil configUtil;
 
     @Autowired
+    private SaasBorrowerService saasBorrowerService;
+
+    @Autowired
     private SaasBorrowerRealInfoService saasBorrowerRealInfoService;
 
     @Autowired
-    private SaasBorrowerCarrierService saasBorrowerCarrierService;
+    private SaasCreditCarrierService saasCreditCarrierService;
 
+    @Autowired
+    private CarrierReportApplication carrierReportApplication;
+
+    @Autowired
+    private DunningReportApplication dunningReportApplication;
 
     public String getCarrierH5Url(String borrowerCode, String mobile) {
         String taskId = redisClient.get(RedisKeyConsts.H5_CARRIER_CRAWLING, borrowerCode + "");
         if (StringUtils.isNotEmpty(taskId)) {
-            return configUtil.getAddressURLPrefix() + UserProfileConsts.H5_CARRIER_RESULT_URL;
+            throw new ApplicationException(RestCodeEnum.REPEAT_REQUEST);
         }
         SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode);
         if (saasBorrowerRealInfoVo == null) {
             throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_REAL_NAME);
+        }
+        if (saasCreditCarrierService.effectivenessCreditCarrier(borrowerCode)) {
+            throw new ApplicationException(CreditErrorCodeEnum.CREDIT_CARRIER_REPORT_EXIST);
         }
         CarrierRequestUrlInput carrierRequestUrlInput = new CarrierRequestUrlInput();
         carrierRequestUrlInput.setName(saasBorrowerRealInfoVo.getName());
@@ -118,7 +130,8 @@ public class CarrierApplication {
         if ("DONE_SUCCESS".equals(status)) {
             String task = redisClient.get(RedisKeyConsts.H5_CARRIER_CRAWLING, userCode);
             if (taskId.equals(task)) {
-                carrierH5Upload(data, typeEnum, userCode);
+                SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCode(userCode);
+                carrierH5Upload(data, typeEnum, saasBorrowerVo.getMerchantCode(), saasBorrowerVo.getBorrowerCode());
             }
         } else if ("DONE_FAIL".equals(status)) {
             //失败处理
@@ -126,7 +139,7 @@ public class CarrierApplication {
         redisClient.del(RedisKeyConsts.H5_CARRIER_CRAWLING, userCode);
     }
 
-    private void carrierH5Upload(String data, CarrierH5TypeEnum typeEnum, String borrowerCode) {
+    private void carrierH5Upload(String data, CarrierH5TypeEnum typeEnum, String merchantCode, String borrowerCode) {
         String carrierUrl = "carrierData/";
         if (configUtil.isServerTest()) {
             carrierUrl += "test/";
@@ -135,12 +148,15 @@ public class CarrierApplication {
         String userTime = borrowerCode + "_" + new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         carrierUrl += typeEnum.getName() + "_" + userTime + "_" + MD5.md5(userTime + System.currentTimeMillis()) + ".json";
         carrierUrl = ossService.uploadFile(carrierUrl, data);
-        SaasBorrowerCarrier saasBorrowerCarrier = new SaasBorrowerCarrier();
-        saasBorrowerCarrier.setBorrowerCode(borrowerCode);
-        saasBorrowerCarrier.setUrl(carrierUrl);
-        saasBorrowerCarrier.setExpireDate(DateUtil.getUTCDate());
-        saasBorrowerCarrier.setSuccess(Boolean.TRUE);
-        saasBorrowerCarrierService.create(saasBorrowerCarrier);
+        SaasCreditCarrierVo addSaasCreditCarrierVo = new SaasCreditCarrierVo();
+        addSaasCreditCarrierVo.setMerchantCode(merchantCode);
+        addSaasCreditCarrierVo.setBorrowerCode(borrowerCode);
+        addSaasCreditCarrierVo.setType(typeEnum.getType());
+        addSaasCreditCarrierVo.setUrl(carrierUrl);
+        addSaasCreditCarrierVo.setSuccess(Boolean.FALSE);
+        saasCreditCarrierService.addSaasCreditCarrier(addSaasCreditCarrierVo);
+        carrierReportApplication.generateCarrierReport(merchantCode, borrowerCode);
+        dunningReportApplication.generateDunningReport(merchantCode, borrowerCode);
     }
 
 }

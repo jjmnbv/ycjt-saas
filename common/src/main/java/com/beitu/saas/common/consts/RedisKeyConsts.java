@@ -107,10 +107,16 @@ public class RedisKeyConsts {
      * H5 登录 验证码 保存 Redis Key前缀
      */
     public static final String H5_SAVE_LOGIN_VERIFYCODE_KEY = "BEITU_SAAS_H5_SAVE_LOGIN_VERIFYCODE_{mobile}";
-    
+
     /**
      * H5聚信立借贷平台爬取Redis Key前缀
      */
     public static final String H5_LOAN_PLATFORM_CRAWLING = "SAAS_H5_LOAN_PLATFORM_CRAWLING_{userCode}_{platform}";
+
+    /**
+     * 同盾 防止 用户短时间内多次重复提交 Redis Key前缀
+     */
+    public static final String SAAS_TONGDUN_FORBID_REPEAT_SUBMIT = "SAAS_TONGDUN_FORBID_REPEAT_SUBMIT_{userCode}";
+
 
 }

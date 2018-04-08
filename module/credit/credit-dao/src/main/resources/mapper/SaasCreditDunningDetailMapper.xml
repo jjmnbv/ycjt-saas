@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beitu.saas.credit.dao.impl.SaasCreditDunningDetailDaoImpl">
+
+    <insert id="batchAddSaasCreditDunningDetail" keyColumn="id" keyProperty="id"
+            parameterType="java.util.List" useGeneratedKeys="true">
+        insert into saas_credit_dunning_detail
+        (record_id,
+        sid,
+        call_tel_total_nums,
+        call_total_times,
+        call_out_times,
+        call_in_times,
+        call_total_duration,
+        call_avg_duration,
+        call_out_duration,
+        call_in_duration,
+        call_duration_below15,
+        call_duration_between15and30,
+        call_duration_above60,
+        first_call_time,
+        last_call_time,
+        `type`,
+        deleted) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            <trim prefix="(" suffix=")">
+                #{item.recordId,jdbcType=BIGINT},
+                #{item.sid,jdbcType=VARCHAR},
+                #{item.callTelTotalNums,jdbcType=INTEGER},
+                #{item.callTotalTimes,jdbcType=INTEGER},
+                #{item.callOutTimes,jdbcType=INTEGER},
+                #{item.callInTimes,jdbcType=INTEGER},
+                #{item.callTotalDuration,jdbcType=INTEGER},
+                #{item.callAvgDuration,jdbcType=DECIMAL},
+                #{item.callOutDuration,jdbcType=INTEGER},
+                #{item.callInDuration,jdbcType=INTEGER},
+                #{item.callDurationBelow15,jdbcType=INTEGER},
+                #{item.callDurationBetween15and30,jdbcType=INTEGER},
+                #{item.callDurationAbove60,jdbcType=INTEGER},
+                #{item.firstCallTime,jdbcType=VARCHAR},
+                #{item.lastCallTime,jdbcType=VARCHAR},
+                #{item.type,jdbcType=TINYINT},
+                #{item.deleted,jdbcType=BIT}
+            </trim>
+        </foreach>
+    </insert>
+
+</mapper>

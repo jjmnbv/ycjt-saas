@@ -34,4 +34,6 @@ public interface SaasOrderDao extends BaseMapper<SaasOrder> {
 
     List<String> selectOrderNumbByParams(String merchantCode, Integer orderStatus);
 
+    SaasOrder selectMainSaasOrderByOrderNumb(String orderNumb);
+
 }

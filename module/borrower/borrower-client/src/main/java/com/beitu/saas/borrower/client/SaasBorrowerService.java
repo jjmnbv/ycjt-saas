@@ -22,4 +22,6 @@ public interface SaasBorrowerService<T extends BaseEntity> extends BaseService<T
 
     Boolean isSaasBorrower(String userCode);
 
+    SaasBorrowerVo getByBorrowerCode(String borrowerCode);
+
 }

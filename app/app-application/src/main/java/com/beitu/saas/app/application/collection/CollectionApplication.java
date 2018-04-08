@@ -5,7 +5,9 @@ import com.beitu.saas.app.application.collection.vo.CollectionOrderListVo;
 import com.beitu.saas.app.application.order.OrderCalculateApplication;
 import com.beitu.saas.collection.client.SaasCollectionCommentService;
 import com.beitu.saas.collection.client.SaasCollectionOrderService;
+import com.beitu.saas.collection.domain.OverdueInfoVo;
 import com.beitu.saas.collection.entity.SaasCollectionCommentEntity;
+import com.beitu.saas.collection.enums.OverdueTimeEnum;
 import com.beitu.saas.collection.param.CollectionOrderQueryParam;
 import com.beitu.saas.collection.vo.CollectionOrderInfoDetailVo;
 import com.beitu.saas.common.utils.DateUtil;
@@ -22,6 +24,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +38,7 @@ import java.util.List;
  */
 @Component
 public class CollectionApplication {
+
     private static final Log LOGGER = LogFactory.getLog(CollectionApplication.class);
 
     @Autowired
@@ -54,7 +58,13 @@ public class CollectionApplication {
 
         collectionOrderInfoDetailVos.stream().forEach(x -> {
             SaasOrderBillDetailVo saasOrderBillDetailVo = saasOrderBillDetailService.getVisibleOrderBillDetailByOrderNumbAndMerchantCode(x.getOrderNo(), collectionOrderQueryParam.getMerchantCode());
-            x.setShouldRepayCapital(orderCalculateApplication.getAmount(saasOrderBillDetailVo));
+            BigDecimal shouldAmount = BigDecimal.ZERO;
+            try {
+                shouldAmount = orderCalculateApplication.getAmount(saasOrderBillDetailVo);
+            } catch (Exception e) {
+                LOGGER.info("清算应还金额出错,异常原因:{} ", e);
+            }
+            x.setShouldRepayCapital(shouldAmount);
         });
 
         List<CollectionOrderListVo> collectionOrderListVos = new ArrayList<>();
@@ -89,6 +99,22 @@ public class CollectionApplication {
         collectionCommentListVo.setCollectionName(saasCollectionCommentEntity.getName());
         collectionCommentListVo.setCollectionMobile(saasCollectionCommentEntity.getMobile());
         return collectionCommentListVo;
+    }
+
+    /**
+     * 获取预期天数参数
+     *
+     * @return
+     */
+    public List<OverdueInfoVo> getOverdueTimeVoList() {
+        List<OverdueInfoVo> vos = new ArrayList<>();
+        for (OverdueTimeEnum enums : OverdueTimeEnum.values()) {
+            OverdueInfoVo vo = new OverdueInfoVo();
+            vo.setType(enums.getType());
+            vo.setDesc(enums.getDesc());
+            vos.add(vo);
+        }
+        return vos;
     }
 
 }
