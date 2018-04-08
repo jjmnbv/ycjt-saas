@@ -53,7 +53,7 @@
         <common.version>2.7</common.version>
 
         <!--分期管家基础服务:redis,oss,mq,memcached-->
-        <base-services-version>1.4</base-services-version>
+        <base-services-version>1.5</base-services-version>
         <aliyun-sdk-oss-version>2.0.1</aliyun-sdk-oss-version>
         <aliyun-java-sdk-core-version>2.1.7</aliyun-java-sdk-core-version>
         <esign-java-sdk-version-version>2.0.9</esign-java-sdk-version-version>

@@ -75,6 +75,18 @@ public class SaasAdminServiceImpl extends AbstractBaseService implements SaasAdm
     }
 
     @Override
+    public SaasAdmin getAllSaasAdminByAdminCode(String adminCode) {
+        List<SaasAdmin> saasAdminList = saasAdminDao.selectByParams(new HashMap<String, Object>() {{
+            put("code", adminCode);
+            put("deleted", false);
+        }});
+        if (CollectionUtils.isNotEmpty(saasAdminList)) {
+            return saasAdminList.get(0);
+        }
+        return null;
+    }
+
+    @Override
     public List<SaasAdmin> getAdminListByMerchantCode(String merchantCode, Page page) {
         Map map = new HashMap(4) {{
             put("merchantCode", merchantCode);

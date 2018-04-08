@@ -229,7 +229,7 @@ public class SaasChannelApplication {
      * @return
      */
     private String getAdminNameByAdminCode(String adminCode) {
-        SaasAdmin saasAdminByAdminCode = saasAdminService.getSaasAdminByAdminCode(adminCode);
+        SaasAdmin saasAdminByAdminCode = saasAdminService.getAllSaasAdminByAdminCode(adminCode);
 
         if (saasAdminByAdminCode != null) {
             return saasAdminByAdminCode.getName();
