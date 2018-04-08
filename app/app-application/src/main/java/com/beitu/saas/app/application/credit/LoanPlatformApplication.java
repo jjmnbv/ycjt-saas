@@ -3,11 +3,19 @@ package com.beitu.saas.app.application.credit;
 import com.beitu.saas.app.application.credit.pojo.JuxinliCallbackDataPojo;
 import com.beitu.saas.app.enums.SaasLoanPlatformEnum;
 import com.beitu.saas.borrower.client.SaasBorrowerLoanCrawlService;
+import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
+import com.beitu.saas.borrower.client.SaasBorrowerService;
 import com.beitu.saas.borrower.domain.SaasBorrowerLoanCrawlVo;
+import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
+import com.beitu.saas.borrower.domain.SaasBorrowerVo;
+import com.beitu.saas.borrower.entity.SaasBorrowerRealInfo;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.consts.TimeConsts;
+import com.beitu.saas.common.enums.RestCodeEnum;
 import com.beitu.saas.common.handle.oss.OSSService;
+import com.beitu.saas.finance.client.SaasCreditHistoryService;
+import com.beitu.saas.finance.client.enums.CreditConsumeEnum;
 import com.beitu.saas.intergration.risk.RiskIntergrationService;
 import com.beitu.saas.intergration.risk.dto.LoanPlatformCrawlingDto;
 import com.beitu.saas.intergration.risk.dto.LoanPlatformQueryDto;
@@ -21,6 +29,7 @@ import com.beitu.saas.intergration.risk.param.LoanPlatformTaskIdPrefixParam;
 import com.beitu.saas.intergration.risk.param.LoanPlatformValidatePrefixParam;
 import com.beitu.saas.intergration.risk.pojo.LoanPlatformQueryPojo;
 import com.beitu.saas.order.client.SaasOrderService;
+import com.beitu.saas.risk.domain.carrier.h5.enums.CarrierH5TypeEnum;
 import com.fqgj.base.services.redis.RedisClient;
 import com.fqgj.common.utils.JSONUtils;
 import com.fqgj.common.utils.MD5;
@@ -59,6 +68,15 @@ public class LoanPlatformApplication {
 
     @Autowired
     private SaasBorrowerLoanCrawlService saasBorrowerLoanCrawlService;
+
+    @Autowired
+    private SaasBorrowerService saasBorrowerService;
+
+    @Autowired
+    private SaasBorrowerRealInfoService saasBorrowerRealInfoService;
+
+    @Autowired
+    private SaasCreditHistoryService saasCreditHistoryService;
 
     public String getLoanPlatformUrl(String borrowerCode, String channelCode, SaasLoanPlatformEnum saasLoanPlatformEnum) {
         String userCode = borrowerCode;
@@ -130,6 +148,14 @@ public class LoanPlatformApplication {
         String userCode = getUserCodeFromTaskId(pojo.getTaskId());
         String url = uploadLoanPlatformData(userCode, platformEnum, dto.getData());
         SaasBorrowerLoanCrawlVo vo = new SaasBorrowerLoanCrawlVo(userCode, pojo.getTaskId(), pojo.getToken(), platformEnum.getCode(), url);
+
+        SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCode(userCode);
+        if (saasBorrowerVo == null) {
+            throw new ApplicationException(RestCodeEnum.BORROWER_NOT_EXIST_ERROR);
+        }
+        SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(saasBorrowerVo.getBorrowerCode());
+        saasCreditHistoryService.addExpenditureCreditHistory(saasBorrowerVo.getMerchantCode(), saasBorrowerRealInfoVo.getName(), CreditConsumeEnum.FLOW_MULTI_PLATFORM_LENDING);
+
         if (!saasBorrowerLoanCrawlService.addSaasBorrowerLoanCrawl(vo)) {
             return "数据库结果写入失败";
         }
