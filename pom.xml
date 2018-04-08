@@ -615,12 +615,6 @@
                 <groupId>org.bouncycastle</groupId>
                 <artifactId>bctsp-jdk15</artifactId>
                 <version>1.46</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.bouncycastle</groupId>
-                        <artifactId>bcprov-jdk15on</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <!--e签宝  end-->
 
@@ -680,24 +674,6 @@
                 <version>${zmxy-sdk-version}</version>
             </dependency>
             <!-- risk end -->
-
-            <!--e签宝 start-->
-            <dependency>
-                <groupId>com.esign</groupId>
-                <artifactId>tech-sdk</artifactId>
-                <version>2.0.16</version>
-            </dependency>
-            <dependency>
-                <groupId>com.esign</groupId>
-                <artifactId>tgtext</artifactId>
-                <version>3.1.0</version>
-            </dependency>
-            <dependency>
-                <groupId>com.esign</groupId>
-                <artifactId>utils</artifactId>
-                <version>3.0.6</version>
-            </dependency>
-            <!--e签宝  end-->
 
         </dependencies>
     </dependencyManagement>
