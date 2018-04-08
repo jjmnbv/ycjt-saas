@@ -128,8 +128,12 @@ public class OrderBillDetailApplication {
         saasOrderBillDetailListVo.setCreatedDate(DateUtil.getDate(saasOrderBillDetailVo.getCreatedDt()));
         saasOrderBillDetailListVo.setRepaymentDate(DateUtil.getDate(saasOrderBillDetailVo.getRepaymentDt()));
         saasOrderBillDetailListVo.setExtend(saasOrderBillDetailVo.getRelationOrderBillDetailId() != null);
-        saasOrderBillDetailListVo.setOverdueDuration(DateUtil.countDay(new Date(), saasOrderBillDetailVo.getRepaymentDt()));
-
+        Integer overdueDuration = DateUtil.countDay(new Date(), saasOrderBillDetailVo.getRepaymentDt());
+        if (overdueDuration > 0) {
+            saasOrderBillDetailListVo.setOverdueDuration(overdueDuration);
+        } else {
+            saasOrderBillDetailListVo.setOverdueDuration(0);
+        }
         BorrowerInfoVo borrowerInfoVo = borrowerApplication.getBorrowerInfoVoByBorrowerCode(saasOrderBillDetailVo.getMerchantCode(), saasOrderBillDetailVo.getBorrowerCode());
         BeanUtils.copyProperties(borrowerInfoVo, saasOrderBillDetailListVo);
 
