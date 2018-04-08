@@ -1,6 +1,7 @@
 package com.beitu.saas.auth.vo;
 
 import com.beitu.saas.auth.entity.SaasMenu;
+import com.beitu.saas.common.consts.CommonConsts;
 import com.fqgj.common.utils.CollectionUtils;
 
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class FormedMenuVO {
                 parentMenu.setId(Menu.getId());
                 parentMenu.setName(Menu.getName());
                 parentMenu.setPath(Menu.getLink());
-                parentMenu.setIcon(Menu.getIconUrl());
+                parentMenu.setIcon(CommonConsts.ossURLPrefix + Menu.getIconUrl());
                 parentMenu.setChildren(createChildrenVavs(menuIdMap.get(Menu.getId().intValue()), menuIdMap));
                 this.list.add(parentMenu);
             }
@@ -53,7 +54,7 @@ public class FormedMenuVO {
         List<ChildrenMenu> childrenMenuList = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(MenuList)) {
             for (SaasMenu entity : MenuList) {
-                if (entity.getId().equals(entity.getPId().longValue())){
+                if (entity.getId().equals(entity.getPId().longValue())) {
                     continue;
                 }
                 menuIds.add(entity.getId() + "");
@@ -61,7 +62,7 @@ public class FormedMenuVO {
                 item.setId(entity.getId());
                 item.setName(entity.getName());
                 item.setPath(entity.getLink());
-                item.setIcon(entity.getIconUrl());
+                item.setIcon(CommonConsts.ossURLPrefix + entity.getIconUrl());
                 item.setChildren(createChildrenVavs(menuIdMap.get(entity.getId()), menuIdMap));
                 childrenMenuList.add(item);
             }
@@ -129,7 +130,7 @@ public class FormedMenuVO {
     }
 
 
-     public class ChildrenMenu {
+    public class ChildrenMenu {
         private Long id;
         private String name;
         private String path;
