@@ -63,8 +63,8 @@ public class SaasConsumeDayStatApplication {
         List<Date> dates = this.getNeedStatDateList(merchantCode);
 
         dates.stream().forEach(x -> {
-            Long totalConsumeCreditCount = saasCreditHistoryService.getYesterdayCreditStatCredit(merchantCode, this.getYesterday());
-            Long totalConsumeSmsCount = saasSmsHistoryService.getYesterdaySmsStatCredit(merchantCode, this.getYesterday());
+            Long totalConsumeCreditCount = saasCreditHistoryService.getYesterdayCreditStatCredit(merchantCode, x);
+            Long totalConsumeSmsCount = saasSmsHistoryService.getYesterdaySmsStatCredit(merchantCode, x);
 
             SaasConsumeDayStatEntity statEntity = new SaasConsumeDayStatEntity()
                     .setConsumeCredit(totalConsumeCreditCount)
