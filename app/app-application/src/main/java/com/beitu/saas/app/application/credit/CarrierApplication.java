@@ -2,6 +2,7 @@ package com.beitu.saas.app.application.credit;
 
 import com.alibaba.fastjson.JSON;
 import com.beitu.saas.app.application.credit.vo.CarrierH5CallbackVo;
+import com.beitu.saas.app.application.finance.FinanceApplication;
 import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
 import com.beitu.saas.borrower.client.SaasBorrowerService;
 import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
@@ -15,6 +16,8 @@ import com.beitu.saas.common.handle.oss.OSSService;
 import com.beitu.saas.credit.client.SaasCreditCarrierService;
 import com.beitu.saas.credit.domain.SaasCreditCarrierVo;
 import com.beitu.saas.credit.enums.CreditErrorCodeEnum;
+import com.beitu.saas.finance.client.SaasCreditHistoryService;
+import com.beitu.saas.finance.client.enums.CreditConsumeEnum;
 import com.beitu.saas.risk.client.service.TripleCarrierService;
 import com.beitu.saas.risk.domain.carrier.h5.enums.CarrierH5TypeEnum;
 import com.beitu.saas.risk.domain.carrier.h5.input.CarrierRequestUrlInput;
@@ -71,6 +74,9 @@ public class CarrierApplication {
     @Autowired
     private DunningReportApplication dunningReportApplication;
 
+    @Autowired
+    private SaasCreditHistoryService saasCreditHistoryService;
+
     public String getCarrierH5Url(String borrowerCode, String mobile) {
         String taskId = redisClient.get(RedisKeyConsts.H5_CARRIER_CRAWLING, borrowerCode + "");
         if (StringUtils.isNotEmpty(taskId)) {
@@ -89,7 +95,7 @@ public class CarrierApplication {
         carrierRequestUrlInput.setIdNumber(saasBorrowerRealInfoVo.getIdentityCode());
         carrierRequestUrlInput.setUserCode(borrowerCode);
         carrierRequestUrlInput.setReturnUrl(configUtil.getApiWebPath() + "/credit/carrier/h5/crawling");
-        carrierRequestUrlInput.setAppUrl(configUtil.getApiWebPath() + "/credit/carrier/callback/1");
+        carrierRequestUrlInput.setAppUrl(configUtil.getApiWebPath() + "/credit/carrier/callback");
 
         TripleServiceResult response = tripleCarrierService.getCarrierServiceResult(ProductTypeEnum.YCJT, TripleServiceTypeEnum.CARRIER_REQUEST_URL, carrierRequestUrlInput);
         if (response.isSuccess()) {
@@ -131,7 +137,12 @@ public class CarrierApplication {
             String task = redisClient.get(RedisKeyConsts.H5_CARRIER_CRAWLING, userCode);
             if (taskId.equals(task)) {
                 SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCode(userCode);
+                if (saasBorrowerVo == null) {
+                    throw new ApplicationException(RestCodeEnum.BORROWER_NOT_EXIST_ERROR);
+                }
                 carrierH5Upload(data, typeEnum, saasBorrowerVo.getMerchantCode(), saasBorrowerVo.getBorrowerCode());
+                SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(saasBorrowerVo.getBorrowerCode());
+                saasCreditHistoryService.addExpenditureCreditHistory(saasBorrowerVo.getMerchantCode(), saasBorrowerRealInfoVo.getName(), CreditConsumeEnum.RISK_CARRIER);
             }
         } else if ("DONE_FAIL".equals(status)) {
             //失败处理

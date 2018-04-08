@@ -9,11 +9,19 @@ import com.beitu.saas.app.application.contract.thread.GenerateContractThread;
 import com.beitu.saas.app.application.order.vo.*;
 import com.beitu.saas.app.enums.BorrowerOrderApplyStatusEnum;
 import com.beitu.saas.app.enums.H5OrderBillDetailViewTypeEnum;
+import com.beitu.saas.app.enums.SaasSmsTypeEnum;
+import com.beitu.saas.auth.domain.SaasAdminVo;
+import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.auth.service.SaasAdminService;
 import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
+import com.beitu.saas.borrower.client.SaasBorrowerService;
 import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
+import com.beitu.saas.borrower.domain.SaasBorrowerVo;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.consts.ChannelConsts;
+import com.beitu.saas.channel.domain.SaasChannelVo;
+import com.beitu.saas.channel.entity.SaasChannelEntity;
+import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.utils.DateUtil;
 import com.beitu.saas.common.utils.ThreadPoolUtils;
 import com.beitu.saas.finance.client.SaasMerchantBalanceInfoService;
@@ -49,10 +57,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author linanjun
@@ -80,7 +85,7 @@ public class OrderApplication {
     private SaasOrderStatusHistoryService saasOrderStatusHistoryService;
 
     @Autowired
-    private SaasChannelService saasChannelService;
+    private SaasBorrowerService saasBorrowerService;
 
     @Autowired
     private SaasAdminService saasAdminService;
@@ -106,6 +111,12 @@ public class OrderApplication {
     @Autowired
     private SendApplication sendApplication;
 
+    @Autowired
+    private SaasChannelService saasChannelService;
+
+    @Autowired
+    private ConfigUtil configUtil;
+
     public BorrowerOrderApplyStatusEnum getOrderApplyStatus(String borrowerCode, String channelCode) {
         if (StringUtils.isNotEmpty(saasOrderService.getReviewerRefuseOrderNumb(borrowerCode, channelCode))) {
             return BorrowerOrderApplyStatusEnum.REFUSE;
@@ -129,6 +140,20 @@ public class OrderApplication {
         saasOrder.setExpireDate(DateUtil.addDate(new Date(), 20));
         saasOrder.setTotalInterestFee(orderCalculateApplication.getInterest(saasOrder.getRealCapital(), saasOrder.getTotalInterestRatio(), saasOrder.getCreatedDt(), saasOrder.getRepaymentDt()));
         saasOrderService.create(saasOrder);
+
+        String borrowerCode = saasOrderApplicationVo.getBorrowerCode();
+        SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCode(borrowerCode);
+        sendApplication.sendNotifyMessage(saasOrderApplicationVo.getMerchantCode(), saasBorrowerVo.getMobile(), null, SaasSmsTypeEnum.SAAS_0004);
+        SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(saasOrderApplicationVo.getChannelCode());
+        SaasAdmin saasAdmin = saasAdminService.getSaasAdminByAdminCode(saasChannelEntity.getChargePersonCode());
+        SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode);
+        sendApplication.sendNotifyMessage(saasOrderApplicationVo.getMerchantCode(), saasAdmin.getMobile(), new HashMap(4) {{
+            put("channel_name", saasChannelEntity.getChannelName());
+            put("money", saasOrderApplicationVo.getRealCapital());
+            put("name", saasBorrowerRealInfoVo.getName());
+            put("phone", saasBorrowerVo.getMobile());
+        }}, SaasSmsTypeEnum.SAAS_0005);
+
         return saasOrder;
     }
 
@@ -473,6 +498,8 @@ public class OrderApplication {
         updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
         updateSaasOrder.setPreliminaryReviewerCode(operatorCode);
         saasOrderService.updateById(updateSaasOrder);
+
+        sendApplication.sendNotifyMessageByBorrowerCode(merchantCode, saasOrderVo.getBorrowerCode(), null, SaasSmsTypeEnum.SAAS_0006);
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
@@ -482,6 +509,10 @@ public class OrderApplication {
             throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
         }
         updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.PRELIMINARY_REVIEWER_REJECT, null);
+
+        sendApplication.sendNotifyMessageByBorrowerCode(merchantCode, saasOrderVo.getBorrowerCode(), new HashMap(2) {{
+            put("channel_url", configUtil.getAddressURLPrefix() + configUtil.getH5AddressURLPrefix() + "?channel=" + saasOrderVo.getChannelCode());
+        }}, SaasSmsTypeEnum.SAAS_0007);
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
@@ -519,6 +550,8 @@ public class OrderApplication {
         updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
         updateSaasOrder.setFinalReviewerCode(operatorCode);
         saasOrderService.updateById(updateSaasOrder);
+
+        sendApplication.sendNotifyMessageByBorrowerCode(merchantCode, saasOrderVo.getBorrowerCode(), null, SaasSmsTypeEnum.SAAS_0006);
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
@@ -528,6 +561,10 @@ public class OrderApplication {
             throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
         }
         updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.FINAL_REVIEWER_REJECT, null);
+
+        sendApplication.sendNotifyMessageByBorrowerCode(merchantCode, saasOrderVo.getBorrowerCode(), new HashMap(2) {{
+            put("channel_url", configUtil.getAddressURLPrefix() + configUtil.getH5AddressURLPrefix() + "?channel=" + saasOrderVo.getChannelCode());
+        }}, SaasSmsTypeEnum.SAAS_0007);
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
@@ -541,6 +578,14 @@ public class OrderApplication {
         updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
         updateSaasOrder.setFinalReviewerCode(operatorCode);
         saasOrderService.updateById(updateSaasOrder);
+        String borrowerCode = saasOrderVo.getBorrowerCode();
+        SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCode(borrowerCode);
+        sendApplication.sendNotifyMessage(merchantCode, saasBorrowerVo.getMobile(), null, SaasSmsTypeEnum.SAAS_0008);
+        SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode);
+        sendApplication.sendNotifyMessageByChannelCode(merchantCode, saasOrderVo.getChannelCode(), new HashMap() {{
+            put("name", saasBorrowerRealInfoVo.getName());
+            put("phone", saasBorrowerVo.getMobile());
+        }}, SaasSmsTypeEnum.SAAS_0009);
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
@@ -553,8 +598,21 @@ public class OrderApplication {
         if (StringUtils.isNotEmpty(saasOrderVo.getTermUrl())) {
             updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.FOR_REIMBURSEMENT, null);
             orderBillDetailApplication.createOrderBillDetail(orderNumb, merchantCode);
+
+            sendApplication.sendNotifyMessageByBorrowerCode(merchantCode, saasOrderVo.getBorrowerCode(), new HashMap(2) {{
+                put("money", saasOrderVo.getRealCapital());
+            }}, SaasSmsTypeEnum.SAAS_0011);
+            SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(saasOrderVo.getBorrowerCode());
+            sendApplication.sendNotifyMessageByChannelCode(merchantCode, saasOrderVo.getChannelCode(), new HashMap(2) {{
+                put("name", saasBorrowerRealInfoVo.getName());
+                put("money", saasOrderVo.getRealCapital());
+            }}, SaasSmsTypeEnum.SAAS_0012);
         } else {
             updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.TO_CONFIRM_RECEIPT, null);
+
+            sendApplication.sendNotifyMessageByBorrowerCode(merchantCode, saasOrderVo.getBorrowerCode(), new HashMap(2) {{
+                put("channel_url", configUtil.getAddressURLPrefix() + configUtil.getH5AddressURLPrefix() + "?channel=" + saasOrderVo.getChannelCode());
+            }}, SaasSmsTypeEnum.SAAS_0010);
         }
         SaasOrder updateSaasOrder = new SaasOrder();
         updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
@@ -590,12 +648,23 @@ public class OrderApplication {
             ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, borrowerCode, null, ContractTypeEnum.BORROWER_DO_AUTHORIZATION_CONTRACT_SIGN));
         }
         ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, borrowerCode, saasOrderVo.getSaasOrderId(), ContractTypeEnum.BORROWER_DO_LOAN_CONTRACT_SIGN));
+
         updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.FOR_REIMBURSEMENT, null);
         String termUrl = contractApplication.borrowerDoLoanContractSign(borrowerCode, saasOrderVo.getSaasOrderId());
         SaasOrder updateSaasOrder = new SaasOrder();
         updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
         updateSaasOrder.setTermUrl(termUrl);
         saasOrderService.updateById(updateSaasOrder);
+
+        sendApplication.sendNotifyMessageByBorrowerCode(merchantCode, saasOrderVo.getBorrowerCode(), new HashMap(2) {{
+            put("money", saasOrderVo.getRealCapital());
+        }}, SaasSmsTypeEnum.SAAS_0011);
+        SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(saasOrderVo.getBorrowerCode());
+        sendApplication.sendNotifyMessageByChannelCode(merchantCode, saasOrderVo.getChannelCode(), new HashMap(2) {{
+            put("name", saasBorrowerRealInfoVo.getName());
+            put("money", saasOrderVo.getRealCapital());
+        }}, SaasSmsTypeEnum.SAAS_0012);
+
         orderBillDetailApplication.createOrderBillDetail(orderNumb, merchantCode);
     }
 
@@ -632,6 +701,10 @@ public class OrderApplication {
 
         ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, operatorCode, extendSaasOrder.getId(), ContractTypeEnum.LENDER_DO_EXTEND_CONTRACT_SIGN));
 
+        sendApplication.sendNotifyMessageByBorrowerCode(merchantCode, saasOrderVo.getBorrowerCode(), new HashMap(2) {{
+            put("channel_url", configUtil.getAddressURLPrefix() + configUtil.getH5AddressURLPrefix() + "?channel=" + saasOrderVo.getChannelCode());
+        }}, SaasSmsTypeEnum.SAAS_0014);
+
         SaasOrderStatusHistory saasOrderStatusHistory = new SaasOrderStatusHistory();
         saasOrderStatusHistory.setOrderId(extendSaasOrder.getId());
         saasOrderStatusHistory.setOrderNumb(extendSaasOrder.getOrderNumb());
@@ -654,12 +727,24 @@ public class OrderApplication {
         saasOrderService.updateOrderStatus(oldSaasOrder.getId(), oldSaasOrder.getVersion(), OrderStatusEnum.getEnumByCode(oldSaasOrder.getOrderStatus()), OrderStatusEnum.IN_EXTEND);
 
         orderBillDetailApplication.createOrderBillDetail(orderNumb, merchantCode);
+
+        sendApplication.sendNotifyMessageByBorrowerCode(merchantCode, saasOrderVo.getBorrowerCode(), new HashMap(2) {{
+            put("money", saasOrderVo.getRealCapital());
+            put("day", DateUtil.countDay(saasOrderVo.getRepaymentDt(), saasOrderVo.getGmtCreate()));
+            put("date", saasOrderVo.getRepaymentDt());
+        }}, SaasSmsTypeEnum.SAAS_0015);
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
     public void destroyOrder(String merchantCode, String operatorCode, String orderNumb) {
+
         updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.HAS_BEEN_DESTROY, null);
         orderBillDetailApplication.destroyOrderBillDetail(orderNumb, merchantCode);
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(orderNumb, merchantCode);
+
+        sendApplication.sendNotifyMessageByBorrowerCode(merchantCode, saasOrderVo.getBorrowerCode(), new HashMap(2) {{
+            put("money", saasOrderVo.getRealCapital());
+        }}, SaasSmsTypeEnum.SAAS_0016);
     }
 
 }

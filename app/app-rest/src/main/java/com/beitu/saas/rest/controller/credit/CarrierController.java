@@ -100,6 +100,7 @@ public class CarrierController {
         Map<String, String> resultMap = new HashMap<>();
         try {
             CarrierH5TypeEnum carrierH5TypeEnum = CarrierH5TypeEnum.getEnumbyType(carrierType);
+            LOGGER.error("=============carrier callback request=============" + carrierType);
             switch (carrierH5TypeEnum) {
                 case CARRIER_TIANJI:
                     tianjiCallback(httpServletRequest);

@@ -8,13 +8,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
-* User: fenqiguanjia
-* Date: 2018-03-23
-* Time: 20:33:10.957
-*/
+ * User: fenqiguanjia
+ * Date: 2018-03-23
+ * Time: 20:33:10.957
+ */
 
-public interface SaasCreditHistoryDao  extends BaseMapper<SaasCreditHistoryEntity> {
-        Long selectYesterdayCreditStatCredit(String merchantCode, Date yesterday);
+public interface SaasCreditHistoryDao extends BaseMapper<SaasCreditHistoryEntity> {
+    Long selectYesterdayCreditStatCredit(String merchantCode, Date yesterday);
 
     List<SaasCreditHistoryEntity> selectCreditListByParam(Map map);
 

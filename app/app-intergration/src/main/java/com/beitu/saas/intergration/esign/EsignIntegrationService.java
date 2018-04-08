@@ -35,7 +35,7 @@ public interface EsignIntegrationService {
      * @param borrowerDoContractSignParam
      * @return
      */
-    String borrowerDoContractSign(BorrowerDoContractSignParam borrowerDoContractSignParam);
+    byte[] borrowerDoContractSign(BorrowerDoContractSignParam borrowerDoContractSignParam);
 
     /**
      * 机构 签署 协议
@@ -43,7 +43,7 @@ public interface EsignIntegrationService {
      * @param lenderDoContractSignParam
      * @return
      */
-    String lenderDoContractSign(LenderDoContractSignParam lenderDoContractSignParam);
+    byte[] lenderDoContractSign(LenderDoContractSignParam lenderDoContractSignParam);
 
     /**
      * 签署 授权协议
@@ -51,6 +51,6 @@ public interface EsignIntegrationService {
      * @param licenseContractSignParam
      * @return
      */
-    String doLicenseContractSign(LicenseContractSignParam licenseContractSignParam);
+    byte[] doLicenseContractSign(LicenseContractSignParam licenseContractSignParam);
 
 }

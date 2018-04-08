@@ -14,8 +14,12 @@ public interface SaasUserEsignAuthorizationService<T extends BaseEntity> extends
 
     Boolean isSuccessAuthorization(String userCode);
 
+    SaasUserEsignAuthorizationVo getSuccessEsignAuthorizationByUserCode(String userCode);
+
     SaasUserEsignAuthorizationVo getByUserCode(String userCode);
 
     SaasUserEsignAuthorization create(SaasUserEsignAuthorizationVo saasUserEsignAuthorizationVo);
+
+    Boolean updateSaasUserEsignAuthorization(Long id, String authorizationUrl);
 
 }

@@ -48,7 +48,7 @@
                 <if test="yesterday !=null">
                     and gmt_create like CONCAT(#{yesterday,jdbcType=VARCHAR},'%')
                 </if>
-                and deleted=0
+                and op_type=0 and deleted=0
             </trim>
         </where>
 

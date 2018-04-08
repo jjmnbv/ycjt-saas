@@ -26,7 +26,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import static org.bouncycastle.asn1.ua.DSTU4145NamedCurves.params;
 
 /**
  * @Author poyangchen
@@ -106,7 +105,7 @@ public class HttpUtil {
             result = EntityUtils.toString(response.getEntity(), charset);
 //            }
         } catch (Exception e) {
-            LOGGER.error("post request error,url:" + url + ",params:" + params, e);
+            LOGGER.error("post request error,url:" + url + ",params:" + parameters, e);
         } finally {
             close(response);
             close(client);
@@ -336,7 +335,7 @@ public class HttpUtil {
             response = client.execute(httppost);
             result = EntityUtils.toString(response.getEntity(), charset);
         } catch (Exception e) {
-            LOGGER.info("submit file request error,url:" + url + ",params:" + params, e);
+            LOGGER.info("submit file request error,url:" + url + ",params:" + parameters, e);
         } finally {
             close(response);
             close(client);

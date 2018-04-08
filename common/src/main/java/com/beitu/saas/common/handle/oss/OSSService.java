@@ -49,6 +49,15 @@ public class OSSService {
 
     }
 
+    public String uploadFile(String fileName, byte[] content) {
+        OSSClient client = new OSSClient(configUtil.getEndpoint(), configUtil.getAccessKeyId(), configUtil.getAccessKeySecret());
+        ObjectMetadata meta = new ObjectMetadata();
+        meta.setContentLength(content.length);
+        client.putObject(configUtil.getBucketName(), fileName, new ByteArrayInputStream(content), meta);
+
+        return fileName;
+    }
+
     public String uploadFile(String fileName, String content) {
         OSSClient client = new OSSClient(configUtil.getEndpoint(), configUtil.getAccessKeyId(), configUtil.getAccessKeySecret());
         ObjectMetadata meta = new ObjectMetadata();

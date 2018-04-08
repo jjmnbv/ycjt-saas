@@ -18,6 +18,8 @@ import com.beitu.saas.credit.domain.SaasCreditTongdunVo;
 import com.beitu.saas.credit.entity.SaasCreditTongdun;
 import com.beitu.saas.credit.entity.SaasCreditTongdunDetail;
 import com.beitu.saas.credit.enums.CreditErrorCodeEnum;
+import com.beitu.saas.finance.client.SaasCreditHistoryService;
+import com.beitu.saas.finance.client.enums.CreditConsumeEnum;
 import com.beitu.saas.risk.client.service.TripleSubscriptionService;
 import com.beitu.saas.risk.domain.enums.triple.TripleServiceTypeEnum;
 import com.beitu.saas.risk.domain.platform.tongdun.TripleTongDunReportQueryOutput;
@@ -64,6 +66,9 @@ public class TongdunAsyncApplication {
 
     @Autowired
     private RedisClient redisClient;
+
+    @Autowired
+    private SaasCreditHistoryService saasCreditHistoryService;
 
     @Transactional(rollbackFor = Exception.class)
     public void generateTongdunReport(String merchantCode, String borrowerCode) {
@@ -116,6 +121,9 @@ public class TongdunAsyncApplication {
             saasCreditTongdun.setBorrowerCode(borrowerCode);
             saasCreditTongdun.setReportId(reportId);
             saasCreditTongdunService.create(saasCreditTongdun);
+
+            saasCreditHistoryService.addExpenditureCreditHistory(merchantCode, saasBorrowerRealInfoVo.getName(), CreditConsumeEnum.RISK_LOAN_BLACKLIST);
+
             generateTongdunDetail(reportId, saasCreditTongdun.getId());
         } else {
             // TODO: 17/6/30 抛出异常
