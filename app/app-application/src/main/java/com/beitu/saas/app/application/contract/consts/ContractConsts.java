@@ -17,4 +17,6 @@ public class ContractConsts {
 
     public static final String DEFAULT_DO_LICENSE_CONTRACT_SIGN_OPERATOR_NAME = "SYSTEM";
 
+    public static final String TEST_PDF_PATH = "test.pdf";
+
 }

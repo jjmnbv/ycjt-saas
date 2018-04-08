@@ -10,6 +10,8 @@ import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.enums.RestCodeEnum;
 import com.beitu.saas.common.utils.DateUtil;
+import com.beitu.saas.common.utils.OrderNoUtil;
+import com.beitu.saas.common.utils.StringUtil;
 import com.beitu.saas.order.client.SaasOrderService;
 import com.beitu.saas.order.entity.SaasOrder;
 import com.beitu.saas.order.enums.OrderErrorCodeEnum;
@@ -21,10 +23,14 @@ import com.itextpdf.text.pdf.AcroFields;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -155,12 +161,13 @@ public class ContractCreateApplication {
         data.put("repaymentDt", DateUtil.getDate(saasOrder.getRepaymentDt()));
         data.put("totalInterestRatio", orderCalculateApplication.getInterestRatio(saasOrder.getTotalInterestRatio()));
         data.put("inscribeDate", DateUtil.getDate(new Date(), ContractConsts.CONTRACT_INSCRIBE_DATE_PATTERN));
-        return generateContract(ContractConsts.LOAN_PDF_PATH, data);
+        return generateContract(ContractConsts.EXTEND_PDF_PATH, data);
     }
 
     private byte[] generateContract(String srcPdfFilePath, Map<String, String> data) {
         PdfStamper ps = null;
         ByteArrayOutputStream bos = null;
+        OutputStream fos = null;
         try {
             PdfReader reader = new PdfReader(srcPdfFilePath);
             bos = new ByteArrayOutputStream();
@@ -168,18 +175,24 @@ public class ContractCreateApplication {
             AcroFields fields = ps.getAcroFields();
             BaseFont bf = BaseFont.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
             for (String key : data.keySet()) {
-                String value = data.get(key).toString();
-                fields.setFieldProperty(key, "textfont", bf, null);
-                fields.setField(key, value);
+                String dataValue = data.get(key);
+                if (StringUtils.isNotEmpty(dataValue)) {
+                    String value = data.get(key).toString();
+                    fields.setFieldProperty(key, "textfont", bf, null);
+                    fields.setField(key, value);
+                }
             }
             ps.setFormFlattening(true);
+            ps.close();
+            fos = new FileOutputStream(configUtil.getPdfPath() + OrderNoUtil.makeOrderNum() + ContractConsts.TEST_PDF_PATH);
+            fos.write(bos.toByteArray());
             return bos.toByteArray();
         } catch (Exception e) {
             LOGGER.error("合同生成失败，失败原因：{}；文件路径：{}", e.getMessage(), srcPdfFilePath);
         } finally {
             try {
-                if (ps != null) {
-                    ps.close();
+                if (fos != null) {
+                    fos.close();
                 }
                 if (bos != null) {
                     bos.close();

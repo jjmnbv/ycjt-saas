@@ -600,6 +600,17 @@
                 <artifactId>utils</artifactId>
                 <version>3.0.6</version>
             </dependency>
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcmail-jdk16</artifactId>
+                <version>1.46</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.bouncycastle</groupId>
+                        <artifactId>bcprov-jdk15on</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
             <!--e签宝  end-->
 
             <!-- 个推 start -->
