@@ -187,12 +187,13 @@ public class ContractApplication {
                     e.printStackTrace();
                 }
             }
-            LicenseContractSignParam licenseContractSignParam = new LicenseContractSignParam();
-            licenseContractSignParam.setUserCode(merchantCode);
-            licenseContractSignParam.setUserAccountId(accountId);
-            licenseContractSignParam.setUserSealData(sealData);
-            licenseContractSignParam.setSrcPdfContent(pdfContent);
-            byte[] content = esignIntegrationService.doLicenseContractSign(licenseContractSignParam);
+//            LicenseContractSignParam licenseContractSignParam = new LicenseContractSignParam();
+//            licenseContractSignParam.setUserCode(merchantCode);
+//            licenseContractSignParam.setUserAccountId(accountId);
+//            licenseContractSignParam.setUserSealData(sealData);
+//            licenseContractSignParam.setSrcPdfContent(pdfContent);
+//            byte[] content = esignIntegrationService.doLicenseContractSign(licenseContractSignParam);
+            byte[] content = pdfContent;
             if (content == null) {
                 throw new ApplicationException("esign盖章失败");
             }
