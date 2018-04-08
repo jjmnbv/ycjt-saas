@@ -135,7 +135,8 @@ public class OrderBillDetailApplication {
             saasOrderBillDetailListVo.setOverdueDuration(0);
         }
         BorrowerInfoVo borrowerInfoVo = borrowerApplication.getBorrowerInfoVoByBorrowerCode(saasOrderBillDetailVo.getMerchantCode(), saasOrderBillDetailVo.getBorrowerCode());
-        BeanUtils.copyProperties(borrowerInfoVo, saasOrderBillDetailListVo);
+        saasOrderBillDetailListVo.setBorrowerName(borrowerInfoVo.getBorrowerName());
+        saasOrderBillDetailListVo.setBorrowerMobile(borrowerInfoVo.getBorrowerMobile());
 
         saasOrderBillDetailListVo.setLoanLendRemark(saasOrderStatusHistoryService.getLoanLendRemark(saasOrderBillDetailVo.getOrderNumb()));
         saasOrderBillDetailListVo.setChannelName(saasChannelService.getSaasChannelByChannelCode(saasOrderBillDetailVo.getChannelCode()).getChannelName());
