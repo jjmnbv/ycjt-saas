@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beitu.saas.credit.dao.impl.PhoneBookInfoDaoImpl">
+    <resultMap id="BaseResultMap" type="com.beitu.saas.credit.entity.PhoneBookInfo">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="prefix" jdbcType="VARCHAR" property="prefix"/>
+        <result column="mobile_type" jdbcType="VARCHAR" property="mobileType"/>
+        <result column="phone_header" jdbcType="VARCHAR" property="phoneHeader"/>
+        <result column="province" jdbcType="VARCHAR" property="province"/>
+        <result column="city" jdbcType="VARCHAR" property="city"/>
+        <result column="area_code" jdbcType="VARCHAR" property="areaCode"/>
+        <result column="postcode" jdbcType="VARCHAR" property="postcode"/>
+        <result column="deleted" jdbcType="BIT" property="deleted"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        prefix,
+        mobile_type,
+        phone_header,
+        province,
+        city,
+        area_code,
+        postcode,
+        deleted,
+        gmt_modified,
+        gmt_create
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from phone_book_info
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.beitu.saas.credit.entity.PhoneBookInfo" useGeneratedKeys="true">
+        insert into phone_book_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="prefix !=null">
+            prefix,
+            </if>
+            <if test="mobileType !=null">
+            mobile_type,
+            </if>
+            <if test="phoneHeader !=null">
+            phone_header,
+            </if>
+            <if test="province !=null">
+            province,
+            </if>
+            <if test="city !=null">
+            city,
+            </if>
+            <if test="areaCode !=null">
+            area_code,
+            </if>
+            <if test="postcode !=null">
+            postcode,
+            </if>
+            <if test="deleted !=null">
+            deleted,
+            </if>
+            <if test="gmtModified !=null">
+            gmt_modified,
+            </if>
+            <if test="gmtCreate !=null">
+            gmt_create,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="prefix != null">
+            #{prefix,jdbcType=VARCHAR},
+            </if>
+            <if test="mobileType != null">
+            #{mobileType,jdbcType=VARCHAR},
+            </if>
+            <if test="phoneHeader != null">
+            #{phoneHeader,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null">
+            #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">
+            #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="areaCode != null">
+            #{areaCode,jdbcType=VARCHAR},
+            </if>
+            <if test="postcode != null">
+            #{postcode,jdbcType=VARCHAR},
+            </if>
+            <if test="deleted != null">
+            #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified != null">
+            #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtCreate != null">
+            #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.beitu.saas.credit.entity.PhoneBookInfo">
+        update phone_book_info
+        <set>
+            <if test="prefix !=null">
+                prefix = #{prefix,jdbcType=VARCHAR},
+            </if>
+            <if test="mobileType !=null">
+                mobile_type = #{mobileType,jdbcType=VARCHAR},
+            </if>
+            <if test="phoneHeader !=null">
+                phone_header = #{phoneHeader,jdbcType=VARCHAR},
+            </if>
+            <if test="province !=null">
+                province = #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="city !=null">
+                city = #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="areaCode !=null">
+                area_code = #{areaCode,jdbcType=VARCHAR},
+            </if>
+            <if test="postcode !=null">
+                postcode = #{postcode,jdbcType=VARCHAR},
+            </if>
+            <if test="deleted !=null">
+                deleted = #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteByPrimaryKey">
+        update  phone_book_info
+        set deleted = 1
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <sql id="paginationSql">
+        <if test="page != null">
+            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+        </if>
+    </sql>
+</mapper>

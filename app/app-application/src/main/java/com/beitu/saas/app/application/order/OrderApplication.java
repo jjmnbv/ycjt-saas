@@ -10,7 +10,6 @@ import com.beitu.saas.app.application.order.vo.*;
 import com.beitu.saas.app.enums.BorrowerOrderApplyStatusEnum;
 import com.beitu.saas.app.enums.H5OrderBillDetailViewTypeEnum;
 import com.beitu.saas.app.enums.SaasSmsTypeEnum;
-import com.beitu.saas.auth.domain.SaasAdminVo;
 import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.auth.service.SaasAdminService;
 import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
@@ -19,7 +18,6 @@ import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
 import com.beitu.saas.borrower.domain.SaasBorrowerVo;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.consts.ChannelConsts;
-import com.beitu.saas.channel.domain.SaasChannelVo;
 import com.beitu.saas.channel.entity.SaasChannelEntity;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.utils.DateUtil;
@@ -132,14 +130,18 @@ public class OrderApplication {
         BeanUtils.copyProperties(saasOrderApplicationVo, saasOrder);
         saasOrder.setOrderNumb(orderNumb);
         saasOrder.setChannelCode(channelCode);
-        if (!ChannelConsts.DEFAULT_CHANNEL_CREATOR_CODE.equals(channelCode)) {
-            saasOrderApplicationVo.setTermUrl(contractApplication.borrowerDoLoanContractSign(saasOrderApplicationVo.getBorrowerCode(), null));
-        }
         saasOrder.setCreatedDt(saasOrderApplicationVo.getGmtCreate());
         saasOrder.setOrderStatus(OrderStatusEnum.SUBMIT_PRELIMINARY_REVIEW.getCode());
         saasOrder.setExpireDate(DateUtil.addDate(new Date(), 20));
         saasOrder.setTotalInterestFee(orderCalculateApplication.getInterest(saasOrder.getRealCapital(), saasOrder.getTotalInterestRatio(), saasOrder.getCreatedDt(), saasOrder.getRepaymentDt()));
         saasOrderService.create(saasOrder);
+
+        if (!ChannelConsts.DEFAULT_CHANNEL_CREATOR_CODE.equals(channelCode)) {
+            SaasOrder updateSaasOrder = new SaasOrder();
+            updateSaasOrder.setId(saasOrder.getId());
+            updateSaasOrder.setTermUrl(contractApplication.borrowerDoLoanContractSign(saasOrderApplicationVo.getBorrowerCode(), saasOrder.getId()));
+            saasOrderService.updateById(updateSaasOrder);
+        }
 
         String borrowerCode = saasOrderApplicationVo.getBorrowerCode();
         SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCode(borrowerCode);

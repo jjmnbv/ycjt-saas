@@ -29,7 +29,6 @@ public class InitEsign {
     @Autowired
     private ConfigUtil configUtil;
 
-    @PostConstruct
     public void initProject() {
         ProjectConfig proCfg = new ProjectConfig();
 

@@ -186,7 +186,7 @@
         <logger name="RocketmqClient" level="info" additivity="false">
             <!--<appender-ref ref="RollingFileInfo"/>-->
         </logger>
-        <logger name="com.fqgj.youjie" level="info">
+        <logger name="com.beitu.saas" level="info">
             <appender-ref ref="RollingFileInfoBiz" />
             <appender-ref ref="RollingFileWarnBiz" />
             <appender-ref ref="RollingFileErrorBiz" />
