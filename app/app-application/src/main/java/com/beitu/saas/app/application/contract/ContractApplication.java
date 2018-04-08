@@ -1,6 +1,7 @@
 package com.beitu.saas.app.application.contract;
 
 import com.beitu.saas.app.application.auth.MerchantApplication;
+import com.beitu.saas.app.application.contract.consts.ContractConsts;
 import com.beitu.saas.auth.domain.MerchantContractInfoVo;
 import com.beitu.saas.auth.enums.ContractConfigTypeEnum;
 import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
@@ -9,6 +10,8 @@ import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.enums.RestCodeEnum;
 import com.beitu.saas.common.handle.oss.OSSService;
 import com.beitu.saas.common.utils.OrderNoUtil;
+import com.beitu.saas.finance.client.SaasCreditHistoryService;
+import com.beitu.saas.finance.client.enums.CreditConsumeEnum;
 import com.beitu.saas.intergration.esign.EsignIntegrationService;
 import com.beitu.saas.intergration.esign.dto.AddOrganizeAccountSuccessDto;
 import com.beitu.saas.intergration.esign.dto.AddPersonAccountSuccessDto;
@@ -56,6 +59,9 @@ public class ContractApplication {
 
     @Autowired
     private ContractCreateApplication contractCreateApplication;
+
+    @Autowired
+    private SaasCreditHistoryService saasCreditHistoryService;
 
     public Boolean needDoLicenseContractSign(String userCode) {
         if (saasUserEsignAuthorizationService.isSuccessAuthorization(userCode)) {
@@ -109,6 +115,8 @@ public class ContractApplication {
         saasUserEsignAuthorizationVo.setSealUrl(sealUrl);
         saasUserEsignAuthorizationVo.setSuccess(Boolean.FALSE);
         if (StringUtils.isNotEmpty(content)) {
+            saasCreditHistoryService.addExpenditureCreditHistory(saasBorrowerRealInfoVo.getMerchantCode(), saasBorrowerRealInfoVo.getName(), CreditConsumeEnum.ESIGN);
+
             String authorizationUrl = ossService.uploadFile(getAuthorizationUrl(borrowerCode), content);
             saasUserEsignAuthorizationVo.setAuthorizationUrl(authorizationUrl);
             saasUserEsignAuthorizationVo.setAuthorizationTime(new Date());
@@ -177,6 +185,8 @@ public class ContractApplication {
         saasUserEsignAuthorizationVo.setSealUrl(sealUrl);
         saasUserEsignAuthorizationVo.setSuccess(Boolean.FALSE);
         if (StringUtils.isNotEmpty(content)) {
+            saasCreditHistoryService.addExpenditureCreditHistory(merchantCode, ContractConsts.DEFAULT_DO_LICENSE_CONTRACT_SIGN_OPERATOR_NAME, CreditConsumeEnum.ESIGN);
+
             String authorizationUrl = ossService.uploadFile(getAuthorizationUrl(merchantCode), content);
             saasUserEsignAuthorizationVo.setAuthorizationUrl(authorizationUrl);
             saasUserEsignAuthorizationVo.setAuthorizationTime(new Date());

@@ -15,4 +15,6 @@ public class ContractConsts {
 
     public static final String CONTRACT_INSCRIBE_DATE_PATTERN = "yyyy年MM月dd日";
 
+    public static final String DEFAULT_DO_LICENSE_CONTRACT_SIGN_OPERATOR_NAME = "SYSTEM";
+
 }
