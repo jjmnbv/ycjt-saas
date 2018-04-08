@@ -153,7 +153,7 @@ public class EsignIntegrationServiceImpl implements EsignIntegrationService {
         UserSignService userSignService = UserSignServiceFactory.instance();
         FileDigestSignResult finalResult = userSignService.localSignPDF(licenseContractSignParam.getUserAccountId(), licenseContractSignParam.getUserSealData(), signPDFStreamBean, posBean, signType);
         if (0 != finalResult.getErrCode()) {
-            LOGGER.error("授权协议授权方签章失败" + (finalResult.isErrShow() ? (":" + finalResult.getMsg()) : "") + " --- userCode:" + licenseContractSignParam.getUserCode());
+            LOGGER.error("授权协议授权方签章失败:" + finalResult.getMsg() + " --- userCode:" + licenseContractSignParam.getUserCode());
             return null;
         }
         return finalResult.getStream();
