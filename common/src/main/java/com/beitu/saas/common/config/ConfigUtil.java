@@ -539,4 +539,13 @@ public class ConfigUtil {
         return config.getIntProperty("contract.number.length", 10);
     }
 
+    public int getRecommendFlowRatio() {
+        return config.getIntProperty("recommend.flow.ratio", 2);
+    }
+
+    public int getShareNum() {
+        return config.getIntProperty("recommend.share.num", 3);
+    }
+
+
 }
