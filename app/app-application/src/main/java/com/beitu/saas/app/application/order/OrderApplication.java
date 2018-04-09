@@ -209,7 +209,7 @@ public class OrderApplication {
         return results;
     }
 
-    public OrderDetailVo getOrderDetailVoByOrderNumbAndMerchantCode(String merchantCode, String orderNumb) {
+    public OrderDetailVo getOrderDetailVoByOrderNumbAndMerchantCode(String orderNumb, String merchantCode) {
         List<SaasOrderVo> saasOrderVoList = saasOrderService.listEffectiveOrderByOrderNumb(orderNumb);
         if (CollectionUtils.isEmpty(saasOrderVoList)) {
             return null;
