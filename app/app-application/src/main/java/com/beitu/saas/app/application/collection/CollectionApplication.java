@@ -98,6 +98,7 @@ public class CollectionApplication {
         collectionCommentListVo.setCollectionDate(DateUtil.getDateTime(saasCollectionCommentEntity.getGmtCreate()));
         collectionCommentListVo.setCollectionName(saasCollectionCommentEntity.getName());
         collectionCommentListVo.setCollectionMobile(saasCollectionCommentEntity.getMobile());
+        collectionCommentListVo.setRemark(saasCollectionCommentEntity.getContent());
         return collectionCommentListVo;
     }
 
