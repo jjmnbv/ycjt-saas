@@ -19,8 +19,8 @@ import com.beitu.saas.borrower.domain.SaasBorrowerVo;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.consts.ChannelConsts;
 import com.beitu.saas.channel.entity.SaasChannelEntity;
-import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.collection.client.SaasCollectionOrderService;
+import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.utils.DateUtil;
 import com.beitu.saas.common.utils.ThreadPoolUtils;
 import com.beitu.saas.finance.client.SaasMerchantBalanceInfoService;
@@ -41,9 +41,9 @@ import com.beitu.saas.order.entity.SaasOrderStatusHistory;
 import com.beitu.saas.order.enums.DashboardTypeEnum;
 import com.beitu.saas.order.enums.OrderErrorCodeEnum;
 import com.beitu.saas.order.enums.OrderStatusEnum;
+import com.beitu.saas.order.vo.DashboardOrderVo;
 import com.beitu.saas.order.vo.LoanDataDetailVo;
 import com.beitu.saas.order.vo.LoanStateDetailVo;
-import com.beitu.saas.order.vo.DashboardOrderVo;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.utils.CollectionUtils;
 import com.fqgj.common.utils.StringUtils;
@@ -201,7 +201,12 @@ public class OrderApplication {
                 h5OrderListVo.setOrderNumb(saasOrderBillDetailVo.getOrderNumb());
                 h5OrderListVo.setAmount(orderCalculateApplication.getAmount(saasOrderBillDetailVo).toString());
                 h5OrderListVo.setRepaymentDt(DateUtil.getDate(saasOrderBillDetailVo.getRepaymentDt()));
-                h5OrderListVo.setOrderStatus(saasOrderService.getOrderStatusByOrderNumb(saasOrderBillDetailVo.getOrderNumb()).getCode());
+                OrderStatusEnum orderStatusEnum = saasOrderService.getOrderStatusByOrderNumb(saasOrderBillDetailVo.getOrderNumb());
+                if (orderStatusEnum.equals(OrderStatusEnum.IN_EXTEND)) {
+                    h5OrderListVo.setOrderStatus(OrderStatusEnum.FOR_REIMBURSEMENT.getCode());
+                } else {
+                    h5OrderListVo.setOrderStatus(orderStatusEnum.getCode());
+                }
                 h5OrderListVo.setViewType(H5OrderBillDetailViewTypeEnum.getByOrderStatus(h5OrderListVo.getOrderStatus()).getCode());
                 results.add(h5OrderListVo);
             });

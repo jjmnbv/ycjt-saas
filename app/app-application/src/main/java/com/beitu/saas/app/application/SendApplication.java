@@ -97,6 +97,9 @@ public class SendApplication {
             return;
         }
         SaasMerchantVo saasMerchantVo = saasMerchantService.getByMerchantCode(merchantCode);
+        if (map == null) {
+            map = new HashMap(4);
+        }
         map.put("sign", saasMerchantVo.getCompanyName());
         SingleSmsSendRequestRO ro = new SingleSmsSendRequestRO();
         ro.setPhone(mobile);

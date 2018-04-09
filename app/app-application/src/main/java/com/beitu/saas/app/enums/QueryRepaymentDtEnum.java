@@ -9,13 +9,13 @@ import com.fqgj.common.api.enums.MsgCodeEnum;
  */
 public enum QueryRepaymentDtEnum implements MsgCodeEnum {
 
-    ALL(1, "全部逾期", null, 0),
-    DUE_TODAY(2, "今日到期", 0, 1),
-    DUE_NEARLY_THREE_DAYS(3, "近3天到期", 0, 3),
-    TODAY_OVERDUE(4, "今日逾期", -1, 0),
-    OVERDUE_3_DAYS(5, "逾期0-3天", -3, 0),
-    OVERDUE_7_DAYS(6, "逾期0-7天", -7, 0),
-    OVERDUE_15_DAYS(7, "逾期0-15天", -15, 0),
+    ALL(1, "全部逾期", null, -1),
+    DUE_TODAY(2, "今日到期", 0, 0),
+    DUE_NEARLY_THREE_DAYS(3, "近3天到期", 0, 2),
+    TODAY_OVERDUE(4, "今日逾期", -1, -1),
+    OVERDUE_3_DAYS(5, "逾期1-3天", -3, -1),
+    OVERDUE_7_DAYS(6, "逾期1-7天", -7, -1),
+    OVERDUE_15_DAYS(7, "逾期1-15天", -15, 0),
     OVERDUE_15_30_DAYS(8, "逾期15-30天", -30, -15),
     OVERDUE_30_60_DAYS(9, "逾期30-60天", -60, -30),
     OVERDUE_60_90_DAYS(10, "逾期60-90天", -90, -60),
