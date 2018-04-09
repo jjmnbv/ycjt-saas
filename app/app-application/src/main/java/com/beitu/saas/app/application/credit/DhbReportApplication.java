@@ -287,8 +287,8 @@ public class DhbReportApplication {
     }
 
     private List<SaasCreditBmpDetailVo> convertBmpData(List<BmpTelTagDataVo> bmpTelTagDataVos, Long recordId) {
-        List<SaasCreditBmpDetailVo> creditBmpDetailVos = new ArrayList<>(bmpTelTagDataVos.size());
         if (CollectionUtils.isNotEmpty(bmpTelTagDataVos)) {
+            List<SaasCreditBmpDetailVo> creditBmpDetailVos = new ArrayList<>(bmpTelTagDataVos.size());
             for (BmpTelTagDataVo bmpTelTagDataVo : bmpTelTagDataVos) {
                 SaasCreditBmpDetailVo detailVo = new SaasCreditBmpDetailVo();
                 detailVo.setRecordId(recordId);
