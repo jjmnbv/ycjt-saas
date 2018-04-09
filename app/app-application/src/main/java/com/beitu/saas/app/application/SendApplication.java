@@ -107,7 +107,7 @@ public class SendApplication {
         if (!result.isSuccess()) {
             throw new ApplicationException(MessageSendErrorCodeEnum.SEND_FAILED);
         }
-        saasSmsHistoryService.addExpenditureSmsHistory(merchantCode, 1L, mobile, saasSmsTypeEnum.getComment());
+        saasSmsHistoryService.addExpenditureSmsHistory(merchantCode, saasSmsTypeEnum.getPrice(), mobile, saasSmsTypeEnum.getComment());
     }
 
     public void sendBatchNotifyMessage(String merchantCode, List<String> mobileList, Map map, SaasSmsTypeEnum saasSmsTypeEnum) {
@@ -130,7 +130,7 @@ public class SendApplication {
         if (!result.isSuccess()) {
             throw new ApplicationException(MessageSendErrorCodeEnum.SEND_FAILED);
         }
-        saasSmsHistoryService.addExpenditureSmsHistory(merchantCode, Long.valueOf(mobileList.size()), null, saasSmsTypeEnum.getComment());
+        saasSmsHistoryService.addExpenditureSmsHistory(merchantCode, Long.valueOf(mobileList.size()) * saasSmsTypeEnum.getPrice(), null, saasSmsTypeEnum.getComment());
     }
 
 }

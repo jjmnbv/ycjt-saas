@@ -154,7 +154,7 @@ public class LoanPlatformApplication {
             throw new ApplicationException(RestCodeEnum.BORROWER_NOT_EXIST_ERROR);
         }
         SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(saasBorrowerVo.getBorrowerCode());
-        saasCreditHistoryService.addExpenditureCreditHistory(saasBorrowerVo.getMerchantCode(), saasBorrowerRealInfoVo.getName(), CreditConsumeEnum.FLOW_MULTI_PLATFORM_LENDING);
+        saasCreditHistoryService.addExpenditureCreditHistory(saasBorrowerVo.getMerchantCode(), saasBorrowerRealInfoVo.getName(), CreditConsumeEnum.RISK_MULTI_PLATFORM_LENDING);
 
         if (!saasBorrowerLoanCrawlService.addSaasBorrowerLoanCrawl(vo)) {
             return "数据库结果写入失败";
