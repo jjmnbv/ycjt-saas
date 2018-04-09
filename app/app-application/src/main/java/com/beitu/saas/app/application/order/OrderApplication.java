@@ -459,44 +459,44 @@ public class OrderApplication {
     }
 
     /**
-     * 数据看板放款数据
+     * 数据看板逾期信息
      *
      * @param merchantCode
      */
-    public List<DashboardOrderShowVo> getDataDashboardOverdueShowInfo(Integer menuType, String merchantCode, Page page) {
-        List<DashboardOrderShowVo> dashboardOrderShowVos = new ArrayList<>();
+    public List<DashboardOverdueOrderShowVo> getDataDashboardOverdueShowInfo(Integer menuType, String merchantCode, Page page) {
+        List<DashboardOverdueOrderShowVo> dashboardOverdueOrderShowVos = new ArrayList<>();
         if (menuType == DashboardTypeEnum.NO_REPAY.getType()) {
             List<DashboardOrderVo> noRepayOrderVos = saasOrderBillDetailService.getNoRepayOrderListByPage(merchantCode, page);
-            dashboardOrderShowVos = this.getDashboardOrderShowList(noRepayOrderVos);
+            dashboardOverdueOrderShowVos = this.getDashboardOrderShowList(noRepayOrderVos);
 
         }
         if (menuType == DashboardTypeEnum.OVERDUE.getType()) {
             List<DashboardOrderVo> overdueOrderVos = saasOrderBillDetailService.getOverdueOrderListByPage(merchantCode, page);
-            dashboardOrderShowVos = this.getDashboardOrderShowList(overdueOrderVos);
+            dashboardOverdueOrderShowVos = this.getDashboardOrderShowList(overdueOrderVos);
         }
 
-        return dashboardOrderShowVos;
+        return dashboardOverdueOrderShowVos;
     }
 
     //获取数据看板订单信息
-    private List<DashboardOrderShowVo> getDashboardOrderShowList(List<DashboardOrderVo> dashboardOrderVos) {
-        List<DashboardOrderShowVo> dashboardOrderShowVos = new ArrayList<>();
+    private List<DashboardOverdueOrderShowVo> getDashboardOrderShowList(List<DashboardOrderVo> dashboardOrderVos) {
+        List<DashboardOverdueOrderShowVo> dashboardOverdueOrderShowVos = new ArrayList<>();
         dashboardOrderVos.stream().forEach(x -> {
             SaasBorrowerVo borrower = saasBorrowerService.getByBorrowerCode(x.getBorrowCode());
             SaasBorrowerRealInfoVo infoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(x.getBorrowCode());
-            DashboardOrderShowVo dashboardOrderShowVo = new DashboardOrderShowVo();
-            dashboardOrderShowVo.setRealCapital(x.getRealCapital());
+            DashboardOverdueOrderShowVo dashboardOverdueOrderShowVo = new DashboardOverdueOrderShowVo();
+            dashboardOverdueOrderShowVo.setRealCapital(x.getRealCapital());
             if (borrower != null) {
-                dashboardOrderShowVo.setMobile(borrower.getMobile());
+                dashboardOverdueOrderShowVo.setMobile(borrower.getMobile());
             }
             if (infoVo != null) {
-                dashboardOrderShowVo.setName(infoVo.getName());
+                dashboardOverdueOrderShowVo.setName(infoVo.getName());
             }
-            dashboardOrderShowVos.add(dashboardOrderShowVo);
+            dashboardOverdueOrderShowVos.add(dashboardOverdueOrderShowVo);
 
         });
 
-        return dashboardOrderShowVos;
+        return dashboardOverdueOrderShowVos;
     }
 
     private SaasOrderListVo convertSaasOrderVo2SaasOrderListVo(SaasOrderVo saasOrderVo) {

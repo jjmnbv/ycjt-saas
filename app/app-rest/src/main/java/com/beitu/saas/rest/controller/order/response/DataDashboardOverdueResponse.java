@@ -1,6 +1,6 @@
 package com.beitu.saas.rest.controller.order.response;
 
-import com.beitu.saas.app.application.order.vo.DashboardOrderShowVo;
+import com.beitu.saas.app.application.order.vo.DashboardOverdueOrderShowVo;
 import com.fqgj.common.api.ResponseData;
 import io.swagger.annotations.ApiModel;
 
@@ -16,17 +16,17 @@ import java.util.List;
  */
 @ApiModel(value = "数据看板逾期信息")
 public class DataDashboardOverdueResponse implements ResponseData {
-    List<DashboardOrderShowVo> dataDashboardOverdueShowVoList;
+    List<DashboardOverdueOrderShowVo> dataDashboardOverdueShowVoList;
 
-    public DataDashboardOverdueResponse(List<DashboardOrderShowVo> dataDashboardOverdueShowVoList) {
+    public DataDashboardOverdueResponse(List<DashboardOverdueOrderShowVo> dataDashboardOverdueShowVoList) {
         this.dataDashboardOverdueShowVoList = dataDashboardOverdueShowVoList;
     }
 
-    public List<DashboardOrderShowVo> getDataDashboardOverdueShowVoList() {
+    public List<DashboardOverdueOrderShowVo> getDataDashboardOverdueShowVoList() {
         return dataDashboardOverdueShowVoList;
     }
 
-    public DataDashboardOverdueResponse setDataDashboardOverdueShowVoList(List<DashboardOrderShowVo> dataDashboardOverdueShowVoList) {
+    public DataDashboardOverdueResponse setDataDashboardOverdueShowVoList(List<DashboardOverdueOrderShowVo> dataDashboardOverdueShowVoList) {
         this.dataDashboardOverdueShowVoList = dataDashboardOverdueShowVoList;
         return this;
     }

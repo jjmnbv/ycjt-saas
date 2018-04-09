@@ -12,7 +12,7 @@ import java.math.BigDecimal;
  * Date: 2018/3/28
  * Time: 上午11:11
  */
-public class DashboardOrderShowVo implements ResponseData {
+public class DashboardOverdueOrderShowVo implements ResponseData {
     @ApiModelProperty(value = "姓名")
     private String name;
 
@@ -22,20 +22,11 @@ public class DashboardOrderShowVo implements ResponseData {
     @ApiModelProperty(value = "账单金额")
     private BigDecimal realCapital;
 
-    public BigDecimal getRealCapital() {
-        return realCapital;
-    }
-
-    public DashboardOrderShowVo setRealCapital(BigDecimal realCapital) {
-        this.realCapital = realCapital;
-        return this;
-    }
-
     public String getName() {
         return name;
     }
 
-    public DashboardOrderShowVo setName(String name) {
+    public DashboardOverdueOrderShowVo setName(String name) {
         this.name = name;
         return this;
     }
@@ -44,8 +35,17 @@ public class DashboardOrderShowVo implements ResponseData {
         return mobile;
     }
 
-    public DashboardOrderShowVo setMobile(String mobile) {
+    public DashboardOverdueOrderShowVo setMobile(String mobile) {
         this.mobile = mobile;
+        return this;
+    }
+
+    public BigDecimal getRealCapital() {
+        return realCapital;
+    }
+
+    public DashboardOverdueOrderShowVo setRealCapital(BigDecimal realCapital) {
+        this.realCapital = realCapital;
         return this;
     }
 }

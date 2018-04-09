@@ -1,9 +1,7 @@
 package com.beitu.saas.rest.controller.order;
 
-import com.beitu.saas.app.annotations.SignIgnore;
-import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.application.order.OrderApplication;
-import com.beitu.saas.app.application.order.vo.DashboardOrderShowVo;
+import com.beitu.saas.app.application.order.vo.DashboardOverdueOrderShowVo;
 import com.beitu.saas.app.application.order.vo.DataDashboardLoanShowVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.rest.controller.order.response.DataDashboardLoanResponse;
@@ -50,11 +48,11 @@ public class DataDashboardController {
 
     @RequestMapping(value = "overdue/query{menuType}", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "逾期数据-menuType:0-待收 1-逾期", response = DataDashboardLoanResponse.class)
+    @ApiOperation(value = "逾期数据-menuType:0-待收 1-逾期", response = DataDashboardOverdueResponse.class)
     public ModuleResponse overdueQuery(@PathVariable(value = "menuType") Integer menuType, Page page) {
         String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
-        List<DashboardOrderShowVo> dataDashboardOverdueShowVoList = orderApplication.getDataDashboardOverdueShowInfo(menuType, merchantCode, page);
-        DataDashboardOverdueResponse dataDashboardOverdueResponse = new DataDashboardOverdueResponse(dataDashboardOverdueShowVoList);
+        List<DashboardOverdueOrderShowVo> dashboardOverdueOrderShowVos = orderApplication.getDataDashboardOverdueShowInfo(menuType, merchantCode, page);
+        DataDashboardOverdueResponse dataDashboardOverdueResponse = new DataDashboardOverdueResponse(dashboardOverdueOrderShowVos);
         return new ModuleResponse<>(dataDashboardOverdueResponse, page);
 
     }
