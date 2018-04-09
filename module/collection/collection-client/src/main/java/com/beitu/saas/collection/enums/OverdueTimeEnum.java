@@ -8,14 +8,14 @@ package com.beitu.saas.collection.enums;
  */
 public enum OverdueTimeEnum {
     ALL(0, 0, 0, "全部"),
-    TODAY(1, 0, 1, "今日到期"),
-    THREE_DAY(2, 2, 3, "逾期3天"),
-    SEVEN_DAY(3, 6, 7, "逾期7天"),
-    ONE_TO_FIFTEEN(4, 10, 15, "逾期10-15天"),
-    FIFTEEN_TO_THIRTY(5, 15, 30, "逾期15-30天"),
-    THIRTY_TO_SIXTY(6, 30, 60, "逾期30-60天"),
-    SIXTY_TO_NINETY(7, 60, 90, "逾期60-90天"),
-    MORE_THAN_NINETY(8, 90, 10000, "逾期90天以上");
+    TODAY(1, 0, 1, "今日逾期"),
+    THREE_DAY(2, 0, 3, "逾期1-3天"),
+    SEVEN_DAY(3, 0, 7, "逾期1-7天"),
+    ONE_TO_FIFTEEN(4, 0, 15, "逾期1-15天"),
+    FIFTEEN_TO_THIRTY(5, 14, 30, "逾期15-30天"),
+    THIRTY_TO_SIXTY(6, 29, 60, "逾期30-60天"),
+    SIXTY_TO_NINETY(7, 59, 90, "逾期60-90天"),
+    MORE_THAN_NINETY(8, 89, 10000, "逾期90天以上");
 
     private Integer type;
 
