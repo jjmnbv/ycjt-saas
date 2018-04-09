@@ -223,7 +223,7 @@ public class OrderBillDetailApplication {
         saasOrderBillDetailService.updateById(updateSaasOrderBillDetail);
     }
 
-    public List<SaasOrderDetailVo> getAllOrderBillDetailByOrderNumb(String orderNumb, String merchantCode) {
+    public List<SaasOrderDetailVo> getAllOrderBillDetailByOrderNumb(String merchantCode, String orderNumb) {
         List<SaasOrderBillDetailVo> saasOrderBillDetailVoList = saasOrderBillDetailService.listByOrderNumbAndMerchantCode(orderNumb, merchantCode);
         if (CollectionUtils.isEmpty(saasOrderBillDetailVoList)) {
             return null;

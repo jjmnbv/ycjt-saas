@@ -129,7 +129,7 @@ public class CreditQueryController {
         List<SaasOrderDetailVo> saasOrderDetailVoList = orderBillDetailApplication.getAllOrderBillDetailByOrderNumb(merchantCode, orderNumb);
         String viewContractUrl = "";
         String downloadContractUrl = "";
-        if (CollectionUtils.isEmpty(saasOrderDetailVoList)) {
+        if (CollectionUtils.isNotEmpty(saasOrderDetailVoList)) {
             SaasOrderVo saasOrderVo = saasOrderService.getMainSaasOrderByOrderNumb(saasOrderDetailVoList.get(0).getOrderNumb());
             if (saasOrderVo != null && StringUtils.isNotEmpty(saasOrderVo.getTermUrl())) {
                 viewContractUrl = configUtil.getAddressURLPrefix() + TermUrlConsts.pdfViewUrl + "?file=/" + saasOrderVo.getTermUrl();
