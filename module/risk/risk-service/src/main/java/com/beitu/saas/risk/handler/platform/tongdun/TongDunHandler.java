@@ -9,7 +9,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.risk.domain.enums.ErrorCodeEnums;
 import com.beitu.saas.risk.domain.exception.BizException;
+import com.beitu.saas.risk.helpers.JSONUtils;
 import com.beitu.saas.risk.helpers.MySSLProtocolSocketFactory;
+import com.fqgj.log.factory.LogFactory;
+import com.fqgj.log.interfaces.Log;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -29,6 +32,8 @@ import java.util.Map;
 
 @Component
 public class TongDunHandler {
+
+    private static final Log LOGGER = LogFactory.getLog(TongDunHandler.class);
 
     @Autowired
     private ConfigUtil configUtil;
@@ -53,6 +58,9 @@ public class TongDunHandler {
         if (resultCode != 200) {
             throw new BizException(ErrorCodeEnums.PLATFORM_SUBSTRIPTION_RESULT_ERROR);
         }
+
+        LOGGER.info("-------tongdun------request:{}-----response:{}", dataMap, returnCode);
+
         String reportId = returnCode.substring(returnCode.lastIndexOf(":") + 2, returnCode.lastIndexOf('"'));
         return reportId;
     }
