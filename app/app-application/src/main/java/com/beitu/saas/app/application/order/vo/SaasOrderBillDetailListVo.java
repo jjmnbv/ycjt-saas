@@ -46,6 +46,19 @@ public class SaasOrderBillDetailListVo implements ResponseData {
     @ApiModelProperty(value = "订单状态")
     private String orderStatus;
 
+
+    @ApiModelProperty(value = "是否能委托催收")
+    private boolean entrustCollect;
+
+    public boolean isEntrustCollect() {
+        return entrustCollect;
+    }
+
+    public SaasOrderBillDetailListVo setEntrustCollect(boolean entrustCollect) {
+        this.entrustCollect = entrustCollect;
+        return this;
+    }
+
     public String getOrderNumb() {
         return orderNumb;
     }

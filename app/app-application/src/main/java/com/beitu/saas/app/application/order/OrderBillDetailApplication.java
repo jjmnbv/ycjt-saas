@@ -7,6 +7,7 @@ import com.beitu.saas.app.application.order.vo.SaasOrderBillDetailListVo;
 import com.beitu.saas.app.application.order.vo.SaasOrderDetailVo;
 import com.beitu.saas.app.enums.QueryRepaymentDtEnum;
 import com.beitu.saas.channel.client.SaasChannelService;
+import com.beitu.saas.collection.client.SaasCollectionOrderService;
 import com.beitu.saas.common.utils.DateUtil;
 import com.beitu.saas.order.client.SaasOrderBillDetailService;
 import com.beitu.saas.order.client.SaasOrderService;
@@ -57,6 +58,9 @@ public class OrderBillDetailApplication {
     @Autowired
     private SaasOrderStatusHistoryService saasOrderStatusHistoryService;
 
+    @Autowired
+    private SaasCollectionOrderService saasCollectionOrderService;
+
     public List<SaasOrderBillDetailListVo> listAfterLendManageOrder(QueryOrderBillDetailVo queryVo, Page page) {
         QuerySaasOrderBillDetailVo querySaasOrderBillDetailVo = convertQueryOrderBillDetailVo2QuerySaasOrderBillDetailVo(queryVo);
         if (querySaasOrderBillDetailVo == null) {
@@ -87,7 +91,12 @@ public class OrderBillDetailApplication {
             return null;
         }
         List<SaasOrderBillDetailListVo> results = new ArrayList<>(saasOrderBillDetailVoList.size());
-        saasOrderBillDetailVoList.forEach(saasOrderBillDetailVo -> results.add(convertSaasOrderBillDetailVo2SaasOrderBillDetailListVo(saasOrderBillDetailVo)));
+        saasOrderBillDetailVoList.forEach(saasOrderBillDetailVo -> {
+            SaasOrderBillDetailListVo saasOrderBillDetailListVo = convertSaasOrderBillDetailVo2SaasOrderBillDetailListVo(saasOrderBillDetailVo);
+            Integer collectionRows = saasCollectionOrderService.getTotalCollectionOrderCount(saasOrderBillDetailVo.getOrderNumb());
+            saasOrderBillDetailListVo.setEntrustCollect(collectionRows > 0 ? false : true);
+            results.add(saasOrderBillDetailListVo);
+        });
         return results;
     }
 

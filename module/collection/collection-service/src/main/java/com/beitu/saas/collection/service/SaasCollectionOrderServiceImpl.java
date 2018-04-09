@@ -66,6 +66,11 @@ public class SaasCollectionOrderServiceImpl extends AbstractBaseService implemen
     }
 
     @Override
+    public Integer getTotalCollectionOrderCount(String orderNo) {
+        return saasCollectionOrderDao.queryCollectionOrderCount(orderNo);
+    }
+
+    @Override
     public void deleteOrder(String orderNo) {
         SaasCollectionOrderEntity entity = saasCollectionOrderDao.selectSaasCollectionOrderEntity(orderNo);
         if (entity != null) {

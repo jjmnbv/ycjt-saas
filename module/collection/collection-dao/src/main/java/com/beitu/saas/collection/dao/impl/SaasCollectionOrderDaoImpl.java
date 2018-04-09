@@ -1,5 +1,6 @@
 package com.beitu.saas.collection.dao.impl;
 
+import com.beitu.saas.collection.client.SaasCollectionOrderService;
 import com.beitu.saas.collection.dao.SaasCollectionOrderDao;
 import com.beitu.saas.collection.param.CollectionOrderQueryParam;
 import com.beitu.saas.collection.entity.SaasCollectionOrderEntity;
@@ -46,5 +47,12 @@ public class SaasCollectionOrderDaoImpl extends AbstractBaseMapper<SaasCollectio
         paramMap.put("collectionOrderQueryParam", collectionOrderQueryParam);
 
         return getSqlSession().selectOne(this.getStatement("queryTotalCollectionOrderListCount"), paramMap);
+    }
+
+    @Override
+    public Integer queryCollectionOrderCount(String orderNo) {
+        Map<String, Object> paramMap = new HashMap();
+        paramMap.put("orderNo", orderNo);
+        return getSqlSession().selectOne(this.getStatement("queryCollectionOrderCount"), paramMap);
     }
 }
