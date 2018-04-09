@@ -1,19 +1,26 @@
 package com.beitu.saas.rest.controller.order;
 
+import com.beitu.saas.app.annotations.SignIgnore;
+import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.application.order.OrderApplication;
-import com.beitu.saas.app.application.order.vo.DataDashboardShowVo;
+import com.beitu.saas.app.application.order.vo.DashboardOrderShowVo;
+import com.beitu.saas.app.application.order.vo.DataDashboardLoanShowVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
-import com.beitu.saas.rest.controller.order.response.DataDashboardResponse;
+import com.beitu.saas.rest.controller.order.response.DataDashboardLoanResponse;
+import com.beitu.saas.rest.controller.order.response.DataDashboardOverdueResponse;
 import com.fqgj.common.api.Page;
-import com.fqgj.common.api.ResponseData;
+import com.fqgj.common.api.Response;
 import com.fqgj.common.response.ModuleResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -30,14 +37,30 @@ public class DataDashboardController {
     @Autowired
     private OrderApplication orderApplication;
 
-    @RequestMapping(value = "/query", method = RequestMethod.POST)
+    @RequestMapping(value = "/loan/query", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "数据看板", response = DataDashboardResponse.class)
-    public ModuleResponse query(Page page) {
+    @ApiOperation(value = "放款数据", response = DataDashboardLoanResponse.class)
+    @SignIgnore
+    @VisitorAccessible
+    public Response loanQuery() {
         String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
-        DataDashboardShowVo dataDashboardShowVo = orderApplication.getDataDashboardInfo(merchantCode, page);
-        DataDashboardResponse dataDashboardResponse = new DataDashboardResponse(dataDashboardShowVo);
-        return new ModuleResponse<>(dataDashboardResponse, page);
+        DataDashboardLoanShowVo dataDashboardLoanShowVo = orderApplication.getDataDashboardInfo(merchantCode);
+        DataDashboardLoanResponse dataDashboardLoanResponse = new DataDashboardLoanResponse(dataDashboardLoanShowVo);
+        return Response.ok().putData(dataDashboardLoanResponse);
+
+    }
+
+    @RequestMapping(value = "overdue/query{menuType}", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "逾期数据", response = DataDashboardLoanResponse.class)
+    @SignIgnore
+    @VisitorAccessible
+    public ModuleResponse overdueQuery(@PathVariable(value = "menuType") Integer menuType, Page page) {
+        String merchantCode = "yyy001";
+//        String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
+        List<DashboardOrderShowVo> dataDashboardOverdueShowVoList = orderApplication.getDataDashboardOverdueShowInfo(menuType, merchantCode, page);
+        DataDashboardOverdueResponse dataDashboardOverdueResponse = new DataDashboardOverdueResponse(dataDashboardOverdueShowVoList);
+        return new ModuleResponse<>(dataDashboardOverdueResponse, page);
 
     }
 }

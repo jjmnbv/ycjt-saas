@@ -4,8 +4,7 @@ import com.beitu.saas.order.domain.QuerySaasOrderBillDetailVo;
 import com.beitu.saas.order.domain.SaasOrderBillDetailVo;
 import com.beitu.saas.order.vo.LoanDataDetailVo;
 import com.beitu.saas.order.vo.LoanStateDetailVo;
-import com.beitu.saas.order.vo.NoRepayOrderVo;
-import com.beitu.saas.order.vo.OverdueOrderVo;
+import com.beitu.saas.order.vo.DashboardOrderVo;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.base.BaseService;
 import com.fqgj.common.entity.BaseEntity;
@@ -29,9 +28,9 @@ public interface SaasOrderBillDetailService<T extends BaseEntity> extends BaseSe
 
     List<LoanStateDetailVo> getLoanStateDetailList(String merchantCode);
 
-    List<NoRepayOrderVo> getNoRepayOrderListByPage(String merchantCode, Page page);
+    List<DashboardOrderVo> getNoRepayOrderListByPage(String merchantCode, Page page);
 
-    List<OverdueOrderVo> getOverdueOrderListByPage(String merchantCode, Page page);
+    List<DashboardOrderVo> getOverdueOrderListByPage(String merchantCode, Page page);
 
     SaasOrderBillDetailVo getVisibleOrderBillDetailByOrderNumbAndMerchantCode(String orderNumb, String merchantCode);
 

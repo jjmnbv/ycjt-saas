@@ -1,5 +1,8 @@
 package com.beitu.saas.app.application.order.vo;
 
+import com.fqgj.common.api.ResponseData;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -10,27 +13,27 @@ import java.util.List;
  * Date: 2018/3/28
  * Time: 上午11:52
  */
-public class DataDashboardShowVo {
-
+public class DataDashboardLoanShowVo implements ResponseData {
+    @ApiModelProperty(value = "放款数据")
     private LoanDataDetailShowVo loanDataDetailVo;
 
+    @ApiModelProperty(value = "账户余额")
     private BigDecimal merchantBalance;
 
+    @ApiModelProperty(value = "剩余点券数")
     private  Long merchantCredit;
 
+    @ApiModelProperty(value = "剩余短信数")
     private  Long merchantSms;
 
-    private List<NoRepayOrderShowVo> noRepayOrderShowVos;
-
-    private List<OverdueOrderShowVo> overdueOrderShowVos;
-
+    @ApiModelProperty(value = "放款数据")
     private List<LoanStateDetailShowVo> loanStateDetailShowVos;
 
     public LoanDataDetailShowVo getLoanDataDetailVo() {
         return loanDataDetailVo;
     }
 
-    public DataDashboardShowVo setLoanDataDetailVo(LoanDataDetailShowVo loanDataDetailVo) {
+    public DataDashboardLoanShowVo setLoanDataDetailVo(LoanDataDetailShowVo loanDataDetailVo) {
         this.loanDataDetailVo = loanDataDetailVo;
         return this;
     }
@@ -39,7 +42,7 @@ public class DataDashboardShowVo {
         return merchantBalance;
     }
 
-    public DataDashboardShowVo setMerchantBalance(BigDecimal merchantBalance) {
+    public DataDashboardLoanShowVo setMerchantBalance(BigDecimal merchantBalance) {
         this.merchantBalance = merchantBalance;
         return this;
     }
@@ -48,7 +51,7 @@ public class DataDashboardShowVo {
         return merchantCredit;
     }
 
-    public DataDashboardShowVo setMerchantCredit(Long merchantCredit) {
+    public DataDashboardLoanShowVo setMerchantCredit(Long merchantCredit) {
         this.merchantCredit = merchantCredit;
         return this;
     }
@@ -57,26 +60,8 @@ public class DataDashboardShowVo {
         return merchantSms;
     }
 
-    public DataDashboardShowVo setMerchantSms(Long merchantSms) {
+    public DataDashboardLoanShowVo setMerchantSms(Long merchantSms) {
         this.merchantSms = merchantSms;
-        return this;
-    }
-
-    public List<NoRepayOrderShowVo> getNoRepayOrderShowVos() {
-        return noRepayOrderShowVos;
-    }
-
-    public DataDashboardShowVo setNoRepayOrderShowVos(List<NoRepayOrderShowVo> noRepayOrderShowVos) {
-        this.noRepayOrderShowVos = noRepayOrderShowVos;
-        return this;
-    }
-
-    public List<OverdueOrderShowVo> getOverdueOrderShowVos() {
-        return overdueOrderShowVos;
-    }
-
-    public DataDashboardShowVo setOverdueOrderShowVos(List<OverdueOrderShowVo> overdueOrderShowVos) {
-        this.overdueOrderShowVos = overdueOrderShowVos;
         return this;
     }
 
@@ -84,7 +69,7 @@ public class DataDashboardShowVo {
         return loanStateDetailShowVos;
     }
 
-    public DataDashboardShowVo setLoanStateDetailShowVos(List<LoanStateDetailShowVo> loanStateDetailShowVos) {
+    public DataDashboardLoanShowVo setLoanStateDetailShowVos(List<LoanStateDetailShowVo> loanStateDetailShowVos) {
         this.loanStateDetailShowVos = loanStateDetailShowVos;
         return this;
     }
