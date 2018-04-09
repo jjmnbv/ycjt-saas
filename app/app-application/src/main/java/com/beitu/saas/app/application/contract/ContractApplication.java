@@ -211,7 +211,7 @@ public class ContractApplication {
 
                 }
             }
-            saasCreditHistoryService.addExpenditureCreditHistory(merchantCode, name, CreditConsumeEnum.ESIGN);
+            saasCreditHistoryService.addExpenditureCreditHistory(merchantCode, name, CreditConsumeEnum.RISK_ESIGN);
             saasUserEsignAuthorizationService.updateSaasUserEsignAuthorization(saasUserEsignAuthorizationVo.getSaasUserEsignAuthorizationId(), url);
         }
     }
