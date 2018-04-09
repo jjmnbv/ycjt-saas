@@ -10,12 +10,10 @@ import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.consts.TimeConsts;
 import com.beitu.saas.common.enums.ProductTypeEnum;
 import com.beitu.saas.common.enums.RestCodeEnum;
-import com.beitu.saas.common.utils.DateUtil;
 import com.beitu.saas.credit.client.SaasCreditTongdunDetailService;
 import com.beitu.saas.credit.client.SaasCreditTongdunService;
 import com.beitu.saas.credit.domain.SaasCreditTongdunDetailVo;
 import com.beitu.saas.credit.domain.SaasCreditTongdunVo;
-import com.beitu.saas.credit.entity.SaasCreditTongdun;
 import com.beitu.saas.credit.entity.SaasCreditTongdunDetail;
 import com.beitu.saas.credit.enums.CreditErrorCodeEnum;
 import com.beitu.saas.finance.client.SaasCreditHistoryService;
@@ -116,15 +114,18 @@ public class TongdunAsyncApplication {
             throw new ApplicationException(RestCodeEnum.CARRIEE_REBIND.setMsg(response.getMsg()));
         }
         if (StringUtils.isNotEmpty(reportId)) {
-            SaasCreditTongdun saasCreditTongdun = new SaasCreditTongdun();
-            saasCreditTongdun.setMerchantCode(merchantCode);
-            saasCreditTongdun.setBorrowerCode(borrowerCode);
-            saasCreditTongdun.setReportId(reportId);
-            saasCreditTongdunService.create(saasCreditTongdun);
+            SaasCreditTongdunVo addCreditTongdunVo = new SaasCreditTongdunVo();
+            addCreditTongdunVo.setMerchantCode(merchantCode);
+            addCreditTongdunVo.setBorrowerCode(borrowerCode);
+            addCreditTongdunVo.setMobile(saasBorrowerVo.getMobile());
+            addCreditTongdunVo.setIdentityCode(saasBorrowerRealInfoVo.getIdentityCode());
+            addCreditTongdunVo.setReportId(reportId);
+            addCreditTongdunVo.setSuccess(Boolean.TRUE);
+            Long recordId = saasCreditTongdunService.addSaasCreditTongdun(addCreditTongdunVo).getId();
 
             saasCreditHistoryService.addExpenditureCreditHistory(merchantCode, saasBorrowerRealInfoVo.getName(), CreditConsumeEnum.RISK_LOAN_BLACKLIST);
 
-            generateTongdunDetail(reportId, saasCreditTongdun.getId());
+            generateTongdunDetail(reportId, recordId);
         } else {
             // TODO: 17/6/30 抛出异常
         }
