@@ -22,7 +22,7 @@
                 and repayment_dt <![CDATA[ >= ]]> #{repaymentBeginDt,jdbcType=DATE}
             </if>
             <if test="repaymentEndDt != null">
-                and repayment_dt <![CDATA[ < ]]> #{repaymentEndDt,jdbcType=DATE}
+                and repayment_dt <![CDATA[ <= ]]> #{repaymentEndDt,jdbcType=DATE}
             </if>
             <if test="destroy !=null">
                 and destroy = #{destroy,jdbcType=BIT}
