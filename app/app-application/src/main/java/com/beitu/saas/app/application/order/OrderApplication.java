@@ -20,6 +20,7 @@ import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.consts.ChannelConsts;
 import com.beitu.saas.channel.entity.SaasChannelEntity;
 import com.beitu.saas.common.config.ConfigUtil;
+import com.beitu.saas.collection.client.SaasCollectionOrderService;
 import com.beitu.saas.common.utils.DateUtil;
 import com.beitu.saas.common.utils.ThreadPoolUtils;
 import com.beitu.saas.finance.client.SaasMerchantBalanceInfoService;
@@ -108,6 +109,9 @@ public class OrderApplication {
 
     @Autowired
     private SendApplication sendApplication;
+
+    @Autowired
+    private SaasCollectionOrderService saasCollectionOrderService;
 
     @Autowired
     private SaasChannelService saasChannelService;
@@ -730,6 +734,8 @@ public class OrderApplication {
 
         orderBillDetailApplication.createOrderBillDetail(orderNumb, merchantCode);
 
+        saasCollectionOrderService.deleteOrder(orderNumb);
+
         sendApplication.sendNotifyMessageByBorrowerCode(merchantCode, saasOrderVo.getBorrowerCode(), new HashMap(2) {{
             put("money", saasOrderVo.getRealCapital());
             put("day", DateUtil.countDay(saasOrderVo.getRepaymentDt(), saasOrderVo.getGmtCreate()));
@@ -742,6 +748,8 @@ public class OrderApplication {
 
         updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.HAS_BEEN_DESTROY, null);
         orderBillDetailApplication.destroyOrderBillDetail(orderNumb, merchantCode);
+
+        saasCollectionOrderService.closeOrder(orderNumb);
         SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(orderNumb, merchantCode);
 
         sendApplication.sendNotifyMessageByBorrowerCode(merchantCode, saasOrderVo.getBorrowerCode(), new HashMap(2) {{
