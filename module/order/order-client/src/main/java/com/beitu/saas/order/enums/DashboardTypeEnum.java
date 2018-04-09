@@ -7,7 +7,7 @@ package com.beitu.saas.order.enums;
  * Date: 2018/3/28
  * Time: 下午2:44
  */
-public enum DashboarTypeEnum {
+public enum DashboardTypeEnum {
     NO_REPAY(0, "待还款"),
     OVERDUE(1, "逾期");
 
@@ -15,7 +15,7 @@ public enum DashboarTypeEnum {
 
     private String desc;
 
-    DashboarTypeEnum(Integer type, String desc) {
+    DashboardTypeEnum(Integer type, String desc) {
         this.type = type;
         this.desc = desc;
     }
@@ -24,7 +24,7 @@ public enum DashboarTypeEnum {
         return type;
     }
 
-    public DashboarTypeEnum setType(Integer type) {
+    public DashboardTypeEnum setType(Integer type) {
         this.type = type;
         return this;
     }
@@ -33,7 +33,7 @@ public enum DashboarTypeEnum {
         return desc;
     }
 
-    public DashboarTypeEnum setDesc(String desc) {
+    public DashboardTypeEnum setDesc(String desc) {
         this.desc = desc;
         return this;
     }

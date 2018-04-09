@@ -9,16 +9,27 @@ import java.math.BigDecimal;
  * Date: 2018/3/28
  * Time: 上午11:11
  */
-public class NoRepayOrderVo {
+public class DashboardOrderVo {
     private String orderNo;
 
+    private String borrowCode;
+
     private BigDecimal realCapital;
+
+    public String getBorrowCode() {
+        return borrowCode;
+    }
+
+    public DashboardOrderVo setBorrowCode(String borrowCode) {
+        this.borrowCode = borrowCode;
+        return this;
+    }
 
     public String getOrderNo() {
         return orderNo;
     }
 
-    public NoRepayOrderVo setOrderNo(String orderNo) {
+    public DashboardOrderVo setOrderNo(String orderNo) {
         this.orderNo = orderNo;
         return this;
     }
@@ -27,7 +38,7 @@ public class NoRepayOrderVo {
         return realCapital;
     }
 
-    public NoRepayOrderVo setRealCapital(BigDecimal realCapital) {
+    public DashboardOrderVo setRealCapital(BigDecimal realCapital) {
         this.realCapital = realCapital;
         return this;
     }

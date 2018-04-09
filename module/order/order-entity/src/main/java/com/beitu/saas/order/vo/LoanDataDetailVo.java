@@ -16,11 +16,13 @@ public class LoanDataDetailVo {
 
     private BigDecimal destroyTotalAmount;
 
-    private BigDecimal totalDestroyTotalAmount;
+    private BigDecimal todayDestroyTotalAmount;
 
     private BigDecimal noRepayTotalAmount;
 
     private BigDecimal overdueTotalAmount;
+
+    private BigDecimal todayOverdueTotalAmount;
 
     public BigDecimal getLoanTotalAmount() {
         return loanTotalAmount;
@@ -49,12 +51,21 @@ public class LoanDataDetailVo {
         return this;
     }
 
-    public BigDecimal getTotalDestroyTotalAmount() {
-        return totalDestroyTotalAmount;
+    public BigDecimal getTodayDestroyTotalAmount() {
+        return todayDestroyTotalAmount;
     }
 
-    public LoanDataDetailVo setTotalDestroyTotalAmount(BigDecimal totalDestroyTotalAmount) {
-        this.totalDestroyTotalAmount = totalDestroyTotalAmount;
+    public LoanDataDetailVo setTodayDestroyTotalAmount(BigDecimal todayDestroyTotalAmount) {
+        this.todayDestroyTotalAmount = todayDestroyTotalAmount;
+        return this;
+    }
+
+    public BigDecimal getTodayOverdueTotalAmount() {
+        return todayOverdueTotalAmount;
+    }
+
+    public LoanDataDetailVo setTodayOverdueTotalAmount(BigDecimal todayOverdueTotalAmount) {
+        this.todayOverdueTotalAmount = todayOverdueTotalAmount;
         return this;
     }
 
