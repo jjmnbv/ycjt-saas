@@ -1,5 +1,8 @@
 package com.beitu.saas.rest.controller.order.request;
 
+import com.beitu.saas.channel.consts.ChannelConsts;
+import com.beitu.saas.order.consts.OrderConsts;
+import com.beitu.saas.order.enums.OrderStatusEnum;
 import com.fqgj.common.api.ParamsObject;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -78,7 +81,9 @@ public class FinalOrderQueryRequest extends ParamsObject {
     }
 
     public void setChannelCode(String channelCode) {
-        this.channelCode = channelCode;
+        if (!ChannelConsts.DEFAULT_ALL_CHANNEL_CODE.equals(channelCode)) {
+            this.channelCode = channelCode;
+        }
     }
 
     public Integer getOrderStatus() {
@@ -86,7 +91,9 @@ public class FinalOrderQueryRequest extends ParamsObject {
     }
 
     public void setOrderStatus(Integer orderStatus) {
-        this.orderStatus = orderStatus;
+        if (!OrderConsts.DEFAULT_ALL_ORDER_STATUS_CODE.equals(orderStatus)) {
+            this.orderStatus = orderStatus;
+        }
     }
 
     public Integer getApplyDuration() {

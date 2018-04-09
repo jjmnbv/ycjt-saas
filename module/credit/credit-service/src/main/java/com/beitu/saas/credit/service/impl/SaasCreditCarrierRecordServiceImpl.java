@@ -42,7 +42,9 @@ public class SaasCreditCarrierRecordServiceImpl extends AbstractBaseService impl
     public List<SaasCreditCarrierRecordVo> listByRecordIdAndRecordTypeEnum(Long recordId, CreditCarrierRecordTypeEnum recordTypeEnum) {
         List<SaasCreditCarrierRecord> saasCreditCarrierRecordList = saasCreditCarrierRecordDao.selectByParams(new HashMap<String, Object>(4) {{
             put("recordId", recordId);
-            put("type", recordTypeEnum.getType());
+            if (recordTypeEnum != null) {
+                put("type", recordTypeEnum.getType());
+            }
             put("deleted", Boolean.FALSE);
         }});
         if (CollectionUtils.isEmpty(saasCreditCarrierRecordList)) {
