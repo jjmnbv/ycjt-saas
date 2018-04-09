@@ -210,6 +210,7 @@ public class CreditApplication {
             // TODO: 2018/3/29 数据库插入不一致数据
 
         }
+        LOGGER.error("--------实名认证------request:{}-------response:{}", param, dto);
         return Boolean.FALSE;
     }
 

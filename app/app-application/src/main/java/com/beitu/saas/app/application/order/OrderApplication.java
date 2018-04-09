@@ -263,7 +263,7 @@ public class OrderApplication {
 
     @Transactional(rollbackFor = RuntimeException.class)
     public void saveOrderRemark(String merchantCode, String operatorCode, String orderNumb, String remark) {
-        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(merchantCode, orderNumb);
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(orderNumb, merchantCode);
         if (StringUtils.isEmpty(remark)) {
             if (StringUtils.isEmpty(saasOrderVo.getRemark())) {
                 return;
