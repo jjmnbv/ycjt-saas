@@ -40,8 +40,6 @@ public class DataDashboardController {
     @RequestMapping(value = "/loan/query", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "放款数据", response = DataDashboardLoanResponse.class)
-    @SignIgnore
-    @VisitorAccessible
     public Response loanQuery() {
         String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
         DataDashboardLoanShowVo dataDashboardLoanShowVo = orderApplication.getDataDashboardInfo(merchantCode);
@@ -52,9 +50,7 @@ public class DataDashboardController {
 
     @RequestMapping(value = "overdue/query{menuType}", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "逾期数据", response = DataDashboardLoanResponse.class)
-    @SignIgnore
-    @VisitorAccessible
+    @ApiOperation(value = "逾期数据-menuType:0-待收 1-逾期", response = DataDashboardLoanResponse.class)
     public ModuleResponse overdueQuery(@PathVariable(value = "menuType") Integer menuType, Page page) {
         String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
         List<DashboardOrderShowVo> dataDashboardOverdueShowVoList = orderApplication.getDataDashboardOverdueShowInfo(menuType, merchantCode, page);
