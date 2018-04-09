@@ -21,7 +21,7 @@ public class CollectionOrderListVo implements ResponseData {
     private String createdDt;
     private String repaymentDt;
     private String extend;
-    private String overdueDuration;
+    private Integer overdueDuration;
     private String channelName;
 
     public String getOrderNo() {
@@ -96,11 +96,11 @@ public class CollectionOrderListVo implements ResponseData {
         return this;
     }
 
-    public String getOverdueDuration() {
+    public Integer getOverdueDuration() {
         return overdueDuration;
     }
 
-    public CollectionOrderListVo setOverdueDuration(String overdueDuration) {
+    public CollectionOrderListVo setOverdueDuration(Integer overdueDuration) {
         this.overdueDuration = overdueDuration;
         return this;
     }
