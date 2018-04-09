@@ -56,8 +56,7 @@ public class DataDashboardController {
     @SignIgnore
     @VisitorAccessible
     public ModuleResponse overdueQuery(@PathVariable(value = "menuType") Integer menuType, Page page) {
-        String merchantCode = "yyy001";
-//        String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
+        String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
         List<DashboardOrderShowVo> dataDashboardOverdueShowVoList = orderApplication.getDataDashboardOverdueShowInfo(menuType, merchantCode, page);
         DataDashboardOverdueResponse dataDashboardOverdueResponse = new DataDashboardOverdueResponse(dataDashboardOverdueShowVoList);
         return new ModuleResponse<>(dataDashboardOverdueResponse, page);
