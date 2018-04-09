@@ -43,7 +43,7 @@ public enum MerchantFlowZMEnum {
 
     public static Boolean hasKey(Long key) {
         for (MerchantFlowZMEnum item : MerchantFlowZMEnum.values()) {
-            if (item.value.equals(key)) {
+            if (item.key.equals(key)) {
                 return true;
             }
         }

@@ -118,5 +118,12 @@ public class RedisKeyConsts {
      */
     public static final String SAAS_TONGDUN_FORBID_REPEAT_SUBMIT = "SAAS_TONGDUN_FORBID_REPEAT_SUBMIT_{userCode}";
 
-
+    /**
+     * 每日推荐总量
+     */
+    public static final String SAAS_RECOMMEND_NUM_DAY = "SAAS_RECOMMEND_NUM_DAY";
+    /**
+     * 每个机构每天接受的量
+     */
+    public static final String SAAS_MERCHANT_RECOMMEND_NUM_DAY = "SAAS_MERCHANT_RECOMMEND_NUM_DAY";
 }

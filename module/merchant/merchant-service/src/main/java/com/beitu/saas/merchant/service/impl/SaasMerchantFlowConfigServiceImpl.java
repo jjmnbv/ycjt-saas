@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * User: xiaochong
@@ -47,8 +49,22 @@ public class SaasMerchantFlowConfigServiceImpl extends AbstractBaseService imple
     @Override
     public void replace(SaasMerchantFlowConfigVo record) {
         SaasMerchantFlowConfig saasMerchantFlowConfig = new SaasMerchantFlowConfig();
-        BeanUtils.copyProperties(record,saasMerchantFlowConfig);
+        BeanUtils.copyProperties(record, saasMerchantFlowConfig);
         saasMerchantFlowConfigDao.replace(saasMerchantFlowConfig);
+    }
+
+    @Override
+    public Map getMerchantCodeFlowNumForMap(Integer zmType, Integer flowType) {
+        List<SaasMerchantFlowConfig> list = this.selectByParams(new HashMap(4) {{
+            put("flowType", flowType);
+            put("zmScore", zmType);
+            put("flowOpen", true);
+            put("deleted", false);
+        }});
+        if (CollectionUtils.isNotEmpty(list)) {
+            return list.stream().collect(Collectors.toMap(SaasMerchantFlowConfig::getMerchantCode, SaasMerchantFlowConfig::getFlowMaxNum));
+        }
+        return null;
     }
 }
 

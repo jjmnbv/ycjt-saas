@@ -4,6 +4,8 @@ import com.beitu.saas.merchant.entity.SaasMerchantFlowConfig;
 import com.fqgj.common.base.BaseService;
 import com.fqgj.common.entity.BaseEntity;
 
+import java.util.Map;
+
 /**
 * User: xiaochong
 * Date: 2018-04-09
@@ -15,4 +17,6 @@ public interface SaasMerchantFlowConfigService<T extends BaseEntity> extends Bas
 
 
     void replace(SaasMerchantFlowConfigVo record);
+
+    Map getMerchantCodeFlowNumForMap(Integer zmType, Integer flowType);
 }
