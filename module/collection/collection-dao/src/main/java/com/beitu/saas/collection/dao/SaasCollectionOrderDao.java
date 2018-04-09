@@ -22,4 +22,6 @@ public interface SaasCollectionOrderDao extends BaseMapper<SaasCollectionOrderEn
 
     Integer queryTotalCollectionOrderListCount(CollectionOrderQueryParam collectionOrderQueryParam);
 
+    Integer queryCollectionOrderCount(String orderNo);
+
 }

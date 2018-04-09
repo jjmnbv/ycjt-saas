@@ -31,6 +31,21 @@ public class SaasChannelParam {
      */
     private String chargePersonCode;
 
+    /**
+     * 备注
+     */
+    private String remark;
+
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public SaasChannelParam setRemark(String remark) {
+        this.remark = remark;
+        return this;
+    }
+
     public Integer getOpType() {
         return opType;
     }

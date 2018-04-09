@@ -42,7 +42,9 @@ public class SaasCreditDunningDetailServiceImpl extends AbstractBaseService impl
     public List<SaasCreditDunningDetailVo> listByRecordId(Long recordId, CreditDunningDetailTypeEnum dunningDetailTypeEnum) {
         List<SaasCreditDunningDetail> saasCreditDunningDetailList = saasCreditDunningDetailDao.selectByParams(new HashMap<String, Object>(4) {{
             put("recordId", recordId);
-            put("type", dunningDetailTypeEnum.getType());
+            if (dunningDetailTypeEnum != null) {
+                put("type", dunningDetailTypeEnum.getType());
+            }
             put("deleted", Boolean.FALSE);
         }});
         if (CollectionUtils.isEmpty(saasCreditDunningDetailList)) {

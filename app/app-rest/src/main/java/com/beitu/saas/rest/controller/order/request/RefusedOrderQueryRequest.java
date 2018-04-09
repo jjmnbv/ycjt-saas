@@ -1,9 +1,9 @@
 package com.beitu.saas.rest.controller.order.request;
 
+import com.beitu.saas.channel.consts.ChannelConsts;
 import com.fqgj.common.api.ParamsObject;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.hibernate.validator.constraints.NotBlank;
 
 import java.util.Date;
 
@@ -62,7 +62,9 @@ public class RefusedOrderQueryRequest extends ParamsObject {
     }
 
     public void setChannelCode(String channelCode) {
-        this.channelCode = channelCode;
+        if (!ChannelConsts.DEFAULT_ALL_CHANNEL_CODE.equals(channelCode)) {
+            this.channelCode = channelCode;
+        }
     }
 
     public Integer getApplyDuration() {

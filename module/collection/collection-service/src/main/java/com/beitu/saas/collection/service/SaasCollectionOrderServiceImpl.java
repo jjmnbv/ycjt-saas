@@ -34,16 +34,21 @@ public class SaasCollectionOrderServiceImpl extends AbstractBaseService implemen
 
     @Override
     public void createCollectionOrder(String orderNo) {
-        SaasCollectionOrderEntity entity = new SaasCollectionOrderEntity().setOrderNo(orderNo)
-                .setStatus(CollectionOrderStatusEnum.OPEN.getType());
-        saasCollectionOrderDao.insert(entity);
+        SaasCollectionOrderEntity orderEntity = saasCollectionOrderDao.selectSaasCollectionOrderEntity(orderNo);
+        if (orderEntity != null) {
+            SaasCollectionOrderEntity entity = new SaasCollectionOrderEntity().setOrderNo(orderNo)
+                    .setStatus(CollectionOrderStatusEnum.OPEN.getType());
+            saasCollectionOrderDao.insert(entity);
+        }
     }
 
     @Override
     public void closeOrder(String orderNo) {
         SaasCollectionOrderEntity entity = saasCollectionOrderDao.selectSaasCollectionOrderEntity(orderNo);
-        entity.setStatus(CollectionOrderStatusEnum.CLOSE.getType());
-        saasCollectionOrderDao.updateByPrimaryKey(entity);
+        if (entity != null) {
+            entity.setStatus(CollectionOrderStatusEnum.CLOSE.getType());
+            saasCollectionOrderDao.updateByPrimaryKey(entity);
+        }
     }
 
     @Override
@@ -58,6 +63,20 @@ public class SaasCollectionOrderServiceImpl extends AbstractBaseService implemen
         }
 
         return saasCollectionOrderDao.selectCollectionOrderListByPage(collectionOrderQueryParam, page);
+    }
+
+    @Override
+    public Integer getTotalCollectionOrderCount(String orderNo) {
+        return saasCollectionOrderDao.queryCollectionOrderCount(orderNo);
+    }
+
+    @Override
+    public void deleteOrder(String orderNo) {
+        SaasCollectionOrderEntity entity = saasCollectionOrderDao.selectSaasCollectionOrderEntity(orderNo);
+        if (entity != null) {
+            entity.setDeleted(true);
+            saasCollectionOrderDao.updateByPrimaryKey(entity);
+        }
     }
 }
 

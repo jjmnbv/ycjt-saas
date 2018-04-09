@@ -36,7 +36,7 @@
         from saas_collection_order
         <where>
             <trim prefixOverrides="and">
-                <if test="channelCode !=null">
+                <if test="orderNo !=null">
                     and order_no = #{orderNo,jdbcType=VARCHAR}
                 </if>
                 and deleted = 0
@@ -93,5 +93,18 @@
         <include refid="Param_collection_order_Where_Clause"/>)t
     </select>
 
+    <select id="queryCollectionOrderCount" parameterType="map" resultType="INTEGER">
+        SELECT
+        count(*)
+        from saas_collection_order
+        <where>
+            <trim prefixOverrides="and">
+                <if test="orderNo !=null">
+                    and order_no = #{orderNo,jdbcType=VARCHAR}
+                </if>
+                and deleted = 0
+            </trim>
+        </where>
+    </select>
 
 </mapper>

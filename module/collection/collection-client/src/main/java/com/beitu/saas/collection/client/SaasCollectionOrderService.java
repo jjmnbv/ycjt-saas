@@ -20,7 +20,7 @@ public interface SaasCollectionOrderService<T extends BaseEntity> extends BaseSe
      *
      * @param orderNo
      */
-    void createCollectionOrder(String  orderNo);
+    void createCollectionOrder(String orderNo);
 
     /**
      * 核销订单
@@ -38,5 +38,20 @@ public interface SaasCollectionOrderService<T extends BaseEntity> extends BaseSe
      */
     List<CollectionOrderInfoDetailVo> getCollectionOrderListByPage(CollectionOrderQueryParam collectionOrderQueryParam, Page page);
 
+
+    /**
+     * 查询催收数量
+     *
+     * @param orderNo
+     * @return
+     */
+    Integer getTotalCollectionOrderCount(String orderNo);
+
+    /**
+     * 逻辑删除
+     *
+     * @param orderNo
+     */
+    void deleteOrder(String orderNo);
 
 }

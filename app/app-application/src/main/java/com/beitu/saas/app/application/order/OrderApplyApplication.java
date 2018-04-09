@@ -7,6 +7,7 @@ import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.order.client.SaasOrderApplicationService;
 import com.beitu.saas.order.client.SaasOrderService;
 import com.beitu.saas.order.entity.SaasOrderApplication;
+import com.beitu.saas.order.enums.OrderStatusEnum;
 import com.fqgj.common.utils.CollectionUtils;
 import com.fqgj.common.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,8 +63,13 @@ public class OrderApplyApplication {
         orderApplicationListVo.setRealCapital(saasOrderApplication.getRealCapital().toString());
         orderApplicationListVo.setBorrowingDuration(DateUtil.countDay(saasOrderApplication.getRepaymentDt(), saasOrderApplication.getGmtCreate()) + "天");
         orderApplicationListVo.setBorrowerName(saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(saasOrderApplication.getBorrowerCode()).getName());
-        orderApplicationListVo.setBorrowerMobile(saasBorrowerService.getByMobileAndMerchantCode(saasOrderApplication.getBorrowerCode(), saasOrderApplication.getMerchantCode()).getMobile());
-        orderApplicationListVo.setOrderStatus(saasOrderService.getOrderStatusByOrderNumb(saasOrderApplication.getOrderNumb()).getMsg());
+        orderApplicationListVo.setBorrowerMobile(saasBorrowerService.getByBorrowerCodeAndMerchantCode(saasOrderApplication.getBorrowerCode(), saasOrderApplication.getMerchantCode()).getMobile());
+        OrderStatusEnum orderStatusEnum = saasOrderService.getOrderStatusByOrderNumb(saasOrderApplication.getOrderNumb());
+        if (orderStatusEnum != null) {
+            orderApplicationListVo.setOrderStatus(orderStatusEnum.getMsg());
+        } else {
+            orderApplicationListVo.setOrderStatus("未提交");
+        }
         orderApplicationListVo.setRepaymentMethod("一次性还本付息");
         orderApplicationListVo.setChannelName(saasChannelService.getSaasChannelByChannelCode(saasOrderApplication.getChannelCode()).getChannelName());
         return orderApplicationListVo;
