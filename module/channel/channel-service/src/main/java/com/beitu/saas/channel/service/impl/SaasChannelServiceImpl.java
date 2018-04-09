@@ -99,7 +99,7 @@ public class SaasChannelServiceImpl extends AbstractBaseService implements SaasC
                     .setChannelName(x.getChanelName())
                     .setChannelStatus(ChannelStatusEnum.OPEN.getType())
                     .setChannelType(x.getChannelType())
-                    .setLinkUrl("?channelCode=" + channelCode)
+                    .setLinkUrl("?channel=" + channelCode)
                     .setChargePersonCode(ChannelConsts.DEFAULT_CHANNEL_CREATOR_CODE)
                     .setCreatorCode(ChannelConsts.DEFAULT_CHANNEL_CREATOR_CODE);
             saasChannelDao.insert(saasChannelEntity);

@@ -102,7 +102,7 @@
             <if test="merchantCode !=null">
                 and merchant_code = #{merchantCode,jdbcType=VARCHAR}
             </if>
-            <if test="merchantCode !=null">
+            <if test="channelType !=null">
                 and channel_type = #{channelType,jdbcType=INTEGER}
             </if>
            and deleted = false
