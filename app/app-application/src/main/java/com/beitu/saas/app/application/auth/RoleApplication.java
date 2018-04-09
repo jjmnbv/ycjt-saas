@@ -101,6 +101,11 @@ public class RoleApplication {
         return ((SaasRole) saasRoleService.selectById(saasAdminRole.getRoleId()));
     }
 
+    public Boolean enableAdminRole(String adminCode) {
+        SaasRole saasRole = this.getRoleByAdminCode(adminCode);
+        return saasRole.getEnabled();
+    }
+
     public Long getMerchantDefaultRole(String merchantCode) {
         SaasAdmin saasAdmin = saasAdminService.getDefaultAdminByMerchantCode(merchantCode);
         return saasAdminRoleService.getRoleIdByAdminCode(saasAdmin.getCode());
