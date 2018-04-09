@@ -22,6 +22,7 @@ import com.fqgj.base.services.redis.RedisClient;
 import com.fqgj.common.api.annotations.ParamsValidate;
 import com.fqgj.common.api.exception.ApiErrorException;
 import com.fqgj.common.utils.RandomUtil;
+import com.fqgj.common.utils.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +78,7 @@ public class VerifyCodeController {
         }
         VerifyCodeTypeEnum type = VerifyCodeTypeEnum.getEnumByName(req.getType());
         String sign = null;
-        if (requestBasicInfo.getPlatform().equals("h5")) {
+        if (requestBasicInfo.getPlatform().equals("h5")&& StringUtils.isNotEmpty(requestBasicInfo.getChannel())) {
             SaasMerchantVo saasMerchantVo = saasChannelApplication.getMerchantByChannelCode(requestBasicInfo.getChannel());
             if (null != saasMerchantVo) {
                 sign = saasMerchantVo.getCompanyName();
@@ -88,9 +89,7 @@ public class VerifyCodeController {
                 throw new ApiErrorException("号码不存在");
             }
             sign = saasMerchantService.getByMerchantCode(saasAdmin.getMerchantCode()).getCompanyName();
-
         }
-
 
         sendApplication.sendVerifyCode(mobile, verifyCode, sign, type);
         redisClient.set(RedisKeyConsts.H5_SAVE_LOGIN_VERIFYCODE_KEY, verifyCode, TimeConsts.TWO_MINUTE, mobile);
