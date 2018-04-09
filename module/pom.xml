@@ -22,6 +22,7 @@
         <module>risk</module>
         <module>sms</module>
         <module>user</module>
+        <module>merchant</module>
     </modules>
 
     <dependencies>

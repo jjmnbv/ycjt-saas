@@ -9,4 +9,6 @@ public interface ChannelConsts {
 
     String DEFAULT_CHANNEL_CREATOR_CODE = "SYSTEM";
 
+    String DEFAULT_ALL_CHANNEL_CODE = "0";
+
 }

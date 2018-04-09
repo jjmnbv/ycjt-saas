@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beitu.saas.merchant.dao.impl.SaasMerchantFlowConfigDaoImpl">
+    <resultMap id="BaseResultMap" type="com.beitu.saas.merchant.entity.SaasMerchantFlowConfig">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode"/>
+        <result column="flow_type" jdbcType="INTEGER" property="flowType"/>
+        <result column="zm_score" jdbcType="INTEGER" property="zmScore"/>
+        <result column="flow_max_num" jdbcType="INTEGER" property="flowMaxNum"/>
+        <result column="flow_open" jdbcType="BIT" property="flowOpen"/>
+        <result column="deleted" jdbcType="BIT" property="deleted"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,
+        merchant_code,
+        flow_type,
+        zm_score,
+        flow_max_num,
+        flow_open,
+        deleted,
+        gmt_modified,
+        gmt_create
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_merchant_flow_config
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.beitu.saas.merchant.entity.SaasMerchantFlowConfig"  useGeneratedKeys="true">
+        insert into saas_merchant_flow_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="merchantCode !=null">
+                merchant_code,
+            </if>
+            <if test="flowType !=null">
+                flow_type,
+            </if>
+            <if test="zmScore !=null">
+                zm_score,
+            </if>
+            <if test="flowMaxNum !=null">
+                flow_max_num,
+            </if>
+            <if test="flowOpen !=null">
+                flow_open,
+            </if>
+            <if test="deleted !=null">
+                deleted,
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified,
+            </if>
+            <if test="gmtCreate !=null">
+                gmt_create,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="merchantCode != null">
+                #{merchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="flowType != null">
+                #{flowType,jdbcType=INTEGER},
+            </if>
+            <if test="zmScore != null">
+                #{zmScore,jdbcType=INTEGER},
+            </if>
+            <if test="flowMaxNum != null">
+                #{flowMaxNum,jdbcType=INTEGER},
+            </if>
+            <if test="flowOpen != null">
+                #{flowOpen,jdbcType=BIT},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.beitu.saas.merchant.entity.SaasMerchantFlowConfig">
+        update saas_merchant_flow_config
+        <set>
+            <if test="merchantCode !=null">
+                merchant_code = #{merchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="flowType !=null">
+                flow_type = #{flowType,jdbcType=INTEGER},
+            </if>
+            <if test="zmScore !=null">
+                zm_score = #{zmScore,jdbcType=INTEGER},
+            </if>
+            <if test="flowMaxNum !=null">
+                flow_max_num = #{flowMaxNum,jdbcType=INTEGER},
+            </if>
+            <if test="flowOpen !=null">
+                flow_open = #{flowOpen,jdbcType=BIT},
+            </if>
+            <if test="deleted !=null">
+                deleted = #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteByPrimaryKey">
+        update  saas_merchant_flow_config
+        set deleted = 1
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <sql id="paginationSql">
+        <if test="page != null">
+            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+        </if>
+    </sql>
+
+    <sql id="paging">
+        <if test="offset != null and limit != null">
+            limit #{offset},#{limit}
+        </if>
+    </sql>
+
+    <select id="selectByParams" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_merchant_flow_config
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="merchantCode !=null">
+                and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+            </if>
+            <if test="flowType !=null">
+                and flow_type = #{flowType,jdbcType=INTEGER}
+            </if>
+            <if test="zmScore !=null">
+                and zm_score = #{zmScore,jdbcType=INTEGER}
+            </if>
+            <if test="flowMaxNum !=null">
+                and flow_max_num = #{flowMaxNum,jdbcType=INTEGER}
+            </if>
+            <if test="flowOpen !=null">
+                and flow_open = #{flowOpen,jdbcType=BIT}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+        <include refid="paging"/>
+    </select>
+    <select id="queryTotal" resultType="INTEGER">
+        select count(*) from saas_merchant_flow_config
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="merchantCode !=null">
+                and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+            </if>
+            <if test="flowType !=null">
+                and flow_type = #{flowType,jdbcType=INTEGER}
+            </if>
+            <if test="zmScore !=null">
+                and zm_score = #{zmScore,jdbcType=INTEGER}
+            </if>
+            <if test="flowMaxNum !=null">
+                and flow_max_num = #{flowMaxNum,jdbcType=INTEGER}
+            </if>
+            <if test="flowOpen !=null">
+                and flow_open = #{flowOpen,jdbcType=BIT}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </select>
+</mapper>
