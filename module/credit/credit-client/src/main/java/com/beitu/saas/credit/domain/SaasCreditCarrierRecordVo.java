@@ -1,12 +1,13 @@
 package com.beitu.saas.credit.domain;
 
+import com.beitu.saas.common.handle.carrier.domain.CarriersPhoneCallVo;
 import com.beitu.saas.credit.entity.SaasCreditCarrierRecord;
-import com.beitu.saas.credit.entity.SaasCreditDunning;
+import com.beitu.saas.credit.enums.CreditCarrierRecordTypeEnum;
 import com.fqgj.common.api.ResponseData;
+import com.fqgj.common.utils.StringUtils;
 import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * User: jungle
@@ -165,6 +166,38 @@ public class SaasCreditCarrierRecordVo implements ResponseData, Serializable {
         BeanUtils.copyProperties(saasCreditCarrierRecordVo, saasCreditCarrierRecord);
         saasCreditCarrierRecord.setId(saasCreditCarrierRecordVo.getSaasCreditCarrierRecordId());
         return saasCreditCarrierRecord;
+    }
+
+    public static SaasCreditCarrierRecordVo getSaasCreditCarrierRecordVo(CarriersPhoneCallVo carriersPhoneCallVo, CreditCarrierRecordTypeEnum creditCarrierRecordTypeEnum, Long recordId) {
+        SaasCreditCarrierRecordVo creditCarrierRecordVo = new SaasCreditCarrierRecordVo();
+        if (CreditCarrierRecordTypeEnum.HIGH_FREQ.equals(creditCarrierRecordTypeEnum) ||
+                CreditCarrierRecordTypeEnum.LONG_DURATION.equals(creditCarrierRecordTypeEnum) ||
+                CreditCarrierRecordTypeEnum.CONTACT_REGION.equals(creditCarrierRecordTypeEnum)) {
+            creditCarrierRecordVo.setPhone(carriersPhoneCallVo.getPeernumber());
+        }
+
+        if (CreditCarrierRecordTypeEnum.MERCHANT.equals(creditCarrierRecordTypeEnum)) {
+            creditCarrierRecordVo.setPhone(carriersPhoneCallVo.getPeernumber());
+            creditCarrierRecordVo.setMerchant(carriersPhoneCallVo.getPeercarrier());
+        }
+
+        if (CreditCarrierRecordTypeEnum.ACTIVE_REGION.equals(creditCarrierRecordTypeEnum) ||
+                CreditCarrierRecordTypeEnum.LONG_DURATION.equals(creditCarrierRecordTypeEnum) ||
+                CreditCarrierRecordTypeEnum.CONTACT_REGION.equals(creditCarrierRecordTypeEnum)) {
+            String location = "无";
+            if (StringUtils.isNotEmpty(carriersPhoneCallVo.getLocation())) {
+                location = carriersPhoneCallVo.getLocation();
+            }
+            creditCarrierRecordVo.setLocation(location);
+        }
+        creditCarrierRecordVo.setRecordId(recordId);
+        creditCarrierRecordVo.setTotalDuration(carriersPhoneCallVo.getCallTime() == null ? 0 : Integer.valueOf(carriersPhoneCallVo.getCallTime()));
+        creditCarrierRecordVo.setCallingTime(carriersPhoneCallVo.getCalling() == null ? 0 : carriersPhoneCallVo.getCalling());
+        creditCarrierRecordVo.setCallingDuration(carriersPhoneCallVo.getCallingTime() == null ? 0 : Integer.valueOf(carriersPhoneCallVo.getCallingTime()));
+        creditCarrierRecordVo.setCalledTime(carriersPhoneCallVo.getCalled() == null ? 0 : carriersPhoneCallVo.getCalled());
+        creditCarrierRecordVo.setCalledDuration(carriersPhoneCallVo.getCalledTime() == null ? 0 : Integer.valueOf(carriersPhoneCallVo.getCalledTime()));
+        creditCarrierRecordVo.setType(creditCarrierRecordTypeEnum.getType());
+        return creditCarrierRecordVo;
     }
 
 }

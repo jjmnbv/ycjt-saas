@@ -1,5 +1,6 @@
 package com.beitu.saas.rest.controller.h5;
 
+import com.beitu.saas.app.annotations.IgnoreRepeatRequest;
 import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.api.ApiResponse;
 import com.beitu.saas.app.api.DataApiResponse;
@@ -9,7 +10,6 @@ import com.beitu.saas.app.application.contract.ContractApplication;
 import com.beitu.saas.app.application.contract.enums.ContractTypeEnum;
 import com.beitu.saas.app.application.contract.thread.GenerateContractThread;
 import com.beitu.saas.app.application.credit.CreditApplication;
-import com.beitu.saas.app.application.credit.LoanPlatformApplication;
 import com.beitu.saas.app.application.credit.vo.BorrowerEmergentContactVo;
 import com.beitu.saas.app.application.credit.vo.BorrowerIdentityInfoVo;
 import com.beitu.saas.app.application.credit.vo.BorrowerWorkInfoVo;
@@ -18,7 +18,6 @@ import com.beitu.saas.app.application.order.vo.OrderDetailVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.app.enums.H5OrderDetailButtonTypeEnum;
 import com.beitu.saas.app.enums.SaasContractEnum;
-import com.beitu.saas.app.enums.SaasLoanPlatformEnum;
 import com.beitu.saas.auth.domain.SaasMerchantVo;
 import com.beitu.saas.auth.service.SaasMerchantService;
 import com.beitu.saas.borrower.client.SaasBorrowerEmergentContactService;
@@ -179,7 +178,7 @@ public class H5Controller {
     @ApiOperation(value = "风控项列表获取", response = CreditModuleListResponse.class)
     public DataApiResponse<CreditModuleListResponse> listCreditModule() {
         SaasBorrowerVo saasBorrowerVo = RequestLocalInfo.getCurrentAdmin().getSaasBorrower();
-        return new DataApiResponse<>(new CreditModuleListResponse(creditApplication.listCreditModule(saasBorrowerVo.getMerchantCode(),saasBorrowerVo.getChannelCode(), saasBorrowerVo.getBorrowerCode())));
+        return new DataApiResponse<>(new CreditModuleListResponse(creditApplication.listCreditModule(saasBorrowerVo.getMerchantCode(), saasBorrowerVo.getChannelCode(), saasBorrowerVo.getBorrowerCode())));
     }
 
     @RequestMapping(value = "/credit/apply/info/get", method = RequestMethod.POST)
@@ -383,6 +382,7 @@ public class H5Controller {
 
     @RequestMapping(value = "/credit/submit", method = RequestMethod.POST)
     @ResponseBody
+    @IgnoreRepeatRequest
     @ApiOperation(value = "提交风控模块", response = ApiResponse.class)
     public ApiResponse submitCreditInfo() {
         String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
@@ -453,6 +453,7 @@ public class H5Controller {
         return new DataApiResponse(response);
     }
 
+    @IgnoreRepeatRequest
     @RequestMapping(value = "/order/confirm/{orderNumb}/{buttonType}", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "用户订单详情按钮操作", response = H5OrderDetailResponse.class)

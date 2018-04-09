@@ -18,6 +18,8 @@ public interface SaasCreditDunningService<T extends BaseEntity> extends BaseServ
 
     SaasCreditDunningVo getByMerchantCodeAndBorrowerCode(String merchantCode, String borrowerCode);
 
+    SaasCreditDunningVo getBySid(String sid);
+
     Boolean updateSuccess(Long id);
 
 }

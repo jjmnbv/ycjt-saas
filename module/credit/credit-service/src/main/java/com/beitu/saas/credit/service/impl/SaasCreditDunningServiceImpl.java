@@ -42,6 +42,18 @@ public class SaasCreditDunningServiceImpl extends AbstractBaseService implements
     }
 
     @Override
+    public SaasCreditDunningVo getBySid(String sid) {
+        List<SaasCreditDunning> saasCreditDunningList = saasCreditDunningDao.selectByParams(new HashMap<String, Object>(4) {{
+            put("sid", sid);
+            put("deleted", Boolean.FALSE);
+        }});
+        if (CollectionUtils.isEmpty(saasCreditDunningList)) {
+            return null;
+        }
+        return SaasCreditDunningVo.convertEntityToVO(saasCreditDunningList.get(saasCreditDunningList.size() - 1));
+    }
+
+    @Override
     public Boolean effectivenessCreditDunning(String borrowerCode) {
         List<SaasCreditDunning> saasCreditDunningList = saasCreditDunningDao.selectByParams(new HashMap<String, Object>(4) {{
             put("borrowerCode", borrowerCode);

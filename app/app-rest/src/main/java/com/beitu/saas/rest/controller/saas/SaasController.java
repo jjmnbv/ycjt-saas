@@ -1,5 +1,6 @@
 package com.beitu.saas.rest.controller.saas;
 
+import com.beitu.saas.app.annotations.IgnoreRepeatRequest;
 import com.beitu.saas.app.api.ApiResponse;
 import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.application.borrower.BorrowerApplication;
@@ -199,6 +200,7 @@ public class SaasController {
 
     @RequestMapping(value = "/credit/submit", method = RequestMethod.POST)
     @ResponseBody
+    @IgnoreRepeatRequest
     @ApiOperation(value = "提交风控模块", response = ApiResponse.class)
     public ApiResponse submitCreditInfo(SaasCreditSubmitRequest req) {
         SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();

@@ -3,4 +3,55 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.beitu.saas.credit.dao.impl.SaasCreditBmpDetailDaoImpl">
 
+    <insert id="batchAddSaasCreditBmpDetail" keyColumn="id" keyProperty="id"
+            parameterType="java.util.List" useGeneratedKeys="true">
+        insert into saas_credit_bmp_detail
+        (record_id,
+        dhb_id,
+        `name`,
+        teldesc,
+        teltype,
+        telnum,
+        telrank,
+        country,
+        city_id,
+        logo,
+        slogan,
+        image,
+        addr,
+        web,
+        url,
+        flag_type,
+        flag_num,
+        flag_fid,
+        catnames,
+        itag_ids,
+        deleted) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            <trim prefix="(" suffix=")">
+                #{recordId,jdbcType=BIGINT},
+                #{dhbId,jdbcType=VARCHAR},
+                #{name,jdbcType=VARCHAR},
+                #{teldesc,jdbcType=VARCHAR},
+                #{teltype,jdbcType=TINYINT},
+                #{telnum,jdbcType=VARCHAR},
+                #{telrank,jdbcType=TINYINT},
+                #{country,jdbcType=INTEGER},
+                #{cityId,jdbcType=INTEGER},
+                #{logo,jdbcType=VARCHAR},
+                #{slogan,jdbcType=VARCHAR},
+                #{image,jdbcType=VARCHAR},
+                #{addr,jdbcType=VARCHAR},
+                #{web,jdbcType=VARCHAR},
+                #{url,jdbcType=VARCHAR},
+                #{flagType,jdbcType=VARCHAR},
+                #{flagNum,jdbcType=INTEGER},
+                #{flagFid,jdbcType=INTEGER},
+                #{catnames,jdbcType=VARCHAR},
+                #{itagIds,jdbcType=VARCHAR},
+                #{deleted,jdbcType=BIT}
+            </trim>
+        </foreach>
+    </insert>
+
 </mapper>
