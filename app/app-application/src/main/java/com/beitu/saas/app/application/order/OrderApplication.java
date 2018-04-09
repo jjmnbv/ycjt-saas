@@ -38,12 +38,12 @@ import com.beitu.saas.order.domain.SaasOrderBillDetailVo;
 import com.beitu.saas.order.domain.SaasOrderVo;
 import com.beitu.saas.order.entity.SaasOrder;
 import com.beitu.saas.order.entity.SaasOrderStatusHistory;
+import com.beitu.saas.order.enums.DashboardTypeEnum;
 import com.beitu.saas.order.enums.OrderErrorCodeEnum;
 import com.beitu.saas.order.enums.OrderStatusEnum;
 import com.beitu.saas.order.vo.LoanDataDetailVo;
 import com.beitu.saas.order.vo.LoanStateDetailVo;
-import com.beitu.saas.order.vo.NoRepayOrderVo;
-import com.beitu.saas.order.vo.OverdueOrderVo;
+import com.beitu.saas.order.vo.DashboardOrderVo;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.utils.CollectionUtils;
 import com.fqgj.common.utils.StringUtils;
@@ -425,11 +425,11 @@ public class OrderApplication {
     }
 
     /**
-     * 数据看板
+     * 数据看板放款数据
      *
      * @param merchantCode
      */
-    public DataDashboardShowVo getDataDashboardInfo(String merchantCode, Page page) {
+    public DataDashboardLoanShowVo getDataDashboardInfo(String merchantCode) {
         //放款数据
         LoanDataDetailVo loanDataDetailVo = saasOrderBillDetailService.getLoanDataDetailVo(merchantCode);
         LoanDataDetailShowVo loanDataDetailShowVo = new LoanDataDetailShowVo();
@@ -440,7 +440,7 @@ public class OrderApplication {
         SaasMerchantSmsInfoEntity smsInfoByMerchantCode = saasMerchantSmsInfoService.getSmsInfoByMerchantCode(merchantCode);
         SaasMerchantBalanceInfoEntity balanceInfoEntity = saasMerchantBalanceInfoService.getMerchantBalanceInfoByMerchantCode(merchantCode);
 
-        DataDashboardShowVo dataDashboardShowVo = new DataDashboardShowVo()
+        DataDashboardLoanShowVo dataDashboardLoanShowVo = new DataDashboardLoanShowVo()
                 .setLoanDataDetailVo(loanDataDetailShowVo)
                 .setMerchantBalance(balanceInfoEntity == null ? BigDecimal.ZERO : balanceInfoEntity.getValue())
                 .setMerchantCredit(creditInfoByMerchantCode == null ? 0l : creditInfoByMerchantCode.getValue())
@@ -454,29 +454,49 @@ public class OrderApplication {
             BeanUtils.copyProperties(x, loanStateDetailShowVo);
             stateDetailShowVos.add(loanStateDetailShowVo);
         });
-        dataDashboardShowVo.setLoanStateDetailShowVos(stateDetailShowVos);
+        dataDashboardLoanShowVo.setLoanStateDetailShowVos(stateDetailShowVos);
+        return dataDashboardLoanShowVo;
+    }
 
-        //待收的订单列表和逾期的订单列表
-        List<NoRepayOrderVo> noRepayOrderVos = saasOrderBillDetailService.getNoRepayOrderListByPage(merchantCode, page);
-        List<OverdueOrderVo> overdueOrderVos = saasOrderBillDetailService.getOverdueOrderListByPage(merchantCode, page);
+    /**
+     * 数据看板放款数据
+     *
+     * @param merchantCode
+     */
+    public List<DashboardOrderShowVo> getDataDashboardOverdueShowInfo(Integer menuType, String merchantCode, Page page) {
+        List<DashboardOrderShowVo> dashboardOrderShowVos = new ArrayList<>();
+        if (menuType == DashboardTypeEnum.NO_REPAY.getType()) {
+            List<DashboardOrderVo> noRepayOrderVos = saasOrderBillDetailService.getNoRepayOrderListByPage(merchantCode, page);
+            dashboardOrderShowVos = this.getDashboardOrderShowList(noRepayOrderVos);
 
-        List<NoRepayOrderShowVo> noRepayOrderShowVos = new ArrayList<>();
-        noRepayOrderVos.stream().forEach(x -> {
-            NoRepayOrderShowVo noRepayOrderShowVo = new NoRepayOrderShowVo();
-            BeanUtils.copyProperties(x, noRepayOrderShowVo);
-            noRepayOrderShowVos.add(noRepayOrderShowVo);
+        }
+        if (menuType == DashboardTypeEnum.OVERDUE.getType()) {
+            List<DashboardOrderVo> overdueOrderVos = saasOrderBillDetailService.getOverdueOrderListByPage(merchantCode, page);
+            dashboardOrderShowVos = this.getDashboardOrderShowList(overdueOrderVos);
+        }
+
+        return dashboardOrderShowVos;
+    }
+
+    //获取数据看板订单信息
+    private List<DashboardOrderShowVo> getDashboardOrderShowList(List<DashboardOrderVo> dashboardOrderVos) {
+        List<DashboardOrderShowVo> dashboardOrderShowVos = new ArrayList<>();
+        dashboardOrderVos.stream().forEach(x -> {
+            SaasBorrowerVo borrower = saasBorrowerService.getByBorrowerCode(x.getBorrowCode());
+            SaasBorrowerRealInfoVo infoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(x.getBorrowCode());
+            DashboardOrderShowVo dashboardOrderShowVo = new DashboardOrderShowVo();
+            dashboardOrderShowVo.setRealCapital(x.getRealCapital());
+            if (borrower != null) {
+                dashboardOrderShowVo.setMobile(borrower.getMobile());
+            }
+            if (infoVo != null) {
+                dashboardOrderShowVo.setName(infoVo.getName());
+            }
+            dashboardOrderShowVos.add(dashboardOrderShowVo);
+
         });
 
-        List<OverdueOrderShowVo> overdueOrderShowVos = new ArrayList<>();
-        overdueOrderVos.stream().forEach(x -> {
-            OverdueOrderShowVo overdueOrderShowVo = new OverdueOrderShowVo();
-            BeanUtils.copyProperties(x, overdueOrderShowVo);
-            overdueOrderShowVos.add(overdueOrderShowVo);
-
-        });
-
-        return dataDashboardShowVo.setNoRepayOrderShowVos(noRepayOrderShowVos)
-                .setOverdueOrderShowVos(overdueOrderShowVos);
+        return dashboardOrderShowVos;
     }
 
     private SaasOrderListVo convertSaasOrderVo2SaasOrderListVo(SaasOrderVo saasOrderVo) {
