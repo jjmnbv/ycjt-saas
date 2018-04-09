@@ -198,6 +198,7 @@ public class SaasChannelApplication {
             riskSettingsVos.add(vo);
         });
 
+        LOGGER.info("渠道号: {} 的风控配置模块size:{}", channelCode, riskSettingsVos.size());
         return riskSettingsVos;
     }
 

@@ -116,6 +116,8 @@ public class CreditApplication {
             creditModuleListVo.setApplyStatus(getInfoApplyStatus(merchantCode, borrowerCode, orderNumb, saasChannelRiskSettingsVo.getModuleCode()).getCode());
             creditModuleListVoList.add(creditModuleListVo);
         });
+
+        LOGGER.info("渠道号: {} H5处理后风控项列表size:{}", channelCode, creditModuleListVoList.size());
         return creditModuleListVoList;
     }
 
