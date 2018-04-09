@@ -2,8 +2,11 @@ package com.beitu.saas.app.application.channel;
 
 import com.beitu.saas.app.application.channel.vo.ChannelStatDetailVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
+import com.beitu.saas.auth.domain.SaasMerchantVo;
 import com.beitu.saas.auth.entity.SaasAdmin;
+import com.beitu.saas.auth.entity.SaasMerchant;
 import com.beitu.saas.auth.service.SaasAdminService;
+import com.beitu.saas.auth.service.SaasMerchantService;
 import com.beitu.saas.channel.domain.SaasChannelDetailVo;
 import com.beitu.saas.channel.domain.SaasChannelRiskSettingsVo;
 import com.beitu.saas.channel.domain.SaasH5ChannelVo;
@@ -53,6 +56,8 @@ public class SaasChannelApplication {
     private SaasAdminService saasAdminService;
     @Resource
     private ConfigUtil configUtil;
+    @Autowired
+    private SaasMerchantService saasMerchantService;
 
 
     /**
@@ -246,6 +251,14 @@ public class SaasChannelApplication {
             return null;
         }
         return saasChannelEntity.getChannelCode();
+    }
+
+    public SaasMerchantVo getMerchantByChannelCode(String channelCode) {
+        SaasChannelEntity channelEntity = saasChannelService.getSaasChannelByChannelCode(channelCode);
+        if (channelEntity == null) {
+            return null;
+        }
+        return saasMerchantService.getByMerchantCode(channelEntity.getMerchantCode());
     }
 
 }
