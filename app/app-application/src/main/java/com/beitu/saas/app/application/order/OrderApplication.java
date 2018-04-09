@@ -750,8 +750,8 @@ public class OrderApplication {
         orderBillDetailApplication.destroyOrderBillDetail(orderNumb, merchantCode);
 
         saasCollectionOrderService.closeOrder(orderNumb);
-        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(orderNumb, merchantCode);
 
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(orderNumb, merchantCode);
         sendApplication.sendNotifyMessageByBorrowerCode(merchantCode, saasOrderVo.getBorrowerCode(), new HashMap(2) {{
             put("money", saasOrderVo.getRealCapital());
         }}, SaasSmsTypeEnum.SAAS_0016);
