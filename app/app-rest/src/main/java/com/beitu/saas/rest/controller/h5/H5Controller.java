@@ -204,12 +204,12 @@ public class H5Controller {
         response.setNeedRealName(borrowerApplication.needRealName(borrowerCode));
         if (contractApplication.needDoLicenseContractSign(borrowerCode)) {
             response.setContractTitle1(SaasContractEnum.LICENSE_CONTRACT.getMsg());
-            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LICENSE_CONTRACT.getUrl() + "?token=" + token);
+            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LICENSE_CONTRACT.getUrl() + "?token=" + token + (configUtil.isServerTest() ? "&test=1" : ""));
             response.setContractTitle2(SaasContractEnum.LOAN_CONTRACT.getMsg());
-            response.setContractUrl2(configUtil.getAddressURLPrefix() + SaasContractEnum.LOAN_CONTRACT.getUrl() + "?token=" + token);
+            response.setContractUrl2(configUtil.getAddressURLPrefix() + SaasContractEnum.LOAN_CONTRACT.getUrl() + "?token=" + token + (configUtil.isServerTest() ? "&test=1" : ""));
         } else {
             response.setContractTitle1(SaasContractEnum.LOAN_CONTRACT.getMsg());
-            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LOAN_CONTRACT.getUrl() + "?token=" + token);
+            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LOAN_CONTRACT.getUrl() + "?token=" + token + (configUtil.isServerTest() ? "&test=1" : ""));
         }
         return new DataApiResponse<>(response);
     }
