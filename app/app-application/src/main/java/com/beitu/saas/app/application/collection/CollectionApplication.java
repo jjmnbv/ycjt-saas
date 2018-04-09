@@ -65,6 +65,9 @@ public class CollectionApplication {
                 LOGGER.info("清算应还金额出错,异常原因:{} ", e);
             }
             x.setShouldRepayCapital(shouldAmount);
+            if (x.getOverdueDuration() < 0) {
+                x.setOverdueDuration(0);
+            }
         });
 
         List<CollectionOrderListVo> collectionOrderListVos = new ArrayList<>();
