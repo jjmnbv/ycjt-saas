@@ -27,6 +27,6 @@ public interface SaasChannelDao extends BaseMapper<SaasChannelEntity> {
 
     Integer queryTotalChannelStatCount(ChannelStatQueryParam channelStatQueryParam);
 
-    SaasChannelEntity selectChannelEntityByMerchantCodeAndCreatorCode(String merchantCode, String creatorCode);
+    SaasChannelEntity selectDefaultChannelEntityByMerchantCode(String merchantCode, Integer channelType);
 
 }

@@ -3,8 +3,8 @@ import com.fqgj.common.entity.BaseEntity;
 
 /**
 * User: fenqiguanjia
-* Date: 2018-03-26
-* Time: 15:11:48.960
+* Date: 2018-04-09
+* Time: 20:43:57.460
 * TableDesc:渠道信息表
 */
 public class SaasChannelEntity extends BaseEntity{
@@ -24,6 +24,10 @@ public class SaasChannelEntity extends BaseEntity{
     *渠道状态(0-开启,1-关闭)
     */
     private Integer channelStatus;
+    /**
+    *渠道类型： 0-自定义渠道 1-系统默认渠道
+    */
+    private Integer channelType;
     /**
     *渠道连接
     */
@@ -75,6 +79,15 @@ public class SaasChannelEntity extends BaseEntity{
 
     public  SaasChannelEntity setChannelStatus(Integer channelStatus){
         this.channelStatus = channelStatus;
+        return this;
+    }
+
+    public  Integer getChannelType(){
+        return this.channelType;
+    }
+
+    public  SaasChannelEntity setChannelType(Integer channelType){
+        this.channelType = channelType;
         return this;
     }
 

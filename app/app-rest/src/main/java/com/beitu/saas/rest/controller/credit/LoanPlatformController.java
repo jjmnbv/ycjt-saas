@@ -7,6 +7,7 @@ import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.app.enums.SaasLoanPlatformEnum;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.entity.SaasChannelEntity;
+import com.beitu.saas.channel.enums.ChannelTypeEnum;
 import com.beitu.saas.rest.controller.credit.request.GetLoanPlatformUrlRequest;
 import com.beitu.saas.rest.controller.credit.request.SaasGetLoanPlatformUrlRequest;
 import com.beitu.saas.rest.controller.credit.response.LoanPlatformUrlResponse;
@@ -61,7 +62,7 @@ public class LoanPlatformController {
     public DataApiResponse<LoanPlatformUrlResponse> getSaasLoanPlatformUrl(@RequestBody @Valid SaasGetLoanPlatformUrlRequest req) {
         String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
         String borrowerCode = req.getBorrowerCode();
-        SaasChannelEntity saasChannelEntity = saasChannelService.getDefaultSaasChannelByMerchantCode(merchantCode);
+        SaasChannelEntity saasChannelEntity = saasChannelService.getDefaultSaasChannelByMerchantCode(merchantCode, ChannelTypeEnum.SYSTEM_DEFINED.getType());
         if (saasChannelEntity == null) {
             throw new ApplicationException("机构不存在默认渠道");
         }

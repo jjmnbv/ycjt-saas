@@ -8,6 +8,7 @@ import com.beitu.saas.channel.domain.SaasChannelDetailVo;
 import com.beitu.saas.channel.domain.SaasChannelRiskSettingsVo;
 import com.beitu.saas.channel.domain.SaasH5ChannelVo;
 import com.beitu.saas.channel.enums.ChannelOperateTypeEnum;
+import com.beitu.saas.channel.enums.ChannelTypeEnum;
 import com.beitu.saas.channel.param.ChannelStatQueryParam;
 import com.beitu.saas.channel.param.SaasChannelParam;
 import com.beitu.saas.channel.client.SaasChannelRiskSettingsService;
@@ -73,6 +74,7 @@ public class SaasChannelApplication {
             saasChannelEntity.setChannelCode(channelCode)
                     .setChannelStatus(ChannelStatusEnum.OPEN.getType())
                     .setLinkUrl("?channel=" + channelCode)
+                    .setChannelType(ChannelTypeEnum.USER_DEFINED.getType())
                     .setCreatorCode(RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode());
             saasChannelService.create(saasChannelEntity);
 
@@ -239,7 +241,7 @@ public class SaasChannelApplication {
     }
 
     public String getDefaultSaasChannelCodeByMerchantCode(String merchantCode) {
-        SaasChannelEntity saasChannelEntity = saasChannelService.getDefaultSaasChannelByMerchantCode(merchantCode);
+        SaasChannelEntity saasChannelEntity = saasChannelService.getDefaultSaasChannelByMerchantCode(merchantCode, ChannelTypeEnum.SYSTEM_DEFINED.getType());
         if (ChannelStatusEnum.CLOSE.getType().equals(saasChannelEntity.getChannelStatus())) {
             return null;
         }

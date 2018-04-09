@@ -22,7 +22,7 @@
                 <if test="saasChannelParam !=null and saasChannelParam.chargePersonCode != null">
                     and charge_person_code = #{saasChannelParam.chargePersonCode,jdbcType=VARCHAR}
                 </if>
-                and creator_code!='SYSTEM' and deleted = 0
+                and channel_type=0 and deleted = 0
             </trim>
         </where>
     </sql>
@@ -94,7 +94,7 @@
         ) t
     </select>
 
-    <select id="selectChannelEntityByMerchantCodeAndCreatorCode" parameterType="map" resultMap="BaseResultMap">
+    <select id="selectDefaultChannelEntityByMerchantCode" parameterType="map" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         from saas_channel
@@ -102,10 +102,10 @@
             <if test="merchantCode !=null">
                 and merchant_code = #{merchantCode,jdbcType=VARCHAR}
             </if>
-            <if test="creatorCode !=null">
-                and creator_code = #{creatorCode,jdbcType=VARCHAR}
+            <if test="merchantCode !=null">
+                and channel_type = #{channelType,jdbcType=INTEGER}
             </if>
-            and deleted = false
+           and deleted = false
         </trim>
     </select>
 
