@@ -60,6 +60,7 @@ public class SaasCollectionOderController {
         CollectionOrderQueryParam param = new CollectionOrderQueryParam();
         BeanUtils.copyProperties(collectionOrderQueryParam, param);
         param.setMerchantCode(RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode());
+
         List<CollectionOrderListVo> collectionOrderList = collectionApplication.getCollectionOrderListByPage(param, page);
         return new ModuleResponse<>(new CollectionOrderListResponse(collectionOrderList), page);
     }

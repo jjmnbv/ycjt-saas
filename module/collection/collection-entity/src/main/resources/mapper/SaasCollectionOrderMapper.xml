@@ -18,6 +18,9 @@
                 <if test="collectionOrderQueryParam.channelCode != null">
                     and so.channel_code = #{collectionOrderQueryParam.channelCode,jdbcType=VARCHAR}
                 </if>
+                <if test="collectionOrderQueryParam.merchantCode != null">
+                    and sb.merchant_code = #{collectionOrderQueryParam.merchantCode,jdbcType=VARCHAR}
+                </if>
                 <if test="collectionOrderQueryParam.overdueStartDate != null and collectionOrderQueryParam.overdueEndDate != null">
                     and date_format(so.repayment_dt, '%Y-%m-%d') &gt;=
                     #{collectionOrderQueryParam.overdueStartDate,jdbcType=VARCHAR}
