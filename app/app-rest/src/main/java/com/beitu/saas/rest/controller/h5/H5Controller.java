@@ -235,7 +235,8 @@ public class H5Controller {
         SaasOrderApplicationVo addOrderApplication = new SaasOrderApplicationVo();
         addOrderApplication.setBorrowerCode(borrowerCode);
         addOrderApplication.setOrderNumb(orderNumb);
-        addOrderApplication.setChannelCode(saasBorrowerVo.getChannelCode());
+        String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
+        addOrderApplication.setChannelCode(channelCode);
         addOrderApplication.setMerchantCode(saasBorrowerVo.getMerchantCode());
         addOrderApplication.setRealCapital(req.getRealCapital());
         addOrderApplication.setTotalInterestRatio(req.getTotalInterestRatio().divide(new BigDecimal(100)));
