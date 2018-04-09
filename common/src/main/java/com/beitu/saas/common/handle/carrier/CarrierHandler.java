@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.beitu.saas.common.handle.carrier.domain.CarriersPhoneCallVo;
 import com.beitu.saas.common.handle.carrier.domain.CarriersVo;
 import com.beitu.saas.common.handle.carrier.enums.CarrierTypeEnum;
-import com.beitu.saas.common.handle.oss.OSSHandler;
+import com.beitu.saas.common.handle.oss.OSSService;
 import com.fqgj.common.utils.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -23,7 +23,7 @@ public class CarrierHandler {
     private static final Logger logger = LoggerFactory.getLogger(CarrierHandler.class);
 
     @Autowired
-    private OSSHandler ossHandler;
+    private OSSService ossService;
 
     @Autowired
     private ServletContext servletContext;
@@ -71,8 +71,7 @@ public class CarrierHandler {
      */
     private JSONObject getCarrierJSONObject4OSSUrl(String ossUrl) {
         if (StringUtils.isNotEmpty(ossUrl)) {
-            String bucketName = "ycjt";
-            String carriersContent = ossHandler.getFileContent(bucketName, ossUrl);//运营商数据
+            String carriersContent = ossService.getFileContent(ossUrl);//运营商数据
             return getCarrierJSONObject4Content(carriersContent);
         }
         return null;

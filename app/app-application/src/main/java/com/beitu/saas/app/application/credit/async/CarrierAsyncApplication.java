@@ -119,11 +119,7 @@ public class CarrierAsyncApplication {
         if (creditCarrierBillVos.size() > 1) {
             Collections.sort(creditCarrierBillVos, (o1, o2) -> (o2.getBillDate().compareTo(o1.getBillDate())));
         }
-        try {
-            saasCreditCarrierBillService.batchAddSaasCreditCarrierBill(creditCarrierBillVos);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        saasCreditCarrierBillService.batchAddSaasCreditCarrierBill(creditCarrierBillVos);
     }
 
     private void generateCarrierExtReport(CarriersVo carriersVo, Long recordId) {

@@ -1,25 +1,16 @@
 package com.beitu.saas.rest.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.beitu.saas.app.annotations.SignIgnore;
 import com.beitu.saas.app.annotations.VisitorAccessible;
-import com.beitu.saas.app.application.credit.CreditApplication;
-import com.beitu.saas.app.application.credit.LoanPlatformApplication;
-import com.beitu.saas.app.application.credit.TongdunReportApplication;
+import com.beitu.saas.app.application.credit.CarrierReportApplication;
+import com.beitu.saas.app.application.credit.DunningReportApplication;
 import com.beitu.saas.app.application.finance.SaasConsumeDayStatApplication;
-import com.beitu.saas.intergration.risk.RiskIntergrationService;
-import com.beitu.saas.intergration.risk.dto.LoanPlatformCrawlingDto;
-import com.beitu.saas.intergration.risk.dto.LoanPlatformQueryDto;
-import com.beitu.saas.intergration.risk.enums.LoanPlatformEnum;
-import com.beitu.saas.intergration.risk.param.LoanPlatformCrawlingParam;
-import com.beitu.saas.intergration.risk.param.LoanPlatformQueryParam;
+import com.beitu.saas.credit.client.SaasCreditCarrierService;
+import com.beitu.saas.credit.entity.SaasCreditCarrier;
 import com.fqgj.log.factory.LogFactory;
 import com.fqgj.log.interfaces.Log;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author xiaochong
@@ -32,10 +23,13 @@ public class OkController {
     private static final Log LOGGER = LogFactory.getLog(OkController.class);
 
     @Autowired
-    private RiskIntergrationService riskIntergrationService;
+    private DunningReportApplication dunningReportApplication;
 
     @Autowired
-    private TongdunReportApplication tongdunReportApplication;
+    private SaasCreditCarrierService saasCreditCarrierService;
+
+    @Autowired
+    private CarrierReportApplication carrierReportApplication;
 
     @Autowired
     private SaasConsumeDayStatApplication saasConsumeDayStatApplication;
@@ -48,12 +42,14 @@ public class OkController {
         return "ok";
     }
 
-    @RequestMapping("/stat")
+    @RequestMapping(value = "/stat", method = RequestMethod.POST)
     @ResponseBody
     @VisitorAccessible
     @SignIgnore
-    public String stat() {
-        tongdunReportApplication.generateTongdunReport("2018040416LUKIO", "20180408213138421000");
+    public String stat(@RequestParam(value = "id") Long id) {
+        SaasCreditCarrier saasCreditCarrier = (SaasCreditCarrier) saasCreditCarrierService.selectById(id);
+        carrierReportApplication.generateCarrierReport(saasCreditCarrier.getMerchantCode(), saasCreditCarrier.getBorrowerCode());
+        dunningReportApplication.generateDunningReport(saasCreditCarrier.getMerchantCode(), saasCreditCarrier.getBorrowerCode());
         return "ok";
     }
 
