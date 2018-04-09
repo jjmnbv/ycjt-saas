@@ -10,7 +10,7 @@ import com.fqgj.common.api.enums.MsgCodeEnum;
 public enum SaasContractEnum implements MsgCodeEnum {
 
     LICENSE_CONTRACT(1, "《电子签授权协议》", "h5/contract/authorization.html"),
-    LOAN_CONTRACT(2, "《借款协议》", "h5/contract/extendTerm.html"),
+    LOAN_CONTRACT(2, "《借款协议》", "h5/contract/borrowTerm.html"),
     EXTEND_CONTRACT(3, "《展期协议》", "h5/contract/extendTerm.html");
 
     SaasContractEnum(Integer code, String msg, String url) {

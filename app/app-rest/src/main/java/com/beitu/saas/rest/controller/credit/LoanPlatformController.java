@@ -7,6 +7,9 @@ import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.app.enums.SaasLoanPlatformEnum;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.entity.SaasChannelEntity;
+import com.beitu.saas.order.client.SaasOrderService;
+import com.beitu.saas.order.domain.SaasOrderVo;
+import com.beitu.saas.order.enums.OrderErrorCodeEnum;
 import com.beitu.saas.rest.controller.credit.request.GetLoanPlatformUrlRequest;
 import com.beitu.saas.rest.controller.credit.request.SaasGetLoanPlatformUrlRequest;
 import com.beitu.saas.rest.controller.credit.response.LoanPlatformUrlResponse;
@@ -44,6 +47,9 @@ public class LoanPlatformController {
     @Autowired
     private SaasChannelService saasChannelService;
 
+    @Autowired
+    private SaasOrderService saasOrderService;
+
     @RequestMapping(value = "/get/url", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "获取多平台借贷爬取URL", response = LoanPlatformUrlResponse.class)
@@ -60,7 +66,12 @@ public class LoanPlatformController {
     @ApiOperation(value = "获取多平台借贷爬取URL", response = LoanPlatformUrlResponse.class)
     public DataApiResponse<LoanPlatformUrlResponse> getSaasLoanPlatformUrl(@RequestBody @Valid SaasGetLoanPlatformUrlRequest req) {
         String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
-        String borrowerCode = req.getBorrowerCode();
+        String orderNumb = req.getOrderNumb();
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(orderNumb, merchantCode);
+        if (saasOrderVo == null) {
+            throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
+        }
+        String borrowerCode = saasOrderVo.getBorrowerCode();
         SaasChannelEntity saasChannelEntity = saasChannelService.getDefaultSaasChannelByMerchantCode(merchantCode);
         if (saasChannelEntity == null) {
             throw new ApplicationException("机构不存在默认渠道");

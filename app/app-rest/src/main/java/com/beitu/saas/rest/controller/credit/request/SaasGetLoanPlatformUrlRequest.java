@@ -19,9 +19,9 @@ public class SaasGetLoanPlatformUrlRequest extends ParamsObject {
     @NotNull(message = "借贷平台类型不能为空")
     private Integer loanPlatformType;
 
-    @ApiModelProperty(value = "用户CODE")
-    @NotBlank(message = "用户码不能为空")
-    private String borrowerCode;
+    @ApiModelProperty(value = "订单号")
+    @NotBlank(message = "订单号不能为空")
+    private String orderNumb;
 
     public Integer getLoanPlatformType() {
         return loanPlatformType;
@@ -31,12 +31,12 @@ public class SaasGetLoanPlatformUrlRequest extends ParamsObject {
         this.loanPlatformType = loanPlatformType;
     }
 
-    public String getBorrowerCode() {
-        return borrowerCode;
+    public String getOrderNumb() {
+        return orderNumb;
     }
 
-    public void setBorrowerCode(String borrowerCode) {
-        this.borrowerCode = borrowerCode;
+    public void setOrderNumb(String orderNumb) {
+        this.orderNumb = orderNumb;
     }
 
     @Override
