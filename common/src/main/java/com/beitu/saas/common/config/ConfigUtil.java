@@ -472,10 +472,6 @@ public class ConfigUtil {
         return config.getProperty("youqianZmxy.zhimaPublicKey", "");
     }
 
-    public String getH5TianjiCarrierNotifyUrl() {
-        return config.getProperty("carrier.tianji.notify.url", "");
-    }
-
     /************* risk end *************/
 
     public String getH5AddressURLPrefix() {

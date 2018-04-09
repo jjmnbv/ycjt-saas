@@ -10,10 +10,6 @@ import com.beitu.saas.risk.domain.enums.ErrorCodeEnums;
 import com.beitu.saas.risk.domain.exception.BizException;
 import com.beitu.saas.risk.domain.platform.rongScore.client.ClientManager;
 import com.beitu.saas.risk.domain.platform.rongScore.utils.RequestUtil;
-import com.fqgj.base.services.redis.RedisClient;
-import com.fqgj.common.utils.StringUtils;
-import com.fqgj.log.factory.LogFactory;
-import com.fqgj.log.interfaces.Log;
 import com.beitu.saas.risk.handler.carrier.RestCallbackUtils;
 import com.beitu.saas.risk.handler.carrier.h5.CarrierH5Handler;
 import com.beitu.saas.risk.handler.carrier.h5.tianji.enums.CarrierTianjiStatusEnum;
@@ -24,6 +20,10 @@ import com.beitu.saas.risk.handler.carrier.h5.vo.CarrierH5Vo;
 import com.beitu.saas.risk.helpers.CollectionUtils;
 import com.beitu.saas.risk.helpers.JSONUtils;
 import com.beitu.saas.risk.helpers.SerializeUtil;
+import com.fqgj.base.services.redis.RedisClient;
+import com.fqgj.common.utils.StringUtils;
+import com.fqgj.log.factory.LogFactory;
+import com.fqgj.log.interfaces.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,9 +41,6 @@ import java.util.UUID;
 public class CarrierH5TianjiHandler implements CarrierH5Handler {
 
     private static final Log LOGGER = LogFactory.getLog(CarrierH5TianjiHandler.class);
-
-    @Autowired
-    private ConfigUtil configUtil;
 
     @Autowired
     private RedisClient redisClient;
@@ -76,7 +73,7 @@ public class CarrierH5TianjiHandler implements CarrierH5Handler {
             bizData.put("idNumber", carrierH5Vo.getIdNumber());
             bizData.put("userId", carrierH5Vo.getUserCode());// 调用方生成的用户ID（调用方定义）
             bizData.put("outUniqueId", UUID.randomUUID().toString().replace("-", ""));//调用方生成的会话唯一标识id，建议使用流水号生成（调用方定义）
-            bizData.put("notifyUrl", configUtil.getH5TianjiCarrierNotifyUrl());
+            bizData.put("notifyUrl", carrierH5Vo.getAppUrl());
 //            bizData.put("notifyUrl", NOTIFY_URL);
             bizData.put("returnUrl", returnUrl);//H5重定向的get地址,拼接运营商标识
             String result = "";

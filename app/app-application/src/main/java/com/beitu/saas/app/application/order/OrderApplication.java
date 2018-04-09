@@ -134,7 +134,7 @@ public class OrderApplication {
         BeanUtils.copyProperties(saasOrderApplicationVo, saasOrder);
         saasOrder.setOrderNumb(orderNumb);
         saasOrder.setChannelCode(channelCode);
-        saasOrder.setCreatedDt(saasOrderApplicationVo.getGmtCreate());
+        saasOrder.setCreatedDt(new Date());
         saasOrder.setOrderStatus(OrderStatusEnum.SUBMIT_PRELIMINARY_REVIEW.getCode());
         saasOrder.setExpireDate(DateUtil.addDate(new Date(), 20));
         saasOrder.setTotalInterestFee(orderCalculateApplication.getInterest(saasOrder.getRealCapital(), saasOrder.getTotalInterestRatio(), saasOrder.getCreatedDt(), saasOrder.getRepaymentDt()));
@@ -153,6 +153,7 @@ public class OrderApplication {
         SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(saasOrderApplicationVo.getChannelCode());
         SaasAdmin saasAdmin = saasAdminService.getSaasAdminByAdminCode(saasChannelEntity.getChargePersonCode());
         SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode);
+
         sendApplication.sendNotifyMessage(saasOrderApplicationVo.getMerchantCode(), saasAdmin.getMobile(), new HashMap(4) {{
             put("channel_name", saasChannelEntity.getChannelName());
             put("money", saasOrderApplicationVo.getRealCapital());
@@ -161,6 +162,22 @@ public class OrderApplication {
         }}, SaasSmsTypeEnum.SAAS_0005);
 
         return saasOrder;
+    }
+
+    public void updateOrderByOrderApplicationVo(SaasOrderApplicationVo saasOrderApplicationVo, String orderNumb) {
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(orderNumb, saasOrderApplicationVo.getMerchantCode());
+        if (saasOrderVo == null) {
+            throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
+        }
+        SaasOrder updateSaasOrder = new SaasOrder();
+        updateSaasOrder.setRealCapital(saasOrderApplicationVo.getRealCapital());
+        updateSaasOrder.setTotalInterestRatio(saasOrderApplicationVo.getTotalInterestRatio());
+        updateSaasOrder.setBorrowPurpose(saasOrderApplicationVo.getBorrowPurpose());
+        updateSaasOrder.setRepaymentDt(saasOrderApplicationVo.getRepaymentDt());
+        updateSaasOrder.setTermUrl(saasOrderApplicationVo.getTermUrl());
+        updateSaasOrder.setCreatedDt(new Date());
+        updateSaasOrder.setTotalInterestFee(orderCalculateApplication.getInterest(updateSaasOrder.getRealCapital(), updateSaasOrder.getTotalInterestRatio(), updateSaasOrder.getCreatedDt(), updateSaasOrder.getRepaymentDt()));
+        saasOrderService.updateById(updateSaasOrder);
     }
 
     public List<H5OrderListVo> listH5Order(String borrowerCode, String merchantCode) {

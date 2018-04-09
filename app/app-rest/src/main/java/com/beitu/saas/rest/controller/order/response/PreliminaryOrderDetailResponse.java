@@ -13,11 +13,21 @@ public class PreliminaryOrderDetailResponse implements ResponseData {
 
     private String orderNumb;
 
+    private Integer orderStatus;
+
     public String getOrderNumb() {
         return orderNumb;
     }
 
     public void setOrderNumb(String orderNumb) {
         this.orderNumb = orderNumb;
+    }
+
+    public Integer getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(Integer orderStatus) {
+        this.orderStatus = orderStatus;
     }
 }

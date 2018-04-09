@@ -13,6 +13,8 @@ public class FinalOrderDetailResponse implements ResponseData {
 
     private String orderNumb;
 
+    private Integer orderStatus;
+
     public String getOrderNumb() {
         return orderNumb;
     }
@@ -20,4 +22,13 @@ public class FinalOrderDetailResponse implements ResponseData {
     public void setOrderNumb(String orderNumb) {
         this.orderNumb = orderNumb;
     }
+
+    public Integer getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(Integer orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
 }

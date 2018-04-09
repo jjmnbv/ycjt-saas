@@ -42,6 +42,7 @@
         <include refid="Base_Column_List"/>
         from saas_order_bill_detail
         <include refid="conditions"/>
+        order by abs(DATEDIFF(repayment_dt,NOW()))
         <include refid="paginationSql"/>
     </select>
 
