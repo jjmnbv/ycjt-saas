@@ -90,8 +90,10 @@ public class AdminController {
     @VisitorAccessible
     @ApiOperation(value = "登录")
     public Response login(@RequestBody AdminLoginRequest adminLoginRequest, HttpServletRequest request) throws IOException {
-        //TODO 校验验证码
         SaasAdmin saasAdmin = saasAdminService.login(adminLoginRequest.getMobile(), adminLoginRequest.getPassword());
+        if (!roleApplication.enableAdminRole(saasAdmin.getCode())){
+            throw new ApiErrorException("角色被禁用");
+        }
         if (StringUtils.isEmpty(adminLoginRequest.getVerifyCode())) {
             if (!saasAdminLoginLogService.equalLoginIp(saasAdmin.getCode(), NetworkUtil.getIpAddress(request))) {
                 throw new ApiErrorException(AdminErrorEnum.SHOW_VERIFYCODE);
