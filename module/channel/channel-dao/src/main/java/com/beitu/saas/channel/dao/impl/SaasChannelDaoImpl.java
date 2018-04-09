@@ -65,11 +65,11 @@ public class SaasChannelDaoImpl extends AbstractBaseMapper<SaasChannelEntity> im
     }
 
     @Override
-    public SaasChannelEntity selectChannelEntityByMerchantCodeAndCreatorCode(String merchantCode, String creatorCode) {
+    public SaasChannelEntity selectDefaultChannelEntityByMerchantCode(String merchantCode, Integer channelType) {
         Map<String, Object> paramMap = new HashMap(4);
         paramMap.put("merchantCode", merchantCode);
-        paramMap.put("creatorCode", creatorCode);
-        return getSqlSession().selectOne(this.getStatement("selectChannelEntityByMerchantCodeAndCreatorCode"), paramMap);
+        paramMap.put("channelType", channelType);
+        return getSqlSession().selectOne(this.getStatement("selectDefaultChannelEntityByMerchantCode"), paramMap);
     }
 
 }

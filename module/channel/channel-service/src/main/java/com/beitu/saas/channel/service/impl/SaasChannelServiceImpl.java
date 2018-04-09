@@ -1,7 +1,9 @@
 package com.beitu.saas.channel.service.impl;
 
 import com.beitu.saas.channel.consts.ChannelConsts;
+import com.beitu.saas.channel.domain.DefaultChannelInfoVo;
 import com.beitu.saas.channel.enums.ChannelStatusEnum;
+import com.beitu.saas.channel.enums.ChannelTypeEnum;
 import com.beitu.saas.channel.param.ChannelStatQueryParam;
 import com.beitu.saas.channel.param.SaasChannelParam;
 import com.beitu.saas.channel.client.SaasChannelService;
@@ -81,23 +83,27 @@ public class SaasChannelServiceImpl extends AbstractBaseService implements SaasC
     }
 
     @Override
-    public SaasChannelEntity getDefaultSaasChannelByMerchantCode(String merchantCode) {
-        return saasChannelDao.selectChannelEntityByMerchantCodeAndCreatorCode(merchantCode, ChannelConsts.DEFAULT_CHANNEL_CREATOR_CODE);
+    public SaasChannelEntity getDefaultSaasChannelByMerchantCode(String merchantCode, Integer channelType) {
+        return saasChannelDao.selectDefaultChannelEntityByMerchantCode(merchantCode, channelType);
     }
 
     @Override
-    public SaasChannelEntity createMerchantDefaultChannel(String merchantCode) {
-        SaasChannelEntity saasChannelEntity = new SaasChannelEntity();
-        String channelCode = ChannelConsts.DEFAULT_CHANNEL_CREATOR_CODE;
-        saasChannelEntity.setMerchantCode(merchantCode)
-                .setChannelCode(channelCode)
-                .setChannelName("SAAS进件渠道")
-                .setChannelStatus(ChannelStatusEnum.OPEN.getType())
-                .setLinkUrl("?channelCode=" + channelCode)
-                .setChargePersonCode(ChannelConsts.DEFAULT_CHANNEL_CREATOR_CODE)
-                .setCreatorCode(ChannelConsts.DEFAULT_CHANNEL_CREATOR_CODE);
-        saasChannelDao.insert(saasChannelEntity);
-        return saasChannelEntity;
+    public void createMerchantDefaultChannel(String merchantCode) {
+        List<DefaultChannelInfoVo> defaultChannelTypeList = ChannelTypeEnum.getDefaultChannelList();
+
+        defaultChannelTypeList.stream().forEach(x -> {
+            SaasChannelEntity saasChannelEntity = new SaasChannelEntity();
+            String channelCode = OrderNoUtil.makeOrderNum();
+            saasChannelEntity.setMerchantCode(merchantCode)
+                    .setChannelCode(channelCode)
+                    .setChannelName(x.getChanelName())
+                    .setChannelStatus(ChannelStatusEnum.OPEN.getType())
+                    .setChannelType(x.getChannelType())
+                    .setLinkUrl("?channel=" + channelCode)
+                    .setChargePersonCode(ChannelConsts.DEFAULT_CHANNEL_CREATOR_CODE)
+                    .setCreatorCode(ChannelConsts.DEFAULT_CHANNEL_CREATOR_CODE);
+            saasChannelDao.insert(saasChannelEntity);
+        });
     }
 
 }

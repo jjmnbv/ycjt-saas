@@ -7,6 +7,7 @@ import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.app.enums.SaasLoanPlatformEnum;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.entity.SaasChannelEntity;
+import com.beitu.saas.channel.enums.ChannelTypeEnum;
 import com.beitu.saas.order.client.SaasOrderService;
 import com.beitu.saas.order.domain.SaasOrderVo;
 import com.beitu.saas.order.enums.OrderErrorCodeEnum;
@@ -72,7 +73,7 @@ public class LoanPlatformController {
             throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
         }
         String borrowerCode = saasOrderVo.getBorrowerCode();
-        SaasChannelEntity saasChannelEntity = saasChannelService.getDefaultSaasChannelByMerchantCode(merchantCode);
+        SaasChannelEntity saasChannelEntity = saasChannelService.getDefaultSaasChannelByMerchantCode(merchantCode, ChannelTypeEnum.SYSTEM_DEFINED.getType());
         if (saasChannelEntity == null) {
             throw new ApplicationException("机构不存在默认渠道");
         }

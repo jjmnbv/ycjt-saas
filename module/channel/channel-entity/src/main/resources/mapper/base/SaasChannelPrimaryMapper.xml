@@ -8,6 +8,7 @@
         <result column="channel_code" jdbcType="VARCHAR" property="channelCode"/>
         <result column="channel_name" jdbcType="VARCHAR" property="channelName"/>
         <result column="channel_status" jdbcType="TINYINT" property="channelStatus"/>
+        <result column="channel_type" jdbcType="TINYINT" property="channelType"/>
         <result column="link_url" jdbcType="VARCHAR" property="linkUrl"/>
         <result column="charge_person_code" jdbcType="VARCHAR" property="chargePersonCode"/>
         <result column="creator_code" jdbcType="VARCHAR" property="creatorCode"/>
@@ -23,6 +24,7 @@
     channel_code,
     channel_name,
     channel_status,
+    channel_type,
     link_url,
     charge_person_code,
     creator_code,
@@ -55,6 +57,9 @@
                 </if>
                 <if test="channelStatus !=null">
                 channel_status,
+                </if>
+                <if test="channelType !=null">
+                channel_type,
                 </if>
                 <if test="linkUrl !=null">
                 link_url,
@@ -90,6 +95,9 @@
                 </if>
                 <if test="channelStatus != null">
                     #{channelStatus,jdbcType=TINYINT},
+                </if>
+                <if test="channelType != null">
+                    #{channelType,jdbcType=TINYINT},
                 </if>
                 <if test="linkUrl != null">
                     #{linkUrl,jdbcType=VARCHAR},
@@ -129,6 +137,9 @@
                 </if>
                 <if test="channelStatus !=null">
                 channel_status = #{channelStatus,jdbcType=TINYINT},
+                </if>
+                <if test="channelType !=null">
+                channel_type = #{channelType,jdbcType=TINYINT},
                 </if>
                 <if test="linkUrl !=null">
                 link_url = #{linkUrl,jdbcType=VARCHAR},
@@ -190,6 +201,9 @@
             <if test="channelStatus !=null">
                 and channel_status = #{channelStatus,jdbcType=TINYINT}
             </if>
+            <if test="channelType !=null">
+                and channel_type = #{channelType,jdbcType=TINYINT}
+            </if>
             <if test="linkUrl !=null">
                 and link_url = #{linkUrl,jdbcType=VARCHAR}
             </if>
@@ -231,6 +245,9 @@
             </if>
             <if test="channelStatus !=null">
                 and channel_status = #{channelStatus,jdbcType=TINYINT}
+            </if>
+            <if test="channelType !=null">
+                and channel_type = #{channelType,jdbcType=TINYINT}
             </if>
             <if test="linkUrl !=null">
                 and link_url = #{linkUrl,jdbcType=VARCHAR}
