@@ -5,6 +5,7 @@ import com.beitu.saas.app.annotations.SignIgnore;
 import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.application.credit.CreditApplication;
 import com.beitu.saas.app.application.credit.LoanPlatformApplication;
+import com.beitu.saas.app.application.credit.TongdunReportApplication;
 import com.beitu.saas.app.application.finance.SaasConsumeDayStatApplication;
 import com.beitu.saas.intergration.risk.RiskIntergrationService;
 import com.beitu.saas.intergration.risk.dto.LoanPlatformCrawlingDto;
@@ -32,9 +33,9 @@ public class OkController {
 
     @Autowired
     private RiskIntergrationService riskIntergrationService;
-    
+
     @Autowired
-    private LoanPlatformApplication loanPlatformApplication;
+    private TongdunReportApplication tongdunReportApplication;
 
     @Autowired
     private SaasConsumeDayStatApplication saasConsumeDayStatApplication;
@@ -52,7 +53,8 @@ public class OkController {
     @VisitorAccessible
     @SignIgnore
     public String stat() {
-        return null;
+        tongdunReportApplication.generateTongdunReport("2018040416LUKIO", "20180408213138421000");
+        return "ok";
     }
 
     @RequestMapping(value = "/syncTask", method = RequestMethod.POST)
