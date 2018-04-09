@@ -23,7 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @create 2018/4/9 下午12:19
  * @description
  */
-@RestController("/merchant/config")
+@RestController
+@RequestMapping("/merchant/config")
 @Api(description = "机构流量设置相关接口")
 public class MerchantConfigController {
 
@@ -51,6 +52,7 @@ public class MerchantConfigController {
     @ParamsValidate
     @ApiOperation(value = "保存流量设置")
     public Response saveConfig(@RequestBody SaveConfigRequest request) {
+        //TODO 一天只能保存一次
         String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
         SaasMerchantFlowConfigVo vo = new SaasMerchantFlowConfigVo();
         BeanUtils.copyProperties(request, vo);
