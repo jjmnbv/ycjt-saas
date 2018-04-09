@@ -38,6 +38,10 @@ public class QuerySaasOrderBillDetailVo {
      * 账单应还日查询结束时间
      */
     private Date repaymentEndDt;
+    /**
+     * 账单是否核销
+     */
+    private Boolean destroy;
 
     public List<String> getOrderNumbList() {
         return orderNumbList;
@@ -93,5 +97,13 @@ public class QuerySaasOrderBillDetailVo {
 
     public void setRepaymentEndDt(Date repaymentEndDt) {
         this.repaymentEndDt = repaymentEndDt;
+    }
+
+    public Boolean getDestroy() {
+        return destroy;
+    }
+
+    public void setDestroy(Boolean destroy) {
+        this.destroy = destroy;
     }
 }

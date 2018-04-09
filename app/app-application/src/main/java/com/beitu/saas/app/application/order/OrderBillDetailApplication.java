@@ -86,6 +86,7 @@ public class OrderBillDetailApplication {
         if (querySaasOrderBillDetailVo == null) {
             return null;
         }
+        querySaasOrderBillDetailVo.setDestroy(Boolean.FALSE);
         List<SaasOrderBillDetailVo> saasOrderBillDetailVoList = saasOrderBillDetailService.listByQueryOrderBillDetailVoAndPage(querySaasOrderBillDetailVo, page);
         if (CollectionUtils.isEmpty(saasOrderBillDetailVoList)) {
             return null;

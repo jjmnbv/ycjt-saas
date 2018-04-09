@@ -62,6 +62,7 @@ public class SaasOrderBillDetailServiceImpl extends AbstractBaseService implemen
         conditions.put("channelCode", querySaasOrderBillDetailVo.getChannelCode());
         conditions.put("repaymentBeginDt", querySaasOrderBillDetailVo.getRepaymentBeginDt());
         conditions.put("repaymentEndDt", querySaasOrderBillDetailVo.getRepaymentEndDt());
+        conditions.put("destroy", querySaasOrderBillDetailVo.getDestroy());
         Integer queryOrderStatus = querySaasOrderBillDetailVo.getQueryOrderStatus();
         if (queryOrderStatus != null) {
             conditions.put("destroy", Boolean.FALSE);
