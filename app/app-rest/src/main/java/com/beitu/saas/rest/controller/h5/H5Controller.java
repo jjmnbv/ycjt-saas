@@ -117,6 +117,7 @@ public class H5Controller {
     @ParamsValidate
     @RequestMapping(value = "/user/login", method = RequestMethod.POST)
     @ResponseBody
+    @IgnoreRepeatRequest
     @ApiOperation(value = "登录", response = UserLoginSuccessResponse.class)
     public DataApiResponse<UserLoginSuccessResponse> login(@RequestBody @Valid UserLoginRequest req, HttpServletRequest request) {
         String verifyCode = redisClient.get(RedisKeyConsts.H5_SAVE_LOGIN_VERIFYCODE_KEY, req.getMobile());
@@ -199,19 +200,21 @@ public class H5Controller {
             response.setRealCapital(saasOrderApplicationVo.getRealCapital());
             response.setTotalInterestRatio(saasOrderApplicationVo.getTotalInterestRatio());
         }
+        String token = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getToken();
         response.setNeedRealName(borrowerApplication.needRealName(borrowerCode));
         if (contractApplication.needDoLicenseContractSign(borrowerCode)) {
             response.setContractTitle1(SaasContractEnum.LICENSE_CONTRACT.getMsg());
-            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LICENSE_CONTRACT.getUrl());
+            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LICENSE_CONTRACT.getUrl() + "?token=" + token);
             response.setContractTitle2(SaasContractEnum.LOAN_CONTRACT.getMsg());
-            response.setContractUrl2(configUtil.getAddressURLPrefix() + SaasContractEnum.LOAN_CONTRACT.getUrl());
+            response.setContractUrl2(configUtil.getAddressURLPrefix() + SaasContractEnum.LOAN_CONTRACT.getUrl() + "?token=" + token);
         } else {
             response.setContractTitle1(SaasContractEnum.LOAN_CONTRACT.getMsg());
-            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LOAN_CONTRACT.getUrl());
+            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LOAN_CONTRACT.getUrl() + "?token=" + token);
         }
         return new DataApiResponse<>(response);
     }
 
+    @IgnoreRepeatRequest
     @ParamsValidate
     @RequestMapping(value = "/credit/apply/info/save", method = RequestMethod.POST)
     @ResponseBody
@@ -259,6 +262,7 @@ public class H5Controller {
         return new DataApiResponse<>(new CreditPersonalInfoResponse(saasBorrowerPersonalInfoVo));
     }
 
+    @IgnoreRepeatRequest
     @RequestMapping(value = "/credit/personal/info/save", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "保存风控模块个人信息", response = ApiResponse.class)
@@ -295,6 +299,7 @@ public class H5Controller {
         return new DataApiResponse<>(new CreditIdentityInfoResponse(saasBorrowerIdentityInfoVo, prefixUrl));
     }
 
+    @IgnoreRepeatRequest
     @RequestMapping(value = "/credit/identity/info/save", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "保存风控模块身份证信息", response = ApiResponse.class)
@@ -328,6 +333,7 @@ public class H5Controller {
         return new DataApiResponse<>(new CreditWorkInfoResponse(saasBorrowerWorkInfoVo));
     }
 
+    @IgnoreRepeatRequest
     @RequestMapping(value = "/credit/work/info/save", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "保存风控模块工作信息", response = ApiResponse.class)
@@ -360,6 +366,7 @@ public class H5Controller {
         return new DataApiResponse<>(new CreditEmergentContactResponse(saasBorrowerEmergentContactVo));
     }
 
+    @IgnoreRepeatRequest
     @ParamsValidate
     @RequestMapping(value = "/credit/emergent/contact/save", method = RequestMethod.POST)
     @ResponseBody
