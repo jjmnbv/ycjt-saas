@@ -71,8 +71,8 @@ public class SaasCollectionOderController {
     public ApiResponse addNote(@RequestBody AddCollectionOrderNoteRequest req) {
         CollectionCommentParam collectionCommentParam = new CollectionCommentParam();
         BeanUtils.copyProperties(req, collectionCommentParam);
-        String followCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCreateName();
-        String followUp = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
+        String followCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
+        String followUp = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCreateName();
         saasCollectionCommentService.createCollectionComment(collectionCommentParam, followCode, followUp);
         return new ApiResponse("新增催记成功");
     }
