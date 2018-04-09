@@ -11,6 +11,7 @@ import com.fqgj.log.enhance.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class SaasUserEsignAuthorizationServiceImpl extends AbstractBaseService i
     }
 
     @Override
-    public SaasUserEsignAuthorizationVo getByUserCode(String userCode) {
+    public SaasUserEsignAuthorizationVo getSuccessEsignAuthorizationByUserCode(String userCode) {
         List<SaasUserEsignAuthorization> authorizationList = saasUserEsignAuthorizationDao.selectByParams(new HashMap<String, Object>(4) {{
             put("userCode", userCode);
             put("success", Boolean.TRUE);
@@ -46,10 +47,31 @@ public class SaasUserEsignAuthorizationServiceImpl extends AbstractBaseService i
     }
 
     @Override
+    public SaasUserEsignAuthorizationVo getByUserCode(String userCode) {
+        List<SaasUserEsignAuthorization> authorizationList = saasUserEsignAuthorizationDao.selectByParams(new HashMap<String, Object>(4) {{
+            put("userCode", userCode);
+            put("deleted", Boolean.FALSE);
+        }});
+        if (CollectionUtils.isEmpty(authorizationList)) {
+            return null;
+        }
+        return SaasUserEsignAuthorizationVo.convertEntityToVO(authorizationList.get(authorizationList.size() - 1));
+    }
+
+    @Override
     public SaasUserEsignAuthorization create(SaasUserEsignAuthorizationVo saasUserEsignAuthorizationVo) {
         SaasUserEsignAuthorization saasUserEsignAuthorization = SaasUserEsignAuthorizationVo.convertVOToEntity(saasUserEsignAuthorizationVo);
         saasUserEsignAuthorizationDao.insert(saasUserEsignAuthorization);
         return saasUserEsignAuthorization;
     }
 
+    @Override
+    public Boolean updateSaasUserEsignAuthorization(Long id, String authorizationUrl) {
+        SaasUserEsignAuthorization saasUserEsignAuthorization = new SaasUserEsignAuthorization();
+        saasUserEsignAuthorization.setId(id);
+        saasUserEsignAuthorization.setAuthorizationUrl(authorizationUrl);
+        saasUserEsignAuthorization.setAuthorizationTime(new Date());
+        saasUserEsignAuthorization.setSuccess(Boolean.TRUE);
+        return saasUserEsignAuthorizationDao.updateByPrimaryKey(saasUserEsignAuthorization) > 0;
+    }
 }

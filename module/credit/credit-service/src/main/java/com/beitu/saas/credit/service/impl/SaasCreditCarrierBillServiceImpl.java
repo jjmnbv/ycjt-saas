@@ -30,7 +30,11 @@ public class SaasCreditCarrierBillServiceImpl extends AbstractBaseService implem
 
     @Override
     public void batchAddSaasCreditCarrierBill(List list) {
-        saasCreditCarrierBillDao.batchAddSaasCreditCarrierBill(list);
+        if (CollectionUtils.isNotEmpty(list)) {
+            List<SaasCreditCarrierBill> addList = new ArrayList<>(list.size());
+            list.forEach(object -> addList.add(SaasCreditCarrierBillVo.convertVOToEntity((SaasCreditCarrierBillVo) object)));
+            saasCreditCarrierBillDao.batchAddSaasCreditCarrierBill(addList);
+        }
     }
 
     @Override

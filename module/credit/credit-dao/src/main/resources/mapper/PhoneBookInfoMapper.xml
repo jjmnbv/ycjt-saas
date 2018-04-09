@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beitu.saas.credit.dao.impl.PhoneBookInfoDaoImpl">
+
+    <select id="selectByPhoneHeader" parameterType="String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from phone_book_info
+        where phone_header = #{phoneHeader,jdbcType=VARCHAR} and deleted=0 limit 1
+    </select>
+
+    <select id="selectByAreaCode" parameterType="String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from phone_book_info
+        where area_code = #{areaCode,jdbcType=VARCHAR} and deleted=0 limit 1
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from phone_book_info
+        where deleted=0
+    </select>
+
+</mapper>

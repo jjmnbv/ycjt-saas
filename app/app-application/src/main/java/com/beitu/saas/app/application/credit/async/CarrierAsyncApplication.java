@@ -10,7 +10,6 @@ import com.beitu.saas.common.utils.DateUtil;
 import com.beitu.saas.common.utils.DecimalUtils;
 import com.beitu.saas.credit.client.*;
 import com.beitu.saas.credit.domain.*;
-import com.beitu.saas.credit.entity.SaasCreditCarrierExt;
 import com.beitu.saas.credit.enums.CreditCarrierRecordTypeEnum;
 import com.beitu.saas.credit.enums.CreditErrorCodeEnum;
 import com.fqgj.common.utils.CollectionUtils;
@@ -120,7 +119,11 @@ public class CarrierAsyncApplication {
         if (creditCarrierBillVos.size() > 1) {
             Collections.sort(creditCarrierBillVos, (o1, o2) -> (o2.getBillDate().compareTo(o1.getBillDate())));
         }
-        saasCreditCarrierBillService.batchAddSaasCreditCarrierBill(creditCarrierBillVos);
+        try {
+            saasCreditCarrierBillService.batchAddSaasCreditCarrierBill(creditCarrierBillVos);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void generateCarrierExtReport(CarriersVo carriersVo, Long recordId) {

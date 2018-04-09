@@ -31,7 +31,11 @@ public class SaasCreditDunningDetailServiceImpl extends AbstractBaseService impl
 
     @Override
     public void batchAddSaasCreditDunningDetail(List list) {
-        saasCreditDunningDetailDao.batchAddSaasCreditDunningDetail(list);
+        if (CollectionUtils.isNotEmpty(list)) {
+            List<SaasCreditDunningDetail> addList = new ArrayList<>(list.size());
+            list.forEach(object -> addList.add(SaasCreditDunningDetailVo.convertVOToEntity((SaasCreditDunningDetailVo) object)));
+            saasCreditDunningDetailDao.batchAddSaasCreditDunningDetail(addList);
+        }
     }
 
     @Override
