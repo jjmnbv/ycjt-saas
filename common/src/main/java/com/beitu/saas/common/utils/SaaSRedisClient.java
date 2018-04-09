@@ -27,9 +27,11 @@ public class SaaSRedisClient extends RedisClient {
         redisTemplate.opsForHash().put(key, hashKey, String.valueOf(value));
     }
 
-    public Map<String, Long> hNumGetAll(String keyFormat, String... keyValues) {
+    public Map<String, String> hNumGetAll(String keyFormat, String... keyValues) {
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer(StandardCharsets.UTF_8));
+        redisTemplate.setHashValueSerializer(new StringRedisSerializer(StandardCharsets.UTF_8));
         String key = format(keyFormat, keyValues);
-        Map<String, Long> result = redisTemplate.opsForHash().entries(key);
+        Map<String, String> result = redisTemplate.opsForHash().entries(key);
         return result;
     }
 }
