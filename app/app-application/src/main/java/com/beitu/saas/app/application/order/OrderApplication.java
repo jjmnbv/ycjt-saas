@@ -14,6 +14,7 @@ import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
 import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.consts.ChannelConsts;
+import com.beitu.saas.collection.client.SaasCollectionOrderService;
 import com.beitu.saas.common.utils.DateUtil;
 import com.beitu.saas.common.utils.ThreadPoolUtils;
 import com.beitu.saas.finance.client.SaasMerchantBalanceInfoService;
@@ -105,6 +106,9 @@ public class OrderApplication {
 
     @Autowired
     private SendApplication sendApplication;
+
+    @Autowired
+    private SaasCollectionOrderService saasCollectionOrderService;
 
     public BorrowerOrderApplyStatusEnum getOrderApplyStatus(String borrowerCode, String channelCode) {
         if (StringUtils.isNotEmpty(saasOrderService.getReviewerRefuseOrderNumb(borrowerCode, channelCode))) {
@@ -654,12 +658,16 @@ public class OrderApplication {
         saasOrderService.updateOrderStatus(oldSaasOrder.getId(), oldSaasOrder.getVersion(), OrderStatusEnum.getEnumByCode(oldSaasOrder.getOrderStatus()), OrderStatusEnum.IN_EXTEND);
 
         orderBillDetailApplication.createOrderBillDetail(orderNumb, merchantCode);
+
+        saasCollectionOrderService.deleteOrder(orderNumb);
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
     public void destroyOrder(String merchantCode, String operatorCode, String orderNumb) {
         updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.HAS_BEEN_DESTROY, null);
         orderBillDetailApplication.destroyOrderBillDetail(orderNumb, merchantCode);
+
+        saasCollectionOrderService.closeOrder(orderNumb);
     }
 
 }

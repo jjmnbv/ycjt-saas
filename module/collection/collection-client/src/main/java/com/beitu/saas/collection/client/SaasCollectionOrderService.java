@@ -39,4 +39,11 @@ public interface SaasCollectionOrderService<T extends BaseEntity> extends BaseSe
     List<CollectionOrderInfoDetailVo> getCollectionOrderListByPage(CollectionOrderQueryParam collectionOrderQueryParam, Page page);
 
 
+    /**
+     * 逻辑删除
+     *
+     * @param orderNo
+     */
+    void deleteOrder(String  orderNo);
+
 }
