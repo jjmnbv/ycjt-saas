@@ -9,8 +9,8 @@ import com.fqgj.common.api.enums.MsgCodeEnum;
  */
 public enum H5OrderDetailButtonTypeEnum implements MsgCodeEnum {
 
-    CONFIRM_RECEIPT_BUTTON_TYPE(1, "查看并签署电子借款合同", "确认收款页面按钮"),
-    CONFIRM_EXTEND_BUTTON_TYPE(2, "查看并签署电子展期合同", "确认展期页面按钮");
+    CONFIRM_RECEIPT_BUTTON_TYPE(1, "查看并签署电子借款协议", "确认收款页面按钮"),
+    CONFIRM_EXTEND_BUTTON_TYPE(2, "查看并签署电子展期协议", "确认展期页面按钮");
 
     H5OrderDetailButtonTypeEnum(Integer code, String msg, String desc) {
         this.code = code;

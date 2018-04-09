@@ -95,7 +95,7 @@ public class CarrierApplication {
         carrierRequestUrlInput.setIdNumber(saasBorrowerRealInfoVo.getIdentityCode());
         carrierRequestUrlInput.setUserCode(borrowerCode);
         carrierRequestUrlInput.setReturnUrl(configUtil.getApiWebPath() + "/credit/carrier/h5/crawling");
-        carrierRequestUrlInput.setAppUrl(configUtil.getApiWebPath() + "/credit/carrier/callback");
+        carrierRequestUrlInput.setAppUrl(configUtil.getApiWebPath() + "/credit/carrier/callback/1");
 
         TripleServiceResult response = tripleCarrierService.getCarrierServiceResult(ProductTypeEnum.YCJT, TripleServiceTypeEnum.CARRIER_REQUEST_URL, carrierRequestUrlInput);
         if (response.isSuccess()) {

@@ -9,6 +9,7 @@ import com.beitu.saas.app.application.order.vo.QueryOrderVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.common.consts.ButtonPermissionConsts;
+import com.beitu.saas.order.client.SaasOrderService;
 import com.beitu.saas.order.enums.OrderStatusEnum;
 import com.beitu.saas.rest.controller.order.request.PreliminaryOrderDetailRequest;
 import com.beitu.saas.rest.controller.order.request.PreliminaryOrderQueryRequest;
@@ -43,6 +44,9 @@ public class PreliminaryReviewOrderController {
     @Autowired
     private OrderApplication orderApplication;
 
+    @Autowired
+    private SaasOrderService saasOrderService;
+
     @RequestMapping(value = "/query", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "初审订单查询", response = PreliminaryOrderListResponse.class)
@@ -75,6 +79,10 @@ public class PreliminaryReviewOrderController {
         orderApplication.updateOrderStatus(saasAdmin.getMerchantCode(), saasAdmin.getCode(), req.getOrderNumb(), OrderStatusEnum.IN_PRELIMINARY_REVIEWER, null);
         PreliminaryOrderDetailResponse response = new PreliminaryOrderDetailResponse();
         response.setOrderNumb(req.getOrderNumb());
+        OrderStatusEnum orderStatusEnum = saasOrderService.getOrderStatusByOrderNumb(req.getOrderNumb());
+        if (orderStatusEnum != null) {
+            response.setOrderStatus(orderStatusEnum.getCode());
+        }
         return new DataApiResponse<>(response);
     }
 

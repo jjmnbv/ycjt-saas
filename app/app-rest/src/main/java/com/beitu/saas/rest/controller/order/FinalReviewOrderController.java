@@ -9,6 +9,7 @@ import com.beitu.saas.app.application.order.vo.QueryOrderVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.common.consts.ButtonPermissionConsts;
+import com.beitu.saas.order.client.SaasOrderService;
 import com.beitu.saas.order.enums.OrderStatusEnum;
 import com.beitu.saas.rest.controller.order.request.FinalOrderDetailRequest;
 import com.beitu.saas.rest.controller.order.request.FinalOrderQueryRequest;
@@ -42,6 +43,9 @@ public class FinalReviewOrderController {
     @Autowired
     private OrderApplication orderApplication;
 
+    @Autowired
+    private SaasOrderService saasOrderService;
+
     @RequestMapping(value = "/query", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "复审订单查询", response = FinalOrderListResponse.class)
@@ -74,6 +78,10 @@ public class FinalReviewOrderController {
         orderApplication.updateOrderStatus(saasAdmin.getMerchantCode(), saasAdmin.getCode(), req.getOrderNumb(), OrderStatusEnum.IN_FINAL_REVIEWER, null);
         FinalOrderDetailResponse response = new FinalOrderDetailResponse();
         response.setOrderNumb(req.getOrderNumb());
+        OrderStatusEnum orderStatusEnum = saasOrderService.getOrderStatusByOrderNumb(req.getOrderNumb());
+        if (orderStatusEnum != null) {
+            response.setOrderStatus(orderStatusEnum.getCode());
+        }
         return new DataApiResponse<>(response);
     }
 

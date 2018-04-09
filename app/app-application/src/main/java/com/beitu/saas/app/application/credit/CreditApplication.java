@@ -230,6 +230,7 @@ public class CreditApplication {
         }
         if (StringUtils.isNotEmpty(orderNumb)) {
             // 驳回订单再次进行提交操作
+            submitRejectApplication(borrowerCode, orderNumb);
             OrderStatusEnum orderStatusEnum = saasOrderService.getOrderStatusByOrderNumb(orderNumb);
             if (orderStatusEnum.equals(OrderStatusEnum.PRELIMINARY_REVIEWER_REJECT)) {
                 orderApplication.updateOrderStatus(merchantCode, borrowerCode, orderNumb, OrderStatusEnum.SUBMIT_PRELIMINARY_REVIEW, "初审驳回后再提交");
@@ -238,7 +239,7 @@ public class CreditApplication {
                 orderApplication.updateOrderStatus(merchantCode, borrowerCode, orderNumb, OrderStatusEnum.SUBMIT_FINAL_REVIEW, "复审驳回后再提交");
                 return new ApiResponse("提交成功");
             }
-            return new ApiResponse(OrderErrorCodeEnum.ERROR_ORDER_NUMB);
+            throw new ApplicationException(OrderErrorCodeEnum.ERROR_ORDER_NUMB);
         }
         final String newOrderNumb = OrderNoUtil.makeOrderNum();
         saasChannelRiskSettingsVoList.forEach(saasChannelRiskSettingsVo -> {
@@ -273,6 +274,14 @@ public class CreditApplication {
         });
         generateBlackData(merchantCode, borrowerCode);
         return new ApiResponse("提交成功");
+    }
+
+    private void submitRejectApplication(String borrowerCode, String orderNumb) {
+        SaasOrderApplicationVo saasOrderApplicationVo = saasOrderApplicationService.getByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
+        if (saasOrderApplicationVo == null) {
+            throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
+        }
+        orderApplication.updateOrderByOrderApplicationVo(saasOrderApplicationVo, orderNumb);
     }
 
     private void submitApplication(String borrowerCode, String orderNumb, String channelCode, Integer required) {
