@@ -1,7 +1,6 @@
 package com.beitu.saas.app.application.credit;
 
 import com.beitu.saas.app.api.ApiResponse;
-import com.beitu.saas.app.application.SendApplication;
 import com.beitu.saas.app.application.channel.SaasChannelApplication;
 import com.beitu.saas.app.application.credit.vo.CreditModuleListVo;
 import com.beitu.saas.app.application.order.OrderApplication;
@@ -98,9 +97,6 @@ public class CreditApplication {
 
     @Autowired
     private TongdunReportApplication tongdunReportApplication;
-
-    @Autowired
-    private SendApplication sendApplication;
 
     public List<CreditModuleListVo> listCreditModule(String merchantCode, String channelCode, String borrowerCode) {
         List<SaasChannelRiskSettingsVo> saasChannelRiskSettingsVoList = saasChannelApplication.getSaasChannelRiskSettingsByChannelCode(channelCode);

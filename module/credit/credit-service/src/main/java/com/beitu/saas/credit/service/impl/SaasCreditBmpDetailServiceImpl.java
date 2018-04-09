@@ -7,9 +7,9 @@ import com.beitu.saas.credit.entity.SaasCreditBmpDetail;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
 import com.fqgj.common.utils.CollectionUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
 import com.fqgj.log.enhance.Module;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,8 +29,12 @@ public class SaasCreditBmpDetailServiceImpl extends AbstractBaseService implemen
     private SaasCreditBmpDetailDao saasCreditBmpDetailDao;
 
     @Override
-    public SaasCreditBmpDetail addSaasCreditBmpDetail(SaasCreditBmpDetailVo saasCreditBmpDetailVo) {
-        return saasCreditBmpDetailDao.insert(SaasCreditBmpDetailVo.convertVOToEntity(saasCreditBmpDetailVo));
+    public void batchAddSaasCreditBmpDetailVo(List list) {
+        if (CollectionUtils.isNotEmpty(list)) {
+            List<SaasCreditBmpDetail> addList = new ArrayList<>(list.size());
+            list.forEach(object -> addList.add(SaasCreditBmpDetailVo.convertVOToEntity((SaasCreditBmpDetailVo) object)));
+            saasCreditBmpDetailDao.batchAddSaasCreditBmpDetail(addList);
+        }
     }
 
     @Override

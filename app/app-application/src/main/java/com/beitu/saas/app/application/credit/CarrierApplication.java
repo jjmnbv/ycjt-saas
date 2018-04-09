@@ -2,7 +2,6 @@ package com.beitu.saas.app.application.credit;
 
 import com.alibaba.fastjson.JSON;
 import com.beitu.saas.app.application.credit.vo.CarrierH5CallbackVo;
-import com.beitu.saas.app.application.finance.FinanceApplication;
 import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
 import com.beitu.saas.borrower.client.SaasBorrowerService;
 import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;

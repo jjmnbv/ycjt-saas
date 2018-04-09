@@ -32,14 +32,6 @@ public class DianhuaHandler {
     private static final Log LOGGER = LogFactory.getLog(DianhuaHandler.class);
 
     /**
-     * api key
-     */
-//    private static final String apikey = "7b094f26255fea07f0df258127d8b6c1";
-    /**
-     * secret
-     */
-//    private static final String appsecret = "a510e00dfa211ce6b7597902ccd9e86355c230a354fd7b7b670f25d51ac901b0";
-    /**
      * 超时时间
      */
     private static final int TIME_OUT = 10 * 1000;

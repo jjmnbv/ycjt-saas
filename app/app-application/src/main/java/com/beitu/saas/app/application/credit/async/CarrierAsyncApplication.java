@@ -137,26 +137,26 @@ public class CarrierAsyncApplication {
         if (CollectionUtils.isNotEmpty(carriersVo.getHighFrequencyDeviceContactList())) {
             for (CarriersPhoneCallVo carriersPhoneCallVo : carriersVo.getHighFrequencyDeviceContactList()) {
                 String phone = carriersPhoneCallVo.getPeernumber();
-                SaasCreditCarrierRecordVo creditCarrierRecordVo = getSaasCreditCarrierRecordVo(carriersPhoneCallVo, CreditCarrierRecordTypeEnum.HIGH_FREQ, recordId);
+                SaasCreditCarrierRecordVo creditCarrierRecordVo = SaasCreditCarrierRecordVo.getSaasCreditCarrierRecordVo(carriersPhoneCallVo, CreditCarrierRecordTypeEnum.HIGH_FREQ, recordId);
                 creditCarrierRecordVo.setLocation(getLocationByPhone(phone));
                 creditCarrierRecordVos.add(creditCarrierRecordVo);
             }
         }
         if (CollectionUtils.isNotEmpty(carriersVo.getActiveRegionPhoneCallVoList())) {
             for (CarriersPhoneCallVo carriersPhoneCallVo : carriersVo.getActiveRegionPhoneCallVoList()) {
-                SaasCreditCarrierRecordVo creditCarrierRecordVo = getSaasCreditCarrierRecordVo(carriersPhoneCallVo, CreditCarrierRecordTypeEnum.ACTIVE_REGION, recordId);
+                SaasCreditCarrierRecordVo creditCarrierRecordVo = SaasCreditCarrierRecordVo.getSaasCreditCarrierRecordVo(carriersPhoneCallVo, CreditCarrierRecordTypeEnum.ACTIVE_REGION, recordId);
                 creditCarrierRecordVos.add(creditCarrierRecordVo);
             }
         }
         if (CollectionUtils.isNotEmpty(carriersVo.getLongCallDurationContactVoList())) {
             for (CarriersPhoneCallVo carriersPhoneCallVo : carriersVo.getLongCallDurationContactVoList()) {
-                SaasCreditCarrierRecordVo creditCarrierRecordVo = getSaasCreditCarrierRecordVo(carriersPhoneCallVo, CreditCarrierRecordTypeEnum.LONG_DURATION, recordId);
+                SaasCreditCarrierRecordVo creditCarrierRecordVo = SaasCreditCarrierRecordVo.getSaasCreditCarrierRecordVo(carriersPhoneCallVo, CreditCarrierRecordTypeEnum.LONG_DURATION, recordId);
                 creditCarrierRecordVos.add(creditCarrierRecordVo);
             }
         }
         if (CollectionUtils.isNotEmpty(carriersVo.getContactRegionPhoneCallVoList())) {
             for (CarriersPhoneCallVo carriersPhoneCallVo : carriersVo.getContactRegionPhoneCallVoList()) {
-                SaasCreditCarrierRecordVo creditCarrierRecordVo = getSaasCreditCarrierRecordVo(carriersPhoneCallVo, CreditCarrierRecordTypeEnum.CONTACT_REGION, recordId);
+                SaasCreditCarrierRecordVo creditCarrierRecordVo = SaasCreditCarrierRecordVo.getSaasCreditCarrierRecordVo(carriersPhoneCallVo, CreditCarrierRecordTypeEnum.CONTACT_REGION, recordId);
                 creditCarrierRecordVos.add(creditCarrierRecordVo);
             }
         }
@@ -221,38 +221,6 @@ public class CarrierAsyncApplication {
         creditCarrierExtVo.setNightDuration(carriersVo.getNightCallDuration());
         creditCarrierExtVo.setTotalDuration(carriersVo.getTotalCallDuration());
         return creditCarrierExtVo;
-    }
-
-    private SaasCreditCarrierRecordVo getSaasCreditCarrierRecordVo(CarriersPhoneCallVo carriersPhoneCallVo, CreditCarrierRecordTypeEnum creditCarrierRecordTypeEnum, Long recordId) {
-        SaasCreditCarrierRecordVo creditCarrierRecordVo = new SaasCreditCarrierRecordVo();
-        if (CreditCarrierRecordTypeEnum.HIGH_FREQ.equals(creditCarrierRecordTypeEnum) ||
-                CreditCarrierRecordTypeEnum.LONG_DURATION.equals(creditCarrierRecordTypeEnum) ||
-                CreditCarrierRecordTypeEnum.CONTACT_REGION.equals(creditCarrierRecordTypeEnum)) {
-            creditCarrierRecordVo.setPhone(carriersPhoneCallVo.getPeernumber());
-        }
-
-        if (CreditCarrierRecordTypeEnum.MERCHANT.equals(creditCarrierRecordTypeEnum)) {
-            creditCarrierRecordVo.setPhone(carriersPhoneCallVo.getPeernumber());
-            creditCarrierRecordVo.setMerchant(carriersPhoneCallVo.getPeercarrier());
-        }
-
-        if (CreditCarrierRecordTypeEnum.ACTIVE_REGION.equals(creditCarrierRecordTypeEnum) ||
-                CreditCarrierRecordTypeEnum.LONG_DURATION.equals(creditCarrierRecordTypeEnum) ||
-                CreditCarrierRecordTypeEnum.CONTACT_REGION.equals(creditCarrierRecordTypeEnum)) {
-            String location = "无";
-            if (StringUtils.isNotEmpty(carriersPhoneCallVo.getLocation())) {
-                location = carriersPhoneCallVo.getLocation();
-            }
-            creditCarrierRecordVo.setLocation(location);
-        }
-        creditCarrierRecordVo.setRecordId(recordId);
-        creditCarrierRecordVo.setTotalDuration(carriersPhoneCallVo.getCallTime() == null ? 0 : Integer.valueOf(carriersPhoneCallVo.getCallTime()));
-        creditCarrierRecordVo.setCallingTime(carriersPhoneCallVo.getCalling() == null ? 0 : carriersPhoneCallVo.getCalling());
-        creditCarrierRecordVo.setCallingDuration(carriersPhoneCallVo.getCallingTime() == null ? 0 : Integer.valueOf(carriersPhoneCallVo.getCallingTime()));
-        creditCarrierRecordVo.setCalledTime(carriersPhoneCallVo.getCalled() == null ? 0 : carriersPhoneCallVo.getCalled());
-        creditCarrierRecordVo.setCalledDuration(carriersPhoneCallVo.getCalledTime() == null ? 0 : Integer.valueOf(carriersPhoneCallVo.getCalledTime()));
-        creditCarrierRecordVo.setType(creditCarrierRecordTypeEnum.getType());
-        return creditCarrierRecordVo;
     }
 
     public String getLocationByPhone(String phone) {

@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface SaasCreditBmpDetailService<T extends BaseEntity> extends BaseService<T> {
 
-    SaasCreditBmpDetail addSaasCreditBmpDetail(SaasCreditBmpDetailVo saasCreditBmpDetailVo);
+    void batchAddSaasCreditBmpDetailVo(List<SaasCreditBmpDetailVo> saasCreditBmpDetailVo);
 
     List<SaasCreditBmpDetailVo> listByRecordId(Long recordId);
 
