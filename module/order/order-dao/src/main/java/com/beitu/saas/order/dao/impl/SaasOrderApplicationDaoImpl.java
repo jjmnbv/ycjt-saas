@@ -39,6 +39,6 @@ public class SaasOrderApplicationDaoImpl extends AbstractBaseMapper<SaasOrderApp
         Map<String, Object> params = new HashMap<>(4);
         params.put("borrowerCode", borrowerCode);
         params.put("orderNumb", orderNumb);
-        return this.getSqlSession().selectOne(this.getStatement(".selectAllByBorrowerCodeAndOrderNumb"), params);
+        return this.getSqlSession().selectList(this.getStatement(".selectAllByBorrowerCodeAndOrderNumb"), params);
     }
 }
