@@ -70,10 +70,10 @@ public class SaasChannelServiceImpl extends AbstractBaseService implements SaasC
      * 清算渠道统计
      */
     private void clearStatRatio(ChannelStatVo channelStatVo) {
-        BigDecimal intoPiecesNum = new BigDecimal(channelStatVo.getIntoPiecesNum());
-        BigDecimal primaryReviewerNum = new BigDecimal(channelStatVo.getPrimaryReviewerNum());
-        BigDecimal finalReviewerNum = new BigDecimal(channelStatVo.getFinalReviewerNum());
-        BigDecimal loanLenderNum = new BigDecimal(channelStatVo.getLoanLenderNum());
+        BigDecimal intoPiecesNum = BigDecimal.valueOf(channelStatVo.getIntoPiecesNum());
+        BigDecimal primaryReviewerNum = BigDecimal.valueOf(channelStatVo.getPrimaryReviewerNum());
+        BigDecimal finalReviewerNum = BigDecimal.valueOf(channelStatVo.getFinalReviewerNum());
+        BigDecimal loanLenderNum = BigDecimal.valueOf(channelStatVo.getLoanLenderNum());
 
         channelStatVo.setPrimaryReviewerRatio(intoPiecesNum.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : primaryReviewerNum.divide(intoPiecesNum, 2, BigDecimal.ROUND_HALF_UP));
         channelStatVo.setFinalReviewerRatio(primaryReviewerNum.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : finalReviewerNum.divide(primaryReviewerNum, 2, BigDecimal.ROUND_HALF_UP));

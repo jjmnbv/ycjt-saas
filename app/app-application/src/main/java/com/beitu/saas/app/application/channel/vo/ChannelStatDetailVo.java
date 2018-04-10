@@ -126,4 +126,21 @@ public class ChannelStatDetailVo {
         this.loanLenderBaseRatio = loanLenderBaseRatio;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "ChannelStatDetailVo{" +
+                "channelCode='" + channelCode + '\'' +
+                ", channelName='" + channelName + '\'' +
+                ", intoPiecesNum=" + intoPiecesNum +
+                ", primaryReviewerNum=" + primaryReviewerNum +
+                ", primaryReviewerRatio=" + primaryReviewerRatio +
+                ", finalReviewerNum=" + finalReviewerNum +
+                ", finalReviewerRatio=" + finalReviewerRatio +
+                ", finalReviewerBaseRatio=" + finalReviewerBaseRatio +
+                ", loanLenderNum=" + loanLenderNum +
+                ", loanLenderRatio=" + loanLenderRatio +
+                ", loanLenderBaseRatio=" + loanLenderBaseRatio +
+                '}';
+    }
 }
