@@ -431,7 +431,8 @@ public class H5Controller {
             response.setHeaderTitle("确认借款");
             if (contractApplication.needDoLicenseContractSign(orderDetailVo.getBorrowerCode())) {
                 response.setContractTitle1(SaasContractEnum.LICENSE_CONTRACT.getMsg());
-                response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LICENSE_CONTRACT.getUrl());
+                response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LICENSE_CONTRACT.getUrl()
+                        + "?token=" + RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getToken() + (configUtil.isServerTest() ? "&test=1" : ""));
                 response.setContract1DownloadUrl("");
                 response.setContractTitle2(SaasContractEnum.LOAN_CONTRACT.getMsg());
                 response.setContractUrl2(contractUrl.toString());

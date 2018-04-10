@@ -230,7 +230,7 @@ public class ContractApplication {
         }
         SaasOrder saasOrder = saasOrderService.selectById(orderId);
         if (saasOrder == null || StringUtils.isEmpty(saasOrder.getTermUrl())) {
-            String url = getLoanContractUrl(borrowerCode);
+            String url = getLoanContractUrl(orderId);
             String loanContractUrl = configUtil.getPdfPath() + MD5.md5(OrderNoUtil.makeOrderNum()) + ".pdf";
             contractCreateApplication.createLoanPdf(orderId, loanContractUrl);
             File file = new File(loanContractUrl);
@@ -254,7 +254,7 @@ public class ContractApplication {
         }
         SaasOrder saasOrder = saasOrderService.selectById(orderId);
         if (saasOrder == null || StringUtils.isEmpty(saasOrder.getTermUrl())) {
-            String url = getLoanContractUrl(merchantCode);
+            String url = getLoanContractUrl(orderId);
             String loanContractUrl = configUtil.getPdfPath() + MD5.md5(OrderNoUtil.makeOrderNum()) + ".pdf";
             contractCreateApplication.createLoanPdf(orderId, loanContractUrl);
             File file = new File(loanContractUrl);
@@ -278,7 +278,7 @@ public class ContractApplication {
         }
         SaasOrder saasOrder = saasOrderService.selectById(orderId);
         if (saasOrder == null || StringUtils.isEmpty(saasOrder.getTermUrl())) {
-            String url = getLoanContractUrl(borrowerCode);
+            String url = getExtendContractUrl(orderId);
             String loanContractUrl = configUtil.getPdfPath() + MD5.md5(OrderNoUtil.makeOrderNum()) + ".pdf";
             contractCreateApplication.createExtendPdf(orderId, loanContractUrl);
             File file = new File(loanContractUrl);
@@ -302,7 +302,7 @@ public class ContractApplication {
         }
         SaasOrder saasOrder = saasOrderService.selectById(orderId);
         if (saasOrder == null || StringUtils.isEmpty(saasOrder.getTermUrl())) {
-            String url = getLoanContractUrl(merchantCode);
+            String url = getExtendContractUrl(orderId);
             String loanContractUrl = configUtil.getPdfPath() + MD5.md5(OrderNoUtil.makeOrderNum()) + ".pdf";
             contractCreateApplication.createExtendPdf(orderId, loanContractUrl);
             File file = new File(loanContractUrl);
@@ -338,21 +338,21 @@ public class ContractApplication {
         return filePath.toString();
     }
 
-    private String getLoanContractUrl(String userCode) {
+    private String getLoanContractUrl(Long orderId) {
         StringBuilder filePath = new StringBuilder("contract/loan/");
         if (configUtil.isServerTest()) {
             filePath.append("test/");
         }
-        filePath.append(userCode).append("_").append(MD5.md5(OrderNoUtil.makeOrderNum())).append(".pdf");
+        filePath.append(orderId).append("_").append(MD5.md5(OrderNoUtil.makeOrderNum())).append(".pdf");
         return filePath.toString();
     }
 
-    private String getExtendContractUrl(String userCode) {
+    private String getExtendContractUrl(Long orderId) {
         StringBuilder filePath = new StringBuilder("contract/extend/");
         if (configUtil.isServerTest()) {
             filePath.append("test/");
         }
-        filePath.append(userCode).append("_").append(MD5.md5(OrderNoUtil.makeOrderNum())).append(".pdf");
+        filePath.append(orderId).append("_").append(MD5.md5(OrderNoUtil.makeOrderNum())).append(".pdf");
         return filePath.toString();
 
     }
