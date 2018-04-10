@@ -298,7 +298,7 @@ public class OrderApplication {
         OrderStatusEnum nextOrderStatus = OrderStatusEnum.getEnumByCode(updateOrderStatus.getCode());
         OrderStatusEnum currentOrderStatus = OrderStatusEnum.getEnumByCode(saasOrderVo.getOrderStatus());
 
-        if (nextOrderStatus.getCodeArray() == null || Arrays.binarySearch(nextOrderStatus.getCodeArray(), currentOrderStatus.getCode()) > 0) {
+        if (nextOrderStatus.getCodeArray() == null || Arrays.binarySearch(nextOrderStatus.getCodeArray(), currentOrderStatus.getCode()) > -1) {
             updateOrderStatus(operatorCode, saasOrderVo.getSaasOrderId(), saasOrderVo.getVersion(), saasOrderVo.getOrderNumb(), currentOrderStatus, updateOrderStatus, remark);
         } else {
             if (nextOrderStatus.getNeedForcedToUpdate()) {
@@ -726,7 +726,7 @@ public class OrderApplication {
         if (DateUtil.countDay(saasOrderVo.getRepaymentDt(), repaymentDt) > 0
                 || DateUtil.countDay(new Date(), repaymentDt) > 0) {
             LOG.warn("......应还日期非法.......展期结束日期:{};订单应还日期:{}", DateUtil.getDate(repaymentDt), DateUtil.getDate(saasOrderVo.getRepaymentDt()));
-            throw new ApplicationException(OrderErrorCodeEnum.ILLEGAL_REPAYMENTDATE);
+            throw new ApplicationException(OrderErrorCodeEnum.ILLEGAL_REPAYMENT_DATE);
         }
         OrderStatusEnum nextOrderStatus = OrderStatusEnum.TO_CONFIRM_EXTEND;
         OrderStatusEnum currentOrderStatus = OrderStatusEnum.getEnumByCode(saasOrderVo.getOrderStatus());

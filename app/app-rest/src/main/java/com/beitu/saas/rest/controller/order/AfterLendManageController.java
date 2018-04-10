@@ -8,10 +8,14 @@ import com.beitu.saas.app.application.order.OrderApplication;
 import com.beitu.saas.app.application.order.OrderBillDetailApplication;
 import com.beitu.saas.app.application.order.vo.QueryOrderBillDetailVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
+import com.beitu.saas.app.enums.SaasContractEnum;
 import com.beitu.saas.auth.entity.SaasAdmin;
+import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.ButtonPermissionConsts;
-import com.beitu.saas.order.enums.OrderStatusEnum;
-import com.beitu.saas.rest.controller.order.request.*;
+import com.beitu.saas.rest.controller.order.request.AfterLendManagerDestroyOrderRequest;
+import com.beitu.saas.rest.controller.order.request.AfterLendManagerExtendOrderRequest;
+import com.beitu.saas.rest.controller.order.request.AfterLendOrderDetailRequest;
+import com.beitu.saas.rest.controller.order.request.AfterLendOrderQueryRequest;
 import com.beitu.saas.rest.controller.order.response.AfterLendOrderDetailResponse;
 import com.beitu.saas.rest.controller.order.response.AfterLendOrderListResponse;
 import com.fqgj.common.api.Page;
@@ -45,6 +49,9 @@ public class AfterLendManageController {
     @Autowired
     private OrderBillDetailApplication orderBillDetailApplication;
 
+    @Autowired
+    private ConfigUtil configUtil;
+
     @RequestMapping(value = "/query", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "贷后管理订单查询", response = AfterLendOrderListResponse.class)
@@ -60,9 +67,11 @@ public class AfterLendManageController {
     @ResponseBody
     @ApiOperation(value = "贷后管理订单详情查看", response = AfterLendOrderDetailResponse.class)
     public DataApiResponse<AfterLendOrderDetailResponse> detail(@RequestBody @Valid AfterLendOrderDetailRequest req) {
-        String adminCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
         AfterLendOrderDetailResponse response = new AfterLendOrderDetailResponse();
         response.setOrderNumb(req.getOrderNumb());
+        response.setContractTitle(SaasContractEnum.EXTEND_CONTRACT.getMsg());
+        response.setContractUrl(configUtil.getAddressURLPrefix() + SaasContractEnum.EXTEND_CONTRACT.getUrl()
+                + "?token=" + RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getToken() + "&platform=web" + (configUtil.isServerTest() ? "&test=1" : ""));
         return new DataApiResponse<>(response);
     }
 
