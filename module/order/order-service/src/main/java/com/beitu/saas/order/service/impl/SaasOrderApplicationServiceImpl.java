@@ -53,6 +53,11 @@ public class SaasOrderApplicationServiceImpl extends AbstractBaseService impleme
         return saasOrderApplicationDao.updateOrderNumbByBorrowerCode(orderNumb, borrowerCode) > 0;
     }
 
+    @Override
+    public List<SaasOrderApplicationVo> listByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb) {
+        return null;
+    }
+
 }
 
 

@@ -35,10 +35,6 @@ public class SaasBorrowerIdentityInfoVo implements ResponseData, Serializable {
      * 手持身份证图片URL
      */
     private String holdUrl;
-    /**
-     * 是否成功
-     */
-    private Boolean success;
 
     public Long getSaasBorrowerIdentityInfoId() {
         return saasBorrowerIdentityInfoId;
@@ -87,14 +83,6 @@ public class SaasBorrowerIdentityInfoVo implements ResponseData, Serializable {
 
     public void setHoldUrl(String holdUrl) {
         this.holdUrl = holdUrl;
-    }
-
-    public Boolean getSuccess() {
-        return this.success;
-    }
-
-    public void setSuccess(Boolean success) {
-        this.success = success;
     }
 
     public static SaasBorrowerIdentityInfoVo convertEntityToVO(SaasBorrowerIdentityInfo saasBorrowerIdentityInfo) {

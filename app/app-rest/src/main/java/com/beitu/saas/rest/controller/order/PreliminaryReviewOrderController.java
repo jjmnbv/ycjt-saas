@@ -39,7 +39,7 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/order/preliminary/review")
 @Api(description = "订单初审模块")
-public class PreliminaryReviewOrderController {
+public class  PreliminaryReviewOrderController {
 
     @Autowired
     private OrderApplication orderApplication;

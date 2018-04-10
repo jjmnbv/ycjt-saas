@@ -3,6 +3,7 @@ package com.beitu.saas.rest.controller.h5.request;
 import com.fqgj.common.api.ParamsObject;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
@@ -26,12 +27,14 @@ public class CreditSaveWorkInfoRequest extends ParamsObject {
      */
     @ApiModelProperty(value = "月收入")
     @NotNull(message = "月收入不能为空")
+    @Length(max = 100000, message = "月收入在0～100000之间")
     private Integer salary;
     /**
      * 发薪日
      */
     @ApiModelProperty(value = "发薪日")
     @NotNull(message = "发薪日不能为空")
+    @Length(max = 31, message = "发薪日在0～31之间")
     private Integer payDay;
     /**
      * 公司名称

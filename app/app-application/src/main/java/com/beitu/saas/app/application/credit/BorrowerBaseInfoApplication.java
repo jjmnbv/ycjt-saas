@@ -87,7 +87,7 @@ public class BorrowerBaseInfoApplication {
 
         SaasBorrowerPersonalInfoVo saasBorrowerPersonalInfoVo = saasBorrowerPersonalInfoService.getByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
         if (saasBorrowerPersonalInfoVo != null) {
-            borrowerPersonalInfoVo.setQq(saasBorrowerPersonalInfoVo.getQq());
+            borrowerPersonalInfoVo.setQq(saasBorrowerPersonalInfoVo.getWechatCode());
             borrowerPersonalInfoVo.setEducation(EducationMsgCodeEnum.getByCode(saasBorrowerPersonalInfoVo.getEducation()).getMsg());
             borrowerPersonalInfoVo.setMaritalStatus(MaritalStatusMsgCodeEnum.getByCode(saasBorrowerPersonalInfoVo.getMaritalStatus()).getMsg());
             borrowerPersonalInfoVo.setZmCreditScore(saasBorrowerPersonalInfoVo.getZmCreditScore());

@@ -44,7 +44,7 @@ public class CreditPersonalInfoResponse implements ResponseData {
 
     public CreditPersonalInfoResponse(SaasBorrowerPersonalInfoVo saasBorrowerPersonalInfoVo) {
         if (saasBorrowerPersonalInfoVo != null) {
-            this.qq = saasBorrowerPersonalInfoVo.getQq();
+            this.qq = saasBorrowerPersonalInfoVo.getWechatCode();
             this.education = saasBorrowerPersonalInfoVo.getEducation();
             this.address = saasBorrowerPersonalInfoVo.getAddress();
             this.liveDuration = saasBorrowerPersonalInfoVo.getLiveDuration();

@@ -7,11 +7,10 @@
         <result column="borrower_code" jdbcType="VARCHAR" property="borrowerCode"/>
         <result column="order_numb" jdbcType="VARCHAR" property="orderNumb"/>
         <result column="career" jdbcType="VARCHAR" property="career"/>
-        <result column="salary" jdbcType="SMALLINT" property="salary"/>
+        <result column="salary" jdbcType="VARCHAR" property="salary"/>
         <result column="pay_day" jdbcType="SMALLINT" property="payDay"/>
         <result column="company_name" jdbcType="VARCHAR" property="companyName"/>
         <result column="company_detail_address" jdbcType="VARCHAR" property="companyDetailAddress"/>
-        <result column="success" jdbcType="BIT" property="success"/>
         <result column="deleted" jdbcType="BIT" property="deleted"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
         <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
@@ -26,7 +25,6 @@
     pay_day,
     company_name,
     company_detail_address,
-    success,
     deleted,
     gmt_modified,
     gmt_create
@@ -65,9 +63,6 @@
             <if test="companyDetailAddress !=null">
                 company_detail_address,
             </if>
-            <if test="success !=null">
-                success,
-            </if>
             <if test="deleted !=null">
                 deleted,
             </if>
@@ -89,7 +84,7 @@
                 #{career,jdbcType=VARCHAR},
             </if>
             <if test="salary != null">
-                #{salary,jdbcType=SMALLINT},
+                #{salary,jdbcType=VARCHAR},
             </if>
             <if test="payDay != null">
                 #{payDay,jdbcType=SMALLINT},
@@ -99,9 +94,6 @@
             </if>
             <if test="companyDetailAddress != null">
                 #{companyDetailAddress,jdbcType=VARCHAR},
-            </if>
-            <if test="success != null">
-                #{success,jdbcType=BIT},
             </if>
             <if test="deleted != null">
                 #{deleted,jdbcType=BIT},
@@ -128,7 +120,7 @@
                 career = #{career,jdbcType=VARCHAR},
             </if>
             <if test="salary !=null">
-                salary = #{salary,jdbcType=SMALLINT},
+                salary = #{salary,jdbcType=VARCHAR},
             </if>
             <if test="payDay !=null">
                 pay_day = #{payDay,jdbcType=SMALLINT},
@@ -138,9 +130,6 @@
             </if>
             <if test="companyDetailAddress !=null">
                 company_detail_address = #{companyDetailAddress,jdbcType=VARCHAR},
-            </if>
-            <if test="success !=null">
-                success = #{success,jdbcType=BIT},
             </if>
             <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},
@@ -188,7 +177,7 @@
                 and career = #{career,jdbcType=VARCHAR}
             </if>
             <if test="salary !=null">
-                and salary = #{salary,jdbcType=SMALLINT}
+                and salary = #{salary,jdbcType=VARCHAR}
             </if>
             <if test="payDay !=null">
                 and pay_day = #{payDay,jdbcType=SMALLINT}
@@ -198,9 +187,6 @@
             </if>
             <if test="companyDetailAddress !=null">
                 and company_detail_address = #{companyDetailAddress,jdbcType=VARCHAR}
-            </if>
-            <if test="success !=null">
-                and success = #{success,jdbcType=BIT}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}
@@ -230,7 +216,7 @@
                 and career = #{career,jdbcType=VARCHAR}
             </if>
             <if test="salary !=null">
-                and salary = #{salary,jdbcType=SMALLINT}
+                and salary = #{salary,jdbcType=VARCHAR}
             </if>
             <if test="payDay !=null">
                 and pay_day = #{payDay,jdbcType=SMALLINT}
@@ -240,9 +226,6 @@
             </if>
             <if test="companyDetailAddress !=null">
                 and company_detail_address = #{companyDetailAddress,jdbcType=VARCHAR}
-            </if>
-            <if test="success !=null">
-                and success = #{success,jdbcType=BIT}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}

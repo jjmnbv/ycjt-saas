@@ -270,6 +270,7 @@ public class H5Controller {
         String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
         SaasBorrowerPersonalInfo saasBorrowerPersonalInfo = new SaasBorrowerPersonalInfo();
         BeanUtils.copyProperties(req, saasBorrowerPersonalInfo);
+        saasBorrowerPersonalInfo.setWechatCode(req.getQq());
         saasBorrowerPersonalInfo.setBorrowerCode(borrowerCode);
 
         String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
@@ -341,6 +342,10 @@ public class H5Controller {
         String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
         SaasBorrowerWorkInfo saasBorrowerWorkInfo = new SaasBorrowerWorkInfo();
         BeanUtils.copyProperties(req, saasBorrowerWorkInfo);
+        Integer salary = req.getSalary();
+        if (salary != null) {
+            saasBorrowerWorkInfo.setSalary(salary.toString());
+        }
         saasBorrowerWorkInfo.setBorrowerCode(borrowerCode);
         saasBorrowerWorkInfo.setCareer(req.getCareerType());
         String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();

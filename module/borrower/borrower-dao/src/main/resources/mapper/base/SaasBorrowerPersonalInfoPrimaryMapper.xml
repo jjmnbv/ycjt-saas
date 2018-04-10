@@ -6,13 +6,12 @@
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="borrower_code" jdbcType="VARCHAR" property="borrowerCode"/>
         <result column="order_numb" jdbcType="VARCHAR" property="orderNumb"/>
-        <result column="qq" jdbcType="VARCHAR" property="qq"/>
+        <result column="wechat_code" jdbcType="VARCHAR" property="wechatCode"/>
         <result column="education" jdbcType="TINYINT" property="education"/>
         <result column="address" jdbcType="VARCHAR" property="address"/>
         <result column="live_duration" jdbcType="VARCHAR" property="liveDuration"/>
         <result column="marital_status" jdbcType="TINYINT" property="maritalStatus"/>
         <result column="zm_credit_score" jdbcType="SMALLINT" property="zmCreditScore"/>
-        <result column="success" jdbcType="BIT" property="success"/>
         <result column="deleted" jdbcType="BIT" property="deleted"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
         <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
@@ -22,13 +21,12 @@
     id,
     borrower_code,
     order_numb,
-    qq,
+    wechat_code,
     education,
     address,
     live_duration,
     marital_status,
     zm_credit_score,
-    success,
     deleted,
     gmt_modified,
     gmt_create
@@ -52,8 +50,8 @@
             <if test="orderNumb !=null">
                 order_numb,
             </if>
-            <if test="qq !=null">
-                qq,
+            <if test="wechatCode !=null">
+                wechat_code,
             </if>
             <if test="education !=null">
                 education,
@@ -69,9 +67,6 @@
             </if>
             <if test="zmCreditScore !=null">
                 zm_credit_score,
-            </if>
-            <if test="success !=null">
-                success,
             </if>
             <if test="deleted !=null">
                 deleted,
@@ -90,8 +85,8 @@
             <if test="orderNumb != null">
                 #{orderNumb,jdbcType=VARCHAR},
             </if>
-            <if test="qq != null">
-                #{qq,jdbcType=VARCHAR},
+            <if test="wechatCode != null">
+                #{wechatCode,jdbcType=VARCHAR},
             </if>
             <if test="education != null">
                 #{education,jdbcType=TINYINT},
@@ -107,9 +102,6 @@
             </if>
             <if test="zmCreditScore != null">
                 #{zmCreditScore,jdbcType=SMALLINT},
-            </if>
-            <if test="success != null">
-                #{success,jdbcType=BIT},
             </if>
             <if test="deleted != null">
                 #{deleted,jdbcType=BIT},
@@ -132,8 +124,8 @@
             <if test="orderNumb !=null">
                 order_numb = #{orderNumb,jdbcType=VARCHAR},
             </if>
-            <if test="qq !=null">
-                qq = #{qq,jdbcType=VARCHAR},
+            <if test="wechatCode !=null">
+                wechat_code = #{wechatCode,jdbcType=VARCHAR},
             </if>
             <if test="education !=null">
                 education = #{education,jdbcType=TINYINT},
@@ -149,9 +141,6 @@
             </if>
             <if test="zmCreditScore !=null">
                 zm_credit_score = #{zmCreditScore,jdbcType=SMALLINT},
-            </if>
-            <if test="success !=null">
-                success = #{success,jdbcType=BIT},
             </if>
             <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},
@@ -195,8 +184,8 @@
             <if test="orderNumb !=null">
                 and order_numb = #{orderNumb,jdbcType=VARCHAR}
             </if>
-            <if test="qq !=null">
-                and qq = #{qq,jdbcType=VARCHAR}
+            <if test="wechatCode !=null">
+                and wechat_code = #{wechatCode,jdbcType=VARCHAR}
             </if>
             <if test="education !=null">
                 and education = #{education,jdbcType=TINYINT}
@@ -212,9 +201,6 @@
             </if>
             <if test="zmCreditScore !=null">
                 and zm_credit_score = #{zmCreditScore,jdbcType=SMALLINT}
-            </if>
-            <if test="success !=null">
-                and success = #{success,jdbcType=BIT}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}
@@ -240,8 +226,8 @@
             <if test="orderNumb !=null">
                 and order_numb = #{orderNumb,jdbcType=VARCHAR}
             </if>
-            <if test="qq !=null">
-                and qq = #{qq,jdbcType=VARCHAR}
+            <if test="wechatCode !=null">
+                and wechat_code = #{wechatCode,jdbcType=VARCHAR}
             </if>
             <if test="education !=null">
                 and education = #{education,jdbcType=TINYINT}
@@ -257,9 +243,6 @@
             </if>
             <if test="zmCreditScore !=null">
                 and zm_credit_score = #{zmCreditScore,jdbcType=SMALLINT}
-            </if>
-            <if test="success !=null">
-                and success = #{success,jdbcType=BIT}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}
