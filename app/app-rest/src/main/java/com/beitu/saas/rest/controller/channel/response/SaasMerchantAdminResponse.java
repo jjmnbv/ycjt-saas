@@ -1,7 +1,6 @@
 package com.beitu.saas.rest.controller.channel.response;
 
 import com.beitu.saas.auth.entity.SaasAdmin;
-import com.beitu.saas.channel.domain.SaasModuleVo;
 import com.fqgj.common.api.ResponseData;
 import io.swagger.annotations.ApiModel;
 

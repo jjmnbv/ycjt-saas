@@ -1,9 +1,9 @@
 package com.beitu.saas.app.application.channel;
 
+import com.beitu.saas.app.application.channel.vo.SaasModuleVo;
 import com.beitu.saas.channel.client.SaasModuleItemService;
 import com.beitu.saas.channel.client.SaasModuleService;
 import com.beitu.saas.channel.domain.SaasModuleItemVo;
-import com.beitu.saas.channel.domain.SaasModuleVo;
 import com.beitu.saas.channel.entity.SaasModuleEntity;
 import com.beitu.saas.channel.entity.SaasModuleItemEntity;
 import com.beitu.saas.channel.param.SaasModuleItemParam;

@@ -5,7 +5,7 @@
     <select id="selectModuleEntityList" parameterType="map" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
-        from saas_module
+        from saas_module where deleted=0
     </select>
 
 </mapper>
