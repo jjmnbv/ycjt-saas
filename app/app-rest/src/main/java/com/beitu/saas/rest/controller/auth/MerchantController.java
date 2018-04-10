@@ -1,6 +1,7 @@
 package com.beitu.saas.rest.controller.auth;
 
 import com.beitu.saas.app.annotations.HasPermission;
+import com.beitu.saas.app.annotations.IgnoreRepeatRequest;
 import com.beitu.saas.app.annotations.SignIgnore;
 import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.application.auth.MerchantApplication;
@@ -18,6 +19,7 @@ import com.beitu.saas.common.consts.ButtonPermissionConsts;
 import com.beitu.saas.rest.controller.auth.request.AddMerchantRequest;
 import com.beitu.saas.rest.controller.auth.response.MerchantInfoResponse;
 import com.fqgj.common.api.Response;
+import com.fqgj.common.api.annotations.ParamsValidate;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -86,6 +88,8 @@ public class MerchantController {
     @ApiOperation(value = "添加机构")
     @SignIgnore
     @VisitorAccessible
+    @ParamsValidate
+    @IgnoreRepeatRequest
     public Response add(@RequestBody AddMerchantRequest request) {
         if (!configUtil.enableAddMerchant()){
             return Response.ok("添加机构不可用,请联系管理员");

@@ -1,6 +1,11 @@
 package com.beitu.saas.rest.controller.auth.request;
 
+import com.beitu.saas.common.utils.IdCardUtil;
+import com.beitu.saas.common.utils.MobileUtil;
+import com.beitu.saas.common.utils.StringUtil;
+import com.beitu.saas.risk.helpers.StringUtils;
 import com.fqgj.common.api.ParamsObject;
+import com.fqgj.common.api.exception.ApiIllegalArgumentException;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -47,7 +52,16 @@ public class AddMerchantRequest extends ParamsObject {
 
     @Override
     public void validate() {
+        if (!MobileUtil.isMobile(adminInfo.getAccountPhone())) {
+            throw new ApiIllegalArgumentException("请输入正确手机号码");
+        }
 
+        if (merchantInfo != null && StringUtils.isNotEmpty(merchantInfo.getJurisdicalPersonIdcard()) && !IdCardUtil.validateCard(merchantInfo.getJurisdicalPersonIdcard())) {
+            throw new ApiIllegalArgumentException("请输入正确身份证号码");
+        }
+        if (lenderInfo != null && StringUtils.isNotEmpty(lenderInfo.getLenderIdcard()) && !IdCardUtil.validateCard(lenderInfo.getLenderIdcard())) {
+            throw new ApiIllegalArgumentException("请输入正确身份证号码");
+        }
     }
 
     class MerchantInfo {
@@ -194,7 +208,7 @@ public class AddMerchantRequest extends ParamsObject {
         }
     }
 
-    public class AdminInfo{
+    public class AdminInfo {
 
         @ApiModelProperty("管理员手机")
         private String accountPhone;
