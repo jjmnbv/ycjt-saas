@@ -115,8 +115,8 @@ public class AdminController {
         }
         saasAdminLoginLogService.addAdminLoginLog(request, saasAdmin.getCode());
         String token = MD5.md5(UUID.randomUUID().toString());
-        redisClient.set(RedisKeyConsts.SAAS_TOKEN_KEY, saasAdmin.getCode(), TimeConsts.TEN_MINUTES, token);
-        redisClient.set(RedisKeyConsts.SAAS_TOKEN_KEY, token, TimeConsts.TEN_MINUTES, saasAdmin.getCode());
+        redisClient.set(RedisKeyConsts.SAAS_TOKEN_KEY, saasAdmin.getCode(), TimeConsts.HALF_AN_HOUR, token);
+        redisClient.set(RedisKeyConsts.SAAS_TOKEN_KEY, token, TimeConsts.HALF_AN_HOUR, saasAdmin.getCode());
         AdminLoginResponse response = new AdminLoginResponse();
         response.setToken(token);
         response.setAdminName(saasAdmin.getName());
