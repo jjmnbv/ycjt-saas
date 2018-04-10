@@ -7,7 +7,7 @@ package com.beitu.saas.merchant.client.enums;
  */
 public enum MerchantFlowZMEnum {
     ZM_610_DOWN(1L, "610分以下(8点券/单)"),
-    ZM_610_UP(2L, "610分以下(10点券/单)");
+    ZM_610_UP(2L, "610分以上(10点券/单)");
     private Long key;
     private String value;
 

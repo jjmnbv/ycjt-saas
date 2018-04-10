@@ -1,5 +1,6 @@
 package com.beitu.saas.app.application.auth;
 
+import com.beitu.saas.app.application.contract.ContractApplication;
 import com.beitu.saas.auth.domain.MerchantContractInfoVo;
 import com.beitu.saas.auth.domain.SaasMerchantVo;
 import com.beitu.saas.auth.entity.*;
@@ -14,6 +15,9 @@ import com.beitu.saas.finance.client.SaasCreditHistoryService;
 import com.beitu.saas.finance.client.SaasMerchantCreditInfoService;
 import com.beitu.saas.finance.client.SaasMerchantSmsInfoService;
 import com.beitu.saas.finance.client.SaasSmsHistoryService;
+import com.beitu.saas.merchant.client.SaasMerchantFlowConfigService;
+import com.beitu.saas.merchant.client.enums.MerchantFlowZMEnum;
+import com.beitu.saas.merchant.entity.SaasMerchantFlowConfig;
 import com.fqgj.common.utils.GenerOrderNoUtil;
 import com.fqgj.common.utils.MD5;
 import com.fqgj.common.utils.StringUtils;
@@ -71,6 +75,12 @@ public class MerchantApplication {
 
     @Autowired
     private ConfigUtil configUtil;
+
+    @Autowired
+    private SaasMerchantFlowConfigService saasMerchantFlowConfigService;
+
+    @Autowired
+    private ContractApplication contractApplication;
 
     @Transactional(rollbackFor = Exception.class)
     public void addMerchant(SaasMerchant saasMerchant, String password, String accountPhone, String accountName) {
@@ -148,11 +158,20 @@ public class MerchantApplication {
         saasChannelRiskSettingsService.createDefaultChannelRiskSettings(merchantCode);
 
         //7 初始化点券和短信余额
-        saasMerchantSmsInfoService.increase(merchantCode, 10L);
+        saasMerchantSmsInfoService.increase(merchantCode, 100L);
         saasSmsHistoryService.addIncomeSmsHistory(merchantCode, 10L, null, "充值");
-        saasMerchantCreditInfoService.increase(merchantCode, 10L);
+        saasMerchantCreditInfoService.increase(merchantCode, 100L);
         saasCreditHistoryService.addIncomeCreditHistory(merchantCode, 10L, "system", "充值");
-
+        //8 默认流量推荐设置
+        SaasMerchantFlowConfig config = new SaasMerchantFlowConfig();
+        config.setMerchantCode(merchantCode);
+        config.setFlowOpen(true);
+        config.setFlowMaxNum(100);
+        config.setZmScore(MerchantFlowZMEnum.ZM_610_UP.getKey().intValue());
+        config.setFlowType(2);
+        saasMerchantFlowConfigService.create(config);
+        //9 电子签
+        //contractApplication.lenderDoLicenseContractSign(merchantCode);
     }
 
     public MerchantContractInfoVo getMerchantContractInfo(String merchantCode) {
