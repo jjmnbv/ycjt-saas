@@ -106,6 +106,9 @@ public class RoleController {
         if (!success) {
             throw new ApplicationException("角色状态更新失败");
         }
+        if (enable == false) {
+            roleApplication.disableRole(roleId);
+        }
         return Response.ok();
     }
 

@@ -91,7 +91,7 @@ public class AdminController {
     @ApiOperation(value = "登录")
     public Response login(@RequestBody AdminLoginRequest adminLoginRequest, HttpServletRequest request) throws IOException {
         SaasAdmin saasAdmin = saasAdminService.login(adminLoginRequest.getMobile(), adminLoginRequest.getPassword());
-        if (!roleApplication.enableAdminRole(saasAdmin.getCode())){
+        if (!roleApplication.enableAdminRole(saasAdmin.getCode())) {
             throw new ApiErrorException("角色被禁用");
         }
         if (StringUtils.isEmpty(adminLoginRequest.getVerifyCode())) {
@@ -164,6 +164,9 @@ public class AdminController {
         saasAdmin.setEnable(enable);
         saasAdmin.setId(adminId);
         boolean success = saasAdminService.updateById(saasAdmin) > 0;
+        if (!success) {
+            throw new ApplicationException("账户状态更新失败");
+        }
         if (enable == false) {
             SaasAdmin entity = (SaasAdmin) saasAdminService.selectById(adminId);
             String oldToken = redisClient.get(RedisKeyConsts.SAAS_TOKEN_KEY, entity.getCode());
@@ -172,10 +175,6 @@ public class AdminController {
                 redisClient.del(RedisKeyConsts.SAAS_TOKEN_KEY, entity.getCode());
             }
         }
-        if (!success) {
-            throw new ApplicationException("账户状态更新失败");
-        }
-
         return Response.ok();
     }
 
