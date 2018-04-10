@@ -158,10 +158,10 @@ public class MerchantApplication {
         saasChannelRiskSettingsService.createDefaultChannelRiskSettings(merchantCode);
 
         //7 初始化点券和短信余额
-        saasMerchantSmsInfoService.increase(merchantCode, 100L);
-        saasSmsHistoryService.addIncomeSmsHistory(merchantCode, 10L, null, "充值");
-        saasMerchantCreditInfoService.increase(merchantCode, 100L);
-        saasCreditHistoryService.addIncomeCreditHistory(merchantCode, 10L, "system", "充值");
+        saasMerchantSmsInfoService.increase(merchantCode, 10000L);
+        saasSmsHistoryService.addIncomeSmsHistory(merchantCode, 10000L, null, "充值");
+        saasMerchantCreditInfoService.increase(merchantCode, 35000L);
+        saasCreditHistoryService.addIncomeCreditHistory(merchantCode, 35000L, "system", "充值");
         //8 默认流量推荐设置
         SaasMerchantFlowConfig config = new SaasMerchantFlowConfig();
         config.setMerchantCode(merchantCode);
