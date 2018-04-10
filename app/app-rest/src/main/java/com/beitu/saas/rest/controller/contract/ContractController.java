@@ -197,7 +197,7 @@ public class ContractController {
         OrderLoanContractInfoResponse response = new OrderLoanContractInfoResponse();
         String borrowerCode = null;
         String merchantCode = null;
-        SaasOrderVo saasOrderVo = saasOrderService.getConfirmExtendOrderByOrderNumb(req.getOrderNumb());
+        SaasOrderVo saasOrderVo = saasOrderService.getMainSaasOrderByOrderNumb(req.getOrderNumb());
         if (saasOrderVo != null) {
             if (!userCode.equals(saasOrderVo.getBorrowerCode()) && !userCode.equals(saasOrderVo.getMerchantCode())) {
                 throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
