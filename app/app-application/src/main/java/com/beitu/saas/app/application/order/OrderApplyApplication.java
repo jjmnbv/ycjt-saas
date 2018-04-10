@@ -42,11 +42,7 @@ public class OrderApplyApplication {
     private SaasOrderService saasOrderService;
 
     public List<OrderApplicationListVo> listOrderApplicationByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb) {
-        List<SaasOrderApplication> saasOrderApplicationList = saasOrderApplicationService.selectByParams(new HashMap<String, Object>(4) {{
-            put("borrowerCode", borrowerCode);
-            put("orderNumb", orderNumb);
-            put("deleted", Boolean.FALSE);
-        }});
+        List<SaasOrderApplication> saasOrderApplicationList = saasOrderApplicationService.listByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
         if (CollectionUtils.isEmpty(saasOrderApplicationList)) {
             return null;
         }

@@ -26,4 +26,16 @@
         and deleted = 0
     </update>
 
+    <select id="selectAllByBorrowerCodeAndOrderNumb" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_order_application
+        where borrower_code = #{borrowerCode,jdbcType=VARCHAR}
+        <if test="orderNumb !=null">
+            and order_numb = #{orderNumb,jdbcType=VARCHAR}
+        </if>
+        and deleted = FALSE
+        order by id desc
+    </select>
+
 </mapper>
