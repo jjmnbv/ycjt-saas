@@ -233,12 +233,12 @@ public class H5Controller {
         if (contractApplication.needDoLicenseContractSign(borrowerCode)) {
             ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, borrowerCode, null, ContractTypeEnum.BORROWER_DO_AUTHORIZATION_CONTRACT_SIGN));
         }
-        String orderNumb = saasOrderService.getReviewerRefuseOrderNumb(borrowerCode, saasBorrowerVo.getChannelCode());
+        String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
+        String orderNumb = saasOrderService.getReviewerRefuseOrderNumb(borrowerCode, channelCode);
 
         SaasOrderApplicationVo addOrderApplication = new SaasOrderApplicationVo();
         addOrderApplication.setBorrowerCode(borrowerCode);
         addOrderApplication.setOrderNumb(orderNumb);
-        String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
         addOrderApplication.setChannelCode(channelCode);
         addOrderApplication.setMerchantCode(saasBorrowerVo.getMerchantCode());
         addOrderApplication.setRealCapital(req.getRealCapital());
