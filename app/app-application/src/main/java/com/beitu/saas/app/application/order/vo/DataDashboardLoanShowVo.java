@@ -18,13 +18,13 @@ public class DataDashboardLoanShowVo implements ResponseData {
     private LoanDataDetailShowVo loanDataDetailVo;
 
     @ApiModelProperty(value = "账户余额")
-    private BigDecimal merchantBalance;
+    private BigDecimal merchantBalance = BigDecimal.ZERO;
 
     @ApiModelProperty(value = "剩余点券数")
-    private  Long merchantCredit;
+    private Long merchantCredit = 0l;
 
     @ApiModelProperty(value = "剩余短信数")
-    private  Long merchantSms;
+    private Long merchantSms = 0l;
 
     @ApiModelProperty(value = "放款数据")
     private List<LoanStateDetailShowVo> loanStateDetailShowVos;
