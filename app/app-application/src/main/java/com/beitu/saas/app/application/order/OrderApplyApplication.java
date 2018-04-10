@@ -3,6 +3,7 @@ package com.beitu.saas.app.application.order;
 import com.beitu.saas.app.application.order.vo.OrderApplicationListVo;
 import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
 import com.beitu.saas.borrower.client.SaasBorrowerService;
+import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.order.client.SaasOrderApplicationService;
 import com.beitu.saas.order.client.SaasOrderService;
@@ -62,7 +63,10 @@ public class OrderApplyApplication {
         orderApplicationListVo.setCreatedDt(DateUtil.getDate(saasOrderApplication.getGmtCreate()));
         orderApplicationListVo.setRealCapital(saasOrderApplication.getRealCapital().toString());
         orderApplicationListVo.setBorrowingDuration(DateUtil.countDay(saasOrderApplication.getRepaymentDt(), saasOrderApplication.getGmtCreate()) + "天");
-        orderApplicationListVo.setBorrowerName(saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(saasOrderApplication.getBorrowerCode()).getName());
+        SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(saasOrderApplication.getBorrowerCode());
+        if (saasBorrowerRealInfoVo != null) {
+            orderApplicationListVo.setBorrowerName(saasBorrowerRealInfoVo.getName());
+        }
         orderApplicationListVo.setBorrowerMobile(saasBorrowerService.getByBorrowerCodeAndMerchantCode(saasOrderApplication.getBorrowerCode(), saasOrderApplication.getMerchantCode()).getMobile());
         OrderStatusEnum orderStatusEnum = saasOrderService.getOrderStatusByOrderNumb(saasOrderApplication.getOrderNumb());
         if (orderStatusEnum != null) {
