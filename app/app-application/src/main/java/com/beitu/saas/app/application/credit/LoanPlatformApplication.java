@@ -8,7 +8,6 @@ import com.beitu.saas.borrower.client.SaasBorrowerService;
 import com.beitu.saas.borrower.domain.SaasBorrowerLoanCrawlVo;
 import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
 import com.beitu.saas.borrower.domain.SaasBorrowerVo;
-import com.beitu.saas.borrower.entity.SaasBorrowerRealInfo;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.consts.TimeConsts;
@@ -28,8 +27,6 @@ import com.beitu.saas.intergration.risk.param.LoanPlatformQueryParam;
 import com.beitu.saas.intergration.risk.param.LoanPlatformTaskIdPrefixParam;
 import com.beitu.saas.intergration.risk.param.LoanPlatformValidatePrefixParam;
 import com.beitu.saas.intergration.risk.pojo.LoanPlatformQueryPojo;
-import com.beitu.saas.order.client.SaasOrderService;
-import com.beitu.saas.risk.domain.carrier.h5.enums.CarrierH5TypeEnum;
 import com.fqgj.base.services.redis.RedisClient;
 import com.fqgj.common.utils.JSONUtils;
 import com.fqgj.common.utils.MD5;
@@ -182,7 +179,7 @@ public class LoanPlatformApplication {
             return "redirect:" + "";
         }
         redisClient.set(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, timestamp, TimeConsts.THREE_MINUTE, userCode, website);
-        return "redirect:" + configUtil.getAddressURLPrefix() + configUtil.getH5AddressURLPrefix()
+        return "redirect:" + configUtil.getH5AddressURL()
                 + "?channel=" + channelCode + "#/thirdLoading";
     }
 

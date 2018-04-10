@@ -4,7 +4,6 @@ import com.beitu.saas.app.application.channel.vo.ChannelStatDetailVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.auth.domain.SaasMerchantVo;
 import com.beitu.saas.auth.entity.SaasAdmin;
-import com.beitu.saas.auth.entity.SaasMerchant;
 import com.beitu.saas.auth.service.SaasAdminService;
 import com.beitu.saas.auth.service.SaasMerchantService;
 import com.beitu.saas.channel.domain.SaasChannelDetailVo;
@@ -158,9 +157,9 @@ public class SaasChannelApplication {
                     .setChannelStatus(x.getChannelStatus())
                     .setChargePersonCode(x.getChargePersonCode())
                     .setChargePersonName(this.getAdminNameByAdminCode(x.getChargePersonCode()))
-                    .setLinkUrl(configUtil.getAddressURLPrefix() + configUtil.getH5AddressURLPrefix() + x.getLinkUrl())
-                    .setLongLinkUrl(configUtil.getAddressURLPrefix() + configUtil.getH5AddressURLPrefix() + x.getLinkUrl())
-                    .setShortLinkUrl(ShortUrlUtil.generateShortUrl(configUtil.getAddressURLPrefix() + configUtil.getH5AddressURLPrefix() + x.getLinkUrl()))
+                    .setLinkUrl(configUtil.getH5AddressURL() + x.getLinkUrl())
+                    .setLongLinkUrl(configUtil.getH5AddressURL() + x.getLinkUrl())
+                    .setShortLinkUrl(ShortUrlUtil.generateShortUrl(configUtil.getH5AddressURL() + x.getLinkUrl()))
                     .setCreatorName(this.getAdminNameByAdminCode(x.getCreatorCode()))
                     .setCreatorCode(x.getCreatorCode())
                     .setGmtCreate(x.getGmtCreate())

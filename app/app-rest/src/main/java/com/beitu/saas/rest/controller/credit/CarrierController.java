@@ -7,7 +7,6 @@ import com.beitu.saas.app.application.credit.CarrierApplication;
 import com.beitu.saas.app.application.credit.vo.CarrierH5CallbackVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.borrower.client.SaasBorrowerService;
-import com.beitu.saas.borrower.consts.UserProfileConsts;
 import com.beitu.saas.borrower.domain.SaasBorrowerVo;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.RedisKeyConsts;
@@ -88,7 +87,7 @@ public class CarrierController {
                 }
             }
         }
-        return "redirect:" + configUtil.getAddressURLPrefix() + configUtil.getH5AddressURLPrefix()
+        return "redirect:" + configUtil.getH5AddressURL()
                 + "#/thirdLoading";
     }
 

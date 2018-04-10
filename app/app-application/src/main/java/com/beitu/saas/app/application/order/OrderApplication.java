@@ -562,7 +562,7 @@ public class OrderApplication {
         updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.PRELIMINARY_REVIEWER_REJECT, null);
 
         sendApplication.sendNotifyMessageByBorrowerCode(merchantCode, saasOrderVo.getBorrowerCode(), new HashMap(2) {{
-            put("channel_url", configUtil.getAddressURLPrefix() + configUtil.getH5AddressURLPrefix() + "?channel=" + saasOrderVo.getChannelCode());
+            put("channel_url", configUtil.getH5AddressURL() + "?channel=" + saasOrderVo.getChannelCode());
         }}, SaasSmsTypeEnum.SAAS_0007);
     }
 
@@ -614,7 +614,7 @@ public class OrderApplication {
         updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.FINAL_REVIEWER_REJECT, null);
 
         sendApplication.sendNotifyMessageByBorrowerCode(merchantCode, saasOrderVo.getBorrowerCode(), new HashMap(2) {{
-            put("channel_url", configUtil.getAddressURLPrefix() + configUtil.getH5AddressURLPrefix() + "?channel=" + saasOrderVo.getChannelCode());
+            put("channel_url", configUtil.getH5AddressURL() + "?channel=" + saasOrderVo.getChannelCode());
         }}, SaasSmsTypeEnum.SAAS_0007);
     }
 
@@ -662,7 +662,7 @@ public class OrderApplication {
             updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.TO_CONFIRM_RECEIPT, null);
 
             sendApplication.sendNotifyMessageByBorrowerCode(merchantCode, saasOrderVo.getBorrowerCode(), new HashMap(2) {{
-                put("channel_url", configUtil.getAddressURLPrefix() + configUtil.getH5AddressURLPrefix() + "?channel=" + saasOrderVo.getChannelCode());
+                put("channel_url", configUtil.getH5AddressURL() + "?channel=" + saasOrderVo.getChannelCode());
             }}, SaasSmsTypeEnum.SAAS_0010);
         }
         SaasOrder updateSaasOrder = new SaasOrder();
@@ -753,7 +753,7 @@ public class OrderApplication {
         ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, operatorCode, extendSaasOrder.getId(), ContractTypeEnum.LENDER_DO_EXTEND_CONTRACT_SIGN));
 
         sendApplication.sendNotifyMessageByBorrowerCode(merchantCode, saasOrderVo.getBorrowerCode(), new HashMap(2) {{
-            put("channel_url", configUtil.getAddressURLPrefix() + configUtil.getH5AddressURLPrefix() + "?channel=" + saasOrderVo.getChannelCode());
+            put("channel_url", configUtil.getH5AddressURL() + "?channel=" + saasOrderVo.getChannelCode());
         }}, SaasSmsTypeEnum.SAAS_0014);
 
         SaasOrderStatusHistory saasOrderStatusHistory = new SaasOrderStatusHistory();
