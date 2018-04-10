@@ -46,7 +46,7 @@ public class DataDashboardController {
 
     }
 
-    @RequestMapping(value = "overdue/query{menuType}", method = RequestMethod.POST)
+    @RequestMapping(value = "overdue/query/{menuType}", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "逾期数据-menuType:0-待收 1-逾期", response = DataDashboardOverdueResponse.class)
     public ModuleResponse overdueQuery(@PathVariable(value = "menuType") Integer menuType, Page page) {
