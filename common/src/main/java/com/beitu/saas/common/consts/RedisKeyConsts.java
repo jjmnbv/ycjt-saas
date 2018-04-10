@@ -56,5 +56,13 @@ public class RedisKeyConsts {
      * 推荐流量设置每天保存一次
      */
     public static final String SAAS_MERCHANT_FLOW_CONFIG = "SAAS_MERCHANT_FLOW_CONFIG_{merchantCode}";
+    /**
+     * 打开 聚信力url 浏览器类型
+     */
+    public static final String SAAS_OPEN_JXL_H5_BROWSER_TYPE = "SAAS_OPEN_JXL_H5_BROWSER_{taskId}";
+    /**
+     * 打开 运营商url 浏览器类型
+     */
+    public static final String SAAS_OPEN_CARRIER_H5_BROWSER_TYPE = "SAAS_OPEN_CARRIER_H5_BROWSER_{borrowerCode}";
 
 }

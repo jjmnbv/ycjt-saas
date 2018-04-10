@@ -21,12 +21,23 @@ public class GetLoanPlatformUrlRequest extends ParamsObject {
     @NotNull(message = "借贷平台类型不能为空")
     private Integer loanPlatformType;
 
+    @ApiModelProperty(value = "浏览器类型(2为微信)")
+    private Integer type;
+
     public Integer getLoanPlatformType() {
         return loanPlatformType;
     }
 
     public void setLoanPlatformType(Integer loanPlatformType) {
         this.loanPlatformType = loanPlatformType;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 
     @Override

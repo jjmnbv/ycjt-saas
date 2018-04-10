@@ -14,6 +14,7 @@ import com.beitu.saas.order.enums.OrderErrorCodeEnum;
 import com.beitu.saas.rest.controller.credit.request.GetLoanPlatformUrlRequest;
 import com.beitu.saas.rest.controller.credit.request.SaasGetLoanPlatformUrlRequest;
 import com.beitu.saas.rest.controller.credit.response.LoanPlatformUrlResponse;
+import com.fqgj.base.services.redis.RedisClient;
 import com.fqgj.exception.common.ApplicationException;
 import com.fqgj.log.factory.LogFactory;
 import com.fqgj.log.interfaces.Log;
@@ -58,7 +59,7 @@ public class LoanPlatformController {
         String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
         String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
         SaasLoanPlatformEnum platform = SaasLoanPlatformEnum.getByCode(req.getLoanPlatformType());
-        String url = loanPlatformApplication.getLoanPlatformUrl(borrowerCode, channelCode, platform);
+        String url = loanPlatformApplication.getLoanPlatformUrl(borrowerCode, channelCode, platform, req.getType());
         return new DataApiResponse<>(new LoanPlatformUrlResponse(url));
     }
 
@@ -78,7 +79,7 @@ public class LoanPlatformController {
             throw new ApplicationException("机构不存在默认渠道");
         }
         SaasLoanPlatformEnum platform = SaasLoanPlatformEnum.getByCode(req.getLoanPlatformType());
-        String url = loanPlatformApplication.getLoanPlatformUrl(borrowerCode, saasChannelEntity.getChannelCode(), platform);
+        String url = loanPlatformApplication.getLoanPlatformUrl(borrowerCode, saasChannelEntity.getChannelCode(), platform, null);
         return new DataApiResponse<>(new LoanPlatformUrlResponse(url));
     }
 
