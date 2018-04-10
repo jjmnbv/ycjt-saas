@@ -75,11 +75,11 @@ public class SaasChannelServiceImpl extends AbstractBaseService implements SaasC
         BigDecimal finalReviewerNum = BigDecimal.valueOf(channelStatVo.getFinalReviewerNum());
         BigDecimal loanLenderNum = BigDecimal.valueOf(channelStatVo.getLoanLenderNum());
 
-        channelStatVo.setPrimaryReviewerRatio(intoPiecesNum.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : primaryReviewerNum.divide(intoPiecesNum, 2, BigDecimal.ROUND_HALF_UP));
-        channelStatVo.setFinalReviewerRatio(primaryReviewerNum.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : finalReviewerNum.divide(primaryReviewerNum, 2, BigDecimal.ROUND_HALF_UP));
-        channelStatVo.setFinalReviewerBaseRatio(intoPiecesNum.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : finalReviewerNum.divide(intoPiecesNum, 2, BigDecimal.ROUND_HALF_UP));
-        channelStatVo.setLoanLenderRatio(finalReviewerNum.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : loanLenderNum.divide(finalReviewerNum, 2, BigDecimal.ROUND_HALF_UP));
-        channelStatVo.setLoanLenderBaseRatio(intoPiecesNum.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : loanLenderNum.divide(intoPiecesNum, 2, BigDecimal.ROUND_HALF_UP));
+        channelStatVo.setPrimaryReviewerRatio(intoPiecesNum.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : primaryReviewerNum.divide(intoPiecesNum, 2, BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100)));
+        channelStatVo.setFinalReviewerRatio(primaryReviewerNum.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : finalReviewerNum.divide(primaryReviewerNum, 2, BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100)));
+        channelStatVo.setFinalReviewerBaseRatio(intoPiecesNum.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : finalReviewerNum.divide(intoPiecesNum, 2, BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100)));
+        channelStatVo.setLoanLenderRatio(finalReviewerNum.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : loanLenderNum.divide(finalReviewerNum, 2, BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100)));
+        channelStatVo.setLoanLenderBaseRatio(intoPiecesNum.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : loanLenderNum.divide(intoPiecesNum, 2, BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100)));
     }
 
     @Override
