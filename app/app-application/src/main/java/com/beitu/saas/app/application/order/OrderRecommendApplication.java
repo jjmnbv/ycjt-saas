@@ -39,7 +39,7 @@ public class OrderRecommendApplication {
         if ((totalNum % modulo) > flowRatio) {
             flowType = 2;
         }
-        if (zmScore > 610) {
+        if (zmScore >= 610) {
             zmType = 2;
         }
         Map<String, Integer> flowNumMap = saasMerchantFlowConfigService.getMerchantCodeFlowNumForMap(zmType, flowType);

@@ -1,5 +1,9 @@
 package com.beitu.saas.merchant.client.enums;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 /**
  * @author xiaochong
  * @create 2018/4/9 下午1:26
@@ -7,7 +11,7 @@ package com.beitu.saas.merchant.client.enums;
  */
 public enum MerchantFlowZMEnum {
     ZM_610_DOWN(1L, "610分以下(8点券/单)"),
-    ZM_610_UP(2L, "610分以上(10点券/单)");
+    ZM_610_UP(2L, "610(含)分以上(10点券/单)");
     private Long key;
     private String value;
 
@@ -48,5 +52,16 @@ public enum MerchantFlowZMEnum {
             }
         }
         return false;
+    }
+
+    public static List getEnumMap() {
+        List list = new ArrayList();
+        for (MerchantFlowZMEnum item : MerchantFlowZMEnum.values()) {
+            list.add(new HashMap() {{
+                put("key", item.getKey());
+                put("value", item.getValue());
+            }});
+        }
+        return list;
     }
 }

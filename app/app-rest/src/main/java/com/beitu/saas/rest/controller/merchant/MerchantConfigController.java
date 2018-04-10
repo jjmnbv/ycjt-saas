@@ -7,6 +7,7 @@ import com.beitu.saas.common.utils.DateUtil;
 import com.beitu.saas.merchant.client.SaasMerchantFlowConfigService;
 import com.beitu.saas.merchant.client.domain.SaasMerchantFlowConfigVo;
 import com.beitu.saas.merchant.client.enums.MerchantFlowNumEnum;
+import com.beitu.saas.merchant.client.enums.MerchantFlowZMEnum;
 import com.beitu.saas.rest.controller.merchant.request.SaveConfigRequest;
 import com.beitu.saas.rest.controller.merchant.response.FlowConfigInfoResponse;
 import com.fqgj.base.services.redis.RedisClient;
@@ -54,6 +55,12 @@ public class MerchantConfigController {
     @ApiOperation(value = "每日最大推送量枚举")
     public Response flowNum() {
         return Response.ok().putData(MerchantFlowNumEnum.getEnumMap());
+    }
+
+    @RequestMapping(value = "/flow-zm/map", method = RequestMethod.GET)
+    @ApiOperation(value = "芝麻分枚举")
+    public Response flowZm() {
+        return Response.ok().putData(MerchantFlowZMEnum.getEnumMap());
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
