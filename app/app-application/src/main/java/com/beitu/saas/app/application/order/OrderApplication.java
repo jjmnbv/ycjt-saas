@@ -298,11 +298,14 @@ public class OrderApplication {
         OrderStatusEnum nextOrderStatus = OrderStatusEnum.getEnumByCode(updateOrderStatus.getCode());
         OrderStatusEnum currentOrderStatus = OrderStatusEnum.getEnumByCode(saasOrderVo.getOrderStatus());
 
-        if ((nextOrderStatus.getCodeArray() == null || Arrays.binarySearch(nextOrderStatus.getCodeArray(), currentOrderStatus.getCode()) < 0) && nextOrderStatus.getNeedForcedToUpdate()) {
-            LOG.warn("......订单操作非法.......当前订单状态:{};更新订单状态:{}", currentOrderStatus.getMsg(), nextOrderStatus.getMsg());
-            throw new ApplicationException(OrderErrorCodeEnum.ILLEGAL_OPERATION_ORDER_STATUS);
+        if ((nextOrderStatus.getCodeArray() == null || Arrays.binarySearch(nextOrderStatus.getCodeArray(), currentOrderStatus.getCode()) > 0)) {
+            updateOrderStatus(operatorCode, saasOrderVo.getSaasOrderId(), saasOrderVo.getVersion(), saasOrderVo.getOrderNumb(), currentOrderStatus, updateOrderStatus, remark);
+        } else {
+            if (nextOrderStatus.getNeedForcedToUpdate()) {
+                LOG.warn("......订单操作非法.......当前订单状态:{};更新订单状态:{}", currentOrderStatus.getMsg(), nextOrderStatus.getMsg());
+                throw new ApplicationException(OrderErrorCodeEnum.ILLEGAL_OPERATION_ORDER_STATUS);
+            }
         }
-        updateOrderStatus(operatorCode, saasOrderVo.getSaasOrderId(), saasOrderVo.getVersion(), saasOrderVo.getOrderNumb(), currentOrderStatus, updateOrderStatus, remark);
     }
 
     private void updateOrderStatus(String operatorCode, Long orderId, Long version, String orderNumb, OrderStatusEnum currentOrderStatus, OrderStatusEnum updateOrderStatus, String remark) {
