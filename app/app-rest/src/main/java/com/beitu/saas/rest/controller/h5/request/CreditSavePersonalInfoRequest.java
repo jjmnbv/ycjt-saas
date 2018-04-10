@@ -1,10 +1,9 @@
 package com.beitu.saas.rest.controller.h5.request;
 
-import com.beitu.saas.app.application.credit.vo.BorrowerPersonalInfoVo;
 import com.fqgj.common.api.ParamsObject;
+import com.fqgj.common.api.exception.ApiIllegalArgumentException;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
@@ -18,7 +17,7 @@ import javax.validation.constraints.NotNull;
 public class CreditSavePersonalInfoRequest extends ParamsObject {
 
     /**
-     * QQ
+     * 微信号
      */
     @ApiModelProperty(value = "微信号")
     @NotBlank(message = "微信号不能为空")
@@ -50,7 +49,6 @@ public class CreditSavePersonalInfoRequest extends ParamsObject {
 
     @ApiModelProperty(value = "芝麻分")
     @NotNull(message = "芝麻分不能为空")
-    @Length(max = 1000, message = "芝麻分在0～1000之间")
     private Integer zmCreditScore;
 
     public String getQq() {
@@ -103,7 +101,9 @@ public class CreditSavePersonalInfoRequest extends ParamsObject {
 
     @Override
     public void validate() {
-
+        if (0 > zmCreditScore || 1000 < zmCreditScore) {
+            throw new ApiIllegalArgumentException("请输入0～1000之间的芝麻分");
+        }
     }
 
 }

@@ -109,6 +109,9 @@ public class CreditSaveEmergentContactRequest extends ParamsObject {
         if (!MobileUtil.isMobile(friendMobile)) {
             throw new ApiIllegalArgumentException(VerifyCodeErrorCodeEnum.NOT_MOBILE);
         }
+        if (familyMobile.equals(friendMobile)) {
+            throw new ApiIllegalArgumentException("两个手机号码不相同");
+        }
     }
 
 }
