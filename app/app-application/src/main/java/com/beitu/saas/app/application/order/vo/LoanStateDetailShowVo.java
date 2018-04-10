@@ -12,9 +12,8 @@ import java.math.BigDecimal;
  * Time: 上午11:15
  */
 public class LoanStateDetailShowVo implements ResponseData {
-    private BigDecimal monthLoanTotalAmount;
-    private BigDecimal monthDestroyTotalAmount;
-    private Integer monthLoanPersonNum;
+    private BigDecimal monthLoanTotalAmount=BigDecimal.ZERO;
+    private BigDecimal monthDestroyTotalAmount=BigDecimal.ZERO;
     private String month;
 
     public String getMonth() {
@@ -41,15 +40,6 @@ public class LoanStateDetailShowVo implements ResponseData {
 
     public LoanStateDetailShowVo setMonthDestroyTotalAmount(BigDecimal monthDestroyTotalAmount) {
         this.monthDestroyTotalAmount = monthDestroyTotalAmount;
-        return this;
-    }
-
-    public Integer getMonthLoanPersonNum() {
-        return monthLoanPersonNum;
-    }
-
-    public LoanStateDetailShowVo setMonthLoanPersonNum(Integer monthLoanPersonNum) {
-        this.monthLoanPersonNum = monthLoanPersonNum;
         return this;
     }
 }

@@ -20,7 +20,7 @@ public class DashboardOverdueOrderShowVo implements ResponseData {
     private String mobile;
 
     @ApiModelProperty(value = "账单金额")
-    private BigDecimal realCapital;
+    private BigDecimal realCapital = BigDecimal.ZERO;
 
     public String getName() {
         return name;

@@ -14,25 +14,25 @@ import java.math.BigDecimal;
  */
 public class LoanDataDetailShowVo implements ResponseData {
     @ApiModelProperty(value = "总放款")
-    private BigDecimal loanTotalAmount;
+    private BigDecimal loanTotalAmount = BigDecimal.ZERO;
 
     @ApiModelProperty(value = "今日放款")
-    private BigDecimal todayLoanTotalAmount;
+    private BigDecimal todayLoanTotalAmount = BigDecimal.ZERO;
 
     @ApiModelProperty(value = "总回收金额")
-    private BigDecimal destroyTotalAmount;
+    private BigDecimal destroyTotalAmount = BigDecimal.ZERO;
 
     @ApiModelProperty(value = "今日回收金额")
-    private BigDecimal todayDestroyTotalAmount;
+    private BigDecimal todayDestroyTotalAmount = BigDecimal.ZERO;
 
     @ApiModelProperty(value = "总待回收")
-    private BigDecimal noRepayTotalAmount;
+    private BigDecimal noRepayTotalAmount = BigDecimal.ZERO;
 
     @ApiModelProperty(value = "逾期总金额")
-    private BigDecimal overdueTotalAmount;
+    private BigDecimal overdueTotalAmount = BigDecimal.ZERO;
 
     @ApiModelProperty(value = "今日逾期金额")
-    private BigDecimal todayOverdueTotalAmount;
+    private BigDecimal todayOverdueTotalAmount = BigDecimal.ZERO;
 
     public BigDecimal getLoanTotalAmount() {
         return loanTotalAmount;

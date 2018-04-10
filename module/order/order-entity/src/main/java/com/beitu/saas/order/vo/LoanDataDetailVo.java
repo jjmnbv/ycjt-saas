@@ -10,19 +10,19 @@ import java.math.BigDecimal;
  * Time: 上午11:11
  */
 public class LoanDataDetailVo {
-    private BigDecimal loanTotalAmount;
+    private BigDecimal loanTotalAmount = BigDecimal.ZERO;
 
-    private BigDecimal todayLoanTotalAmount;
+    private BigDecimal todayLoanTotalAmount = BigDecimal.ZERO;
 
-    private BigDecimal destroyTotalAmount;
+    private BigDecimal destroyTotalAmount = BigDecimal.ZERO;
 
-    private BigDecimal todayDestroyTotalAmount;
+    private BigDecimal todayDestroyTotalAmount = BigDecimal.ZERO;
 
-    private BigDecimal noRepayTotalAmount;
+    private BigDecimal noRepayTotalAmount = BigDecimal.ZERO;
 
-    private BigDecimal overdueTotalAmount;
+    private BigDecimal overdueTotalAmount = BigDecimal.ZERO;
 
-    private BigDecimal todayOverdueTotalAmount;
+    private BigDecimal todayOverdueTotalAmount = BigDecimal.ZERO;
 
     public BigDecimal getLoanTotalAmount() {
         return loanTotalAmount;
