@@ -4,8 +4,6 @@ import java.util.List;
 
 public class OrderPushUserDunningInfoVo {
     
-    private Long carrierId;
-    
     private String sid;
     
     private String mobile;
@@ -17,14 +15,6 @@ public class OrderPushUserDunningInfoVo {
     private String url;
     
     private List<OrderPushUserDunningDetailVo> details;
-    
-    public Long getCarrierId() {
-        return carrierId;
-    }
-    
-    public void setCarrierId(Long carrierId) {
-        this.carrierId = carrierId;
-    }
     
     public String getSid() {
         return sid;

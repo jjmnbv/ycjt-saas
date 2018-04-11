@@ -1,6 +1,9 @@
 package com.beitu.saas.app.enums;
 
 import com.fqgj.common.api.enums.MsgCodeEnum;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Objects;
 
 /**
  * @author linanjun
@@ -8,9 +11,11 @@ import com.fqgj.common.api.enums.MsgCodeEnum;
  * @description
  */
 public enum MaritalStatusMsgCodeEnum implements MsgCodeEnum {
-
-    MARRIED(1, "已婚"),
-    UN_MARRIED(2, "未婚");
+    
+    NOT_MARRIED(0, "未婚"),
+    MARRIED_AND_PROCREATED(1, "已婚已育"),
+    MARRIED_AND_NOT_PROCREATED(2, "已婚未育"),
+    OTHER(3, "其他");
 
     MaritalStatusMsgCodeEnum(Integer code, String msg) {
         this.code = code;
@@ -45,6 +50,18 @@ public enum MaritalStatusMsgCodeEnum implements MsgCodeEnum {
         }
         for (MaritalStatusMsgCodeEnum maritalStatusMsgCodeEnum : MaritalStatusMsgCodeEnum.values()) {
             if (maritalStatusMsgCodeEnum.getCode().equals(code)) {
+                return maritalStatusMsgCodeEnum;
+            }
+        }
+        return null;
+    }
+    
+    public static MaritalStatusMsgCodeEnum getByDesc(String desc) {
+        if (StringUtils.isEmpty(desc)) {
+            return null;
+        }
+        for (MaritalStatusMsgCodeEnum maritalStatusMsgCodeEnum : MaritalStatusMsgCodeEnum.values()) {
+            if (Objects.equals(maritalStatusMsgCodeEnum.getMsg(), desc)) {
                 return maritalStatusMsgCodeEnum;
             }
         }

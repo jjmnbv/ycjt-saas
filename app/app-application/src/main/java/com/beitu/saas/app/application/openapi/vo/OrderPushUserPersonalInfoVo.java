@@ -2,7 +2,7 @@ package com.beitu.saas.app.application.openapi.vo;
 
 public class OrderPushUserPersonalInfoVo {
     
-    private String wechat;
+    private String wechatCode;
     
     private String education;
     
@@ -12,12 +12,12 @@ public class OrderPushUserPersonalInfoVo {
     
     private String maritalStatus;
     
-    public String getWechat() {
-        return wechat;
+    public String getWechatCode() {
+        return wechatCode;
     }
     
-    public void setWechat(String wechat) {
-        this.wechat = wechat;
+    public void setWechatCode(String wechatCode) {
+        this.wechatCode = wechatCode;
     }
     
     public String getEducation() {

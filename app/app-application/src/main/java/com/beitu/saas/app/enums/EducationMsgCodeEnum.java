@@ -1,6 +1,9 @@
 package com.beitu.saas.app.enums;
 
 import com.fqgj.common.api.enums.MsgCodeEnum;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Objects;
 
 /**
  * @author linanjun
@@ -50,6 +53,18 @@ public enum EducationMsgCodeEnum implements MsgCodeEnum {
         }
         for (EducationMsgCodeEnum educationMsgCodeEnum : EducationMsgCodeEnum.values()) {
             if (educationMsgCodeEnum.getCode().equals(code)) {
+                return educationMsgCodeEnum;
+            }
+        }
+        return null;
+    }
+    
+    public static EducationMsgCodeEnum getByDesc(String desc) {
+        if (StringUtils.isEmpty(desc)) {
+            return null;
+        }
+        for (EducationMsgCodeEnum educationMsgCodeEnum : EducationMsgCodeEnum.values()) {
+            if (Objects.equals(educationMsgCodeEnum.getMsg(), desc)) {
                 return educationMsgCodeEnum;
             }
         }
