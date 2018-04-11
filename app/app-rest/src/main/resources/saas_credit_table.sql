@@ -57,7 +57,6 @@ DROP TABLE IF EXISTS `saas_credit_dunning_detail`;
 CREATE TABLE `saas_credit_dunning_detail` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '表ID',
   `record_id` bigint(20) unsigned NOT NULL COMMENT '用户催收数据查询表ID',
-  `sid` varchar(64) NOT NULL COMMENT '电话邦催收数据查询唯一标识',
   `call_tel_total_nums` int(11) unsigned NOT NULL COMMENT '总通话号码数',
   `call_total_times` int(11) unsigned NOT NULL COMMENT '总通话次数',
   `call_out_times` int(11) unsigned NOT NULL COMMENT '主叫次数',

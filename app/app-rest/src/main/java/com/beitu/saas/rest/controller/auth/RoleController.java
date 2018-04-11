@@ -57,9 +57,6 @@ public class RoleController {
     @Autowired
     private AdminInfoApplication adminInfoApplication;
 
-    @Autowired
-    private SaasAdminService saasAdminService;
-
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ParamsValidate
     @ApiOperation(value = "添加角色")
@@ -105,6 +102,9 @@ public class RoleController {
         boolean success = saasRoleService.updateById(saasRole) > 0;
         if (!success) {
             throw new ApplicationException("角色状态更新失败");
+        }
+        if (enable == false) {
+            roleApplication.disableRole(roleId);
         }
         return Response.ok();
     }
@@ -172,6 +172,7 @@ public class RoleController {
     @ApiOperation(value = "更新角色")
     public Response update(@RequestBody UpdateRoleRequest updateRoleRequest) {
         roleApplication.updateRole(updateRoleRequest.getRoleName(), updateRoleRequest.getRoleId(), updateRoleRequest.getMenusIds(), updateRoleRequest.getButtonIds());
+        roleApplication.disableRole(updateRoleRequest.getRoleId());
         return Response.ok();
     }
 

@@ -7,7 +7,6 @@
             parameterType="java.util.List" useGeneratedKeys="true">
         insert into saas_credit_dunning_detail
         (record_id,
-        sid,
         call_tel_total_nums,
         call_total_times,
         call_out_times,
@@ -26,7 +25,6 @@
         <foreach collection="list" item="item" index="index" separator=",">
             <trim prefix="(" suffix=")">
                 #{item.recordId,jdbcType=BIGINT},
-                #{item.sid,jdbcType=VARCHAR},
                 #{item.callTelTotalNums,jdbcType=INTEGER},
                 #{item.callTotalTimes,jdbcType=INTEGER},
                 #{item.callOutTimes,jdbcType=INTEGER},

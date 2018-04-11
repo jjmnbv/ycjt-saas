@@ -32,6 +32,7 @@
                 and deleted = false
             </trim>
         </where>
+        order by id desc
     </select>
 
     <select id="selectByCurrentOrderStatusAndOrderNumb" parameterType="map"

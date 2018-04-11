@@ -170,6 +170,7 @@ public class OrderApplication {
             throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
         }
         SaasOrder updateSaasOrder = new SaasOrder();
+        updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
         updateSaasOrder.setRealCapital(saasOrderApplicationVo.getRealCapital());
         updateSaasOrder.setTotalInterestRatio(saasOrderApplicationVo.getTotalInterestRatio());
         updateSaasOrder.setBorrowPurpose(saasOrderApplicationVo.getBorrowPurpose());
@@ -441,7 +442,9 @@ public class OrderApplication {
         //放款数据
         LoanDataDetailVo loanDataDetailVo = saasOrderBillDetailService.getLoanDataDetailVo(merchantCode);
         LoanDataDetailShowVo loanDataDetailShowVo = new LoanDataDetailShowVo();
-        BeanUtils.copyProperties(loanDataDetailVo, loanDataDetailShowVo);
+        if (loanDataDetailVo != null) {
+            BeanUtils.copyProperties(loanDataDetailVo, loanDataDetailShowVo);
+        }
 
         //账户信息
         SaasMerchantCreditInfoEntity creditInfoByMerchantCode = saasMerchantCreditInfoService.getCreditInfoByMerchantCode(merchantCode);
@@ -451,8 +454,8 @@ public class OrderApplication {
         DataDashboardLoanShowVo dataDashboardLoanShowVo = new DataDashboardLoanShowVo()
                 .setLoanDataDetailVo(loanDataDetailShowVo)
                 .setMerchantBalance(balanceInfoEntity == null ? BigDecimal.ZERO : balanceInfoEntity.getValue())
-                .setMerchantCredit(creditInfoByMerchantCode == null ? 0l : creditInfoByMerchantCode.getValue())
-                .setMerchantSms(smsInfoByMerchantCode == null ? 0l : smsInfoByMerchantCode.getValue());
+                .setMerchantCredit(creditInfoByMerchantCode == null ? 0L : creditInfoByMerchantCode.getValue())
+                .setMerchantSms(smsInfoByMerchantCode == null ? 0L : smsInfoByMerchantCode.getValue());
 
         //走势曲线图
         List<LoanStateDetailVo> loanStateDetailVos = saasOrderBillDetailService.getLoanStateDetailList(merchantCode);

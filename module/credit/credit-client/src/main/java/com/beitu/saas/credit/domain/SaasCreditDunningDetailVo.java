@@ -23,10 +23,6 @@ public class SaasCreditDunningDetailVo implements ResponseData, Serializable {
      */
     private Long recordId;
     /**
-     * 电话邦催收数据查询唯一标识
-     */
-    private String sid;
-    /**
      * 总通话号码数
      */
     private Integer callTelTotalNums;
@@ -91,21 +87,12 @@ public class SaasCreditDunningDetailVo implements ResponseData, Serializable {
         this.saasCreditDunningDetailId = saasCreditDunningDetailId;
     }
 
-
     public Long getRecordId() {
         return this.recordId;
     }
 
     public void setRecordId(Long recordId) {
         this.recordId = recordId;
-    }
-
-    public String getSid() {
-        return this.sid;
-    }
-
-    public void setSid(String sid) {
-        this.sid = sid;
     }
 
     public Integer getCallTelTotalNums() {

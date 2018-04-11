@@ -148,15 +148,13 @@ public class UserAccessRightInterceptor implements HandlerInterceptor {
                 RequestBasicInfo basicVO = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo();
                 if (basicVO.getPlatform().equals("h5")) {
                     String code = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
-                    redisClient.expire(RedisKeyConsts.SAAS_TOKEN_KEY, TimeConsts.TEN_MINUTES, code);
+                    redisClient.expire(RedisKeyConsts.SAAS_TOKEN_KEY, TimeConsts.HALF_AN_HOUR, code);
                 }
                 if (basicVO.getPlatform().equals("web")) {
                     String code = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode();
-                    redisClient.expire(RedisKeyConsts.SAAS_TOKEN_KEY, TimeConsts.TEN_MINUTES, code);
+                    redisClient.expire(RedisKeyConsts.SAAS_TOKEN_KEY, TimeConsts.HALF_AN_HOUR, code);
                 }
-//                redisClient.expire(RedisKeyConsts.SAAS_TOKEN_KEY, TimeConsts.TEN_MINUTES, basicVO.getToken());
-                // 为了方便测试联调，将token时效设置变长
-                redisClient.expire(RedisKeyConsts.SAAS_TOKEN_KEY, TimeConsts.AN_HOUR, basicVO.getToken());
+                redisClient.expire(RedisKeyConsts.SAAS_TOKEN_KEY, TimeConsts.HALF_AN_HOUR, basicVO.getToken());
                 String key = MD5.md5(httpServletRequest.getRequestURI() + basicVO.getToken());
                 String value = redisClient.get(RedisKeyConsts.REPEAT_PREFIX, key);
                 if (ignoreRepeatRequest != null && StringUtils.isNotEmpty(value)) {

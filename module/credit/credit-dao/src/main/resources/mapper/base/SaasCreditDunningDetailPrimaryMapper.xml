@@ -5,7 +5,6 @@
     <resultMap id="BaseResultMap" type="com.beitu.saas.credit.entity.SaasCreditDunningDetail">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="record_id" jdbcType="BIGINT" property="recordId"/>
-        <result column="sid" jdbcType="VARCHAR" property="sid"/>
         <result column="call_tel_total_nums" jdbcType="INTEGER" property="callTelTotalNums"/>
         <result column="call_total_times" jdbcType="INTEGER" property="callTotalTimes"/>
         <result column="call_out_times" jdbcType="INTEGER" property="callOutTimes"/>
@@ -28,7 +27,6 @@
     <sql id="Base_Column_List">
     id,
     record_id,
-    sid,
     call_tel_total_nums,
     call_total_times,
     call_out_times,
@@ -62,9 +60,6 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="recordId !=null">
                 record_id,
-            </if>
-            <if test="sid !=null">
-                sid,
             </if>
             <if test="callTelTotalNums !=null">
                 call_tel_total_nums,
@@ -121,9 +116,6 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="recordId != null">
                 #{recordId,jdbcType=BIGINT},
-            </if>
-            <if test="sid != null">
-                #{sid,jdbcType=VARCHAR},
             </if>
             <if test="callTelTotalNums != null">
                 #{callTelTotalNums,jdbcType=INTEGER},
@@ -184,9 +176,6 @@
         <set>
             <if test="recordId !=null">
                 record_id = #{recordId,jdbcType=BIGINT},
-            </if>
-            <if test="sid !=null">
-                sid = #{sid,jdbcType=VARCHAR},
             </if>
             <if test="callTelTotalNums !=null">
                 call_tel_total_nums = #{callTelTotalNums,jdbcType=INTEGER},
@@ -269,9 +258,6 @@
             <if test="recordId !=null">
                 and record_id = #{recordId,jdbcType=BIGINT}
             </if>
-            <if test="sid !=null">
-                and sid = #{sid,jdbcType=VARCHAR}
-            </if>
             <if test="callTelTotalNums !=null">
                 and call_tel_total_nums = #{callTelTotalNums,jdbcType=INTEGER}
             </if>
@@ -334,9 +320,6 @@
             </if>
             <if test="recordId !=null">
                 and record_id = #{recordId,jdbcType=BIGINT}
-            </if>
-            <if test="sid !=null">
-                and sid = #{sid,jdbcType=VARCHAR}
             </if>
             <if test="callTelTotalNums !=null">
                 and call_tel_total_nums = #{callTelTotalNums,jdbcType=INTEGER}

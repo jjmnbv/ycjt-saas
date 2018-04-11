@@ -71,7 +71,7 @@ public class BorrowerBaseInfoApplication {
         BorrowerPersonalInfoVo borrowerPersonalInfoVo = new BorrowerPersonalInfoVo();
         SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCodeAndMerchantCode(borrowerCode, merchantCode);
         if (saasBorrowerVo == null) {
-
+            return null;
         }
         borrowerPersonalInfoVo.setMobile(saasBorrowerVo.getMobile());
 
