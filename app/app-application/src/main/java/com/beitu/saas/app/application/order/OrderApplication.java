@@ -136,7 +136,6 @@ public class OrderApplication {
         saasOrder.setChannelCode(channelCode);
         saasOrder.setOrderStatus(OrderStatusEnum.SUBMIT_PRELIMINARY_REVIEW.getCode());
         saasOrder.setExpireDate(DateUtil.addDate(new Date(), 20));
-        saasOrder.setTotalInterestFee(orderCalculateApplication.getInterest(saasOrder.getRealCapital(), saasOrder.getTotalInterestRatio(), saasOrder.getCreatedDt(), saasOrder.getRepaymentDt()));
         saasOrderService.create(saasOrder);
 
         if (!ChannelConsts.DEFAULT_CHANNEL_CREATOR_CODE.equals(channelCode)) {
@@ -176,7 +175,6 @@ public class OrderApplication {
         updateSaasOrder.setRepaymentDt(saasOrderApplicationVo.getRepaymentDt());
         updateSaasOrder.setTermUrl(saasOrderApplicationVo.getTermUrl());
         updateSaasOrder.setExpireDate(DateUtil.addDate(new Date(), 20));
-        updateSaasOrder.setTotalInterestFee(orderCalculateApplication.getInterest(updateSaasOrder.getRealCapital(), updateSaasOrder.getTotalInterestRatio(), updateSaasOrder.getCreatedDt(), updateSaasOrder.getRepaymentDt()));
         saasOrderService.updateById(updateSaasOrder);
     }
 
@@ -512,11 +510,11 @@ public class OrderApplication {
     private SaasOrderListVo convertSaasOrderVo2SaasOrderListVo(SaasOrderVo saasOrderVo) {
         SaasOrderListVo orderListVo = new SaasOrderListVo();
         orderListVo.setOrderNumb(saasOrderVo.getOrderNumb());
-        orderListVo.setApplyDate(DateUtil.getDate(saasOrderVo.getCreatedDt()));
+        orderListVo.setApplyDate(DateUtil.getDate(saasOrderVo.getGmtCreate()));
         orderListVo.setCapital(saasOrderVo.getRealCapital().toString());
         orderListVo.setOrderStatus(OrderStatusEnum.getEnumByCode(saasOrderVo.getOrderStatus()).getMsg());
         orderListVo.setRemark(saasOrderVo.getRemark());
-        orderListVo.setBorrowingDuration(DateUtil.countDay(saasOrderVo.getRepaymentDt(), saasOrderVo.getCreatedDt()) + "天");
+        orderListVo.setBorrowingDuration(DateUtil.countDay(saasOrderVo.getRepaymentDt(), saasOrderVo.getGmtCreate()) + "天");
         BorrowerInfoVo borrowerInfoVo = borrowerApplication.getBorrowerInfoVoByBorrowerCode(saasOrderVo.getMerchantCode(), saasOrderVo.getBorrowerCode());
         BeanUtils.copyProperties(borrowerInfoVo, orderListVo);
         orderListVo.setChannelName(saasChannelService.getSaasChannelByChannelCode(saasOrderVo.getChannelCode()).getChannelName());
