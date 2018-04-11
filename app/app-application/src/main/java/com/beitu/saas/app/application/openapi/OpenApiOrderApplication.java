@@ -54,7 +54,7 @@ public class OpenApiOrderApplication {
             LOGGER.warn("************************* 洋葱借条推单处理失败:{} *************************", e);
             throw new ApplicationException(OpenApiOrderPushErrorCodeEnum.DATA_PARSE_ERROR);
         }
-        Map merchantsInfo = orderRecommendApplication.getRecommendMerchantCode(Long.valueOf(pushData.getZmScore().toString()));
+        Map merchantsInfo = orderRecommendApplication.getRecommendMerchantCode(Long.valueOf(pushData.getZmScore().toString()),pushData.getIdentityNo());
         List<String> merchantCodes = (List<String>)merchantsInfo.get("list");
         if (CollectionUtils.isEmpty(merchantCodes)) {
             OpenApiOrderPushErrorCodeEnum errorCodeEnum = OpenApiOrderPushErrorCodeEnum.NO_MATCHED_MERCHANT;
