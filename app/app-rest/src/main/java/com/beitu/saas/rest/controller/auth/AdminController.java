@@ -94,8 +94,9 @@ public class AdminController {
         if (!roleApplication.enableAdminRole(saasAdmin.getCode())) {
             throw new ApiErrorException("角色被禁用");
         }
+        Boolean equalLoginIp = saasAdminLoginLogService.equalLoginIp(saasAdmin.getCode(), NetworkUtil.getIpAddress(request));
         if (StringUtils.isEmpty(adminLoginRequest.getVerifyCode())) {
-            if (!saasAdminLoginLogService.equalLoginIp(saasAdmin.getCode(), NetworkUtil.getIpAddress(request))) {
+            if (!equalLoginIp) {
                 throw new ApiErrorException(AdminErrorEnum.SHOW_VERIFYCODE);
             }
         }
@@ -108,7 +109,7 @@ public class AdminController {
             redisClient.del(RedisKeyConsts.SAAS_TOKEN_KEY, oldToken);
         }
         String verifyCode = redisClient.get(RedisKeyConsts.H5_SAVE_LOGIN_VERIFYCODE_KEY, adminLoginRequest.getMobile());
-        if (StringUtils.isNotEmpty(verifyCode)) {
+        if (StringUtils.isNotEmpty(verifyCode) && !equalLoginIp) {
             if (!verifyCode.equals(adminLoginRequest.getVerifyCode())) {
                 throw new ApiErrorException(SmsErrorCodeEnum.INPUT_WRONG_VERIFY_CODE);
             }
