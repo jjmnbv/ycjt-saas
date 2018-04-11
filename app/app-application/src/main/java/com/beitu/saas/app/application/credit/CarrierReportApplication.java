@@ -67,6 +67,7 @@ public class CarrierReportApplication {
             creditCarrierReportVo.setStatus(CarrierStatusEnum.FAILURE.getCode());
             return creditCarrierReportVo;
         }
+        creditCarrierReportVo.setStatus(CarrierStatusEnum.SUCCESS.getCode());
         Long recordId = saasCreditCarrierVo.getSaasCreditCarrierId();
 
         SaasCreditCarrierBaseVo saasCreditCarrierBaseVo = saasCreditCarrierBaseService.getByRecordId(recordId);
