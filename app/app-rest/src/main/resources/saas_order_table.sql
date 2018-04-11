@@ -34,7 +34,7 @@ CREATE TABLE `saas_order` (
   `late_interest_ratio` decimal(5,4) NOT NULL DEFAULT '0.2400' COMMENT '逾期利率',
   `borrow_purpose` varchar(32) DEFAULT NULL COMMENT '借款意图',
   `repayment_dt` date NOT NULL COMMENT '账单应还日',
-  `created_dt` date NOT NULL COMMENT '订单申请时间',
+  `created_dt` date DEFAULT NULL COMMENT '订单计息时间',
   `expire_date` datetime NOT NULL COMMENT '订单过期时间',
   `term_url` varchar(256) DEFAULT NULL COMMENT '借款协议URL地址',
   `relation_order_id` bigint(20) unsigned DEFAULT NULL COMMENT '展期关联订单ID',

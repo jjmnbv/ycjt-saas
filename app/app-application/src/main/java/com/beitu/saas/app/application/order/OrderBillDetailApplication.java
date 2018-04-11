@@ -202,7 +202,7 @@ public class OrderBillDetailApplication {
         addSaasOrderBillDetail.setTotalInterestRatio(saasOrderVo.getTotalInterestRatio());
         addSaasOrderBillDetail.setLateInterestRatio(saasOrderVo.getLateInterestRatio());
         if (addSaasOrderBillDetail.getCreatedDt() == null) {
-            addSaasOrderBillDetail.setCreatedDt(saasOrderVo.getCreatedDt());
+            addSaasOrderBillDetail.setCreatedDt(new Date());
         }
         addSaasOrderBillDetail.setRepaymentDt(saasOrderVo.getRepaymentDt());
         addSaasOrderBillDetail.setInterest(saasOrderVo.getTotalInterestFee());
