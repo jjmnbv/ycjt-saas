@@ -362,7 +362,7 @@ public class OpenApiOrderApplication {
     }
     
     private List<SaasBorrowerRelatedDataVo> orderPushUserRegister(OrderPushToSaasDataVo data, List<String> merchantCodes) {
-        List<SaasBorrowerRelatedDataVo> borrowerCodes = new ArrayList<>();
+        List<SaasBorrowerRelatedDataVo> borrowerRelatedDataVos = new ArrayList<>();
         for (int i = 0; i < merchantCodes.size(); i++) {
             String merchantCode = merchantCodes.get(i);
             String identityNo = data.getIdentityNo();
@@ -379,9 +379,9 @@ public class OpenApiOrderApplication {
             if (borrowerCode == null) {
                 borrowerCode = registerUser(mobile, merchantCode, channelCode);
             }
-            borrowerCodes.add(new SaasBorrowerRelatedDataVo(borrowerCode, merchantCode, channelCode));
+            borrowerRelatedDataVos.add(new SaasBorrowerRelatedDataVo(borrowerCode, merchantCode, channelCode));
         }
-        return borrowerCodes;
+        return borrowerRelatedDataVos;
     }
     
     public Boolean canMatchMerchant(String identityNo, String merchantCode) {
