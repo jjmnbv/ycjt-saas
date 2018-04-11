@@ -135,11 +135,11 @@ public class DhbReportApplication {
                     for (CarriersPhoneCallVo callVo : carriersVo.getCarriersCallVoList()) {
                         if (matchVo.getNumberList().contains(callVo.getPeernumber())) {
                             if (StringUtils.isNotBlank(callVo.getCallTime())) {
-                                if (callVo.getDialtype().contains("主叫")) {
+                                if (callVo.getDialtype().contains("主叫") || Objects.equals(callVo.getDialtype(), "1")) {
                                     matchVo.setCallingTime(matchVo.getCallingTime() + 1);
                                     matchVo.setCallingDuration(matchVo.getCallingDuration() + Integer.valueOf(callVo.getCallTime()));
                                 }
-                                if (callVo.getDialtype().contains("被叫")) {
+                                if (callVo.getDialtype().contains("被叫") || Objects.equals(callVo.getDialtype(), "2")) {
                                     matchVo.setCalledTime(matchVo.getCalledTime() + 1);
                                     matchVo.setCalledDuration(matchVo.getCalledDuration() + Integer.valueOf(callVo.getCallTime()));
                                 }
