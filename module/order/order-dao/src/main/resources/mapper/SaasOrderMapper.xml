@@ -35,10 +35,10 @@
                 and loan_lender_code = #{loanLenderCode,jdbcType=VARCHAR}
             </if>
             <if test="createdBeginDt != null">
-                and gmt_create <![CDATA[ >= ]]> #{createdBeginDt,jdbcType=TIMESTAMP}
+                and DATE_FORMAT(gmt_create,'%Y-%m-%d') <![CDATA[ >= ]]> #{createdBeginDt,jdbcType=DATE}
             </if>
             <if test="createdEndDt != null">
-                and gmt_create <![CDATA[ <= ]]> #{createdEndDt,jdbcType=TIMESTAMP}
+                and DATE_FORMAT(gmt_create,'%Y-%m-%d') <![CDATA[ <= ]]> #{createdEndDt,jdbcType=DATE}
             </if>
             <if test="repaymentDt !=null">
                 and repayment_dt <![CDATA[ >= ]]> #{repaymentDt,jdbcType=DATE}

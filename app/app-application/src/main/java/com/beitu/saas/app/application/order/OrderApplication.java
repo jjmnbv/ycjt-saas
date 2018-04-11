@@ -510,7 +510,7 @@ public class OrderApplication {
     private SaasOrderListVo convertSaasOrderVo2SaasOrderListVo(SaasOrderVo saasOrderVo) {
         SaasOrderListVo orderListVo = new SaasOrderListVo();
         orderListVo.setOrderNumb(saasOrderVo.getOrderNumb());
-        orderListVo.setApplyDate(DateUtil.getDateTime(saasOrderVo.getGmtCreate()));
+        orderListVo.setApplyDate(DateUtil.getDate(saasOrderVo.getGmtCreate()));
         orderListVo.setCapital(saasOrderVo.getRealCapital().toString());
         orderListVo.setOrderStatus(OrderStatusEnum.getEnumByCode(saasOrderVo.getOrderStatus()).getMsg());
         orderListVo.setRemark(saasOrderVo.getRemark());
