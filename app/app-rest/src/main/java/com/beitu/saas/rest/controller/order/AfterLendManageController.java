@@ -71,7 +71,7 @@ public class AfterLendManageController {
         AfterLendOrderDetailResponse response = new AfterLendOrderDetailResponse();
         response.setOrderNumb(req.getOrderNumb());
         response.setContractTitle(SaasContractEnum.EXTEND_CONTRACT.getMsg());
-        response.setContractUrl(configUtil.getAddressURLPrefix() + TermUrlConsts.pdfViewUrl + "?file=/" + SaasContractEnum.EXTEND_CONTRACT.getUrl()
+        response.setContractUrl(configUtil.getAddressURLPrefix() + SaasContractEnum.EXTEND_CONTRACT.getUrl()
                 + "?token=" + RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getToken() + "&platform=web" + (configUtil.isServerTest() ? "&test=1" : ""));
         return new DataApiResponse<>(response);
     }

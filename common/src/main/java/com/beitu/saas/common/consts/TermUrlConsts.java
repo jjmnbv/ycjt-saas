@@ -7,12 +7,6 @@ package com.beitu.saas.common.consts;
  */
 public interface TermUrlConsts {
 
-    String borrowTermUrl = "terms/borrowTerm.html";
-
-    String extendTermUrl = "terms/extendTerm.html";
-
-    String authorizationUrl = "terms/authorization.html";
-
     String pdfViewUrl = "h5/pdfview/web/viewer.html";
 
 }
