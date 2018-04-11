@@ -151,7 +151,6 @@ public class OrderApplication {
         SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(saasOrderApplicationVo.getChannelCode());
         SaasAdmin saasAdmin = saasAdminService.getSaasAdminByAdminCode(saasChannelEntity.getChargePersonCode());
         SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode);
-
         sendApplication.sendNotifyMessage(saasOrderApplicationVo.getMerchantCode(), saasAdmin.getMobile(), new HashMap(4) {{
             put("channel_name", saasChannelEntity.getChannelName());
             put("money", saasOrderApplicationVo.getRealCapital());
@@ -176,6 +175,20 @@ public class OrderApplication {
         updateSaasOrder.setTermUrl(saasOrderApplicationVo.getTermUrl());
         updateSaasOrder.setExpireDate(DateUtil.addDate(new Date(), 20));
         saasOrderService.updateById(updateSaasOrder);
+
+        String borrowerCode = saasOrderApplicationVo.getBorrowerCode();
+        SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCode(borrowerCode);
+        sendApplication.sendNotifyMessage(saasOrderApplicationVo.getMerchantCode(), saasBorrowerVo.getMobile(), null, SaasSmsTypeEnum.SAAS_0004);
+        SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(saasOrderApplicationVo.getChannelCode());
+        SaasAdmin saasAdmin = saasAdminService.getSaasAdminByAdminCode(saasChannelEntity.getChargePersonCode());
+        SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode);
+        sendApplication.sendNotifyMessage(saasOrderApplicationVo.getMerchantCode(), saasAdmin.getMobile(), new HashMap(4) {{
+            put("channel_name", saasChannelEntity.getChannelName());
+            put("money", saasOrderApplicationVo.getRealCapital());
+            put("name", saasBorrowerRealInfoVo.getName());
+            put("phone", saasBorrowerVo.getMobile());
+        }}, SaasSmsTypeEnum.SAAS_0005);
+
     }
 
     public List<H5OrderListVo> listH5Order(String borrowerCode, String merchantCode) {
