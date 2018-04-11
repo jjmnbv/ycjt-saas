@@ -13,6 +13,7 @@ import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
 import com.beitu.saas.borrower.client.SaasBorrowerService;
 import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
 import com.beitu.saas.borrower.domain.SaasBorrowerVo;
+import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.enums.RestCodeEnum;
 import com.beitu.saas.common.utils.DateUtil;
@@ -75,6 +76,9 @@ public class ContractController {
     @Autowired
     private OrderCalculateApplication orderCalculateApplication;
 
+    @Autowired
+    private ConfigUtil configUtil;
+
     //@SignIgnore
     @RequestMapping(value = "/order/extend", method = RequestMethod.POST)
     @ResponseBody
@@ -116,7 +120,7 @@ public class ContractController {
             String sealUrl = contractApplication.getUserSealUrl(userCode);
             if (StringUtils.isNotEmpty(sealUrl)) {
                 response.setBorrowStamp(Boolean.TRUE);
-                response.setBorrowStampUrl(sealUrl);
+                response.setBorrowStampUrl(configUtil.getAddressURLPrefix() + sealUrl);
             }
         }
         if (StringUtils.isNotEmpty(merchantCode)) {
@@ -131,7 +135,7 @@ public class ContractController {
             String sealUrl = contractApplication.getUserSealUrl(userCode);
             if (StringUtils.isNotEmpty(sealUrl)) {
                 response.setLenderStamp(Boolean.TRUE);
-                response.setLenderStampUrl(sealUrl);
+                response.setLenderStampUrl(configUtil.getAddressURLPrefix() + sealUrl);
             }
             if (StringUtils.isNotEmpty(merchantContractInfoVo.getContractUrl())) {
                 response.setLenderStamp(Boolean.TRUE);
@@ -158,7 +162,7 @@ public class ContractController {
             String sealUrl = contractApplication.getUserSealUrl(userCode);
             if (StringUtils.isNotEmpty(sealUrl)) {
                 response.setUserStamp(Boolean.TRUE);
-                response.setUserStampUrl(sealUrl);
+                response.setUserStampUrl(configUtil.getAddressURLPrefix() + sealUrl);
             }
             return new DataApiResponse(response);
         }
@@ -175,11 +179,11 @@ public class ContractController {
             String sealUrl = contractApplication.getUserSealUrl(userCode);
             if (StringUtils.isNotEmpty(sealUrl)) {
                 response.setUserStamp(Boolean.TRUE);
-                response.setUserStampUrl(sealUrl);
+                response.setUserStampUrl(configUtil.getAddressURLPrefix() + sealUrl);
             }
             if (StringUtils.isNotEmpty(merchantContractInfoVo.getContractUrl())) {
                 response.setUserStamp(Boolean.TRUE);
-                response.setUserStampUrl(merchantContractInfoVo.getContractUrl());
+                response.setUserStampUrl(configUtil.getAddressURLPrefix() + merchantContractInfoVo.getContractUrl());
             }
         }
         return new DataApiResponse(response);
@@ -230,7 +234,7 @@ public class ContractController {
             String sealUrl = contractApplication.getUserSealUrl(userCode);
             if (StringUtils.isNotEmpty(sealUrl)) {
                 response.setBorrowStamp(Boolean.TRUE);
-                response.setBorrowStampUrl(sealUrl);
+                response.setBorrowStampUrl(configUtil.getAddressURLPrefix() + sealUrl);
             }
         }
         if (StringUtils.isNotEmpty(merchantCode)) {
@@ -245,11 +249,11 @@ public class ContractController {
             String sealUrl = contractApplication.getUserSealUrl(userCode);
             if (StringUtils.isNotEmpty(sealUrl)) {
                 response.setLenderStamp(Boolean.TRUE);
-                response.setLenderStampUrl(sealUrl);
+                response.setLenderStampUrl(configUtil.getAddressURLPrefix() + sealUrl);
             }
             if (StringUtils.isNotEmpty(merchantContractInfoVo.getContractUrl())) {
                 response.setLenderStamp(Boolean.TRUE);
-                response.setLenderStampUrl(merchantContractInfoVo.getContractUrl());
+                response.setLenderStampUrl(configUtil.getAddressURLPrefix() + merchantContractInfoVo.getContractUrl());
             }
         }
         return new DataApiResponse(response);

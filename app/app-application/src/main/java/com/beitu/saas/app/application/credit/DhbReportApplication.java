@@ -102,7 +102,6 @@ public class DhbReportApplication {
         if (saasBorrowerRealInfoVo != null) {
             name = saasBorrowerRealInfoVo.getName();
         }
-        saasCreditHistoryService.addExpenditureCreditHistory(merchantCode, name, CreditConsumeEnum.RISK_CARRIER);
 
         if (recordId == null) {
             throw new ApplicationException(CreditErrorCodeEnum.CREDIT_BMP_GENERATE_ERROR, "credit_bmp插入失败");
@@ -114,6 +113,7 @@ public class DhbReportApplication {
         }
         saasCreditBmpDetailService.batchAddSaasCreditBmpDetailVo(list);
         saasCreditBmpService.updateSuccess(recordId);
+        saasCreditHistoryService.addExpenditureCreditHistory(merchantCode, name, CreditConsumeEnum.RISK_CARRIER);
 
         List<SaasCreditBmpDetailVo> saasCreditBmpDetailVoList = saasCreditBmpDetailService.listByRecordId(recordId);
         Map<String, String> merchantAddressMap = new HashMap(saasCreditBmpDetailVoList.size());
