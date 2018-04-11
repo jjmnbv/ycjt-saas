@@ -86,6 +86,7 @@ public class OrderBillDetailApplication {
         if (querySaasOrderBillDetailVo == null) {
             return null;
         }
+        querySaasOrderBillDetailVo.setDestroy(Boolean.FALSE);
         List<SaasOrderBillDetailVo> saasOrderBillDetailVoList = saasOrderBillDetailService.listByQueryOrderBillDetailVoAndPage(querySaasOrderBillDetailVo, page);
         if (CollectionUtils.isEmpty(saasOrderBillDetailVoList)) {
             return null;
@@ -201,7 +202,7 @@ public class OrderBillDetailApplication {
         addSaasOrderBillDetail.setTotalInterestRatio(saasOrderVo.getTotalInterestRatio());
         addSaasOrderBillDetail.setLateInterestRatio(saasOrderVo.getLateInterestRatio());
         if (addSaasOrderBillDetail.getCreatedDt() == null) {
-            addSaasOrderBillDetail.setCreatedDt(saasOrderVo.getCreatedDt());
+            addSaasOrderBillDetail.setCreatedDt(new Date());
         }
         addSaasOrderBillDetail.setRepaymentDt(saasOrderVo.getRepaymentDt());
         addSaasOrderBillDetail.setInterest(saasOrderVo.getTotalInterestFee());

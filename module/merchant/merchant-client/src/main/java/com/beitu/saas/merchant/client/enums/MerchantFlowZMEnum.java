@@ -1,15 +1,37 @@
 package com.beitu.saas.merchant.client.enums;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 /**
  * @author xiaochong
  * @create 2018/4/9 下午1:26
  * @description
  */
 public enum MerchantFlowZMEnum {
-    ZM_610_DOWN(1L, "610分以下(8点券/单)"),
-    ZM_610_UP(2L, "610分以下(10点券/单)");
+    SHARED_ZM_610_DOWN(1L, "610分以下(8点券/单)", 1L),
+    SHARED_ZM_610_UP(2L, "610(含)分以上(10点券/单)", 1L),
+    ALONE_ZM_610_DOWN(1L, "610分以下(16点券/单)", 2L),
+    ALONE_ZM_610_UP(2L, "610(含)分以上(20点券/单)", 2L);
     private Long key;
     private String value;
+    private Long flowType;
+
+
+    MerchantFlowZMEnum(Long key, String value, Long flowType) {
+        this.key = key;
+        this.value = value;
+        this.flowType = flowType;
+    }
+
+    public Long getFlowType() {
+        return flowType;
+    }
+
+    public void setFlowType(Long flowType) {
+        this.flowType = flowType;
+    }
 
     MerchantFlowZMEnum(Long key, String value) {
         this.key = key;
@@ -48,5 +70,18 @@ public enum MerchantFlowZMEnum {
             }
         }
         return false;
+    }
+
+    public static List getEnumMapByFlowType(Long flowType) {
+        List list = new ArrayList();
+        for (MerchantFlowZMEnum item : MerchantFlowZMEnum.values()) {
+            if (item.getFlowType().equals(flowType)) {
+                list.add(new HashMap() {{
+                    put("key", item.getKey());
+                    put("value", item.getValue());
+                }});
+            }
+        }
+        return list;
     }
 }

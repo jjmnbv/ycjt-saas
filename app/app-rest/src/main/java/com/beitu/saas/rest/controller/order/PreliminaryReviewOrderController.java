@@ -81,7 +81,7 @@ public class PreliminaryReviewOrderController {
         response.setOrderNumb(req.getOrderNumb());
         OrderStatusEnum orderStatusEnum = saasOrderService.getOrderStatusByOrderNumb(req.getOrderNumb());
         if (orderStatusEnum != null) {
-            response.setOrderStatus(orderStatusEnum.getCode());
+            response.setOrderStatus(orderStatusEnum.getMsg());
         }
         return new DataApiResponse<>(response);
     }

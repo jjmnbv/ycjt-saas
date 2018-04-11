@@ -12,7 +12,7 @@ public class ButtonPermissionConsts {
     public static final String RECOMMEND_GRAB = "1c41fe92257a4391";// "推荐借款抢单"),
     public static final String RECOMMEND_REJECT = "3ea3d82389e321eb";// "推荐借款拒绝"),
 
-    public static final String PRELIMINARY_REVIEWER_GET_ORDER = "65b318b3e14c9203";// "初审领单"),
+    public static final String PRELIMINARY_REVIEWER_GET_ORDER = "92e0275249baf2b4";// "初审领单"),
     public static final String PRELIMINARY_REVIEWER_PASS = "6ef62ed1a2e1990d";// "通过初审"),
     public static final String PRELIMINARY_REVIEWER_REJECT = "b33ee3ff7b07ec29";// "初审驳回"),
     public static final String PRELIMINARY_REVIEWER_REFUSE = "1d5f845c6ab50db6";// "初审拒绝"),

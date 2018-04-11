@@ -22,7 +22,7 @@ public class CreditWorkInfoResponse implements ResponseData {
      * 月收入
      */
     @ApiModelProperty(value = "月收入")
-    private Integer salary;
+    private String salary;
     /**
      * 发薪日
      */
@@ -57,11 +57,11 @@ public class CreditWorkInfoResponse implements ResponseData {
         this.careerType = careerType;
     }
 
-    public Integer getSalary() {
+    public String getSalary() {
         return salary;
     }
 
-    public void setSalary(Integer salary) {
+    public void setSalary(String salary) {
         this.salary = salary;
     }
 

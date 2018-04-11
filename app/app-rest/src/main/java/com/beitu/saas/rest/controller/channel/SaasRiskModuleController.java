@@ -1,10 +1,8 @@
 package com.beitu.saas.rest.controller.channel;
 
-import com.beitu.saas.app.annotations.SignIgnore;
-import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.application.channel.SaasRiskModuleApplication;
+import com.beitu.saas.app.application.channel.vo.SaasModuleVo;
 import com.beitu.saas.channel.domain.SaasModuleItemVo;
-import com.beitu.saas.channel.domain.SaasModuleVo;
 import com.beitu.saas.channel.enums.ChannelErrorCodeEnum;
 import com.beitu.saas.channel.param.SaasModuleItemParam;
 import com.beitu.saas.channel.param.SaasModuleParam;
@@ -45,7 +43,6 @@ public class SaasRiskModuleController {
      *
      * @return
      */
-    @SignIgnore
     @RequestMapping(value = "/moduleList", method = RequestMethod.POST)
     @ApiOperation(value = "风控模块列表", response = SaasModuleResponse.class)
     public Response getModuleList() {
@@ -57,7 +54,6 @@ public class SaasRiskModuleController {
     /**
      * 风控模块详情表查询
      */
-    @SignIgnore
     @RequestMapping(value = "/moduleItemlList/{moduleCode}", method = RequestMethod.POST)
     @ApiOperation(value = "风控模块字段列表", response = SaasModuleItemResponse.class)
     public Response getModuleItemList(@PathVariable(value = "moduleCode") String moduleCode) {
@@ -72,7 +68,6 @@ public class SaasRiskModuleController {
      * @param saasRiskModuleRequestParam
      * @return
      */
-    @SignIgnore
     @RequestMapping(value = "/addModule", method = RequestMethod.POST)
     @ApiOperation(value = "新建风控模块", response = Response.class)
     public Response addModule(@RequestBody SaasRiskModuleRequestParam saasRiskModuleRequestParam) {
@@ -94,7 +89,6 @@ public class SaasRiskModuleController {
      * @param saasRiskModuleItemRequestParam
      * @return
      */
-    @SignIgnore
     @RequestMapping(value = "/addModuleItem", method = RequestMethod.POST)
     @ApiOperation(value = "新建风控模块字段", response = Response.class)
     public Response addModuleItem(@RequestBody SaasRiskModuleItemRequestParam saasRiskModuleItemRequestParam) {

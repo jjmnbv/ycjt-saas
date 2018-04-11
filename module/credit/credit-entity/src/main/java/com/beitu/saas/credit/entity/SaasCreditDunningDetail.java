@@ -16,10 +16,6 @@ public class SaasCreditDunningDetail extends BaseEntity {
      */
     private Long recordId;
     /**
-     * 电话邦催收数据查询唯一标识
-     */
-    private String sid;
-    /**
      * 总通话号码数
      */
     private Integer callTelTotalNums;
@@ -83,15 +79,6 @@ public class SaasCreditDunningDetail extends BaseEntity {
 
     public SaasCreditDunningDetail setRecordId(Long recordId) {
         this.recordId = recordId;
-        return this;
-    }
-
-    public String getSid() {
-        return this.sid;
-    }
-
-    public SaasCreditDunningDetail setSid(String sid) {
-        this.sid = sid;
         return this;
     }
 

@@ -4,8 +4,7 @@ import com.beitu.saas.order.dao.SaasOrderBillDetailDao;
 import com.beitu.saas.order.entity.SaasOrderBillDetail;
 import com.beitu.saas.order.vo.LoanDataDetailVo;
 import com.beitu.saas.order.vo.LoanStateDetailVo;
-import com.beitu.saas.order.vo.NoRepayOrderVo;
-import com.beitu.saas.order.vo.OverdueOrderVo;
+import com.beitu.saas.order.vo.DashboardOrderVo;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.base.AbstractBaseMapper;
 import org.springframework.stereotype.Repository;
@@ -65,7 +64,7 @@ public class SaasOrderBillDetailDaoImpl extends AbstractBaseMapper<SaasOrderBill
     }
 
     @Override
-    public List<NoRepayOrderVo> selectNoRepayOrder(String merchantCode, Page page) {
+    public List<DashboardOrderVo> selectNoRepayOrder(String merchantCode, Page page) {
         Map<String, Object> map = new HashMap<>(4);
         map.put("merchantCode", merchantCode);
         if (page != null) {
@@ -83,7 +82,7 @@ public class SaasOrderBillDetailDaoImpl extends AbstractBaseMapper<SaasOrderBill
     }
 
     @Override
-    public List<OverdueOrderVo> selectOverdueOrder(String merchantCode, Page page) {
+    public List<DashboardOrderVo> selectOverdueOrder(String merchantCode, Page page) {
         Map<String, Object> map = new HashMap<>(4);
         map.put("merchantCode", merchantCode);
         if (page != null) {

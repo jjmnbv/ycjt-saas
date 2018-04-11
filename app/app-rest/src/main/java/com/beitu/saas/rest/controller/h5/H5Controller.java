@@ -117,6 +117,7 @@ public class H5Controller {
     @ParamsValidate
     @RequestMapping(value = "/user/login", method = RequestMethod.POST)
     @ResponseBody
+    @IgnoreRepeatRequest
     @ApiOperation(value = "登录", response = UserLoginSuccessResponse.class)
     public DataApiResponse<UserLoginSuccessResponse> login(@RequestBody @Valid UserLoginRequest req, HttpServletRequest request) {
         String verifyCode = redisClient.get(RedisKeyConsts.H5_SAVE_LOGIN_VERIFYCODE_KEY, req.getMobile());
@@ -199,19 +200,21 @@ public class H5Controller {
             response.setRealCapital(saasOrderApplicationVo.getRealCapital());
             response.setTotalInterestRatio(saasOrderApplicationVo.getTotalInterestRatio());
         }
+        String token = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getToken();
         response.setNeedRealName(borrowerApplication.needRealName(borrowerCode));
         if (contractApplication.needDoLicenseContractSign(borrowerCode)) {
             response.setContractTitle1(SaasContractEnum.LICENSE_CONTRACT.getMsg());
-            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LICENSE_CONTRACT.getUrl());
+            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LICENSE_CONTRACT.getUrl() + "?token=" + token + "&platform=h5" + (configUtil.isServerTest() ? "&test=1" : ""));
             response.setContractTitle2(SaasContractEnum.LOAN_CONTRACT.getMsg());
-            response.setContractUrl2(configUtil.getAddressURLPrefix() + SaasContractEnum.LOAN_CONTRACT.getUrl());
+            response.setContractUrl2(configUtil.getAddressURLPrefix() + SaasContractEnum.LOAN_CONTRACT.getUrl() + "?token=" + token + "&platform=h5" + (configUtil.isServerTest() ? "&test=1" : ""));
         } else {
             response.setContractTitle1(SaasContractEnum.LOAN_CONTRACT.getMsg());
-            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LOAN_CONTRACT.getUrl());
+            response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LOAN_CONTRACT.getUrl() + "?token=" + token + "&platform=h5" + (configUtil.isServerTest() ? "&test=1" : ""));
         }
         return new DataApiResponse<>(response);
     }
 
+    @IgnoreRepeatRequest
     @ParamsValidate
     @RequestMapping(value = "/credit/apply/info/save", method = RequestMethod.POST)
     @ResponseBody
@@ -230,12 +233,12 @@ public class H5Controller {
         if (contractApplication.needDoLicenseContractSign(borrowerCode)) {
             ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, borrowerCode, null, ContractTypeEnum.BORROWER_DO_AUTHORIZATION_CONTRACT_SIGN));
         }
-        String orderNumb = saasOrderService.getReviewerRefuseOrderNumb(borrowerCode, saasBorrowerVo.getChannelCode());
+        String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
+        String orderNumb = saasOrderService.getReviewerRefuseOrderNumb(borrowerCode, channelCode);
 
         SaasOrderApplicationVo addOrderApplication = new SaasOrderApplicationVo();
         addOrderApplication.setBorrowerCode(borrowerCode);
         addOrderApplication.setOrderNumb(orderNumb);
-        String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
         addOrderApplication.setChannelCode(channelCode);
         addOrderApplication.setMerchantCode(saasBorrowerVo.getMerchantCode());
         addOrderApplication.setRealCapital(req.getRealCapital());
@@ -259,6 +262,7 @@ public class H5Controller {
         return new DataApiResponse<>(new CreditPersonalInfoResponse(saasBorrowerPersonalInfoVo));
     }
 
+    @IgnoreRepeatRequest
     @RequestMapping(value = "/credit/personal/info/save", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "保存风控模块个人信息", response = ApiResponse.class)
@@ -266,6 +270,7 @@ public class H5Controller {
         String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
         SaasBorrowerPersonalInfo saasBorrowerPersonalInfo = new SaasBorrowerPersonalInfo();
         BeanUtils.copyProperties(req, saasBorrowerPersonalInfo);
+        saasBorrowerPersonalInfo.setWechatCode(req.getQq());
         saasBorrowerPersonalInfo.setBorrowerCode(borrowerCode);
 
         String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
@@ -295,6 +300,7 @@ public class H5Controller {
         return new DataApiResponse<>(new CreditIdentityInfoResponse(saasBorrowerIdentityInfoVo, prefixUrl));
     }
 
+    @IgnoreRepeatRequest
     @RequestMapping(value = "/credit/identity/info/save", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "保存风控模块身份证信息", response = ApiResponse.class)
@@ -328,6 +334,7 @@ public class H5Controller {
         return new DataApiResponse<>(new CreditWorkInfoResponse(saasBorrowerWorkInfoVo));
     }
 
+    @IgnoreRepeatRequest
     @RequestMapping(value = "/credit/work/info/save", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "保存风控模块工作信息", response = ApiResponse.class)
@@ -360,6 +367,7 @@ public class H5Controller {
         return new DataApiResponse<>(new CreditEmergentContactResponse(saasBorrowerEmergentContactVo));
     }
 
+    @IgnoreRepeatRequest
     @ParamsValidate
     @RequestMapping(value = "/credit/emergent/contact/save", method = RequestMethod.POST)
     @ResponseBody
@@ -424,7 +432,8 @@ public class H5Controller {
             response.setHeaderTitle("确认借款");
             if (contractApplication.needDoLicenseContractSign(orderDetailVo.getBorrowerCode())) {
                 response.setContractTitle1(SaasContractEnum.LICENSE_CONTRACT.getMsg());
-                response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LICENSE_CONTRACT.getUrl());
+                response.setContractUrl1(configUtil.getAddressURLPrefix() + SaasContractEnum.LICENSE_CONTRACT.getUrl()
+                        + "?token=" + RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getToken() + "&platform=h5" + (configUtil.isServerTest() ? "&test=1" : ""));
                 response.setContract1DownloadUrl("");
                 response.setContractTitle2(SaasContractEnum.LOAN_CONTRACT.getMsg());
                 response.setContractUrl2(contractUrl.toString());

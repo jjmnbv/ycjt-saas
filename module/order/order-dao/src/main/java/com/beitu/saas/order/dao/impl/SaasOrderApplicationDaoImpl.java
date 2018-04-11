@@ -6,6 +6,7 @@ import com.beitu.saas.order.entity.SaasOrderApplication;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,7 +31,14 @@ public class SaasOrderApplicationDaoImpl extends AbstractBaseMapper<SaasOrderApp
         Map<String, Object> params = new HashMap<>(4);
         params.put("orderNumb", orderNumb);
         params.put("borrowerCode", borrowerCode);
-        return this.getSqlSession().update(this.getStatement(".updateOrderNumbByBorrowerCode"), borrowerCode);
+        return this.getSqlSession().update(this.getStatement(".updateOrderNumbByBorrowerCode"), params);
     }
 
+    @Override
+    public List<SaasOrderApplication> selectAllByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb) {
+        Map<String, Object> params = new HashMap<>(4);
+        params.put("borrowerCode", borrowerCode);
+        params.put("orderNumb", orderNumb);
+        return this.getSqlSession().selectList(this.getStatement(".selectAllByBorrowerCodeAndOrderNumb"), params);
+    }
 }

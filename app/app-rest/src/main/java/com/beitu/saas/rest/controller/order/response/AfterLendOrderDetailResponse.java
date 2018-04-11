@@ -8,10 +8,14 @@ import io.swagger.annotations.ApiModel;
  * @create 2018/3/21 下午3:59
  * @description
  */
-@ApiModel(value = "订单风控信息")
+@ApiModel(value = "贷后管理订单详情")
 public class AfterLendOrderDetailResponse implements ResponseData {
 
     private String orderNumb;
+
+    private String contractTitle;
+
+    private String contractUrl;
 
     public String getOrderNumb() {
         return orderNumb;
@@ -19,5 +23,21 @@ public class AfterLendOrderDetailResponse implements ResponseData {
 
     public void setOrderNumb(String orderNumb) {
         this.orderNumb = orderNumb;
+    }
+
+    public String getContractTitle() {
+        return contractTitle;
+    }
+
+    public void setContractTitle(String contractTitle) {
+        this.contractTitle = contractTitle;
+    }
+
+    public String getContractUrl() {
+        return contractUrl;
+    }
+
+    public void setContractUrl(String contractUrl) {
+        this.contractUrl = contractUrl;
     }
 }

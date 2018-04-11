@@ -24,9 +24,9 @@ public class SaasBorrowerPersonalInfoVo implements ResponseData, Serializable {
      */
     private String orderNumb;
     /**
-     * QQ
+     * 微信号
      */
-    private String qq;
+    private String wechatCode;
     /**
      * 学历
      */
@@ -47,10 +47,6 @@ public class SaasBorrowerPersonalInfoVo implements ResponseData, Serializable {
      * 芝麻分
      */
     private Integer zmCreditScore;
-    /**
-     * 是否成功
-     */
-    private Boolean success;
 
     public Long getSaasBorrowerPersonalInfoId() {
         return saasBorrowerPersonalInfoId;
@@ -77,12 +73,12 @@ public class SaasBorrowerPersonalInfoVo implements ResponseData, Serializable {
         this.orderNumb = orderNumb;
     }
 
-    public String getQq() {
-        return this.qq;
+    public String getWechatCode() {
+        return this.wechatCode;
     }
 
-    public void setQq(String qq) {
-        this.qq = qq;
+    public void setWechatCode(String wechatCode) {
+        this.wechatCode = wechatCode;
     }
 
     public Integer getEducation() {
@@ -123,14 +119,6 @@ public class SaasBorrowerPersonalInfoVo implements ResponseData, Serializable {
 
     public void setZmCreditScore(Integer zmCreditScore) {
         this.zmCreditScore = zmCreditScore;
-    }
-
-    public Boolean getSuccess() {
-        return this.success;
-    }
-
-    public void setSuccess(Boolean success) {
-        this.success = success;
     }
 
     public static SaasBorrowerPersonalInfoVo convertEntityToVO(SaasBorrowerPersonalInfo saasBorrowerPersonalInfo) {

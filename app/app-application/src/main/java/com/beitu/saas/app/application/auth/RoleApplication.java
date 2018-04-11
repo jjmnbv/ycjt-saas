@@ -6,10 +6,14 @@ import com.beitu.saas.auth.entity.SaasOperationButton;
 import com.beitu.saas.auth.entity.SaasRole;
 import com.beitu.saas.auth.enums.PermissionTypeEnum;
 import com.beitu.saas.auth.service.*;
+import com.beitu.saas.common.consts.RedisKeyConsts;
+import com.fqgj.base.services.redis.RedisClient;
 import com.fqgj.common.utils.CollectionUtils;
+import com.fqgj.common.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +41,8 @@ public class RoleApplication {
     @Autowired
     private SaasAdminService saasAdminService;
 
+    @Autowired
+    private RedisClient redisClient;
 
     @Transactional(rollbackFor = Exception.class)
     public Long addRoleAndEmpower(String roleName, String currentName, String merchantCode, List menuIds, List buttonIds) {
@@ -101,9 +107,28 @@ public class RoleApplication {
         return ((SaasRole) saasRoleService.selectById(saasAdminRole.getRoleId()));
     }
 
+    public Boolean enableAdminRole(String adminCode) {
+        SaasRole saasRole = this.getRoleByAdminCode(adminCode);
+        return saasRole.getEnabled();
+    }
+
     public Long getMerchantDefaultRole(String merchantCode) {
         SaasAdmin saasAdmin = saasAdminService.getDefaultAdminByMerchantCode(merchantCode);
         return saasAdminRoleService.getRoleIdByAdminCode(saasAdmin.getCode());
+
+    }
+
+    public void disableRole(Long roleId) {
+        List<String> list = saasAdminRoleService.getAdminCodeByRoleId(roleId);
+        if (CollectionUtils.isNotEmpty(list)) {
+            list.forEach(v -> {
+                String oldToken = redisClient.get(RedisKeyConsts.SAAS_TOKEN_KEY, v);
+                if (StringUtils.isNotEmpty(oldToken)) {
+                    redisClient.del(RedisKeyConsts.SAAS_TOKEN_KEY, oldToken);
+                    redisClient.del(RedisKeyConsts.SAAS_TOKEN_KEY, v);
+                }
+            });
+        }
 
     }
 }

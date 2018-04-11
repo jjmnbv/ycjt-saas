@@ -1,6 +1,7 @@
 package com.beitu.saas.app.application.credit;
 
 import com.beitu.saas.app.application.credit.pojo.JuxinliCallbackDataPojo;
+import com.beitu.saas.app.enums.H5BrowserTypeEnum;
 import com.beitu.saas.app.enums.SaasLoanPlatformEnum;
 import com.beitu.saas.borrower.client.SaasBorrowerLoanCrawlService;
 import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
@@ -8,7 +9,6 @@ import com.beitu.saas.borrower.client.SaasBorrowerService;
 import com.beitu.saas.borrower.domain.SaasBorrowerLoanCrawlVo;
 import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
 import com.beitu.saas.borrower.domain.SaasBorrowerVo;
-import com.beitu.saas.borrower.entity.SaasBorrowerRealInfo;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.consts.TimeConsts;
@@ -28,8 +28,6 @@ import com.beitu.saas.intergration.risk.param.LoanPlatformQueryParam;
 import com.beitu.saas.intergration.risk.param.LoanPlatformTaskIdPrefixParam;
 import com.beitu.saas.intergration.risk.param.LoanPlatformValidatePrefixParam;
 import com.beitu.saas.intergration.risk.pojo.LoanPlatformQueryPojo;
-import com.beitu.saas.order.client.SaasOrderService;
-import com.beitu.saas.risk.domain.carrier.h5.enums.CarrierH5TypeEnum;
 import com.fqgj.base.services.redis.RedisClient;
 import com.fqgj.common.utils.JSONUtils;
 import com.fqgj.common.utils.MD5;
@@ -78,7 +76,7 @@ public class LoanPlatformApplication {
     @Autowired
     private SaasCreditHistoryService saasCreditHistoryService;
 
-    public String getLoanPlatformUrl(String borrowerCode, String channelCode, SaasLoanPlatformEnum saasLoanPlatformEnum) {
+    public String getLoanPlatformUrl(String borrowerCode, String channelCode, SaasLoanPlatformEnum saasLoanPlatformEnum, Integer type) {
         String userCode = borrowerCode;
         String website = saasLoanPlatformEnum.getWebsite();
         String value = redisClient.get(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, userCode, website);
@@ -112,6 +110,10 @@ public class LoanPlatformApplication {
         if (!Objects.equals(LoanPlatformCrawlingCodeEnum.SUCCESS.getCode(), resultDto.getCode())) {
             LOGGER.warn("获取{}借贷平台地址失败......taskId:{};msg:{}", saasLoanPlatformEnum.getMsg(), taskId, resultDto.getMsg());
             throw new ApplicationException("获取借贷平台地址失败,请重试");
+        }
+
+        if (type != null && H5BrowserTypeEnum.WEIXIN.getCode().equals(type)) {
+            redisClient.set(RedisKeyConsts.SAAS_OPEN_JXL_H5_BROWSER_TYPE, type, TimeConsts.TEN_MINUTES, taskId);
         }
         return resultDto.getUrl();
     }
@@ -177,12 +179,21 @@ public class LoanPlatformApplication {
         }
         String prefix = getPrefixFromTaskId(taskId);
         String userCode = getUserCodeFromTaskId(taskId);
+
         LoanPlatformValidatePrefixParam param = new LoanPlatformValidatePrefixParam(timestamp, userCode, website, prefix);
         if (!riskIntergrationService.validateLoanPlatformCallbackPrefix(param)) {
             return "redirect:" + "";
         }
         redisClient.set(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, timestamp, TimeConsts.THREE_MINUTE, userCode, website);
-        return "redirect:" + configUtil.getAddressURLPrefix() + configUtil.getH5AddressURLPrefix()
+        Object Type = redisClient.get(RedisKeyConsts.SAAS_OPEN_JXL_H5_BROWSER_TYPE, taskId);
+        if (Type != null) {
+            Integer browserType = Integer.parseInt(Type.toString());
+            if (H5BrowserTypeEnum.WEIXIN.getCode().equals(browserType)) {
+                return "redirect:" + configUtil.getH5AddressURL()
+                        + "?channel=" + channelCode + "#/formList";
+            }
+        }
+        return "redirect:" + configUtil.getH5AddressURL()
                 + "?channel=" + channelCode + "#/thirdLoading";
     }
 

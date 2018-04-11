@@ -20,6 +20,7 @@ import com.beitu.saas.sms.ro.BatchSmsSendRquestRO;
 import com.beitu.saas.sms.ro.Result;
 import com.beitu.saas.sms.ro.SingleSmsSendRequestRO;
 import com.beitu.saas.sms.ro.SmsMsgBatchContentRO;
+import com.fqgj.common.utils.StringUtils;
 import com.fqgj.exception.common.ApplicationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,13 +67,13 @@ public class SendApplication {
      * @param code               验证码
      * @param verifyCodeTypeEnum 验证码内容
      */
-    public void sendVerifyCode(String mobile, String code, VerifyCodeTypeEnum verifyCodeTypeEnum) {
+    public void sendVerifyCode(String mobile, String code, String sign, VerifyCodeTypeEnum verifyCodeTypeEnum) {
         SingleSmsSendRequestRO ro = new SingleSmsSendRequestRO();
         ro.setPhone(mobile);
         ro.setBizCode(verifyCodeTypeEnum.getType());
         ro.setReplaceParam(new HashMap<String, String>(2) {{
             put("VERIFY_CODE", code);
-            put("sign", "贝途科技");
+            put("sign", StringUtils.isNotEmpty(sign) ? sign : "贝途科技");
         }});
         ro.setType(1);
         Result<Boolean> result = smsMsgService.send(ro);
@@ -97,6 +98,9 @@ public class SendApplication {
             return;
         }
         SaasMerchantVo saasMerchantVo = saasMerchantService.getByMerchantCode(merchantCode);
+        if (map == null) {
+            map = new HashMap(4);
+        }
         map.put("sign", saasMerchantVo.getCompanyName());
         SingleSmsSendRequestRO ro = new SingleSmsSendRequestRO();
         ro.setPhone(mobile);

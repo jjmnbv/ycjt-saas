@@ -6,12 +6,13 @@ import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.application.credit.CarrierApplication;
 import com.beitu.saas.app.application.credit.vo.CarrierH5CallbackVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
+import com.beitu.saas.app.enums.H5BrowserTypeEnum;
 import com.beitu.saas.borrower.client.SaasBorrowerService;
-import com.beitu.saas.borrower.consts.UserProfileConsts;
 import com.beitu.saas.borrower.domain.SaasBorrowerVo;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.consts.TimeConsts;
+import com.beitu.saas.rest.controller.credit.request.H5GetCarrierUrlRequest;
 import com.beitu.saas.rest.controller.credit.response.CarrierH5Response;
 import com.beitu.saas.risk.domain.carrier.h5.enums.CarrierH5StatusEnum;
 import com.beitu.saas.risk.domain.carrier.h5.enums.CarrierH5TypeEnum;
@@ -28,15 +29,13 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,9 +68,10 @@ public class CarrierController {
     @RequestMapping(value = "/h5/get", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "H5运营商认证地址获取接口", response = CarrierH5Response.class)
-    public DataApiResponse<CarrierH5Response> getCarrierH5() {
+    public DataApiResponse<CarrierH5Response> getCarrierH5(@RequestBody @Valid H5GetCarrierUrlRequest req) {
         SaasBorrowerVo saasBorrowerVo = RequestLocalInfo.getCurrentAdmin().getSaasBorrower();
-        String url = carrierApplication.getCarrierH5Url(saasBorrowerVo.getBorrowerCode(), saasBorrowerVo.getMobile());
+        String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
+        String url = carrierApplication.getCarrierH5Url(channelCode, saasBorrowerVo.getBorrowerCode(), saasBorrowerVo.getMobile(), req.getType());
         return new DataApiResponse<>(new CarrierH5Response(url));
     }
 
@@ -79,16 +79,28 @@ public class CarrierController {
     @RequestMapping(value = "/h5/crawling", method = RequestMethod.GET)
     public String crawlingNotify(HttpServletRequest request) {
         String userId = request.getParameter("userId");
+        String[] codeArray = userId.split("_");
+        String channelCode = codeArray[0];
+        String borrowerCode = codeArray[1];
         String taskId = request.getParameter("outUniqueId");
         if (StringUtils.isNotEmpty(userId) && StringUtils.isNotEmpty(taskId)) {
-            String mobile = saasBorrowerService.getMobileByBorrowerCode(userId);
+            String mobile = saasBorrowerService.getMobileByBorrowerCode(borrowerCode);
             if (StringUtils.isNotEmpty(mobile)) {
                 if (carrierApplication.carrierTaskAndUserMatch(userId, mobile, taskId)) {
-                    redisClient.set(RedisKeyConsts.H5_CARRIER_CRAWLING, taskId, TimeConsts.TEN_MINUTES, userId);
+                    redisClient.set(RedisKeyConsts.H5_CARRIER_CRAWLING, taskId, TimeConsts.TEN_MINUTES, borrowerCode);
                 }
             }
         }
-        return "redirect:" + configUtil.getAddressURLPrefix() + configUtil.getH5AddressURLPrefix()
+
+        Object type = redisClient.get(RedisKeyConsts.SAAS_OPEN_CARRIER_H5_BROWSER_TYPE, borrowerCode);
+        if (type != null) {
+            Integer browserType = Integer.parseInt(type.toString());
+            if (H5BrowserTypeEnum.WEIXIN.getCode().equals(browserType)) {
+                return "redirect:" + configUtil.getH5AddressURL() + "?channel=" + channelCode
+                        + "#/formList";
+            }
+        }
+        return "redirect:" + configUtil.getH5AddressURL()
                 + "#/thirdLoading";
     }
 
@@ -157,7 +169,10 @@ public class CarrierController {
             }
         }
         CarrierH5CallbackVo h5CallbackVo = new CarrierH5CallbackVo();
-        h5CallbackVo.setUserCode(userId);
+        String[] codeArray = userId.split("_");
+        String channelCode = codeArray[0];
+        String borrowerCode = codeArray[1];
+        h5CallbackVo.setUserCode(borrowerCode);
         h5CallbackVo.setTaskId(outUniqueId);
         h5CallbackVo.setStatus(status);
         h5CallbackVo.setData(reportData);

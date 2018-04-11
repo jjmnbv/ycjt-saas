@@ -12,7 +12,6 @@
         <result column="friend_type" jdbcType="VARCHAR" property="friendType"/>
         <result column="friend_name" jdbcType="VARCHAR" property="friendName"/>
         <result column="friend_mobile" jdbcType="VARCHAR" property="friendMobile"/>
-        <result column="success" jdbcType="BIT" property="success"/>
         <result column="deleted" jdbcType="BIT" property="deleted"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
         <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
@@ -28,7 +27,6 @@
     friend_type,
     friend_name,
     friend_mobile,
-    success,
     deleted,
     gmt_modified,
     gmt_create
@@ -46,119 +44,110 @@
             parameterType="com.beitu.saas.borrower.entity.SaasBorrowerEmergentContact" useGeneratedKeys="true">
         insert into saas_borrower_emergent_contact
         <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="borrowerCode !=null">
+            <if test="borrowerCode !=null">
                 borrower_code,
-                </if>
-                <if test="orderNumb !=null">
+            </if>
+            <if test="orderNumb !=null">
                 order_numb,
-                </if>
-                <if test="familyType !=null">
+            </if>
+            <if test="familyType !=null">
                 family_type,
-                </if>
-                <if test="familyName !=null">
+            </if>
+            <if test="familyName !=null">
                 family_name,
-                </if>
-                <if test="familyMobile !=null">
+            </if>
+            <if test="familyMobile !=null">
                 family_mobile,
-                </if>
-                <if test="friendType !=null">
+            </if>
+            <if test="friendType !=null">
                 friend_type,
-                </if>
-                <if test="friendName !=null">
+            </if>
+            <if test="friendName !=null">
                 friend_name,
-                </if>
-                <if test="friendMobile !=null">
+            </if>
+            <if test="friendMobile !=null">
                 friend_mobile,
-                </if>
-                <if test="success !=null">
-                success,
-                </if>
-                <if test="deleted !=null">
+            </if>
+            <if test="deleted !=null">
                 deleted,
-                </if>
-                <if test="gmtModified !=null">
+            </if>
+            <if test="gmtModified !=null">
                 gmt_modified,
-                </if>
-                <if test="gmtCreate !=null">
+            </if>
+            <if test="gmtCreate !=null">
                 gmt_create,
-                </if>
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-                <if test="borrowerCode != null">
-                    #{borrowerCode,jdbcType=VARCHAR},
-                </if>
-                <if test="orderNumb != null">
-                    #{orderNumb,jdbcType=VARCHAR},
-                </if>
-                <if test="familyType != null">
-                    #{familyType,jdbcType=VARCHAR},
-                </if>
-                <if test="familyName != null">
-                    #{familyName,jdbcType=VARCHAR},
-                </if>
-                <if test="familyMobile != null">
-                    #{familyMobile,jdbcType=VARCHAR},
-                </if>
-                <if test="friendType != null">
-                    #{friendType,jdbcType=VARCHAR},
-                </if>
-                <if test="friendName != null">
-                    #{friendName,jdbcType=VARCHAR},
-                </if>
-                <if test="friendMobile != null">
-                    #{friendMobile,jdbcType=VARCHAR},
-                </if>
-                <if test="success != null">
-                    #{success,jdbcType=BIT},
-                </if>
-                <if test="deleted != null">
-                    #{deleted,jdbcType=BIT},
-                </if>
-                <if test="gmtModified != null">
-                    #{gmtModified,jdbcType=TIMESTAMP},
-                </if>
-                <if test="gmtCreate != null">
-                    #{gmtCreate,jdbcType=TIMESTAMP},
-                </if>
+            <if test="borrowerCode != null">
+                #{borrowerCode,jdbcType=VARCHAR},
+            </if>
+            <if test="orderNumb != null">
+                #{orderNumb,jdbcType=VARCHAR},
+            </if>
+            <if test="familyType != null">
+                #{familyType,jdbcType=VARCHAR},
+            </if>
+            <if test="familyName != null">
+                #{familyName,jdbcType=VARCHAR},
+            </if>
+            <if test="familyMobile != null">
+                #{familyMobile,jdbcType=VARCHAR},
+            </if>
+            <if test="friendType != null">
+                #{friendType,jdbcType=VARCHAR},
+            </if>
+            <if test="friendName != null">
+                #{friendName,jdbcType=VARCHAR},
+            </if>
+            <if test="friendMobile != null">
+                #{friendMobile,jdbcType=VARCHAR},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
         </trim>
     </insert>
 
     <update id="updateByPrimaryKey" parameterType="com.beitu.saas.borrower.entity.SaasBorrowerEmergentContact">
         update saas_borrower_emergent_contact
         <set>
-                <if test="borrowerCode !=null">
+            <if test="borrowerCode !=null">
                 borrower_code = #{borrowerCode,jdbcType=VARCHAR},
-                </if>
-                <if test="orderNumb !=null">
+            </if>
+            <if test="orderNumb !=null">
                 order_numb = #{orderNumb,jdbcType=VARCHAR},
-                </if>
-                <if test="familyType !=null">
+            </if>
+            <if test="familyType !=null">
                 family_type = #{familyType,jdbcType=VARCHAR},
-                </if>
-                <if test="familyName !=null">
+            </if>
+            <if test="familyName !=null">
                 family_name = #{familyName,jdbcType=VARCHAR},
-                </if>
-                <if test="familyMobile !=null">
+            </if>
+            <if test="familyMobile !=null">
                 family_mobile = #{familyMobile,jdbcType=VARCHAR},
-                </if>
-                <if test="friendType !=null">
+            </if>
+            <if test="friendType !=null">
                 friend_type = #{friendType,jdbcType=VARCHAR},
-                </if>
-                <if test="friendName !=null">
+            </if>
+            <if test="friendName !=null">
                 friend_name = #{friendName,jdbcType=VARCHAR},
-                </if>
-                <if test="friendMobile !=null">
+            </if>
+            <if test="friendMobile !=null">
                 friend_mobile = #{friendMobile,jdbcType=VARCHAR},
-                </if>
-                <if test="success !=null">
-                success = #{success,jdbcType=BIT},
-                </if>
-                <if test="deleted !=null">
+            </if>
+            <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},
-                </if>
-                <if test="gmtModified !=null">
+            </if>
+            <if test="gmtModified !=null">
                 gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-                </if>
+            </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
@@ -171,7 +160,7 @@
 
     <sql id="paginationSql">
         <if test="page != null">
-            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+            limit #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
         </if>
     </sql>
 
@@ -212,9 +201,6 @@
             </if>
             <if test="friendMobile !=null">
                 and friend_mobile = #{friendMobile,jdbcType=VARCHAR}
-            </if>
-            <if test="success !=null">
-                and success = #{success,jdbcType=BIT}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}
@@ -257,9 +243,6 @@
             </if>
             <if test="friendMobile !=null">
                 and friend_mobile = #{friendMobile,jdbcType=VARCHAR}
-            </if>
-            <if test="success !=null">
-                and success = #{success,jdbcType=BIT}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}

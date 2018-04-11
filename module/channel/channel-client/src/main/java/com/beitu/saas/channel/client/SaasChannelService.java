@@ -18,7 +18,7 @@ import java.util.List;
 public interface SaasChannelService<T extends BaseEntity> extends BaseService<T> {
 
     /**
-     * 渠道列表
+     * 渠道列表-不包括默认渠道
      */
     List<SaasChannelEntity> getSaasChannelList(SaasChannelParam param, Page page);
 
@@ -45,7 +45,7 @@ public interface SaasChannelService<T extends BaseEntity> extends BaseService<T>
     /**
      * 根据 机构CODE 得到 机构SAAS进件渠道
      */
-    SaasChannelEntity getDefaultSaasChannelByMerchantCode(String merchantCode);
+    SaasChannelEntity getDefaultSaasChannelByMerchantCode(String merchantCode, Integer channelType);
 
     /**
      * 创建 机构默认SAAS进件渠道
@@ -53,6 +53,6 @@ public interface SaasChannelService<T extends BaseEntity> extends BaseService<T>
      * @param merchantCode 机构CODE
      * @return
      */
-    SaasChannelEntity createMerchantDefaultChannel(String merchantCode);
+    void createMerchantDefaultChannel(String merchantCode);
 
 }

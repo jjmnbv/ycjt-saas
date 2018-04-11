@@ -69,6 +69,8 @@ public class DianhuaHandler {
         String apikey = configUtil.getDhbApiKey();
         String appsecret = configUtil.getDhbAppSecret();
 
+        LOGGER.info("---------key:{}--------secret:{}---------", apikey, appsecret);
+
         String url = "https://cuishou-api.dianhua.cn/busi/genCuiShou?apikey=" + apikey + "&time=" + time;
         Map<String, String> map = new TreeMap<String, String>();
         map.put("apikey", apikey);

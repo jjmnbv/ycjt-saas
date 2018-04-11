@@ -47,10 +47,6 @@ public class SaasBorrowerEmergentContactVo implements ResponseData, Serializable
      * 同事朋友联系人手机号
      */
     private String friendMobile;
-    /**
-     * 是否成功
-     */
-    private Boolean success;
 
     public Long getSaasBorrowerEmergentContactId() {
         return saasBorrowerEmergentContactId;
@@ -60,9 +56,8 @@ public class SaasBorrowerEmergentContactVo implements ResponseData, Serializable
         this.saasBorrowerEmergentContactId = saasBorrowerEmergentContactId;
     }
 
-
     public String getBorrowerCode() {
-        return this.borrowerCode;
+        return borrowerCode;
     }
 
     public void setBorrowerCode(String borrowerCode) {
@@ -70,7 +65,7 @@ public class SaasBorrowerEmergentContactVo implements ResponseData, Serializable
     }
 
     public String getOrderNumb() {
-        return this.orderNumb;
+        return orderNumb;
     }
 
     public void setOrderNumb(String orderNumb) {
@@ -78,7 +73,7 @@ public class SaasBorrowerEmergentContactVo implements ResponseData, Serializable
     }
 
     public String getFamilyType() {
-        return this.familyType;
+        return familyType;
     }
 
     public void setFamilyType(String familyType) {
@@ -86,7 +81,7 @@ public class SaasBorrowerEmergentContactVo implements ResponseData, Serializable
     }
 
     public String getFamilyName() {
-        return this.familyName;
+        return familyName;
     }
 
     public void setFamilyName(String familyName) {
@@ -94,7 +89,7 @@ public class SaasBorrowerEmergentContactVo implements ResponseData, Serializable
     }
 
     public String getFamilyMobile() {
-        return this.familyMobile;
+        return familyMobile;
     }
 
     public void setFamilyMobile(String familyMobile) {
@@ -102,7 +97,7 @@ public class SaasBorrowerEmergentContactVo implements ResponseData, Serializable
     }
 
     public String getFriendType() {
-        return this.friendType;
+        return friendType;
     }
 
     public void setFriendType(String friendType) {
@@ -110,7 +105,7 @@ public class SaasBorrowerEmergentContactVo implements ResponseData, Serializable
     }
 
     public String getFriendName() {
-        return this.friendName;
+        return friendName;
     }
 
     public void setFriendName(String friendName) {
@@ -118,19 +113,11 @@ public class SaasBorrowerEmergentContactVo implements ResponseData, Serializable
     }
 
     public String getFriendMobile() {
-        return this.friendMobile;
+        return friendMobile;
     }
 
     public void setFriendMobile(String friendMobile) {
         this.friendMobile = friendMobile;
-    }
-
-    public Boolean getSuccess() {
-        return this.success;
-    }
-
-    public void setSuccess(Boolean success) {
-        this.success = success;
     }
 
     public static SaasBorrowerEmergentContactVo convertEntityToVO(SaasBorrowerEmergentContact saasBorrowerEmergentContact) {

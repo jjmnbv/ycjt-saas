@@ -2,12 +2,15 @@ package com.beitu.saas.app.application.channel;
 
 import com.beitu.saas.app.application.channel.vo.ChannelStatDetailVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
+import com.beitu.saas.auth.domain.SaasMerchantVo;
 import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.auth.service.SaasAdminService;
+import com.beitu.saas.auth.service.SaasMerchantService;
 import com.beitu.saas.channel.domain.SaasChannelDetailVo;
 import com.beitu.saas.channel.domain.SaasChannelRiskSettingsVo;
 import com.beitu.saas.channel.domain.SaasH5ChannelVo;
 import com.beitu.saas.channel.enums.ChannelOperateTypeEnum;
+import com.beitu.saas.channel.enums.ChannelTypeEnum;
 import com.beitu.saas.channel.param.ChannelStatQueryParam;
 import com.beitu.saas.channel.param.SaasChannelParam;
 import com.beitu.saas.channel.client.SaasChannelRiskSettingsService;
@@ -52,6 +55,8 @@ public class SaasChannelApplication {
     private SaasAdminService saasAdminService;
     @Resource
     private ConfigUtil configUtil;
+    @Autowired
+    private SaasMerchantService saasMerchantService;
 
 
     /**
@@ -73,6 +78,7 @@ public class SaasChannelApplication {
             saasChannelEntity.setChannelCode(channelCode)
                     .setChannelStatus(ChannelStatusEnum.OPEN.getType())
                     .setLinkUrl("?channel=" + channelCode)
+                    .setChannelType(ChannelTypeEnum.USER_DEFINED.getType())
                     .setCreatorCode(RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getCode());
             saasChannelService.create(saasChannelEntity);
 
@@ -151,9 +157,9 @@ public class SaasChannelApplication {
                     .setChannelStatus(x.getChannelStatus())
                     .setChargePersonCode(x.getChargePersonCode())
                     .setChargePersonName(this.getAdminNameByAdminCode(x.getChargePersonCode()))
-                    .setLinkUrl(configUtil.getAddressURLPrefix() + configUtil.getH5AddressURLPrefix() + x.getLinkUrl())
-                    .setLongLinkUrl(configUtil.getAddressURLPrefix() + configUtil.getH5AddressURLPrefix() + x.getLinkUrl())
-                    .setShortLinkUrl(ShortUrlUtil.generateShortUrl(configUtil.getAddressURLPrefix() + configUtil.getH5AddressURLPrefix() + x.getLinkUrl()))
+                    .setLinkUrl(configUtil.getH5AddressURL() + x.getLinkUrl())
+                    .setLongLinkUrl(configUtil.getH5AddressURL() + x.getLinkUrl())
+                    .setShortLinkUrl(ShortUrlUtil.generateShortUrl(configUtil.getH5AddressURL() + x.getLinkUrl()))
                     .setCreatorName(this.getAdminNameByAdminCode(x.getCreatorCode()))
                     .setCreatorCode(x.getCreatorCode())
                     .setGmtCreate(x.getGmtCreate())
@@ -239,11 +245,19 @@ public class SaasChannelApplication {
     }
 
     public String getDefaultSaasChannelCodeByMerchantCode(String merchantCode) {
-        SaasChannelEntity saasChannelEntity = saasChannelService.getDefaultSaasChannelByMerchantCode(merchantCode);
+        SaasChannelEntity saasChannelEntity = saasChannelService.getDefaultSaasChannelByMerchantCode(merchantCode, ChannelTypeEnum.SYSTEM_DEFINED.getType());
         if (ChannelStatusEnum.CLOSE.getType().equals(saasChannelEntity.getChannelStatus())) {
             return null;
         }
         return saasChannelEntity.getChannelCode();
+    }
+
+    public SaasMerchantVo getMerchantByChannelCode(String channelCode) {
+        SaasChannelEntity channelEntity = saasChannelService.getSaasChannelByChannelCode(channelCode);
+        if (channelEntity == null) {
+            return null;
+        }
+        return saasMerchantService.getByMerchantCode(channelEntity.getMerchantCode());
     }
 
 }

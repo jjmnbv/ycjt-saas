@@ -1,5 +1,7 @@
 package com.beitu.saas.app.application.order.vo;
 
+import com.fqgj.common.api.ResponseData;
+
 import java.math.BigDecimal;
 
 /**
@@ -9,10 +11,9 @@ import java.math.BigDecimal;
  * Date: 2018/4/3
  * Time: 上午11:15
  */
-public class LoanStateDetailShowVo {
-    private BigDecimal monthLoanTotalAmount;
-    private BigDecimal monthDestroyTotalAmount;
-    private Integer monthLoanPersonNum;
+public class LoanStateDetailShowVo implements ResponseData {
+    private BigDecimal monthLoanTotalAmount=BigDecimal.ZERO;
+    private BigDecimal monthDestroyTotalAmount=BigDecimal.ZERO;
     private String month;
 
     public String getMonth() {
@@ -39,15 +40,6 @@ public class LoanStateDetailShowVo {
 
     public LoanStateDetailShowVo setMonthDestroyTotalAmount(BigDecimal monthDestroyTotalAmount) {
         this.monthDestroyTotalAmount = monthDestroyTotalAmount;
-        return this;
-    }
-
-    public Integer getMonthLoanPersonNum() {
-        return monthLoanPersonNum;
-    }
-
-    public LoanStateDetailShowVo setMonthLoanPersonNum(Integer monthLoanPersonNum) {
-        this.monthLoanPersonNum = monthLoanPersonNum;
         return this;
     }
 }

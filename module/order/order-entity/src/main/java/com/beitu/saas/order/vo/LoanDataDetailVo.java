@@ -10,17 +10,19 @@ import java.math.BigDecimal;
  * Time: 上午11:11
  */
 public class LoanDataDetailVo {
-    private BigDecimal loanTotalAmount;
+    private BigDecimal loanTotalAmount = BigDecimal.ZERO;
 
-    private BigDecimal todayLoanTotalAmount;
+    private BigDecimal todayLoanTotalAmount = BigDecimal.ZERO;
 
-    private BigDecimal destroyTotalAmount;
+    private BigDecimal destroyTotalAmount = BigDecimal.ZERO;
 
-    private BigDecimal totalDestroyTotalAmount;
+    private BigDecimal todayDestroyTotalAmount = BigDecimal.ZERO;
 
-    private BigDecimal noRepayTotalAmount;
+    private BigDecimal noRepayTotalAmount = BigDecimal.ZERO;
 
-    private BigDecimal overdueTotalAmount;
+    private BigDecimal overdueTotalAmount = BigDecimal.ZERO;
+
+    private BigDecimal todayOverdueTotalAmount = BigDecimal.ZERO;
 
     public BigDecimal getLoanTotalAmount() {
         return loanTotalAmount;
@@ -49,12 +51,21 @@ public class LoanDataDetailVo {
         return this;
     }
 
-    public BigDecimal getTotalDestroyTotalAmount() {
-        return totalDestroyTotalAmount;
+    public BigDecimal getTodayDestroyTotalAmount() {
+        return todayDestroyTotalAmount;
     }
 
-    public LoanDataDetailVo setTotalDestroyTotalAmount(BigDecimal totalDestroyTotalAmount) {
-        this.totalDestroyTotalAmount = totalDestroyTotalAmount;
+    public LoanDataDetailVo setTodayDestroyTotalAmount(BigDecimal todayDestroyTotalAmount) {
+        this.todayDestroyTotalAmount = todayDestroyTotalAmount;
+        return this;
+    }
+
+    public BigDecimal getTodayOverdueTotalAmount() {
+        return todayOverdueTotalAmount;
+    }
+
+    public LoanDataDetailVo setTodayOverdueTotalAmount(BigDecimal todayOverdueTotalAmount) {
+        this.todayOverdueTotalAmount = todayOverdueTotalAmount;
         return this;
     }
 

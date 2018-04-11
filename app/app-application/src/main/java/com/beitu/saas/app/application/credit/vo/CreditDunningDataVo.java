@@ -64,17 +64,13 @@ public class CreditDunningDataVo implements Serializable {
                     dunningOutDuration += saasCreditDunningDetailVo.getCallOutDuration();
                 }
             }
-            new CreditDunningDataVo(dunning30Days, dunning30And60Days, dunningTotalNum, dunningIn, dunningOut, dunningInDuration, dunningOutDuration);
+            this.dunning30Days = dunning30Days + "次";
+            this.dunning30And60Days = dunning30And60Days + "次";
+            this.dunningTotalNum = dunningTotalNum + "个";
+            this.dunningInAndOut = dunningIn + "/" + dunningOut;
+            this.dunningInAndOutDuration = (dunningInDuration / 60 + ((dunningInDuration % 60 > 0) ? 1 : 0)) + "分/" +
+                    (dunningOutDuration / 60 + ((dunningOutDuration % 60 > 0) ? 1 : 0)) + "分";
         }
-    }
-
-    private CreditDunningDataVo(Integer dunning30Days, Integer dunning30And60Days, Integer dunningTotalNum, Integer dunningIn, Integer dunningOut, Integer dunningInDuration, Integer dunningOutDuration) {
-        this.dunning30Days = dunning30Days + "次";
-        this.dunning30And60Days = dunning30And60Days + "次";
-        this.dunningTotalNum = dunningTotalNum + "个";
-        this.dunningInAndOut = dunningIn + "/" + dunningOut;
-        this.dunningInAndOutDuration = (dunningInDuration / 60 + ((dunningInDuration % 60 > 0) ? 1 : 0)) + "分/" +
-                (dunningOutDuration / 60 + ((dunningOutDuration % 60 > 0) ? 1 : 0)) + "分";
     }
 
     public String getDunning30Days() {

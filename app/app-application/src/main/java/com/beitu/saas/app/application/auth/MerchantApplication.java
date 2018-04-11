@@ -1,5 +1,6 @@
 package com.beitu.saas.app.application.auth;
 
+import com.beitu.saas.app.application.contract.ContractApplication;
 import com.beitu.saas.auth.domain.MerchantContractInfoVo;
 import com.beitu.saas.auth.domain.SaasMerchantVo;
 import com.beitu.saas.auth.entity.*;
@@ -14,6 +15,9 @@ import com.beitu.saas.finance.client.SaasCreditHistoryService;
 import com.beitu.saas.finance.client.SaasMerchantCreditInfoService;
 import com.beitu.saas.finance.client.SaasMerchantSmsInfoService;
 import com.beitu.saas.finance.client.SaasSmsHistoryService;
+import com.beitu.saas.merchant.client.SaasMerchantFlowConfigService;
+import com.beitu.saas.merchant.client.enums.MerchantFlowZMEnum;
+import com.beitu.saas.merchant.entity.SaasMerchantFlowConfig;
 import com.fqgj.common.utils.GenerOrderNoUtil;
 import com.fqgj.common.utils.MD5;
 import com.fqgj.common.utils.StringUtils;
@@ -72,6 +76,12 @@ public class MerchantApplication {
     @Autowired
     private ConfigUtil configUtil;
 
+    @Autowired
+    private SaasMerchantFlowConfigService saasMerchantFlowConfigService;
+
+    @Autowired
+    private ContractApplication contractApplication;
+
     @Transactional(rollbackFor = Exception.class)
     public void addMerchant(SaasMerchant saasMerchant, String password, String accountPhone, String accountName) {
 
@@ -99,12 +109,12 @@ public class MerchantApplication {
         //超级管理员
         Long roleId = roleApplication.addRoleAndEmpower("超级管理员", "system", saasAdmin.getMerchantCode(),
                 Arrays.asList(109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126),
-                Arrays.asList(109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155)
+                Arrays.asList(109, 110, 114, 115, 116, 117, 118, 119, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155)
         );
         //子管理员
         roleApplication.addRoleAndEmpower("子管理员", "system", saasAdmin.getMerchantCode(),
                 Arrays.asList(109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126),
-                Arrays.asList(109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152)
+                Arrays.asList(109, 110, 114, 115, 116, 117, 118, 119, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152)
         );
         //审核
         roleApplication.addRoleAndEmpower("审核", "system", saasAdmin.getMerchantCode(),
@@ -148,11 +158,20 @@ public class MerchantApplication {
         saasChannelRiskSettingsService.createDefaultChannelRiskSettings(merchantCode);
 
         //7 初始化点券和短信余额
-        saasMerchantSmsInfoService.increase(merchantCode, 10L);
-        saasSmsHistoryService.addIncomeSmsHistory(merchantCode, 10L, null, "充值");
-        saasMerchantCreditInfoService.increase(merchantCode, 10L);
-        saasCreditHistoryService.addIncomeCreditHistory(merchantCode, 10L, "system", "充值");
-
+        saasMerchantSmsInfoService.increase(merchantCode, 10000L);
+        saasSmsHistoryService.addIncomeSmsHistory(merchantCode, 10000L, null, "充值");
+        saasMerchantCreditInfoService.increase(merchantCode, 35000L);
+        saasCreditHistoryService.addIncomeCreditHistory(merchantCode, 35000L, "system", "充值");
+        //8 默认流量推荐设置
+        SaasMerchantFlowConfig config = new SaasMerchantFlowConfig();
+        config.setMerchantCode(merchantCode);
+        config.setFlowOpen(true);
+        config.setFlowMaxNum(100);
+        config.setZmScore(MerchantFlowZMEnum.ALONE_ZM_610_UP.getKey().intValue());
+        config.setFlowType(2);
+        saasMerchantFlowConfigService.create(config);
+        //9 电子签
+        //contractApplication.lenderDoLicenseContractSign(merchantCode);
     }
 
     public MerchantContractInfoVo getMerchantContractInfo(String merchantCode) {
