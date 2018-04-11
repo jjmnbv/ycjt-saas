@@ -1,57 +1,83 @@
 package com.beitu.saas.app.application.credit.vo;
 
 import com.fqgj.common.api.ResponseData;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.List;
 
 /**
  * Created by linchengyu on 17/6/23.
  */
+@ApiModel(value = "运营商报告")
 public class CreditCarrierReportVo implements ResponseData {
 
     /**
+     * 运营商认证状态（1未认证，2认证成功，3认证失败）
+     */
+    @ApiModelProperty(value = "运营商认证状态（1未认证，2认证成功，3认证失败）")
+    private Integer status;
+    /**
      * 运营商认证信息
      */
+    @ApiModelProperty(value = "运营商认证信息")
     private CreditCarrierBaseVo creditCarrierBaseVo;
 
     /**
      * 号码总览
      */
+    @ApiModelProperty(value = "号码总览")
     private CreditCarrierOverviewVo creditCarrierOverviewVo;
 
     /**
      * 催收数据
      */
+    @ApiModelProperty(value = "催收数据")
     private CreditDunningDataVo dunningInfo;
     /**
      * 金融敏感信息
      */
+    @ApiModelProperty(value = "金融敏感信息")
     private List<CreditCarrierFinancialListVo> financialSensitive;
     /**
      * 高频联系人
      */
+    @ApiModelProperty(value = "高频联系人")
     private List<CreditCarrierHighFreqListVo> highFreq;
     /**
      * 长时间联系人
      */
+    @ApiModelProperty(value = "长时间联系人")
     private List<CreditCarrierLongDurationListVo> longDuration;
     /**
      * 商户通话记录
      */
+    @ApiModelProperty(value = "商户通话记录")
     private List<CreditCarrierMerchantListVo> merchant;
 
     /**
      * 通话活跃区域
      */
+    @ApiModelProperty(value = "通话活跃区域")
     private List<CreditCarrierActiveRegionListVo> activeRegion;
     /**
      * 联系人所在地
      */
+    @ApiModelProperty(value = "联系人所在地")
     private List<CreditCarrierContactRegionListVo> contactRegion;
     /**
      * 月通话情况
      */
+    @ApiModelProperty(value = "月通话情况")
     private List<CreditCarrierBillListVo> billList;
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 
     public CreditCarrierBaseVo getCreditCarrierBaseVo() {
         return creditCarrierBaseVo;
