@@ -794,7 +794,7 @@ public class OrderApplication {
 
         SaasOrder updateSaasOrder = new SaasOrder();
         updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
-        updateSaasOrder.setExpireDate(DateUtil.addYear(updateSaasOrder.getCreatedDt(), 10));
+        updateSaasOrder.setExpireDate(DateUtil.addYear(saasOrderVo.getCreatedDt(), 10));
         saasOrderService.updateById(updateSaasOrder);
 
         ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, operatorCode, saasOrderVo.getSaasOrderId(), ContractTypeEnum.BORROWER_DO_EXTEND_CONTRACT_SIGN));
