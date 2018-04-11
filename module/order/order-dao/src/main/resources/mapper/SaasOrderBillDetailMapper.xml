@@ -53,6 +53,7 @@
         from saas_order_bill_detail
         where borrower_code = #{borrowerCode,jdbcType=VARCHAR} and merchant_code = #{merchantCode,jdbcType=VARCHAR}
         and deleted = false and visible = true
+        order by abs(DATEDIFF(repayment_dt,NOW()))
     </select>
 
     <select id="selectByOrderNumbAndMerchantCode" resultMap="BaseResultMap">
