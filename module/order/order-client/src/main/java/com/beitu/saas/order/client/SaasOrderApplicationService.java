@@ -5,6 +5,8 @@ import com.beitu.saas.order.entity.SaasOrderApplication;
 import com.fqgj.common.base.BaseService;
 import com.fqgj.common.entity.BaseEntity;
 
+import java.util.List;
+
 /**
  * User: jungle
  * Date: 2018-03-23
@@ -17,5 +19,7 @@ public interface SaasOrderApplicationService<T extends BaseEntity> extends BaseS
     SaasOrderApplicationVo getByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb);
 
     Boolean updateOrderNumbByBorrowerCode(String orderNumb, String borrowerCode);
+
+    List<SaasOrderApplicationVo> listByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb);
 
 }

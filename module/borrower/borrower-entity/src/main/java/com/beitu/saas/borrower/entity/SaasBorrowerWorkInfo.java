@@ -4,8 +4,8 @@ import com.fqgj.common.entity.BaseEntity;
 
 /**
  * User: jungle
- * Date: 2018-03-26
- * Time: 11:33:49.719
+ * Date: 2018-04-10
+ * Time: 16:49:47.300
  * TableDesc:SAAS借款人工作信息表
  */
 public class SaasBorrowerWorkInfo extends BaseEntity {
@@ -24,7 +24,7 @@ public class SaasBorrowerWorkInfo extends BaseEntity {
     /**
      * 月收入
      */
-    private Integer salary;
+    private String salary;
     /**
      * 发薪日
      */
@@ -37,10 +37,6 @@ public class SaasBorrowerWorkInfo extends BaseEntity {
      * 公司详细地址
      */
     private String companyDetailAddress;
-    /**
-     * 是否成功
-     */
-    private Boolean success;
 
 
     public String getBorrowerCode() {
@@ -70,11 +66,11 @@ public class SaasBorrowerWorkInfo extends BaseEntity {
         return this;
     }
 
-    public Integer getSalary() {
+    public String getSalary() {
         return this.salary;
     }
 
-    public SaasBorrowerWorkInfo setSalary(Integer salary) {
+    public SaasBorrowerWorkInfo setSalary(String salary) {
         this.salary = salary;
         return this;
     }
@@ -103,15 +99,6 @@ public class SaasBorrowerWorkInfo extends BaseEntity {
 
     public SaasBorrowerWorkInfo setCompanyDetailAddress(String companyDetailAddress) {
         this.companyDetailAddress = companyDetailAddress;
-        return this;
-    }
-
-    public Boolean getSuccess() {
-        return this.success;
-    }
-
-    public SaasBorrowerWorkInfo setSuccess(Boolean success) {
-        this.success = success;
         return this;
     }
 }

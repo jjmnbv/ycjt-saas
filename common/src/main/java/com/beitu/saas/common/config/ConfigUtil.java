@@ -474,8 +474,8 @@ public class ConfigUtil {
 
     /************* risk end *************/
 
-    public String getH5AddressURLPrefix() {
-        return config.getProperty("oss.h5.addressURLPrefix", "");
+    public String getH5AddressURL() {
+        return config.getProperty("oss.h5.addressURL", "");
     }
 
     /**

@@ -411,6 +411,20 @@ public class DateUtil {
         return c.getTime();
     }
 
+    /**
+     * 日期 加几年
+     *
+     * @param date 日期
+     * @param year 年数
+     * @return 返回相加后的日期
+     */
+    public static Date addYear(Date date, int year) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.YEAR, year);
+        return c.getTime();
+    }
+
     public static Boolean isExceedOneDay(Date date) {
         if (date == null) {
             return null;

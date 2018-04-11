@@ -270,6 +270,7 @@ public class H5Controller {
         String borrowerCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getBorrowerCode();
         SaasBorrowerPersonalInfo saasBorrowerPersonalInfo = new SaasBorrowerPersonalInfo();
         BeanUtils.copyProperties(req, saasBorrowerPersonalInfo);
+        saasBorrowerPersonalInfo.setWechatCode(req.getQq());
         saasBorrowerPersonalInfo.setBorrowerCode(borrowerCode);
 
         String channelCode = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();

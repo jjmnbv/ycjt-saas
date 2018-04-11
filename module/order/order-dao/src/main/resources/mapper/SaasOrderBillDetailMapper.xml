@@ -27,6 +27,7 @@
             <if test="destroy !=null">
                 and destroy = #{destroy,jdbcType=BIT}
             </if>
+            and visible = true
             and deleted = false
         </trim>
     </sql>
@@ -52,6 +53,7 @@
         from saas_order_bill_detail
         where borrower_code = #{borrowerCode,jdbcType=VARCHAR} and merchant_code = #{merchantCode,jdbcType=VARCHAR}
         and deleted = false and visible = true
+        order by abs(DATEDIFF(repayment_dt,NOW()))
     </select>
 
     <select id="selectByOrderNumbAndMerchantCode" resultMap="BaseResultMap">
@@ -66,13 +68,13 @@
     <select id="selectLoanDataDetail" parameterType="java.lang.String"
             resultType="com.beitu.saas.order.vo.LoanDataDetailVo">
       select
-      sum(case when visible=1 then real_capital else null end) loanTotalAmount,
-      sum(case when created_dt=DATE_SUB(curdate(),INTERVAL 0 DAY) and visible=1 then real_capital else null end) todayLoanTotalAmount,
-      sum(case when visible=1 and destroy=1 then amount else null end) destroyTotalAmount,
-      sum(case when visible=1 and created_dt=DATE_SUB(curdate(),INTERVAL 0 DAY) then amount else null end) todayDestroyTotalAmount,
-      sum(case when visible=1 and destroy=0 then real_capital else null end) noRepayTotalAmount,
-      sum(case when visible=1 and destroy=0  and datediff(DATE_SUB(curdate(),INTERVAL 0 DAY),repayment_dt)>0 then real_capital else null end) overdueTotalAmount,
-      sum(case when visible=1 and destroy=0  and datediff(NOW(),repayment_dt)=1 then real_capital else null end) todayOverdueTotalAmount
+      sum(case when visible=1 then real_capital else 0 end) loanTotalAmount,
+      sum(case when created_dt=DATE_SUB(curdate(),INTERVAL 0 DAY) and visible=1 then real_capital else 0 end) todayLoanTotalAmount,
+      sum(case when visible=1 and destroy=1 then amount else 0 end) destroyTotalAmount,
+      sum(case when visible=1 and created_dt=DATE_SUB(curdate(),INTERVAL 0 DAY) then amount else 0 end) todayDestroyTotalAmount,
+      sum(case when visible=1 and destroy=0 then real_capital else 0 end) noRepayTotalAmount,
+      sum(case when visible=1 and destroy=0  and datediff(DATE_SUB(curdate(),INTERVAL 0 DAY),repayment_dt)>0 then real_capital else 0 end) overdueTotalAmount,
+      sum(case when visible=1 and destroy=0  and datediff(NOW(),repayment_dt)=1 then real_capital else 0 end) todayOverdueTotalAmount
       from saas_order_bill_detail
       where merchant_code = #{merchantCode,jdbcType=VARCHAR} and deleted = false
     </select>

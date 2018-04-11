@@ -30,7 +30,7 @@ public class SaasBorrowerWorkInfoVo implements ResponseData, Serializable {
     /**
      * 月收入
      */
-    private Integer salary;
+    private String salary;
     /**
      * 发薪日
      */
@@ -43,10 +43,6 @@ public class SaasBorrowerWorkInfoVo implements ResponseData, Serializable {
      * 公司详细地址
      */
     private String companyDetailAddress;
-    /**
-     * 是否成功
-     */
-    private Boolean success;
 
     public Long getSaasBorrowerWorkInfoId() {
         return saasBorrowerWorkInfoId;
@@ -81,11 +77,11 @@ public class SaasBorrowerWorkInfoVo implements ResponseData, Serializable {
         this.career = career;
     }
 
-    public Integer getSalary() {
+    public String getSalary() {
         return this.salary;
     }
 
-    public void setSalary(Integer salary) {
+    public void setSalary(String salary) {
         this.salary = salary;
     }
 
@@ -111,14 +107,6 @@ public class SaasBorrowerWorkInfoVo implements ResponseData, Serializable {
 
     public void setCompanyDetailAddress(String companyDetailAddress) {
         this.companyDetailAddress = companyDetailAddress;
-    }
-
-    public Boolean getSuccess() {
-        return this.success;
-    }
-
-    public void setSuccess(Boolean success) {
-        this.success = success;
     }
 
     public static SaasBorrowerWorkInfoVo convertEntityToVO(SaasBorrowerWorkInfo saasBorrowerWorkInfo) {

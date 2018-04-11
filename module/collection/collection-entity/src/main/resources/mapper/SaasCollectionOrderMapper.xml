@@ -27,7 +27,8 @@
                     and date_format(so.repayment_dt, '%Y-%m-%d') &lt;
                     #{collectionOrderQueryParam.overdueEndDate,jdbcType=VARCHAR}
                 </if>
-                and sco.status=0 AND sco.deleted = 0
+                and sco.status=0 AND sco.deleted = 0 and so.deleted=0
+                and sb.deleted=0 and sbri.deleted=0 and sc.deleted=0
             </trim>
         </where>
     </sql>

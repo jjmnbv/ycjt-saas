@@ -4,8 +4,8 @@ import com.fqgj.common.entity.BaseEntity;
 
 /**
  * User: jungle
- * Date: 2018-03-31
- * Time: 16:50:49.988
+ * Date: 2018-04-10
+ * Time: 16:49:47.292
  * TableDesc:SAAS借款人个人信息表
  */
 public class SaasBorrowerPersonalInfo extends BaseEntity {
@@ -18,9 +18,9 @@ public class SaasBorrowerPersonalInfo extends BaseEntity {
      */
     private String orderNumb;
     /**
-     * QQ
+     * 微信号
      */
-    private String qq;
+    private String wechatCode;
     /**
      * 学历
      */
@@ -41,10 +41,6 @@ public class SaasBorrowerPersonalInfo extends BaseEntity {
      * 芝麻分
      */
     private Integer zmCreditScore;
-    /**
-     * 是否成功
-     */
-    private Boolean success;
 
 
     public String getBorrowerCode() {
@@ -65,12 +61,12 @@ public class SaasBorrowerPersonalInfo extends BaseEntity {
         return this;
     }
 
-    public String getQq() {
-        return this.qq;
+    public String getWechatCode() {
+        return this.wechatCode;
     }
 
-    public SaasBorrowerPersonalInfo setQq(String qq) {
-        this.qq = qq;
+    public SaasBorrowerPersonalInfo setWechatCode(String wechatCode) {
+        this.wechatCode = wechatCode;
         return this;
     }
 
@@ -116,15 +112,6 @@ public class SaasBorrowerPersonalInfo extends BaseEntity {
 
     public SaasBorrowerPersonalInfo setZmCreditScore(Integer zmCreditScore) {
         this.zmCreditScore = zmCreditScore;
-        return this;
-    }
-
-    public Boolean getSuccess() {
-        return this.success;
-    }
-
-    public SaasBorrowerPersonalInfo setSuccess(Boolean success) {
-        this.success = success;
         return this;
     }
 }

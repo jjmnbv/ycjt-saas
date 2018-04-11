@@ -33,7 +33,6 @@
     <update id="updateOrderNumbByBorrowerCode">
         update  saas_borrower_identity_info
         set order_numb = #{orderNumb,jdbcType=VARCHAR},
-          success = true,
           gmt_modified = NOW()
         where borrower_code = #{borrowerCode,jdbcType=VARCHAR}
         and order_numb is null
