@@ -169,12 +169,7 @@ public class AdminController {
             throw new ApplicationException("账户状态更新失败");
         }
         if (enable == false) {
-            SaasAdmin entity = (SaasAdmin) saasAdminService.selectById(adminId);
-            String oldToken = redisClient.get(RedisKeyConsts.SAAS_TOKEN_KEY, entity.getCode());
-            if (StringUtils.isNotEmpty(oldToken)) {
-                redisClient.del(RedisKeyConsts.SAAS_TOKEN_KEY, oldToken);
-                redisClient.del(RedisKeyConsts.SAAS_TOKEN_KEY, entity.getCode());
-            }
+            adminInfoApplication.expireToke(adminId);
         }
         return Response.ok();
     }
@@ -208,6 +203,7 @@ public class AdminController {
             saasAdminRole.setAdminCode(entity.getCode());
             saasAdminRole.setRoleId(updateAdminRequest.getRoleId());
             saasAdminRoleService.updateByAdminCode(saasAdminRole);
+            adminInfoApplication.expireToke(updateAdminRequest.getAdminId());
         }
         return Response.ok();
     }
