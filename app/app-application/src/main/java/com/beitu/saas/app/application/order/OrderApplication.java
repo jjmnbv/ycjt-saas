@@ -170,6 +170,7 @@ public class OrderApplication {
             throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
         }
         SaasOrder updateSaasOrder = new SaasOrder();
+        updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
         updateSaasOrder.setRealCapital(saasOrderApplicationVo.getRealCapital());
         updateSaasOrder.setTotalInterestRatio(saasOrderApplicationVo.getTotalInterestRatio());
         updateSaasOrder.setBorrowPurpose(saasOrderApplicationVo.getBorrowPurpose());
