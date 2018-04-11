@@ -2,10 +2,15 @@ package com.beitu.saas.app.application.openapi;
 
 import com.beitu.saas.app.application.openapi.vo.OrderPushToSaasDataVo;
 import com.beitu.saas.app.application.order.OrderRecommendApplication;
+import com.beitu.saas.app.enums.OpenApiOrderPushErrorCodeEnum;
+import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
+import com.beitu.saas.borrower.client.SaasBorrowerService;
+import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
+import com.beitu.saas.borrower.domain.SaasBorrowerVo;
+import com.beitu.saas.borrower.entity.SaasBorrower;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.entity.SaasChannelEntity;
 import com.beitu.saas.channel.enums.ChannelTypeEnum;
-import com.beitu.saas.common.utils.StringUtil;
 import com.fqgj.common.utils.CollectionUtils;
 import com.fqgj.common.utils.JSONUtils;
 import com.fqgj.exception.common.ApplicationException;
@@ -16,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author linanjun
@@ -32,30 +38,36 @@ public class OpenApiOrderApplication {
     
     @Autowired
     private SaasChannelService saasChannelService;
+    
+    @Autowired
+    private SaasBorrowerService saasBorrowerService;
+    
+    @Autowired
+    private SaasBorrowerRealInfoService saasBorrowerRealInfoService;
 
     public Boolean ycjtOrderPushProcess(String requestString) {
+        LOGGER.info("************************* 洋葱借条推单处理开始 *************************");
         OrderPushToSaasDataVo pushData;
         try {
             pushData = JSONUtils.json2pojoAndOffUnknownField(requestString, OrderPushToSaasDataVo.class);
         } catch (Exception e) {
-            throw new ApplicationException("数据解析失败");
+            LOGGER.warn("************************* 洋葱借条推单处理失败:{} *************************", e);
+            throw new ApplicationException(OpenApiOrderPushErrorCodeEnum.DATA_PARSE_ERROR);
         }
-        List<String> merchantCodes = orderRecommendApplication.getRecommendMerchantCode(Long.valueOf(pushData.getZmScore().toString()));
+        Map merchantsInfo = orderRecommendApplication.getRecommendMerchantCode(Long.valueOf(pushData.getZmScore().toString()));
+        List<String> merchantCodes = (List<String>)merchantsInfo.get("list");
         if (CollectionUtils.isEmpty(merchantCodes)) {
-            throw new ApplicationException("未找到匹配推单对象机构");
+            OpenApiOrderPushErrorCodeEnum errorCodeEnum = OpenApiOrderPushErrorCodeEnum.NO_MATCHED_MERCHANT;
+            LOGGER.warn("************************* 洋葱借条推单处理失败:{} *************************", errorCodeEnum.getMsg());
+            throw new ApplicationException(errorCodeEnum);
         }
+        Integer flowType = (Integer)merchantsInfo.get("flowType");
         
-        
-        
-        
-        
-        
-        pushData.getZmScore();
-        
+        LOGGER.info("************************* 洋葱借条推单处理成功 *************************");
         return null;
     }
     
-    private Boolean orderPushUserRegister(OrderPushToSaasDataVo orderPushToSaasDataVo, List<String> merchantCodes) {
+    private Boolean orderPushUserRegister(OrderPushToSaasDataVo data, List<String> merchantCodes) {
         for (int i = 0; i < merchantCodes.size(); i++) {
             String merchantCode = merchantCodes.get(i);
             SaasChannelEntity channel = saasChannelService.getDefaultSaasChannelByMerchantCode(merchantCode, ChannelTypeEnum.RECOMMEND_DEFINED.getType());
@@ -63,8 +75,43 @@ public class OpenApiOrderApplication {
                 continue;
             }
             String channelCode = channel.getChannelCode();
-            
+            String mobile = data.getMobile();
+            String identityNo = data.getIdentityNo();
+            String borrowerCode = getBorrowerCodeByInfo(mobile, identityNo, merchantCode);
+            if (borrowerCode == null) {
+                borrowerCode = registerUser(mobile, merchantCode, channelCode);
+            }
         }
+        return null;
+    }
+    
+    public Boolean canMatchMerchant(String identityNo, String merchantCode) {
+        SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByIdentityCodeAndMerchantCode(identityNo, merchantCode);
+        if (saasBorrowerRealInfoVo != null) {
+            return Boolean.FALSE;
+        }
+        return Boolean.TRUE;
+    }
+    
+    private String getBorrowerCodeByInfo(String mobile, String identityNo, String merchantCode) {
+        SaasBorrowerVo borrowerVo = saasBorrowerService.getByMobileAndMerchantCode(mobile, merchantCode);
+        if (borrowerVo != null) {
+            return borrowerVo.getBorrowerCode();
+        }
+        SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByIdentityCodeAndMerchantCode(identityNo, merchantCode);
+        if (saasBorrowerRealInfoVo != null) {
+            return saasBorrowerRealInfoVo.getBorrowerCode();
+        }
+        return null;
+    }
+    
+    private String registerUser(String mobile, String merchantCode, String channelCode) {
+        SaasBorrowerVo saasBorrowerVo = new SaasBorrowerVo();
+        saasBorrowerVo.setMobile(mobile);
+        saasBorrowerVo.setMerchantCode(merchantCode);
+        saasBorrowerVo.setChannelCode(channelCode);
+        SaasBorrower saasBorrower = saasBorrowerService.create(saasBorrowerVo);
+        return saasBorrower.getBorrowerCode();
     }
 
 }
