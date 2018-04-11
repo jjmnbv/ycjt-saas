@@ -79,7 +79,7 @@ public class LoanPlatformApplication {
     public String getLoanPlatformUrl(String borrowerCode, String channelCode, SaasLoanPlatformEnum saasLoanPlatformEnum, Integer type) {
         String userCode = borrowerCode;
         String website = saasLoanPlatformEnum.getWebsite();
-        String value = redisClient.get(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, userCode, website);
+        String value = redisClient.get(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, userCode);
         if (StringUtils.isNotEmpty(value)) {
             throw new ApplicationException("正在认证中,请稍后再试");
         }
@@ -161,7 +161,7 @@ public class LoanPlatformApplication {
         if (!saasBorrowerLoanCrawlService.addSaasBorrowerLoanCrawl(vo)) {
             return "数据库结果写入失败";
         }
-        redisClient.del(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, userCode, pojo.getWebsite());
+        redisClient.del(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, userCode);
         return null;
     }
 
@@ -184,7 +184,7 @@ public class LoanPlatformApplication {
         if (!riskIntergrationService.validateLoanPlatformCallbackPrefix(param)) {
             return "redirect:" + "";
         }
-        redisClient.set(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, timestamp, TimeConsts.THREE_MINUTE, userCode, website);
+        redisClient.set(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, timestamp, TimeConsts.THREE_MINUTE, userCode);
         Object Type = redisClient.get(RedisKeyConsts.SAAS_OPEN_JXL_H5_BROWSER_TYPE, taskId);
         if (Type != null) {
             Integer browserType = Integer.parseInt(Type.toString());
@@ -243,7 +243,7 @@ public class LoanPlatformApplication {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            timestamp = redisClient.get(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, userCode, website);
+            timestamp = redisClient.get(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, userCode);
             if (StringUtils.isNotEmpty(timestamp)) {
                 break;
             }

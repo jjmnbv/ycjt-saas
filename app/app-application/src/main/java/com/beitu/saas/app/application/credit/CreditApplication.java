@@ -162,6 +162,10 @@ public class CreditApplication {
                 if (saasBorrowerLoanCrawlService.effectivenessLoanCrawl(borrowerCode, null)) {
                     return BorrowerInfoApplyStatusEnum.FINISHED;
                 }
+                Object platformValue = redisClient.get(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, borrowerCode);
+                if (platformValue != null) {
+                    return BorrowerInfoApplyStatusEnum.AUTHENTICATING;
+                }
                 return BorrowerInfoApplyStatusEnum.INCOMPLETE;
         }
         return BorrowerInfoApplyStatusEnum.INCOMPLETE;
