@@ -9,6 +9,7 @@
         from saas_user_esign_authorization
         where user_code = #{userCode,jdbcType=VARCHAR}
         and success = true
+        and deleted = false
     </select>
 
 </mapper>

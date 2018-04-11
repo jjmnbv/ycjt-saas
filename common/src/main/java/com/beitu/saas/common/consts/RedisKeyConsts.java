@@ -37,7 +37,7 @@ public class RedisKeyConsts {
     /**
      * H5聚信立借贷平台爬取Redis Key前缀
      */
-    public static final String H5_LOAN_PLATFORM_CRAWLING = "SAAS_H5_LOAN_PLATFORM_CRAWLING_{userCode}_{platform}";
+    public static final String H5_LOAN_PLATFORM_CRAWLING = "SAAS_H5_LOAN_PLATFORM_CRAWLING_{userCode}";
 
     /**
      * 同盾 防止 用户短时间内多次重复提交 Redis Key前缀

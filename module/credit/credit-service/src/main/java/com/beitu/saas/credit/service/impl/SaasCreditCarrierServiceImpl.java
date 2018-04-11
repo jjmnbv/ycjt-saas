@@ -43,7 +43,7 @@ public class SaasCreditCarrierServiceImpl extends AbstractBaseService implements
             return Boolean.FALSE;
         }
         SaasCreditCarrier saasCreditCarrier = saasCreditCarrierList.get(saasCreditCarrierList.size() - 1);
-        if (saasCreditCarrier.getSuccess() && DateUtil.isExceedOneMonth(saasCreditCarrier.getGmtCreate())) {
+        if (DateUtil.isExceedOneMonth(saasCreditCarrier.getGmtCreate())) {
             return Boolean.TRUE;
         }
         return Boolean.FALSE;
