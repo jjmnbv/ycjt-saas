@@ -135,7 +135,6 @@ public class CarrierApplication {
         String taskId = h5CallbackVo.getTaskId();
         String userCode = h5CallbackVo.getUserCode();
         CarrierH5TypeEnum typeEnum = h5CallbackVo.getCarrierType();
-        redisClient.del(RedisKeyConsts.H5_CARRIER_CRAWLING, userCode);
         if ("DONE_SUCCESS".equals(status)) {
             String task = redisClient.get(RedisKeyConsts.H5_CARRIER_CRAWLING, userCode);
             if (taskId.equals(task)) {
@@ -150,6 +149,7 @@ public class CarrierApplication {
         } else if ("DONE_FAIL".equals(status)) {
             //失败处理
         }
+        redisClient.del(RedisKeyConsts.H5_CARRIER_CRAWLING, userCode);
     }
 
     private void carrierH5Upload(String data, CarrierH5TypeEnum typeEnum, String merchantCode, String borrowerCode) {
