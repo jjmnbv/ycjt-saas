@@ -28,7 +28,7 @@ public class OrderRecommendApplication {
     @Autowired
     private ConfigUtil configUtil;
 
-    public List getRecommendMerchantCode(Long zmScore) {
+    public Map getRecommendMerchantCode(Long zmScore) {
         Long modulo = 10L;
         Long totalNum = saaSRedisClient.getNumber(RedisKeyConsts.SAAS_RECOMMEND_NUM_DAY);
         Map<String, String> map = saaSRedisClient.hNumGetAll(RedisKeyConsts.SAAS_MERCHANT_RECOMMEND_NUM_DAY);
@@ -79,7 +79,10 @@ public class OrderRecommendApplication {
         saaSRedisClient.incrBy(RedisKeyConsts.SAAS_RECOMMEND_NUM_DAY, 1L);
         saaSRedisClient.expireAt(RedisKeyConsts.SAAS_RECOMMEND_NUM_DAY, DateUtil.getNextDayBeginTime());
         saaSRedisClient.expireAt(RedisKeyConsts.SAAS_MERCHANT_RECOMMEND_NUM_DAY, DateUtil.getNextDayBeginTime());
-        return list;
-
+        Integer finalFlowType = flowType;
+        return new HashMap(2) {{
+            put("flowType", finalFlowType);
+            put("list", list);
+        }};
     }
 }
