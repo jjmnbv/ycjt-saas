@@ -20,6 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +45,7 @@ public class OpenApiOrderApplication {
     
     @Autowired
     private SaasBorrowerRealInfoService saasBorrowerRealInfoService;
-
+    
     public Boolean ycjtOrderPushProcess(String requestString) {
         LOGGER.info("************************* 洋葱借条推单处理开始 *************************");
         OrderPushToSaasDataVo pushData;
@@ -61,28 +62,48 @@ public class OpenApiOrderApplication {
             LOGGER.warn("************************* 洋葱借条推单处理失败:{} *************************", errorCodeEnum.getMsg());
             throw new ApplicationException(errorCodeEnum);
         }
+        List<String> borrowerCodes = orderPushUserRegisterAndRealName(pushData, merchantCodes);
+    
+    
+        
+        
+        
+    
+//        String name = data.getName();
+//        saasBorrowerRealInfoService.create(merchantCode, borrowerCode, name, identityNo);
+        
+        
+        
+        
+        // TODO: 2018/4/11 根据商户吸量类型flowType记录推单数据
         Integer flowType = (Integer)merchantsInfo.get("flowType");
+        
         
         LOGGER.info("************************* 洋葱借条推单处理成功 *************************");
         return null;
     }
     
-    private Boolean orderPushUserRegister(OrderPushToSaasDataVo data, List<String> merchantCodes) {
+    private List<String> orderPushUserRegisterAndRealName(OrderPushToSaasDataVo data, List<String> merchantCodes) {
+        List<String> borrowerCodes = new ArrayList<>();
         for (int i = 0; i < merchantCodes.size(); i++) {
             String merchantCode = merchantCodes.get(i);
+            String identityNo = data.getIdentityNo();
+            if (!canMatchMerchant(identityNo, merchantCode)) {
+                continue;
+            }
             SaasChannelEntity channel = saasChannelService.getDefaultSaasChannelByMerchantCode(merchantCode, ChannelTypeEnum.RECOMMEND_DEFINED.getType());
             if (channel == null || StringUtils.isEmpty(channel.getChannelCode())) {
                 continue;
             }
             String channelCode = channel.getChannelCode();
             String mobile = data.getMobile();
-            String identityNo = data.getIdentityNo();
             String borrowerCode = getBorrowerCodeByInfo(mobile, identityNo, merchantCode);
             if (borrowerCode == null) {
                 borrowerCode = registerUser(mobile, merchantCode, channelCode);
             }
+            borrowerCodes.add(borrowerCode);
         }
-        return null;
+        return borrowerCodes;
     }
     
     public Boolean canMatchMerchant(String identityNo, String merchantCode) {
