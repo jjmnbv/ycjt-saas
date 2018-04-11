@@ -1,8 +1,6 @@
 package com.beitu.saas.app.application.openapi.vo;
 
-import java.io.Serializable;
-
-public class OrderPushUserEmergentContactVo implements Serializable {
+public class OrderPushUserEmergentContactVo {
     
     private String familyType;
     

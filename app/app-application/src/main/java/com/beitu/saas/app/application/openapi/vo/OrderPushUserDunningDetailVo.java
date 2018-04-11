@@ -1,9 +1,8 @@
 package com.beitu.saas.app.application.openapi.vo;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class OrderPushUserDunningDetailVo implements Serializable {
+public class OrderPushUserDunningDetailVo {
     
     private Integer callTelTotalNums;
     

@@ -1,9 +1,8 @@
 package com.beitu.saas.app.application.openapi.vo;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class OrderPushUserDunningInfoVo implements Serializable {
+public class OrderPushUserDunningInfoVo {
     
     private Long carrierId;
     

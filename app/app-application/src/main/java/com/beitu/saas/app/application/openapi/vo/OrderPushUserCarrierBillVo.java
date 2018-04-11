@@ -1,10 +1,9 @@
 package com.beitu.saas.app.application.openapi.vo;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class OrderPushUserCarrierBillVo implements Serializable {
+public class OrderPushUserCarrierBillVo {
     
     private Date billDate;
     

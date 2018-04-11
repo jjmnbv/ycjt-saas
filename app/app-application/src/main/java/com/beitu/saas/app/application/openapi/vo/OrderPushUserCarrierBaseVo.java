@@ -1,10 +1,9 @@
 package com.beitu.saas.app.application.openapi.vo;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class OrderPushUserCarrierBaseVo implements Serializable {
+public class OrderPushUserCarrierBaseVo {
     
     private String carrierType;
     

@@ -1,8 +1,6 @@
 package com.beitu.saas.app.application.openapi.vo;
 
-import java.io.Serializable;
-
-public class OrderPushUserIdentityInfoVo implements Serializable {
+public class OrderPushUserIdentityInfoVo {
     
     private String frontUrl;
     

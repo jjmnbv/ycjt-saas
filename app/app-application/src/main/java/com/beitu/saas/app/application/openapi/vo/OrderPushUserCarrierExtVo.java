@@ -1,8 +1,6 @@
 package com.beitu.saas.app.application.openapi.vo;
 
-import java.io.Serializable;
-
-public class OrderPushUserCarrierExtVo implements Serializable {
+public class OrderPushUserCarrierExtVo {
     
     private String activeRegion;
     

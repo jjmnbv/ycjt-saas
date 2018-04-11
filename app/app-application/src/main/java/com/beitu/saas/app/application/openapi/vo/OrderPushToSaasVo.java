@@ -1,8 +1,6 @@
 package com.beitu.saas.app.application.openapi.vo;
 
-import java.io.Serializable;
-
-public class OrderPushToSaasVo implements Serializable {
+public class OrderPushToSaasVo {
     
     private OrderPushUserBasicInfoVo basicInfo;
     

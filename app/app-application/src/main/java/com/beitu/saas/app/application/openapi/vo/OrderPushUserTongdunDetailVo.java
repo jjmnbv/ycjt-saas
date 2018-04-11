@@ -1,9 +1,8 @@
 package com.beitu.saas.app.application.openapi.vo;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class OrderPushUserTongdunDetailVo implements Serializable {
+public class OrderPushUserTongdunDetailVo {
     
     private String reportId;
     
