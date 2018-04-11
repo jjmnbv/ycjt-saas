@@ -9,14 +9,12 @@ import org.springframework.http.HttpStatus;
  * @description
  */
 public enum OpenApiOrderPushErrorCodeEnum implements ErrorCodeEnum {
-
-    DATA_PARSE_ERROR(10000, "数据解析失败", HttpStatus.OK),
-    NO_MATCHED_MERCHANT(20000, "未找到匹配推单对象机构", HttpStatus.OK),
-    USER_BASIC_INFO_MISS(20001, "用户基础信息缺失", HttpStatus.OK),
-    USER_ORDER_INFO_MISS(20001, "用户订单信息缺失", HttpStatus.OK)
-//    ,
-//    USER_INFO_EXIST(20001, "用户信息已存在", HttpStatus.OK)
-    ;
+    
+    ORDER_RECEIVE_FAIL(10000, "接口进件失败", HttpStatus.OK),
+    DATA_PARSE_ERROR(10001, "数据解析失败", HttpStatus.OK),
+    NO_MATCHED_MERCHANT(20001, "未找到匹配推单对象机构", HttpStatus.OK),
+    USER_BASIC_INFO_MISS(20002, "用户基础信息缺失", HttpStatus.OK),
+    USER_ORDER_INFO_MISS(20003, "用户订单信息缺失", HttpStatus.OK);
 
     private Integer code;
 

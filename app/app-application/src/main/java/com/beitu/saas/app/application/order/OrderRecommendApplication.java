@@ -1,6 +1,6 @@
 package com.beitu.saas.app.application.order;
 
-import com.beitu.saas.app.application.openapi.OpenApiOrderApplication;
+import com.beitu.saas.app.application.openapi.OpenApiMerchantApplication;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.utils.DateUtil;
@@ -31,7 +31,7 @@ public class OrderRecommendApplication {
     private ConfigUtil configUtil;
 
     @Autowired
-    private OpenApiOrderApplication openApiOrderApplication;
+    private OpenApiMerchantApplication openApiMerchantApplication;
 
     public Map getRecommendMerchantCode(Long zmScore, String identityNo) {
         Map map = getRecommendMerchantCode(zmScore, identityNo, null);
@@ -91,7 +91,7 @@ public class OrderRecommendApplication {
         while (it.hasNext()) {
             i++;
             Map.Entry entry = (Map.Entry) it.next();
-            if (!openApiOrderApplication.canMatchMerchant(identityNo, entry.getKey().toString())) {
+            if (!openApiMerchantApplication.canMatchMerchant(identityNo, entry.getKey().toString())) {
                 continue;
             }
             saaSRedisClient.hIncrBy(RedisKeyConsts.SAAS_MERCHANT_RECOMMEND_NUM_DAY, entry.getKey().toString(), 1L);
