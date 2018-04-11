@@ -79,19 +79,19 @@ public class CarrierController {
     @RequestMapping(value = "/h5/crawling", method = RequestMethod.GET)
     public String crawlingNotify(HttpServletRequest request) {
         String userId = request.getParameter("userId");
+        String taskId = request.getParameter("outUniqueId");
+        if (StringUtils.isEmpty(userId) || StringUtils.isEmpty(taskId)) {
+            return "";
+        }
         String[] codeArray = userId.split("_");
         String channelCode = codeArray[0];
         String borrowerCode = codeArray[1];
-        String taskId = request.getParameter("outUniqueId");
-        if (StringUtils.isNotEmpty(userId) && StringUtils.isNotEmpty(taskId)) {
-            String mobile = saasBorrowerService.getMobileByBorrowerCode(borrowerCode);
-            if (StringUtils.isNotEmpty(mobile)) {
-                if (carrierApplication.carrierTaskAndUserMatch(userId, mobile, taskId)) {
-                    redisClient.set(RedisKeyConsts.H5_CARRIER_CRAWLING, taskId, TimeConsts.TEN_MINUTES, borrowerCode);
-                }
+        String mobile = saasBorrowerService.getMobileByBorrowerCode(borrowerCode);
+        if (StringUtils.isNotEmpty(mobile)) {
+            if (carrierApplication.carrierTaskAndUserMatch(userId, mobile, taskId)) {
+                redisClient.set(RedisKeyConsts.H5_CARRIER_CRAWLING, taskId, TimeConsts.TEN_MINUTES, borrowerCode);
             }
         }
-
         Object type = redisClient.get(RedisKeyConsts.SAAS_OPEN_CARRIER_H5_BROWSER_TYPE, borrowerCode);
         if (type != null) {
             Integer browserType = Integer.parseInt(type.toString());

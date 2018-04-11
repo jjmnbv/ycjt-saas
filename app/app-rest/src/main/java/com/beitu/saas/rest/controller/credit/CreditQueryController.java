@@ -132,7 +132,7 @@ public class CreditQueryController {
         if (CollectionUtils.isNotEmpty(saasOrderDetailVoList)) {
             SaasOrderVo saasOrderVo = saasOrderService.getMainSaasOrderByOrderNumb(saasOrderDetailVoList.get(0).getOrderNumb());
             if (saasOrderVo != null && StringUtils.isNotEmpty(saasOrderVo.getTermUrl())) {
-                viewContractUrl = configUtil.getAddressURLPrefix() + TermUrlConsts.pdfViewUrl + "?file=/" + saasOrderVo.getTermUrl();
+                viewContractUrl = configUtil.getAddressURLPrefix() + TermUrlConsts.pdfViewUrl + "?pdf=/" + saasOrderVo.getTermUrl();
                 downloadContractUrl = configUtil.getAddressURLPrefix() + saasOrderVo.getTermUrl();
             }
         }

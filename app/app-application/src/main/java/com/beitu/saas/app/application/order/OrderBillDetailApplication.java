@@ -245,7 +245,7 @@ public class OrderBillDetailApplication {
             saasOrderDetailVo.setBorrowingDuration(DateUtil.countDay(saasOrderBillDetailVo.getRepaymentDt(), saasOrderBillDetailVo.getGmtCreate()));
             saasOrderDetailVo.setTotalInterestRatio(orderCalculateApplication.getInterestRatio(saasOrderBillDetailVo.getTotalInterestRatio()));
             saasOrderDetailVo.setInterest(saasOrderBillDetailVo.getInterest().toString());
-            if (saasOrderBillDetailVo.getAmount() == null) {
+            if (saasOrderBillDetailVo.getAmount() == null || BigDecimal.ZERO.compareTo(saasOrderBillDetailVo.getAmount()) == 0) {
                 saasOrderDetailVo.setAmount(orderCalculateApplication.getAmount(saasOrderBillDetailVo).toString());
             } else {
                 saasOrderDetailVo.setAmount(saasOrderBillDetailVo.getAmount().toString());

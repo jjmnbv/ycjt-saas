@@ -2,6 +2,7 @@ package com.beitu.saas.app.application.credit;
 
 import com.beitu.saas.app.application.credit.async.CarrierAsyncApplication;
 import com.beitu.saas.app.application.credit.vo.*;
+import com.beitu.saas.app.enums.CarrierStatusEnum;
 import com.beitu.saas.common.utils.ThreadPoolUtils;
 import com.beitu.saas.credit.client.*;
 import com.beitu.saas.credit.domain.*;
@@ -56,13 +57,18 @@ public class CarrierReportApplication {
     private SaasCreditBmpDetailService saasCreditBmpDetailService;
 
     public CreditCarrierReportVo getCarrierReportByMerchantCodeAndBorrowerCode(String merchantCode, String borrowerCode) {
+        CreditCarrierReportVo creditCarrierReportVo = new CreditCarrierReportVo();
         SaasCreditCarrierVo saasCreditCarrierVo = saasCreditCarrierService.getByMerchantCodeAndBorrowerCode(merchantCode, borrowerCode);
         if (saasCreditCarrierVo == null) {
-            return null;
+            creditCarrierReportVo.setStatus(CarrierStatusEnum.UNAUTHORIZED.getCode());
+            return creditCarrierReportVo;
         }
+        if (!saasCreditCarrierVo.getSuccess()) {
+            creditCarrierReportVo.setStatus(CarrierStatusEnum.FAILURE.getCode());
+            return creditCarrierReportVo;
+        }
+        creditCarrierReportVo.setStatus(CarrierStatusEnum.SUCCESS.getCode());
         Long recordId = saasCreditCarrierVo.getSaasCreditCarrierId();
-
-        CreditCarrierReportVo creditCarrierReportVo = new CreditCarrierReportVo();
 
         SaasCreditCarrierBaseVo saasCreditCarrierBaseVo = saasCreditCarrierBaseService.getByRecordId(recordId);
         creditCarrierReportVo.setCreditCarrierBaseVo(new CreditCarrierBaseVo(saasCreditCarrierBaseVo));

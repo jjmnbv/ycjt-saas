@@ -54,44 +54,28 @@ public class DunningAsyncApplication {
         if (saasCreditCarrierVo == null) {
             throw new ApplicationException(CreditErrorCodeEnum.CREDIT_CARRIER_DATA_LACK);
         }
-        Long recordId = null;
-        DunningDataVo dunningDataVo = null;
-        SaasCreditDunningVo saasCreditDunningVo = saasCreditDunningService.getByMerchantCodeAndBorrowerCode(merchantCode, borrowerCode);
-        if (saasCreditDunningVo == null) {
-            String result = dianhuaHandler.getDunningVo(saasCreditCarrierVo.getUrl());
-            DunningResultVo resultVo;
-            try {
-                resultVo = JSONUtils.json2pojoAndOffUnknownField(result, DunningResultVo.class);
-            } catch (Exception e) {
-                throw new ApplicationException(CreditErrorCodeEnum.CREDIT_DUNNING_GENERATE_ERROR, "电话邦结果JSON序列化失败");
-            }
-            saasCreditDunningVo = new SaasCreditDunningVo();
-            if (resultVo != null && resultVo.getData() != null) {
-                saasCreditDunningVo.setMerchantCode(merchantCode);
-                saasCreditDunningVo.setBorrowerCode(borrowerCode);
-                saasCreditDunningVo.setCarrierId(saasCreditCarrierVo.getSaasCreditCarrierId());
-                dunningDataVo = resultVo.getData();
-                saasCreditDunningVo.setSid(dunningDataVo.getSid());
-                saasCreditDunningVo.setMobile(dunningDataVo.getTel());
-                saasCreditDunningVo.setTotalNum(dunningDataVo.getTotalNum());
-                saasCreditDunningVo.setEffectiveNum(dunningDataVo.getEffectiveNum());
-                saasCreditDunningVo.setSuccess(Boolean.FALSE);
-                String url = uploadDunningData(borrowerCode, result);
-                saasCreditDunningVo.setUrl(url);
-                recordId = saasCreditDunningService.addSaasCreditDunning(saasCreditDunningVo).getId();
-            }
-        } else if (saasCreditDunningVo.getSuccess()) {
-            return;
-        } else {
-            recordId = saasCreditDunningVo.getSaasCreditDunningId();
-            String result = ossService.getFileContent(saasCreditDunningVo.getUrl());
-            try {
-                DunningResultVo resultVo = JSONUtils.json2pojoAndOffUnknownField(result, DunningResultVo.class);
-                dunningDataVo = resultVo.getData();
-            } catch (Exception e) {
-                throw new ApplicationException(CreditErrorCodeEnum.CREDIT_DUNNING_GENERATE_ERROR, "电话邦结果JSON序列化失败");
-            }
+        String result = dianhuaHandler.getDunningVo(saasCreditCarrierVo.getUrl());
+        DunningResultVo resultVo;
+        try {
+            resultVo = JSONUtils.json2pojoAndOffUnknownField(result, DunningResultVo.class);
+        } catch (Exception e) {
+            throw new ApplicationException(CreditErrorCodeEnum.CREDIT_DUNNING_GENERATE_ERROR, "电话邦结果JSON序列化失败");
         }
+        SaasCreditDunningVo saasCreditDunningVo = new SaasCreditDunningVo();
+        if (resultVo == null || resultVo.getData() == null) {
+        }
+        saasCreditDunningVo.setMerchantCode(merchantCode);
+        saasCreditDunningVo.setBorrowerCode(borrowerCode);
+        saasCreditDunningVo.setCarrierId(saasCreditCarrierVo.getSaasCreditCarrierId());
+        DunningDataVo dunningDataVo = resultVo.getData();
+        saasCreditDunningVo.setSid(dunningDataVo.getSid());
+        saasCreditDunningVo.setMobile(dunningDataVo.getTel());
+        saasCreditDunningVo.setTotalNum(dunningDataVo.getTotalNum());
+        saasCreditDunningVo.setEffectiveNum(dunningDataVo.getEffectiveNum());
+        saasCreditDunningVo.setSuccess(Boolean.FALSE);
+        String url = uploadDunningData(borrowerCode, result);
+        saasCreditDunningVo.setUrl(url);
+        Long recordId = saasCreditDunningService.addSaasCreditDunning(saasCreditDunningVo).getId();
 
         if (recordId == null) {
             throw new ApplicationException(CreditErrorCodeEnum.CREDIT_DUNNING_GENERATE_ERROR, "credit_dunning插入失败");

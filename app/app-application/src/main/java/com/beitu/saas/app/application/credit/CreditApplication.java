@@ -344,8 +344,6 @@ public class CreditApplication {
     }
 
     private void submitCarrierAuthentic(String merchantCode, String borrowerCode, Integer required) {
-        carrierReportApplication.generateCarrierReport(merchantCode, borrowerCode);
-        dunningReportApplication.generateDunningReport(merchantCode, borrowerCode);
         if (!saasCreditCarrierService.effectivenessCreditCarrier(borrowerCode)) {
             if (SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
                 throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_CARRIER_AUTHENTIC);

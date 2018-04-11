@@ -31,7 +31,6 @@ public class CarrierCallLogVo implements Serializable {
     public CarrierCallLogVo(CarriersPhoneCallVo callVo) {
         if (callVo != null) {
             this.callTel = callVo.getPeernumber();
-            this.callMethod = Objects.equals(callVo.getDialtype(), "主叫") ? 1 : 2;
             this.callDuration = StringUtils.isEmpty(callVo.getCallTime()) ? 0 : Integer.valueOf(callVo.getCallTime());
             Date createtime = null;
             if (StringUtils.isNotEmpty(callVo.getCreatetime())) {
@@ -40,6 +39,14 @@ public class CarrierCallLogVo implements Serializable {
             if (createtime != null) {
                 this.callTime = createtime.getTime() / 1000;
             }
+            if (Objects.equals(callVo.getDialtype(), "1")) {
+                this.callMethod = 1;
+            } else if (Objects.equals(callVo.getDialtype(), "2")) {
+                this.callMethod = 2;
+            } else {
+                this.callMethod = Objects.equals(callVo.getDialtype(), "主叫") ? 1 : 2;
+            }
+
         }
     }
     

@@ -97,10 +97,10 @@ public class CarrierApplication {
         carrierRequestUrlInput.setReturnUrl(configUtil.getApiWebPath() + "/credit/carrier/h5/crawling");
         carrierRequestUrlInput.setAppUrl(configUtil.getApiWebPath() + "/credit/carrier/callback/1");
 
-        redisClient.set(RedisKeyConsts.SAAS_OPEN_CARRIER_H5_BROWSER_TYPE, type, TimeConsts.TEN_MINUTES, borrowerCode);
 
         TripleServiceResult response = tripleCarrierService.getCarrierServiceResult(ProductTypeEnum.YCJT, TripleServiceTypeEnum.CARRIER_REQUEST_URL, carrierRequestUrlInput);
         if (response.isSuccess()) {
+            redisClient.set(RedisKeyConsts.SAAS_OPEN_CARRIER_H5_BROWSER_TYPE, type, TimeConsts.TEN_MINUTES, borrowerCode);
             CarrierRequestUrlOutput carrierRequestUrlOutput = (CarrierRequestUrlOutput) response.getData();
             return carrierRequestUrlOutput.getRedirectUrl();
         } else {
@@ -135,6 +135,7 @@ public class CarrierApplication {
         String taskId = h5CallbackVo.getTaskId();
         String userCode = h5CallbackVo.getUserCode();
         CarrierH5TypeEnum typeEnum = h5CallbackVo.getCarrierType();
+        redisClient.del(RedisKeyConsts.H5_CARRIER_CRAWLING, userCode);
         if ("DONE_SUCCESS".equals(status)) {
             String task = redisClient.get(RedisKeyConsts.H5_CARRIER_CRAWLING, userCode);
             if (taskId.equals(task)) {
@@ -149,7 +150,6 @@ public class CarrierApplication {
         } else if ("DONE_FAIL".equals(status)) {
             //失败处理
         }
-        redisClient.del(RedisKeyConsts.H5_CARRIER_CRAWLING, userCode);
     }
 
     private void carrierH5Upload(String data, CarrierH5TypeEnum typeEnum, String merchantCode, String borrowerCode) {

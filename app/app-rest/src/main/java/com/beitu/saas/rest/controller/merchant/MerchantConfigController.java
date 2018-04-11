@@ -1,7 +1,8 @@
 package com.beitu.saas.rest.controller.merchant;
 
+import com.beitu.saas.app.annotations.HasPermission;
 import com.beitu.saas.app.common.RequestLocalInfo;
-import com.beitu.saas.auth.domain.MerchantContractInfoVo;
+import com.beitu.saas.common.consts.ButtonPermissionConsts;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.utils.DateUtil;
 import com.beitu.saas.merchant.client.SaasMerchantFlowConfigService;
@@ -63,6 +64,7 @@ public class MerchantConfigController {
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ParamsValidate
     @ApiOperation(value = "保存流量设置")
+    @HasPermission(permissionKey = ButtonPermissionConsts.SET_FLOW_CONDITIONS)
     public Response saveConfig(@RequestBody SaveConfigRequest request) {
         String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
         Object o = redisClient.get(RedisKeyConsts.SAAS_MERCHANT_FLOW_CONFIG, merchantCode);
