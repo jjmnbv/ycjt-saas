@@ -39,7 +39,7 @@ public class OrderDetailQueryResponse implements ResponseData {
         }
         this.originalOrderDetailVo = allOrderBillDetail.get(0);
         if (allOrderBillDetail.size() > 1) {
-            this.extendOrderDetailVoList = allOrderBillDetail.subList(1, allOrderBillDetail.size() - 1);
+            this.extendOrderDetailVoList = allOrderBillDetail.subList(1, allOrderBillDetail.size());
         }
         this.mainOrderDetailVo = new SaasOrderDetailVo();
         BeanUtils.copyProperties(allOrderBillDetail.get(allOrderBillDetail.size() - 1), mainOrderDetailVo);

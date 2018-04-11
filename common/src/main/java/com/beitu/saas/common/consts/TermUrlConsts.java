@@ -13,6 +13,6 @@ public interface TermUrlConsts {
 
     String authorizationUrl = "terms/authorization.html";
 
-    String pdfViewUrl = "H5/pdfview/web/viewer.html";
+    String pdfViewUrl = "h5/pdfview/web/viewer.html";
 
 }
