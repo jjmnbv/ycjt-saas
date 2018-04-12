@@ -60,9 +60,9 @@ public class SaasMerchantSmsInfoServiceImpl extends AbstractBaseService implemen
         if (add) {
             balanceValue = balanceValue + value;
         } else {
-            if (balanceValue.compareTo(value) == -1) {
-                throw new ApiErrorException(BalanceErrorCodeEnum.LACK_OF_BALANCE.setMsg("短信条数不足"));
-            }
+//            if (balanceValue.compareTo(value) == -1) {
+//                throw new ApiErrorException(BalanceErrorCodeEnum.LACK_OF_BALANCE.setMsg("短信条数不足"));
+//            }
             balanceValue = balanceValue - value;
         }
         userBalanceInfo.setValue(balanceValue);
