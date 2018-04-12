@@ -29,8 +29,8 @@
             </CustomJSONLayout>
         </console>
         <!-- 这个会打印出所有的info及以下级别的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档-->
-        <!--<RollingFile name="RollingFileInfo" fileName="${sys:borrower.home}/logs/info.Log"-->
-        <!--filePattern="${sys:borrower.home}/logs/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.Log">-->
+        <!--<RollingFile name="RollingFileInfo" fileName="${sys:user.home}/logs/info.Log"-->
+        <!--filePattern="${sys:user.home}/logs/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.Log">-->
         <RollingFile name="RollingFileDiag" fileName="${basePath}/${project-name}/event/diag.log"
                      filePattern="${basePath}/${project-name}/event/diag-%d{yyyy-MM-dd}-%i.log" immediateFlush="true">
             <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
@@ -92,12 +92,12 @@
             </filters>
             <PatternLayout pattern="${log_pattern}"/>
             <!--<CustomJSONLayout charset="UTF-8" locationInfo="false" properties="true" compact="true" complete="false"-->
-                              <!--newline="true"-->
-                              <!--commaAtEventEnd="false" includeLogger="false" includeLevel="true" includeThread="true"-->
-                              <!--includeMessage="true"-->
-                              <!--includeLog="false" includeNDC="false" logTrace="false" includeThrown="true"-->
-                              <!--jsonEscapeSubLayout="true" subLayoutAsElement="true">-->
-                <!--&lt;!&ndash;<KeyValuePair key="environment_user" value="${env:USER}"/>&ndash;&gt;-->
+            <!--newline="true"-->
+            <!--commaAtEventEnd="false" includeLogger="false" includeLevel="true" includeThread="true"-->
+            <!--includeMessage="true"-->
+            <!--includeLog="false" includeNDC="false" logTrace="false" includeThrown="true"-->
+            <!--jsonEscapeSubLayout="true" subLayoutAsElement="true">-->
+            <!--&lt;!&ndash;<KeyValuePair key="environment_user" value="${env:USER}"/>&ndash;&gt;-->
             <!--</CustomJSONLayout>-->
             <Policies>
                 <TimeBasedTriggeringPolicy/>
@@ -115,12 +115,12 @@
             <!--<PatternLayout pattern="%msg%n"/>-->
             <PatternLayout pattern="${log_pattern}"/>
             <!--<CustomJSONLayout charset="UTF-8" locationInfo="false" properties="true" compact="true" complete="false"-->
-                              <!--newline="true"-->
-                              <!--commaAtEventEnd="false" includeLogger="false" includeLevel="true" includeThread="true"-->
-                              <!--includeMessage="true"-->
-                              <!--includeLog="false" includeNDC="false" logTrace="false" includeThrown="true"-->
-                              <!--jsonEscapeSubLayout="true" subLayoutAsElement="true">-->
-                <!--&lt;!&ndash;<KeyValuePair key="environment_user" value="${env:USER}"/>&ndash;&gt;-->
+            <!--newline="true"-->
+            <!--commaAtEventEnd="false" includeLogger="false" includeLevel="true" includeThread="true"-->
+            <!--includeMessage="true"-->
+            <!--includeLog="false" includeNDC="false" logTrace="false" includeThrown="true"-->
+            <!--jsonEscapeSubLayout="true" subLayoutAsElement="true">-->
+            <!--&lt;!&ndash;<KeyValuePair key="environment_user" value="${env:USER}"/>&ndash;&gt;-->
             <!--</CustomJSONLayout>-->
             <Policies>
                 <TimeBasedTriggeringPolicy/>
@@ -137,12 +137,12 @@
             <!--<PatternLayout pattern="%msg%n"/>-->
             <PatternLayout pattern="${log_pattern}"/>
             <!--<CustomJSONLayout charset="UTF-8" locationInfo="false" properties="true" compact="true" complete="false"-->
-                              <!--newline="true"-->
-                              <!--commaAtEventEnd="false" includeLogger="false" includeLevel="true" includeThread="true"-->
-                              <!--includeMessage="true"-->
-                              <!--includeLog="false" includeNDC="false" logTrace="false" includeThrown="true"-->
-                              <!--jsonEscapeSubLayout="true" subLayoutAsElement="true">-->
-                <!--&lt;!&ndash;<KeyValuePair key="environment_user" value="${env:USER}"/>&ndash;&gt;-->
+            <!--newline="true"-->
+            <!--commaAtEventEnd="false" includeLogger="false" includeLevel="true" includeThread="true"-->
+            <!--includeMessage="true"-->
+            <!--includeLog="false" includeNDC="false" logTrace="false" includeThrown="true"-->
+            <!--jsonEscapeSubLayout="true" subLayoutAsElement="true">-->
+            <!--&lt;!&ndash;<KeyValuePair key="environment_user" value="${env:USER}"/>&ndash;&gt;-->
             <!--</CustomJSONLayout>-->
             <Policies>
                 <TimeBasedTriggeringPolicy/>
@@ -158,12 +158,12 @@
             <!--<PatternLayout pattern="%msg%n"/>-->
             <PatternLayout pattern="${log_pattern}"/>
             <!--<CustomJSONLayout charset="UTF-8" locationInfo="false" properties="true" compact="true" complete="false"-->
-                              <!--newline="true"-->
-                              <!--commaAtEventEnd="false" includeLogger="false" includeLevel="true" includeThread="true"-->
-                              <!--includeMessage="true"-->
-                              <!--includeLog="false" includeNDC="false" logTrace="false" includeThrown="true"-->
-                              <!--jsonEscapeSubLayout="true" subLayoutAsElement="true">-->
-                <!--&lt;!&ndash;<KeyValuePair key="environment_user" value="${env:USER}"/>&ndash;&gt;-->
+            <!--newline="true"-->
+            <!--commaAtEventEnd="false" includeLogger="false" includeLevel="true" includeThread="true"-->
+            <!--includeMessage="true"-->
+            <!--includeLog="false" includeNDC="false" logTrace="false" includeThrown="true"-->
+            <!--jsonEscapeSubLayout="true" subLayoutAsElement="true">-->
+            <!--&lt;!&ndash;<KeyValuePair key="environment_user" value="${env:USER}"/>&ndash;&gt;-->
             <!--</CustomJSONLayout>-->
             <Policies>
                 <TimeBasedTriggeringPolicy/>
@@ -193,7 +193,7 @@
         </logger>
         <root level="info">
             <appender-ref ref="Console"/>
-            <appender-ref ref="RollingFileInfo"/>
+            <!--<appender-ref ref="RollingFileInfo"/>-->
             <!--<appender-ref ref="RollingFileWarn"/>-->
             <!--<appender-ref ref="RollingFileError"/>-->
         </root>

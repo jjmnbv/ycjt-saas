@@ -77,11 +77,9 @@ public class BorrowerApplication {
             throw new ApplicationException(ChannelErrorCodeEnum.DISABLE_CHANNEL);
         }
         SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByMobileAndMerchantCode(mobile, saasH5ChannelVo.getMerchantCode());
-        String token;
         String borrowerCode;
         if (saasBorrowerVo != null) {
             borrowerCode = saasBorrowerVo.getBorrowerCode();
-            token = saasBorrowerTokenService.refreshToken(saasBorrowerVo.getBorrowerCode(), saasH5ChannelVo.getMerchantCode()).getToken();
         } else {
             saasBorrowerVo = new SaasBorrowerVo();
             saasBorrowerVo.setMerchantCode(saasH5ChannelVo.getMerchantCode());
@@ -89,8 +87,8 @@ public class BorrowerApplication {
             saasBorrowerVo.setMobile(mobile);
             SaasBorrower saasBorrower = saasBorrowerService.create(saasBorrowerVo);
             borrowerCode = saasBorrower.getBorrowerCode();
-            token = saasBorrowerTokenService.create(saasBorrower.getBorrowerCode(), saasH5ChannelVo.getMerchantCode()).getToken();
         }
+        String token = saasBorrowerTokenService.refreshToken(borrowerCode, saasH5ChannelVo.getMerchantCode()).getToken();
 
         if (StringUtils.isNotEmpty(ip)) {
             SaasBorrowerLoginLog saasBorrowerLoginLog = new SaasBorrowerLoginLog();

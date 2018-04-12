@@ -12,6 +12,7 @@ import com.beitu.saas.app.enums.SaasContractEnum;
 import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.ButtonPermissionConsts;
+import com.beitu.saas.common.consts.TermUrlConsts;
 import com.beitu.saas.rest.controller.order.request.AfterLendManagerDestroyOrderRequest;
 import com.beitu.saas.rest.controller.order.request.AfterLendManagerExtendOrderRequest;
 import com.beitu.saas.rest.controller.order.request.AfterLendOrderDetailRequest;

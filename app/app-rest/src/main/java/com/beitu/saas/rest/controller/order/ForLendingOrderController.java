@@ -7,16 +7,14 @@ import com.beitu.saas.app.api.ModuleApiResponse;
 import com.beitu.saas.app.application.order.OrderApplication;
 import com.beitu.saas.app.application.order.vo.QueryOrderVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
+import com.beitu.saas.app.enums.SaasLendRemarkEnum;
 import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.common.consts.ButtonPermissionConsts;
-import com.beitu.saas.order.enums.OrderStatusEnum;
-import com.beitu.saas.rest.controller.order.request.FinalReviewerOperateOrderRequest;
-import com.beitu.saas.rest.controller.order.request.LendingOrderDetailRequest;
-import com.beitu.saas.rest.controller.order.request.LendingOrderQueryRequest;
-import com.beitu.saas.rest.controller.order.request.LendingOrderRemarkSaveRequest;
+import com.beitu.saas.rest.controller.order.request.*;
 import com.beitu.saas.rest.controller.order.response.LendingOrderDetailResponse;
 import com.beitu.saas.rest.controller.order.response.LendingOrderListResponse;
 import com.fqgj.common.api.Page;
+import com.fqgj.common.api.exception.ApiIllegalArgumentException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
@@ -77,9 +75,13 @@ public class ForLendingOrderController {
     @RequestMapping(value = "/agree", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "放款", response = ApiResponse.class)
-    public ApiResponse agree(@RequestBody @Valid FinalReviewerOperateOrderRequest req) {
+    public ApiResponse agree(@RequestBody @Valid LenderAgreeOrderRequest req) {
         SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
-        orderApplication.lenderAgree(saasAdmin.getMerchantCode(), saasAdmin.getCode(), req.getOrderNumb());
+        SaasLendRemarkEnum saasLendRemarkEnum = SaasLendRemarkEnum.getByCode(req.getLendRemark());
+        if (saasLendRemarkEnum == null) {
+            throw new ApiIllegalArgumentException("下款途径不支持");
+        }
+        orderApplication.lenderAgree(saasAdmin.getMerchantCode(), saasAdmin.getCode(), req.getOrderNumb(), saasLendRemarkEnum.getMsg());
         return new ApiResponse("操作成功");
     }
 
@@ -87,7 +89,7 @@ public class ForLendingOrderController {
     @RequestMapping(value = "/refuse", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "放款拒绝", response = ApiResponse.class)
-    public ApiResponse refuse(@RequestBody @Valid FinalReviewerOperateOrderRequest req) {
+    public ApiResponse refuse(@RequestBody @Valid LenderRefuseOrderRequest req) {
         SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
         orderApplication.lenderRefuse(saasAdmin.getMerchantCode(), saasAdmin.getCode(), req.getOrderNumb());
         return new ApiResponse("操作成功");

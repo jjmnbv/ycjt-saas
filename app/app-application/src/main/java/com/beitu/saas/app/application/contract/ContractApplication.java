@@ -155,7 +155,7 @@ public class ContractApplication {
 
     private void doEsignAuthorization(String merchantCode, String userCode, String name, String accountId, String sealUrl, String sealData) {
         if (StringUtils.isEmpty(sealUrl)) {
-            sealUrl = getSealUrl(merchantCode);
+            sealUrl = getSealUrl(userCode);
             ossService.uploadFile(sealUrl, sealData);
         }
         String url = getAuthorizationUrl(userCode);
@@ -211,8 +211,8 @@ public class ContractApplication {
 
                 }
             }
-            saasCreditHistoryService.addExpenditureCreditHistory(merchantCode, name, CreditConsumeEnum.RISK_ESIGN);
             saasUserEsignAuthorizationService.updateSaasUserEsignAuthorization(saasUserEsignAuthorizationVo.getSaasUserEsignAuthorizationId(), url);
+            saasCreditHistoryService.addExpenditureCreditHistory(merchantCode, name, CreditConsumeEnum.RISK_ESIGN);
         }
     }
 
@@ -325,7 +325,7 @@ public class ContractApplication {
         if (configUtil.isServerTest()) {
             filePath.append("test/");
         }
-        filePath.append(userCode).append("/").append(MD5.md5(OrderNoUtil.makeOrderNum()));
+        filePath.append(userCode).append("/").append(MD5.md5(OrderNoUtil.makeOrderNum())).append(".jpg");
         return filePath.toString();
     }
 

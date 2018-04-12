@@ -21,6 +21,10 @@ public class SaasOrderListVo implements ResponseData {
 
     private String capital;
 
+    private String repaymentDate;
+
+    private String totalInterestRatio;
+
     private String borrowingDuration;
 
     private String applyDate;
@@ -28,6 +32,8 @@ public class SaasOrderListVo implements ResponseData {
     private String channelName;
 
     private String orderStatus;
+
+    private Integer zmCreditScore;
 
     private String remark;
 
@@ -83,6 +89,22 @@ public class SaasOrderListVo implements ResponseData {
         this.capital = capital;
     }
 
+    public String getRepaymentDate() {
+        return repaymentDate;
+    }
+
+    public void setRepaymentDate(String repaymentDate) {
+        this.repaymentDate = repaymentDate;
+    }
+
+    public String getTotalInterestRatio() {
+        return totalInterestRatio;
+    }
+
+    public void setTotalInterestRatio(String totalInterestRatio) {
+        this.totalInterestRatio = totalInterestRatio;
+    }
+
     public String getBorrowingDuration() {
         return borrowingDuration;
     }
@@ -113,6 +135,14 @@ public class SaasOrderListVo implements ResponseData {
 
     public void setOrderStatus(String orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+    public Integer getZmCreditScore() {
+        return zmCreditScore;
+    }
+
+    public void setZmCreditScore(Integer zmCreditScore) {
+        this.zmCreditScore = zmCreditScore;
     }
 
     public String getRemark() {

@@ -10,6 +10,10 @@ import com.beitu.saas.borrower.entity.SaasBorrowerRealInfo;
 import com.beitu.saas.borrower.entity.SaasBorrowerWorkInfo;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.utils.identityNumber.vo.IdcardInfoExtractor;
+import com.beitu.saas.credit.client.SaasCreditCarrierRecordService;
+import com.beitu.saas.credit.client.SaasCreditCarrierService;
+import com.beitu.saas.credit.domain.SaasCreditCarrierRecordVo;
+import com.beitu.saas.credit.domain.SaasCreditCarrierVo;
 import com.beitu.saas.order.client.SaasOrderApplicationService;
 import com.beitu.saas.order.domain.SaasOrderApplicationVo;
 import com.fqgj.common.utils.CollectionUtils;
@@ -57,6 +61,12 @@ public class BorrowerBaseInfoApplication {
     @Autowired
     private SaasBorrowerLoginLogService saasBorrowerLoginLogService;
 
+    @Autowired
+    private SaasCreditCarrierService saasCreditCarrierService;
+
+    @Autowired
+    private SaasCreditCarrierRecordService saasCreditCarrierRecordService;
+
     public BorrowerOrderApplicationVo getUserOrderApplicationVo(String borrowerCode, String orderNumb) {
         SaasOrderApplicationVo saasOrderApplicationVo = saasOrderApplicationService.getByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
         if (saasOrderApplicationVo == null) {
@@ -71,7 +81,7 @@ public class BorrowerBaseInfoApplication {
         BorrowerPersonalInfoVo borrowerPersonalInfoVo = new BorrowerPersonalInfoVo();
         SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCodeAndMerchantCode(borrowerCode, merchantCode);
         if (saasBorrowerVo == null) {
-
+            return null;
         }
         borrowerPersonalInfoVo.setMobile(saasBorrowerVo.getMobile());
 
@@ -105,13 +115,25 @@ public class BorrowerBaseInfoApplication {
         }
         BorrowerIdentityInfoVo borrowerIdentityInfoVo = new BorrowerIdentityInfoVo();
         if (StringUtils.isNotEmpty(saasBorrowerIdentityInfoVo.getFrontUrl())) {
-            borrowerIdentityInfoVo.setFrontUrl(configUtil.getAddressURLPrefix() + saasBorrowerIdentityInfoVo.getFrontUrl());
+            String url = saasBorrowerIdentityInfoVo.getFrontUrl();
+            if (!url.contains("http:") && !url.contains("https:")) {
+                url = configUtil.getAddressURLPrefix() + url;
+            }
+            borrowerIdentityInfoVo.setFrontUrl(url);
         }
         if (StringUtils.isNotEmpty(saasBorrowerIdentityInfoVo.getBackUrl())) {
-            borrowerIdentityInfoVo.setBackUrl(configUtil.getAddressURLPrefix() + saasBorrowerIdentityInfoVo.getBackUrl());
+            String url = saasBorrowerIdentityInfoVo.getBackUrl();
+            if (!url.contains("http:") && !url.contains("https:")) {
+                url = configUtil.getAddressURLPrefix() + url;
+            }
+            borrowerIdentityInfoVo.setBackUrl(url);
         }
         if (StringUtils.isNotEmpty(saasBorrowerIdentityInfoVo.getHoldUrl())) {
-            borrowerIdentityInfoVo.setHoldUrl(configUtil.getAddressURLPrefix() + saasBorrowerIdentityInfoVo.getHoldUrl());
+            String url = saasBorrowerIdentityInfoVo.getHoldUrl();
+            if (!url.contains("http:") && !url.contains("https:")) {
+                url = configUtil.getAddressURLPrefix() + url;
+            }
+            borrowerIdentityInfoVo.setHoldUrl(url);
         }
         return borrowerIdentityInfoVo;
     }
@@ -126,13 +148,28 @@ public class BorrowerBaseInfoApplication {
         return borrowerWorkInfoVo;
     }
 
-    public BorrowerEmergentContactVo getUserEmergentContactVo(String borrowerCode, String orderNumb) {
+    public BorrowerEmergentContactVo getUserEmergentContactVo(String merchantCode, String borrowerCode, String orderNumb) {
         SaasBorrowerEmergentContactVo saasBorrowerEmergentContactVo = saasBorrowerEmergentContactService.getByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
         if (saasBorrowerEmergentContactVo == null) {
             return null;
         }
         BorrowerEmergentContactVo borrowerEmergentContactVo = new BorrowerEmergentContactVo();
         BeanUtils.copyProperties(saasBorrowerEmergentContactVo, borrowerEmergentContactVo);
+
+        SaasCreditCarrierVo saasCreditCarrierVo = saasCreditCarrierService.getByMerchantCodeAndBorrowerCode(merchantCode, borrowerCode);
+        if (saasCreditCarrierVo != null && saasCreditCarrierVo.getSuccess()) {
+            Long recordId = saasCreditCarrierVo.getSaasCreditCarrierId();
+            List<SaasCreditCarrierRecordVo> familyRecordVoList = saasCreditCarrierRecordService.listByRecordIdAndMobile(recordId, saasBorrowerEmergentContactVo.getFamilyMobile());
+            if (CollectionUtils.isNotEmpty(familyRecordVoList)) {
+                SaasCreditCarrierRecordVo familyRecordVo = familyRecordVoList.get(familyRecordVoList.size() - 1);
+                borrowerEmergentContactVo.setFamilyRecord(familyRecordVo.getCalledDuration() + "/" + familyRecordVo.getCallingDuration() + "、" + familyRecordVo.getTotalDuration() + "秒");
+            }
+            List<SaasCreditCarrierRecordVo> friendRecordVoList = saasCreditCarrierRecordService.listByRecordIdAndMobile(recordId, saasBorrowerEmergentContactVo.getFriendMobile());
+            if (CollectionUtils.isNotEmpty(friendRecordVoList)) {
+                SaasCreditCarrierRecordVo friendRecordVo = friendRecordVoList.get(friendRecordVoList.size() - 1);
+                borrowerEmergentContactVo.setFriendRecord(friendRecordVo.getCalledDuration() + "/" + friendRecordVo.getCallingDuration() + "、" + friendRecordVo.getTotalDuration() + "秒");
+            }
+        }
         return borrowerEmergentContactVo;
     }
 

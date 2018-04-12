@@ -162,6 +162,10 @@ public class CreditApplication {
                 if (saasBorrowerLoanCrawlService.effectivenessLoanCrawl(borrowerCode, null)) {
                     return BorrowerInfoApplyStatusEnum.FINISHED;
                 }
+                Object platformValue = redisClient.get(RedisKeyConsts.H5_LOAN_PLATFORM_CRAWLING, borrowerCode);
+                if (platformValue != null) {
+                    return BorrowerInfoApplyStatusEnum.AUTHENTICATING;
+                }
                 return BorrowerInfoApplyStatusEnum.INCOMPLETE;
         }
         return BorrowerInfoApplyStatusEnum.INCOMPLETE;
@@ -245,7 +249,6 @@ public class CreditApplication {
             RiskModuleEnum riskModuleEnum = RiskModuleEnum.getRiskModuleEnumByModuleCode(saasChannelRiskSettingsVo.getModuleCode());
             switch (riskModuleEnum) {
                 case APPLICATION:
-                    submitApplication(borrowerCode, newOrderNumb, channelCode, saasChannelRiskSettingsVo.getRequired());
                     break;
                 case PERSONAL_INFO:
                     submitPersonalInfo(borrowerCode, newOrderNumb, saasChannelRiskSettingsVo.getRequired());
@@ -271,6 +274,7 @@ public class CreditApplication {
                     break;
             }
         });
+        submitApplication(borrowerCode, newOrderNumb, channelCode, SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE);
         generateBlackData(merchantCode, borrowerCode);
         return new ApiResponse("提交成功");
     }
@@ -344,8 +348,6 @@ public class CreditApplication {
     }
 
     private void submitCarrierAuthentic(String merchantCode, String borrowerCode, Integer required) {
-        carrierReportApplication.generateCarrierReport(merchantCode, borrowerCode);
-        dunningReportApplication.generateDunningReport(merchantCode, borrowerCode);
         if (!saasCreditCarrierService.effectivenessCreditCarrier(borrowerCode)) {
             if (SaasChannelRiskSettingsVo.DEFAULT_NEED_REQUIRED_VALUE.equals(required)) {
                 throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_NEED_CARRIER_AUTHENTIC);

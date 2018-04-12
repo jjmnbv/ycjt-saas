@@ -37,7 +37,7 @@ public class RedisKeyConsts {
     /**
      * H5聚信立借贷平台爬取Redis Key前缀
      */
-    public static final String H5_LOAN_PLATFORM_CRAWLING = "SAAS_H5_LOAN_PLATFORM_CRAWLING_{userCode}_{platform}";
+    public static final String H5_LOAN_PLATFORM_CRAWLING = "SAAS_H5_LOAN_PLATFORM_CRAWLING_{userCode}";
 
     /**
      * 同盾 防止 用户短时间内多次重复提交 Redis Key前缀
@@ -56,5 +56,13 @@ public class RedisKeyConsts {
      * 推荐流量设置每天保存一次
      */
     public static final String SAAS_MERCHANT_FLOW_CONFIG = "SAAS_MERCHANT_FLOW_CONFIG_{merchantCode}";
+    /**
+     * 打开 聚信力url 浏览器类型
+     */
+    public static final String SAAS_OPEN_JXL_H5_BROWSER_TYPE = "SAAS_OPEN_JXL_H5_BROWSER_{taskId}";
+    /**
+     * 打开 运营商url 浏览器类型
+     */
+    public static final String SAAS_OPEN_CARRIER_H5_BROWSER_TYPE = "SAAS_OPEN_CARRIER_H5_BROWSER_{borrowerCode}";
 
 }

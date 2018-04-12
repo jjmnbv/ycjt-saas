@@ -1,21 +1,17 @@
 package com.beitu.saas.order.service.impl;
 
-import com.beitu.saas.common.utils.OrderNoUtil;
 import com.beitu.saas.order.client.SaasOrderApplicationService;
 import com.beitu.saas.order.dao.SaasOrderApplicationDao;
 import com.beitu.saas.order.domain.SaasOrderApplicationVo;
 import com.beitu.saas.order.entity.SaasOrderApplication;
-import com.beitu.saas.order.enums.OrderApplyStatusMsgEnum;
 import com.fqgj.common.base.AbstractBaseService;
-import com.fqgj.common.base.BaseService;
 import com.fqgj.common.base.NameSpace;
 import com.fqgj.common.utils.CollectionUtils;
 import com.fqgj.log.enhance.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -55,7 +51,13 @@ public class SaasOrderApplicationServiceImpl extends AbstractBaseService impleme
 
     @Override
     public List<SaasOrderApplicationVo> listByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb) {
-        return null;
+        List<SaasOrderApplication> saasOrderApplicationList = saasOrderApplicationDao.selectAllByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
+        if (CollectionUtils.isEmpty(saasOrderApplicationList)) {
+            return null;
+        }
+        List<SaasOrderApplicationVo> results = new ArrayList<>(saasOrderApplicationList.size());
+        saasOrderApplicationList.forEach(saasOrderApplication -> results.add(SaasOrderApplicationVo.convertEntityToVO(saasOrderApplication)));
+        return results;
     }
 
 }

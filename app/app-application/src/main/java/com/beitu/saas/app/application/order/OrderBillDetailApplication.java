@@ -202,7 +202,7 @@ public class OrderBillDetailApplication {
         addSaasOrderBillDetail.setTotalInterestRatio(saasOrderVo.getTotalInterestRatio());
         addSaasOrderBillDetail.setLateInterestRatio(saasOrderVo.getLateInterestRatio());
         if (addSaasOrderBillDetail.getCreatedDt() == null) {
-            addSaasOrderBillDetail.setCreatedDt(saasOrderVo.getCreatedDt());
+            addSaasOrderBillDetail.setCreatedDt(new Date());
         }
         addSaasOrderBillDetail.setRepaymentDt(saasOrderVo.getRepaymentDt());
         addSaasOrderBillDetail.setInterest(saasOrderVo.getTotalInterestFee());
@@ -240,19 +240,32 @@ public class OrderBillDetailApplication {
             saasOrderDetailVo.setPeriod(i);
             saasOrderDetailVo.setOrderNumb(saasOrderBillDetailVo.getOrderNumb());
             saasOrderDetailVo.setCapital(saasOrderBillDetailVo.getRealCapital().toString());
-            saasOrderDetailVo.setCreatedDate(DateUtil.getDate(saasOrderBillDetailVo.getGmtCreate()));
+            Date createdDt;
+            if (lastSaasOrderDetailVo == null) {
+                createdDt = saasOrderBillDetailVo.getGmtCreate();
+                saasOrderDetailVo.setBorrowingDuration(DateUtil.countDay(saasOrderBillDetailVo.getRepaymentDt(), createdDt));
+            } else {
+                Date lastRepaymentDt = DateUtil.getDate(lastSaasOrderDetailVo.getRepaymentDate(), DateUtil.getDatePattern());
+                Integer days = DateUtil.countDay(saasOrderBillDetailVo.getGmtCreate(), lastRepaymentDt);
+                if (days > 0) {
+                    createdDt = DateUtil.addDate(saasOrderBillDetailVo.getGmtCreate(), 1);
+                } else {
+                    createdDt = DateUtil.addDate(lastRepaymentDt, 1);
+                }
+                saasOrderDetailVo.setBorrowingDuration(DateUtil.countDay(saasOrderBillDetailVo.getRepaymentDt(), createdDt) + 1);
+            }
+            saasOrderDetailVo.setCreatedDate(DateUtil.getDate(createdDt));
             saasOrderDetailVo.setRepaymentDate(DateUtil.getDate(saasOrderBillDetailVo.getRepaymentDt()));
-            saasOrderDetailVo.setBorrowingDuration(DateUtil.countDay(saasOrderBillDetailVo.getRepaymentDt(), saasOrderBillDetailVo.getGmtCreate()));
             saasOrderDetailVo.setTotalInterestRatio(orderCalculateApplication.getInterestRatio(saasOrderBillDetailVo.getTotalInterestRatio()));
             saasOrderDetailVo.setInterest(saasOrderBillDetailVo.getInterest().toString());
-            if (saasOrderBillDetailVo.getAmount() == null) {
+            if (saasOrderBillDetailVo.getAmount() == null || BigDecimal.ZERO.compareTo(saasOrderBillDetailVo.getAmount()) == 0) {
                 saasOrderDetailVo.setAmount(orderCalculateApplication.getAmount(saasOrderBillDetailVo).toString());
             } else {
                 saasOrderDetailVo.setAmount(saasOrderBillDetailVo.getAmount().toString());
             }
             if (lastSaasOrderDetailVo != null) {
                 try {
-                    lastSaasOrderDetailVo.setOverdueDuration(DateUtil.countDays(saasOrderDetailVo.getCreatedDate(), lastSaasOrderDetailVo.getRepaymentDate()));
+                    lastSaasOrderDetailVo.setOverdueDuration(DateUtil.countDays(saasOrderDetailVo.getCreatedDate(), lastSaasOrderDetailVo.getRepaymentDate()) - 1);
                 } catch (Exception e) {
                     LOGGER.warn(".....订单日期转换失败.....失败原因：{}，订单CODE：{}；订单创建日期：{}；订单应还日期：{}", e.getMessage(), saasOrderDetailVo.getOrderNumb(), saasOrderDetailVo.getCreatedDate(), lastSaasOrderDetailVo.getRepaymentDate());
                 }

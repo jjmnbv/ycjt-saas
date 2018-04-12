@@ -27,6 +27,9 @@ public class BorrowerEmergentContactVo implements ResponseData {
      */
     @ApiModelProperty(value = "直系亲属手机号码")
     private String familyMobile;
+
+    @ApiModelProperty(value = "直系亲属通话记录")
+    private String familyRecord;
     /**
      * 同事朋友联系人类型
      */
@@ -42,6 +45,9 @@ public class BorrowerEmergentContactVo implements ResponseData {
      */
     @ApiModelProperty(value = "同事朋友手机号码")
     private String friendMobile;
+
+    @ApiModelProperty(value = "同事朋友通话记录")
+    private String friendRecord;
 
     public String getFamilyType() {
         return familyType;
@@ -65,6 +71,14 @@ public class BorrowerEmergentContactVo implements ResponseData {
 
     public void setFamilyMobile(String familyMobile) {
         this.familyMobile = familyMobile;
+    }
+
+    public String getFamilyRecord() {
+        return familyRecord;
+    }
+
+    public void setFamilyRecord(String familyRecord) {
+        this.familyRecord = familyRecord;
     }
 
     public String getFriendType() {
@@ -91,4 +105,11 @@ public class BorrowerEmergentContactVo implements ResponseData {
         this.friendMobile = friendMobile;
     }
 
+    public String getFriendRecord() {
+        return friendRecord;
+    }
+
+    public void setFriendRecord(String friendRecord) {
+        this.friendRecord = friendRecord;
+    }
 }

@@ -109,12 +109,12 @@ public class MerchantApplication {
         //超级管理员
         Long roleId = roleApplication.addRoleAndEmpower("超级管理员", "system", saasAdmin.getMerchantCode(),
                 Arrays.asList(109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126),
-                Arrays.asList(109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155)
+                Arrays.asList(109, 110, 114, 115, 116, 117, 118, 119, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155)
         );
         //子管理员
         roleApplication.addRoleAndEmpower("子管理员", "system", saasAdmin.getMerchantCode(),
                 Arrays.asList(109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126),
-                Arrays.asList(109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152)
+                Arrays.asList(109, 110, 114, 115, 116, 117, 118, 119, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152)
         );
         //审核
         roleApplication.addRoleAndEmpower("审核", "system", saasAdmin.getMerchantCode(),
@@ -167,7 +167,7 @@ public class MerchantApplication {
         config.setMerchantCode(merchantCode);
         config.setFlowOpen(true);
         config.setFlowMaxNum(100);
-        config.setZmScore(MerchantFlowZMEnum.ZM_610_UP.getKey().intValue());
+        config.setZmScore(MerchantFlowZMEnum.ALONE_ZM_610_UP.getKey().intValue());
         config.setFlowType(2);
         saasMerchantFlowConfigService.create(config);
         //9 电子签

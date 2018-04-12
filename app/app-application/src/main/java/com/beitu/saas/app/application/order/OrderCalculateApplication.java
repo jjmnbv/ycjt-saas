@@ -54,11 +54,15 @@ public class OrderCalculateApplication {
      * @param totalInterestRatio 借款年利率
      * @param createdDt          申请日期
      * @param repaymentDt        应还日期
+     * @param isExtend           是否展期
      * @return
      */
-    public BigDecimal getInterest(BigDecimal realCapital, BigDecimal totalInterestRatio, Date createdDt, Date repaymentDt) {
+    public BigDecimal getInterest(BigDecimal realCapital, BigDecimal totalInterestRatio, Date createdDt, Date repaymentDt, Boolean isExtend) {
         BigDecimal interest = BigDecimal.ZERO;
         Integer lendDt = DateUtil.countDay(repaymentDt, createdDt);
+        if (isExtend) {
+            lendDt += 1;
+        }
         if (lendDt > 0) {
             interest = realCapital.multiply(totalInterestRatio).multiply(new BigDecimal(lendDt)).divide(new BigDecimal(365), 2, BigDecimal.ROUND_HALF_UP);
         }

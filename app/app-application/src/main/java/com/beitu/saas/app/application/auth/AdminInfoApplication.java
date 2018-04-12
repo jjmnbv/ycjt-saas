@@ -9,9 +9,12 @@ import com.beitu.saas.auth.service.SaasAdminRoleService;
 import com.beitu.saas.auth.service.SaasAdminService;
 import com.beitu.saas.auth.service.SaasAdminTokenService;
 import com.beitu.saas.auth.service.SaasRolePermissionService;
+import com.beitu.saas.common.consts.RedisKeyConsts;
+import com.fqgj.base.services.redis.RedisClient;
 import com.fqgj.common.entity.BaseEntity;
 import com.fqgj.common.utils.CollectionUtils;
 import com.fqgj.common.utils.GenerOrderNoUtil;
+import com.fqgj.common.utils.StringUtils;
 import com.fqgj.common.utils.TimeUtils;
 import com.fqgj.exception.common.ApplicationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +46,9 @@ public class AdminInfoApplication {
 
     @Autowired
     private SaasRolePermissionService saasRolePermissionService;
+
+    @Autowired
+    private RedisClient redisClient;
 
 
     public SaasAdmin getSaasAdminByAccessToken(String token) {
@@ -103,6 +109,15 @@ public class AdminInfoApplication {
         saasAdminRole.setRoleId(roleId);
         saasAdminRoleService.create(saasAdminRole);
 
+    }
+
+    public void expireToke(Long adminId){
+        SaasAdmin entity = (SaasAdmin) saasAdminService.selectById(adminId);
+        String oldToken = redisClient.get(RedisKeyConsts.SAAS_TOKEN_KEY, entity.getCode());
+        if (StringUtils.isNotEmpty(oldToken)) {
+            redisClient.del(RedisKeyConsts.SAAS_TOKEN_KEY, oldToken);
+            redisClient.del(RedisKeyConsts.SAAS_TOKEN_KEY, entity.getCode());
+        }
     }
 
 }

@@ -54,44 +54,28 @@ public class DunningAsyncApplication {
         if (saasCreditCarrierVo == null) {
             throw new ApplicationException(CreditErrorCodeEnum.CREDIT_CARRIER_DATA_LACK);
         }
-        Long recordId = null;
-        DunningDataVo dunningDataVo = null;
-        SaasCreditDunningVo saasCreditDunningVo = saasCreditDunningService.getByMerchantCodeAndBorrowerCode(merchantCode, borrowerCode);
-        if (saasCreditDunningVo == null) {
-            String result = dianhuaHandler.getDunningVo(saasCreditCarrierVo.getUrl());
-            DunningResultVo resultVo;
-            try {
-                resultVo = JSONUtils.json2pojoAndOffUnknownField(result, DunningResultVo.class);
-            } catch (Exception e) {
-                throw new ApplicationException(CreditErrorCodeEnum.CREDIT_DUNNING_GENERATE_ERROR, "电话邦结果JSON序列化失败");
-            }
-            saasCreditDunningVo = new SaasCreditDunningVo();
-            if (resultVo != null && resultVo.getData() != null) {
-                saasCreditDunningVo.setMerchantCode(merchantCode);
-                saasCreditDunningVo.setBorrowerCode(borrowerCode);
-                saasCreditDunningVo.setCarrierId(saasCreditCarrierVo.getSaasCreditCarrierId());
-                dunningDataVo = resultVo.getData();
-                saasCreditDunningVo.setSid(dunningDataVo.getSid());
-                saasCreditDunningVo.setMobile(dunningDataVo.getTel());
-                saasCreditDunningVo.setTotalNum(dunningDataVo.getTotalNum());
-                saasCreditDunningVo.setEffectiveNum(dunningDataVo.getEffectiveNum());
-                saasCreditDunningVo.setSuccess(Boolean.FALSE);
-                String url = uploadDunningData(borrowerCode, result);
-                saasCreditDunningVo.setUrl(url);
-                recordId = saasCreditDunningService.addSaasCreditDunning(saasCreditDunningVo).getId();
-            }
-        } else if (saasCreditDunningVo.getSuccess()) {
-            return;
-        } else {
-            recordId = saasCreditDunningVo.getSaasCreditDunningId();
-            String result = ossService.getFileContent(saasCreditDunningVo.getUrl());
-            try {
-                DunningResultVo resultVo = JSONUtils.json2pojoAndOffUnknownField(result, DunningResultVo.class);
-                dunningDataVo = resultVo.getData();
-            } catch (Exception e) {
-                throw new ApplicationException(CreditErrorCodeEnum.CREDIT_DUNNING_GENERATE_ERROR, "电话邦结果JSON序列化失败");
-            }
+        String result = dianhuaHandler.getDunningVo(saasCreditCarrierVo.getUrl());
+        DunningResultVo resultVo;
+        try {
+            resultVo = JSONUtils.json2pojoAndOffUnknownField(result, DunningResultVo.class);
+        } catch (Exception e) {
+            throw new ApplicationException(CreditErrorCodeEnum.CREDIT_DUNNING_GENERATE_ERROR, "电话邦结果JSON序列化失败");
         }
+        SaasCreditDunningVo saasCreditDunningVo = new SaasCreditDunningVo();
+        if (resultVo == null || resultVo.getData() == null) {
+        }
+        saasCreditDunningVo.setMerchantCode(merchantCode);
+        saasCreditDunningVo.setBorrowerCode(borrowerCode);
+        saasCreditDunningVo.setCarrierId(saasCreditCarrierVo.getSaasCreditCarrierId());
+        DunningDataVo dunningDataVo = resultVo.getData();
+        saasCreditDunningVo.setSid(dunningDataVo.getSid());
+        saasCreditDunningVo.setMobile(dunningDataVo.getTel());
+        saasCreditDunningVo.setTotalNum(dunningDataVo.getTotalNum());
+        saasCreditDunningVo.setEffectiveNum(dunningDataVo.getEffectiveNum());
+        saasCreditDunningVo.setSuccess(Boolean.FALSE);
+        String url = uploadDunningData(borrowerCode, result);
+        saasCreditDunningVo.setUrl(url);
+        Long recordId = saasCreditDunningService.addSaasCreditDunning(saasCreditDunningVo).getId();
 
         if (recordId == null) {
             throw new ApplicationException(CreditErrorCodeEnum.CREDIT_DUNNING_GENERATE_ERROR, "credit_dunning插入失败");
@@ -119,52 +103,52 @@ public class DunningAsyncApplication {
         List<SaasCreditDunningDetailVo> saasCreditDunningDetailVoList = new ArrayList<>();
         if (dunningDataVo != null) {
             if (dunningDataVo.getOverview() != null) {
-                SaasCreditDunningDetailVo dunning = getSaasCreditDunningDetailVo(dunningDataVo.getOverview().getDunning(), CreditDunningDetailTypeEnum.OVER_VIEW, recordId, sid);
+                SaasCreditDunningDetailVo dunning = getSaasCreditDunningDetailVo(dunningDataVo.getOverview().getDunning(), CreditDunningDetailTypeEnum.OVER_VIEW, recordId);
                 saasCreditDunningDetailVoList.add(dunning);
-                SaasCreditDunningDetailVo notSure = getSaasCreditDunningDetailVo(dunningDataVo.getOverview().getNotSureDunning(), CreditDunningDetailTypeEnum.OVER_VIEW_NOT_SURE, recordId, sid);
+                SaasCreditDunningDetailVo notSure = getSaasCreditDunningDetailVo(dunningDataVo.getOverview().getNotSureDunning(), CreditDunningDetailTypeEnum.OVER_VIEW_NOT_SURE, recordId);
                 saasCreditDunningDetailVoList.add(notSure);
             }
             if (dunningDataVo.getLastWeek() != null) {
-                SaasCreditDunningDetailVo dunning = getSaasCreditDunningDetailVo(dunningDataVo.getLastWeek().getDunning(), CreditDunningDetailTypeEnum.LAST_WEEK, recordId, sid);
+                SaasCreditDunningDetailVo dunning = getSaasCreditDunningDetailVo(dunningDataVo.getLastWeek().getDunning(), CreditDunningDetailTypeEnum.LAST_WEEK, recordId);
                 saasCreditDunningDetailVoList.add(dunning);
-                SaasCreditDunningDetailVo notSure = getSaasCreditDunningDetailVo(dunningDataVo.getLastWeek().getNotSureDunning(), CreditDunningDetailTypeEnum.LAST_WEEK_NOT_SURE, recordId, sid);
+                SaasCreditDunningDetailVo notSure = getSaasCreditDunningDetailVo(dunningDataVo.getLastWeek().getNotSureDunning(), CreditDunningDetailTypeEnum.LAST_WEEK_NOT_SURE, recordId);
                 saasCreditDunningDetailVoList.add(notSure);
             }
             if (dunningDataVo.getLastTwoWeeks() != null) {
-                SaasCreditDunningDetailVo dunning = getSaasCreditDunningDetailVo(dunningDataVo.getLastTwoWeeks().getDunning(), CreditDunningDetailTypeEnum.LAST_TWO_WEEK, recordId, sid);
+                SaasCreditDunningDetailVo dunning = getSaasCreditDunningDetailVo(dunningDataVo.getLastTwoWeeks().getDunning(), CreditDunningDetailTypeEnum.LAST_TWO_WEEK, recordId);
                 saasCreditDunningDetailVoList.add(dunning);
-                SaasCreditDunningDetailVo notSure = getSaasCreditDunningDetailVo(dunningDataVo.getLastTwoWeeks().getNotSureDunning(), CreditDunningDetailTypeEnum.LAST_TWO_WEEK_NOT_SURE, recordId, sid);
+                SaasCreditDunningDetailVo notSure = getSaasCreditDunningDetailVo(dunningDataVo.getLastTwoWeeks().getNotSureDunning(), CreditDunningDetailTypeEnum.LAST_TWO_WEEK_NOT_SURE, recordId);
                 saasCreditDunningDetailVoList.add(notSure);
             }
             if (dunningDataVo.getLastThreeWeeks() != null) {
-                SaasCreditDunningDetailVo dunning = getSaasCreditDunningDetailVo(dunningDataVo.getLastThreeWeeks().getDunning(), CreditDunningDetailTypeEnum.LAST_THREE_WEEK, recordId, sid);
+                SaasCreditDunningDetailVo dunning = getSaasCreditDunningDetailVo(dunningDataVo.getLastThreeWeeks().getDunning(), CreditDunningDetailTypeEnum.LAST_THREE_WEEK, recordId);
                 saasCreditDunningDetailVoList.add(dunning);
-                SaasCreditDunningDetailVo notSure = getSaasCreditDunningDetailVo(dunningDataVo.getLastThreeWeeks().getNotSureDunning(), CreditDunningDetailTypeEnum.LAST_THREE_WEEK_NOT_SURE, recordId, sid);
+                SaasCreditDunningDetailVo notSure = getSaasCreditDunningDetailVo(dunningDataVo.getLastThreeWeeks().getNotSureDunning(), CreditDunningDetailTypeEnum.LAST_THREE_WEEK_NOT_SURE, recordId);
                 saasCreditDunningDetailVoList.add(notSure);
             }
             if (dunningDataVo.getLast30Days() != null) {
-                SaasCreditDunningDetailVo dunning = getSaasCreditDunningDetailVo(dunningDataVo.getLast30Days().getDunning(), CreditDunningDetailTypeEnum.DAYS_30, recordId, sid);
+                SaasCreditDunningDetailVo dunning = getSaasCreditDunningDetailVo(dunningDataVo.getLast30Days().getDunning(), CreditDunningDetailTypeEnum.DAYS_30, recordId);
                 saasCreditDunningDetailVoList.add(dunning);
-                SaasCreditDunningDetailVo notSure = getSaasCreditDunningDetailVo(dunningDataVo.getLast30Days().getNotSureDunning(), CreditDunningDetailTypeEnum.DAYS_30_NOT_SURE, recordId, sid);
+                SaasCreditDunningDetailVo notSure = getSaasCreditDunningDetailVo(dunningDataVo.getLast30Days().getNotSureDunning(), CreditDunningDetailTypeEnum.DAYS_30_NOT_SURE, recordId);
                 saasCreditDunningDetailVoList.add(notSure);
             }
             if (dunningDataVo.getLast30And60Days() != null) {
-                SaasCreditDunningDetailVo dunning = getSaasCreditDunningDetailVo(dunningDataVo.getLast30And60Days().getDunning(), CreditDunningDetailTypeEnum.DAYS_30_60, recordId, sid);
+                SaasCreditDunningDetailVo dunning = getSaasCreditDunningDetailVo(dunningDataVo.getLast30And60Days().getDunning(), CreditDunningDetailTypeEnum.DAYS_30_60, recordId);
                 saasCreditDunningDetailVoList.add(dunning);
-                SaasCreditDunningDetailVo notSure = getSaasCreditDunningDetailVo(dunningDataVo.getLast30And60Days().getNotSureDunning(), CreditDunningDetailTypeEnum.DAYS_30_60_NOT_SURE, recordId, sid);
+                SaasCreditDunningDetailVo notSure = getSaasCreditDunningDetailVo(dunningDataVo.getLast30And60Days().getNotSureDunning(), CreditDunningDetailTypeEnum.DAYS_30_60_NOT_SURE, recordId);
                 saasCreditDunningDetailVoList.add(notSure);
             }
             if (dunningDataVo.getLast60And90Days() != null) {
-                SaasCreditDunningDetailVo dunning = getSaasCreditDunningDetailVo(dunningDataVo.getLast60And90Days().getDunning(), CreditDunningDetailTypeEnum.DAYS_60_90, recordId, sid);
+                SaasCreditDunningDetailVo dunning = getSaasCreditDunningDetailVo(dunningDataVo.getLast60And90Days().getDunning(), CreditDunningDetailTypeEnum.DAYS_60_90, recordId);
                 saasCreditDunningDetailVoList.add(dunning);
-                SaasCreditDunningDetailVo notSure = getSaasCreditDunningDetailVo(dunningDataVo.getLast60And90Days().getNotSureDunning(), CreditDunningDetailTypeEnum.DAYS_60_90_NOT_SURE, recordId, sid);
+                SaasCreditDunningDetailVo notSure = getSaasCreditDunningDetailVo(dunningDataVo.getLast60And90Days().getNotSureDunning(), CreditDunningDetailTypeEnum.DAYS_60_90_NOT_SURE, recordId);
                 saasCreditDunningDetailVoList.add(notSure);
             }
         }
         return saasCreditDunningDetailVoList;
     }
 
-    private SaasCreditDunningDetailVo getSaasCreditDunningDetailVo(DunningStatisticVo dunningStatisticVo, CreditDunningDetailTypeEnum typeEnum, Long recordId, String sid) {
+    private SaasCreditDunningDetailVo getSaasCreditDunningDetailVo(DunningStatisticVo dunningStatisticVo, CreditDunningDetailTypeEnum typeEnum, Long recordId) {
         if (dunningStatisticVo == null) {
             return null;
         }
@@ -218,7 +202,6 @@ public class DunningAsyncApplication {
         if (typeEnum != null) {
             creditDunningDetailVo.setType(typeEnum.getType());
         }
-        creditDunningDetailVo.setSid(sid);
         creditDunningDetailVo.setRecordId(recordId);
         return creditDunningDetailVo;
     }

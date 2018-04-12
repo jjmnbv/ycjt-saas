@@ -431,7 +431,7 @@ public class CarrierData implements Serializable {
                                     //设置 carriersCallMap
                                     if (carriersCallMap.containsKey(peerNumber)) {
                                         carriersPhoneCallVo = carriersCallMap.get(peerNumber);
-                                        if (carrierCallJson.containsKey("dialtype") && carrierCallJson.getString("dialtype").contains("主叫")) {
+                                        if (carrierCallJson.containsKey("dialtype") && (carrierCallJson.getString("dialtype").contains("主叫") || Objects.equals(carrierCallJson.getString("dialtype"), "1"))) {
                                             carriersPhoneCallVo.setCalling(carriersPhoneCallVo.getCalling() + 1);
                                             carriersCallMonth.setCalling(carriersCallMonth.getCalling() + 1);
                                             if (carrierCallJson.containsKey("durationsec")) {
@@ -475,7 +475,7 @@ public class CarrierData implements Serializable {
                                         carriersPhoneCallVo.setCallTime(carrierCallJson.containsKey("durationsec") ? carrierCallJson.getString("durationsec") : "0");
                                         carriersPhoneCallVo.setCallingTime("0");
                                         carriersPhoneCallVo.setCalledTime("0");
-                                        if (carrierCallJson.containsKey("dialtype") && carrierCallJson.getString("dialtype").contains("主叫")) {
+                                        if (carrierCallJson.containsKey("dialtype") && (carrierCallJson.getString("dialtype").contains("主叫") || Objects.equals(carrierCallJson.getString("dialtype"), "1"))) {
                                             carriersPhoneCallVo.setCalling(carriersPhoneCallVo.getCalling() + 1);
                                             carriersCallMonth.setCalling(carriersCallMonth.getCalling() + 1);
                                             carriersPhoneCallVo.setCallingTime(carrierCallJson.containsKey("durationsec") ? carrierCallJson.getString("durationsec") : "0");
@@ -531,7 +531,7 @@ public class CarrierData implements Serializable {
                                     if (carriersCallMap.containsKey(peernumber)) {
                                         CarriersPhoneCallVo carriersPhoneCallVo = carriersCallMap.get(peernumber);
                                         if (StringUtils.isNotEmpty(dialtype)) {
-                                            if (dialtype.contains("主叫")) {
+                                            if (dialtype.contains("主叫") || Objects.equals(dialtype, "1")) {
                                                 carriersPhoneCallVo.setCalling(carriersPhoneCallVo.getCalling() + 1);
                                                 carriersCallMonth.setCalling(carriersCallMonth.getCalling() + 1);
                                                 if (StringUtils.isNotEmpty(callTime)) {
@@ -568,7 +568,7 @@ public class CarrierData implements Serializable {
                                         carriersCallVo.setCallingTime("0");
                                         carriersCallVo.setCalledTime("0");
                                         if (StringUtils.isNotEmpty(dialtype)) {
-                                            if (dialtype.contains("主叫")) {
+                                            if (dialtype.contains("主叫") || Objects.equals(dialtype, "1")) {
                                                 carriersCallVo.setCalling(carriersCallVo.getCalling() + 1);
                                                 carriersCallMonth.setCalling(carriersCallMonth.getCalling() + 1);
 
@@ -818,10 +818,10 @@ public class CarrierData implements Serializable {
                         if (StringUtils.isBlank(carrierCallVo.getCallTime())) {
                             continue;
                         }
-                        if (carrierCallVo.getDialtype().contains("主叫")) {
+                        if (carrierCallVo.getDialtype().contains("主叫") || Objects.equals(carrierCallVo.getDialtype(), "1")) {
                             phoneCallVo.setCalling(1).setCallingTime(carrierCallVo.getCallTime());
                         }
-                        if (carrierCallVo.getDialtype().contains("被叫")) {
+                        if (carrierCallVo.getDialtype().contains("被叫") || Objects.equals(carrierCallVo.getDialtype(), "2")) {
                             phoneCallVo.setCalled(1).setCalledTime(carrierCallVo.getCallTime());
                         }
                         activeRegionPhoneCallVoMap.put(location, phoneCallVo);
@@ -829,12 +829,12 @@ public class CarrierData implements Serializable {
                         if (StringUtils.isBlank(carrierCallVo.getCallTime()) && StringUtils.isBlank(callVo.getCallTime())) {
                             continue;
                         }
-                        if (carrierCallVo.getDialtype().contains("主叫") && StringUtils.isNotBlank(callVo.getCallingTime())) {
+                        if ((carrierCallVo.getDialtype().contains("主叫") || Objects.equals(carrierCallVo.getDialtype(), "1")) && StringUtils.isNotBlank(callVo.getCallingTime())) {
                             callVo.setCalling(callVo.getCalling() + 1)
                                     .setCallingTime((Long.parseLong(carrierCallVo.getCallTime()) + Long.parseLong(callVo.getCallingTime())) + "")
                                     .setCallTime((Long.parseLong(carrierCallVo.getCallTime()) + Long.parseLong(callVo.getCallTime())) + "");
                         }
-                        if (carrierCallVo.getDialtype().contains("被叫") && StringUtils.isNotBlank(callVo.getCalledTime())) {
+                        if ((carrierCallVo.getDialtype().contains("被叫") || Objects.equals(carrierCallVo.getDialtype(), "2")) && StringUtils.isNotBlank(callVo.getCalledTime())) {
                             callVo.setCalled(callVo.getCalled() + 1)
                                     .setCalledTime((Long.parseLong(carrierCallVo.getCallTime()) + Long.parseLong(callVo.getCalledTime())) + "")
                                     .setCallTime((Long.parseLong(carrierCallVo.getCallTime()) + Long.parseLong(callVo.getCallTime())) + "");

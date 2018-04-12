@@ -9,6 +9,7 @@ import com.beitu.saas.borrower.domain.SaasBorrowerVo;
 import com.beitu.saas.borrower.enums.BorrowerErrorCodeEnum;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.RedisKeyConsts;
+import com.beitu.saas.common.consts.TimeConsts;
 import com.beitu.saas.common.enums.ProductTypeEnum;
 import com.beitu.saas.common.enums.RestCodeEnum;
 import com.beitu.saas.common.handle.oss.OSSService;
@@ -76,7 +77,7 @@ public class CarrierApplication {
     @Autowired
     private SaasCreditHistoryService saasCreditHistoryService;
 
-    public String getCarrierH5Url(String borrowerCode, String mobile) {
+    public String getCarrierH5Url(String channelCode, String borrowerCode, String mobile, Integer type) {
         String taskId = redisClient.get(RedisKeyConsts.H5_CARRIER_CRAWLING, borrowerCode + "");
         if (StringUtils.isNotEmpty(taskId)) {
             throw new ApplicationException(RestCodeEnum.REPEAT_REQUEST);
@@ -92,12 +93,14 @@ public class CarrierApplication {
         carrierRequestUrlInput.setName(saasBorrowerRealInfoVo.getName());
         carrierRequestUrlInput.setPhone(mobile);
         carrierRequestUrlInput.setIdNumber(saasBorrowerRealInfoVo.getIdentityCode());
-        carrierRequestUrlInput.setUserCode(borrowerCode);
+        carrierRequestUrlInput.setUserCode(channelCode + "_" + borrowerCode);
         carrierRequestUrlInput.setReturnUrl(configUtil.getApiWebPath() + "/credit/carrier/h5/crawling");
         carrierRequestUrlInput.setAppUrl(configUtil.getApiWebPath() + "/credit/carrier/callback/1");
 
+
         TripleServiceResult response = tripleCarrierService.getCarrierServiceResult(ProductTypeEnum.YCJT, TripleServiceTypeEnum.CARRIER_REQUEST_URL, carrierRequestUrlInput);
         if (response.isSuccess()) {
+            redisClient.set(RedisKeyConsts.SAAS_OPEN_CARRIER_H5_BROWSER_TYPE, type, TimeConsts.TEN_MINUTES, borrowerCode);
             CarrierRequestUrlOutput carrierRequestUrlOutput = (CarrierRequestUrlOutput) response.getData();
             return carrierRequestUrlOutput.getRedirectUrl();
         } else {

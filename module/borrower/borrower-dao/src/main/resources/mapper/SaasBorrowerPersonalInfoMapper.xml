@@ -39,4 +39,12 @@
         and deleted = 0
     </update>
 
+    <select id="selectZmCreditScoreByBorrowerCodeAndOrderNumb" resultType="java.lang.Integer">
+        select zm_credit_score
+        from saas_borrower_personal_info
+        where borrower_code = #{borrowerCode,jdbcType=VARCHAR}
+        and order_numb = #{orderNumb,jdbcType=VARCHAR}
+        and deleted = 0
+    </select>
+
 </mapper>

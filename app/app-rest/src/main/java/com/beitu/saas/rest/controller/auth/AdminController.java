@@ -91,11 +91,12 @@ public class AdminController {
     @ApiOperation(value = "登录")
     public Response login(@RequestBody AdminLoginRequest adminLoginRequest, HttpServletRequest request) throws IOException {
         SaasAdmin saasAdmin = saasAdminService.login(adminLoginRequest.getMobile(), adminLoginRequest.getPassword());
-        if (!roleApplication.enableAdminRole(saasAdmin.getCode())){
+        if (!roleApplication.enableAdminRole(saasAdmin.getCode())) {
             throw new ApiErrorException("角色被禁用");
         }
+        Boolean equalLoginIp = saasAdminLoginLogService.equalLoginIp(saasAdmin.getCode(), NetworkUtil.getIpAddress(request));
         if (StringUtils.isEmpty(adminLoginRequest.getVerifyCode())) {
-            if (!saasAdminLoginLogService.equalLoginIp(saasAdmin.getCode(), NetworkUtil.getIpAddress(request))) {
+            if (!equalLoginIp) {
                 throw new ApiErrorException(AdminErrorEnum.SHOW_VERIFYCODE);
             }
         }
@@ -108,15 +109,15 @@ public class AdminController {
             redisClient.del(RedisKeyConsts.SAAS_TOKEN_KEY, oldToken);
         }
         String verifyCode = redisClient.get(RedisKeyConsts.H5_SAVE_LOGIN_VERIFYCODE_KEY, adminLoginRequest.getMobile());
-        if (StringUtils.isNotEmpty(verifyCode)) {
+        if (StringUtils.isNotEmpty(verifyCode) && !equalLoginIp) {
             if (!verifyCode.equals(adminLoginRequest.getVerifyCode())) {
                 throw new ApiErrorException(SmsErrorCodeEnum.INPUT_WRONG_VERIFY_CODE);
             }
         }
         saasAdminLoginLogService.addAdminLoginLog(request, saasAdmin.getCode());
         String token = MD5.md5(UUID.randomUUID().toString());
-        redisClient.set(RedisKeyConsts.SAAS_TOKEN_KEY, saasAdmin.getCode(), TimeConsts.TEN_MINUTES, token);
-        redisClient.set(RedisKeyConsts.SAAS_TOKEN_KEY, token, TimeConsts.TEN_MINUTES, saasAdmin.getCode());
+        redisClient.set(RedisKeyConsts.SAAS_TOKEN_KEY, saasAdmin.getCode(), TimeConsts.HALF_AN_HOUR, token);
+        redisClient.set(RedisKeyConsts.SAAS_TOKEN_KEY, token, TimeConsts.HALF_AN_HOUR, saasAdmin.getCode());
         AdminLoginResponse response = new AdminLoginResponse();
         response.setToken(token);
         response.setAdminName(saasAdmin.getName());
@@ -164,18 +165,12 @@ public class AdminController {
         saasAdmin.setEnable(enable);
         saasAdmin.setId(adminId);
         boolean success = saasAdminService.updateById(saasAdmin) > 0;
-        if (enable == false) {
-            SaasAdmin entity = (SaasAdmin) saasAdminService.selectById(adminId);
-            String oldToken = redisClient.get(RedisKeyConsts.SAAS_TOKEN_KEY, entity.getCode());
-            if (StringUtils.isNotEmpty(oldToken)) {
-                redisClient.del(RedisKeyConsts.SAAS_TOKEN_KEY, oldToken);
-                redisClient.del(RedisKeyConsts.SAAS_TOKEN_KEY, entity.getCode());
-            }
-        }
         if (!success) {
             throw new ApplicationException("账户状态更新失败");
         }
-
+        if (enable == false) {
+            adminInfoApplication.expireToke(adminId);
+        }
         return Response.ok();
     }
 
@@ -208,6 +203,7 @@ public class AdminController {
             saasAdminRole.setAdminCode(entity.getCode());
             saasAdminRole.setRoleId(updateAdminRequest.getRoleId());
             saasAdminRoleService.updateByAdminCode(saasAdminRole);
+            adminInfoApplication.expireToke(updateAdminRequest.getAdminId());
         }
         return Response.ok();
     }
