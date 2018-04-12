@@ -2,5 +2,55 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.beitu.saas.borrower.dao.impl.SaasBorrowerDaoImpl">
+    <sql id="Param_Where_Clause">
+        <where>
+            <trim prefixOverrides="and">
 
+                <if test="borrowerInfoParam !=null and borrowerInfoParam.name != null">
+                    and sbri.name = #{borrowerInfoParam.name,jdbcType=VARCHAR}
+                </if>
+                <if test="borrowerInfoParam !=null and borrowerInfoParam.mobile != null">
+                    and sb.mobile = #{borrowerInfoParam.mobile,jdbcType=VARCHAR}
+                </if>
+                <if test="borrowerInfoParam !=null and borrowerInfoParam.identityCode != null">
+                    and sbri.identity_code = #{borrowerInfoParam.identityCode,jdbcType=VARCHAR}
+                </if>
+                <if test="borrowerInfoParam !=null and borrowerInfoParam.channelCode != null">
+                    and sb.channel_code = #{borrowerInfoParam.channelCode,jdbcType=VARCHAR}
+                </if>
+                <if test="borrowerInfoParam !=null and borrowerInfoParam.merchantCode != null">
+                    and sb.merchant_code = #{borrowerInfoParam.merchantCode,jdbcType=VARCHAR}
+                </if>
+                sb.deleted = 0 AND sbri.deleted = 0
+            </trim>
+        </where>
+    </sql>
+    
+    <select id="selectBorrowerInfoList" parameterType="map" resultType="com.beitu.saas.borrower.vo.SaasBorrowerManagerVo">
+        SELECT
+        sbri.name,
+        sb.borrower_code borrowCode,
+        sb.mobile,
+        sbri.gender,
+        sbri.identity_code identityCode,
+        sbri.native_place nativePlace,
+        sb.gmt_create gmtCreate,
+        sb.channel_code channelCode
+        FROM
+        saas_borrower sb
+        LEFT JOIN
+        saas_borrower_real_info sbri ON sb.borrower_code = sbri.borrower_code
+        <include refid="Param_Where_Clause"/>
+    </select>
+
+    <select id="countSelectBorrowerInfoList" parameterType="map" resultType="INTEGER">
+        SELECT
+        count(*)
+        FROM
+        saas_borrower sb
+        LEFT JOIN
+        saas_borrower_real_info sbri ON sb.borrower_code = sbri.borrower_code
+        WHERE
+        <include refid="Param_Where_Clause"/>
+    </select>
 </mapper>
