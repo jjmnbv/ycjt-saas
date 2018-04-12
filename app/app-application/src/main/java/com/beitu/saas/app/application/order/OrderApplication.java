@@ -20,6 +20,7 @@ import com.beitu.saas.borrower.domain.SaasBorrowerVo;
 import com.beitu.saas.borrower.enums.BorrowerErrorCodeEnum;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.consts.ChannelConsts;
+import com.beitu.saas.channel.domain.SaasChannelVo;
 import com.beitu.saas.channel.entity.SaasChannelEntity;
 import com.beitu.saas.collection.client.SaasCollectionOrderService;
 import com.beitu.saas.common.config.ConfigUtil;
@@ -546,7 +547,10 @@ public class OrderApplication {
         orderListVo.setBorrowingDuration(DateUtil.countDay(saasOrderVo.getRepaymentDt(), new Date()) + "天");
         BorrowerInfoVo borrowerInfoVo = borrowerApplication.getBorrowerInfoVoByBorrowerCode(saasOrderVo.getMerchantCode(), saasOrderVo.getBorrowerCode());
         BeanUtils.copyProperties(borrowerInfoVo, orderListVo);
-        orderListVo.setChannelName(saasChannelService.getSaasChannelByChannelCode(saasOrderVo.getChannelCode()).getChannelName());
+        SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(saasOrderVo.getChannelCode());
+        if (saasChannelEntity != null) {
+            orderListVo.setChannelName(saasChannelEntity.getChannelName());
+        }
         if (StringUtils.isNotEmpty(saasOrderVo.getPreliminaryReviewerCode())) {
             orderListVo.setPreliminaryReviewer(saasAdminService.getSaasAdminByAdminCode(saasOrderVo.getPreliminaryReviewerCode()).getName());
         }
