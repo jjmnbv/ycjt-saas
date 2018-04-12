@@ -5,9 +5,6 @@ import com.beitu.saas.app.enums.EducationMsgCodeEnum;
 import com.beitu.saas.app.enums.MaritalStatusMsgCodeEnum;
 import com.beitu.saas.borrower.client.*;
 import com.beitu.saas.borrower.domain.*;
-import com.beitu.saas.borrower.entity.SaasBorrowerEmergentContact;
-import com.beitu.saas.borrower.entity.SaasBorrowerRealInfo;
-import com.beitu.saas.borrower.entity.SaasBorrowerWorkInfo;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.utils.identityNumber.vo.IdcardInfoExtractor;
 import com.beitu.saas.credit.client.SaasCreditCarrierRecordService;
@@ -20,7 +17,6 @@ import com.fqgj.common.utils.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -33,40 +29,40 @@ import java.util.List;
  */
 @Service
 public class BorrowerBaseInfoApplication {
-
+    
     @Autowired
     private SaasOrderApplicationService saasOrderApplicationService;
-
+    
     @Autowired
     private SaasBorrowerPersonalInfoService saasBorrowerPersonalInfoService;
-
+    
     @Autowired
     private SaasBorrowerService saasBorrowerService;
-
+    
     @Autowired
     private SaasBorrowerRealInfoService saasBorrowerRealInfoService;
-
+    
     @Autowired
     private SaasBorrowerIdentityInfoService saasBorrowerIdentityInfoService;
-
-    @Autowired
-    private ConfigUtil configUtil;
-
+    
     @Autowired
     private SaasBorrowerWorkInfoService saasBorrowerWorkInfoService;
-
+    
     @Autowired
     private SaasBorrowerEmergentContactService saasBorrowerEmergentContactService;
-
+    
     @Autowired
     private SaasBorrowerLoginLogService saasBorrowerLoginLogService;
-
+    
     @Autowired
     private SaasCreditCarrierService saasCreditCarrierService;
-
+    
     @Autowired
     private SaasCreditCarrierRecordService saasCreditCarrierRecordService;
-
+    
+    @Autowired
+    private ConfigUtil configUtil;
+    
     public BorrowerOrderApplicationVo getUserOrderApplicationVo(String borrowerCode, String orderNumb) {
         SaasOrderApplicationVo saasOrderApplicationVo = saasOrderApplicationService.getByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
         if (saasOrderApplicationVo == null) {
@@ -76,7 +72,7 @@ public class BorrowerBaseInfoApplication {
         BeanUtils.copyProperties(saasOrderApplicationVo, borrowerOrderApplicationVo);
         return borrowerOrderApplicationVo;
     }
-
+    
     public BorrowerPersonalInfoVo getUserPersonalInfoVo(String merchantCode, String borrowerCode, String orderNumb) {
         BorrowerPersonalInfoVo borrowerPersonalInfoVo = new BorrowerPersonalInfoVo();
         SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCodeAndMerchantCode(borrowerCode, merchantCode);
@@ -84,7 +80,7 @@ public class BorrowerBaseInfoApplication {
             return null;
         }
         borrowerPersonalInfoVo.setMobile(saasBorrowerVo.getMobile());
-
+        
         SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode);
         if (saasBorrowerRealInfoVo != null) {
             borrowerPersonalInfoVo.setUserName(saasBorrowerRealInfoVo.getName());
@@ -94,7 +90,7 @@ public class BorrowerBaseInfoApplication {
             borrowerPersonalInfoVo.setGender(idcardInfoExtractor.getGender());
             borrowerPersonalInfoVo.setAge(idcardInfoExtractor.getAge());
         }
-
+        
         SaasBorrowerPersonalInfoVo saasBorrowerPersonalInfoVo = saasBorrowerPersonalInfoService.getByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
         if (saasBorrowerPersonalInfoVo != null) {
             borrowerPersonalInfoVo.setQq(saasBorrowerPersonalInfoVo.getWechatCode());
@@ -102,12 +98,12 @@ public class BorrowerBaseInfoApplication {
             borrowerPersonalInfoVo.setMaritalStatus(MaritalStatusMsgCodeEnum.getByCode(saasBorrowerPersonalInfoVo.getMaritalStatus()).getMsg());
             borrowerPersonalInfoVo.setZmCreditScore(saasBorrowerPersonalInfoVo.getZmCreditScore());
         }
-
+        
         borrowerPersonalInfoVo.setPhoneSystem(saasBorrowerLoginLogService.getBorrowerPhoneSystem(borrowerCode));
-
+        
         return borrowerPersonalInfoVo;
     }
-
+    
     public BorrowerIdentityInfoVo getUserIdentityInfoVo(String borrowerCode, String orderNumb) {
         SaasBorrowerIdentityInfoVo saasBorrowerIdentityInfoVo = saasBorrowerIdentityInfoService.getByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
         if (saasBorrowerIdentityInfoVo == null) {
@@ -137,7 +133,7 @@ public class BorrowerBaseInfoApplication {
         }
         return borrowerIdentityInfoVo;
     }
-
+    
     public BorrowerWorkInfoVo getUserWorkInfoVo(String borrowerCode, String orderNumb) {
         SaasBorrowerWorkInfoVo saasBorrowerWorkInfoVo = saasBorrowerWorkInfoService.getByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
         if (saasBorrowerWorkInfoVo == null) {
@@ -147,7 +143,7 @@ public class BorrowerBaseInfoApplication {
         BeanUtils.copyProperties(saasBorrowerWorkInfoVo, borrowerWorkInfoVo);
         return borrowerWorkInfoVo;
     }
-
+    
     public BorrowerEmergentContactVo getUserEmergentContactVo(String merchantCode, String borrowerCode, String orderNumb) {
         SaasBorrowerEmergentContactVo saasBorrowerEmergentContactVo = saasBorrowerEmergentContactService.getByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
         if (saasBorrowerEmergentContactVo == null) {
@@ -155,7 +151,7 @@ public class BorrowerBaseInfoApplication {
         }
         BorrowerEmergentContactVo borrowerEmergentContactVo = new BorrowerEmergentContactVo();
         BeanUtils.copyProperties(saasBorrowerEmergentContactVo, borrowerEmergentContactVo);
-
+        
         SaasCreditCarrierVo saasCreditCarrierVo = saasCreditCarrierService.getByMerchantCodeAndBorrowerCode(merchantCode, borrowerCode);
         if (saasCreditCarrierVo != null && saasCreditCarrierVo.getSuccess()) {
             Long recordId = saasCreditCarrierVo.getSaasCreditCarrierId();
@@ -178,7 +174,7 @@ public class BorrowerBaseInfoApplication {
         }
         return borrowerEmergentContactVo;
     }
-
+    
     public BorrowerLivingAreaVo getUserLivingAreaVo(String borrowerCode, String orderNumb) {
         List<SaasBorrowerLoginLogVo> saasBorrowerLoginLogVoList = saasBorrowerLoginLogService.listBorrowerLivingArea(borrowerCode);
         if (CollectionUtils.isEmpty(saasBorrowerLoginLogVoList)) {
@@ -193,5 +189,5 @@ public class BorrowerBaseInfoApplication {
         });
         return new BorrowerLivingAreaVo(results);
     }
-
+    
 }
