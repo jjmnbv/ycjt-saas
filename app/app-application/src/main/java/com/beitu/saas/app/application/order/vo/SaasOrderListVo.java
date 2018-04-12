@@ -21,6 +21,10 @@ public class SaasOrderListVo implements ResponseData {
 
     private String capital;
 
+    private String repaymentDate;
+
+    private String totalInterestRatio;
+
     private String borrowingDuration;
 
     private String applyDate;
@@ -83,6 +87,22 @@ public class SaasOrderListVo implements ResponseData {
 
     public void setCapital(String capital) {
         this.capital = capital;
+    }
+
+    public String getRepaymentDate() {
+        return repaymentDate;
+    }
+
+    public void setRepaymentDate(String repaymentDate) {
+        this.repaymentDate = repaymentDate;
+    }
+
+    public String getTotalInterestRatio() {
+        return totalInterestRatio;
+    }
+
+    public void setTotalInterestRatio(String totalInterestRatio) {
+        this.totalInterestRatio = totalInterestRatio;
     }
 
     public String getBorrowingDuration() {

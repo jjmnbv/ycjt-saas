@@ -24,6 +24,9 @@ public class OrderDetailQueryResponse implements ResponseData {
     @ApiModelProperty(value = "下载合同URL")
     private String downloadContractUrl;
 
+    @ApiModelProperty
+    private Boolean extend;
+
     @ApiModelProperty(value = "当前账单信息")
     private SaasOrderDetailVo mainOrderDetailVo;
 
@@ -38,7 +41,9 @@ public class OrderDetailQueryResponse implements ResponseData {
             return;
         }
         this.originalOrderDetailVo = allOrderBillDetail.get(0);
+        this.extend = Boolean.FALSE;
         if (allOrderBillDetail.size() > 1) {
+            this.extend = Boolean.TRUE;
             this.extendOrderDetailVoList = allOrderBillDetail.subList(1, allOrderBillDetail.size());
         }
         this.mainOrderDetailVo = new SaasOrderDetailVo();
@@ -64,6 +69,14 @@ public class OrderDetailQueryResponse implements ResponseData {
 
     public void setDownloadContractUrl(String downloadContractUrl) {
         this.downloadContractUrl = downloadContractUrl;
+    }
+
+    public Boolean getExtend() {
+        return extend;
+    }
+
+    public void setExtend(Boolean extend) {
+        this.extend = extend;
     }
 
     public SaasOrderDetailVo getMainOrderDetailVo() {

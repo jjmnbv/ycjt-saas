@@ -39,9 +39,6 @@ import javax.validation.Valid;
 public class OverdueOrderManageController {
 
     @Autowired
-    private OrderApplication orderApplication;
-
-    @Autowired
     private OrderBillDetailApplication orderBillDetailApplication;
 
     @Autowired

@@ -2,11 +2,7 @@ package com.beitu.saas.rest.controller.system;
 
 import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.common.RequestLocalInfo;
-import com.beitu.saas.app.enums.EducationMsgCodeEnum;
-import com.beitu.saas.app.enums.MaritalStatusMsgCodeEnum;
-import com.beitu.saas.app.enums.QueryRepaymentDtEnum;
-import com.beitu.saas.app.enums.SaasLoanPlatformEnum;
-import com.beitu.saas.auth.domain.SaasAdminVo;
+import com.beitu.saas.app.enums.*;
 import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.entity.SaasChannelEntity;
@@ -85,6 +81,13 @@ public class SystemController {
             enumVoList.add(enumVo);
         });
         return new DataApiResponse<>(new EnumResponse(enumVoList));
+    }
+
+    @RequestMapping(value = "/enum/lend/remark", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "下款途径枚举信息", response = EnumResponse.class)
+    public DataApiResponse<EnumResponse> getSaasLendRemarkEnum() {
+        return new DataApiResponse<>(new EnumResponse(SaasLendRemarkEnum.values()));
     }
 
 }
