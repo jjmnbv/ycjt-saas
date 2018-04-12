@@ -31,7 +31,7 @@ public class SaasOrderLendRemarkServiceImpl extends AbstractBaseService implemen
 
     @Override
     public String getLendWayByOrderNumb(String orderNumb) {
-        return null;
+        return saasOrderLendRemarkDao.selectLendWayByOrderNumb(orderNumb);
     }
 
 }
