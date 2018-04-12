@@ -1,6 +1,8 @@
 package com.beitu.saas.openapi.domain;
 
+import com.beitu.saas.openapi.entity.SaasOpenApiOrderInfoLog;
 import com.fqgj.common.api.ResponseData;
+import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 
@@ -41,6 +43,16 @@ public class SaasOpenApiOrderInfoLogVo implements ResponseData, Serializable {
      * 是否进件成功
      */
     private Boolean success;
+    
+    public SaasOpenApiOrderInfoLogVo(String mobile, Integer zmScore, String identityNo, String dataUrl, Integer flowType, Long from, Boolean success) {
+        this.mobile = mobile;
+        this.zmScore = zmScore;
+        this.identityNo = identityNo;
+        this.dataUrl = dataUrl;
+        this.flowType = flowType;
+        this.from = from;
+        this.success = success;
+    }
     
     public Long getSaasOpenApiOrderInfoLogId() {
         return saasOpenApiOrderInfoLogId;
@@ -105,5 +117,15 @@ public class SaasOpenApiOrderInfoLogVo implements ResponseData, Serializable {
     
     public void setSuccess(Boolean success) {
         this.success = success;
+    }
+    
+    public static SaasOpenApiOrderInfoLog convertVOToEntity(SaasOpenApiOrderInfoLogVo saasOpenApiOrderInfoLogVo) {
+        if (saasOpenApiOrderInfoLogVo == null) {
+            return null;
+        }
+        SaasOpenApiOrderInfoLog saasOpenApiOrderInfoLog = new SaasOpenApiOrderInfoLog();
+        BeanUtils.copyProperties(saasOpenApiOrderInfoLogVo, saasOpenApiOrderInfoLog);
+        saasOpenApiOrderInfoLog.setId(saasOpenApiOrderInfoLogVo.getSaasOpenApiOrderInfoLogId());
+        return saasOpenApiOrderInfoLog;
     }
 }
