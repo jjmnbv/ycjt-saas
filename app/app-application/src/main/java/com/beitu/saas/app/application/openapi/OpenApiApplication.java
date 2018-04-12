@@ -40,8 +40,10 @@ public class OpenApiApplication {
         }
         String mobile = pushData.getMobile();
         String identityNo = pushData.getIdentityNo();
-        
+    
+        /////////////////////////////////////////////////////////////////////////
         // TODO: 2018/4/11 根据推单记录数据判断是否继续进行推单操作
+        /////////////////////////////////////////////////////////////////////////
         
         Map merchantsInfo = orderRecommendApplication.getRecommendMerchantCode(Long.valueOf(pushData.getZmScore().toString()), identityNo);
         List<String> merchantCodes = (List<String>) merchantsInfo.get("list");
@@ -58,7 +60,7 @@ public class OpenApiApplication {
             throw new ApplicationException(errorCodeEnum);
         }
         
-        
+        /////////////////////////////////////////////////////////////////////////
         // TODO: 2018/4/12 子线程来处理数据
         /////////////////////////////////////////////////////////////////////////
         
@@ -85,12 +87,14 @@ public class OpenApiApplication {
         }
         
         /////////////////////////////////////////////////////////////////////////
-        
-        
         // TODO: 2018/4/11 根据商户吸量类型flowType记录推单数据
+        /////////////////////////////////////////////////////////////////////////
+        
         Integer flowType = (Integer) merchantsInfo.get("flowType");
         
         return borrowerRelatedDataVos.size() > 0;
     }
+    
+    
     
 }
