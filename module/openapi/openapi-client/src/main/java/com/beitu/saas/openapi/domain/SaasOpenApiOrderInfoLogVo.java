@@ -44,6 +44,16 @@ public class SaasOpenApiOrderInfoLogVo implements ResponseData, Serializable {
      */
     private Boolean success;
     
+    public SaasOpenApiOrderInfoLogVo(String mobile, Integer zmScore, String identityNo, String dataUrl, Integer flowType, Long from, Boolean success) {
+        this.mobile = mobile;
+        this.zmScore = zmScore;
+        this.identityNo = identityNo;
+        this.dataUrl = dataUrl;
+        this.flowType = flowType;
+        this.from = from;
+        this.success = success;
+    }
+    
     public Long getSaasOpenApiOrderInfoLogId() {
         return saasOpenApiOrderInfoLogId;
     }

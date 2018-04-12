@@ -3,6 +3,8 @@ package com.beitu.saas.openapi.dao;
 import com.fqgj.common.base.BaseMapper;
 import com.beitu.saas.openapi.entity.SaasOpenApiOrderInfoLog;
 
+import java.util.Date;
+
 /**
  * User: linchengyu
  * Date: 2018-04-12
@@ -10,5 +12,7 @@ import com.beitu.saas.openapi.entity.SaasOpenApiOrderInfoLog;
  */
 
 public interface SaasOpenApiOrderInfoLogDao extends BaseMapper<SaasOpenApiOrderInfoLog> {
-
+    
+    SaasOpenApiOrderInfoLog getByMobile(String mobile, Long from, Boolean success, Date startDate);
+    
 }

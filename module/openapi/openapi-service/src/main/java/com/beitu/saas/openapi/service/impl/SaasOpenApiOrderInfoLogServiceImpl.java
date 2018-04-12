@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.fqgj.log.enhance.Module;
 
+import java.util.Date;
+
 /**
  * User: linchengyu
  * Date: 2018-04-12
@@ -25,8 +27,21 @@ public class SaasOpenApiOrderInfoLogServiceImpl extends AbstractBaseService impl
     private SaasOpenApiOrderInfoLogDao saasOpenApiOrderInfoLogDao;
     
     @Override
-    public SaasOpenApiOrderInfoLogVo addSaasOpenApiOrderInfoLog(SaasOpenApiOrderInfoLogVo vo) {
-        SaasOpenApiOrderInfoLog entity = saasOpenApiOrderInfoLogDao.insert(SaasOpenApiOrderInfoLogVo.convertVOToEntity(vo));
+    public Boolean addSaasOpenApiOrderInfoLog(SaasOpenApiOrderInfoLogVo vo) {
+//        SaasOpenApiOrderInfoLog entity = saasOpenApiOrderInfoLogDao.insert(SaasOpenApiOrderInfoLogVo.convertVOToEntity(vo));
+//        if (entity == null) {
+//            return null;
+//        }
+//        SaasOpenApiOrderInfoLogVo saasOpenApiOrderInfoLogVo = new SaasOpenApiOrderInfoLogVo();
+//        BeanUtils.copyProperties(entity, saasOpenApiOrderInfoLogVo);
+//        saasOpenApiOrderInfoLogVo.setSaasOpenApiOrderInfoLogId(entity.getId());
+//        return saasOpenApiOrderInfoLogVo;
+        return saasOpenApiOrderInfoLogDao.insert(SaasOpenApiOrderInfoLogVo.convertVOToEntity(vo)) != null;
+    }
+    
+    @Override
+    public SaasOpenApiOrderInfoLogVo getByMobile(String mobile, Long from, Boolean success, Date startDate) {
+        SaasOpenApiOrderInfoLog entity = saasOpenApiOrderInfoLogDao.getByMobile(mobile, from, success, startDate);
         if (entity == null) {
             return null;
         }

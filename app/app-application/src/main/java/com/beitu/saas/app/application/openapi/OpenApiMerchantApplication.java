@@ -57,7 +57,7 @@ public class OpenApiMerchantApplication {
         return borrowerRelatedDataVos;
     }
     
-    public void merchantOrderUserProcess(SaasBorrowerRelatedDataVo borrowerRelatedDataVo, OrderPushToSaasVo userAndOrderData, String mobile, String identityNo) {
+    public void merchantOrderUserProcess(SaasBorrowerRelatedDataVo borrowerRelatedDataVo, OrderPushToSaasVo userAndOrderData, String mobile, String identityNo, Integer flowType) {
         OrderPushUserBasicInfoVo basicInfo = userAndOrderData.getBasicInfo();
         if (basicInfo == null) {
             OpenApiOrderPushErrorCodeEnum errorCodeEnum = OpenApiOrderPushErrorCodeEnum.USER_BASIC_INFO_MISS;
@@ -69,6 +69,10 @@ public class OpenApiMerchantApplication {
             LOGGER.warn("************************* 洋葱借条推单处理失败: {} Mobile:{} IdentityNo:{} *************************", errorCodeEnum.getMsg(), mobile, identityNo);
         }
         String orderNumb = openApiUserInfoApplication.userRealNameAndOrderCreate(borrowerRelatedDataVo, basicInfo, orderInfo);
+    
+        /////////////////////////////////////////////////////////////////////////
+        // TODO: 2018/4/13 推送成功/计费点
+        /////////////////////////////////////////////////////////////////////////
         
         OrderPushUserPersonalInfoVo personalInfo = userAndOrderData.getPersonalInfo();
         OrderPushUserWorkInfoVo workInfo = userAndOrderData.getWorkInfo();

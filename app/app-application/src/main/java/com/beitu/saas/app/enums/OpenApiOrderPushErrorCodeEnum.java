@@ -14,7 +14,8 @@ public enum OpenApiOrderPushErrorCodeEnum implements ErrorCodeEnum {
     DATA_PARSE_ERROR(10001, "数据解析失败", HttpStatus.OK),
     NO_MATCHED_MERCHANT(20001, "未找到匹配推单对象机构", HttpStatus.OK),
     USER_BASIC_INFO_MISS(20002, "用户基础信息缺失", HttpStatus.OK),
-    USER_ORDER_INFO_MISS(20003, "用户订单信息缺失", HttpStatus.OK);
+    USER_ORDER_INFO_MISS(20003, "用户订单信息缺失", HttpStatus.OK),
+    LOG_MOBILE_EXIST_ERROR(20004, "已存在该手机号推单记录", HttpStatus.OK);
 
     private Integer code;
 

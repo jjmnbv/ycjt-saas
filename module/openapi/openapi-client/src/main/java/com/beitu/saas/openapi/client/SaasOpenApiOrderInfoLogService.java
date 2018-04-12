@@ -4,6 +4,8 @@ import com.beitu.saas.openapi.domain.SaasOpenApiOrderInfoLogVo;
 import com.fqgj.common.base.BaseService;
 import com.fqgj.common.entity.BaseEntity;
 
+import java.util.Date;
+
 /**
  * User: linchengyu
  * Date: 2018-04-12
@@ -11,6 +13,8 @@ import com.fqgj.common.entity.BaseEntity;
  */
 public interface SaasOpenApiOrderInfoLogService<T extends BaseEntity> extends BaseService<T> {
     
-    SaasOpenApiOrderInfoLogVo addSaasOpenApiOrderInfoLog(SaasOpenApiOrderInfoLogVo vo);
+    Boolean addSaasOpenApiOrderInfoLog(SaasOpenApiOrderInfoLogVo vo);
+    
+    SaasOpenApiOrderInfoLogVo getByMobile(String mobile, Long from, Boolean success, Date startDate);
     
 }
