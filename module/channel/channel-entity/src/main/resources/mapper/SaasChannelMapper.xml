@@ -62,6 +62,7 @@
                 and merchant_code = #{merchantCode,jdbcType=VARCHAR}
             </if>
             and deleted = false
+            and <![CDATA[ channel_type != 1 ]]>
         </trim>
     </select>
 
