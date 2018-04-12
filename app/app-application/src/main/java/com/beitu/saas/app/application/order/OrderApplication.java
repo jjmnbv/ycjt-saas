@@ -17,6 +17,7 @@ import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
 import com.beitu.saas.borrower.client.SaasBorrowerService;
 import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
 import com.beitu.saas.borrower.domain.SaasBorrowerVo;
+import com.beitu.saas.borrower.enums.BorrowerErrorCodeEnum;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.consts.ChannelConsts;
 import com.beitu.saas.channel.entity.SaasChannelEntity;
@@ -588,6 +589,11 @@ public class OrderApplication {
         if (StringUtils.isNotEmpty(saasOrderVo.getPreliminaryReviewerCode()) && !operatorCode.equals(saasOrderVo.getPreliminaryReviewerCode())) {
             throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
         }
+
+        if (saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(saasOrderVo.getBorrowerCode()) == null) {
+            throw new ApplicationException(OrderErrorCodeEnum.BORROWER_NEED_REAL_NAME);
+        }
+
         updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.PRELIMINARY_REVIEWER_REJECT, null);
 
         sendApplication.sendNotifyMessageByBorrowerCode(merchantCode, saasOrderVo.getBorrowerCode(), new HashMap(2) {{

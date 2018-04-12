@@ -75,12 +75,6 @@ public class CreditApplication {
     private SaasCreditCarrierService saasCreditCarrierService;
 
     @Autowired
-    private CarrierReportApplication carrierReportApplication;
-
-    @Autowired
-    private DunningReportApplication dunningReportApplication;
-
-    @Autowired
     private OrderApplication orderApplication;
 
     @Autowired
