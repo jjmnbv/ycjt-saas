@@ -15,10 +15,10 @@
                 <if test="borrowerInfoParam !=null and borrowerInfoParam.identityCode != null and borrowerInfoParam.identityCode != ''">
                     and sbri.identity_code = #{borrowerInfoParam.identityCode,jdbcType=VARCHAR}
                 </if>
-                <if test="borrowerInfoParam !=null and borrowerInfoParam.channelCode != null and borrowerInfoParam.channelCode != ''">
+                <if test="borrowerInfoParam !=null and borrowerInfoParam.channelCode != 0 and borrowerInfoParam.channelCode != ''">
                     and sb.channel_code = #{borrowerInfoParam.channelCode,jdbcType=VARCHAR}
                 </if>
-                <if test="borrowerInfoParam !=null and borrowerInfoParam.merchantCode != 0 and borrowerInfoParam.merchantCode != ''">
+                <if test="borrowerInfoParam !=null and borrowerInfoParam.merchantCode != null and borrowerInfoParam.merchantCode != ''">
                     and sb.merchant_code = #{borrowerInfoParam.merchantCode,jdbcType=VARCHAR}
                 </if>
                 and sb.deleted = 0 AND sbri.deleted = 0
