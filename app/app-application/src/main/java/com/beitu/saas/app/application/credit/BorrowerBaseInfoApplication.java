@@ -170,7 +170,10 @@ public class BorrowerBaseInfoApplication {
             List<SaasCreditCarrierRecordVo> friendRecordVoList = saasCreditCarrierRecordService.listByRecordIdAndMobile(recordId, saasBorrowerEmergentContactVo.getFriendMobile());
             if (CollectionUtils.isNotEmpty(friendRecordVoList)) {
                 SaasCreditCarrierRecordVo friendRecordVo = friendRecordVoList.get(friendRecordVoList.size() - 1);
-                borrowerEmergentContactVo.setFriendRecord(friendRecordVo.getCalledDuration() + "/" + friendRecordVo.getCallingDuration() + "、" + friendRecordVo.getTotalDuration() + "秒");
+                Integer calledDuration = (int) Math.ceil(friendRecordVo.getCalledDuration() / 60);
+                Integer callingDuration = (int) Math.ceil(friendRecordVo.getCallingDuration() / 60);
+                Integer totalDuration = (int) Math.ceil(friendRecordVo.getTotalDuration() / 60);
+                borrowerEmergentContactVo.setFriendRecord(calledDuration + "分" + "/" + callingDuration + "分" + "、" + totalDuration + "分");
             }
         }
         return borrowerEmergentContactVo;

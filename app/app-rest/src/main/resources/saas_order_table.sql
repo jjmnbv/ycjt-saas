@@ -102,6 +102,19 @@ CREATE TABLE `saas_order_status_history` (
   KEY `idx_order_numb` (`order_numb`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='SAAS订单状态流水表';
 
+DROP TABLE IF EXISTS `saas_order_lend_remark`;
+CREATE TABLE `saas_order_lend_remark` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '表ID',
+  `order_numb` varchar(32) NOT NULL COMMENT '订单号',
+  `lend_way` varchar(32) NOT NULL COMMENT '放款途径',
+  `lend_person_code` varchar(32) NOT NULL COMMENT '放款人',
+  `deleted` bit(1) NOT NULL COMMENT '是否删除',
+  `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_order_numb` (`order_numb`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='SAAS订单放款备注表';
+
 DROP TABLE IF EXISTS `saas_borrower`;
 CREATE TABLE `saas_borrower` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '表ID',

@@ -67,11 +67,11 @@ public class SaasOrderBillDetailServiceImpl extends AbstractBaseService implemen
         if (queryOrderStatus != null) {
             conditions.put("destroy", Boolean.FALSE);
             if (OrderStatusEnum.FOR_REIMBURSEMENT.getCode().equals(queryOrderStatus)) {
-                conditions.put("repaymentEndDt", new Date());
-            } else if (OrderStatusEnum.OVERDUE.getCode().equals(queryOrderStatus)) {
                 conditions.put("repaymentBeginDt", new Date());
+            } else if (OrderStatusEnum.OVERDUE.getCode().equals(queryOrderStatus)) {
+                conditions.put("repaymentEndDt", new Date());
             } else if (OrderStatusEnum.HAS_BEEN_DESTROY.getCode().equals(queryOrderStatus)) {
-                conditions.put("destroy", Boolean.FALSE);
+                conditions.put("destroy", Boolean.TRUE);
             }
         }
         Integer count = saasOrderBillDetailDao.countByConditions(conditions);

@@ -33,13 +33,11 @@ import com.beitu.saas.finance.entity.SaasMerchantBalanceInfoEntity;
 import com.beitu.saas.finance.entity.SaasMerchantCreditInfoEntity;
 import com.beitu.saas.finance.entity.SaasMerchantSmsInfoEntity;
 import com.beitu.saas.order.client.SaasOrderBillDetailService;
+import com.beitu.saas.order.client.SaasOrderLendRemarkService;
 import com.beitu.saas.order.client.SaasOrderService;
 import com.beitu.saas.order.client.SaasOrderStatusHistoryService;
 import com.beitu.saas.order.consts.OrderConsts;
-import com.beitu.saas.order.domain.QuerySaasOrderVo;
-import com.beitu.saas.order.domain.SaasOrderApplicationVo;
-import com.beitu.saas.order.domain.SaasOrderBillDetailVo;
-import com.beitu.saas.order.domain.SaasOrderVo;
+import com.beitu.saas.order.domain.*;
 import com.beitu.saas.order.entity.SaasOrder;
 import com.beitu.saas.order.entity.SaasOrderStatusHistory;
 import com.beitu.saas.order.enums.DashboardTypeEnum;
@@ -125,6 +123,9 @@ public class OrderApplication {
 
     @Autowired
     private SaasBorrowerPersonalInfoService saasBorrowerPersonalInfoService;
+
+    @Autowired
+    private SaasOrderLendRemarkService saasOrderLendRemarkService;
 
     public BorrowerOrderApplyStatusEnum getOrderApplyStatus(String borrowerCode, String channelCode) {
         if (StringUtils.isNotEmpty(saasOrderService.getReviewerRefuseOrderNumb(borrowerCode, channelCode))) {
@@ -713,6 +714,12 @@ public class OrderApplication {
                 put("channel_url", configUtil.getH5AddressURL() + "?channel=" + saasOrderVo.getChannelCode());
             }}, SaasSmsTypeEnum.SAAS_0010);
         }
+
+        SaasOrderLendRemarkVo addSaasOrderLendRemarkVo = new SaasOrderLendRemarkVo();
+        addSaasOrderLendRemarkVo.setOrderNumb(orderNumb);
+        addSaasOrderLendRemarkVo.setLendWay(lendRemark);
+        addSaasOrderLendRemarkVo.setLendPersonCode(operatorCode);
+        saasOrderLendRemarkService.save(addSaasOrderLendRemarkVo);
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
