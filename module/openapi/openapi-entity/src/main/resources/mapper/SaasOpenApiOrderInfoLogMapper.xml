@@ -18,9 +18,10 @@
             `success` = #{success, jdbcType=BIT} AND
         </if>
         <if test="startDate != null">
-            `gmt_create` >= #{startDate,jdbcType=TIMESTAMP} AND
+            `gmt_create` >= #{startDate, jdbcType=TIMESTAMP} AND
         </if>
         `deleted` = 0
+        ORDER BY `id` DESC LIMIT 1
     </select>
 
 </mapper>
