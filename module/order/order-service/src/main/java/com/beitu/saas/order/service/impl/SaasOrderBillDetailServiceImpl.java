@@ -57,6 +57,7 @@ public class SaasOrderBillDetailServiceImpl extends AbstractBaseService implemen
     @Override
     public List<SaasOrderBillDetailVo> listByQueryOrderBillDetailVoAndPage(QuerySaasOrderBillDetailVo querySaasOrderBillDetailVo, Page page) {
         Map<String, Object> conditions = new HashMap<>(16);
+        conditions.put("orderNumbList", querySaasOrderBillDetailVo.getOrderNumbList());
         conditions.put("borrowerCodeList", querySaasOrderBillDetailVo.getBorrowerCodeList());
         conditions.put("merchantCode", querySaasOrderBillDetailVo.getMerchantCode());
         conditions.put("channelCode", querySaasOrderBillDetailVo.getChannelCode());
