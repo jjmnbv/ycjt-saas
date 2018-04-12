@@ -151,7 +151,7 @@ public class OrderApplication {
         SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(saasOrderApplicationVo.getChannelCode());
         SaasAdmin saasAdmin = saasAdminService.getSaasAdminByAdminCode(saasChannelEntity.getChargePersonCode());
         SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode);
-        sendApplication.sendNotifyMessage(saasOrderApplicationVo.getMerchantCode(), saasAdmin.getMobile(), new HashMap(4) {{
+        sendApplication.sendNotifyMessage(saasOrderApplicationVo.getMerchantCode(), saasAdmin.getMobile(), new HashMap(8) {{
             put("channel_name", saasChannelEntity.getChannelName());
             put("money", saasOrderApplicationVo.getRealCapital());
             put("name", saasBorrowerRealInfoVo.getName());
@@ -182,7 +182,7 @@ public class OrderApplication {
         SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(saasOrderApplicationVo.getChannelCode());
         SaasAdmin saasAdmin = saasAdminService.getSaasAdminByAdminCode(saasChannelEntity.getChargePersonCode());
         SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode);
-        sendApplication.sendNotifyMessage(saasOrderApplicationVo.getMerchantCode(), saasAdmin.getMobile(), new HashMap(4) {{
+        sendApplication.sendNotifyMessage(saasOrderApplicationVo.getMerchantCode(), saasAdmin.getMobile(), new HashMap(8) {{
             put("channel_name", saasChannelEntity.getChannelName());
             put("money", saasOrderApplicationVo.getRealCapital());
             put("name", saasBorrowerRealInfoVo.getName());
@@ -226,43 +226,37 @@ public class OrderApplication {
     }
 
     public OrderDetailVo getOrderDetailVoByOrderNumbAndMerchantCode(String orderNumb, String merchantCode) {
-        List<SaasOrderVo> saasOrderVoList = saasOrderService.listEffectiveOrderByOrderNumb(orderNumb);
-        if (CollectionUtils.isEmpty(saasOrderVoList)) {
+        SaasOrderVo mainSaasOrderVo = saasOrderService.getMainSaasOrderByOrderNumb(orderNumb);
+        if (mainSaasOrderVo == null || !mainSaasOrderVo.getMerchantCode().equals(merchantCode)) {
             return null;
         }
-        OrderDetailVo orderDetailVo;
-        SaasOrderVo saasOrderVo;
-        if (saasOrderVoList.size() == 1) {
-            saasOrderVo = saasOrderVoList.get(0);
-            orderDetailVo = convertSaasOrderVo2OrderDetailVo(saasOrderVo);
-            orderDetailVo.setAmount(orderCalculateApplication.getAmount(saasOrderVo).toString());
-        } else {
-            saasOrderVo = saasOrderVoList.get(saasOrderVoList.size() - 1);
-            if (OrderStatusEnum.TO_CONFIRM_EXTEND.getCode().equals(saasOrderVo.getOrderStatus())) {
-                saasOrderVo = saasOrderVoList.get(saasOrderVoList.size() - 2);
-                saasOrderVo.setOrderStatus(OrderStatusEnum.TO_CONFIRM_EXTEND.getCode());
-            }
-            orderDetailVo = convertSaasOrderVo2OrderDetailVo(saasOrderVo);
-            SaasOrderBillDetailVo saasOrderBillDetailVo = saasOrderBillDetailService.getVisibleOrderBillDetailByOrderNumbAndMerchantCode(orderNumb, merchantCode);
+        OrderDetailVo orderDetailVo = convertSaasOrderVo2OrderDetailVo(mainSaasOrderVo);
+        OrderStatusEnum orderStatusEnum = saasOrderService.getOrderStatusByOrderNumb(orderNumb);
+        orderDetailVo.setOrderStatus(orderStatusEnum.getCode());
+
+        SaasOrderBillDetailVo saasOrderBillDetailVo = saasOrderBillDetailService.getVisibleOrderBillDetailByOrderNumbAndMerchantCode(orderNumb, merchantCode);
+        if (saasOrderBillDetailVo != null) {
             orderDetailVo.setAmount(orderCalculateApplication.getAmount(saasOrderBillDetailVo).toString());
             orderDetailVo.setRepaymentDt(DateUtil.getDate(saasOrderBillDetailVo.getRepaymentDt()));
+        } else {
+            orderDetailVo.setAmount(orderCalculateApplication.getAmount(mainSaasOrderVo).toString());
+            orderDetailVo.setRepaymentDt(DateUtil.getDate(mainSaasOrderVo.getRepaymentDt()));
         }
-        SaasBorrowerRealInfoVo realInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(saasOrderVo.getBorrowerCode());
+        SaasBorrowerRealInfoVo realInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(mainSaasOrderVo.getBorrowerCode());
         if (realInfoVo != null) {
             orderDetailVo.setBorrowerName(realInfoVo.getName());
             orderDetailVo.setBorrowerIdentityCode(realInfoVo.getIdentityCode());
         }
-
-        if (OrderStatusEnum.TO_CONFIRM_EXTEND.getCode().equals(orderDetailVo.getOrderStatus())) {
-            saasOrderVo = saasOrderVoList.get(saasOrderVoList.size() - 1);
+        if (OrderStatusEnum.TO_CONFIRM_EXTEND.equals(orderStatusEnum)) {
+            SaasOrderVo extendSaasOrderVo = saasOrderService.getConfirmExtendOrderByOrderNumb(orderNumb);
             ExtendOrderDetailVo extendOrderDetailVo = new ExtendOrderDetailVo();
-            extendOrderDetailVo.setExtendDuration(DateUtil.countDay(saasOrderVo.getRepaymentDt(), saasOrderVo.getGmtCreate()));
-            extendOrderDetailVo.setRepaymentDt(DateUtil.getDate(saasOrderVo.getRepaymentDt()));
-            extendOrderDetailVo.setTotalInterestRatio(orderCalculateApplication.getInterestRatio(saasOrderVo.getTotalInterestRatio()));
+            extendOrderDetailVo.setExtendDuration(DateUtil.countDay(extendSaasOrderVo.getRepaymentDt(), extendSaasOrderVo.getGmtCreate()));
+            extendOrderDetailVo.setRepaymentDt(DateUtil.getDate(extendSaasOrderVo.getRepaymentDt()));
+            extendOrderDetailVo.setExtendTermUrl(extendSaasOrderVo.getTermUrl());
+            extendOrderDetailVo.setTotalInterestRatio(orderCalculateApplication.getInterestRatio(extendSaasOrderVo.getTotalInterestRatio()));
             extendOrderDetailVo.setExtendTitle("确认展期");
             orderDetailVo.setExtendOrderDetailVos(Arrays.asList(extendOrderDetailVo));
         }
-
         return orderDetailVo;
     }
 
@@ -274,6 +268,7 @@ public class OrderApplication {
         orderDetailVo.setRepaymentDt(DateUtil.getDate(saasOrderVo.getRepaymentDt()));
         orderDetailVo.setOrderStatus(saasOrderVo.getOrderStatus());
         orderDetailVo.setBorrowPurpose(saasOrderVo.getBorrowPurpose());
+        orderDetailVo.setTermUrl(saasOrderVo.getTermUrl());
         return orderDetailVo;
     }
 

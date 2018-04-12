@@ -437,11 +437,11 @@ public class H5Controller {
                 response.setContract1DownloadUrl("");
                 response.setContractTitle2(SaasContractEnum.LOAN_CONTRACT.getMsg());
                 response.setContractUrl2(contractUrl.toString());
-                response.setContract2DownloadUrl(downloadContractUrl.toString());
+                response.setContract2DownloadUrl("");
             } else {
                 response.setContractTitle1(SaasContractEnum.LOAN_CONTRACT.getMsg());
                 response.setContractUrl1(contractUrl.toString());
-                response.setContract1DownloadUrl(downloadContractUrl.toString());
+                response.setContract1DownloadUrl("");
             }
             response.setVisible(Boolean.TRUE);
             response.setButtonTitle(H5OrderDetailButtonTypeEnum.CONFIRM_RECEIPT_BUTTON_TYPE.getMsg());
