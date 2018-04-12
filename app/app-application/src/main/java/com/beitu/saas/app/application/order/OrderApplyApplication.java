@@ -5,6 +5,7 @@ import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
 import com.beitu.saas.borrower.client.SaasBorrowerService;
 import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
 import com.beitu.saas.channel.client.SaasChannelService;
+import com.beitu.saas.channel.entity.SaasChannelEntity;
 import com.beitu.saas.order.client.SaasOrderApplicationService;
 import com.beitu.saas.order.client.SaasOrderService;
 import com.beitu.saas.order.domain.SaasOrderApplicationVo;
@@ -70,7 +71,10 @@ public class OrderApplyApplication {
             orderApplicationListVo.setOrderStatus("未提交");
         }
         orderApplicationListVo.setRepaymentMethod("一次性还本付息");
-        orderApplicationListVo.setChannelName(saasChannelService.getSaasChannelByChannelCode(saasOrderApplicationVo.getChannelCode()).getChannelName());
+        SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(saasOrderApplicationVo.getChannelCode());
+        if (saasChannelEntity != null) {
+            orderApplicationListVo.setChannelName(saasChannelEntity.getChannelName());
+        }
         return orderApplicationListVo;
     }
 

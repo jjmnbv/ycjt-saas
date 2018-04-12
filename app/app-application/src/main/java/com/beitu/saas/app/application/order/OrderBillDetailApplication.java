@@ -11,6 +11,7 @@ import com.beitu.saas.channel.entity.SaasChannelEntity;
 import com.beitu.saas.collection.client.SaasCollectionOrderService;
 import com.beitu.saas.common.utils.DateUtil;
 import com.beitu.saas.order.client.SaasOrderBillDetailService;
+import com.beitu.saas.order.client.SaasOrderLendRemarkService;
 import com.beitu.saas.order.client.SaasOrderService;
 import com.beitu.saas.order.client.SaasOrderStatusHistoryService;
 import com.beitu.saas.order.domain.QuerySaasOrderBillDetailVo;
@@ -62,6 +63,9 @@ public class OrderBillDetailApplication {
     @Autowired
     private SaasCollectionOrderService saasCollectionOrderService;
 
+    @Autowired
+    private SaasOrderLendRemarkService saasOrderLendRemarkService;
+
     public List<SaasOrderBillDetailListVo> listAfterLendManageOrder(QueryOrderBillDetailVo queryVo, Page page) {
         QuerySaasOrderBillDetailVo querySaasOrderBillDetailVo = convertQueryOrderBillDetailVo2QuerySaasOrderBillDetailVo(queryVo);
         if (querySaasOrderBillDetailVo == null) {
@@ -70,7 +74,11 @@ public class OrderBillDetailApplication {
         if (queryVo.getOrderStatus() != null) {
             querySaasOrderBillDetailVo.setQueryOrderStatus(queryVo.getOrderStatus());
             if (OrderStatusEnum.TO_CONFIRM_EXTEND.getCode().equals(queryVo.getOrderStatus())) {
-                querySaasOrderBillDetailVo.setOrderNumbList(saasOrderService.listAllConfirmReceiptOrderNumbByMerchantCode(queryVo.getMerchantCode()));
+                List<String> orderNumbList = saasOrderService.listAllConfirmExtendOrderNumbByMerchantCode(queryVo.getMerchantCode());
+                if (CollectionUtils.isEmpty(orderNumbList)) {
+                    return null;
+                }
+                querySaasOrderBillDetailVo.setOrderNumbList(orderNumbList);
             }
         }
         List<SaasOrderBillDetailVo> saasOrderBillDetailVoList = saasOrderBillDetailService.listByQueryOrderBillDetailVoAndPage(querySaasOrderBillDetailVo, page);
@@ -149,12 +157,17 @@ public class OrderBillDetailApplication {
         saasOrderBillDetailListVo.setBorrowerName(borrowerInfoVo.getBorrowerName());
         saasOrderBillDetailListVo.setBorrowerMobile(borrowerInfoVo.getBorrowerMobile());
 
-        saasOrderBillDetailListVo.setLoanLendRemark(saasOrderStatusHistoryService.getLoanLendRemark(saasOrderBillDetailVo.getOrderNumb()));
+        saasOrderBillDetailListVo.setLoanLendRemark(saasOrderLendRemarkService.getLendWayByOrderNumb(saasOrderBillDetailVo.getOrderNumb()));
         SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(saasOrderBillDetailVo.getChannelCode());
         if (saasChannelEntity != null) {
             saasOrderBillDetailListVo.setChannelName(saasChannelEntity.getChannelName());
         }
-        saasOrderBillDetailListVo.setOrderStatus(saasOrderService.getOrderStatusByOrderNumb(saasOrderBillDetailVo.getOrderNumb()).getMsg());
+        OrderStatusEnum orderStatusEnum = saasOrderService.getOrderStatusByOrderNumb(saasOrderBillDetailVo.getOrderNumb());
+        if (orderStatusEnum.equals(OrderStatusEnum.IN_EXTEND)) {
+            saasOrderBillDetailListVo.setOrderStatus(OrderStatusEnum.FOR_REIMBURSEMENT.getMsg());
+        } else {
+            saasOrderBillDetailListVo.setOrderStatus(orderStatusEnum.getMsg());
+        }
 
         return saasOrderBillDetailListVo;
     }
@@ -172,7 +185,7 @@ public class OrderBillDetailApplication {
         BorrowerInfoVo borrowerInfoVo = borrowerApplication.getBorrowerInfoVoByBorrowerCode(saasOrderVo.getMerchantCode(), saasOrderVo.getBorrowerCode());
         BeanUtils.copyProperties(borrowerInfoVo, saasOrderBillDetailListVo);
 
-        saasOrderBillDetailListVo.setLoanLendRemark(saasOrderStatusHistoryService.getLoanLendRemark(saasOrderVo.getOrderNumb()));
+        saasOrderBillDetailListVo.setLoanLendRemark(saasOrderLendRemarkService.getLendWayByOrderNumb(saasOrderVo.getOrderNumb()));
         SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(saasOrderVo.getChannelCode());
         if (saasChannelEntity != null) {
             saasOrderBillDetailListVo.setChannelName(saasChannelEntity.getChannelName());

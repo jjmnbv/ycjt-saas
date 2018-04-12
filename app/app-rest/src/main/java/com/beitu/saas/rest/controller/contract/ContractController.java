@@ -190,6 +190,7 @@ public class ContractController {
                 response.setUserStampUrl(configUtil.getAddressURLPrefix() + merchantContractInfoVo.getContractUrl());
             }
         }
+        response.setInscribeDate(DateUtil.getDate(new Date()));
         return new DataApiResponse(response);
     }
 

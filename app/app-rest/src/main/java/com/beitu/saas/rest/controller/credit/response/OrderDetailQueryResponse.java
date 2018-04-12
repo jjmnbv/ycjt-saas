@@ -1,6 +1,7 @@
 package com.beitu.saas.rest.controller.credit.response;
 
 import com.beitu.saas.app.application.order.vo.SaasOrderDetailVo;
+import com.beitu.saas.common.utils.DateUtil;
 import com.beitu.saas.risk.helpers.CollectionUtils;
 import com.fqgj.common.api.ResponseData;
 import io.swagger.annotations.ApiModel;
@@ -48,9 +49,13 @@ public class OrderDetailQueryResponse implements ResponseData {
         }
         this.mainOrderDetailVo = new SaasOrderDetailVo();
         BeanUtils.copyProperties(allOrderBillDetail.get(allOrderBillDetail.size() - 1), mainOrderDetailVo);
+        this.mainOrderDetailVo.setTotalInterestRatio(originalOrderDetailVo.getTotalInterestRatio());
         this.mainOrderDetailVo.setCreatedDate(originalOrderDetailVo.getCreatedDate());
-        this.mainOrderDetailVo.setBorrowingDuration(allOrderBillDetail.stream().collect(Collectors.summingInt(SaasOrderDetailVo::getBorrowingDuration)));
         this.mainOrderDetailVo.setOverdueDuration(allOrderBillDetail.stream().collect(Collectors.summingInt(SaasOrderDetailVo::getOverdueDuration)));
+        try {
+            this.mainOrderDetailVo.setBorrowingDuration(DateUtil.countDays(this.mainOrderDetailVo.getRepaymentDate(), this.mainOrderDetailVo.getCreatedDate()));
+        } catch (Exception e) {
+        }
         this.viewContractUrl = viewContractUrl;
         this.downloadContractUrl = downloadContractUrl;
     }
