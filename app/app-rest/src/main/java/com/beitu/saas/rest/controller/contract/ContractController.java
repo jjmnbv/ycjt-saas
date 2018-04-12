@@ -40,6 +40,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -97,7 +98,7 @@ public class ContractController {
             response.setRealCapital(saasOrderVo.getRealCapital());
             response.setCreatedDt(DateUtil.getDate(saasOrderVo.getCreatedDt()));
             response.setRepaymentDt(DateUtil.getDate(saasOrderVo.getRepaymentDt()));
-            response.setTotalInterestRatio(orderCalculateApplication.getInterestRatio(saasOrderVo.getTotalInterestRatio()));
+            response.setTotalInterestRatio(saasOrderVo.getTotalInterestRatio().multiply(new BigDecimal("100")).setScale(0).toString());
             response.setFirstOrderNo(saasOrderVo.getRelationOrderId() + "");
             response.setInscribeDate(DateUtil.getDate(new Date()));
             borrowerCode = saasOrderVo.getBorrowerCode();
@@ -218,7 +219,7 @@ public class ContractController {
             response.setRepaymentDt(DateUtil.getDate(saasOrderVo.getRepaymentDt()));
             response.setDeadline(DateUtil.countDay(saasOrderVo.getRepaymentDt(), new Date()));
             response.setAmount(orderCalculateApplication.getAmount(saasOrderVo));
-            response.setTotalInterestRatio(orderCalculateApplication.getInterestRatio(saasOrderVo.getTotalInterestRatio()));
+            response.setTotalInterestRatio(saasOrderVo.getTotalInterestRatio().multiply(new BigDecimal("100")).setScale(0).toString());
             response.setInscribeDate(DateUtil.getDate(new Date()));
             borrowerCode = saasOrderVo.getBorrowerCode();
             merchantCode = saasOrderVo.getMerchantCode();
@@ -263,6 +264,7 @@ public class ContractController {
                 response.setLenderStampUrl(configUtil.getAddressURLPrefix() + merchantContractInfoVo.getContractUrl());
             }
         }
+        response.setInscribeDate(DateUtil.getDate(new Date()));
         return new DataApiResponse(response);
     }
 
