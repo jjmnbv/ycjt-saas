@@ -63,9 +63,9 @@ public class SaasMerchantCreditInfoServiceImpl extends AbstractBaseService imple
         if (add) {
             balanceValue = balanceValue + value;
         } else {
-            if (balanceValue.compareTo(value) == -1) {
-                throw new ApiErrorException(BalanceErrorCodeEnum.LACK_OF_BALANCE);
-            }
+//            if (balanceValue.compareTo(value) == -1) {
+//                throw new ApiErrorException(BalanceErrorCodeEnum.LACK_OF_BALANCE);
+//            }
             balanceValue = balanceValue - value;
         }
         userBalanceInfo.setValue(balanceValue);
