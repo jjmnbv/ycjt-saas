@@ -14,8 +14,8 @@ public enum SaasLendRemarkEnum implements MsgCodeEnum {
     BANK_TRANSFER(3, "银行转账"),
     CASH_PAYMENTS(4, "现金支付"),
     JIEDAIBAO(5, "借贷宝"),
-    YANGCONGJIETIAO(6, "洋葱借条"),
-    WUYOUJIETIAO(7, "无忧借条"),;
+    YANGCONGJIETIAO(6, "洋葱借条");
+//    WUYOUJIETIAO(7, "无忧借条");
 
     SaasLendRemarkEnum(Integer code, String msg) {
         this.code = code;

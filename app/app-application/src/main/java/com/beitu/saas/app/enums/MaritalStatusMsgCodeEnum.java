@@ -12,10 +12,10 @@ import java.util.Objects;
  */
 public enum MaritalStatusMsgCodeEnum implements MsgCodeEnum {
 
-    NOT_MARRIED(1, "未婚"),
-    MARRIED_AND_PROCREATED(2, "已婚已育"),
-    MARRIED_AND_NOT_PROCREATED(3, "已婚未育"),
-    OTHER(4, "其他");
+    NOT_MARRIED(0, "未婚"),
+    MARRIED_AND_PROCREATED(1, "已婚已育"),
+    MARRIED_AND_NOT_PROCREATED(2, "已婚未育"),
+    OTHER(3, "其他");
 
     MaritalStatusMsgCodeEnum(Integer code, String msg) {
         this.code = code;
