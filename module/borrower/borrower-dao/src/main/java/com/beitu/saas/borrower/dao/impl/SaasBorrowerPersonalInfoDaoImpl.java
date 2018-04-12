@@ -48,4 +48,11 @@ public class SaasBorrowerPersonalInfoDaoImpl extends AbstractBaseMapper<SaasBorr
         params.put("orderNumb", orderNumb);
         return this.getSqlSession().selectOne(this.getStatement(".selectZmCreditScoreByBorrowerCodeAndOrderNumb"), params);
     }
+
+
+    @Override
+    public Integer selectRecentZmCreditScoreByBorrowerCode(String borrowerCode) {
+        Map<String, Object> params = new HashMap<>(4);
+        params.put("borrowerCode", borrowerCode);
+        return this.getSqlSession().selectOne(this.getStatement(".selectRecentZmCreditScoreByBorrowerCode"), params);    }
 }

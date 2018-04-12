@@ -47,4 +47,12 @@
         and deleted = 0
     </select>
 
+    <select id="selectRecentZmCreditScoreByBorrowerCode" resultType="java.lang.Integer">
+        select zm_credit_score
+        from saas_borrower_personal_info
+        where borrower_code = #{borrowerCode,jdbcType=VARCHAR}
+        and deleted = 0
+        order by id desc limit 1
+    </select>
+
 </mapper>

@@ -21,7 +21,7 @@
                 <if test="borrowerInfoParam !=null and borrowerInfoParam.merchantCode != null">
                     and sb.merchant_code = #{borrowerInfoParam.merchantCode,jdbcType=VARCHAR}
                 </if>
-                sb.deleted = 0 AND sbri.deleted = 0
+                and sb.deleted = 0 AND sbri.deleted = 0
             </trim>
         </where>
     </sql>
@@ -49,7 +49,6 @@
         saas_borrower sb
         LEFT JOIN
         saas_borrower_real_info sbri ON sb.borrower_code = sbri.borrower_code
-        WHERE
         <include refid="Param_Where_Clause"/>
     </select>
 </mapper>

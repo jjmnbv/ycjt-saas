@@ -4,10 +4,7 @@ import com.beitu.saas.app.application.borrower.vo.BorrowerInfoVo;
 import com.beitu.saas.app.application.borrower.vo.BorrowerManagerInfoVo;
 import com.beitu.saas.app.application.channel.SaasChannelApplication;
 import com.beitu.saas.borrower.BorrowerInfoParam;
-import com.beitu.saas.borrower.client.SaasBorrowerLoginLogService;
-import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
-import com.beitu.saas.borrower.client.SaasBorrowerService;
-import com.beitu.saas.borrower.client.SaasBorrowerTokenService;
+import com.beitu.saas.borrower.client.*;
 import com.beitu.saas.borrower.domain.SaasBorrowerLoginLogVo;
 import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
 import com.beitu.saas.borrower.domain.SaasBorrowerVo;
@@ -69,6 +66,8 @@ public class BorrowerApplication {
 
     @Autowired
     private SaasBorrowerRealInfoService saasBorrowerRealInfoService;
+    @Autowired
+    private SaasBorrowerPersonalInfoService saasBorrowerPersonalInfoService;
 
     @Transactional(rollbackFor = RuntimeException.class)
     public String login(String mobile, String channelCode, String phoneSystem, String ip) {
@@ -204,14 +203,16 @@ public class BorrowerApplication {
             BorrowerManagerInfoVo borrowerManagerInfoVo = new BorrowerManagerInfoVo();
             BeanUtils.copyProperties(x, borrowerManagerInfoVo);
 
-            
             IdcardInfoExtractor idcardInfoExtractor = new IdcardInfoExtractor(x.getIdentityCode());
             borrowerManagerInfoVo.setAge(idcardInfoExtractor.getAge());
             borrowerManagerInfoVo.setGender(idcardInfoExtractor.getGender());
+            Integer recentZmScore=saasBorrowerPersonalInfoService.getRecentZmCreditScoreByBorrowerCode(x.getBorrowerCode());
+            borrowerManagerInfoVo.setZmCreditScore(recentZmScore);
             SaasH5ChannelVo saasH5ChannelVo = saasChannelApplication.getSaasChannelBychannelCode(x.getChannelCode());
             if (saasH5ChannelVo != null) {
                 borrowerManagerInfoVo.setChannelName(saasH5ChannelVo.getChannelName());
             }
+
             borrowerManagerInfoVos.add(borrowerManagerInfoVo);
         });
 

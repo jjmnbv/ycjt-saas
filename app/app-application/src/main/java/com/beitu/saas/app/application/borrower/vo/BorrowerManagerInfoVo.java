@@ -18,7 +18,7 @@ public class BorrowerManagerInfoVo implements ResponseData, Serializable {
     private Integer age;
     private String identityCode;
     private String nativePlace;
-    private String zmCreditScore;
+    private Integer zmCreditScore;
     private String gmtCreate;
     private String channelCode;
     private String channelName;
@@ -87,11 +87,11 @@ public class BorrowerManagerInfoVo implements ResponseData, Serializable {
         return this;
     }
 
-    public String getZmCreditScore() {
+    public Integer getZmCreditScore() {
         return zmCreditScore;
     }
 
-    public BorrowerManagerInfoVo setZmCreditScore(String zmCreditScore) {
+    public BorrowerManagerInfoVo setZmCreditScore(Integer zmCreditScore) {
         this.zmCreditScore = zmCreditScore;
         return this;
     }
