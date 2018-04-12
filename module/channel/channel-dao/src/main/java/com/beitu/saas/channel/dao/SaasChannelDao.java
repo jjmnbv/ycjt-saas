@@ -19,6 +19,8 @@ public interface SaasChannelDao extends BaseMapper<SaasChannelEntity> {
 
     List<SaasChannelEntity> selectChannelEntityList(SaasChannelParam saasChannelParam, Page page);
 
+    List<SaasChannelEntity> selectAllChannelEntityList(String merchantCode);
+
     Integer countChannelEntityList(SaasChannelParam saasChannelParam);
 
     SaasChannelEntity selectChannelEntityByChannelCode(String channelCode);

@@ -50,7 +50,7 @@ public enum ChannelTypeEnum {
             if (e.getType() > 0) {
                 DefaultChannelInfoVo defaultChannelInfoParam = new DefaultChannelInfoVo()
                         .setChannelType(e.getType())
-                        .setChanelName(e.name());
+                        .setChanelName(e.getDesc());
                 defaultChannelList.add(defaultChannelInfoParam);
             }
         }

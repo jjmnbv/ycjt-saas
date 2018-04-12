@@ -31,7 +31,6 @@
         sbri.name,
         sb.borrower_code borrowCode,
         sb.mobile,
-        sbri.gender,
         sbri.identity_code identityCode,
         sbri.native_place nativePlace,
         sb.gmt_create gmtCreate,

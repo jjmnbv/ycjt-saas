@@ -41,6 +41,11 @@ public class SaasChannelServiceImpl extends AbstractBaseService implements SaasC
     }
 
     @Override
+    public List<SaasChannelEntity> getAllSaasChannelList(String merchantCode) {
+        return saasChannelDao.selectAllChannelEntityList(merchantCode);
+    }
+
+    @Override
     public void operateSaasChannel(String channelCode, Integer status) {
         SaasChannelEntity channelEntity = saasChannelDao.selectChannelEntityByChannelCode(channelCode);
         channelEntity.setChannelStatus(status);

@@ -33,6 +33,12 @@ public class SaasChannelDaoImpl extends AbstractBaseMapper<SaasChannelEntity> im
     }
 
     @Override
+    public List<SaasChannelEntity> selectAllChannelEntityList(String merchantCode) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("merchantCode", merchantCode);
+        return getSqlSession().selectList(this.getStatement("selectAllChannelEntityList"), map);    }
+
+    @Override
     public Integer countChannelEntityList(SaasChannelParam saasChannelParam) {
         Map<String, Object> map = new HashMap<>();
         map.put("saasChannelParam", saasChannelParam);

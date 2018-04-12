@@ -70,10 +70,7 @@ public class SystemController {
     @ApiOperation(value = "渠道列表枚举信息", response = EnumResponse.class)
     public DataApiResponse<EnumResponse> listChannel() {
         SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
-        SaasChannelParam saasChannelParam = new SaasChannelParam();
-        saasChannelParam.setMerchantCode(saasAdmin.getMerchantCode());
-        saasChannelParam.setChannelStatus(0);
-        List<SaasChannelEntity> saasChannelEntityList = saasChannelService.getSaasChannelList(saasChannelParam, null);
+        List<SaasChannelEntity> saasChannelEntityList = saasChannelService.getAllSaasChannelList(saasAdmin.getMerchantCode());
         if (CollectionUtils.isEmpty(saasChannelEntityList)) {
             return new DataApiResponse<>();
         }

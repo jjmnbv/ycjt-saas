@@ -1,4 +1,4 @@
-package com.beitu.saas.borrower.vo;
+package com.beitu.saas.app.application.borrower.vo;
 
 import com.fqgj.common.api.ResponseData;
 
@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Date: 2018-04-12
  * Time: 20:25:59.840
  */
-public class SaasBorrowerManagerVo implements ResponseData, Serializable {
+public class BorrowerManagerInfoVo implements ResponseData, Serializable {
 
     private String borrowerCode;
     private String name;
@@ -28,7 +28,7 @@ public class SaasBorrowerManagerVo implements ResponseData, Serializable {
         return borrowerCode;
     }
 
-    public SaasBorrowerManagerVo setBorrowerCode(String borrowerCode) {
+    public BorrowerManagerInfoVo setBorrowerCode(String borrowerCode) {
         this.borrowerCode = borrowerCode;
         return this;
     }
@@ -37,7 +37,7 @@ public class SaasBorrowerManagerVo implements ResponseData, Serializable {
         return name;
     }
 
-    public SaasBorrowerManagerVo setName(String name) {
+    public BorrowerManagerInfoVo setName(String name) {
         this.name = name;
         return this;
     }
@@ -46,7 +46,7 @@ public class SaasBorrowerManagerVo implements ResponseData, Serializable {
         return mobile;
     }
 
-    public SaasBorrowerManagerVo setMobile(String mobile) {
+    public BorrowerManagerInfoVo setMobile(String mobile) {
         this.mobile = mobile;
         return this;
     }
@@ -55,7 +55,7 @@ public class SaasBorrowerManagerVo implements ResponseData, Serializable {
         return gender;
     }
 
-    public SaasBorrowerManagerVo setGender(String gender) {
+    public BorrowerManagerInfoVo setGender(String gender) {
         this.gender = gender;
         return this;
     }
@@ -64,7 +64,7 @@ public class SaasBorrowerManagerVo implements ResponseData, Serializable {
         return age;
     }
 
-    public SaasBorrowerManagerVo setAge(Integer age) {
+    public BorrowerManagerInfoVo setAge(Integer age) {
         this.age = age;
         return this;
     }
@@ -73,7 +73,7 @@ public class SaasBorrowerManagerVo implements ResponseData, Serializable {
         return identityCode;
     }
 
-    public SaasBorrowerManagerVo setIdentityCode(String identityCode) {
+    public BorrowerManagerInfoVo setIdentityCode(String identityCode) {
         this.identityCode = identityCode;
         return this;
     }
@@ -82,7 +82,7 @@ public class SaasBorrowerManagerVo implements ResponseData, Serializable {
         return nativePlace;
     }
 
-    public SaasBorrowerManagerVo setNativePlace(String nativePlace) {
+    public BorrowerManagerInfoVo setNativePlace(String nativePlace) {
         this.nativePlace = nativePlace;
         return this;
     }
@@ -91,7 +91,7 @@ public class SaasBorrowerManagerVo implements ResponseData, Serializable {
         return zmCreditScore;
     }
 
-    public SaasBorrowerManagerVo setZmCreditScore(String zmCreditScore) {
+    public BorrowerManagerInfoVo setZmCreditScore(String zmCreditScore) {
         this.zmCreditScore = zmCreditScore;
         return this;
     }
@@ -100,7 +100,7 @@ public class SaasBorrowerManagerVo implements ResponseData, Serializable {
         return gmtCreate;
     }
 
-    public SaasBorrowerManagerVo setGmtCreate(String gmtCreate) {
+    public BorrowerManagerInfoVo setGmtCreate(String gmtCreate) {
         this.gmtCreate = gmtCreate;
         return this;
     }
@@ -109,7 +109,7 @@ public class SaasBorrowerManagerVo implements ResponseData, Serializable {
         return channelCode;
     }
 
-    public SaasBorrowerManagerVo setChannelCode(String channelCode) {
+    public BorrowerManagerInfoVo setChannelCode(String channelCode) {
         this.channelCode = channelCode;
         return this;
     }
@@ -118,7 +118,7 @@ public class SaasBorrowerManagerVo implements ResponseData, Serializable {
         return channelName;
     }
 
-    public SaasBorrowerManagerVo setChannelName(String channelName) {
+    public BorrowerManagerInfoVo setChannelName(String channelName) {
         this.channelName = channelName;
         return this;
     }
