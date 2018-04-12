@@ -265,7 +265,7 @@ public class OrderBillDetailApplication {
             }
             if (lastSaasOrderDetailVo != null) {
                 try {
-                    lastSaasOrderDetailVo.setOverdueDuration(DateUtil.countDays(saasOrderDetailVo.getCreatedDate(), lastSaasOrderDetailVo.getRepaymentDate()));
+                    lastSaasOrderDetailVo.setOverdueDuration(DateUtil.countDays(saasOrderDetailVo.getCreatedDate(), lastSaasOrderDetailVo.getRepaymentDate()) + 1);
                 } catch (Exception e) {
                     LOGGER.warn(".....订单日期转换失败.....失败原因：{}，订单CODE：{}；订单创建日期：{}；订单应还日期：{}", e.getMessage(), saasOrderDetailVo.getOrderNumb(), saasOrderDetailVo.getCreatedDate(), lastSaasOrderDetailVo.getRepaymentDate());
                 }
