@@ -23,7 +23,7 @@
     identity_no,
     data_url,
     flow_type,
-    from,
+    `from`,
     success,
     deleted,
     gmt_modified,
@@ -58,7 +58,7 @@
                 flow_type,
             </if>
             <if test="from !=null">
-                from,
+                `from`,
             </if>
             <if test="success !=null">
                 success,
@@ -126,7 +126,7 @@
                 flow_type = #{flowType,jdbcType=TINYINT},
             </if>
             <if test="from !=null">
-                from = #{from,jdbcType=BIGINT},
+                `from` = #{from,jdbcType=BIGINT},
             </if>
             <if test="success !=null">
                 success = #{success,jdbcType=BIT},
@@ -183,7 +183,7 @@
                 and flow_type = #{flowType,jdbcType=TINYINT}
             </if>
             <if test="from !=null">
-                and from = #{from,jdbcType=BIGINT}
+                and `from` = #{from,jdbcType=BIGINT}
             </if>
             <if test="success !=null">
                 and success = #{success,jdbcType=BIT}
@@ -222,7 +222,7 @@
                 and flow_type = #{flowType,jdbcType=TINYINT}
             </if>
             <if test="from !=null">
-                and from = #{from,jdbcType=BIGINT}
+                and `from` = #{from,jdbcType=BIGINT}
             </if>
             <if test="success !=null">
                 and success = #{success,jdbcType=BIT}
