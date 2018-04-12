@@ -5,11 +5,17 @@ import com.beitu.saas.app.api.ApiResponse;
 import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.api.ModuleApiResponse;
 import com.beitu.saas.app.application.order.OrderApplication;
+import com.beitu.saas.app.application.order.OrderCalculateApplication;
 import com.beitu.saas.app.application.order.vo.QueryOrderVo;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.app.enums.SaasLendRemarkEnum;
 import com.beitu.saas.auth.entity.SaasAdmin;
+import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
+import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
 import com.beitu.saas.common.consts.ButtonPermissionConsts;
+import com.beitu.saas.common.utils.DateUtil;
+import com.beitu.saas.order.client.SaasOrderService;
+import com.beitu.saas.order.domain.SaasOrderVo;
 import com.beitu.saas.rest.controller.order.request.*;
 import com.beitu.saas.rest.controller.order.response.LendingOrderDetailResponse;
 import com.beitu.saas.rest.controller.order.response.LendingOrderListResponse;
@@ -26,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
+import java.util.Date;
 
 /**
  * @author linanjun
@@ -39,6 +46,15 @@ public class ForLendingOrderController {
 
     @Autowired
     private OrderApplication orderApplication;
+
+    @Autowired
+    private SaasOrderService saasOrderService;
+
+    @Autowired
+    private SaasBorrowerRealInfoService saasBorrowerRealInfoService;
+
+    @Autowired
+    private OrderCalculateApplication orderCalculateApplication;
 
     @RequestMapping(value = "/query", method = RequestMethod.POST)
     @ResponseBody
@@ -67,6 +83,14 @@ public class ForLendingOrderController {
     public DataApiResponse<LendingOrderDetailResponse> detail(@RequestBody @Valid LendingOrderDetailRequest req) {
         SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
         LendingOrderDetailResponse response = new LendingOrderDetailResponse();
+        SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(req.getOrderNumb(), saasAdmin.getMerchantCode());
+        if (saasOrderVo != null) {
+            response.setCapital(saasOrderVo.getRealCapital().toString());
+            response.setTotalInterestRatio(orderCalculateApplication.getInterestRatio(saasOrderVo.getTotalInterestRatio()));
+            response.setBorrowingDuration(DateUtil.countDay(saasOrderVo.getRepaymentDt(), new Date()) + "天");
+            SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(saasOrderVo.getBorrowerCode());
+            response.setBorrowerName(saasBorrowerRealInfoVo.getName());
+        }
         response.setOrderNumb(req.getOrderNumb());
         return new DataApiResponse<>(response);
     }
