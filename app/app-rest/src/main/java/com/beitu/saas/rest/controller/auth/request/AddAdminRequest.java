@@ -1,6 +1,8 @@
 package com.beitu.saas.rest.controller.auth.request;
 
+import com.beitu.saas.common.utils.MobileUtil;
 import com.fqgj.common.api.ParamsObject;
+import com.fqgj.common.api.exception.ApiIllegalArgumentException;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -69,6 +71,9 @@ public class AddAdminRequest extends ParamsObject {
 
     @Override
     public void validate() {
+        if (!MobileUtil.isMobile(mobile)){
+            throw new ApiIllegalArgumentException("请输入正确号码");
+        }
 
     }
 }

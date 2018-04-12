@@ -70,7 +70,7 @@ public class SaasMerchantConfigServiceImpl extends AbstractBaseService implement
     public Boolean updateContractConfig(String merchantCode, Integer type) {
         SaasMerchantConfig saasMerchantConfig = new SaasMerchantConfig();
         saasMerchantConfig.setConfigEnum(type.toString());
-        List<SaasMerchantConfig> list = this.selectByParams(new HashMap<String, Object>() {{
+        List<SaasMerchantConfig> list = this.selectByParams(new HashMap<String, Object>(2) {{
             put("merchantCode", merchantCode);
             put("configType", MerchantConfigTypeEnum.CONTRACT_CONFIG.getKey());
 
