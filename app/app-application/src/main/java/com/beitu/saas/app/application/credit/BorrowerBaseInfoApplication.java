@@ -162,7 +162,10 @@ public class BorrowerBaseInfoApplication {
             List<SaasCreditCarrierRecordVo> familyRecordVoList = saasCreditCarrierRecordService.listByRecordIdAndMobile(recordId, saasBorrowerEmergentContactVo.getFamilyMobile());
             if (CollectionUtils.isNotEmpty(familyRecordVoList)) {
                 SaasCreditCarrierRecordVo familyRecordVo = familyRecordVoList.get(familyRecordVoList.size() - 1);
-                borrowerEmergentContactVo.setFamilyRecord(familyRecordVo.getCalledDuration() + "/" + familyRecordVo.getCallingDuration() + "、" + familyRecordVo.getTotalDuration() + "秒");
+                Integer calledDuration = (int) Math.ceil(familyRecordVo.getCalledDuration() / 60);
+                Integer callingDuration = (int) Math.ceil(familyRecordVo.getCallingDuration() / 60);
+                Integer totalDuration = (int) Math.ceil(familyRecordVo.getTotalDuration() / 60);
+                borrowerEmergentContactVo.setFamilyRecord(calledDuration + "分" + "/" + callingDuration + "分" + "、" + totalDuration + "分");
             }
             List<SaasCreditCarrierRecordVo> friendRecordVoList = saasCreditCarrierRecordService.listByRecordIdAndMobile(recordId, saasBorrowerEmergentContactVo.getFriendMobile());
             if (CollectionUtils.isNotEmpty(friendRecordVoList)) {

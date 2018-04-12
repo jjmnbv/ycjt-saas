@@ -103,7 +103,7 @@ public class ForLendingOrderController {
         SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
         SaasLendRemarkEnum saasLendRemarkEnum = SaasLendRemarkEnum.getByCode(req.getLendRemark());
         if (saasLendRemarkEnum == null) {
-            throw new ApiIllegalArgumentException("下款途径不支持");
+            throw new ApiIllegalArgumentException("请选择下款备注");
         }
         orderApplication.lenderAgree(saasAdmin.getMerchantCode(), saasAdmin.getCode(), req.getOrderNumb(), saasLendRemarkEnum.getMsg());
         return new ApiResponse("操作成功");

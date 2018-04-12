@@ -7,6 +7,7 @@ import com.beitu.saas.app.application.order.vo.SaasOrderBillDetailListVo;
 import com.beitu.saas.app.application.order.vo.SaasOrderDetailVo;
 import com.beitu.saas.app.enums.QueryRepaymentDtEnum;
 import com.beitu.saas.channel.client.SaasChannelService;
+import com.beitu.saas.channel.entity.SaasChannelEntity;
 import com.beitu.saas.collection.client.SaasCollectionOrderService;
 import com.beitu.saas.common.utils.DateUtil;
 import com.beitu.saas.order.client.SaasOrderBillDetailService;
@@ -149,7 +150,10 @@ public class OrderBillDetailApplication {
         saasOrderBillDetailListVo.setBorrowerMobile(borrowerInfoVo.getBorrowerMobile());
 
         saasOrderBillDetailListVo.setLoanLendRemark(saasOrderStatusHistoryService.getLoanLendRemark(saasOrderBillDetailVo.getOrderNumb()));
-        saasOrderBillDetailListVo.setChannelName(saasChannelService.getSaasChannelByChannelCode(saasOrderBillDetailVo.getChannelCode()).getChannelName());
+        SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(saasOrderBillDetailVo.getChannelCode());
+        if (saasChannelEntity != null) {
+            saasOrderBillDetailListVo.setChannelName(saasChannelEntity.getChannelName());
+        }
         saasOrderBillDetailListVo.setOrderStatus(saasOrderService.getOrderStatusByOrderNumb(saasOrderBillDetailVo.getOrderNumb()).getMsg());
 
         return saasOrderBillDetailListVo;
@@ -169,7 +173,10 @@ public class OrderBillDetailApplication {
         BeanUtils.copyProperties(borrowerInfoVo, saasOrderBillDetailListVo);
 
         saasOrderBillDetailListVo.setLoanLendRemark(saasOrderStatusHistoryService.getLoanLendRemark(saasOrderVo.getOrderNumb()));
-        saasOrderBillDetailListVo.setChannelName(saasChannelService.getSaasChannelByChannelCode(saasOrderVo.getChannelCode()).getChannelName());
+        SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(saasOrderVo.getChannelCode());
+        if (saasChannelEntity != null) {
+            saasOrderBillDetailListVo.setChannelName(saasChannelEntity.getChannelName());
+        }
         saasOrderBillDetailListVo.setOrderStatus(saasOrderService.getOrderStatusByOrderNumb(saasOrderVo.getOrderNumb()).getMsg());
 
         return saasOrderBillDetailListVo;
