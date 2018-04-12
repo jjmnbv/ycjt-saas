@@ -115,13 +115,25 @@ public class BorrowerBaseInfoApplication {
         }
         BorrowerIdentityInfoVo borrowerIdentityInfoVo = new BorrowerIdentityInfoVo();
         if (StringUtils.isNotEmpty(saasBorrowerIdentityInfoVo.getFrontUrl())) {
-            borrowerIdentityInfoVo.setFrontUrl(configUtil.getAddressURLPrefix() + saasBorrowerIdentityInfoVo.getFrontUrl());
+            String url = saasBorrowerIdentityInfoVo.getFrontUrl();
+            if (!url.contains("http:") && !url.contains("https:")) {
+                url = configUtil.getAddressURLPrefix() + url;
+            }
+            borrowerIdentityInfoVo.setFrontUrl(url);
         }
         if (StringUtils.isNotEmpty(saasBorrowerIdentityInfoVo.getBackUrl())) {
-            borrowerIdentityInfoVo.setBackUrl(configUtil.getAddressURLPrefix() + saasBorrowerIdentityInfoVo.getBackUrl());
+            String url = saasBorrowerIdentityInfoVo.getBackUrl();
+            if (!url.contains("http:") && !url.contains("https:")) {
+                url = configUtil.getAddressURLPrefix() + url;
+            }
+            borrowerIdentityInfoVo.setBackUrl(url);
         }
         if (StringUtils.isNotEmpty(saasBorrowerIdentityInfoVo.getHoldUrl())) {
-            borrowerIdentityInfoVo.setHoldUrl(configUtil.getAddressURLPrefix() + saasBorrowerIdentityInfoVo.getHoldUrl());
+            String url = saasBorrowerIdentityInfoVo.getHoldUrl();
+            if (!url.contains("http:") && !url.contains("https:")) {
+                url = configUtil.getAddressURLPrefix() + url;
+            }
+            borrowerIdentityInfoVo.setHoldUrl(url);
         }
         return borrowerIdentityInfoVo;
     }

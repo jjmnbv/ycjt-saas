@@ -62,8 +62,7 @@ public class SaasCreditCarrierBaseVo implements ResponseData, Serializable {
     public void setSaasCreditCarrierBaseId(Long saasCreditCarrierBaseId) {
         this.saasCreditCarrierBaseId = saasCreditCarrierBaseId;
     }
-
-
+    
     public Long getRecordId() {
         return this.recordId;
     }
