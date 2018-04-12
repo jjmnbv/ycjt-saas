@@ -1,5 +1,6 @@
 package com.beitu.saas.openapi.client;
 
+import com.beitu.saas.openapi.domain.SaasOpenApiOrderInfoLogVo;
 import com.fqgj.common.base.BaseService;
 import com.fqgj.common.entity.BaseEntity;
 
@@ -9,5 +10,7 @@ import com.fqgj.common.entity.BaseEntity;
  * Time: 22:35:49.733
  */
 public interface SaasOpenApiOrderInfoLogService<T extends BaseEntity> extends BaseService<T> {
-
+    
+    SaasOpenApiOrderInfoLogVo addSaasOpenApiOrderInfoLog(SaasOpenApiOrderInfoLogVo vo);
+    
 }

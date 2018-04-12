@@ -2,8 +2,11 @@ package com.beitu.saas.openapi.service.impl;
 
 import com.beitu.saas.openapi.client.SaasOpenApiOrderInfoLogService;
 import com.beitu.saas.openapi.dao.SaasOpenApiOrderInfoLogDao;
+import com.beitu.saas.openapi.domain.SaasOpenApiOrderInfoLogVo;
+import com.beitu.saas.openapi.entity.SaasOpenApiOrderInfoLog;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.fqgj.log.enhance.Module;
@@ -20,6 +23,18 @@ public class SaasOpenApiOrderInfoLogServiceImpl extends AbstractBaseService impl
     
     @Autowired
     private SaasOpenApiOrderInfoLogDao saasOpenApiOrderInfoLogDao;
+    
+    @Override
+    public SaasOpenApiOrderInfoLogVo addSaasOpenApiOrderInfoLog(SaasOpenApiOrderInfoLogVo vo) {
+        SaasOpenApiOrderInfoLog entity = saasOpenApiOrderInfoLogDao.insert(SaasOpenApiOrderInfoLogVo.convertVOToEntity(vo));
+        if (entity == null) {
+            return null;
+        }
+        SaasOpenApiOrderInfoLogVo saasOpenApiOrderInfoLogVo = new SaasOpenApiOrderInfoLogVo();
+        BeanUtils.copyProperties(entity, saasOpenApiOrderInfoLogVo);
+        saasOpenApiOrderInfoLogVo.setSaasOpenApiOrderInfoLogId(entity.getId());
+        return saasOpenApiOrderInfoLogVo;
+    }
 }
 
 
