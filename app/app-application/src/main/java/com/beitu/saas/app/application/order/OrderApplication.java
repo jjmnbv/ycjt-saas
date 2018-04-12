@@ -255,6 +255,7 @@ public class OrderApplication {
             extendOrderDetailVo.setExtendTermUrl(extendSaasOrderVo.getTermUrl());
             extendOrderDetailVo.setTotalInterestRatio(orderCalculateApplication.getInterestRatio(extendSaasOrderVo.getTotalInterestRatio()));
             extendOrderDetailVo.setExtendTitle("确认展期");
+            orderDetailVo.setTermUrl(extendSaasOrderVo.getTermUrl());
             orderDetailVo.setExtendOrderDetailVos(Arrays.asList(extendOrderDetailVo));
         }
         return orderDetailVo;
