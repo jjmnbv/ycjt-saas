@@ -75,12 +75,10 @@ public class OpenApiApplication {
             throw new ApplicationException(errorCodeEnum);
         }
         
-        Integer count = 0;
         for (int i = 0; i < borrowerRelatedDataVos.size(); i++) {
             SaasBorrowerRelatedDataVo vo = borrowerRelatedDataVos.get(i);
             try {
                 openApiMerchantApplication.merchantOrderUserProcess(vo, userAndOrderData, mobile, identityNo);
-                count++;
             } catch (Exception e) {
                 LOGGER.warn("************************* 商户推单处理失败 Mobile:{} IdentityNo:{} Merchant:{} Borrower:{} CAUSE:{} *************************", mobile, identityNo, vo.getMerchantCode(), vo.getBorrowerCode(), e);
             }
