@@ -243,18 +243,19 @@ public class OrderBillDetailApplication {
             Date createdDt;
             if (lastSaasOrderDetailVo == null) {
                 createdDt = saasOrderBillDetailVo.getGmtCreate();
+                saasOrderDetailVo.setBorrowingDuration(DateUtil.countDay(saasOrderBillDetailVo.getRepaymentDt(), createdDt));
             } else {
                 Date lastRepaymentDt = DateUtil.getDate(lastSaasOrderDetailVo.getRepaymentDate(), DateUtil.getDatePattern());
                 Integer days = DateUtil.countDay(saasOrderBillDetailVo.getGmtCreate(), lastRepaymentDt);
                 if (days > 0) {
-                    createdDt = saasOrderBillDetailVo.getGmtCreate();
+                    createdDt = DateUtil.addDate(saasOrderBillDetailVo.getGmtCreate(), 1);
                 } else {
                     createdDt = DateUtil.addDate(lastRepaymentDt, 1);
                 }
+                saasOrderDetailVo.setBorrowingDuration(DateUtil.countDay(saasOrderBillDetailVo.getRepaymentDt(), createdDt) + 1);
             }
             saasOrderDetailVo.setCreatedDate(DateUtil.getDate(createdDt));
             saasOrderDetailVo.setRepaymentDate(DateUtil.getDate(saasOrderBillDetailVo.getRepaymentDt()));
-            saasOrderDetailVo.setBorrowingDuration(DateUtil.countDay(saasOrderBillDetailVo.getRepaymentDt(), createdDt));
             saasOrderDetailVo.setTotalInterestRatio(orderCalculateApplication.getInterestRatio(saasOrderBillDetailVo.getTotalInterestRatio()));
             saasOrderDetailVo.setInterest(saasOrderBillDetailVo.getInterest().toString());
             if (saasOrderBillDetailVo.getAmount() == null || BigDecimal.ZERO.compareTo(saasOrderBillDetailVo.getAmount()) == 0) {

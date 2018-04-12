@@ -12,6 +12,7 @@ import com.beitu.saas.app.enums.H5OrderBillDetailViewTypeEnum;
 import com.beitu.saas.app.enums.SaasSmsTypeEnum;
 import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.auth.service.SaasAdminService;
+import com.beitu.saas.borrower.client.SaasBorrowerPersonalInfoService;
 import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
 import com.beitu.saas.borrower.client.SaasBorrowerService;
 import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
@@ -118,6 +119,9 @@ public class OrderApplication {
 
     @Autowired
     private ConfigUtil configUtil;
+
+    @Autowired
+    private SaasBorrowerPersonalInfoService saasBorrowerPersonalInfoService;
 
     public BorrowerOrderApplyStatusEnum getOrderApplyStatus(String borrowerCode, String channelCode) {
         if (StringUtils.isNotEmpty(saasOrderService.getReviewerRefuseOrderNumb(borrowerCode, channelCode))) {
@@ -530,6 +534,7 @@ public class OrderApplication {
         if (StringUtils.isNotEmpty(saasOrderVo.getPreliminaryReviewerCode())) {
             orderListVo.setPreliminaryReviewer(saasAdminService.getSaasAdminByAdminCode(saasOrderVo.getPreliminaryReviewerCode()).getName());
         }
+        orderListVo.setZmCreditScore(saasBorrowerPersonalInfoService.getZmCreditScoreByBorrowerCodeAndOrderNumb(saasOrderVo.getBorrowerCode(), saasOrderVo.getOrderNumb()));
         if (StringUtils.isNotEmpty(saasOrderVo.getFinalReviewerCode())) {
             orderListVo.setFinalReviewer(saasAdminService.getSaasAdminByAdminCode(saasOrderVo.getFinalReviewerCode()).getName());
         }
@@ -741,7 +746,7 @@ public class OrderApplication {
         SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(orderNumb, merchantCode);
 
         if (DateUtil.countDay(saasOrderVo.getRepaymentDt(), repaymentDt) >= 0
-                || DateUtil.countDay(new Date(), repaymentDt) > 0) {
+                || DateUtil.countDay(new Date(), repaymentDt) >= 0) {
             LOG.warn("......应还日期非法.......展期结束日期:{};订单应还日期:{}", DateUtil.getDate(repaymentDt), DateUtil.getDate(saasOrderVo.getRepaymentDt()));
             throw new ApplicationException(OrderErrorCodeEnum.ILLEGAL_REPAYMENT_DATE);
         }

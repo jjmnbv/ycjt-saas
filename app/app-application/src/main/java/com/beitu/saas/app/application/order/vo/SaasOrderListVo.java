@@ -29,6 +29,8 @@ public class SaasOrderListVo implements ResponseData {
 
     private String orderStatus;
 
+    private Integer zmCreditScore;
+
     private String remark;
 
     private String preliminaryReviewer;
@@ -113,6 +115,14 @@ public class SaasOrderListVo implements ResponseData {
 
     public void setOrderStatus(String orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+    public Integer getZmCreditScore() {
+        return zmCreditScore;
+    }
+
+    public void setZmCreditScore(Integer zmCreditScore) {
+        this.zmCreditScore = zmCreditScore;
     }
 
     public String getRemark() {

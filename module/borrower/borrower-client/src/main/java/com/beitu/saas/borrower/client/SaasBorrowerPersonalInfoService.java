@@ -18,4 +18,5 @@ public interface SaasBorrowerPersonalInfoService<T extends BaseEntity> extends B
 
     Boolean updateOrderNumbByBorrowerCode(String orderNumb, String borrowerCode);
 
+    Integer getZmCreditScoreByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb);
 }
