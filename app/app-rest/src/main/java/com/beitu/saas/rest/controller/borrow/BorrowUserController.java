@@ -65,14 +65,11 @@ public class BorrowUserController {
      * @param page
      * @return
      */
-    @SignIgnore
-    @VisitorAccessible
     @RequestMapping(value = "/borrowerInfoGet", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "客户管理类别", response = BorrowerManagerInfoResponse.class)
     public ModuleResponse getBorrowerInfoListByPage(@RequestBody BorrowerManagerInfoRequest req, Page page) {
-//        String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
-        String merchantCode = "2018040420DRUNS";
+        String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
         BorrowerInfoParam borrowerInfoParam = new BorrowerInfoParam();
         BeanUtils.copyProperties(req, borrowerInfoParam);
         borrowerInfoParam.setMerchantCode(merchantCode);

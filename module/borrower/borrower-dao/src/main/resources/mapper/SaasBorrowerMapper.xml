@@ -29,7 +29,7 @@
     <select id="selectBorrowerInfoList" parameterType="map" resultType="com.beitu.saas.borrower.vo.SaasBorrowerManagerVo">
         SELECT
         sbri.name,
-        sb.borrower_code borrowCode,
+        sb.borrower_code borrowerCode,
         sb.mobile,
         sbri.identity_code identityCode,
         sbri.native_place nativePlace,
