@@ -57,6 +57,7 @@ public class SaasOrderBillDetailServiceImpl extends AbstractBaseService implemen
     @Override
     public List<SaasOrderBillDetailVo> listByQueryOrderBillDetailVoAndPage(QuerySaasOrderBillDetailVo querySaasOrderBillDetailVo, Page page) {
         Map<String, Object> conditions = new HashMap<>(16);
+        conditions.put("orderNumbList", querySaasOrderBillDetailVo.getOrderNumbList());
         conditions.put("borrowerCodeList", querySaasOrderBillDetailVo.getBorrowerCodeList());
         conditions.put("merchantCode", querySaasOrderBillDetailVo.getMerchantCode());
         conditions.put("channelCode", querySaasOrderBillDetailVo.getChannelCode());
@@ -67,11 +68,11 @@ public class SaasOrderBillDetailServiceImpl extends AbstractBaseService implemen
         if (queryOrderStatus != null) {
             conditions.put("destroy", Boolean.FALSE);
             if (OrderStatusEnum.FOR_REIMBURSEMENT.getCode().equals(queryOrderStatus)) {
-                conditions.put("repaymentEndDt", new Date());
-            } else if (OrderStatusEnum.OVERDUE.getCode().equals(queryOrderStatus)) {
                 conditions.put("repaymentBeginDt", new Date());
+            } else if (OrderStatusEnum.OVERDUE.getCode().equals(queryOrderStatus)) {
+                conditions.put("repaymentEndDt", new Date());
             } else if (OrderStatusEnum.HAS_BEEN_DESTROY.getCode().equals(queryOrderStatus)) {
-                conditions.put("destroy", Boolean.FALSE);
+                conditions.put("destroy", Boolean.TRUE);
             }
         }
         Integer count = saasOrderBillDetailDao.countByConditions(conditions);

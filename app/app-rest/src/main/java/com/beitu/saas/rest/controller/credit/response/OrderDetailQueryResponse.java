@@ -1,6 +1,7 @@
 package com.beitu.saas.rest.controller.credit.response;
 
 import com.beitu.saas.app.application.order.vo.SaasOrderDetailVo;
+import com.beitu.saas.common.utils.DateUtil;
 import com.beitu.saas.risk.helpers.CollectionUtils;
 import com.fqgj.common.api.ResponseData;
 import io.swagger.annotations.ApiModel;
@@ -24,6 +25,9 @@ public class OrderDetailQueryResponse implements ResponseData {
     @ApiModelProperty(value = "下载合同URL")
     private String downloadContractUrl;
 
+    @ApiModelProperty
+    private Boolean extend;
+
     @ApiModelProperty(value = "当前账单信息")
     private SaasOrderDetailVo mainOrderDetailVo;
 
@@ -38,14 +42,20 @@ public class OrderDetailQueryResponse implements ResponseData {
             return;
         }
         this.originalOrderDetailVo = allOrderBillDetail.get(0);
+        this.extend = Boolean.FALSE;
         if (allOrderBillDetail.size() > 1) {
+            this.extend = Boolean.TRUE;
             this.extendOrderDetailVoList = allOrderBillDetail.subList(1, allOrderBillDetail.size());
         }
         this.mainOrderDetailVo = new SaasOrderDetailVo();
         BeanUtils.copyProperties(allOrderBillDetail.get(allOrderBillDetail.size() - 1), mainOrderDetailVo);
+        this.mainOrderDetailVo.setTotalInterestRatio(originalOrderDetailVo.getTotalInterestRatio());
         this.mainOrderDetailVo.setCreatedDate(originalOrderDetailVo.getCreatedDate());
-        this.mainOrderDetailVo.setBorrowingDuration(allOrderBillDetail.stream().collect(Collectors.summingInt(SaasOrderDetailVo::getBorrowingDuration)));
         this.mainOrderDetailVo.setOverdueDuration(allOrderBillDetail.stream().collect(Collectors.summingInt(SaasOrderDetailVo::getOverdueDuration)));
+        try {
+            this.mainOrderDetailVo.setBorrowingDuration(DateUtil.countDays(this.mainOrderDetailVo.getRepaymentDate(), this.mainOrderDetailVo.getCreatedDate()));
+        } catch (Exception e) {
+        }
         this.viewContractUrl = viewContractUrl;
         this.downloadContractUrl = downloadContractUrl;
     }
@@ -64,6 +74,14 @@ public class OrderDetailQueryResponse implements ResponseData {
 
     public void setDownloadContractUrl(String downloadContractUrl) {
         this.downloadContractUrl = downloadContractUrl;
+    }
+
+    public Boolean getExtend() {
+        return extend;
+    }
+
+    public void setExtend(Boolean extend) {
+        this.extend = extend;
     }
 
     public SaasOrderDetailVo getMainOrderDetailVo() {

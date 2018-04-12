@@ -53,6 +53,20 @@
         <include refid="paginationSql"/>
     </select>
 
+    <select id="selectAllChannelEntityList" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from saas_channel
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="merchantCode !=null">
+                and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+            </if>
+            and deleted = false
+            and <![CDATA[ channel_type != 1 ]]>
+        </trim>
+        order by channel_type desc
+    </select>
+
     <select id="countChannelEntityList" parameterType="map" resultType="INTEGER">
         SELECT COUNT(*)
         from saas_channel
@@ -105,7 +119,7 @@
             <if test="channelType !=null">
                 and channel_type = #{channelType,jdbcType=INTEGER}
             </if>
-           and deleted = false
+            and deleted = false
         </trim>
     </select>
 

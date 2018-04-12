@@ -192,6 +192,11 @@ public class SaasOrderServiceImpl extends AbstractBaseService implements SaasOrd
     }
 
     @Override
+    public List<String> listAllConfirmExtendOrderNumbByMerchantCode(String merchantCode) {
+        return saasOrderDao.selectOrderNumbByParams(merchantCode, OrderStatusEnum.TO_CONFIRM_EXTEND.getCode());
+    }
+
+    @Override
     public Boolean updatePreliminaryReviewerCode(Long orderId, String operatorCode) {
         return saasOrderDao.updatePreliminaryReviewerCode(orderId, operatorCode) > 0;
     }

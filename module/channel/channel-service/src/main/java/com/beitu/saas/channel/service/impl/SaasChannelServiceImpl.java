@@ -41,6 +41,11 @@ public class SaasChannelServiceImpl extends AbstractBaseService implements SaasC
     }
 
     @Override
+    public List<SaasChannelEntity> getAllSaasChannelList(String merchantCode) {
+        return saasChannelDao.selectAllChannelEntityList(merchantCode);
+    }
+
+    @Override
     public void operateSaasChannel(String channelCode, Integer status) {
         SaasChannelEntity channelEntity = saasChannelDao.selectChannelEntityByChannelCode(channelCode);
         channelEntity.setChannelStatus(status);
@@ -92,7 +97,11 @@ public class SaasChannelServiceImpl extends AbstractBaseService implements SaasC
         List<DefaultChannelInfoVo> defaultChannelTypeList = ChannelTypeEnum.getDefaultChannelList();
 
         defaultChannelTypeList.stream().forEach(x -> {
-            SaasChannelEntity saasChannelEntity = new SaasChannelEntity();
+            SaasChannelEntity saasChannelEntity = saasChannelDao.selectDefaultChannelEntityByMerchantCode(merchantCode, x.getChannelType());
+            if (saasChannelEntity != null) {
+                return;
+            }
+            saasChannelEntity = new SaasChannelEntity();
             String channelCode = OrderNoUtil.makeOrderNum();
             saasChannelEntity.setMerchantCode(merchantCode)
                     .setChannelCode(channelCode)

@@ -3,6 +3,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.beitu.saas.auth.dao.impl.SaasMerchantDaoImpl">
     <select id="selectAllMerchantCode" parameterType="Integer" resultType="String">
-        SELECT merchant_code merchantCode FROM youjie.saas_merchant where deleted=0;
+        SELECT merchant_code merchantCode FROM saas_merchant where deleted=0;
     </select>
 </mapper>

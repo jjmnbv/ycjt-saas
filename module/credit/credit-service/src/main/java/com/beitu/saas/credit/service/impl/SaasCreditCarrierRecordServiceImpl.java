@@ -54,6 +54,22 @@ public class SaasCreditCarrierRecordServiceImpl extends AbstractBaseService impl
         saasCreditCarrierRecordList.forEach(saasCreditCarrierRecord -> results.add(SaasCreditCarrierRecordVo.convertEntityToVO(saasCreditCarrierRecord)));
         return results;
     }
+
+    @Override
+    public List<SaasCreditCarrierRecordVo> listByRecordIdAndMobile(Long recordId, String mobile) {
+        List<SaasCreditCarrierRecord> saasCreditCarrierRecordList = saasCreditCarrierRecordDao.selectByParams(new HashMap<String, Object>(4) {{
+            put("recordId", recordId);
+            put("phone", mobile);
+            put("deleted", Boolean.FALSE);
+        }});
+        if (CollectionUtils.isEmpty(saasCreditCarrierRecordList)) {
+            return null;
+        }
+        List<SaasCreditCarrierRecordVo> results = new ArrayList<>(saasCreditCarrierRecordList.size());
+        saasCreditCarrierRecordList.forEach(saasCreditCarrierRecord -> results.add(SaasCreditCarrierRecordVo.convertEntityToVO(saasCreditCarrierRecord)));
+        return results;
+    }
+
 }
 
 

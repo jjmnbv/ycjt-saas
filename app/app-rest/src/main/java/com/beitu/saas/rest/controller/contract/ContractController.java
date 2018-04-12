@@ -40,6 +40,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -97,7 +98,7 @@ public class ContractController {
             response.setRealCapital(saasOrderVo.getRealCapital());
             response.setCreatedDt(DateUtil.getDate(saasOrderVo.getCreatedDt()));
             response.setRepaymentDt(DateUtil.getDate(saasOrderVo.getRepaymentDt()));
-            response.setTotalInterestRatio(orderCalculateApplication.getInterestRatio(saasOrderVo.getTotalInterestRatio()));
+            response.setTotalInterestRatio(saasOrderVo.getTotalInterestRatio().multiply(new BigDecimal("100")).setScale(0).toString());
             response.setFirstOrderNo(saasOrderVo.getRelationOrderId() + "");
             response.setInscribeDate(DateUtil.getDate(new Date()));
             borrowerCode = saasOrderVo.getBorrowerCode();
@@ -115,8 +116,10 @@ public class ContractController {
         }
         if (StringUtils.isNotEmpty(borrowerCode)) {
             SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode);
-            response.setBorrowUserName(saasBorrowerRealInfoVo.getName());
-            response.setBorrowIdentityNo(saasBorrowerRealInfoVo.getIdentityCode());
+            if (saasBorrowerRealInfoVo != null) {
+                response.setBorrowUserName(saasBorrowerRealInfoVo.getName());
+                response.setBorrowIdentityNo(saasBorrowerRealInfoVo.getIdentityCode());
+            }
             String sealUrl = contractApplication.getUserSealUrl(userCode);
             if (StringUtils.isNotEmpty(sealUrl)) {
                 response.setBorrowStamp(Boolean.TRUE);
@@ -155,10 +158,13 @@ public class ContractController {
             throw new ApplicationException(RestCodeEnum.TOKEN_NOT_AVAILABLE);
         }
         UserLicenseContractInfoResponse response = new UserLicenseContractInfoResponse();
+        response.setInscribeDate(DateUtil.getDate(new Date()));
         if (saasBorrowerService.isSaasBorrower(userCode)) {
             SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(userCode);
-            response.setUserName(saasBorrowerRealInfoVo.getName());
-            response.setUserCode("身份证号：" + saasBorrowerRealInfoVo.getIdentityCode());
+            if (saasBorrowerRealInfoVo != null) {
+                response.setUserName(saasBorrowerRealInfoVo.getName());
+                response.setUserCode("身份证号：" + saasBorrowerRealInfoVo.getIdentityCode());
+            }
             String sealUrl = contractApplication.getUserSealUrl(userCode);
             if (StringUtils.isNotEmpty(sealUrl)) {
                 response.setUserStamp(Boolean.TRUE);
@@ -213,7 +219,7 @@ public class ContractController {
             response.setRepaymentDt(DateUtil.getDate(saasOrderVo.getRepaymentDt()));
             response.setDeadline(DateUtil.countDay(saasOrderVo.getRepaymentDt(), new Date()));
             response.setAmount(orderCalculateApplication.getAmount(saasOrderVo));
-            response.setTotalInterestRatio(orderCalculateApplication.getInterestRatio(saasOrderVo.getTotalInterestRatio()));
+            response.setTotalInterestRatio(saasOrderVo.getTotalInterestRatio().multiply(new BigDecimal("100")).setScale(0).toString());
             response.setInscribeDate(DateUtil.getDate(new Date()));
             borrowerCode = saasOrderVo.getBorrowerCode();
             merchantCode = saasOrderVo.getMerchantCode();
@@ -229,8 +235,10 @@ public class ContractController {
         }
         if (StringUtils.isNotEmpty(borrowerCode)) {
             SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode);
-            response.setBorrowUserName(saasBorrowerRealInfoVo.getName());
-            response.setBorrowIdentityNo(saasBorrowerRealInfoVo.getIdentityCode());
+            if (saasBorrowerRealInfoVo != null) {
+                response.setBorrowUserName(saasBorrowerRealInfoVo.getName());
+                response.setBorrowIdentityNo(saasBorrowerRealInfoVo.getIdentityCode());
+            }
             String sealUrl = contractApplication.getUserSealUrl(userCode);
             if (StringUtils.isNotEmpty(sealUrl)) {
                 response.setBorrowStamp(Boolean.TRUE);
@@ -256,6 +264,7 @@ public class ContractController {
                 response.setLenderStampUrl(configUtil.getAddressURLPrefix() + merchantContractInfoVo.getContractUrl());
             }
         }
+        response.setInscribeDate(DateUtil.getDate(new Date()));
         return new DataApiResponse(response);
     }
 

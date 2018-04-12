@@ -97,8 +97,8 @@ public class CreditQueryController {
         BorrowerPersonalInfoVo borrowerPersonalInfoVo = borrowerBaseInfoApplication.getUserPersonalInfoVo(merchantCode, borrowerCode, orderNumb);
         BorrowerIdentityInfoVo borrowerIdentityInfoVo = borrowerBaseInfoApplication.getUserIdentityInfoVo(borrowerCode, orderNumb);
         BorrowerWorkInfoVo borrowerWorkInfoVo = borrowerBaseInfoApplication.getUserWorkInfoVo(borrowerCode, orderNumb);
-        BorrowerEmergentContactVo borrowerEmergentContactVo = borrowerBaseInfoApplication.getUserEmergentContactVo(borrowerCode, orderNumb);
-        BorrowerLivingAreaVo borrowerLivingAreaVo = borrowerBaseInfoApplication.getUserLivingAreaVo(borrowerCode, orderNumb);
+        BorrowerEmergentContactVo borrowerEmergentContactVo = borrowerBaseInfoApplication.getUserEmergentContactVo(merchantCode, borrowerCode, orderNumb);
+        BorrowerLivingAreaVo borrowerLivingAreaVo = null;
 
         return new DataApiResponse<>(new UserBaseInfoResponse(orderApplicationListVo, borrowerPersonalInfoVo, borrowerIdentityInfoVo, borrowerWorkInfoVo, borrowerEmergentContactVo, borrowerLivingAreaVo));
     }

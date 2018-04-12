@@ -68,6 +68,13 @@ public interface SaasOrderService<T extends BaseEntity> extends BaseService<T> {
 
     SaasOrderVo getConfirmExtendOrderByOrderNumb(String orderNumb);
 
+    /**
+     * 得到 展期待确认 的订单列表
+     *
+     * @return
+     */
+    List<String> listAllConfirmExtendOrderNumbByMerchantCode(String merchantCode);
+
     Boolean updatePreliminaryReviewerCode(Long orderId, String operatorCode);
 
     Boolean updateFinalReviewerCode(Long orderId, String operatorCode);

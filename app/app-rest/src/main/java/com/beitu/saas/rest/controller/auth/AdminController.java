@@ -148,6 +148,9 @@ public class AdminController {
         if (!merchantApplication.canAddAccount(merchantCode)) {
             throw new ApiErrorException("创建账户个数到底上限,请联系软件服务商");
         }
+        if (saasAdminService.hasRegisteredMobile(addAdminRequest.getMobile())) {
+            throw new ApplicationException(AdminErrorEnum.MOBILE_EXIST);
+        }
         SaasAdmin saasAdmin = new SaasAdmin();
         BeanUtils.copyProperties(addAdminRequest, saasAdmin);
         saasAdmin.setPassword(MD5.md5(addAdminRequest.getPassword())).setMerchantCode(GenerOrderNoUtil.generateOrderNo());

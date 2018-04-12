@@ -44,6 +44,16 @@ public class SaasBorrowerPersonalInfoServiceImpl extends AbstractBaseService imp
         return saasBorrowerPersonalInfoDao.updateOrderNumbByBorrowerCode(orderNumb, borrowerCode) == 1;
     }
 
+    @Override
+    public Integer getZmCreditScoreByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb) {
+        return saasBorrowerPersonalInfoDao.selectZmCreditScoreByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
+    }
+
+
+    @Override
+    public Integer getRecentZmCreditScoreByBorrowerCode(String borrowerCode) {
+        return saasBorrowerPersonalInfoDao.selectRecentZmCreditScoreByBorrowerCode(borrowerCode);
+    }
 }
 
 

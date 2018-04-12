@@ -7,6 +7,10 @@ import com.beitu.saas.borrower.client.*;
 import com.beitu.saas.borrower.domain.*;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.utils.identityNumber.vo.IdcardInfoExtractor;
+import com.beitu.saas.credit.client.SaasCreditCarrierRecordService;
+import com.beitu.saas.credit.client.SaasCreditCarrierService;
+import com.beitu.saas.credit.domain.SaasCreditCarrierRecordVo;
+import com.beitu.saas.credit.domain.SaasCreditCarrierVo;
 import com.beitu.saas.order.client.SaasOrderApplicationService;
 import com.beitu.saas.order.domain.SaasOrderApplicationVo;
 import com.fqgj.common.utils.CollectionUtils;
@@ -42,9 +46,6 @@ public class BorrowerBaseInfoApplication {
     private SaasBorrowerIdentityInfoService saasBorrowerIdentityInfoService;
     
     @Autowired
-    private ConfigUtil configUtil;
-    
-    @Autowired
     private SaasBorrowerWorkInfoService saasBorrowerWorkInfoService;
     
     @Autowired
@@ -52,6 +53,15 @@ public class BorrowerBaseInfoApplication {
     
     @Autowired
     private SaasBorrowerLoginLogService saasBorrowerLoginLogService;
+    
+    @Autowired
+    private SaasCreditCarrierService saasCreditCarrierService;
+    
+    @Autowired
+    private SaasCreditCarrierRecordService saasCreditCarrierRecordService;
+    
+    @Autowired
+    private ConfigUtil configUtil;
     
     public BorrowerOrderApplicationVo getUserOrderApplicationVo(String borrowerCode, String orderNumb) {
         SaasOrderApplicationVo saasOrderApplicationVo = saasOrderApplicationService.getByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
@@ -134,13 +144,34 @@ public class BorrowerBaseInfoApplication {
         return borrowerWorkInfoVo;
     }
     
-    public BorrowerEmergentContactVo getUserEmergentContactVo(String borrowerCode, String orderNumb) {
+    public BorrowerEmergentContactVo getUserEmergentContactVo(String merchantCode, String borrowerCode, String orderNumb) {
         SaasBorrowerEmergentContactVo saasBorrowerEmergentContactVo = saasBorrowerEmergentContactService.getByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
         if (saasBorrowerEmergentContactVo == null) {
             return null;
         }
         BorrowerEmergentContactVo borrowerEmergentContactVo = new BorrowerEmergentContactVo();
         BeanUtils.copyProperties(saasBorrowerEmergentContactVo, borrowerEmergentContactVo);
+        
+        SaasCreditCarrierVo saasCreditCarrierVo = saasCreditCarrierService.getByMerchantCodeAndBorrowerCode(merchantCode, borrowerCode);
+        if (saasCreditCarrierVo != null && saasCreditCarrierVo.getSuccess()) {
+            Long recordId = saasCreditCarrierVo.getSaasCreditCarrierId();
+            List<SaasCreditCarrierRecordVo> familyRecordVoList = saasCreditCarrierRecordService.listByRecordIdAndMobile(recordId, saasBorrowerEmergentContactVo.getFamilyMobile());
+            if (CollectionUtils.isNotEmpty(familyRecordVoList)) {
+                SaasCreditCarrierRecordVo familyRecordVo = familyRecordVoList.get(familyRecordVoList.size() - 1);
+                Integer calledDuration = (int) Math.ceil(familyRecordVo.getCalledDuration() / 60);
+                Integer callingDuration = (int) Math.ceil(familyRecordVo.getCallingDuration() / 60);
+                Integer totalDuration = (int) Math.ceil(familyRecordVo.getTotalDuration() / 60);
+                borrowerEmergentContactVo.setFamilyRecord(calledDuration + "分" + "/" + callingDuration + "分" + "、" + totalDuration + "分");
+            }
+            List<SaasCreditCarrierRecordVo> friendRecordVoList = saasCreditCarrierRecordService.listByRecordIdAndMobile(recordId, saasBorrowerEmergentContactVo.getFriendMobile());
+            if (CollectionUtils.isNotEmpty(friendRecordVoList)) {
+                SaasCreditCarrierRecordVo friendRecordVo = friendRecordVoList.get(friendRecordVoList.size() - 1);
+                Integer calledDuration = (int) Math.ceil(friendRecordVo.getCalledDuration() / 60);
+                Integer callingDuration = (int) Math.ceil(friendRecordVo.getCallingDuration() / 60);
+                Integer totalDuration = (int) Math.ceil(friendRecordVo.getTotalDuration() / 60);
+                borrowerEmergentContactVo.setFriendRecord(calledDuration + "分" + "/" + callingDuration + "分" + "、" + totalDuration + "分");
+            }
+        }
         return borrowerEmergentContactVo;
     }
     

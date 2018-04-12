@@ -9,4 +9,6 @@ public interface OrderConsts {
 
     Integer DEFAULT_ALL_ORDER_STATUS_CODE = 0;
 
+    Integer DEFAULT_ORDER_EXPIRE_DURATION = 20;
+
 }

@@ -7,9 +7,11 @@ import com.beitu.saas.app.application.order.vo.SaasOrderBillDetailListVo;
 import com.beitu.saas.app.application.order.vo.SaasOrderDetailVo;
 import com.beitu.saas.app.enums.QueryRepaymentDtEnum;
 import com.beitu.saas.channel.client.SaasChannelService;
+import com.beitu.saas.channel.entity.SaasChannelEntity;
 import com.beitu.saas.collection.client.SaasCollectionOrderService;
 import com.beitu.saas.common.utils.DateUtil;
 import com.beitu.saas.order.client.SaasOrderBillDetailService;
+import com.beitu.saas.order.client.SaasOrderLendRemarkService;
 import com.beitu.saas.order.client.SaasOrderService;
 import com.beitu.saas.order.client.SaasOrderStatusHistoryService;
 import com.beitu.saas.order.domain.QuerySaasOrderBillDetailVo;
@@ -61,6 +63,9 @@ public class OrderBillDetailApplication {
     @Autowired
     private SaasCollectionOrderService saasCollectionOrderService;
 
+    @Autowired
+    private SaasOrderLendRemarkService saasOrderLendRemarkService;
+
     public List<SaasOrderBillDetailListVo> listAfterLendManageOrder(QueryOrderBillDetailVo queryVo, Page page) {
         QuerySaasOrderBillDetailVo querySaasOrderBillDetailVo = convertQueryOrderBillDetailVo2QuerySaasOrderBillDetailVo(queryVo);
         if (querySaasOrderBillDetailVo == null) {
@@ -69,7 +74,11 @@ public class OrderBillDetailApplication {
         if (queryVo.getOrderStatus() != null) {
             querySaasOrderBillDetailVo.setQueryOrderStatus(queryVo.getOrderStatus());
             if (OrderStatusEnum.TO_CONFIRM_EXTEND.getCode().equals(queryVo.getOrderStatus())) {
-                querySaasOrderBillDetailVo.setOrderNumbList(saasOrderService.listAllConfirmReceiptOrderNumbByMerchantCode(queryVo.getMerchantCode()));
+                List<String> orderNumbList = saasOrderService.listAllConfirmExtendOrderNumbByMerchantCode(queryVo.getMerchantCode());
+                if (CollectionUtils.isEmpty(orderNumbList)) {
+                    return null;
+                }
+                querySaasOrderBillDetailVo.setOrderNumbList(orderNumbList);
             }
         }
         List<SaasOrderBillDetailVo> saasOrderBillDetailVoList = saasOrderBillDetailService.listByQueryOrderBillDetailVoAndPage(querySaasOrderBillDetailVo, page);
@@ -148,9 +157,17 @@ public class OrderBillDetailApplication {
         saasOrderBillDetailListVo.setBorrowerName(borrowerInfoVo.getBorrowerName());
         saasOrderBillDetailListVo.setBorrowerMobile(borrowerInfoVo.getBorrowerMobile());
 
-        saasOrderBillDetailListVo.setLoanLendRemark(saasOrderStatusHistoryService.getLoanLendRemark(saasOrderBillDetailVo.getOrderNumb()));
-        saasOrderBillDetailListVo.setChannelName(saasChannelService.getSaasChannelByChannelCode(saasOrderBillDetailVo.getChannelCode()).getChannelName());
-        saasOrderBillDetailListVo.setOrderStatus(saasOrderService.getOrderStatusByOrderNumb(saasOrderBillDetailVo.getOrderNumb()).getMsg());
+        saasOrderBillDetailListVo.setLoanLendRemark(saasOrderLendRemarkService.getLendWayByOrderNumb(saasOrderBillDetailVo.getOrderNumb()));
+        SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(saasOrderBillDetailVo.getChannelCode());
+        if (saasChannelEntity != null) {
+            saasOrderBillDetailListVo.setChannelName(saasChannelEntity.getChannelName());
+        }
+        OrderStatusEnum orderStatusEnum = saasOrderService.getOrderStatusByOrderNumb(saasOrderBillDetailVo.getOrderNumb());
+        if (orderStatusEnum.equals(OrderStatusEnum.IN_EXTEND)) {
+            saasOrderBillDetailListVo.setOrderStatus(OrderStatusEnum.FOR_REIMBURSEMENT.getMsg());
+        } else {
+            saasOrderBillDetailListVo.setOrderStatus(orderStatusEnum.getMsg());
+        }
 
         return saasOrderBillDetailListVo;
     }
@@ -168,8 +185,11 @@ public class OrderBillDetailApplication {
         BorrowerInfoVo borrowerInfoVo = borrowerApplication.getBorrowerInfoVoByBorrowerCode(saasOrderVo.getMerchantCode(), saasOrderVo.getBorrowerCode());
         BeanUtils.copyProperties(borrowerInfoVo, saasOrderBillDetailListVo);
 
-        saasOrderBillDetailListVo.setLoanLendRemark(saasOrderStatusHistoryService.getLoanLendRemark(saasOrderVo.getOrderNumb()));
-        saasOrderBillDetailListVo.setChannelName(saasChannelService.getSaasChannelByChannelCode(saasOrderVo.getChannelCode()).getChannelName());
+        saasOrderBillDetailListVo.setLoanLendRemark(saasOrderLendRemarkService.getLendWayByOrderNumb(saasOrderVo.getOrderNumb()));
+        SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(saasOrderVo.getChannelCode());
+        if (saasChannelEntity != null) {
+            saasOrderBillDetailListVo.setChannelName(saasChannelEntity.getChannelName());
+        }
         saasOrderBillDetailListVo.setOrderStatus(saasOrderService.getOrderStatusByOrderNumb(saasOrderVo.getOrderNumb()).getMsg());
 
         return saasOrderBillDetailListVo;
@@ -240,9 +260,22 @@ public class OrderBillDetailApplication {
             saasOrderDetailVo.setPeriod(i);
             saasOrderDetailVo.setOrderNumb(saasOrderBillDetailVo.getOrderNumb());
             saasOrderDetailVo.setCapital(saasOrderBillDetailVo.getRealCapital().toString());
-            saasOrderDetailVo.setCreatedDate(DateUtil.getDate(saasOrderBillDetailVo.getGmtCreate()));
+            Date createdDt;
+            if (lastSaasOrderDetailVo == null) {
+                createdDt = saasOrderBillDetailVo.getGmtCreate();
+                saasOrderDetailVo.setBorrowingDuration(DateUtil.countDay(saasOrderBillDetailVo.getRepaymentDt(), createdDt));
+            } else {
+                Date lastRepaymentDt = DateUtil.getDate(lastSaasOrderDetailVo.getRepaymentDate(), DateUtil.getDatePattern());
+                Integer days = DateUtil.countDay(saasOrderBillDetailVo.getGmtCreate(), lastRepaymentDt);
+                if (days > 0) {
+                    createdDt = DateUtil.addDate(saasOrderBillDetailVo.getGmtCreate(), 1);
+                } else {
+                    createdDt = DateUtil.addDate(lastRepaymentDt, 1);
+                }
+                saasOrderDetailVo.setBorrowingDuration(DateUtil.countDay(saasOrderBillDetailVo.getRepaymentDt(), createdDt) + 1);
+            }
+            saasOrderDetailVo.setCreatedDate(DateUtil.getDate(createdDt));
             saasOrderDetailVo.setRepaymentDate(DateUtil.getDate(saasOrderBillDetailVo.getRepaymentDt()));
-            saasOrderDetailVo.setBorrowingDuration(DateUtil.countDay(saasOrderBillDetailVo.getRepaymentDt(), saasOrderBillDetailVo.getGmtCreate()));
             saasOrderDetailVo.setTotalInterestRatio(orderCalculateApplication.getInterestRatio(saasOrderBillDetailVo.getTotalInterestRatio()));
             saasOrderDetailVo.setInterest(saasOrderBillDetailVo.getInterest().toString());
             if (saasOrderBillDetailVo.getAmount() == null || BigDecimal.ZERO.compareTo(saasOrderBillDetailVo.getAmount()) == 0) {
@@ -252,7 +285,7 @@ public class OrderBillDetailApplication {
             }
             if (lastSaasOrderDetailVo != null) {
                 try {
-                    lastSaasOrderDetailVo.setOverdueDuration(DateUtil.countDays(saasOrderDetailVo.getCreatedDate(), lastSaasOrderDetailVo.getRepaymentDate()));
+                    lastSaasOrderDetailVo.setOverdueDuration(DateUtil.countDays(saasOrderDetailVo.getCreatedDate(), lastSaasOrderDetailVo.getRepaymentDate()) - 1);
                 } catch (Exception e) {
                     LOGGER.warn(".....订单日期转换失败.....失败原因：{}，订单CODE：{}；订单创建日期：{}；订单应还日期：{}", e.getMessage(), saasOrderDetailVo.getOrderNumb(), saasOrderDetailVo.getCreatedDate(), lastSaasOrderDetailVo.getRepaymentDate());
                 }

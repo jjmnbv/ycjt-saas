@@ -17,4 +17,8 @@ public interface SaasBorrowerPersonalInfoDao extends BaseMapper<SaasBorrowerPers
 
     int updateOrderNumbByBorrowerCode(String orderNumb, String borrowerCode);
 
+    Integer selectZmCreditScoreByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb);
+
+    Integer selectRecentZmCreditScoreByBorrowerCode(String borrowerCode);
+
 }

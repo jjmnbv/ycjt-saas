@@ -118,8 +118,14 @@ public class ContractCreateApplication {
         }
 
         data.put("orderNo", getContractNumbByOrderId(saasOrder.getId()));
-        data.put("createdDt", DateUtil.getDate(saasOrder.getCreatedDt()));
-        data.put("deadline", DateUtil.countDay(saasOrder.getRepaymentDt(), saasOrder.getCreatedDt()) + "");
+        Date createdDt;
+        if (saasOrder.getCreatedDt() == null) {
+            createdDt = new Date();
+        } else {
+            createdDt = saasOrder.getCreatedDt();
+        }
+        data.put("createdDt", DateUtil.getDate(createdDt));
+        data.put("deadline", DateUtil.countDay(saasOrder.getRepaymentDt(), createdDt) + "");
         data.put("realCapital", saasOrder.getRealCapital().toString());
         data.put("realCapitalCN", NumberToCNUtil.number2CNMontrayUnit(saasOrder.getRealCapital()));
         data.put("repaymentDt", DateUtil.getDate(saasOrder.getRepaymentDt()));
@@ -154,8 +160,14 @@ public class ContractCreateApplication {
 
         data.put("orderNo", getContractNumbByOrderId(saasOrder.getId()));
         data.put("firstOrderNo", getContractNumbByOrderId(saasOrder.getRelationOrderId()));
-        data.put("createdDt", DateUtil.getDate(saasOrder.getCreatedDt()));
-        data.put("deadline", DateUtil.countDay(saasOrder.getRepaymentDt(), saasOrder.getCreatedDt()) + "");
+        Date createdDt;
+        if (saasOrder.getCreatedDt() == null) {
+            createdDt = DateUtil.addDate(new Date(), 1);
+        } else {
+            createdDt = saasOrder.getCreatedDt();
+        }
+        data.put("createdDt", DateUtil.getDate(createdDt));
+        data.put("deadline", (DateUtil.countDay(saasOrder.getRepaymentDt(), createdDt) + 1) + "");
         data.put("realCapital", saasOrder.getRealCapital().toString());
         data.put("realCapitalCN", NumberToCNUtil.number2CNMontrayUnit(saasOrder.getRealCapital()));
         data.put("repaymentDt", DateUtil.getDate(saasOrder.getRepaymentDt()));
@@ -165,13 +177,12 @@ public class ContractCreateApplication {
     }
 
     private void generateContract(String srcPdfFilePath, String createFilePath, Map<String, String> data) {
-        PdfStamper ps = null;
         ByteArrayOutputStream bos = null;
         OutputStream fos = null;
         try {
             PdfReader reader = new PdfReader(srcPdfFilePath);
             bos = new ByteArrayOutputStream();
-            ps = new PdfStamper(reader, bos);
+            PdfStamper ps = new PdfStamper(reader, bos);
             AcroFields fields = ps.getAcroFields();
             BaseFont bf = BaseFont.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
             for (String key : data.keySet()) {

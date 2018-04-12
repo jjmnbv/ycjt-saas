@@ -1,9 +1,12 @@
 package com.beitu.saas.borrower.service.impl;
 
+import com.beitu.saas.borrower.BorrowerInfoParam;
 import com.beitu.saas.borrower.client.SaasBorrowerService;
 import com.beitu.saas.borrower.dao.SaasBorrowerDao;
 import com.beitu.saas.borrower.domain.SaasBorrowerVo;
 import com.beitu.saas.borrower.entity.SaasBorrower;
+import com.beitu.saas.borrower.vo.SaasBorrowerManagerVo;
+import com.fqgj.common.api.Page;
 import com.fqgj.common.base.AbstractBaseService;
 import com.fqgj.common.base.NameSpace;
 import com.fqgj.common.utils.CollectionUtils;
@@ -94,6 +97,10 @@ public class SaasBorrowerServiceImpl extends AbstractBaseService implements Saas
         return SaasBorrowerVo.convertEntityToVO(saasBorrowerList.get(0));
     }
 
+    @Override
+    public List<SaasBorrowerManagerVo> getBorrowerInfoList(BorrowerInfoParam borrowerInfoParam, Page page) {
+        return saasBorrowerDao.selectBorrowerInfoList(borrowerInfoParam, page);
+    }
 }
 
 

@@ -1,17 +1,17 @@
 package com.beitu.saas.app.application.borrower;
 
 import com.beitu.saas.app.application.borrower.vo.BorrowerInfoVo;
+import com.beitu.saas.app.application.borrower.vo.BorrowerManagerInfoVo;
 import com.beitu.saas.app.application.channel.SaasChannelApplication;
-import com.beitu.saas.borrower.client.SaasBorrowerLoginLogService;
-import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
-import com.beitu.saas.borrower.client.SaasBorrowerService;
-import com.beitu.saas.borrower.client.SaasBorrowerTokenService;
+import com.beitu.saas.borrower.BorrowerInfoParam;
+import com.beitu.saas.borrower.client.*;
 import com.beitu.saas.borrower.domain.SaasBorrowerLoginLogVo;
 import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
 import com.beitu.saas.borrower.domain.SaasBorrowerVo;
 import com.beitu.saas.borrower.entity.SaasBorrower;
 import com.beitu.saas.borrower.entity.SaasBorrowerLoginLog;
 import com.beitu.saas.borrower.enums.BorrowerErrorCodeEnum;
+import com.beitu.saas.borrower.vo.SaasBorrowerManagerVo;
 import com.beitu.saas.channel.domain.SaasH5ChannelVo;
 import com.beitu.saas.channel.enums.ChannelErrorCodeEnum;
 import com.beitu.saas.common.consts.RedisKeyConsts;
@@ -21,6 +21,7 @@ import com.beitu.saas.common.utils.identityNumber.vo.IdcardInfoExtractor;
 import com.beitu.saas.common.utils.location.BDLocationUtils;
 import com.fqgj.base.services.redis.RedisClient;
 import com.fqgj.base.services.redis.TimeConsts;
+import com.fqgj.common.api.Page;
 import com.fqgj.common.utils.CollectionUtils;
 import com.fqgj.common.utils.HttpUtil;
 import com.fqgj.common.utils.JSONUtils;
@@ -28,6 +29,7 @@ import com.fqgj.common.utils.StringUtils;
 import com.fqgj.exception.common.ApplicationException;
 import com.fqgj.log.factory.LogFactory;
 import com.fqgj.log.interfaces.Log;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,6 +66,8 @@ public class BorrowerApplication {
 
     @Autowired
     private SaasBorrowerRealInfoService saasBorrowerRealInfoService;
+    @Autowired
+    private SaasBorrowerPersonalInfoService saasBorrowerPersonalInfoService;
 
     @Transactional(rollbackFor = RuntimeException.class)
     public String login(String mobile, String channelCode, String phoneSystem, String ip) {
@@ -188,6 +192,31 @@ public class BorrowerApplication {
             borrowerInfoVo.setBorrowerGender(idcardInfoExtractor.getGender());
         }
         return borrowerInfoVo;
+    }
+
+
+    public List<BorrowerManagerInfoVo> getBorrowerInfoListByPage(BorrowerInfoParam borrowerInfoParam, Page page) {
+        List<SaasBorrowerManagerVo> borrowerInfoList = saasBorrowerService.getBorrowerInfoList(borrowerInfoParam, page);
+        List<BorrowerManagerInfoVo> borrowerManagerInfoVos = new ArrayList<>();
+
+        borrowerInfoList.stream().forEach(x -> {
+            BorrowerManagerInfoVo borrowerManagerInfoVo = new BorrowerManagerInfoVo();
+            BeanUtils.copyProperties(x, borrowerManagerInfoVo);
+
+            IdcardInfoExtractor idcardInfoExtractor = new IdcardInfoExtractor(x.getIdentityCode());
+            borrowerManagerInfoVo.setAge(idcardInfoExtractor.getAge());
+            borrowerManagerInfoVo.setGender(idcardInfoExtractor.getGender());
+            Integer recentZmScore=saasBorrowerPersonalInfoService.getRecentZmCreditScoreByBorrowerCode(x.getBorrowerCode());
+            borrowerManagerInfoVo.setZmCreditScore(recentZmScore);
+            SaasH5ChannelVo saasH5ChannelVo = saasChannelApplication.getSaasChannelBychannelCode(x.getChannelCode());
+            if (saasH5ChannelVo != null) {
+                borrowerManagerInfoVo.setChannelName(saasH5ChannelVo.getChannelName());
+            }
+
+            borrowerManagerInfoVos.add(borrowerManagerInfoVo);
+        });
+
+        return borrowerManagerInfoVos;
     }
 
 

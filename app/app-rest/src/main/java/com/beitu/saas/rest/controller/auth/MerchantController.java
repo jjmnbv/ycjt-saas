@@ -11,6 +11,7 @@ import com.beitu.saas.auth.domain.SaasMerchantVo;
 import com.beitu.saas.auth.entity.SaasMerchant;
 import com.beitu.saas.auth.entity.SaasMerchantConfig;
 import com.beitu.saas.auth.entity.SaasSmsConfigDictionary;
+import com.beitu.saas.auth.enums.ContractConfigTypeEnum;
 import com.beitu.saas.auth.service.SaasMerchantConfigService;
 import com.beitu.saas.auth.service.SaasMerchantService;
 import com.beitu.saas.auth.service.SaasSmsConfigDictionaryService;
@@ -20,6 +21,7 @@ import com.beitu.saas.rest.controller.auth.request.AddMerchantRequest;
 import com.beitu.saas.rest.controller.auth.response.MerchantInfoResponse;
 import com.fqgj.common.api.Response;
 import com.fqgj.common.api.annotations.ParamsValidate;
+import com.fqgj.common.api.exception.ApiErrorException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -28,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author xiaochong
@@ -70,6 +73,9 @@ public class MerchantController {
     @ApiOperation(value = "合同设置")
     @HasPermission(permissionKey = ButtonPermissionConsts.CONTRACT_SETTING)
     public Response setContractType(@PathVariable Integer type) {
+        if (Objects.equals(type, ContractConfigTypeEnum.COMPANY_CONTRACT.getKey())) {
+            throw new ApiErrorException("暂不支持公司合同");
+        }
         String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
         saasMerchantConfigService.updateContractConfig(merchantCode, type);
         return Response.ok();
@@ -91,7 +97,7 @@ public class MerchantController {
     @ParamsValidate
     @IgnoreRepeatRequest
     public Response add(@RequestBody AddMerchantRequest request) {
-        if (!configUtil.enableAddMerchant()){
+        if (!configUtil.enableAddMerchant()) {
             return Response.ok("添加机构不可用,请联系管理员");
         }
         SaasMerchant saasMerchant = new SaasMerchant();

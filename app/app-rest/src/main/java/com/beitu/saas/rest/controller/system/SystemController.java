@@ -2,11 +2,7 @@ package com.beitu.saas.rest.controller.system;
 
 import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.common.RequestLocalInfo;
-import com.beitu.saas.app.enums.EducationMsgCodeEnum;
-import com.beitu.saas.app.enums.MaritalStatusMsgCodeEnum;
-import com.beitu.saas.app.enums.QueryRepaymentDtEnum;
-import com.beitu.saas.app.enums.SaasLoanPlatformEnum;
-import com.beitu.saas.auth.domain.SaasAdminVo;
+import com.beitu.saas.app.enums.*;
 import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.entity.SaasChannelEntity;
@@ -70,10 +66,7 @@ public class SystemController {
     @ApiOperation(value = "渠道列表枚举信息", response = EnumResponse.class)
     public DataApiResponse<EnumResponse> listChannel() {
         SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
-        SaasChannelParam saasChannelParam = new SaasChannelParam();
-        saasChannelParam.setMerchantCode(saasAdmin.getMerchantCode());
-        saasChannelParam.setChannelStatus(0);
-        List<SaasChannelEntity> saasChannelEntityList = saasChannelService.getSaasChannelList(saasChannelParam, null);
+        List<SaasChannelEntity> saasChannelEntityList = saasChannelService.getAllSaasChannelList(saasAdmin.getMerchantCode());
         if (CollectionUtils.isEmpty(saasChannelEntityList)) {
             return new DataApiResponse<>();
         }
@@ -85,6 +78,13 @@ public class SystemController {
             enumVoList.add(enumVo);
         });
         return new DataApiResponse<>(new EnumResponse(enumVoList));
+    }
+
+    @RequestMapping(value = "/enum/lend/remark", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "下款途径枚举信息", response = EnumResponse.class)
+    public DataApiResponse<EnumResponse> getSaasLendRemarkEnum() {
+        return new DataApiResponse<>(new EnumResponse(SaasLendRemarkEnum.values()));
     }
 
 }

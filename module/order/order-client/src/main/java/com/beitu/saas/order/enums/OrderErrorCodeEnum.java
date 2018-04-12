@@ -15,8 +15,10 @@ public enum OrderErrorCodeEnum implements ErrorCodeEnum {
     ORDER_STATUS_UPDATE_FAILURE(60003, "订单状态更新失败", HttpStatus.OK),
     ORDER_BEING_SINGLE(60004, "订单已被他人领单", HttpStatus.OK),
     NO_PERMISSION_OPERATE_ORDER(60005, "没有该订单操作权限", HttpStatus.OK),
-    ILLEGAL_REPAYMENT_DATE(60006, "展期到期日期非法", HttpStatus.OK),
-    ORDER_FAILURE(60007, "订单已失效", HttpStatus.OK);
+    ILLEGAL_EXTEND_REPAYMENT_DATE(60006, "展期到期日期非法", HttpStatus.OK),
+    ORDER_FAILURE(60007, "订单已失效", HttpStatus.OK),
+    ILLEGAL_REPAYMENT_DATE(60008, "订单借款天数非法", HttpStatus.OK),
+    BORROWER_NEED_REAL_NAME(60009, "请先让借款用户进行实名认证", HttpStatus.OK);
 
     private Integer code;
 

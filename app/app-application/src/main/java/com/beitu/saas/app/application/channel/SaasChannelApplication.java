@@ -25,6 +25,7 @@ import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.utils.OrderNoUtil;
 import com.beitu.saas.common.utils.ShortUrlUtil;
 import com.fqgj.common.api.Page;
+import com.fqgj.common.api.exception.ApiIllegalArgumentException;
 import com.fqgj.log.factory.LogFactory;
 import com.fqgj.log.interfaces.Log;
 import org.springframework.beans.BeanUtils;
@@ -72,6 +73,14 @@ public class SaasChannelApplication {
     @Transactional(rollbackFor = Exception.class)
     public void addOrUpdateChannel(SaasChannelParam saasChannelParam, List<SaasChannelRiskSettingsParam> saasChannelRiskSettingsVoList) {
         if (saasChannelParam.getOpType() == ChannelOperateTypeEnum.ADD.getType()) {
+            SaasChannelParam param = new SaasChannelParam()
+                    .setChannelName(saasChannelParam.getChannelName())
+                    .setMerchantCode(saasChannelParam.getMerchantCode());
+            List<SaasChannelEntity> saasChannelList = saasChannelService.getSaasChannelList(param, null);
+            if (saasChannelList.size() > 0) {
+                throw new ApiIllegalArgumentException("当前渠道名称已经存在, 请重新创建!");
+            }
+
             SaasChannelEntity saasChannelEntity = new SaasChannelEntity();
             BeanUtils.copyProperties(saasChannelParam, saasChannelEntity);
             String channelCode = OrderNoUtil.makeOrderNum();

@@ -18,4 +18,6 @@ public interface SaasCreditCarrierRecordService<T extends BaseEntity> extends Ba
 
     List<SaasCreditCarrierRecordVo> listByRecordIdAndRecordTypeEnum(Long recordId, CreditCarrierRecordTypeEnum recordTypeEnum);
 
+    List<SaasCreditCarrierRecordVo> listByRecordIdAndMobile(Long recordId, String mobile);
+
 }
