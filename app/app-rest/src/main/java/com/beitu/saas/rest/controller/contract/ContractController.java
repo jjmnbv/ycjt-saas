@@ -115,8 +115,10 @@ public class ContractController {
         }
         if (StringUtils.isNotEmpty(borrowerCode)) {
             SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode);
-            response.setBorrowUserName(saasBorrowerRealInfoVo.getName());
-            response.setBorrowIdentityNo(saasBorrowerRealInfoVo.getIdentityCode());
+            if (saasBorrowerRealInfoVo != null) {
+                response.setBorrowUserName(saasBorrowerRealInfoVo.getName());
+                response.setBorrowIdentityNo(saasBorrowerRealInfoVo.getIdentityCode());
+            }
             String sealUrl = contractApplication.getUserSealUrl(userCode);
             if (StringUtils.isNotEmpty(sealUrl)) {
                 response.setBorrowStamp(Boolean.TRUE);
@@ -157,8 +159,10 @@ public class ContractController {
         UserLicenseContractInfoResponse response = new UserLicenseContractInfoResponse();
         if (saasBorrowerService.isSaasBorrower(userCode)) {
             SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(userCode);
-            response.setUserName(saasBorrowerRealInfoVo.getName());
-            response.setUserCode("身份证号：" + saasBorrowerRealInfoVo.getIdentityCode());
+            if (saasBorrowerRealInfoVo != null) {
+                response.setUserName(saasBorrowerRealInfoVo.getName());
+                response.setUserCode("身份证号：" + saasBorrowerRealInfoVo.getIdentityCode());
+            }
             String sealUrl = contractApplication.getUserSealUrl(userCode);
             if (StringUtils.isNotEmpty(sealUrl)) {
                 response.setUserStamp(Boolean.TRUE);
@@ -229,8 +233,10 @@ public class ContractController {
         }
         if (StringUtils.isNotEmpty(borrowerCode)) {
             SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode);
-            response.setBorrowUserName(saasBorrowerRealInfoVo.getName());
-            response.setBorrowIdentityNo(saasBorrowerRealInfoVo.getIdentityCode());
+            if (saasBorrowerRealInfoVo != null) {
+                response.setBorrowUserName(saasBorrowerRealInfoVo.getName());
+                response.setBorrowIdentityNo(saasBorrowerRealInfoVo.getIdentityCode());
+            }
             String sealUrl = contractApplication.getUserSealUrl(userCode);
             if (StringUtils.isNotEmpty(sealUrl)) {
                 response.setBorrowStamp(Boolean.TRUE);
