@@ -64,6 +64,7 @@
             and deleted = false
             and <![CDATA[ channel_type != 1 ]]>
         </trim>
+        order by channel_type desc
     </select>
 
     <select id="countChannelEntityList" parameterType="map" resultType="INTEGER">
