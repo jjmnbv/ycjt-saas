@@ -10,6 +10,10 @@ import com.beitu.saas.borrower.entity.SaasBorrowerRealInfo;
 import com.beitu.saas.borrower.entity.SaasBorrowerWorkInfo;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.utils.identityNumber.vo.IdcardInfoExtractor;
+import com.beitu.saas.credit.client.SaasCreditCarrierRecordService;
+import com.beitu.saas.credit.client.SaasCreditCarrierService;
+import com.beitu.saas.credit.domain.SaasCreditCarrierRecordVo;
+import com.beitu.saas.credit.domain.SaasCreditCarrierVo;
 import com.beitu.saas.order.client.SaasOrderApplicationService;
 import com.beitu.saas.order.domain.SaasOrderApplicationVo;
 import com.fqgj.common.utils.CollectionUtils;
@@ -56,6 +60,12 @@ public class BorrowerBaseInfoApplication {
 
     @Autowired
     private SaasBorrowerLoginLogService saasBorrowerLoginLogService;
+
+    @Autowired
+    private SaasCreditCarrierService saasCreditCarrierService;
+
+    @Autowired
+    private SaasCreditCarrierRecordService saasCreditCarrierRecordService;
 
     public BorrowerOrderApplicationVo getUserOrderApplicationVo(String borrowerCode, String orderNumb) {
         SaasOrderApplicationVo saasOrderApplicationVo = saasOrderApplicationService.getByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
@@ -126,13 +136,28 @@ public class BorrowerBaseInfoApplication {
         return borrowerWorkInfoVo;
     }
 
-    public BorrowerEmergentContactVo getUserEmergentContactVo(String borrowerCode, String orderNumb) {
+    public BorrowerEmergentContactVo getUserEmergentContactVo(String merchantCode, String borrowerCode, String orderNumb) {
         SaasBorrowerEmergentContactVo saasBorrowerEmergentContactVo = saasBorrowerEmergentContactService.getByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
         if (saasBorrowerEmergentContactVo == null) {
             return null;
         }
         BorrowerEmergentContactVo borrowerEmergentContactVo = new BorrowerEmergentContactVo();
         BeanUtils.copyProperties(saasBorrowerEmergentContactVo, borrowerEmergentContactVo);
+
+        SaasCreditCarrierVo saasCreditCarrierVo = saasCreditCarrierService.getByMerchantCodeAndBorrowerCode(merchantCode, borrowerCode);
+        if (saasCreditCarrierVo != null && saasCreditCarrierVo.getSuccess()) {
+            Long recordId = saasCreditCarrierVo.getSaasCreditCarrierId();
+            List<SaasCreditCarrierRecordVo> familyRecordVoList = saasCreditCarrierRecordService.listByRecordIdAndMobile(recordId, saasBorrowerEmergentContactVo.getFamilyMobile());
+            if (CollectionUtils.isNotEmpty(familyRecordVoList)) {
+                SaasCreditCarrierRecordVo familyRecordVo = familyRecordVoList.get(familyRecordVoList.size() - 1);
+                borrowerEmergentContactVo.setFamilyRecord(familyRecordVo.getCalledDuration() + "/" + familyRecordVo.getCallingDuration() + "、" + familyRecordVo.getTotalDuration() + "秒");
+            }
+            List<SaasCreditCarrierRecordVo> friendRecordVoList = saasCreditCarrierRecordService.listByRecordIdAndMobile(recordId, saasBorrowerEmergentContactVo.getFriendMobile());
+            if (CollectionUtils.isNotEmpty(friendRecordVoList)) {
+                SaasCreditCarrierRecordVo friendRecordVo = friendRecordVoList.get(friendRecordVoList.size() - 1);
+                borrowerEmergentContactVo.setFriendRecord(friendRecordVo.getCalledDuration() + "/" + friendRecordVo.getCallingDuration() + "、" + friendRecordVo.getTotalDuration() + "秒");
+            }
+        }
         return borrowerEmergentContactVo;
     }
 

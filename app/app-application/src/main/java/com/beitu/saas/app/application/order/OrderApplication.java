@@ -33,6 +33,7 @@ import com.beitu.saas.finance.entity.SaasMerchantSmsInfoEntity;
 import com.beitu.saas.order.client.SaasOrderBillDetailService;
 import com.beitu.saas.order.client.SaasOrderService;
 import com.beitu.saas.order.client.SaasOrderStatusHistoryService;
+import com.beitu.saas.order.consts.OrderConsts;
 import com.beitu.saas.order.domain.QuerySaasOrderVo;
 import com.beitu.saas.order.domain.SaasOrderApplicationVo;
 import com.beitu.saas.order.domain.SaasOrderBillDetailVo;
@@ -132,14 +133,14 @@ public class OrderApplication {
         return BorrowerOrderApplyStatusEnum.NO_SUBMIT;
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public SaasOrder createOrder(SaasOrderApplicationVo saasOrderApplicationVo, String orderNumb, String channelCode) {
         SaasOrder saasOrder = new SaasOrder();
         BeanUtils.copyProperties(saasOrderApplicationVo, saasOrder);
         saasOrder.setOrderNumb(orderNumb);
         saasOrder.setChannelCode(channelCode);
         saasOrder.setOrderStatus(OrderStatusEnum.SUBMIT_PRELIMINARY_REVIEW.getCode());
-        saasOrder.setExpireDate(DateUtil.addDate(new Date(), 20));
+        saasOrder.setExpireDate(getOrderExpireDate(saasOrderApplicationVo.getRepaymentDt()));
         saasOrderService.create(saasOrder);
 
         if (!ChannelConsts.DEFAULT_CHANNEL_CREATOR_CODE.equals(channelCode)) {
@@ -165,6 +166,7 @@ public class OrderApplication {
         return saasOrder;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void updateOrderByOrderApplicationVo(SaasOrderApplicationVo saasOrderApplicationVo, String orderNumb) {
         SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(orderNumb, saasOrderApplicationVo.getMerchantCode());
         if (saasOrderVo == null) {
@@ -177,7 +179,7 @@ public class OrderApplication {
         updateSaasOrder.setBorrowPurpose(saasOrderApplicationVo.getBorrowPurpose());
         updateSaasOrder.setRepaymentDt(saasOrderApplicationVo.getRepaymentDt());
         updateSaasOrder.setTermUrl(saasOrderApplicationVo.getTermUrl());
-        updateSaasOrder.setExpireDate(DateUtil.addDate(new Date(), 20));
+        updateSaasOrder.setExpireDate(getOrderExpireDate(saasOrderApplicationVo.getRepaymentDt()));
         saasOrderService.updateById(updateSaasOrder);
 
         String borrowerCode = saasOrderApplicationVo.getBorrowerCode();
@@ -193,6 +195,17 @@ public class OrderApplication {
             put("phone", saasBorrowerVo.getMobile());
         }}, SaasSmsTypeEnum.SAAS_0005);
 
+    }
+
+    private Date getOrderExpireDate(Date repaymentDt) {
+        Integer borrowingDuration = DateUtil.countDay(repaymentDt, new Date());
+        if (borrowingDuration < 1) {
+            throw new ApplicationException(OrderErrorCodeEnum.ILLEGAL_REPAYMENT_DATE);
+        } else if (borrowingDuration > OrderConsts.DEFAULT_ORDER_EXPIRE_DURATION) {
+            return DateUtil.addDate(new Date(), OrderConsts.DEFAULT_ORDER_EXPIRE_DURATION);
+        } else {
+            return repaymentDt;
+        }
     }
 
     public List<H5OrderListVo> listH5Order(String borrowerCode, String merchantCode) {
@@ -412,7 +425,6 @@ public class OrderApplication {
             page.setTotalCount(0);
             return null;
         }
-        querySaasOrderVo.setRepaymentDt(new Date());
         querySaasOrderVo.setOrderStatusList(Arrays.asList(
                 OrderStatusEnum.SUBMIT_LOAN_LENDER.getCode()));
         List<SaasOrderVo> saasOrderVoList = saasOrderService.listByQuerySaasOrderVoAndPage(querySaasOrderVo, page);
@@ -670,7 +682,7 @@ public class OrderApplication {
             updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.FOR_REIMBURSEMENT, lendRemark);
             updateSaasOrder.setCreatedDt(new Date());
             updateSaasOrder.setExpireDate(DateUtil.addYear(new Date(), 10));
-            updateSaasOrder.setTotalInterestFee(orderCalculateApplication.getInterest(saasOrderVo.getRealCapital(), saasOrderVo.getTotalInterestRatio(), new Date(), saasOrderVo.getRepaymentDt()));
+            updateSaasOrder.setTotalInterestFee(orderCalculateApplication.getInterest(saasOrderVo.getRealCapital(), saasOrderVo.getTotalInterestRatio(), new Date(), saasOrderVo.getRepaymentDt(), Boolean.FALSE));
             saasOrderService.updateById(updateSaasOrder);
 
             orderBillDetailApplication.createOrderBillDetail(orderNumb, merchantCode);
@@ -684,7 +696,6 @@ public class OrderApplication {
                 put("money", saasOrderVo.getRealCapital());
             }}, SaasSmsTypeEnum.SAAS_0012);
         } else {
-            updateSaasOrder.setExpireDate(DateUtil.addDate(saasOrderVo.getRepaymentDt(), 1));
             saasOrderService.updateById(updateSaasOrder);
             updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.TO_CONFIRM_RECEIPT, lendRemark);
 
@@ -728,7 +739,8 @@ public class OrderApplication {
         SaasOrder updateSaasOrder = new SaasOrder();
         updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
         updateSaasOrder.setCreatedDt(new Date());
-        updateSaasOrder.setTotalInterestFee(orderCalculateApplication.getInterest(saasOrderVo.getRealCapital(), saasOrderVo.getTotalInterestRatio(), new Date(), saasOrderVo.getRepaymentDt()));
+        updateSaasOrder.setExpireDate(DateUtil.addYear(new Date(), 10));
+        updateSaasOrder.setTotalInterestFee(orderCalculateApplication.getInterest(saasOrderVo.getRealCapital(), saasOrderVo.getTotalInterestRatio(), new Date(), saasOrderVo.getRepaymentDt(), Boolean.FALSE));
         updateSaasOrder.setTermUrl(termUrl);
         saasOrderService.updateById(updateSaasOrder);
 
@@ -775,7 +787,7 @@ public class OrderApplication {
         } else {
             extendSaasOrder.setCreatedDt(DateUtil.addDate(saasOrderVo.getRepaymentDt(), 1));
         }
-        extendSaasOrder.setTotalInterestFee(orderCalculateApplication.getInterest(extendSaasOrder.getRealCapital(), extendSaasOrder.getTotalInterestRatio(), extendSaasOrder.getCreatedDt(), extendSaasOrder.getRepaymentDt()));
+        extendSaasOrder.setTotalInterestFee(orderCalculateApplication.getInterest(extendSaasOrder.getRealCapital(), extendSaasOrder.getTotalInterestRatio(), extendSaasOrder.getCreatedDt(), extendSaasOrder.getRepaymentDt(), Boolean.TRUE));
         extendSaasOrder.setExpireDate(DateUtil.getTodayOverTime());
         extendSaasOrder.setRelationOrderId(saasOrderVo.getSaasOrderId());
         extendSaasOrder.setOrderStatus(nextOrderStatus.getCode());

@@ -18,6 +18,7 @@
         from saas_borrower_login_log
         where borrower_code = #{borrowerCode,jdbcType=VARCHAR}
         and deleted = 0
+        limit 10
     </select>
 
 </mapper>
