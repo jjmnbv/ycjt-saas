@@ -19,6 +19,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,40 +30,40 @@ import java.util.List;
  */
 @Service
 public class BorrowerBaseInfoApplication {
-    
+
     @Autowired
     private SaasOrderApplicationService saasOrderApplicationService;
-    
+
     @Autowired
     private SaasBorrowerPersonalInfoService saasBorrowerPersonalInfoService;
-    
+
     @Autowired
     private SaasBorrowerService saasBorrowerService;
-    
+
     @Autowired
     private SaasBorrowerRealInfoService saasBorrowerRealInfoService;
-    
+
     @Autowired
     private SaasBorrowerIdentityInfoService saasBorrowerIdentityInfoService;
-    
+
     @Autowired
     private SaasBorrowerWorkInfoService saasBorrowerWorkInfoService;
-    
+
     @Autowired
     private SaasBorrowerEmergentContactService saasBorrowerEmergentContactService;
-    
+
     @Autowired
     private SaasBorrowerLoginLogService saasBorrowerLoginLogService;
-    
+
     @Autowired
     private SaasCreditCarrierService saasCreditCarrierService;
-    
+
     @Autowired
     private SaasCreditCarrierRecordService saasCreditCarrierRecordService;
-    
+
     @Autowired
     private ConfigUtil configUtil;
-    
+
     public BorrowerOrderApplicationVo getUserOrderApplicationVo(String borrowerCode, String orderNumb) {
         SaasOrderApplicationVo saasOrderApplicationVo = saasOrderApplicationService.getByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
         if (saasOrderApplicationVo == null) {
@@ -72,7 +73,7 @@ public class BorrowerBaseInfoApplication {
         BeanUtils.copyProperties(saasOrderApplicationVo, borrowerOrderApplicationVo);
         return borrowerOrderApplicationVo;
     }
-    
+
     public BorrowerPersonalInfoVo getUserPersonalInfoVo(String merchantCode, String borrowerCode, String orderNumb) {
         BorrowerPersonalInfoVo borrowerPersonalInfoVo = new BorrowerPersonalInfoVo();
         SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCodeAndMerchantCode(borrowerCode, merchantCode);
@@ -80,7 +81,7 @@ public class BorrowerBaseInfoApplication {
             return null;
         }
         borrowerPersonalInfoVo.setMobile(saasBorrowerVo.getMobile());
-        
+
         SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode);
         if (saasBorrowerRealInfoVo != null) {
             borrowerPersonalInfoVo.setUserName(saasBorrowerRealInfoVo.getName());
@@ -90,7 +91,7 @@ public class BorrowerBaseInfoApplication {
             borrowerPersonalInfoVo.setGender(idcardInfoExtractor.getGender());
             borrowerPersonalInfoVo.setAge(idcardInfoExtractor.getAge());
         }
-        
+
         SaasBorrowerPersonalInfoVo saasBorrowerPersonalInfoVo = saasBorrowerPersonalInfoService.getByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
         if (saasBorrowerPersonalInfoVo != null) {
             borrowerPersonalInfoVo.setQq(saasBorrowerPersonalInfoVo.getWechatCode());
@@ -98,12 +99,12 @@ public class BorrowerBaseInfoApplication {
             borrowerPersonalInfoVo.setMaritalStatus(MaritalStatusMsgCodeEnum.getByCode(saasBorrowerPersonalInfoVo.getMaritalStatus()).getMsg());
             borrowerPersonalInfoVo.setZmCreditScore(saasBorrowerPersonalInfoVo.getZmCreditScore());
         }
-        
+
         borrowerPersonalInfoVo.setPhoneSystem(saasBorrowerLoginLogService.getBorrowerPhoneSystem(borrowerCode));
-        
+
         return borrowerPersonalInfoVo;
     }
-    
+
     public BorrowerIdentityInfoVo getUserIdentityInfoVo(String borrowerCode, String orderNumb) {
         SaasBorrowerIdentityInfoVo saasBorrowerIdentityInfoVo = saasBorrowerIdentityInfoService.getByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
         if (saasBorrowerIdentityInfoVo == null) {
@@ -133,7 +134,7 @@ public class BorrowerBaseInfoApplication {
         }
         return borrowerIdentityInfoVo;
     }
-    
+
     public BorrowerWorkInfoVo getUserWorkInfoVo(String borrowerCode, String orderNumb) {
         SaasBorrowerWorkInfoVo saasBorrowerWorkInfoVo = saasBorrowerWorkInfoService.getByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
         if (saasBorrowerWorkInfoVo == null) {
@@ -143,7 +144,7 @@ public class BorrowerBaseInfoApplication {
         BeanUtils.copyProperties(saasBorrowerWorkInfoVo, borrowerWorkInfoVo);
         return borrowerWorkInfoVo;
     }
-    
+
     public BorrowerEmergentContactVo getUserEmergentContactVo(String merchantCode, String borrowerCode, String orderNumb) {
         SaasBorrowerEmergentContactVo saasBorrowerEmergentContactVo = saasBorrowerEmergentContactService.getByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
         if (saasBorrowerEmergentContactVo == null) {
@@ -151,30 +152,31 @@ public class BorrowerBaseInfoApplication {
         }
         BorrowerEmergentContactVo borrowerEmergentContactVo = new BorrowerEmergentContactVo();
         BeanUtils.copyProperties(saasBorrowerEmergentContactVo, borrowerEmergentContactVo);
-        
+
         SaasCreditCarrierVo saasCreditCarrierVo = saasCreditCarrierService.getByMerchantCodeAndBorrowerCode(merchantCode, borrowerCode);
         if (saasCreditCarrierVo != null && saasCreditCarrierVo.getSuccess()) {
             Long recordId = saasCreditCarrierVo.getSaasCreditCarrierId();
             List<SaasCreditCarrierRecordVo> familyRecordVoList = saasCreditCarrierRecordService.listByRecordIdAndMobile(recordId, saasBorrowerEmergentContactVo.getFamilyMobile());
+            BigDecimal divisor = new BigDecimal(60);
             if (CollectionUtils.isNotEmpty(familyRecordVoList)) {
                 SaasCreditCarrierRecordVo familyRecordVo = familyRecordVoList.get(familyRecordVoList.size() - 1);
-                Integer calledDuration = (int) Math.ceil(familyRecordVo.getCalledDuration() / 60);
-                Integer callingDuration = (int) Math.ceil(familyRecordVo.getCallingDuration() / 60);
-                Integer totalDuration = (int) Math.ceil(familyRecordVo.getTotalDuration() / 60);
+                BigDecimal calledDuration = BigDecimal.valueOf(familyRecordVo.getCalledDuration()).divide(divisor, 0, BigDecimal.ROUND_UP);
+                BigDecimal callingDuration = BigDecimal.valueOf(familyRecordVo.getCallingDuration()).divide(divisor, 0, BigDecimal.ROUND_UP);
+                BigDecimal totalDuration = BigDecimal.valueOf(familyRecordVo.getTotalDuration()).divide(divisor, 0, BigDecimal.ROUND_UP);
                 borrowerEmergentContactVo.setFamilyRecord(calledDuration + "分" + "/" + callingDuration + "分" + "、" + totalDuration + "分");
             }
             List<SaasCreditCarrierRecordVo> friendRecordVoList = saasCreditCarrierRecordService.listByRecordIdAndMobile(recordId, saasBorrowerEmergentContactVo.getFriendMobile());
             if (CollectionUtils.isNotEmpty(friendRecordVoList)) {
                 SaasCreditCarrierRecordVo friendRecordVo = friendRecordVoList.get(friendRecordVoList.size() - 1);
-                Integer calledDuration = (int) Math.ceil(friendRecordVo.getCalledDuration() / 60);
-                Integer callingDuration = (int) Math.ceil(friendRecordVo.getCallingDuration() / 60);
-                Integer totalDuration = (int) Math.ceil(friendRecordVo.getTotalDuration() / 60);
+                BigDecimal calledDuration = BigDecimal.valueOf(friendRecordVo.getCalledDuration()).divide(divisor, 0, BigDecimal.ROUND_UP);
+                BigDecimal callingDuration = BigDecimal.valueOf(friendRecordVo.getCallingDuration()).divide(divisor, 0, BigDecimal.ROUND_UP);
+                BigDecimal totalDuration = BigDecimal.valueOf(friendRecordVo.getTotalDuration()).divide(divisor, 0, BigDecimal.ROUND_UP);
                 borrowerEmergentContactVo.setFriendRecord(calledDuration + "分" + "/" + callingDuration + "分" + "、" + totalDuration + "分");
             }
         }
         return borrowerEmergentContactVo;
     }
-    
+
     public BorrowerLivingAreaVo getUserLivingAreaVo(String borrowerCode, String orderNumb) {
         List<SaasBorrowerLoginLogVo> saasBorrowerLoginLogVoList = saasBorrowerLoginLogService.listBorrowerLivingArea(borrowerCode);
         if (CollectionUtils.isEmpty(saasBorrowerLoginLogVoList)) {
@@ -189,5 +191,13 @@ public class BorrowerBaseInfoApplication {
         });
         return new BorrowerLivingAreaVo(results);
     }
-    
+
+    public static void main(String[] args) {
+        BigDecimal a = new BigDecimal(9);
+        BigDecimal b = new BigDecimal(60);
+
+        System.out.println(c);
+        System.out.println(c.intValue());
+    }
+
 }
