@@ -20,6 +20,7 @@ import com.beitu.saas.borrower.domain.SaasBorrowerVo;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.consts.ChannelConsts;
 import com.beitu.saas.channel.entity.SaasChannelEntity;
+import com.beitu.saas.channel.enums.ChannelTypeEnum;
 import com.beitu.saas.collection.client.SaasCollectionOrderService;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.utils.DateUtil;
@@ -426,8 +427,7 @@ public class OrderApplication {
             page.setTotalCount(0);
             return null;
         }
-        querySaasOrderVo.setOrderStatusList(Arrays.asList(OrderStatusEnum.SUBMIT_LOAN_LENDER.getCode(),
-                OrderStatusEnum.TO_CONFIRM_RECEIPT.getCode()));
+        querySaasOrderVo.setOrderStatusList(Arrays.asList(OrderStatusEnum.SUBMIT_LOAN_LENDER.getCode()));
         List<SaasOrderVo> saasOrderVoList = saasOrderService.listByQuerySaasOrderVoAndPage(querySaasOrderVo, page);
         if (CollectionUtils.isEmpty(saasOrderVoList)) {
             return null;
@@ -611,6 +611,10 @@ public class OrderApplication {
         SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(orderNumb, merchantCode);
         if (StringUtils.isNotEmpty(saasOrderVo.getPreliminaryReviewerCode()) && !operatorCode.equals(saasOrderVo.getPreliminaryReviewerCode())) {
             throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
+        }
+        SaasChannelEntity saasChannelEntity = saasChannelService.getDefaultSaasChannelByMerchantCode(merchantCode, ChannelTypeEnum.RECOMMEND_DEFINED.getType());
+        if (saasChannelEntity != null && saasChannelEntity.getChannelCode().equals(saasOrderVo.getChannelCode())) {
+            throw new ApplicationException("推荐流量无法审核，需要重新进件");
         }
         updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.SUBMIT_FINAL_REVIEW, null);
         SaasOrder updateSaasOrder = new SaasOrder();
