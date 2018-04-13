@@ -7,6 +7,7 @@ package com.beitu.saas.app.enums;
  */
 public enum SaasSmsTypeEnum {
 
+    SAAS_0001("SAAS_0001", "您本次登入的短信验证码为{000000}，请及时进行登入【签名】", "登录验证码", 1L),
     SAAS_0002("SAAS_0002", "#company#邀请您立即申请借款。点击申请 #channel_url#", "后台新建直接发送短信", 2L),
     SAAS_0003("SAAS_0003", "恭喜您，您通过#company#审核最高可借#10000# 点击申请 #channel_url#", "导入用户批量发送短信", 2L),
     SAAS_0004("SAAS_0004", "您的借款申请已提交，我们会尽快审核您的申请 ", "借款申请已提交", 1L),

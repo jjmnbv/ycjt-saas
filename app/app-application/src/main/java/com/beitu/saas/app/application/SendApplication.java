@@ -67,7 +67,7 @@ public class SendApplication {
      * @param code               验证码
      * @param verifyCodeTypeEnum 验证码内容
      */
-    public void sendVerifyCode(String mobile, String code, String sign, VerifyCodeTypeEnum verifyCodeTypeEnum) {
+    public void sendVerifyCode(String mobile, String code, String sign, String merchantCode, VerifyCodeTypeEnum verifyCodeTypeEnum) {
         SingleSmsSendRequestRO ro = new SingleSmsSendRequestRO();
         ro.setPhone(mobile);
         ro.setBizCode(verifyCodeTypeEnum.getType());
@@ -77,6 +77,9 @@ public class SendApplication {
         }});
         ro.setType(1);
         Result<Boolean> result = smsMsgService.send(ro);
+        if (StringUtils.isNotEmpty(merchantCode)) {
+            saasSmsHistoryService.addExpenditureSmsHistory(merchantCode, SaasSmsTypeEnum.SAAS_0001.getPrice(), mobile, SaasSmsTypeEnum.SAAS_0001.getComment());
+        }
         if (!result.isSuccess()) {
             throw new ApplicationException(MessageSendErrorCodeEnum.SEND_FAILED);
         }
@@ -104,7 +107,7 @@ public class SendApplication {
 
     public void sendNotifyMessage(String merchantCode, String mobile, Map map, SaasSmsTypeEnum saasSmsTypeEnum) {
         try {
-            if (saasMerchantConfigService.hasSmsConfig(merchantCode, saasSmsTypeEnum.getBizCode())) {
+            if (!saasMerchantConfigService.hasSmsConfig(merchantCode, saasSmsTypeEnum.getBizCode())) {
                 return;
             }
             SaasMerchantVo saasMerchantVo = saasMerchantService.getByMerchantCode(merchantCode);

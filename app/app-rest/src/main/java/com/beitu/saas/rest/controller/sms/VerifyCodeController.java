@@ -78,10 +78,12 @@ public class VerifyCodeController {
         }
         VerifyCodeTypeEnum type = VerifyCodeTypeEnum.getEnumByName(req.getType());
         String sign = null;
+        String merchantCode = null;
         if (requestBasicInfo.getPlatform().equals("h5")&& StringUtils.isNotEmpty(requestBasicInfo.getChannel())) {
             SaasMerchantVo saasMerchantVo = saasChannelApplication.getMerchantByChannelCode(requestBasicInfo.getChannel());
             if (null != saasMerchantVo) {
                 sign = saasMerchantVo.getCompanyName();
+                merchantCode=saasMerchantVo.getMerchantCode();
             }
         } else if (requestBasicInfo.getPlatform().equals("web")) {
             SaasAdmin saasAdmin = saasAdminService.getSaasAdminByMoblie(mobile);
@@ -89,9 +91,10 @@ public class VerifyCodeController {
                 throw new ApiErrorException("号码不存在");
             }
             sign = saasMerchantService.getByMerchantCode(saasAdmin.getMerchantCode()).getCompanyName();
+            merchantCode=saasAdmin.getMerchantCode();
         }
 
-        sendApplication.sendVerifyCode(mobile, verifyCode, sign, type);
+        sendApplication.sendVerifyCode(mobile, verifyCode, sign,merchantCode,type);
         redisClient.set(RedisKeyConsts.H5_SAVE_LOGIN_VERIFYCODE_KEY, verifyCode, TimeConsts.TWO_MINUTE, mobile);
         return new ApiResponse();
     }
