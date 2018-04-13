@@ -181,7 +181,7 @@ public class BorrowerApplication {
         BorrowerInfoVo borrowerInfoVo = new BorrowerInfoVo();
         SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCodeAndMerchantCode(borrowerCode, merchantCode);
         if (saasBorrowerVo == null) {
-            throw new ApplicationException(RestCodeEnum.BORROWER_NOT_EXIST_ERROR);
+            return null;
         }
         borrowerInfoVo.setBorrowerMobile(saasBorrowerVo.getMobile());
         SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode);
