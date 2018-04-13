@@ -158,15 +158,15 @@ public class MerchantApplication {
         saasChannelRiskSettingsService.createDefaultChannelRiskSettings(merchantCode);
 
         //7 初始化点券和短信余额
-        saasMerchantSmsInfoService.increase(merchantCode, 10000L);
-        saasSmsHistoryService.addIncomeSmsHistory(merchantCode, 10000L, null, "充值");
+        saasMerchantSmsInfoService.increase(merchantCode, 60000L);
+        saasSmsHistoryService.addIncomeSmsHistory(merchantCode, 60000L, null, "充值");
         saasMerchantCreditInfoService.increase(merchantCode, 35000L);
         saasCreditHistoryService.addIncomeCreditHistory(merchantCode, 35000L, "system", "充值");
         //8 默认流量推荐设置
         SaasMerchantFlowConfig config = new SaasMerchantFlowConfig();
         config.setMerchantCode(merchantCode);
         config.setFlowOpen(true);
-        config.setFlowMaxNum(100);
+        config.setFlowMaxNum(200);
         config.setZmScore(MerchantFlowZMEnum.ALONE_ZM_610_UP.getKey().intValue());
         config.setFlowType(2);
         saasMerchantFlowConfigService.create(config);
