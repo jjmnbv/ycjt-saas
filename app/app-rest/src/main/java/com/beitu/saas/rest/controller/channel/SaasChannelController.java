@@ -13,10 +13,8 @@ import com.beitu.saas.channel.enums.ChannelErrorCodeEnum;
 import com.beitu.saas.channel.param.ChannelStatQueryParam;
 import com.beitu.saas.channel.param.SaasChannelParam;
 import com.beitu.saas.channel.param.SaasChannelRiskSettingsParam;
-import com.beitu.saas.rest.controller.channel.request.ChannelStatQueryRequestParam;
-import com.beitu.saas.rest.controller.channel.request.SaasChannelQueryRequestParam;
-import com.beitu.saas.rest.controller.channel.request.SaasChannelRequestParam;
-import com.beitu.saas.rest.controller.channel.request.SaasOperateChannelRequestParam;
+import com.beitu.saas.common.utils.ShortUrlUtil;
+import com.beitu.saas.rest.controller.channel.request.*;
 import com.beitu.saas.rest.controller.channel.response.SaasChannelDetailResponse;
 import com.beitu.saas.rest.controller.channel.response.SaasChannelListResponse;
 import com.beitu.saas.rest.controller.channel.response.SaasChannelStatListResponse;
@@ -154,6 +152,16 @@ public class SaasChannelController {
     }
 
     /**
+     * 获取单个渠道详情
+     */
+    @RequestMapping(value = "/shortUrl", method = RequestMethod.POST)
+    @ApiOperation(value = "获取单个短链接", response = Response.class)
+    public Response getShortUrl(HttpServletResponse resp, String url) {
+        String shortUrl = ShortUrlUtil.generateShortUrl(url);
+        return Response.ok().putData(shortUrl);
+    }
+
+    /**
      * 二维码请求
      *
      * @param resp
@@ -167,7 +175,7 @@ public class SaasChannelController {
     public ApiResponse getQRcode(HttpServletResponse resp, String qrUrl) throws IOException {
         if (qrUrl != null && !"".equals(qrUrl)) {
             resp.setHeader("Content-type", "image/jpeg");
-            resp.setHeader("Content-disposition","attachment;filename=code.jpeg");
+            resp.setHeader("Content-disposition", "attachment;filename=code.jpeg");
             OutputStream stream = null;
             try {
                 int width = 400;//图片的宽度
