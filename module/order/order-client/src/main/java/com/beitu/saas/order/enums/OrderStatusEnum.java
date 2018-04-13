@@ -19,7 +19,7 @@ public enum OrderStatusEnum implements MsgCodeEnum {
     FINAL_REVIEWER_REJECT(204, "复审驳回", new Integer[]{202}, Boolean.TRUE),
     FINAL_REVIEWER_REFUSE(205, "复审拒绝", new Integer[]{202, 204}, Boolean.TRUE),
     SUBMIT_LOAN_LENDER(301, "待放款", new Integer[]{202, 203}, Boolean.TRUE),
-    LOAN_LENDER_REFUSE(302, "放款拒绝", new Integer[]{301}, Boolean.TRUE),
+    LOAN_LENDER_REFUSE(302, "放款拒绝", new Integer[]{301, 303}, Boolean.TRUE),
     TO_CONFIRM_RECEIPT(303, "待确认收款", new Integer[]{301}, Boolean.TRUE),
     FOR_REIMBURSEMENT(401, "待还款", new Integer[]{301, 303, 402}, Boolean.TRUE),
     TO_CONFIRM_EXTEND(402, "展期待确认", new Integer[]{401}, Boolean.TRUE),

@@ -426,8 +426,8 @@ public class OrderApplication {
             page.setTotalCount(0);
             return null;
         }
-        querySaasOrderVo.setOrderStatusList(Arrays.asList(
-                OrderStatusEnum.SUBMIT_LOAN_LENDER.getCode()));
+        querySaasOrderVo.setOrderStatusList(Arrays.asList(OrderStatusEnum.SUBMIT_LOAN_LENDER.getCode(),
+                OrderStatusEnum.TO_CONFIRM_RECEIPT.getCode()));
         List<SaasOrderVo> saasOrderVoList = saasOrderService.listByQuerySaasOrderVoAndPage(querySaasOrderVo, page);
         if (CollectionUtils.isEmpty(saasOrderVoList)) {
             return null;
