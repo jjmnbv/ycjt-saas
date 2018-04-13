@@ -31,38 +31,6 @@ public class ConfigUtil {
         return config.getBooleanProperty("server.preload.data", true);
     }
 
-    public String getAppCode() {
-        return config.getProperty("server.test", "");
-    }
-
-    public String getReviewUrl() {
-        return config.getProperty("app.reviewUrl", "");
-    }
-
-    public String getAppVersion() {
-        return config.getProperty("app.version", "");
-    }
-
-    public String getIosForceUpdateUrl() {
-        return config.getProperty("app.forceUpdate.iosUrl", "");
-    }
-
-    public String getAndroidForceUpdateUrl() {
-        return config.getProperty("app.forceUpdate.androidUrl", "");
-    }
-
-    public String getForceUpdateDesc() {
-        return config.getProperty("app.forceUpdate.desc", "");
-    }
-
-    public int getIosForceUpdateMinVersionCode() {
-        return config.getIntProperty("app.forceUpdate.iosMinVersionCode", 0);
-    }
-
-    public int getAndroidForceUpdateMinVersionCode() {
-        return config.getIntProperty("app.forceUpdate.androidMinVersionCode", 0);
-    }
-
     public String getAccessKeyId() {
         return config.getProperty("oss.accessKeyId", "");
     }
@@ -71,20 +39,12 @@ public class ConfigUtil {
         return config.getProperty("oss.accessKeySecret", "");
     }
 
-    public String getRegion() {
-        return config.getProperty("oss.region", "");
-    }
-
     public String getEndpoint() {
         return config.getProperty("oss.endpoint", "");
     }
 
     public String getBucketName() {
         return config.getProperty("oss.bucketName", "");
-    }
-
-    public String getPictureURLPrefix() {
-        return config.getProperty("oss.pictureURLPrefix", "");
     }
 
     public String getAddressURLPrefix() {
@@ -111,40 +71,12 @@ public class ConfigUtil {
         return config.getBooleanProperty("zm.score.switch", false);
     }
 
-    public boolean getCarrierH5Switch() {
-        return config.getBooleanProperty("carrier.h5.switch", true);
-    }
-
     public String getApiWebPath() {
         return config.getProperty("api.web.path", "");
     }
 
     public String getApiWebPathHttp() {
         return config.getProperty("api.web.path.http", "");
-    }
-
-    public String getPasswordSecret() {
-        return config.getProperty("transaction.password.secret", "");
-    }
-
-    public String getRechargeBaseFee() {
-        return config.getProperty("bank.order.recharge.base.fee", "");
-    }
-
-    public String getWithdrawBaseFee() {
-        return config.getProperty("bank.order.withdraw.base.fee", "");
-    }
-
-    public String getWithdrawFeeRate() {
-        return config.getProperty("bank.order.withdraw.fee.rate", "");
-    }
-
-    public String getRechargeMax() {
-        return config.getProperty("pay.recharge.max.value", "");
-    }
-
-    public boolean getRechargeWithdrawMinimumSwitch() {
-        return config.getBooleanProperty("pay.recharge.withdraw.minimum.switch", false);
     }
 
     public String getAESKey() {
@@ -172,18 +104,6 @@ public class ConfigUtil {
     }
 
     //    User Report View Config
-    public long getUserReportInitCreditValue() {
-        return config.getLongProperty("report.init.credit.value", 6L);
-    }
-
-    public int getUserReportConsumeCreditValue() {
-        return config.getIntProperty("report.credit.consume", 1);
-    }
-
-    public double getReportGeneratePrice() {
-        return config.getDoubleProperty("report.generate.price", 19.9D);
-    }
-
     public String getEbUrl() {
         return config.getProperty("hessian.eb.crawler", "");
     }
@@ -214,28 +134,6 @@ public class ConfigUtil {
 
     public String getZmxyZhimaPublicKey() {
         return config.getProperty("zmxy.publicKey", "");
-    }
-
-    public String getMeiqiaGroupId() {
-        return config.getProperty("meiqia.groupId", "");
-    }
-
-    public String getMeiqiaAgentId() {
-        return config.getProperty("meiqia.agentId", "");
-    }
-
-    /**
-     * add by linanjun 文件导出的格式
-     * 值有两种选项：.xlsx OR .csv
-     *
-     * @return
-     */
-    public String getExportFileType() {
-        return config.getProperty("export.file.type", "");
-    }
-
-    public String getInvitationCodes() {
-        return config.getProperty("invitation.code", "");
     }
 
     public boolean getSwaggerEnable() {
@@ -277,30 +175,6 @@ public class ConfigUtil {
         return config.getIntProperty("crawl.taobao.interval", 5);
     }
 
-    public String getFilterHotProvinces() {
-        return config.getProperty("filter.hot.provinces", "");
-    }
-
-    public int getFilterZmFloor() {
-        return config.getIntProperty("filter.zm.floor", 350);
-    }
-
-    public int getFilterZmCeil() {
-        return config.getIntProperty("filter.zm.ceil", 950);
-    }
-
-    public int getFilterContactCountFloor() {
-        return config.getIntProperty("filter.contact.count.floor", 0);
-    }
-
-    public int getFilterContactCountCeil() {
-        return config.getIntProperty("filter.contact.count.ceil", 120);
-    }
-
-    public int getFilterTotalLimit() {
-        return config.getIntProperty("fliter.total.limit", 1000);
-    }
-
     public String getESignProjectId() {
         return config.getProperty("esign.project.id", "");
     }
@@ -311,90 +185,6 @@ public class ConfigUtil {
 
     public String getApisUrl() {
         return config.getProperty("esign.apis.url", "");
-    }
-
-    public String getTaskWithholdIp() {
-        return config.getProperty("task.withhold.ip", "");
-    }
-
-    public String getTaskPushIp() {
-        return config.getProperty("task.push.ip", "");
-    }
-
-    public String getRecommendFilterBlackList() {
-        return config.getProperty("recommend.filter.black.list", "");
-    }
-
-    public String getRecommendFilterWhiteList() {
-        return config.getProperty("recommend.filter.white.list", "all");
-    }
-
-    public int getFaceCjpMaxCount() {
-        return config.getIntProperty("face.cjp.max.count", 6);
-    }
-
-    public String getLoginAlertTitle() {
-        return config.getProperty("login.alert.title", "");
-    }
-
-    public String getLoginAlertMsg() {
-        return config.getProperty("login.alert.message", "");
-    }
-
-    public int getLoginAlertCountDown() {
-        return config.getIntProperty("login.alert.countdown", 0);
-    }
-
-    public String getPushInterval() {
-        return config.getProperty("push.interval", "1,6,12");
-    }
-
-    public String getOrderLockPushInterval() {
-        return config.getProperty("order.lock.push.interval", "1,6,12,24,72");
-    }
-
-    public int getOrderDistributeTime() {
-        return config.getIntProperty("order.distribute.time", 24);
-    }
-
-    public int getOrderDistributeNum() {
-        return config.getIntProperty("order.distribute.num", 50);
-    }
-
-    public String getBorrowAlertTitle() {
-        return config.getProperty("borrow.alert.title", "");
-    }
-
-    public String getBorrowAlertMsg() {
-        return config.getProperty("borrow.alert.message", "");
-    }
-
-    public int getBorrowAlertCountDown() {
-        return config.getIntProperty("borrow.alert.countdown", 0);
-    }
-
-    public Long getBorrowMaxAmount() {
-        return config.getLongProperty("borrow.max.amount", 200000L);
-    }
-
-    public String getReceivedAlertMsg() {
-        return config.getProperty("received.alert.message", "");
-    }
-
-    public int getReceivedAlertCountDown() {
-        return config.getIntProperty("received.alert.countdown", 0);
-    }
-
-    public int getMaxDailyReceiveCompensation() {
-        return config.getIntProperty("received.max.daily.compensation", 10);
-    }
-
-    public int getMaxExtendNum() {
-        return config.getIntProperty("max.extend.num", 1000);
-    }
-
-    public String getMerchantDetailUrl() {
-        return config.getProperty("merchant.detail.h5.url", "");
     }
 
     /**
@@ -546,6 +336,5 @@ public class ConfigUtil {
     public int getShareNum() {
         return config.getIntProperty("recommend.share.num", 3);
     }
-
 
 }
