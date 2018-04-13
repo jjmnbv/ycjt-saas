@@ -9,6 +9,7 @@ import com.beitu.saas.app.enums.OpenApiOrderPushFromTypeEnum;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.TimeConsts;
 import com.beitu.saas.common.handle.oss.OSSService;
+import com.beitu.saas.finance.client.enums.CreditConsumeEnum;
 import com.beitu.saas.openapi.client.SaasOpenApiOrderInfoLogService;
 import com.beitu.saas.openapi.domain.SaasOpenApiOrderInfoLogVo;
 import com.fqgj.common.utils.CollectionUtils;
@@ -25,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Component
 public class OpenApiApplication {
@@ -101,12 +103,13 @@ public class OpenApiApplication {
             LOGGER.warn("************************* 洋葱借条推单处理失败:{} Mobile:{} IdentityNo:{} *************************", errorCodeEnum.getMsg(), mobile, identityNo);
             throw new ApplicationException(errorCodeEnum);
         }
-    
+        
         Integer flowType = (Integer) merchantsInfo.get("flowType");
+        CreditConsumeEnum consumeEnum = getConsumeTypeBy(flowType, zmScore);
         for (int i = 0; i < borrowerRelatedDataVos.size(); i++) {
             SaasBorrowerRelatedDataVo vo = borrowerRelatedDataVos.get(i);
             try {
-                openApiMerchantApplication.merchantOrderUserProcess(vo, userAndOrderData, mobile, identityNo, flowType);
+                openApiMerchantApplication.merchantOrderUserProcess(vo, userAndOrderData, mobile, identityNo, consumeEnum);
             } catch (Exception e) {
                 LOGGER.warn("************************* 商户推单处理失败 Mobile:{} IdentityNo:{} Merchant:{} Borrower:{} CAUSE:{} *************************", mobile, identityNo, vo.getMerchantCode(), vo.getBorrowerCode(), e);
             }
@@ -132,6 +135,20 @@ public class OpenApiApplication {
     private Boolean logExistByMobile(String mobile, OpenApiOrderPushFromTypeEnum from) {
         Date startDate = TimeUtils.appointed(-TimeConsts.ONE_MONTH_DAYS);
         return saasOpenApiOrderInfoLogService.getByMobile(mobile, from.getType(), Boolean.TRUE, startDate) != null;
+    }
+    
+    private CreditConsumeEnum getConsumeTypeBy(Integer flowType, Integer zmScore) {
+        if (Objects.equals(flowType, 1)) {
+            if (zmScore < 610) {
+                return CreditConsumeEnum.FLOW_SHARED_610_DOWN;
+            } else {
+                return CreditConsumeEnum.FLOW_SHARED_610_UP;
+            }
+        }
+        if (zmScore < 610) {
+            return CreditConsumeEnum.FLOW_ALONE_610_DOWN;
+        }
+        return CreditConsumeEnum.FLOW_ALONE_610_UP;
     }
     
 }

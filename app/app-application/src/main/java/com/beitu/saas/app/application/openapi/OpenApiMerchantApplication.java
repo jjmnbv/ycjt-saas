@@ -9,6 +9,8 @@ import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.entity.SaasChannelEntity;
 import com.beitu.saas.channel.enums.ChannelTypeEnum;
 import com.beitu.saas.common.consts.TimeConsts;
+import com.beitu.saas.finance.client.SaasCreditHistoryService;
+import com.beitu.saas.finance.client.enums.CreditConsumeEnum;
 import com.beitu.saas.openapi.client.SaasOpenApiOrderInfoLogService;
 import com.beitu.saas.openapi.domain.SaasOpenApiOrderInfoLogVo;
 import com.beitu.saas.openapi.entity.SaasOpenApiOrderInfoLog;
@@ -44,6 +46,9 @@ public class OpenApiMerchantApplication {
     @Autowired
     private SaasOpenApiOrderInfoLogService saasOpenApiOrderInfoLogService;
     
+    @Autowired
+    private SaasCreditHistoryService saasCreditHistoryService;
+    
     public List<SaasBorrowerRelatedDataVo> merchantChannelRegister(OrderPushToSaasDataVo data, List<String> merchantCodes) {
         List<SaasBorrowerRelatedDataVo> borrowerRelatedDataVos = new ArrayList<>();
         for (int i = 0; i < merchantCodes.size(); i++) {
@@ -68,7 +73,7 @@ public class OpenApiMerchantApplication {
         return borrowerRelatedDataVos;
     }
     
-    public void merchantOrderUserProcess(SaasBorrowerRelatedDataVo borrowerRelatedDataVo, OrderPushToSaasVo userAndOrderData, String mobile, String identityNo, Integer flowType) {
+    public void merchantOrderUserProcess(SaasBorrowerRelatedDataVo borrowerRelatedDataVo, OrderPushToSaasVo userAndOrderData, String mobile, String identityNo, CreditConsumeEnum flowConsumeEnum) {
         OrderPushUserBasicInfoVo basicInfo = userAndOrderData.getBasicInfo();
         if (basicInfo == null) {
             OpenApiOrderPushErrorCodeEnum errorCodeEnum = OpenApiOrderPushErrorCodeEnum.USER_BASIC_INFO_MISS;
@@ -81,10 +86,9 @@ public class OpenApiMerchantApplication {
         }
         String orderNumb = openApiUserInfoApplication.userRealNameAndOrderCreate(borrowerRelatedDataVo, basicInfo, orderInfo);
         logSuccessByMobile(mobile, OpenApiOrderPushFromTypeEnum.YCJT_APP);
-        
-        /////////////////////////////////////////////////////////////////////////
-        // TODO: 2018/4/13 计费点
-        /////////////////////////////////////////////////////////////////////////
+    
+        String merchantCode = borrowerRelatedDataVo.getMerchantCode();
+        saasCreditHistoryService.addExpenditureCreditHistory(merchantCode, "system", flowConsumeEnum);
         
         OrderPushUserPersonalInfoVo personalInfo = userAndOrderData.getPersonalInfo();
         OrderPushUserWorkInfoVo workInfo = userAndOrderData.getWorkInfo();
@@ -95,7 +99,6 @@ public class OpenApiMerchantApplication {
         OrderPushUserBmpInfoVo bmpInfo = userAndOrderData.getBmpInfo();
         OrderPushUserTongdunInfoVo tongdunInfo = userAndOrderData.getTongdunInfo();
         
-        String merchantCode = borrowerRelatedDataVo.getMerchantCode();
         String borrowerCode = borrowerRelatedDataVo.getBorrowerCode();
         
         openApiUserInfoApplication.addUserPersonalInfo(personalInfo, basicInfo, borrowerCode, orderNumb);
@@ -106,6 +109,8 @@ public class OpenApiMerchantApplication {
         openApiCreditInfoApplication.addCreditDunningInfo(dunningInfo, borrowerCode, merchantCode, carrierId);
         openApiCreditInfoApplication.addCreditBmpInfo(bmpInfo, borrowerCode, merchantCode);
         openApiCreditInfoApplication.addCreditTongdunInfo(tongdunInfo, borrowerCode, merchantCode);
+    
+        saasCreditHistoryService.addExpenditureCreditHistory(merchantCode, "system", CreditConsumeEnum.FLOW_REPORT);
     }
     
     public Boolean canMatchMerchant(String identityNo, String merchantCode) {
