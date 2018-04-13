@@ -137,6 +137,7 @@ public class ContractController {
             throw new ApplicationException(RestCodeEnum.TOKEN_NOT_AVAILABLE);
         }
         UserLicenseContractInfoResponse response = new UserLicenseContractInfoResponse();
+        response.setInscribeDate(DateUtil.getDate(new Date(), ContractConsts.CONTRACT_INSCRIBE_DATE_PATTERN));
         if (saasBorrowerService.isSaasBorrower(userCode)) {
             SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(userCode);
             if (saasBorrowerRealInfoVo != null) {
@@ -170,7 +171,6 @@ public class ContractController {
                 response.setUserStampUrl(ContractConsts.SEAL_BASE64_DATA_PREFIX + ossService.getFileContent(merchantContractInfoVo.getContractUrl()));
             }
         }
-        response.setInscribeDate(DateUtil.getDate(new Date(), ContractConsts.CONTRACT_INSCRIBE_DATE_PATTERN));
         return new DataApiResponse(response);
     }
 
