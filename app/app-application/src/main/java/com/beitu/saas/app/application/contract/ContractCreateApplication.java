@@ -166,11 +166,11 @@ public class ContractCreateApplication {
         } else {
             createdDt = saasOrder.getCreatedDt();
         }
-        data.put("createdDt", DateUtil.getDate(createdDt));
+        data.put("createdDt", DateUtil.getDate(createdDt, ContractConsts.CONTRACT_INSCRIBE_DATE_PATTERN));
         data.put("deadline", (DateUtil.countDay(saasOrder.getRepaymentDt(), createdDt) + 1) + "");
         data.put("realCapital", saasOrder.getRealCapital().toString());
         data.put("realCapitalCN", NumberToCNUtil.number2CNMontrayUnit(saasOrder.getRealCapital()));
-        data.put("repaymentDt", DateUtil.getDate(saasOrder.getRepaymentDt()));
+        data.put("repaymentDt", DateUtil.getDate(saasOrder.getRepaymentDt(), ContractConsts.CONTRACT_INSCRIBE_DATE_PATTERN));
         data.put("totalInterestRatio", orderCalculateApplication.getInterestRatio(saasOrder.getTotalInterestRatio()));
         data.put("inscribeDate", DateUtil.getDate(new Date(), ContractConsts.CONTRACT_INSCRIBE_DATE_PATTERN));
         generateContract(ContractConsts.EXTEND_PDF_PATH, createFilePath, data);

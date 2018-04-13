@@ -7,6 +7,7 @@ package com.beitu.saas.app.enums;
  */
 public enum SaasSmsTypeEnum {
 
+    SAAS_0001("SAAS_0001", "您本次登入的短信验证码为{000000}，请及时进行登入【签名】", "登录验证码", 1L),
     SAAS_0002("SAAS_0002", "#company#邀请您立即申请借款。点击申请 #channel_url#", "后台新建直接发送短信", 2L),
     SAAS_0003("SAAS_0003", "恭喜您，您通过#company#审核最高可借#10000# 点击申请 #channel_url#", "导入用户批量发送短信", 2L),
     SAAS_0004("SAAS_0004", "您的借款申请已提交，我们会尽快审核您的申请 ", "借款申请已提交", 1L),
@@ -25,8 +26,8 @@ public enum SaasSmsTypeEnum {
     SAAS_0017("SAAS_0017", "【签名】您在#company#有账单需要处理，请致电#company_phone# 了解详情", "逾期后每日12点提醒", 1L),
     SAAS_0018("SAAS_0018", "【签名】您账号为#account_phone#的账号在ip为#ip# #city_name# 登入，请及时确认是否本人操作", "账号异地登录", 1L),
     SAAS_0019("SAAS_0019", "【签名】您账号为#account_phone#的账号在另外一处登入，请及时确认是否本人操作", "账号被踢", 1L),
-    SAAS_0020("SAAS_0020", "【签名】您#company#的账户点券剩余xx，为了不影响正常使用请及时充值", "账户点券剩余提醒", 1L),
-    SAAS_0021("SAAS_0021", "【【签名】您#company#的账户短信剩余xx条，为了不影响正常使用请及时充值", "账户短信条数剩余提醒", 1L);
+    SAAS_0020("SAAS_0020", "【签名】您#company#的账户点券剩余#num#，为了不影响正常使用请及时充值", "账户点券剩余提醒", 1L),
+    SAAS_0021("SAAS_0021", "【【签名】您#company#的账户短信剩余#num#条，为了不影响正常使用请及时充值", "账户短信条数剩余提醒", 1L);
 
     private String bizCode;
 

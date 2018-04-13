@@ -279,9 +279,9 @@ public class ContractApplication {
         SaasOrder saasOrder = saasOrderService.selectById(orderId);
         if (saasOrder == null || StringUtils.isEmpty(saasOrder.getTermUrl())) {
             String url = getExtendContractUrl(orderId);
-            String loanContractUrl = configUtil.getPdfPath() + MD5.md5(OrderNoUtil.makeOrderNum()) + ".pdf";
-            contractCreateApplication.createExtendPdf(orderId, loanContractUrl);
-            File file = new File(loanContractUrl);
+            String extendContractUrl = configUtil.getPdfPath() + MD5.md5(orderId + OrderNoUtil.makeOrderNum()) + ".pdf";
+            contractCreateApplication.createExtendPdf(orderId, extendContractUrl);
+            File file = new File(extendContractUrl);
             try {
                 InputStream inputStream = new FileInputStream(file);
                 url = ossService.uploadFile(inputStream, inputStream.available(), url);
@@ -303,9 +303,9 @@ public class ContractApplication {
         SaasOrder saasOrder = saasOrderService.selectById(orderId);
         if (saasOrder == null || StringUtils.isEmpty(saasOrder.getTermUrl())) {
             String url = getExtendContractUrl(orderId);
-            String loanContractUrl = configUtil.getPdfPath() + MD5.md5(OrderNoUtil.makeOrderNum()) + ".pdf";
-            contractCreateApplication.createExtendPdf(orderId, loanContractUrl);
-            File file = new File(loanContractUrl);
+            String extendContractUrl = configUtil.getPdfPath() + MD5.md5(orderId + OrderNoUtil.makeOrderNum()) + ".pdf";
+            contractCreateApplication.createExtendPdf(orderId, extendContractUrl);
+            File file = new File(extendContractUrl);
             try {
                 InputStream inputStream = new FileInputStream(file);
                 url = ossService.uploadFile(inputStream, inputStream.available(), url);
@@ -325,7 +325,7 @@ public class ContractApplication {
         if (configUtil.isServerTest()) {
             filePath.append("test/");
         }
-        filePath.append(userCode).append("/").append(MD5.md5(OrderNoUtil.makeOrderNum())).append(".jpg");
+        filePath.append(userCode).append("/").append(MD5.md5(OrderNoUtil.makeOrderNum()));
         return filePath.toString();
     }
 

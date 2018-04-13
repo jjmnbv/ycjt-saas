@@ -19,4 +19,6 @@ public class ContractConsts {
 
     public static final String TEST_PDF_PATH = "test.pdf";
 
+    public static final String SEAL_BASE64_DATA_PREFIX = "data:image/png;base64,";
+
 }

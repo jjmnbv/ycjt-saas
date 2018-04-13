@@ -17,11 +17,10 @@ import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
 import com.beitu.saas.borrower.client.SaasBorrowerService;
 import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
 import com.beitu.saas.borrower.domain.SaasBorrowerVo;
-import com.beitu.saas.borrower.enums.BorrowerErrorCodeEnum;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.consts.ChannelConsts;
-import com.beitu.saas.channel.domain.SaasChannelVo;
 import com.beitu.saas.channel.entity.SaasChannelEntity;
+import com.beitu.saas.channel.enums.ChannelTypeEnum;
 import com.beitu.saas.collection.client.SaasCollectionOrderService;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.utils.DateUtil;
@@ -428,8 +427,7 @@ public class OrderApplication {
             page.setTotalCount(0);
             return null;
         }
-        querySaasOrderVo.setOrderStatusList(Arrays.asList(
-                OrderStatusEnum.SUBMIT_LOAN_LENDER.getCode()));
+        querySaasOrderVo.setOrderStatusList(Arrays.asList(OrderStatusEnum.SUBMIT_LOAN_LENDER.getCode()));
         List<SaasOrderVo> saasOrderVoList = saasOrderService.listByQuerySaasOrderVoAndPage(querySaasOrderVo, page);
         if (CollectionUtils.isEmpty(saasOrderVoList)) {
             return null;
@@ -547,7 +545,9 @@ public class OrderApplication {
         orderListVo.setRemark(saasOrderVo.getRemark());
         orderListVo.setBorrowingDuration(DateUtil.countDay(saasOrderVo.getRepaymentDt(), new Date()) + "天");
         BorrowerInfoVo borrowerInfoVo = borrowerApplication.getBorrowerInfoVoByBorrowerCode(saasOrderVo.getMerchantCode(), saasOrderVo.getBorrowerCode());
-        BeanUtils.copyProperties(borrowerInfoVo, orderListVo);
+        if (borrowerInfoVo != null) {
+            BeanUtils.copyProperties(borrowerInfoVo, orderListVo);
+        }
         SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(saasOrderVo.getChannelCode());
         if (saasChannelEntity != null) {
             orderListVo.setChannelName(saasChannelEntity.getChannelName());
@@ -611,6 +611,10 @@ public class OrderApplication {
         SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(orderNumb, merchantCode);
         if (StringUtils.isNotEmpty(saasOrderVo.getPreliminaryReviewerCode()) && !operatorCode.equals(saasOrderVo.getPreliminaryReviewerCode())) {
             throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
+        }
+        SaasChannelEntity saasChannelEntity = saasChannelService.getDefaultSaasChannelByMerchantCode(merchantCode, ChannelTypeEnum.RECOMMEND_DEFINED.getType());
+        if (saasChannelEntity != null && saasChannelEntity.getChannelCode().equals(saasOrderVo.getChannelCode())) {
+            throw new ApplicationException("推荐流量无法审核，需要重新进件");
         }
         updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.SUBMIT_FINAL_REVIEW, null);
         SaasOrder updateSaasOrder = new SaasOrder();
@@ -688,7 +692,7 @@ public class OrderApplication {
         SaasOrder updateSaasOrder = new SaasOrder();
         updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
         updateSaasOrder.setLoanLenderCode(operatorCode);
-        ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, operatorCode, saasOrderVo.getSaasOrderId(), ContractTypeEnum.LENDER_DO_LOAN_CONTRACT_SIGN));
+        ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, merchantCode, saasOrderVo.getSaasOrderId(), ContractTypeEnum.LENDER_DO_LOAN_CONTRACT_SIGN));
         if (StringUtils.isNotEmpty(saasOrderVo.getTermUrl())) {
             updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.FOR_REIMBURSEMENT, lendRemark);
             updateSaasOrder.setCreatedDt(new Date());
@@ -825,7 +829,7 @@ public class OrderApplication {
         saasOrderStatusHistory.setOperatorCode(operatorCode);
         saasOrderStatusHistoryService.create(saasOrderStatusHistory);
 
-        ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, operatorCode, extendSaasOrder.getId(), ContractTypeEnum.LENDER_DO_EXTEND_CONTRACT_SIGN));
+        ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, merchantCode, extendSaasOrder.getId(), ContractTypeEnum.LENDER_DO_EXTEND_CONTRACT_SIGN));
     }
 
     @Transactional(rollbackFor = RuntimeException.class)

@@ -67,7 +67,7 @@ public class SendApplication {
      * @param code               验证码
      * @param verifyCodeTypeEnum 验证码内容
      */
-    public void sendVerifyCode(String mobile, String code, String sign, VerifyCodeTypeEnum verifyCodeTypeEnum) {
+    public void sendVerifyCode(String mobile, String code, String sign, String merchantCode, VerifyCodeTypeEnum verifyCodeTypeEnum) {
         SingleSmsSendRequestRO ro = new SingleSmsSendRequestRO();
         ro.setPhone(mobile);
         ro.setBizCode(verifyCodeTypeEnum.getType());
@@ -77,41 +77,57 @@ public class SendApplication {
         }});
         ro.setType(1);
         Result<Boolean> result = smsMsgService.send(ro);
+        if (StringUtils.isNotEmpty(merchantCode)) {
+            saasSmsHistoryService.addExpenditureSmsHistory(merchantCode, SaasSmsTypeEnum.SAAS_0001.getPrice(), mobile, SaasSmsTypeEnum.SAAS_0001.getComment());
+        }
         if (!result.isSuccess()) {
             throw new ApplicationException(MessageSendErrorCodeEnum.SEND_FAILED);
         }
     }
 
     public void sendNotifyMessageByChannelCode(String merchantCode, String channelCode, Map map, SaasSmsTypeEnum saasSmsTypeEnum) {
-        SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(channelCode);
-        SaasAdmin saasAdmin = saasAdminService.getSaasAdminByAdminCode(saasChannelEntity.getChargePersonCode());
-        sendNotifyMessage(merchantCode, saasAdmin.getMobile(), map, saasSmsTypeEnum);
+        try {
+            SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(channelCode);
+            SaasAdmin saasAdmin = saasAdminService.getSaasAdminByAdminCode(saasChannelEntity.getChargePersonCode());
+            sendNotifyMessage(merchantCode, saasAdmin.getMobile(), map, saasSmsTypeEnum);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void sendNotifyMessageByBorrowerCode(String merchantCode, String sendCode, Map map, SaasSmsTypeEnum saasSmsTypeEnum) {
-        SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCodeAndMerchantCode(sendCode, merchantCode);
-        sendNotifyMessage(merchantCode, saasBorrowerVo.getMobile(), map, saasSmsTypeEnum);
+        try {
+            SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCodeAndMerchantCode(sendCode, merchantCode);
+            sendNotifyMessage(merchantCode, saasBorrowerVo.getMobile(), map, saasSmsTypeEnum);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void sendNotifyMessage(String merchantCode, String mobile, Map map, SaasSmsTypeEnum saasSmsTypeEnum) {
-        if (saasMerchantConfigService.hasSmsConfig(merchantCode, saasSmsTypeEnum.getBizCode())) {
-            return;
+        try {
+            if (!saasMerchantConfigService.hasSmsConfig(merchantCode, saasSmsTypeEnum.getBizCode())) {
+                return;
+            }
+            SaasMerchantVo saasMerchantVo = saasMerchantService.getByMerchantCode(merchantCode);
+            if (map == null) {
+                map = new HashMap(4);
+            }
+            map.put("sign", saasMerchantVo.getCompanyName());
+            SingleSmsSendRequestRO ro = new SingleSmsSendRequestRO();
+            ro.setPhone(mobile);
+            ro.setBizCode(saasSmsTypeEnum.getBizCode());
+            ro.setReplaceParam(map);
+            ro.setType(0);
+            Result<Boolean> result = smsMsgService.send(ro);
+            if (!result.isSuccess()) {
+                throw new ApplicationException(MessageSendErrorCodeEnum.SEND_FAILED);
+            }
+            saasSmsHistoryService.addExpenditureSmsHistory(merchantCode, saasSmsTypeEnum.getPrice(), mobile, saasSmsTypeEnum.getComment());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        SaasMerchantVo saasMerchantVo = saasMerchantService.getByMerchantCode(merchantCode);
-        if (map == null) {
-            map = new HashMap(4);
-        }
-        map.put("sign", saasMerchantVo.getCompanyName());
-        SingleSmsSendRequestRO ro = new SingleSmsSendRequestRO();
-        ro.setPhone(mobile);
-        ro.setBizCode(saasSmsTypeEnum.getBizCode());
-        ro.setReplaceParam(map);
-        ro.setType(0);
-        Result<Boolean> result = smsMsgService.send(ro);
-        if (!result.isSuccess()) {
-            throw new ApplicationException(MessageSendErrorCodeEnum.SEND_FAILED);
-        }
-        saasSmsHistoryService.addExpenditureSmsHistory(merchantCode, saasSmsTypeEnum.getPrice(), mobile, saasSmsTypeEnum.getComment());
     }
 
     public void sendBatchNotifyMessage(String merchantCode, List<String> mobileList, Map map, SaasSmsTypeEnum saasSmsTypeEnum) {

@@ -1,5 +1,11 @@
 package com.beitu.saas.app.application.finance;
 
+import com.beitu.saas.app.application.SendApplication;
+import com.beitu.saas.app.enums.SaasConsumeMsgTypeEnum;
+import com.beitu.saas.app.enums.SaasSmsTypeEnum;
+import com.beitu.saas.auth.domain.SaasMerchantVo;
+import com.beitu.saas.auth.entity.SaasAdmin;
+import com.beitu.saas.auth.service.SaasAdminService;
 import com.beitu.saas.auth.service.SaasMerchantService;
 import com.beitu.saas.finance.client.*;
 import com.beitu.saas.finance.entity.SaasConsumeDayStatEntity;
@@ -12,9 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -39,6 +43,10 @@ public class SaasConsumeDayStatApplication {
     private SaasMerchantCreditInfoService saasMerchantCreditInfoService;
     @Autowired
     private SaasMerchantSmsInfoService saasMerchantSmsInfoService;
+    @Autowired
+    private SendApplication sendApplication;
+    @Autowired
+    private SaasAdminService saasAdminService;
 
     /**
      * 每日点券/短信统计
@@ -78,9 +86,15 @@ public class SaasConsumeDayStatApplication {
             SaasMerchantSmsInfoEntity smsEntity = saasMerchantSmsInfoService.getSmsInfoByMerchantCode(merchantCode);
             if (creditEntity != null) {
                 saasMerchantCreditInfoService.decrease(merchantCode, totalConsumeCreditCount);
+                if (creditEntity.getValue() < totalConsumeCreditCount) {
+                    this.sendNotifyMessage(merchantCode, totalConsumeCreditCount, SaasConsumeMsgTypeEnum.CREDIT.getType());
+                }
             }
             if (smsEntity != null) {
                 saasMerchantSmsInfoService.decrease(merchantCode, totalConsumeSmsCount);
+                if (smsEntity.getValue() < totalConsumeSmsCount) {
+                    this.sendNotifyMessage(merchantCode, totalConsumeSmsCount, SaasConsumeMsgTypeEnum.MESSAGE.getType());
+                }
             }
         });
         LOGGER.info("== 机构号为: {}的日清算完成 ==", merchantCode);
@@ -105,6 +119,25 @@ public class SaasConsumeDayStatApplication {
             }
         }
         return dates;
+    }
+
+    public void sendNotifyMessage(String merchantCode, Long num, Integer type) {
+        try {
+            SaasAdmin admin = saasAdminService.getDefaultAdminByMerchantCode(merchantCode);
+            SaasMerchantVo merchantVo = saasMerchantService.getByMerchantCode(merchantCode);
+            Map<String, Object> map = new HashMap<>(4);
+            map.put("company", merchantVo.getCompanyName());
+            map.put("num", num);
+
+            if (type == SaasConsumeMsgTypeEnum.CREDIT.getType()) {
+                sendApplication.sendNotifyMessage(merchantCode, admin.getMobile(), map, SaasSmsTypeEnum.SAAS_0020);
+            }
+            if (type == SaasConsumeMsgTypeEnum.MESSAGE.getType()) {
+                sendApplication.sendNotifyMessage(merchantCode, admin.getMobile(), map, SaasSmsTypeEnum.SAAS_0021);
+            }
+        } catch (Exception e) {
+            LOGGER.error("结构号: {}  {}余额不足,短信通知失败, 异常原因: {}", merchantCode, SaasConsumeMsgTypeEnum.getMsgByType(type), e);
+        }
     }
 
     private Date getYesterday() {

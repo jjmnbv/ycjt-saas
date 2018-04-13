@@ -1,5 +1,8 @@
 package com.beitu.saas.app.application.credit.async;
 
+import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
+import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
+import com.beitu.saas.borrower.entity.SaasBorrowerRealInfo;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.handle.dianhua.DianhuaHandler;
 import com.beitu.saas.common.handle.dianhua.domain.DunningDataVo;
@@ -14,6 +17,8 @@ import com.beitu.saas.credit.domain.SaasCreditDunningDetailVo;
 import com.beitu.saas.credit.domain.SaasCreditDunningVo;
 import com.beitu.saas.credit.enums.CreditDunningDetailTypeEnum;
 import com.beitu.saas.credit.enums.CreditErrorCodeEnum;
+import com.beitu.saas.finance.client.SaasCreditHistoryService;
+import com.beitu.saas.finance.client.enums.CreditConsumeEnum;
 import com.fqgj.common.utils.JSONUtils;
 import com.fqgj.common.utils.MD5;
 import com.fqgj.exception.common.ApplicationException;
@@ -49,6 +54,12 @@ public class DunningAsyncApplication {
     @Autowired
     private ConfigUtil configUtil;
 
+    @Autowired
+    private SaasCreditHistoryService saasCreditHistoryService;
+
+    @Autowired
+    private SaasBorrowerRealInfoService saasBorrowerRealInfoService;
+
     public void generateDunningReport(String merchantCode, String borrowerCode) {
         SaasCreditCarrierVo saasCreditCarrierVo = saasCreditCarrierService.getByMerchantCodeAndBorrowerCode(merchantCode, borrowerCode);
         if (saasCreditCarrierVo == null) {
@@ -76,6 +87,13 @@ public class DunningAsyncApplication {
         String url = uploadDunningData(borrowerCode, result);
         saasCreditDunningVo.setUrl(url);
         Long recordId = saasCreditDunningService.addSaasCreditDunning(saasCreditDunningVo).getId();
+
+        SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode);
+        String name = borrowerCode;
+        if (saasBorrowerRealInfoVo != null) {
+            name = saasBorrowerRealInfoVo.getName();
+        }
+        saasCreditHistoryService.addExpenditureCreditHistory(merchantCode, name, CreditConsumeEnum.RISK_DIANHUABANG);
 
         if (recordId == null) {
             throw new ApplicationException(CreditErrorCodeEnum.CREDIT_DUNNING_GENERATE_ERROR, "credit_dunning插入失败");
