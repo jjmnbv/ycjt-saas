@@ -192,12 +192,4 @@ public class BorrowerBaseInfoApplication {
         return new BorrowerLivingAreaVo(results);
     }
 
-    public static void main(String[] args) {
-        BigDecimal a = new BigDecimal(9);
-        BigDecimal b = new BigDecimal(60);
-
-        System.out.println(c);
-        System.out.println(c.intValue());
-    }
-
 }
