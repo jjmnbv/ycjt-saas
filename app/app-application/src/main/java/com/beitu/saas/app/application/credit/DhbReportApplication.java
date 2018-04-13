@@ -4,7 +4,6 @@ import com.beitu.saas.app.application.credit.async.CarrierAsyncApplication;
 import com.beitu.saas.app.application.credit.vo.CreditBmpMatchVo;
 import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
 import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
-import com.beitu.saas.borrower.entity.SaasBorrowerRealInfo;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.handle.carrier.CarrierHandler;
 import com.beitu.saas.common.handle.carrier.domain.CarriersPhoneCallVo;
@@ -20,8 +19,6 @@ import com.beitu.saas.credit.domain.*;
 import com.beitu.saas.credit.enums.CreditBmpDetailTagEnum;
 import com.beitu.saas.credit.enums.CreditCarrierRecordTypeEnum;
 import com.beitu.saas.credit.enums.CreditErrorCodeEnum;
-import com.beitu.saas.finance.client.SaasCreditHistoryService;
-import com.beitu.saas.finance.client.enums.CreditConsumeEnum;
 import com.fqgj.common.utils.CollectionUtils;
 import com.fqgj.common.utils.JSONUtils;
 import com.fqgj.common.utils.MD5;
@@ -56,9 +53,6 @@ public class DhbReportApplication {
 
     @Autowired
     private SaasCreditCarrierRecordService saasCreditCarrierRecordService;
-
-    @Autowired
-    private SaasCreditHistoryService saasCreditHistoryService;
 
     @Autowired
     private CarrierAsyncApplication carrierAsyncApplication;
@@ -113,7 +107,6 @@ public class DhbReportApplication {
         }
         saasCreditBmpDetailService.batchAddSaasCreditBmpDetailVo(list);
         saasCreditBmpService.updateSuccess(recordId);
-        saasCreditHistoryService.addExpenditureCreditHistory(merchantCode, name, CreditConsumeEnum.RISK_CARRIER);
 
         List<SaasCreditBmpDetailVo> saasCreditBmpDetailVoList = saasCreditBmpDetailService.listByRecordId(recordId);
         Map<String, String> merchantAddressMap = new HashMap(saasCreditBmpDetailVoList.size());

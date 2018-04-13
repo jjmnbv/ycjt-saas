@@ -143,8 +143,6 @@ public class CarrierApplication {
                     throw new ApplicationException(RestCodeEnum.BORROWER_NOT_EXIST_ERROR);
                 }
                 carrierH5Upload(data, typeEnum, saasBorrowerVo.getMerchantCode(), saasBorrowerVo.getBorrowerCode());
-                SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(saasBorrowerVo.getBorrowerCode());
-                saasCreditHistoryService.addExpenditureCreditHistory(saasBorrowerVo.getMerchantCode(), saasBorrowerRealInfoVo.getName(), CreditConsumeEnum.RISK_CARRIER);
             }
         } else if ("DONE_FAIL".equals(status)) {
             //失败处理
@@ -168,6 +166,12 @@ public class CarrierApplication {
         addSaasCreditCarrierVo.setUrl(carrierUrl);
         addSaasCreditCarrierVo.setSuccess(Boolean.FALSE);
         saasCreditCarrierService.addSaasCreditCarrier(addSaasCreditCarrierVo);
+        SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode);
+        String name = borrowerCode;
+        if (saasBorrowerRealInfoVo != null) {
+            name = saasBorrowerRealInfoVo.getName();
+        }
+        saasCreditHistoryService.addExpenditureCreditHistory(saasBorrowerRealInfoVo.getMerchantCode(), name, CreditConsumeEnum.RISK_CARRIER);
         carrierReportApplication.generateCarrierReport(merchantCode, borrowerCode);
         dunningReportApplication.generateDunningReport(merchantCode, borrowerCode);
     }

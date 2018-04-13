@@ -14,6 +14,8 @@ import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.utils.OrderNoUtil;
 import com.beitu.saas.credit.client.SaasCreditCarrierService;
 import com.beitu.saas.credit.client.SaasCreditTongdunService;
+import com.beitu.saas.finance.client.SaasCreditHistoryService;
+import com.beitu.saas.finance.client.enums.CreditConsumeEnum;
 import com.beitu.saas.intergration.user.UserIntegrationService;
 import com.beitu.saas.intergration.user.dto.UserNameIdNoValidationDto;
 import com.beitu.saas.intergration.user.enums.UserNameIdNoValidationCodeEnum;
@@ -91,6 +93,9 @@ public class CreditApplication {
 
     @Autowired
     private TongdunReportApplication tongdunReportApplication;
+
+    @Autowired
+    private SaasCreditHistoryService saasCreditHistoryService;
 
     public List<CreditModuleListVo> listCreditModule(String merchantCode, String channelCode, String borrowerCode) {
         List<SaasChannelRiskSettingsVo> saasChannelRiskSettingsVoList = saasChannelApplication.getSaasChannelRiskSettingsByChannelCode(channelCode);
@@ -177,6 +182,7 @@ public class CreditApplication {
         if (saasBorrowerRealInfoService.getBorrowerRealInfoByIdentityCodeAndMerchantCode(identityCode, merchantCode) != null) {
             throw new ApplicationException(BorrowerErrorCodeEnum.IDENTITY_CODE_EXIST);
         }
+        saasCreditHistoryService.addExpenditureCreditHistory(merchantCode, name, CreditConsumeEnum.RISK_REALNAME);
         if (!realNameAuth(name, identityCode)) {
             return Boolean.FALSE;
         }
