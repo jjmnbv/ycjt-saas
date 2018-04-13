@@ -52,7 +52,7 @@ CREATE TABLE `saas_order` (
   KEY `idx_merchant_code` (`merchant_code`),
   KEY `idx_channel_code` (`channel_code`),
   KEY `idy_borrower_code` (`borrower_code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='SAAS订单表';
+) ENGINE=InnoDB DEFAULT AUTO_INCREMENT=100000 CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='SAAS订单表';
 
 DROP TABLE IF EXISTS `saas_order_bill_detail`;
 CREATE TABLE `saas_order_bill_detail` (
@@ -129,7 +129,7 @@ CREATE TABLE `saas_borrower` (
   KEY `idx_borrower_code` (`borrower_code`),
   KEY `idy_merchant_code` (`merchant_code`),
   KEY `idy_channel_code` (`channel_code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='SAAS借款人表';
+) ENGINE=InnoDB DEFAULT AUTO_INCREMENT=100000 CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='SAAS借款人表';
 
 DROP TABLE IF EXISTS `saas_borrower_login_log`;
 CREATE TABLE `saas_borrower_login_log` (

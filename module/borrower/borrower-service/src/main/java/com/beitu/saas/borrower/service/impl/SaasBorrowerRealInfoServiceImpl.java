@@ -77,7 +77,7 @@ public class SaasBorrowerRealInfoServiceImpl extends AbstractBaseService impleme
         saasBorrowerRealInfo.setBorrowerCode(borrowerCode);
         saasBorrowerRealInfo.setMerchantCode(merchantCode);
         saasBorrowerRealInfo.setName(name);
-        saasBorrowerRealInfo.setIdentityCode(identityCode);
+        saasBorrowerRealInfo.setIdentityCode(identityCode.toUpperCase());
         IdcardInfoExtractor idcardInfoExtractor = new IdcardInfoExtractor(identityCode);
         saasBorrowerRealInfo.setGender(IdcardInfoExtractor.MALE.equals(idcardInfoExtractor.getGender()) ? 1 : 0);
         saasBorrowerRealInfo.setNativePlace(idcardInfoExtractor.getProvince());
