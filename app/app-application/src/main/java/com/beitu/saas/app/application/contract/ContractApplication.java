@@ -325,7 +325,7 @@ public class ContractApplication {
         if (configUtil.isServerTest()) {
             filePath.append("test/");
         }
-        filePath.append(userCode).append("/").append(MD5.md5(OrderNoUtil.makeOrderNum())).append(".jpg");
+        filePath.append(userCode).append("/").append(MD5.md5(OrderNoUtil.makeOrderNum()));
         return filePath.toString();
     }
 

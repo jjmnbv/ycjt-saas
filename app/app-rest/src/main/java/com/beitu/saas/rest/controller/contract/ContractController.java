@@ -4,6 +4,7 @@ import com.beitu.saas.app.annotations.SignIgnore;
 import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.application.auth.MerchantApplication;
 import com.beitu.saas.app.application.contract.ContractApplication;
+import com.beitu.saas.app.application.contract.consts.ContractConsts;
 import com.beitu.saas.app.application.order.OrderCalculateApplication;
 import com.beitu.saas.auth.domain.MerchantContractInfoVo;
 import com.beitu.saas.auth.entity.SaasAdmin;
@@ -16,6 +17,7 @@ import com.beitu.saas.borrower.domain.SaasBorrowerVo;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.enums.RestCodeEnum;
+import com.beitu.saas.common.handle.oss.OSSService;
 import com.beitu.saas.common.utils.DateUtil;
 import com.beitu.saas.order.client.SaasOrderService;
 import com.beitu.saas.order.domain.SaasOrderVo;
@@ -80,9 +82,8 @@ public class ContractController {
     private OrderCalculateApplication orderCalculateApplication;
 
     @Autowired
-    private ConfigUtil configUtil;
+    private OSSService ossService;
 
-    //@SignIgnore
     @RequestMapping(value = "/order/extend", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "展期协议详情", response = OrderExtendContractInfoResponse.class)
@@ -127,7 +128,7 @@ public class ContractController {
             String sealUrl = contractApplication.getUserSealUrl(userCode);
             if (StringUtils.isNotEmpty(sealUrl)) {
                 response.setBorrowStamp(Boolean.TRUE);
-                response.setBorrowStampUrl(configUtil.getAddressURLPrefix() + sealUrl);
+                response.setBorrowStampUrl(ContractConsts.SEAL_BASE64_DATA_PREFIX + ossService.getFileContent(sealUrl));
             }
         }
         if (StringUtils.isNotEmpty(merchantCode)) {
@@ -142,11 +143,11 @@ public class ContractController {
             String sealUrl = contractApplication.getUserSealUrl(userCode);
             if (StringUtils.isNotEmpty(sealUrl)) {
                 response.setLenderStamp(Boolean.TRUE);
-                response.setLenderStampUrl(configUtil.getAddressURLPrefix() + sealUrl);
+                response.setLenderStampUrl(ContractConsts.SEAL_BASE64_DATA_PREFIX + ossService.getFileContent(sealUrl));
             }
             if (StringUtils.isNotEmpty(merchantContractInfoVo.getContractUrl())) {
                 response.setLenderStamp(Boolean.TRUE);
-                response.setLenderStampUrl(merchantContractInfoVo.getContractUrl());
+                response.setLenderStampUrl(ContractConsts.SEAL_BASE64_DATA_PREFIX + ossService.getFileContent(merchantContractInfoVo.getContractUrl()));
             }
         }
         return new DataApiResponse(response);
@@ -172,7 +173,7 @@ public class ContractController {
             String sealUrl = contractApplication.getUserSealUrl(userCode);
             if (StringUtils.isNotEmpty(sealUrl)) {
                 response.setUserStamp(Boolean.TRUE);
-                response.setUserStampUrl(configUtil.getAddressURLPrefix() + sealUrl);
+                response.setUserStampUrl(ContractConsts.SEAL_BASE64_DATA_PREFIX + ossService.getFileContent(sealUrl));
             }
             return new DataApiResponse(response);
         }
@@ -189,11 +190,11 @@ public class ContractController {
             String sealUrl = contractApplication.getUserSealUrl(userCode);
             if (StringUtils.isNotEmpty(sealUrl)) {
                 response.setUserStamp(Boolean.TRUE);
-                response.setUserStampUrl(configUtil.getAddressURLPrefix() + sealUrl);
+                response.setUserStampUrl(ContractConsts.SEAL_BASE64_DATA_PREFIX + ossService.getFileContent(sealUrl));
             }
             if (StringUtils.isNotEmpty(merchantContractInfoVo.getContractUrl())) {
                 response.setUserStamp(Boolean.TRUE);
-                response.setUserStampUrl(configUtil.getAddressURLPrefix() + merchantContractInfoVo.getContractUrl());
+                response.setUserStampUrl(ContractConsts.SEAL_BASE64_DATA_PREFIX + ossService.getFileContent(merchantContractInfoVo.getContractUrl()));
             }
         }
         return new DataApiResponse(response);
@@ -246,7 +247,7 @@ public class ContractController {
             String sealUrl = contractApplication.getUserSealUrl(userCode);
             if (StringUtils.isNotEmpty(sealUrl)) {
                 response.setBorrowStamp(Boolean.TRUE);
-                response.setBorrowStampUrl(configUtil.getAddressURLPrefix() + sealUrl);
+                response.setBorrowStampUrl(ContractConsts.SEAL_BASE64_DATA_PREFIX + ossService.getFileContent(sealUrl));
             }
         }
         if (StringUtils.isNotEmpty(merchantCode)) {
@@ -261,11 +262,11 @@ public class ContractController {
             String sealUrl = contractApplication.getUserSealUrl(userCode);
             if (StringUtils.isNotEmpty(sealUrl)) {
                 response.setLenderStamp(Boolean.TRUE);
-                response.setLenderStampUrl(configUtil.getAddressURLPrefix() + sealUrl);
+                response.setLenderStampUrl(ContractConsts.SEAL_BASE64_DATA_PREFIX + ossService.getFileContent(sealUrl));
             }
             if (StringUtils.isNotEmpty(merchantContractInfoVo.getContractUrl())) {
                 response.setLenderStamp(Boolean.TRUE);
-                response.setLenderStampUrl(configUtil.getAddressURLPrefix() + merchantContractInfoVo.getContractUrl());
+                response.setLenderStampUrl(ContractConsts.SEAL_BASE64_DATA_PREFIX + ossService.getFileContent(merchantContractInfoVo.getContractUrl()));
             }
         }
         response.setInscribeDate(DateUtil.getDate(new Date()));
