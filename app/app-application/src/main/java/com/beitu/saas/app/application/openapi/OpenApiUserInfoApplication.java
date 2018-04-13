@@ -136,6 +136,7 @@ public class OpenApiUserInfoApplication {
         saasOrder.setChannelCode(channelCode);
         saasOrder.setBorrowerCode(borrowerCode);
         saasOrder.setOrderStatus(OrderStatusEnum.SUBMIT_PRELIMINARY_REVIEW.getCode());
+        saasOrder.setCreatedDt(null);
         saasOrderService.create(saasOrder);
         
         return orderNumb;
