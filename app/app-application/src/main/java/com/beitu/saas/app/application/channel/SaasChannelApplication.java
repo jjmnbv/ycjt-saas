@@ -168,6 +168,7 @@ public class SaasChannelApplication {
                     .setChargePersonName(this.getAdminNameByAdminCode(x.getChargePersonCode()))
                     .setLinkUrl(configUtil.getH5AddressURL() + x.getLinkUrl())
                     .setLongLinkUrl(configUtil.getH5AddressURL() + x.getLinkUrl())
+                    .setShortLinkUrl(ShortUrlUtil.generateShortUrl(configUtil.getH5AddressURL() + x.getLinkUrl()))
                     .setCreatorName(this.getAdminNameByAdminCode(x.getCreatorCode()))
                     .setCreatorCode(x.getCreatorCode())
                     .setGmtCreate(x.getGmtCreate())
