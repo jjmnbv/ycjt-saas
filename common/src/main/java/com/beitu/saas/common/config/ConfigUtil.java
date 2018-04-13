@@ -546,6 +546,12 @@ public class ConfigUtil {
     public int getShareNum() {
         return config.getIntProperty("recommend.share.num", 3);
     }
-
+    
+    /**
+     * Open API相关
+     */
+    public String getOrderPushIpWhiteList() {
+        return config.getProperty("open.order.push.ip.white.list", "");
+    }
 
 }
