@@ -14,6 +14,7 @@ import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
 import com.beitu.saas.borrower.client.SaasBorrowerService;
 import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
 import com.beitu.saas.borrower.domain.SaasBorrowerVo;
+import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.enums.RestCodeEnum;
 import com.beitu.saas.common.handle.oss.OSSService;
@@ -21,6 +22,7 @@ import com.beitu.saas.common.utils.DateUtil;
 import com.beitu.saas.order.client.SaasOrderService;
 import com.beitu.saas.order.domain.SaasOrderVo;
 import com.beitu.saas.order.enums.OrderErrorCodeEnum;
+import com.beitu.saas.order.enums.OrderStatusEnum;
 import com.beitu.saas.rest.controller.contract.request.OrderExtendContractInfoRequest;
 import com.beitu.saas.rest.controller.contract.request.OrderLoanContractInfoRequest;
 import com.beitu.saas.rest.controller.contract.request.UserLicenseContractInfoRequest;
@@ -85,6 +87,9 @@ public class ContractController {
     @Autowired
     private OSSService ossService;
 
+    @Autowired
+    private ConfigUtil configUtil;
+
     @RequestMapping(value = "/order/extend", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "展期协议详情", response = OrderExtendContractInfoResponse.class)
@@ -108,10 +113,18 @@ public class ContractController {
         }
         List<SaasOrderVo> saasOrderVoList = saasOrderService.listEffectiveOrderByOrderNumb(req.getOrderNumb());
         if (CollectionUtils.isNotEmpty(saasOrderVoList)) {
-            SaasOrderVo saasOrderVo = saasOrderVoList.get(saasOrderVoList.size() - 1);
+            SaasOrderVo saasOrderVo = null;
+            for (int i = saasOrderVoList.size() - 1; i > -1; i--) {
+                saasOrderVo = saasOrderVoList.get(i);
+                if (OrderStatusEnum.FOR_REIMBURSEMENT.getCode().equals(saasOrderVo.getOrderStatus())) {
+                    break;
+                }
+            }
+            if (saasOrderVo == null) {
+                return null;
+            }
             response.setRealCapital(saasOrderVo.getRealCapital());
-            response.setFirstOrderNo(saasOrderVo.getSaasOrderId() + "");
-            response.setInscribeDate(DateUtil.getDate(new Date()));
+            response.setFirstOrderNo(getContractNumbByOrderId(saasOrderVo.getSaasOrderId()));
             Date createdDt = new Date();
             if (saasOrderVo.getRepaymentDt().compareTo(createdDt) > 0) {
                 createdDt = saasOrderVo.getRepaymentDt();
@@ -255,6 +268,10 @@ public class ContractController {
         }
         sealDataVo.setInscribeDate(DateUtil.getDate(new Date(), ContractConsts.CONTRACT_INSCRIBE_DATE_PATTERN));
         return sealDataVo;
+    }
+
+    private String getContractNumbByOrderId(Long orderId) {
+        return String.format("%0" + configUtil.getContractNumbLength() + "d", orderId);
     }
 
 }
