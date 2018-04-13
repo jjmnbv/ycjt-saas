@@ -154,8 +154,10 @@ public class OrderBillDetailApplication {
             saasOrderBillDetailListVo.setOverdueDuration(0);
         }
         BorrowerInfoVo borrowerInfoVo = borrowerApplication.getBorrowerInfoVoByBorrowerCode(saasOrderBillDetailVo.getMerchantCode(), saasOrderBillDetailVo.getBorrowerCode());
-        saasOrderBillDetailListVo.setBorrowerName(borrowerInfoVo.getBorrowerName());
-        saasOrderBillDetailListVo.setBorrowerMobile(borrowerInfoVo.getBorrowerMobile());
+        if (borrowerInfoVo != null) {
+            saasOrderBillDetailListVo.setBorrowerName(borrowerInfoVo.getBorrowerName());
+            saasOrderBillDetailListVo.setBorrowerMobile(borrowerInfoVo.getBorrowerMobile());
+        }
 
         saasOrderBillDetailListVo.setLoanLendRemark(saasOrderLendRemarkService.getLendWayByOrderNumb(saasOrderBillDetailVo.getOrderNumb()));
         SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(saasOrderBillDetailVo.getChannelCode());
@@ -183,7 +185,9 @@ public class OrderBillDetailApplication {
         saasOrderBillDetailListVo.setOverdueDuration(DateUtil.countDay(new Date(), saasOrderVo.getRepaymentDt()));
 
         BorrowerInfoVo borrowerInfoVo = borrowerApplication.getBorrowerInfoVoByBorrowerCode(saasOrderVo.getMerchantCode(), saasOrderVo.getBorrowerCode());
-        BeanUtils.copyProperties(borrowerInfoVo, saasOrderBillDetailListVo);
+        if (borrowerInfoVo != null) {
+            BeanUtils.copyProperties(borrowerInfoVo, saasOrderBillDetailListVo);
+        }
 
         saasOrderBillDetailListVo.setLoanLendRemark(saasOrderLendRemarkService.getLendWayByOrderNumb(saasOrderVo.getOrderNumb()));
         SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(saasOrderVo.getChannelCode());

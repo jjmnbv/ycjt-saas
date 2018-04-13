@@ -27,6 +27,7 @@ import com.beitu.saas.rest.controller.contract.response.OrderExtendContractInfoR
 import com.beitu.saas.rest.controller.contract.response.OrderLoanContractInfoResponse;
 import com.beitu.saas.rest.controller.contract.response.UserLicenseContractInfoResponse;
 import com.fqgj.base.services.redis.RedisClient;
+import com.fqgj.common.utils.CollectionUtils;
 import com.fqgj.common.utils.NumberToCNUtil;
 import com.fqgj.exception.common.ApplicationException;
 import io.swagger.annotations.Api;
@@ -42,6 +43,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author linanjun
@@ -92,15 +94,17 @@ public class ContractController {
         OrderExtendContractInfoResponse response = new OrderExtendContractInfoResponse();
         String borrowerCode = null;
         String merchantCode = null;
-        SaasOrderVo saasOrderVo = saasOrderService.getConfirmExtendOrderByOrderNumb(req.getOrderNumb());
-        if (saasOrderVo != null) {
-            response.setOrderNo(saasOrderVo.getSaasOrderId() + "");
+        List<SaasOrderVo> saasOrderVoList = saasOrderService.listEffectiveOrderByOrderNumb(req.getOrderNumb());
+        if (CollectionUtils.isNotEmpty(saasOrderVoList)) {
+            SaasOrderVo saasOrderVo = saasOrderVoList.get(saasOrderVoList.size() - 1);
             response.setRealCapital(saasOrderVo.getRealCapital());
-            response.setCreatedDt(DateUtil.getDate(saasOrderVo.getCreatedDt()));
-            response.setRepaymentDt(DateUtil.getDate(saasOrderVo.getRepaymentDt()));
-            response.setTotalInterestRatio(saasOrderVo.getTotalInterestRatio().multiply(new BigDecimal("100")).setScale(0).toString());
-            response.setFirstOrderNo(saasOrderVo.getRelationOrderId() + "");
+            response.setFirstOrderNo(saasOrderVo.getSaasOrderId() + "");
             response.setInscribeDate(DateUtil.getDate(new Date()));
+            Date createdDt = new Date();
+            if (saasOrderVo.getRepaymentDt().compareTo(createdDt) > 0) {
+                createdDt = saasOrderVo.getRepaymentDt();
+            }
+            response.setCreatedDt(DateUtil.getDate(DateUtil.addDate(createdDt, 1)));
             borrowerCode = saasOrderVo.getBorrowerCode();
             merchantCode = saasOrderVo.getMerchantCode();
         } else {

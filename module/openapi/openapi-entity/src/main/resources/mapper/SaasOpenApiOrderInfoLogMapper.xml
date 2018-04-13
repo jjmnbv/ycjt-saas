@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beitu.saas.openapi.dao.impl.SaasOpenApiOrderInfoLogDaoImpl">
+
+    <select id="selectByMobile" parameterType="HashMap" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM `saas_open_api_order_info_log`
+        WHERE
+        <if test="mobile != null">
+            `mobile` = #{mobile, jdbcType=VARCHAR} AND
+        </if>
+        <if test="from != null">
+            `from` = #{from, jdbcType=BIGINT} AND
+        </if>
+        <if test="success != null">
+            `success` = #{success, jdbcType=BIT} AND
+        </if>
+        <if test="startDate != null">
+            `gmt_create` >= #{startDate, jdbcType=TIMESTAMP} AND
+        </if>
+        `deleted` = 0
+        ORDER BY `id` DESC LIMIT 1
+    </select>
+
+</mapper>
