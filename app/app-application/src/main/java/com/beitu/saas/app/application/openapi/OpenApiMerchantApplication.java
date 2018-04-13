@@ -2,18 +2,26 @@ package com.beitu.saas.app.application.openapi;
 
 import com.beitu.saas.app.application.openapi.vo.*;
 import com.beitu.saas.app.enums.OpenApiOrderPushErrorCodeEnum;
+import com.beitu.saas.app.enums.OpenApiOrderPushFromTypeEnum;
 import com.beitu.saas.borrower.client.*;
 import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.entity.SaasChannelEntity;
 import com.beitu.saas.channel.enums.ChannelTypeEnum;
+import com.beitu.saas.common.consts.TimeConsts;
+import com.beitu.saas.openapi.client.SaasOpenApiOrderInfoLogService;
+import com.beitu.saas.openapi.domain.SaasOpenApiOrderInfoLogVo;
+import com.beitu.saas.openapi.entity.SaasOpenApiOrderInfoLog;
+import com.fqgj.common.utils.TimeUtils;
 import com.fqgj.log.factory.LogFactory;
 import com.fqgj.log.interfaces.Log;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -32,6 +40,9 @@ public class OpenApiMerchantApplication {
     
     @Autowired
     private OpenApiCreditInfoApplication openApiCreditInfoApplication;
+    
+    @Autowired
+    private SaasOpenApiOrderInfoLogService saasOpenApiOrderInfoLogService;
     
     public List<SaasBorrowerRelatedDataVo> merchantChannelRegister(OrderPushToSaasDataVo data, List<String> merchantCodes) {
         List<SaasBorrowerRelatedDataVo> borrowerRelatedDataVos = new ArrayList<>();
@@ -69,9 +80,10 @@ public class OpenApiMerchantApplication {
             LOGGER.warn("************************* 洋葱借条推单处理失败: {} Mobile:{} IdentityNo:{} *************************", errorCodeEnum.getMsg(), mobile, identityNo);
         }
         String orderNumb = openApiUserInfoApplication.userRealNameAndOrderCreate(borrowerRelatedDataVo, basicInfo, orderInfo);
-    
+        logSuccessByMobile(mobile, OpenApiOrderPushFromTypeEnum.YCJT_APP);
+        
         /////////////////////////////////////////////////////////////////////////
-        // TODO: 2018/4/13 推送成功/计费点
+        // TODO: 2018/4/13 计费点
         /////////////////////////////////////////////////////////////////////////
         
         OrderPushUserPersonalInfoVo personalInfo = userAndOrderData.getPersonalInfo();
@@ -102,6 +114,19 @@ public class OpenApiMerchantApplication {
             return Boolean.FALSE;
         }
         return Boolean.TRUE;
+    }
+    
+    private Boolean logSuccessByMobile(String mobile, OpenApiOrderPushFromTypeEnum from) {
+        Date startDate = TimeUtils.appointed(-TimeConsts.ONE_MONTH_DAYS);
+        SaasOpenApiOrderInfoLogVo vo = saasOpenApiOrderInfoLogService.getByMobile(mobile, from.getType(), Boolean.FALSE, startDate);
+        if (vo == null) {
+            return Boolean.FALSE;
+        }
+        SaasOpenApiOrderInfoLog entity = new SaasOpenApiOrderInfoLog();
+        BeanUtils.copyProperties(vo, entity);
+        entity.setId(vo.getSaasOpenApiOrderInfoLogId());
+        entity.setSuccess(Boolean.TRUE);
+        return saasOpenApiOrderInfoLogService.updateById(entity) > 0;
     }
     
 }
