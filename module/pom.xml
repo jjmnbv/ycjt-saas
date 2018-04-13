@@ -23,6 +23,7 @@
         <module>sms</module>
         <module>user</module>
         <module>merchant</module>
+        <module>openapi</module>
     </modules>
 
     <dependencies>

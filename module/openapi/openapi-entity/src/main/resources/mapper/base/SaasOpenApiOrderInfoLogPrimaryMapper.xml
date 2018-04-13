@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beitu.saas.openapi.dao.impl.SaasOpenApiOrderInfoLogDaoImpl">
+    <resultMap id="BaseResultMap" type="com.beitu.saas.openapi.entity.SaasOpenApiOrderInfoLog">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="zm_score" jdbcType="SMALLINT" property="zmScore"/>
+        <result column="identity_no" jdbcType="VARCHAR" property="identityNo"/>
+        <result column="data_url" jdbcType="VARCHAR" property="dataUrl"/>
+        <result column="flow_type" jdbcType="TINYINT" property="flowType"/>
+        <result column="from" jdbcType="BIGINT" property="from"/>
+        <result column="success" jdbcType="BIT" property="success"/>
+        <result column="deleted" jdbcType="BIT" property="deleted"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id,
+    mobile,
+    zm_score,
+    identity_no,
+    data_url,
+    flow_type,
+    `from`,
+    success,
+    deleted,
+    gmt_modified,
+    gmt_create
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Long"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_open_api_order_info_log
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" keyColumn="id" keyProperty="id"
+            parameterType="com.beitu.saas.openapi.entity.SaasOpenApiOrderInfoLog" useGeneratedKeys="true">
+        insert into saas_open_api_order_info_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="mobile !=null">
+                mobile,
+            </if>
+            <if test="zmScore !=null">
+                zm_score,
+            </if>
+            <if test="identityNo !=null">
+                identity_no,
+            </if>
+            <if test="dataUrl !=null">
+                data_url,
+            </if>
+            <if test="flowType !=null">
+                flow_type,
+            </if>
+            <if test="from !=null">
+                `from`,
+            </if>
+            <if test="success !=null">
+                success,
+            </if>
+            <if test="deleted !=null">
+                deleted,
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified,
+            </if>
+            <if test="gmtCreate !=null">
+                gmt_create,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="mobile != null">
+                #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="zmScore != null">
+                #{zmScore,jdbcType=SMALLINT},
+            </if>
+            <if test="identityNo != null">
+                #{identityNo,jdbcType=VARCHAR},
+            </if>
+            <if test="dataUrl != null">
+                #{dataUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="flowType != null">
+                #{flowType,jdbcType=TINYINT},
+            </if>
+            <if test="from != null">
+                #{from,jdbcType=BIGINT},
+            </if>
+            <if test="success != null">
+                #{success,jdbcType=BIT},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.beitu.saas.openapi.entity.SaasOpenApiOrderInfoLog">
+        update saas_open_api_order_info_log
+        <set>
+            <if test="mobile !=null">
+                mobile = #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="zmScore !=null">
+                zm_score = #{zmScore,jdbcType=SMALLINT},
+            </if>
+            <if test="identityNo !=null">
+                identity_no = #{identityNo,jdbcType=VARCHAR},
+            </if>
+            <if test="dataUrl !=null">
+                data_url = #{dataUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="flowType !=null">
+                flow_type = #{flowType,jdbcType=TINYINT},
+            </if>
+            <if test="from !=null">
+                `from` = #{from,jdbcType=BIGINT},
+            </if>
+            <if test="success !=null">
+                success = #{success,jdbcType=BIT},
+            </if>
+            <if test="deleted !=null">
+                deleted = #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteByPrimaryKey">
+        update  saas_open_api_order_info_log
+        set deleted = 1
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <sql id="paginationSql">
+        <if test="page != null">
+            limit #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+        </if>
+    </sql>
+
+    <sql id="paging">
+        <if test="offset != null and limit != null">
+            limit #{offset},#{limit}
+        </if>
+    </sql>
+
+    <select id="selectByParams" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_open_api_order_info_log
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="mobile !=null">
+                and mobile = #{mobile,jdbcType=VARCHAR}
+            </if>
+            <if test="zmScore !=null">
+                and zm_score = #{zmScore,jdbcType=SMALLINT}
+            </if>
+            <if test="identityNo !=null">
+                and identity_no = #{identityNo,jdbcType=VARCHAR}
+            </if>
+            <if test="dataUrl !=null">
+                and data_url = #{dataUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="flowType !=null">
+                and flow_type = #{flowType,jdbcType=TINYINT}
+            </if>
+            <if test="from !=null">
+                and `from` = #{from,jdbcType=BIGINT}
+            </if>
+            <if test="success !=null">
+                and success = #{success,jdbcType=BIT}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+        <include refid="paging"/>
+    </select>
+    <select id="queryTotal" resultType="INTEGER">
+        select count(*) from saas_open_api_order_info_log
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="mobile !=null">
+                and mobile = #{mobile,jdbcType=VARCHAR}
+            </if>
+            <if test="zmScore !=null">
+                and zm_score = #{zmScore,jdbcType=SMALLINT}
+            </if>
+            <if test="identityNo !=null">
+                and identity_no = #{identityNo,jdbcType=VARCHAR}
+            </if>
+            <if test="dataUrl !=null">
+                and data_url = #{dataUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="flowType !=null">
+                and flow_type = #{flowType,jdbcType=TINYINT}
+            </if>
+            <if test="from !=null">
+                and `from` = #{from,jdbcType=BIGINT}
+            </if>
+            <if test="success !=null">
+                and success = #{success,jdbcType=BIT}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </select>
+</mapper>

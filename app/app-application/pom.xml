@@ -158,6 +158,16 @@
             <artifactId>merchant-client</artifactId>
             <version>0.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.beitu.saas</groupId>
+            <artifactId>openapi-client</artifactId>
+            <version>0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.beitu.saas</groupId>
+            <artifactId>openapi-service</artifactId>
+            <version>0.1</version>
+        </dependency>
     </dependencies>
 
 </project>
