@@ -154,8 +154,8 @@ public class SaasChannelController {
     /**
      * 获取单个渠道详情
      */
-    @RequestMapping(value = "/shortUrl", method = RequestMethod.POST)
-    @ApiOperation(value = "获取单个短链接", response = Response.class)
+//    @RequestMapping(value = "/shortUrl", method = RequestMethod.POST)
+//    @ApiOperation(value = "获取单个短链接", response = Response.class)
     public Response getShortUrl(HttpServletResponse resp, String url) {
         String shortUrl = ShortUrlUtil.generateShortUrl(url);
         return Response.ok().putData(shortUrl);
