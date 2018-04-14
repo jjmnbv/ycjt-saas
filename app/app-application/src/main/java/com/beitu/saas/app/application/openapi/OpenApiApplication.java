@@ -1,7 +1,7 @@
 package com.beitu.saas.app.application.openapi;
 
+import com.beitu.saas.app.application.openapi.thread.PushOrderUserCreditThread;
 import com.beitu.saas.app.application.openapi.vo.OrderPushToSaasDataVo;
-import com.beitu.saas.app.application.openapi.vo.OrderPushToSaasVo;
 import com.beitu.saas.app.application.openapi.vo.SaasBorrowerRelatedDataVo;
 import com.beitu.saas.app.application.order.OrderRecommendApplication;
 import com.beitu.saas.app.enums.OpenApiOrderPushErrorCodeEnum;
@@ -9,7 +9,8 @@ import com.beitu.saas.app.enums.OpenApiOrderPushFromTypeEnum;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.TimeConsts;
 import com.beitu.saas.common.handle.oss.OSSService;
-import com.beitu.saas.finance.client.enums.CreditConsumeEnum;
+import com.beitu.saas.common.utils.NetworkUtil;
+import com.beitu.saas.common.utils.ThreadPoolUtils;
 import com.beitu.saas.openapi.client.SaasOpenApiOrderInfoLogService;
 import com.beitu.saas.openapi.domain.SaasOpenApiOrderInfoLogVo;
 import com.fqgj.common.utils.CollectionUtils;
@@ -19,14 +20,14 @@ import com.fqgj.common.utils.TimeUtils;
 import com.fqgj.exception.common.ApplicationException;
 import com.fqgj.log.factory.LogFactory;
 import com.fqgj.log.interfaces.Log;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Component
 public class OpenApiApplication {
@@ -85,41 +86,41 @@ public class OpenApiApplication {
             LOGGER.warn("************************* 洋葱借条推单处理失败:{} Mobile:{} IdentityNo:{} *************************", errorCodeEnum.getMsg(), mobile, identityNo);
             throw new ApplicationException(errorCodeEnum);
         }
-        
-        /////////////////////////////////////////////////////////////////////////
-        // TODO: 2018/4/12 子线程来处理数据
-        /////////////////////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////////////////////
-        OrderPushToSaasVo userAndOrderData;
-        try {
-            userAndOrderData = JSONUtils.json2pojoAndOffUnknownField(pushData.getData(), OrderPushToSaasVo.class);
-        } catch (Exception e) {
-            LOGGER.warn("************************* 洋葱借条推单处理失败 Mobile:{} IdentityNo:{} CAUSE:{} *************************", mobile, identityNo, e);
-            throw new ApplicationException(OpenApiOrderPushErrorCodeEnum.DATA_PARSE_ERROR);
-        }
-        if (userAndOrderData == null) {
-            OpenApiOrderPushErrorCodeEnum errorCodeEnum = OpenApiOrderPushErrorCodeEnum.DATA_PARSE_ERROR;
-            LOGGER.warn("************************* 洋葱借条推单处理失败:{} Mobile:{} IdentityNo:{} *************************", errorCodeEnum.getMsg(), mobile, identityNo);
-            throw new ApplicationException(errorCodeEnum);
-        }
-        
+    
         Integer flowType = (Integer) merchantsInfo.get("flowType");
-        CreditConsumeEnum consumeEnum = getConsumeTypeBy(flowType, zmScore);
-        for (int i = 0; i < borrowerRelatedDataVos.size(); i++) {
-            SaasBorrowerRelatedDataVo vo = borrowerRelatedDataVos.get(i);
-            try {
-                openApiMerchantApplication.merchantOrderUserProcess(vo, userAndOrderData, mobile, identityNo, consumeEnum);
-            } catch (Exception e) {
-                LOGGER.warn("************************* 商户推单处理失败 Mobile:{} IdentityNo:{} Merchant:{} Borrower:{} CAUSE:{} *************************", mobile, identityNo, vo.getMerchantCode(), vo.getBorrowerCode(), e);
-            }
-        }
-        /////////////////////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////////////////////
+        ThreadPoolUtils.getTaskInstance().execute(new PushOrderUserCreditThread(openApiMerchantApplication, borrowerRelatedDataVos ,pushData, flowType));
         
         String url = uploadOrderPushData(mobile, from, requestString);
         SaasOpenApiOrderInfoLogVo vo = new SaasOpenApiOrderInfoLogVo(mobile, zmScore, identityNo, url, flowType, from.getType(), Boolean.FALSE);
         return saasOpenApiOrderInfoLogService.addSaasOpenApiOrderInfoLog(vo);
+    }
+    
+    public void ipWhiteListValidation(HttpServletRequest request) {
+        String sourceIp = null;
+        try {
+            sourceIp = NetworkUtil.getIpAddress(request);
+        } catch (IOException e) {
+        }
+        if (StringUtils.isEmpty(sourceIp)) {
+            LOGGER.warn("************************* 洋葱借条推单来源IP地址获取失败 *************************");
+            throw new ApplicationException(OpenApiOrderPushErrorCodeEnum.SOURCE_IP_ACQUIRE_FAILURE);
+        }
+        LOGGER.info("************************* OpenAPI洋葱借条推单来源IP地址 : {} *************************", sourceIp);
+        String ipWhite = configUtil.getOrderPushIpWhiteList();
+        if (StringUtils.isEmpty(ipWhite) || Objects.equals(ipWhite, "null")) {
+            LOGGER.warn("************************* 洋葱借条推单功能处于关闭状态 *************************");
+            throw new ApplicationException(OpenApiOrderPushErrorCodeEnum.ORDER_PUSH_OFF);
+        }
+        String[] whiteIps = ipWhite.split(",");
+        if (whiteIps.length == 0) {
+            LOGGER.warn("************************* 洋葱借条推单功能处于关闭状态 *************************");
+            throw new ApplicationException(OpenApiOrderPushErrorCodeEnum.ORDER_PUSH_OFF);
+        }
+        Set<String> set = new HashSet<String>(Arrays.asList(whiteIps));
+        if (!set.contains(sourceIp)) {
+            LOGGER.warn("************************* 洋葱借条推单来源IP地址非法 *************************");
+            throw new ApplicationException(OpenApiOrderPushErrorCodeEnum.ILLEGAL_SOURCE_IP);
+        }
     }
     
     private String uploadOrderPushData(String mobile, OpenApiOrderPushFromTypeEnum from, String data) {
@@ -135,20 +136,6 @@ public class OpenApiApplication {
     private Boolean logExistByMobile(String mobile, OpenApiOrderPushFromTypeEnum from) {
         Date startDate = TimeUtils.appointed(-TimeConsts.ONE_MONTH_DAYS);
         return saasOpenApiOrderInfoLogService.getByMobile(mobile, from.getType(), Boolean.TRUE, startDate) != null;
-    }
-    
-    private CreditConsumeEnum getConsumeTypeBy(Integer flowType, Integer zmScore) {
-        if (Objects.equals(flowType, 1)) {
-            if (zmScore < 610) {
-                return CreditConsumeEnum.FLOW_SHARED_610_DOWN;
-            } else {
-                return CreditConsumeEnum.FLOW_SHARED_610_UP;
-            }
-        }
-        if (zmScore < 610) {
-            return CreditConsumeEnum.FLOW_ALONE_610_DOWN;
-        }
-        return CreditConsumeEnum.FLOW_ALONE_610_UP;
     }
     
 }

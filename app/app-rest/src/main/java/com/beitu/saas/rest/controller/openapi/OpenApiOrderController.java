@@ -37,6 +37,7 @@ public class OpenApiOrderController {
     @ApiOperation(value = "洋葱借条推单接口")
     @RequestMapping(value = "/ycjt/push", consumes = "application/json", method = RequestMethod.POST)
     public Response ycjtPush(HttpServletRequest request) throws Exception {
+        openApiApplication.ipWhiteListValidation(request);
         LOGGER.info("************************* 洋葱借条推单处理开始 *************************");
         String reqStr = IOUtils.toString(request.getInputStream(), "utf-8");
         if (!openApiApplication.ycjtOrderPushProcess(reqStr)) {

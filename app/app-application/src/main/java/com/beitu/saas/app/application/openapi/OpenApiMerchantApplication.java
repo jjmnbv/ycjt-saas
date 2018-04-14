@@ -86,7 +86,7 @@ public class OpenApiMerchantApplication {
         }
         String orderNumb = openApiUserInfoApplication.userRealNameAndOrderCreate(borrowerRelatedDataVo, basicInfo, orderInfo);
         logSuccessByMobile(mobile, OpenApiOrderPushFromTypeEnum.YCJT_APP);
-    
+        
         String merchantCode = borrowerRelatedDataVo.getMerchantCode();
         saasCreditHistoryService.addExpenditureCreditHistory(merchantCode, "system", flowConsumeEnum);
         
@@ -109,7 +109,7 @@ public class OpenApiMerchantApplication {
         openApiCreditInfoApplication.addCreditDunningInfo(dunningInfo, borrowerCode, merchantCode, carrierId);
         openApiCreditInfoApplication.addCreditBmpInfo(bmpInfo, borrowerCode, merchantCode);
         openApiCreditInfoApplication.addCreditTongdunInfo(tongdunInfo, borrowerCode, merchantCode);
-    
+        
         saasCreditHistoryService.addExpenditureCreditHistory(merchantCode, "system", CreditConsumeEnum.FLOW_REPORT);
     }
     

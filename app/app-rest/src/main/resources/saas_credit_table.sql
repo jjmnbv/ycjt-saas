@@ -30,7 +30,7 @@ CREATE TABLE `saas_credit_tongdun_detail` (
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`),
   KEY `idx_report_id` (`report_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=353 DEFAULT CHARSET=utf8mb4 COMMENT='同盾信用记录详情表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='同盾信用记录详情表';
 
 DROP TABLE IF EXISTS `saas_credit_dunning`;
 CREATE TABLE `saas_credit_dunning` (
