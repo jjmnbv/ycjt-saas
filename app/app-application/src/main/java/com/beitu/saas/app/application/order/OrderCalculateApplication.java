@@ -70,7 +70,7 @@ public class OrderCalculateApplication {
     }
 
     public String getInterestRatio(BigDecimal interestRatio) {
-        return interestRatio.multiply(new BigDecimal("100")).setScale(0) + "%";
+        return interestRatio.multiply(new BigDecimal("100")).setScale(0, BigDecimal.ROUND_HALF_UP) + "%";
     }
 
 }
