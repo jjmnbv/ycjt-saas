@@ -7,12 +7,14 @@ import com.beitu.saas.app.application.order.OrderRecommendApplication;
 import com.beitu.saas.app.enums.OpenApiOrderPushErrorCodeEnum;
 import com.beitu.saas.app.enums.OpenApiOrderPushFromTypeEnum;
 import com.beitu.saas.common.config.ConfigUtil;
+import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.consts.TimeConsts;
 import com.beitu.saas.common.handle.oss.OSSService;
 import com.beitu.saas.common.utils.NetworkUtil;
 import com.beitu.saas.common.utils.ThreadPoolUtils;
 import com.beitu.saas.openapi.client.SaasOpenApiOrderInfoLogService;
 import com.beitu.saas.openapi.domain.SaasOpenApiOrderInfoLogVo;
+import com.fqgj.base.services.redis.RedisClient;
 import com.fqgj.common.utils.CollectionUtils;
 import com.fqgj.common.utils.JSONUtils;
 import com.fqgj.common.utils.MD5;
@@ -44,6 +46,9 @@ public class OpenApiApplication {
     private SaasOpenApiOrderInfoLogService saasOpenApiOrderInfoLogService;
     
     @Autowired
+    private RedisClient redisClient;
+    
+    @Autowired
     private OSSService ossService;
     
     @Autowired
@@ -63,6 +68,14 @@ public class OpenApiApplication {
             throw new ApplicationException(errorCodeEnum);
         }
         String mobile = pushData.getMobile();
+        String redisMobile = redisClient.get(RedisKeyConsts.SAAS_OPEN_API_ORDER_PUSH_PROCESSING, mobile);
+        if (StringUtils.isNotEmpty(redisMobile) && Objects.equals(redisMobile, mobile)) {
+            OpenApiOrderPushErrorCodeEnum errorCodeEnum = OpenApiOrderPushErrorCodeEnum.ORDER_PUSH_IS_PROCESSING;
+            LOGGER.warn("************************* 洋葱借条推单处理失败:{} *************************", errorCodeEnum.getMsg());
+            throw new ApplicationException(errorCodeEnum);
+        }
+        redisClient.set(RedisKeyConsts.SAAS_OPEN_API_ORDER_PUSH_PROCESSING, mobile, TimeConsts.THIRTY_SECONDS, mobile);
+        
         OpenApiOrderPushFromTypeEnum from = OpenApiOrderPushFromTypeEnum.YCJT_APP;
         if (logExistByMobile(mobile, from)) {
             OpenApiOrderPushErrorCodeEnum errorCodeEnum = OpenApiOrderPushErrorCodeEnum.LOG_MOBILE_EXIST_ERROR;
