@@ -10,6 +10,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.net.InetAddress;
+
 /**
  * Created with IntelliJ IDEA.
  * Description:
@@ -29,13 +31,23 @@ public class CreditAndMsgDayClearTaksJob {
 
     @Scheduled(cron = "0 30 1 * * ?")
     public void creditAndMsgDayClear() {
-        LOGGER.info("== 点券和短信日清算任务开始 ==");
         String taskSwitch = configUtil.getClearDayStatSwith();
         if (StringUtils.isEmpty(taskSwitch) || taskSwitch.equals("false")) {
             LOGGER.info("!====== 点券和短信每日清算任务未开启 ====!");
             return;
         }
-
+        String ipWhite = configUtil.getClearDayStatIpWhite();
+        String hostIp = null;
+        try {
+            hostIp = InetAddress.getLocalHost().getHostAddress();
+        } catch (Exception e) {
+            LOGGER.error("!====== 点券和短信每日清算任务获取机器地址发生异常：{} ====!", e.getMessage());
+        }
+        if (StringUtils.isEmpty(ipWhite) || !ipWhite.equals(hostIp)) {
+            LOGGER.info("!====== 点券和短信每日清算任务机器白名单限制 ====!");
+            return;
+        }
+        LOGGER.info("== 点券和短信日清算任务开始 ==");
         try {
             saasConsumeDayStatApplication.creditAndMsgDayClear();
         } catch (Exception e) {
@@ -43,4 +55,5 @@ public class CreditAndMsgDayClearTaksJob {
         }
         LOGGER.info("== 点券和短信日清算任务结束 ==");
     }
+
 }
