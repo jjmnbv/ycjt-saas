@@ -69,5 +69,10 @@ public class RedisKeyConsts {
      * 添加机构
      */
     public static final String SAAS_MERCHANT_ADD = "SAAS_MERCHANT_ADD_{mobile}";
+    
+    /**
+     * Open API推单处理缓存
+     */
+    public static final String SAAS_OPEN_API_ORDER_PUSH = "SAAS_OPEN_ORDER_PUSH_{mobile}";
 
 }
