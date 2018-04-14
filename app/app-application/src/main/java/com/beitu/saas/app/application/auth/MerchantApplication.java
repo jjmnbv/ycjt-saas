@@ -165,7 +165,7 @@ public class MerchantApplication {
         //8 默认流量推荐设置
         SaasMerchantFlowConfig config = new SaasMerchantFlowConfig();
         config.setMerchantCode(merchantCode);
-        config.setFlowOpen(true);
+        config.setFlowOpen(false);
         config.setFlowMaxNum(200);
         config.setZmScore(MerchantFlowZMEnum.ALONE_ZM_610_UP.getKey().intValue());
         config.setFlowType(2);
