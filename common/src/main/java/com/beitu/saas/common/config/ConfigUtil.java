@@ -75,10 +75,6 @@ public class ConfigUtil {
         return config.getProperty("api.web.path", "");
     }
 
-    public String getApiWebPathHttp() {
-        return config.getProperty("api.web.path.http", "");
-    }
-
     public String getAESKey() {
         return config.getProperty("AES.key", "");
     }
