@@ -65,4 +65,9 @@ public class RedisKeyConsts {
      */
     public static final String SAAS_OPEN_CARRIER_H5_BROWSER_TYPE = "SAAS_OPEN_CARRIER_H5_BROWSER_{borrowerCode}";
 
+    /**
+     * 添加机构
+     */
+    public static final String SAAS_MERCHANT_ADD = "SAAS_MERCHANT_ADD_{mobile}";
+
 }

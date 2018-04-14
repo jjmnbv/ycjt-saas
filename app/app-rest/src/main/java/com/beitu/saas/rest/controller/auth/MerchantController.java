@@ -17,8 +17,12 @@ import com.beitu.saas.auth.service.SaasMerchantService;
 import com.beitu.saas.auth.service.SaasSmsConfigDictionaryService;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.ButtonPermissionConsts;
+import com.beitu.saas.common.consts.RedisKeyConsts;
+import com.beitu.saas.common.consts.TimeConsts;
+import com.beitu.saas.common.utils.DateUtil;
 import com.beitu.saas.rest.controller.auth.request.AddMerchantRequest;
 import com.beitu.saas.rest.controller.auth.response.MerchantInfoResponse;
+import com.fqgj.base.services.redis.RedisClient;
 import com.fqgj.common.api.Response;
 import com.fqgj.common.api.annotations.ParamsValidate;
 import com.fqgj.common.api.exception.ApiErrorException;
@@ -56,6 +60,9 @@ public class MerchantController {
 
     @Autowired
     private ConfigUtil configUtil;
+
+    @Autowired
+    private RedisClient redisClient;
 
     @RequestMapping(value = "/info", method = RequestMethod.GET)
     @ApiOperation(value = "机构信息", response = MerchantInfoResponse.class)
@@ -100,6 +107,12 @@ public class MerchantController {
         if (!configUtil.enableAddMerchant()) {
             return Response.ok("添加机构不可用,请联系管理员");
         }
+        Object o = redisClient.get(RedisKeyConsts.SAAS_MERCHANT_ADD, request.getAdminInfo().getAccountPhone());
+        if (null != o) {
+            throw new ApiErrorException("重复提交");
+        }
+        redisClient.set(RedisKeyConsts.SAAS_MERCHANT_ADD, request.getAdminInfo().getAccountPhone(), TimeConsts.ONE_MINUTE, request.getAdminInfo().getAccountPhone());
+        
         SaasMerchant saasMerchant = new SaasMerchant();
         if (request.getMerchantInfo() != null) {
             BeanUtils.copyProperties(request.getMerchantInfo(), saasMerchant);
