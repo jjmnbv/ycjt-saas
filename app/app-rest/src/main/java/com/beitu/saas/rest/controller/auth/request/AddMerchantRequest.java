@@ -26,6 +26,17 @@ public class AddMerchantRequest extends ParamsObject {
     @ApiModelProperty("管理员信息")
     private AdminInfo adminInfo;
 
+    @ApiModelProperty("账户信息")
+    private AccountInfo accountInfo;
+
+    public AccountInfo getAccountInfo() {
+        return accountInfo;
+    }
+
+    public void setAccountInfo(AccountInfo accountInfo) {
+        this.accountInfo = accountInfo;
+    }
+
     public MerchantInfo getMerchantInfo() {
         return merchantInfo;
     }
@@ -239,6 +250,30 @@ public class AddMerchantRequest extends ParamsObject {
 
         public void setPassword(String password) {
             this.password = password;
+        }
+    }
+
+    public class AccountInfo{
+
+        @ApiModelProperty("短信条数")
+        private Long sms;
+        @ApiModelProperty("点券数")
+        private Long credit;
+
+        public Long getSms() {
+            return sms;
+        }
+
+        public void setSms(Long sms) {
+            this.sms = sms;
+        }
+
+        public Long getCredit() {
+            return credit;
+        }
+
+        public void setCredit(Long credit) {
+            this.credit = credit;
         }
     }
 }

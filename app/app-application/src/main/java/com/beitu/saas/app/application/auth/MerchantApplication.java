@@ -83,7 +83,7 @@ public class MerchantApplication {
     private ContractApplication contractApplication;
 
     @Transactional(rollbackFor = Exception.class)
-    public void addMerchant(SaasMerchant saasMerchant, String password, String accountPhone, String accountName) {
+    public void addMerchant(SaasMerchant saasMerchant, String password, String accountPhone, String accountName,Long sms,Long credit) {
 
         //1.保存机构信息
         saasMerchant.setMerchantCode(GenerOrderNoUtil.generateOrderNo());
@@ -158,10 +158,10 @@ public class MerchantApplication {
         saasChannelRiskSettingsService.createDefaultChannelRiskSettings(merchantCode);
 
         //7 初始化点券和短信余额
-        saasMerchantSmsInfoService.increase(merchantCode, 60000L);
-        saasSmsHistoryService.addIncomeSmsHistory(merchantCode, 60000L, null, "充值");
-        saasMerchantCreditInfoService.increase(merchantCode, 35000L);
-        saasCreditHistoryService.addIncomeCreditHistory(merchantCode, 35000L, "system", "充值");
+        saasMerchantSmsInfoService.increase(merchantCode, sms);
+        saasSmsHistoryService.addIncomeSmsHistory(merchantCode, sms, null, "充值");
+        saasMerchantCreditInfoService.increase(merchantCode, credit);
+        saasCreditHistoryService.addIncomeCreditHistory(merchantCode, credit, "system", "充值");
         //8 默认流量推荐设置
         SaasMerchantFlowConfig config = new SaasMerchantFlowConfig();
         config.setMerchantCode(merchantCode);
