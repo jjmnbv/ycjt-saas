@@ -271,6 +271,12 @@ public class ConfigUtil {
         return config.getProperty("clear.day.stat", "");
     }
 
+    /**
+     * 点券和短信日清算任务执行机器IP
+     */
+    public String getClearDayStatIpWhite() {
+        return config.getProperty("clear.day.stat.ip.white", "");
+    }
 
     /**
      * 第三方配置信息
@@ -332,7 +338,7 @@ public class ConfigUtil {
     public int getShareNum() {
         return config.getIntProperty("recommend.share.num", 3);
     }
-    
+
     /**
      * Open API相关
      */
