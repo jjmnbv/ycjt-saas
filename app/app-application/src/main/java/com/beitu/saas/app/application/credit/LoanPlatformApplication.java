@@ -100,7 +100,7 @@ public class LoanPlatformApplication {
         StringBuilder urlSb = new StringBuilder();
         urlSb.append(configUtil.getApiWebPath() + "/credit/loan/platform/juxinli/crawling?param=");
         urlSb.append(taskId + "_");
-        urlSb.append(saasLoanPlatformEnum.getWebsite() + "_");
+        urlSb.append(website + "_");
         urlSb.append(prefixDto.getTimestamp() + "_");
         urlSb.append(channelCode);
         param.setJumpUrl(urlSb.toString());

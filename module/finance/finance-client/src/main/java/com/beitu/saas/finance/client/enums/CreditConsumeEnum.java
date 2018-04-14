@@ -15,7 +15,7 @@ public enum CreditConsumeEnum {
     FLOW_REPORT(4, "流量-信用报告"),
     RISK_CARRIER(1, "风控-运营商"),
     RISK_LOAN_BLACKLIST(1, "风控-网贷黑名单"),
-    RISK_MULTI_PLATFORM_LENDING(1, "风控-多平台借贷"),
+    RISK_MULTI_PLATFORM_LENDING(0, "风控-多平台借贷"),
     RISK_ESIGN(1, "风控-电子签签署"),
     RISK_DIANHUABANG(1, "风控-催收分"),
     RISK_REALNAME(1, "风控-实名认证"),;

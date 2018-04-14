@@ -86,13 +86,15 @@ public class OpenApiApplication {
             LOGGER.warn("************************* 洋葱借条推单处理失败:{} Mobile:{} IdentityNo:{} *************************", errorCodeEnum.getMsg(), mobile, identityNo);
             throw new ApplicationException(errorCodeEnum);
         }
-    
-        Integer flowType = (Integer) merchantsInfo.get("flowType");
-        ThreadPoolUtils.getTaskInstance().execute(new PushOrderUserCreditThread(openApiMerchantApplication, borrowerRelatedDataVos ,pushData, flowType));
         
         String url = uploadOrderPushData(mobile, from, requestString);
+        Integer flowType = (Integer) merchantsInfo.get("flowType");
         SaasOpenApiOrderInfoLogVo vo = new SaasOpenApiOrderInfoLogVo(mobile, zmScore, identityNo, url, flowType, from.getType(), Boolean.FALSE);
-        return saasOpenApiOrderInfoLogService.addSaasOpenApiOrderInfoLog(vo);
+        if (saasOpenApiOrderInfoLogService.addSaasOpenApiOrderInfoLog(vo)) {
+            ThreadPoolUtils.getTaskInstance().execute(new PushOrderUserCreditThread(openApiMerchantApplication, borrowerRelatedDataVos ,pushData, flowType));
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
     }
     
     public void ipWhiteListValidation(HttpServletRequest request) {
