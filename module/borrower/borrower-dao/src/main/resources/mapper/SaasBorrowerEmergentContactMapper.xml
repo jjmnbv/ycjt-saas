@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beitu.saas.borrower.dao.impl.SaasBorrowerEmergentContactDaoImpl">
+
+    <select id="selectByBorrowerCodeAndOrderNumb" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_borrower_emergent_contact
+        where borrower_code = #{borrowerCode,jdbcType=VARCHAR}
+        <if test="orderNumb !=null">
+            and order_numb = #{orderNumb,jdbcType=VARCHAR}
+        </if>
+        <if test="orderNumb == null">
+            and order_numb is null
+        </if>
+        and deleted = 0
+    </select>
+
+    <select id="countByBorrowerCodeAndOrderNumb" resultType="java.lang.Integer">
+        select COUNT(1)
+        from saas_borrower_emergent_contact
+        where borrower_code = #{borrowerCode,jdbcType=VARCHAR}
+        <if test="orderNumb !=null">
+            and order_numb = #{orderNumb,jdbcType=VARCHAR}
+        </if>
+        <if test="orderNumb == null">
+            and order_numb is null
+        </if>
+        and deleted = 0
+    </select>
+
+    <update id="updateOrderNumbByBorrowerCode">
+        update  saas_borrower_emergent_contact
+        set order_numb = #{orderNumb,jdbcType=VARCHAR},
+          gmt_modified = NOW()
+        where borrower_code = #{borrowerCode,jdbcType=VARCHAR}
+        and order_numb is null
+        and deleted = 0
+    </update>
+
+</mapper>

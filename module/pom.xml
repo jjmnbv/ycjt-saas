@@ -13,11 +13,25 @@
     <packaging>pom</packaging>
     <modules>
         <module>auth</module>
+        <module>borrower</module>
+        <module>channel</module>
+        <module>collection</module>
+        <module>credit</module>
+        <module>finance</module>
+        <module>order</module>
+        <module>risk</module>
+        <module>sms</module>
         <module>user</module>
-
+        <module>merchant</module>
+        <module>openapi</module>
     </modules>
 
     <dependencies>
+        <dependency>
+            <groupId>com.beitu.saas</groupId>
+            <artifactId>common</artifactId>
+            <version>0.1</version>
+        </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>

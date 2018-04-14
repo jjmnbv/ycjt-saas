@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beitu.saas.credit.dao.impl.SaasCreditBmpDetailDaoImpl">
+
+    <insert id="batchAddSaasCreditBmpDetail" keyColumn="id" keyProperty="id"
+            parameterType="java.util.List" useGeneratedKeys="true">
+        insert into saas_credit_bmp_detail
+        (record_id,
+        dhb_id,
+        `name`,
+        teldesc,
+        teltype,
+        telnum,
+        telrank,
+        country,
+        city_id,
+        logo,
+        slogan,
+        image,
+        addr,
+        web,
+        url,
+        flag_type,
+        flag_num,
+        flag_fid,
+        catnames,
+        itag_ids,
+        deleted) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            <trim prefix="(" suffix=")">
+                #{item.recordId,jdbcType=BIGINT},
+                #{item.dhbId,jdbcType=VARCHAR},
+                #{item.name,jdbcType=VARCHAR},
+                #{item.teldesc,jdbcType=VARCHAR},
+                #{item.teltype,jdbcType=TINYINT},
+                #{item.telnum,jdbcType=VARCHAR},
+                #{item.telrank,jdbcType=TINYINT},
+                #{item.country,jdbcType=INTEGER},
+                #{item.cityId,jdbcType=INTEGER},
+                #{item.logo,jdbcType=VARCHAR},
+                #{item.slogan,jdbcType=VARCHAR},
+                #{item.image,jdbcType=VARCHAR},
+                #{item.addr,jdbcType=VARCHAR},
+                #{item.web,jdbcType=VARCHAR},
+                #{item.url,jdbcType=VARCHAR},
+                #{item.flagType,jdbcType=VARCHAR},
+                #{item.flagNum,jdbcType=INTEGER},
+                #{item.flagFid,jdbcType=INTEGER},
+                #{item.catnames,jdbcType=VARCHAR},
+                #{item.itagIds,jdbcType=VARCHAR},
+                #{item.deleted,jdbcType=BIT}
+            </trim>
+        </foreach>
+    </insert>
+
+</mapper>

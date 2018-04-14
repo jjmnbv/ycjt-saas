@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beitu.saas.order.dao.impl.SaasOrderDaoImpl">
+
+    <sql id="conditions">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="merchantCode !=null">
+                and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+            </if>
+            <if test="channelCode !=null">
+                and channel_code = #{channelCode,jdbcType=VARCHAR}
+            </if>
+            <if test="borrowerCodeList !=null and borrowerCodeList.size > 0">
+                and borrower_code IN
+                <foreach item="borrowerCode" index="index" collection="borrowerCodeList" open="(" separator=","
+                         close=")">
+                    #{borrowerCode}
+                </foreach>
+            </if>
+            <if test="orderStatusList !=null and orderStatusList.size > 0">
+                and order_status IN
+                <foreach item="orderStatus" index="index" collection="orderStatusList" open="(" separator=","
+                         close=")">
+                    #{orderStatus}
+                </foreach>
+            </if>
+            <if test="preliminaryReviewerCode !=null">
+                and preliminary_reviewer_code = #{preliminaryReviewerCode,jdbcType=VARCHAR}
+            </if>
+            <if test="finalReviewerCode !=null">
+                and final_reviewer_code = #{finalReviewerCode,jdbcType=VARCHAR}
+            </if>
+            <if test="loanLenderCode !=null">
+                and loan_lender_code = #{loanLenderCode,jdbcType=VARCHAR}
+            </if>
+            <if test="createdBeginDt != null">
+                and DATE_FORMAT(gmt_create,'%Y-%m-%d') <![CDATA[ >= ]]> #{createdBeginDt,jdbcType=DATE}
+            </if>
+            <if test="createdEndDt != null">
+                and DATE_FORMAT(gmt_create,'%Y-%m-%d') <![CDATA[ <= ]]> #{createdEndDt,jdbcType=DATE}
+            </if>
+            <if test="repaymentDt !=null">
+                and repayment_dt <![CDATA[ >= ]]> #{repaymentDt,jdbcType=DATE}
+            </if>
+            <if test="repaymentBeginDt !=null">
+                and repayment_dt <![CDATA[ >= ]]> #{repaymentBeginDt,jdbcType=DATE}
+            </if>
+            <if test="repaymentEndDt !=null">
+                and repayment_dt <![CDATA[ >= ]]> #{repaymentEndDt,jdbcType=DATE}
+            </if>
+            and expire_date <![CDATA[ >= ]]> NOW()
+            and deleted = false
+        </trim>
+    </sql>
+
+    <select id="countByConditions" resultType="java.lang.Integer">
+        select COUNT(1)
+        from saas_order
+        <include refid="conditions"/>
+    </select>
+
+    <select id="selectByConditions" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_order
+        <include refid="conditions"/>
+        order by id desc
+        <include refid="paginationSql"/>
+    </select>
+
+    <select id="selectByBorrowerCodeAndChannelCode" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_order
+        where channel_code = #{channelCode,jdbcType=VARCHAR}
+        and borrower_code = #{borrowerCode,jdbcType=VARCHAR}
+        and expire_date <![CDATA[ >= ]]> NOW()
+        and deleted = false
+        order by id desc limit 1
+    </select>
+
+    <select id="selectByOrderNumbAndMerchantCode" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_order
+        where order_numb = #{orderNumb,jdbcType=VARCHAR}
+        and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+        and deleted = false
+        and expire_date <![CDATA[ >= ]]> NOW()
+        order by id desc limit 1
+    </select>
+
+    <update id="updateOrderStatus">
+        update saas_order
+        <set>
+            order_status = #{updateOrderStatus,jdbcType=SMALLINT},
+            version = #{version,jdbcType=BIGINT} + 1,
+            gmt_modified = NOW()
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+        and order_status = #{currentOrderStatus,jdbcType=SMALLINT}
+        AND version = #{version,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateOrderRemark">
+        update saas_order
+        set remark = #{remark,jdbcType=VARCHAR},gmt_modified = NOW()
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="selectByBorrowerCodeAndOrderStatusList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_order
+        where borrower_code = #{borrowerCode,jdbcType=VARCHAR}
+        <if test="orderStatusList !=null and orderStatusList.size > 0">
+            and order_status IN
+            <foreach item="orderStatus" index="index" collection="orderStatusList" open="(" separator=","
+                     close=")">
+                #{orderStatus}
+            </foreach>
+        </if>
+        and deleted = false
+        and expire_date <![CDATA[ >= ]]> NOW()
+    </select>
+
+    <update id="updatePreliminaryReviewerCode">
+        update saas_order
+        set preliminary_reviewer_code = #{preliminaryReviewerCode,jdbcType=VARCHAR},gmt_modified = NOW()
+        where id = #{id,jdbcType=BIGINT} and preliminary_reviewer_code is null
+    </update>
+
+    <update id="updateFinalReviewerCode">
+        update saas_order
+        set final_reviewer_code = #{finalReviewerCode,jdbcType=VARCHAR},gmt_modified = NOW()
+        where id = #{id,jdbcType=BIGINT} and final_reviewer_code is null
+    </update>
+
+    <select id="selectOrderNumbByParams" resultType="java.lang.String">
+        select order_numb
+        from saas_order
+        where deleted = false
+        and expire_date <![CDATA[ >= ]]> NOW()
+        <if test="merchantCode !=null">
+            and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+        </if>
+        <if test="orderStatus !=null">
+            and order_status = #{orderStatus,jdbcType=SMALLINT}
+        </if>
+    </select>
+
+    <select id="selectMainSaasOrderByOrderNumb" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_order
+        where deleted = false
+        and expire_date <![CDATA[ >= ]]> NOW()
+        and order_numb = #{orderNumb,jdbcType=VARCHAR}
+        and relation_order_id is null
+    </select>
+
+</mapper>

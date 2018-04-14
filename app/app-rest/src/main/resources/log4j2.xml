@@ -92,12 +92,12 @@
             </filters>
             <PatternLayout pattern="${log_pattern}"/>
             <!--<CustomJSONLayout charset="UTF-8" locationInfo="false" properties="true" compact="true" complete="false"-->
-                              <!--newline="true"-->
-                              <!--commaAtEventEnd="false" includeLogger="false" includeLevel="true" includeThread="true"-->
-                              <!--includeMessage="true"-->
-                              <!--includeLog="false" includeNDC="false" logTrace="false" includeThrown="true"-->
-                              <!--jsonEscapeSubLayout="true" subLayoutAsElement="true">-->
-                <!--&lt;!&ndash;<KeyValuePair key="environment_user" value="${env:USER}"/>&ndash;&gt;-->
+            <!--newline="true"-->
+            <!--commaAtEventEnd="false" includeLogger="false" includeLevel="true" includeThread="true"-->
+            <!--includeMessage="true"-->
+            <!--includeLog="false" includeNDC="false" logTrace="false" includeThrown="true"-->
+            <!--jsonEscapeSubLayout="true" subLayoutAsElement="true">-->
+            <!--&lt;!&ndash;<KeyValuePair key="environment_user" value="${env:USER}"/>&ndash;&gt;-->
             <!--</CustomJSONLayout>-->
             <Policies>
                 <TimeBasedTriggeringPolicy/>
@@ -115,12 +115,12 @@
             <!--<PatternLayout pattern="%msg%n"/>-->
             <PatternLayout pattern="${log_pattern}"/>
             <!--<CustomJSONLayout charset="UTF-8" locationInfo="false" properties="true" compact="true" complete="false"-->
-                              <!--newline="true"-->
-                              <!--commaAtEventEnd="false" includeLogger="false" includeLevel="true" includeThread="true"-->
-                              <!--includeMessage="true"-->
-                              <!--includeLog="false" includeNDC="false" logTrace="false" includeThrown="true"-->
-                              <!--jsonEscapeSubLayout="true" subLayoutAsElement="true">-->
-                <!--&lt;!&ndash;<KeyValuePair key="environment_user" value="${env:USER}"/>&ndash;&gt;-->
+            <!--newline="true"-->
+            <!--commaAtEventEnd="false" includeLogger="false" includeLevel="true" includeThread="true"-->
+            <!--includeMessage="true"-->
+            <!--includeLog="false" includeNDC="false" logTrace="false" includeThrown="true"-->
+            <!--jsonEscapeSubLayout="true" subLayoutAsElement="true">-->
+            <!--&lt;!&ndash;<KeyValuePair key="environment_user" value="${env:USER}"/>&ndash;&gt;-->
             <!--</CustomJSONLayout>-->
             <Policies>
                 <TimeBasedTriggeringPolicy/>
@@ -137,12 +137,12 @@
             <!--<PatternLayout pattern="%msg%n"/>-->
             <PatternLayout pattern="${log_pattern}"/>
             <!--<CustomJSONLayout charset="UTF-8" locationInfo="false" properties="true" compact="true" complete="false"-->
-                              <!--newline="true"-->
-                              <!--commaAtEventEnd="false" includeLogger="false" includeLevel="true" includeThread="true"-->
-                              <!--includeMessage="true"-->
-                              <!--includeLog="false" includeNDC="false" logTrace="false" includeThrown="true"-->
-                              <!--jsonEscapeSubLayout="true" subLayoutAsElement="true">-->
-                <!--&lt;!&ndash;<KeyValuePair key="environment_user" value="${env:USER}"/>&ndash;&gt;-->
+            <!--newline="true"-->
+            <!--commaAtEventEnd="false" includeLogger="false" includeLevel="true" includeThread="true"-->
+            <!--includeMessage="true"-->
+            <!--includeLog="false" includeNDC="false" logTrace="false" includeThrown="true"-->
+            <!--jsonEscapeSubLayout="true" subLayoutAsElement="true">-->
+            <!--&lt;!&ndash;<KeyValuePair key="environment_user" value="${env:USER}"/>&ndash;&gt;-->
             <!--</CustomJSONLayout>-->
             <Policies>
                 <TimeBasedTriggeringPolicy/>
@@ -158,12 +158,12 @@
             <!--<PatternLayout pattern="%msg%n"/>-->
             <PatternLayout pattern="${log_pattern}"/>
             <!--<CustomJSONLayout charset="UTF-8" locationInfo="false" properties="true" compact="true" complete="false"-->
-                              <!--newline="true"-->
-                              <!--commaAtEventEnd="false" includeLogger="false" includeLevel="true" includeThread="true"-->
-                              <!--includeMessage="true"-->
-                              <!--includeLog="false" includeNDC="false" logTrace="false" includeThrown="true"-->
-                              <!--jsonEscapeSubLayout="true" subLayoutAsElement="true">-->
-                <!--&lt;!&ndash;<KeyValuePair key="environment_user" value="${env:USER}"/>&ndash;&gt;-->
+            <!--newline="true"-->
+            <!--commaAtEventEnd="false" includeLogger="false" includeLevel="true" includeThread="true"-->
+            <!--includeMessage="true"-->
+            <!--includeLog="false" includeNDC="false" logTrace="false" includeThrown="true"-->
+            <!--jsonEscapeSubLayout="true" subLayoutAsElement="true">-->
+            <!--&lt;!&ndash;<KeyValuePair key="environment_user" value="${env:USER}"/>&ndash;&gt;-->
             <!--</CustomJSONLayout>-->
             <Policies>
                 <TimeBasedTriggeringPolicy/>
@@ -186,14 +186,14 @@
         <logger name="RocketmqClient" level="info" additivity="false">
             <!--<appender-ref ref="RollingFileInfo"/>-->
         </logger>
-        <logger name="com.fqgj.youjie" level="info">
+        <logger name="com.beitu.saas" level="info">
             <appender-ref ref="RollingFileInfoBiz" />
             <appender-ref ref="RollingFileWarnBiz" />
             <appender-ref ref="RollingFileErrorBiz" />
         </logger>
         <root level="info">
             <appender-ref ref="Console"/>
-            <!--<appender-ref ref="RollingFileInfo"/>-->
+            <appender-ref ref="RollingFileInfo"/>
             <!--<appender-ref ref="RollingFileWarn"/>-->
             <!--<appender-ref ref="RollingFileError"/>-->
         </root>

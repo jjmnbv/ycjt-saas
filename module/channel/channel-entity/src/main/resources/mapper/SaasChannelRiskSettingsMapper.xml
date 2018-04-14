@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beitu.saas.channel.dao.impl.SaasChannelRiskSettingsDaoImpl">
+    <select id="selectSaasChannelRiskSettingsEntityList" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from saas_channel_risk_settings
+        <where>
+            <trim prefixOverrides="and">
+                <if test="channelCode !=null">
+                    and channel_code = #{channelCode,jdbcType=VARCHAR}
+                </if>
+                and deleted = 0
+            </trim>
+        </where>
+    </select>
+
+    <update id="deleteRiskSettingsByChannelCode">
+        update  saas_channel_risk_settings
+        set deleted = 1
+        where channel_code = #{channelCode,jdbcType=VARCHAR}
+    </update>
+</mapper>

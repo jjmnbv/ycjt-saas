@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beitu.saas.channel.dao.impl.SaasModuleItemDaoImpl">
+    <resultMap id="BaseResultMap" type="com.beitu.saas.channel.entity.SaasModuleItemEntity">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="module_code" jdbcType="VARCHAR" property="moduleCode"/>
+        <result column="item_code" jdbcType="VARCHAR" property="itemCode"/>
+        <result column="item_desc" jdbcType="VARCHAR" property="itemDesc"/>
+        <result column="deleted" jdbcType="BIT" property="deleted"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id,
+    module_code,
+    item_code,
+    item_desc,
+    deleted,
+    gmt_modified,
+    gmt_create
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Long"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_module_item
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" keyColumn="id" keyProperty="id"
+            parameterType="com.beitu.saas.channel.entity.SaasModuleItemEntity" useGeneratedKeys="true">
+        insert into saas_module_item
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="moduleCode !=null">
+                module_code,
+                </if>
+                <if test="itemCode !=null">
+                item_code,
+                </if>
+                <if test="itemDesc !=null">
+                item_desc,
+                </if>
+                <if test="deleted !=null">
+                deleted,
+                </if>
+                <if test="gmtModified !=null">
+                gmt_modified,
+                </if>
+                <if test="gmtCreate !=null">
+                gmt_create,
+                </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="moduleCode != null">
+                    #{moduleCode,jdbcType=VARCHAR},
+                </if>
+                <if test="itemCode != null">
+                    #{itemCode,jdbcType=VARCHAR},
+                </if>
+                <if test="itemDesc != null">
+                    #{itemDesc,jdbcType=VARCHAR},
+                </if>
+                <if test="deleted != null">
+                    #{deleted,jdbcType=BIT},
+                </if>
+                <if test="gmtModified != null">
+                    #{gmtModified,jdbcType=TIMESTAMP},
+                </if>
+                <if test="gmtCreate != null">
+                    #{gmtCreate,jdbcType=TIMESTAMP},
+                </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.beitu.saas.channel.entity.SaasModuleItemEntity">
+        update saas_module_item
+        <set>
+                <if test="moduleCode !=null">
+                module_code = #{moduleCode,jdbcType=VARCHAR},
+                </if>
+                <if test="itemCode !=null">
+                item_code = #{itemCode,jdbcType=VARCHAR},
+                </if>
+                <if test="itemDesc !=null">
+                item_desc = #{itemDesc,jdbcType=VARCHAR},
+                </if>
+                <if test="deleted !=null">
+                deleted = #{deleted,jdbcType=BIT},
+                </if>
+                <if test="gmtModified !=null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+                </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteByPrimaryKey">
+        update  saas_module_item
+        set deleted = 1
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <sql id="paginationSql">
+        <if test="page != null">
+            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+        </if>
+    </sql>
+
+    <sql id="paging">
+        <if test="offset != null and limit != null">
+            limit #{offset},#{limit}
+        </if>
+    </sql>
+
+    <select id="selectByParams" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_module_item
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="moduleCode !=null">
+                and module_code = #{moduleCode,jdbcType=VARCHAR}
+            </if>
+            <if test="itemCode !=null">
+                and item_code = #{itemCode,jdbcType=VARCHAR}
+            </if>
+            <if test="itemDesc !=null">
+                and item_desc = #{itemDesc,jdbcType=VARCHAR}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+        <include refid="paging"/>
+    </select>
+    <select id="queryTotal" resultType="INTEGER">
+        select count(*) from saas_module_item
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="moduleCode !=null">
+                and module_code = #{moduleCode,jdbcType=VARCHAR}
+            </if>
+            <if test="itemCode !=null">
+                and item_code = #{itemCode,jdbcType=VARCHAR}
+            </if>
+            <if test="itemDesc !=null">
+                and item_desc = #{itemDesc,jdbcType=VARCHAR}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </select>
+</mapper>

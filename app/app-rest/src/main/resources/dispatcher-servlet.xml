@@ -12,7 +12,7 @@
 	http://www.springframework.org/schema/context/spring-context.xsd  http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
 
     <context:annotation-config/>
-    <context:component-scan base-package="com.beitu.saas.rest.controller">
+    <context:component-scan base-package="com.fqgj;com.beitu.saas.rest.controller">
         <context:exclude-filter type="assignable" expression="com.fqgj.common.api.annotations.BeanFieldValidatorImpl"></context:exclude-filter>
     </context:component-scan>
     <!--<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">-->
@@ -85,6 +85,15 @@
     <tx:annotation-driven transaction-manager="txManager"/>
 
     <task:annotation-driven/>
+
+    <!-- 上传文件解释器 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="utf-8"/>
+        <!-- 文件限制5M -->
+        <property name="maxUploadSize" value="5242880"/>
+        <property name="maxInMemorySize" value="524288"/>
+        <property name="resolveLazily" value="true"/>
+    </bean>
 
     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
         <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>

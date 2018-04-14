@@ -26,15 +26,15 @@ import java.util.Map;
  * 105	请求参数过多	Too many parameters
  * 106	未知的签名方法	Unsupported signature method
  * 107	timestamp参数无效	Invalid/Used timestamp parameter
- * 108	无效的user id	Invalid user id
- * 109	无效的用户资料字段名	Invalid user info field
+ * 108	无效的user id	Invalid borrower id
+ * 109	无效的用户资料字段名	Invalid borrower info field
  * 110	无效的access token	Access token invalid or no longer valid
  * 111	access token过期	Access token expired
  * 112	session key过期	Session key expired
  * 114   无效的ip参数 Invalid Ip
  * 210	用户不可见	User not visible
  * 211	获取未授权的字段	Unsupported permission
- * 212	没有权限获取用户的email	No permission to access user email
+ * 212	没有权限获取用户的email	No permission to access borrower email
  * 800	未知的存储操作错误	Unknown domain store API error
  * 801	无效的操作方法	Invalid operation
  * 802	数据存储空间已超过设定的上限	Data store allowable quota was exceeded
@@ -60,7 +60,7 @@ import java.util.Map;
  */
 public enum RestCodeEnum implements ErrorCodeEnum {
 
-    TOKEN_NOT_AVAILABLE(700, "Token失效", HttpStatus.OK),
+    TOKEN_NOT_AVAILABLE(700, "Token失效", HttpStatus.UNAUTHORIZED),
 
     USER_NOT_EXIST_ERROR(10000, "用户名不存在", HttpStatus.OK),
     PARAMTER_SIGN_ERROR(11001, "签名错误", HttpStatus.OK),
@@ -71,7 +71,9 @@ public enum RestCodeEnum implements ErrorCodeEnum {
     CARRIER_CRAWL_ERROR(40000, "认证失败,请稍后再试！", HttpStatus.INTERNAL_SERVER_ERROR),
     CARRIER_VAILD_VERIFY_CODE_ERROR(40001, "校验验证码失败,请稍后再试！", HttpStatus.OK),
     CARRIEE_REBIND(40002, "运营商授权异常，请重试", HttpStatus.OK),
-    REPEAT_REQUEST(800, "正在处理中,请稍后重试", HttpStatus.OK);
+    REPEAT_REQUEST(800, "正在处理中,请稍后重试", HttpStatus.OK),
+    BORROWER_NOT_EXIST_ERROR(10001, "借款用户不存在", HttpStatus.OK),
+    MERCHANT_NOT_EXIST_ERROR(10002, "出借机构不存在", HttpStatus.OK);
 
     private Integer code;
     private String msg;

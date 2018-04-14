@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beitu.saas.auth.dao.impl.SaasMerchantDaoImpl">
+    <resultMap id="BaseResultMap" type="com.beitu.saas.auth.entity.SaasMerchant">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode"/>
+        <result column="company_name" jdbcType="VARCHAR" property="companyName"/>
+        <result column="company_mail" jdbcType="VARCHAR" property="companyMail"/>
+        <result column="company_tel" jdbcType="VARCHAR" property="companyTel"/>
+        <result column="company_address" jdbcType="VARCHAR" property="companyAddress"/>
+        <result column="credit_code" jdbcType="VARCHAR" property="creditCode"/>
+        <result column="jurisdical_person" jdbcType="VARCHAR" property="jurisdicalPerson"/>
+        <result column="jurisdical_person_idcard" jdbcType="VARCHAR" property="jurisdicalPersonIdcard"/>
+        <result column="contract_seal_url" jdbcType="VARCHAR" property="contractSealUrl"/>
+        <result column="business_licence_url" jdbcType="VARCHAR" property="businessLicenceUrl"/>
+        <result column="lender_name" jdbcType="VARCHAR" property="lenderName"/>
+        <result column="lender_idcard" jdbcType="VARCHAR" property="lenderIdcard"/>
+        <result column="lender_tel" jdbcType="VARCHAR" property="lenderTel"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="allow_account_num" jdbcType="INTEGER" property="allowAccountNum"/>
+        <result column="deleted" jdbcType="BIT" property="deleted"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,
+        merchant_code,
+        company_name,
+        company_mail,
+        company_tel,
+        company_address,
+        credit_code,
+        jurisdical_person,
+        jurisdical_person_idcard,
+        contract_seal_url,
+        business_licence_url,
+        lender_name,
+        lender_idcard,
+        lender_tel,
+        password,
+        allow_account_num,
+        deleted,
+        gmt_modified,
+        gmt_create
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_merchant
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.beitu.saas.auth.entity.SaasMerchant"  useGeneratedKeys="true">
+        insert into saas_merchant
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="merchantCode !=null">
+                merchant_code,
+            </if>
+            <if test="companyName !=null">
+                company_name,
+            </if>
+            <if test="companyMail !=null">
+                company_mail,
+            </if>
+            <if test="companyTel !=null">
+                company_tel,
+            </if>
+            <if test="companyAddress !=null">
+                company_address,
+            </if>
+            <if test="creditCode !=null">
+                credit_code,
+            </if>
+            <if test="jurisdicalPerson !=null">
+                jurisdical_person,
+            </if>
+            <if test="jurisdicalPersonIdcard !=null">
+                jurisdical_person_idcard,
+            </if>
+            <if test="contractSealUrl !=null">
+                contract_seal_url,
+            </if>
+            <if test="businessLicenceUrl !=null">
+                business_licence_url,
+            </if>
+            <if test="lenderName !=null">
+                lender_name,
+            </if>
+            <if test="lenderIdcard !=null">
+                lender_idcard,
+            </if>
+            <if test="lenderTel !=null">
+                lender_tel,
+            </if>
+            <if test="password !=null">
+                password,
+            </if>
+            <if test="allowAccountNum !=null">
+                allow_account_num,
+            </if>
+            <if test="deleted !=null">
+                deleted,
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified,
+            </if>
+            <if test="gmtCreate !=null">
+                gmt_create,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="merchantCode != null">
+                #{merchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="companyName != null">
+                #{companyName,jdbcType=VARCHAR},
+            </if>
+            <if test="companyMail != null">
+                #{companyMail,jdbcType=VARCHAR},
+            </if>
+            <if test="companyTel != null">
+                #{companyTel,jdbcType=VARCHAR},
+            </if>
+            <if test="companyAddress != null">
+                #{companyAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="creditCode != null">
+                #{creditCode,jdbcType=VARCHAR},
+            </if>
+            <if test="jurisdicalPerson != null">
+                #{jurisdicalPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="jurisdicalPersonIdcard != null">
+                #{jurisdicalPersonIdcard,jdbcType=VARCHAR},
+            </if>
+            <if test="contractSealUrl != null">
+                #{contractSealUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="businessLicenceUrl != null">
+                #{businessLicenceUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="lenderName != null">
+                #{lenderName,jdbcType=VARCHAR},
+            </if>
+            <if test="lenderIdcard != null">
+                #{lenderIdcard,jdbcType=VARCHAR},
+            </if>
+            <if test="lenderTel != null">
+                #{lenderTel,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="allowAccountNum != null">
+                #{allowAccountNum,jdbcType=INTEGER},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.beitu.saas.auth.entity.SaasMerchant">
+        update saas_merchant
+        <set>
+            <if test="merchantCode !=null">
+                merchant_code = #{merchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="companyName !=null">
+                company_name = #{companyName,jdbcType=VARCHAR},
+            </if>
+            <if test="companyMail !=null">
+                company_mail = #{companyMail,jdbcType=VARCHAR},
+            </if>
+            <if test="companyTel !=null">
+                company_tel = #{companyTel,jdbcType=VARCHAR},
+            </if>
+            <if test="companyAddress !=null">
+                company_address = #{companyAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="creditCode !=null">
+                credit_code = #{creditCode,jdbcType=VARCHAR},
+            </if>
+            <if test="jurisdicalPerson !=null">
+                jurisdical_person = #{jurisdicalPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="jurisdicalPersonIdcard !=null">
+                jurisdical_person_idcard = #{jurisdicalPersonIdcard,jdbcType=VARCHAR},
+            </if>
+            <if test="contractSealUrl !=null">
+                contract_seal_url = #{contractSealUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="businessLicenceUrl !=null">
+                business_licence_url = #{businessLicenceUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="lenderName !=null">
+                lender_name = #{lenderName,jdbcType=VARCHAR},
+            </if>
+            <if test="lenderIdcard !=null">
+                lender_idcard = #{lenderIdcard,jdbcType=VARCHAR},
+            </if>
+            <if test="lenderTel !=null">
+                lender_tel = #{lenderTel,jdbcType=VARCHAR},
+            </if>
+            <if test="password !=null">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="allowAccountNum !=null">
+                allow_account_num = #{allowAccountNum,jdbcType=INTEGER},
+            </if>
+            <if test="deleted !=null">
+                deleted = #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteByPrimaryKey">
+        update  saas_merchant
+        set deleted = 1
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <sql id="paginationSql">
+        <if test="page != null">
+            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+        </if>
+    </sql>
+
+    <sql id="paging">
+        <if test="offset != null and limit != null">
+            limit #{offset},#{limit}
+        </if>
+    </sql>
+
+    <select id="selectByParams" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_merchant
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="merchantCode !=null">
+                and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+            </if>
+            <if test="companyName !=null">
+                and company_name = #{companyName,jdbcType=VARCHAR}
+            </if>
+            <if test="companyMail !=null">
+                and company_mail = #{companyMail,jdbcType=VARCHAR}
+            </if>
+            <if test="companyTel !=null">
+                and company_tel = #{companyTel,jdbcType=VARCHAR}
+            </if>
+            <if test="companyAddress !=null">
+                and company_address = #{companyAddress,jdbcType=VARCHAR}
+            </if>
+            <if test="creditCode !=null">
+                and credit_code = #{creditCode,jdbcType=VARCHAR}
+            </if>
+            <if test="jurisdicalPerson !=null">
+                and jurisdical_person = #{jurisdicalPerson,jdbcType=VARCHAR}
+            </if>
+            <if test="jurisdicalPersonIdcard !=null">
+                and jurisdical_person_idcard = #{jurisdicalPersonIdcard,jdbcType=VARCHAR}
+            </if>
+            <if test="contractSealUrl !=null">
+                and contract_seal_url = #{contractSealUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="businessLicenceUrl !=null">
+                and business_licence_url = #{businessLicenceUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="lenderName !=null">
+                and lender_name = #{lenderName,jdbcType=VARCHAR}
+            </if>
+            <if test="lenderIdcard !=null">
+                and lender_idcard = #{lenderIdcard,jdbcType=VARCHAR}
+            </if>
+            <if test="lenderTel !=null">
+                and lender_tel = #{lenderTel,jdbcType=VARCHAR}
+            </if>
+            <if test="password !=null">
+                and password = #{password,jdbcType=VARCHAR}
+            </if>
+            <if test="allowAccountNum !=null">
+                and allow_account_num = #{allowAccountNum,jdbcType=INTEGER}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+        <include refid="paging"/>
+    </select>
+    <select id="queryTotal" resultType="INTEGER">
+        select count(*) from saas_merchant
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="merchantCode !=null">
+                and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+            </if>
+            <if test="companyName !=null">
+                and company_name = #{companyName,jdbcType=VARCHAR}
+            </if>
+            <if test="companyMail !=null">
+                and company_mail = #{companyMail,jdbcType=VARCHAR}
+            </if>
+            <if test="companyTel !=null">
+                and company_tel = #{companyTel,jdbcType=VARCHAR}
+            </if>
+            <if test="companyAddress !=null">
+                and company_address = #{companyAddress,jdbcType=VARCHAR}
+            </if>
+            <if test="creditCode !=null">
+                and credit_code = #{creditCode,jdbcType=VARCHAR}
+            </if>
+            <if test="jurisdicalPerson !=null">
+                and jurisdical_person = #{jurisdicalPerson,jdbcType=VARCHAR}
+            </if>
+            <if test="jurisdicalPersonIdcard !=null">
+                and jurisdical_person_idcard = #{jurisdicalPersonIdcard,jdbcType=VARCHAR}
+            </if>
+            <if test="contractSealUrl !=null">
+                and contract_seal_url = #{contractSealUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="businessLicenceUrl !=null">
+                and business_licence_url = #{businessLicenceUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="lenderName !=null">
+                and lender_name = #{lenderName,jdbcType=VARCHAR}
+            </if>
+            <if test="lenderIdcard !=null">
+                and lender_idcard = #{lenderIdcard,jdbcType=VARCHAR}
+            </if>
+            <if test="lenderTel !=null">
+                and lender_tel = #{lenderTel,jdbcType=VARCHAR}
+            </if>
+            <if test="password !=null">
+                and password = #{password,jdbcType=VARCHAR}
+            </if>
+            <if test="allowAccountNum !=null">
+                and allow_account_num = #{allowAccountNum,jdbcType=INTEGER}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </select>
+</mapper>

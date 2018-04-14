@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beitu.saas.order.dao.impl.SaasOrderApplicationDaoImpl">
+    <resultMap id="BaseResultMap" type="com.beitu.saas.order.entity.SaasOrderApplication">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode"/>
+        <result column="channel_code" jdbcType="VARCHAR" property="channelCode"/>
+        <result column="borrower_code" jdbcType="VARCHAR" property="borrowerCode"/>
+        <result column="order_numb" jdbcType="VARCHAR" property="orderNumb"/>
+        <result column="real_capital" jdbcType="DECIMAL" property="realCapital"/>
+        <result column="total_interest_ratio" jdbcType="DECIMAL" property="totalInterestRatio"/>
+        <result column="late_interest_ratio" jdbcType="DECIMAL" property="lateInterestRatio"/>
+        <result column="borrow_purpose" jdbcType="VARCHAR" property="borrowPurpose"/>
+        <result column="repayment_dt" jdbcType="DATE" property="repaymentDt"/>
+        <result column="term_url" jdbcType="VARCHAR" property="termUrl"/>
+        <result column="deleted" jdbcType="BIT" property="deleted"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id,
+    merchant_code,
+    channel_code,
+    borrower_code,
+    order_numb,
+    real_capital,
+    total_interest_ratio,
+    late_interest_ratio,
+    borrow_purpose,
+    repayment_dt,
+    term_url,
+    deleted,
+    gmt_modified,
+    gmt_create
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Long"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_order_application
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" keyColumn="id" keyProperty="id"
+            parameterType="com.beitu.saas.order.entity.SaasOrderApplication" useGeneratedKeys="true">
+        insert into saas_order_application
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="merchantCode !=null">
+                merchant_code,
+            </if>
+            <if test="channelCode !=null">
+                channel_code,
+            </if>
+            <if test="borrowerCode !=null">
+                borrower_code,
+            </if>
+            <if test="orderNumb !=null">
+                order_numb,
+            </if>
+            <if test="realCapital !=null">
+                real_capital,
+            </if>
+            <if test="totalInterestRatio !=null">
+                total_interest_ratio,
+            </if>
+            <if test="lateInterestRatio !=null">
+                late_interest_ratio,
+            </if>
+            <if test="borrowPurpose !=null">
+                borrow_purpose,
+            </if>
+            <if test="repaymentDt !=null">
+                repayment_dt,
+            </if>
+            <if test="termUrl !=null">
+                term_url,
+            </if>
+            <if test="deleted !=null">
+                deleted,
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified,
+            </if>
+            <if test="gmtCreate !=null">
+                gmt_create,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="merchantCode != null">
+                #{merchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="channelCode != null">
+                #{channelCode,jdbcType=VARCHAR},
+            </if>
+            <if test="borrowerCode != null">
+                #{borrowerCode,jdbcType=VARCHAR},
+            </if>
+            <if test="orderNumb != null">
+                #{orderNumb,jdbcType=VARCHAR},
+            </if>
+            <if test="realCapital != null">
+                #{realCapital,jdbcType=DECIMAL},
+            </if>
+            <if test="totalInterestRatio != null">
+                #{totalInterestRatio,jdbcType=DECIMAL},
+            </if>
+            <if test="lateInterestRatio != null">
+                #{lateInterestRatio,jdbcType=DECIMAL},
+            </if>
+            <if test="borrowPurpose != null">
+                #{borrowPurpose,jdbcType=VARCHAR},
+            </if>
+            <if test="repaymentDt != null">
+                #{repaymentDt,jdbcType=DATE},
+            </if>
+            <if test="termUrl != null">
+                #{termUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.beitu.saas.order.entity.SaasOrderApplication">
+        update saas_order_application
+        <set>
+            <if test="merchantCode !=null">
+                merchant_code = #{merchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="channelCode !=null">
+                channel_code = #{channelCode,jdbcType=VARCHAR},
+            </if>
+            <if test="borrowerCode !=null">
+                borrower_code = #{borrowerCode,jdbcType=VARCHAR},
+            </if>
+            <if test="orderNumb !=null">
+                order_numb = #{orderNumb,jdbcType=VARCHAR},
+            </if>
+            <if test="realCapital !=null">
+                real_capital = #{realCapital,jdbcType=DECIMAL},
+            </if>
+            <if test="totalInterestRatio !=null">
+                total_interest_ratio = #{totalInterestRatio,jdbcType=DECIMAL},
+            </if>
+            <if test="lateInterestRatio !=null">
+                late_interest_ratio = #{lateInterestRatio,jdbcType=DECIMAL},
+            </if>
+            <if test="borrowPurpose !=null">
+                borrow_purpose = #{borrowPurpose,jdbcType=VARCHAR},
+            </if>
+            <if test="repaymentDt !=null">
+                repayment_dt = #{repaymentDt,jdbcType=DATE},
+            </if>
+            <if test="termUrl !=null">
+                term_url = #{termUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="deleted !=null">
+                deleted = #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteByPrimaryKey">
+        update  saas_order_application
+        set deleted = 1
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <sql id="paginationSql">
+        <if test="page != null">
+            limit #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+        </if>
+    </sql>
+
+    <sql id="paging">
+        <if test="offset != null and limit != null">
+            limit #{offset},#{limit}
+        </if>
+    </sql>
+
+    <select id="selectByParams" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_order_application
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="merchantCode !=null">
+                and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+            </if>
+            <if test="channelCode !=null">
+                and channel_code = #{channelCode,jdbcType=VARCHAR}
+            </if>
+            <if test="borrowerCode !=null">
+                and borrower_code = #{borrowerCode,jdbcType=VARCHAR}
+            </if>
+            <if test="orderNumb !=null">
+                and order_numb = #{orderNumb,jdbcType=VARCHAR}
+            </if>
+            <if test="realCapital !=null">
+                and real_capital = #{realCapital,jdbcType=DECIMAL}
+            </if>
+            <if test="totalInterestRatio !=null">
+                and total_interest_ratio = #{totalInterestRatio,jdbcType=DECIMAL}
+            </if>
+            <if test="lateInterestRatio !=null">
+                and late_interest_ratio = #{lateInterestRatio,jdbcType=DECIMAL}
+            </if>
+            <if test="borrowPurpose !=null">
+                and borrow_purpose = #{borrowPurpose,jdbcType=VARCHAR}
+            </if>
+            <if test="repaymentDt !=null">
+                and repayment_dt = #{repaymentDt,jdbcType=DATE}
+            </if>
+            <if test="termUrl !=null">
+                and term_url = #{termUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+        <include refid="paging"/>
+    </select>
+    <select id="queryTotal" resultType="INTEGER">
+        select count(*) from saas_order_application
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="merchantCode !=null">
+                and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+            </if>
+            <if test="channelCode !=null">
+                and channel_code = #{channelCode,jdbcType=VARCHAR}
+            </if>
+            <if test="borrowerCode !=null">
+                and borrower_code = #{borrowerCode,jdbcType=VARCHAR}
+            </if>
+            <if test="orderNumb !=null">
+                and order_numb = #{orderNumb,jdbcType=VARCHAR}
+            </if>
+            <if test="realCapital !=null">
+                and real_capital = #{realCapital,jdbcType=DECIMAL}
+            </if>
+            <if test="totalInterestRatio !=null">
+                and total_interest_ratio = #{totalInterestRatio,jdbcType=DECIMAL}
+            </if>
+            <if test="lateInterestRatio !=null">
+                and late_interest_ratio = #{lateInterestRatio,jdbcType=DECIMAL}
+            </if>
+            <if test="borrowPurpose !=null">
+                and borrow_purpose = #{borrowPurpose,jdbcType=VARCHAR}
+            </if>
+            <if test="repaymentDt !=null">
+                and repayment_dt = #{repaymentDt,jdbcType=DATE}
+            </if>
+            <if test="termUrl !=null">
+                and term_url = #{termUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </select>
+</mapper>

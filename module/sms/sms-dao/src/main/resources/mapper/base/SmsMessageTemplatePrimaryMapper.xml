@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beitu.saas.sms.dao.impl.SmsMessageTemplateDaoImpl">
+    <resultMap id="BaseResultMap" type="com.beitu.saas.sms.entity.SmsMessageTemplate">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="app_id" jdbcType="BIGINT" property="appId"/>
+        <result column="biz_code" jdbcType="VARCHAR" property="bizCode"/>
+        <result column="is_common" jdbcType="SMALLINT" property="isCommon"/>
+        <result column="msg_type" jdbcType="SMALLINT" property="msgType"/>
+        <result column="template_type" jdbcType="TINYINT" property="templateType"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="third_tmp_id" jdbcType="VARCHAR" property="thirdTmpId"/>
+        <result column="servicer_code" jdbcType="VARCHAR" property="servicerCode"/>
+        <result column="replace_list" jdbcType="VARCHAR" property="replaceList"/>
+        <result column="desc_info" jdbcType="VARCHAR" property="descInfo"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="sign" jdbcType="VARCHAR" property="sign"/>
+        <result column="deleted" jdbcType="BIT" property="deleted"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id,
+    app_id,
+    biz_code,
+    is_common,
+    msg_type,
+    template_type,
+    content,
+    third_tmp_id,
+    servicer_code,
+    replace_list,
+    desc_info,
+    type,
+    sign,
+    deleted,
+    gmt_modified,
+    gmt_create
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Long"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sms_message_template
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" keyColumn="id" keyProperty="id"
+            parameterType="com.beitu.saas.sms.entity.SmsMessageTemplate" useGeneratedKeys="true">
+        insert into sms_message_template
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="appId !=null">
+                app_id,
+                </if>
+                <if test="bizCode !=null">
+                biz_code,
+                </if>
+                <if test="isCommon !=null">
+                is_common,
+                </if>
+                <if test="msgType !=null">
+                msg_type,
+                </if>
+                <if test="templateType !=null">
+                template_type,
+                </if>
+                <if test="content !=null">
+                content,
+                </if>
+                <if test="thirdTmpId !=null">
+                third_tmp_id,
+                </if>
+                <if test="servicerCode !=null">
+                servicer_code,
+                </if>
+                <if test="replaceList !=null">
+                replace_list,
+                </if>
+                <if test="descInfo !=null">
+                desc_info,
+                </if>
+                <if test="type !=null">
+                type,
+                </if>
+                <if test="sign !=null">
+                sign,
+                </if>
+                <if test="deleted !=null">
+                deleted,
+                </if>
+                <if test="gmtModified !=null">
+                gmt_modified,
+                </if>
+                <if test="gmtCreate !=null">
+                gmt_create,
+                </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="appId != null">
+                    #{appId,jdbcType=BIGINT},
+                </if>
+                <if test="bizCode != null">
+                    #{bizCode,jdbcType=VARCHAR},
+                </if>
+                <if test="isCommon != null">
+                    #{isCommon,jdbcType=SMALLINT},
+                </if>
+                <if test="msgType != null">
+                    #{msgType,jdbcType=SMALLINT},
+                </if>
+                <if test="templateType != null">
+                    #{templateType,jdbcType=TINYINT},
+                </if>
+                <if test="content != null">
+                    #{content,jdbcType=VARCHAR},
+                </if>
+                <if test="thirdTmpId != null">
+                    #{thirdTmpId,jdbcType=VARCHAR},
+                </if>
+                <if test="servicerCode != null">
+                    #{servicerCode,jdbcType=VARCHAR},
+                </if>
+                <if test="replaceList != null">
+                    #{replaceList,jdbcType=VARCHAR},
+                </if>
+                <if test="descInfo != null">
+                    #{descInfo,jdbcType=VARCHAR},
+                </if>
+                <if test="type != null">
+                    #{type,jdbcType=VARCHAR},
+                </if>
+                <if test="sign != null">
+                    #{sign,jdbcType=VARCHAR},
+                </if>
+                <if test="deleted != null">
+                    #{deleted,jdbcType=BIT},
+                </if>
+                <if test="gmtModified != null">
+                    #{gmtModified,jdbcType=TIMESTAMP},
+                </if>
+                <if test="gmtCreate != null">
+                    #{gmtCreate,jdbcType=TIMESTAMP},
+                </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.beitu.saas.sms.entity.SmsMessageTemplate">
+        update sms_message_template
+        <set>
+                <if test="appId !=null">
+                app_id = #{appId,jdbcType=BIGINT},
+                </if>
+                <if test="bizCode !=null">
+                biz_code = #{bizCode,jdbcType=VARCHAR},
+                </if>
+                <if test="isCommon !=null">
+                is_common = #{isCommon,jdbcType=SMALLINT},
+                </if>
+                <if test="msgType !=null">
+                msg_type = #{msgType,jdbcType=SMALLINT},
+                </if>
+                <if test="templateType !=null">
+                template_type = #{templateType,jdbcType=TINYINT},
+                </if>
+                <if test="content !=null">
+                content = #{content,jdbcType=VARCHAR},
+                </if>
+                <if test="thirdTmpId !=null">
+                third_tmp_id = #{thirdTmpId,jdbcType=VARCHAR},
+                </if>
+                <if test="servicerCode !=null">
+                servicer_code = #{servicerCode,jdbcType=VARCHAR},
+                </if>
+                <if test="replaceList !=null">
+                replace_list = #{replaceList,jdbcType=VARCHAR},
+                </if>
+                <if test="descInfo !=null">
+                desc_info = #{descInfo,jdbcType=VARCHAR},
+                </if>
+                <if test="type !=null">
+                type = #{type,jdbcType=VARCHAR},
+                </if>
+                <if test="sign !=null">
+                sign = #{sign,jdbcType=VARCHAR},
+                </if>
+                <if test="deleted !=null">
+                deleted = #{deleted,jdbcType=BIT},
+                </if>
+                <if test="gmtModified !=null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+                </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteByPrimaryKey">
+        update  sms_message_template
+        set deleted = 1
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <sql id="paginationSql">
+        <if test="page != null">
+            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+        </if>
+    </sql>
+
+    <sql id="paging">
+        <if test="offset != null and limit != null">
+            limit #{offset},#{limit}
+        </if>
+    </sql>
+
+    <select id="selectByParams" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sms_message_template
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="appId !=null">
+                and app_id = #{appId,jdbcType=BIGINT}
+            </if>
+            <if test="bizCode !=null">
+                and biz_code = #{bizCode,jdbcType=VARCHAR}
+            </if>
+            <if test="isCommon !=null">
+                and is_common = #{isCommon,jdbcType=SMALLINT}
+            </if>
+            <if test="msgType !=null">
+                and msg_type = #{msgType,jdbcType=SMALLINT}
+            </if>
+            <if test="templateType !=null">
+                and template_type = #{templateType,jdbcType=TINYINT}
+            </if>
+            <if test="content !=null">
+                and content = #{content,jdbcType=VARCHAR}
+            </if>
+            <if test="thirdTmpId !=null">
+                and third_tmp_id = #{thirdTmpId,jdbcType=VARCHAR}
+            </if>
+            <if test="servicerCode !=null">
+                and servicer_code = #{servicerCode,jdbcType=VARCHAR}
+            </if>
+            <if test="replaceList !=null">
+                and replace_list = #{replaceList,jdbcType=VARCHAR}
+            </if>
+            <if test="descInfo !=null">
+                and desc_info = #{descInfo,jdbcType=VARCHAR}
+            </if>
+            <if test="type !=null">
+                and type = #{type,jdbcType=VARCHAR}
+            </if>
+            <if test="sign !=null">
+                and sign = #{sign,jdbcType=VARCHAR}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+        <include refid="paging"/>
+    </select>
+    <select id="queryTotal" resultType="INTEGER">
+        select count(*) from sms_message_template
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="appId !=null">
+                and app_id = #{appId,jdbcType=BIGINT}
+            </if>
+            <if test="bizCode !=null">
+                and biz_code = #{bizCode,jdbcType=VARCHAR}
+            </if>
+            <if test="isCommon !=null">
+                and is_common = #{isCommon,jdbcType=SMALLINT}
+            </if>
+            <if test="msgType !=null">
+                and msg_type = #{msgType,jdbcType=SMALLINT}
+            </if>
+            <if test="templateType !=null">
+                and template_type = #{templateType,jdbcType=TINYINT}
+            </if>
+            <if test="content !=null">
+                and content = #{content,jdbcType=VARCHAR}
+            </if>
+            <if test="thirdTmpId !=null">
+                and third_tmp_id = #{thirdTmpId,jdbcType=VARCHAR}
+            </if>
+            <if test="servicerCode !=null">
+                and servicer_code = #{servicerCode,jdbcType=VARCHAR}
+            </if>
+            <if test="replaceList !=null">
+                and replace_list = #{replaceList,jdbcType=VARCHAR}
+            </if>
+            <if test="descInfo !=null">
+                and desc_info = #{descInfo,jdbcType=VARCHAR}
+            </if>
+            <if test="type !=null">
+                and type = #{type,jdbcType=VARCHAR}
+            </if>
+            <if test="sign !=null">
+                and sign = #{sign,jdbcType=VARCHAR}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </select>
+</mapper>

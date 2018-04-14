@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beitu.saas.auth.dao.impl.SaasAdminDaoImpl">
+    <resultMap id="BaseResultMap" type="com.beitu.saas.auth.entity.SaasAdmin">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="job" jdbcType="VARCHAR" property="job"/>
+        <result column="enable" jdbcType="BIT" property="enable"/>
+        <result column="create_name" jdbcType="VARCHAR" property="createName"/>
+        <result column="is_default" jdbcType="BIT" property="isDefault"/>
+        <result column="deleted" jdbcType="BIT" property="deleted"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,
+        code,
+        merchant_code,
+        password,
+        `name`,
+        mobile,
+        job,
+        enable,
+        create_name,
+        deleted,
+        is_default,
+        gmt_modified,
+        gmt_create
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_admin
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.beitu.saas.auth.entity.SaasAdmin"  useGeneratedKeys="true">
+        insert into saas_admin
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="code !=null">
+                code,
+            </if>
+            <if test="merchantCode !=null">
+                merchant_code,
+            </if>
+            <if test="password !=null">
+                password,
+            </if>
+            <if test="name !=null">
+                `name`,
+            </if>
+            <if test="mobile !=null">
+                mobile,
+            </if>
+            <if test="job !=null">
+                job,
+            </if>
+            <if test="enable !=null">
+                enable,
+            </if>
+            <if test="createName !=null">
+                create_name,
+            </if>
+            <if test="deleted !=null">
+                deleted,
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified,
+            </if>
+            <if test="gmtCreate !=null">
+                gmt_create,
+            </if>
+            <if test="isDefault !=null">
+                is_default,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="code != null">
+                #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="merchantCode != null">
+                #{merchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null">
+                #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="job != null">
+                #{job,jdbcType=VARCHAR},
+            </if>
+            <if test="enable != null">
+                #{enable,jdbcType=BIT},
+            </if>
+            <if test="createName != null">
+                #{createName,jdbcType=VARCHAR},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDefault != null">
+                #{isDefault,jdbcType=BIT},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.beitu.saas.auth.entity.SaasAdmin">
+        update saas_admin
+        <set>
+            <if test="code !=null">
+                code = #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="merchantCode !=null">
+                merchant_code = #{merchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="password !=null">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="name !=null">
+                `name` = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile !=null">
+                mobile = #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="job !=null">
+                job = #{job,jdbcType=VARCHAR},
+            </if>
+            <if test="enable !=null">
+                enable = #{enable,jdbcType=BIT},
+            </if>
+            <if test="createName !=null">
+                create_name = #{createName,jdbcType=VARCHAR},
+            </if>
+            <if test="deleted !=null">
+                deleted = #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDefault !=null">
+                is_default = #{isDefault,jdbcType=BIT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteByPrimaryKey">
+        update  saas_admin
+        set deleted = 1
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <sql id="paginationSql">
+        <if test="page != null">
+            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+        </if>
+    </sql>
+
+    <sql id="paging">
+        <if test="offset != null and limit != null">
+            limit #{offset},#{limit}
+        </if>
+    </sql>
+
+    <select id="selectByParams" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_admin
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="code !=null">
+                and code = #{code,jdbcType=VARCHAR}
+            </if>
+            <if test="merchantCode !=null">
+                and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+            </if>
+            <if test="password !=null">
+                and password = #{password,jdbcType=VARCHAR}
+            </if>
+            <if test="name !=null">
+                and `name` = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="mobile !=null">
+                and mobile = #{mobile,jdbcType=VARCHAR}
+            </if>
+            <if test="job !=null">
+                and job = #{job,jdbcType=VARCHAR}
+            </if>
+            <if test="enable !=null">
+                and enable = #{enable,jdbcType=BIT}
+            </if>
+            <if test="createName !=null">
+                and create_name = #{createName,jdbcType=VARCHAR}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="isDefault !=null">
+                and is_default = #{isDefault,jdbcType=BIT}
+            </if>
+        </trim>
+        <include refid="paginationSql"/>
+        <include refid="paging"/>
+    </select>
+    <select id="queryTotal" resultType="INTEGER">
+        select count(*) from saas_admin
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="code !=null">
+                and code = #{code,jdbcType=VARCHAR}
+            </if>
+            <if test="merchantCode !=null">
+                and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+            </if>
+            <if test="password !=null">
+                and password = #{password,jdbcType=VARCHAR}
+            </if>
+            <if test="name !=null">
+                and `name` = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="mobile !=null">
+                and mobile = #{mobile,jdbcType=VARCHAR}
+            </if>
+            <if test="job !=null">
+                and job = #{job,jdbcType=VARCHAR}
+            </if>
+            <if test="enable !=null">
+                and enable = #{enable,jdbcType=BIT}
+            </if>
+            <if test="createName !=null">
+                and create_name = #{createName,jdbcType=VARCHAR}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="isDefault !=null">
+                and is_default = #{isDefault,jdbcType=BIT}
+            </if>
+        </trim>
+    </select>
+</mapper>

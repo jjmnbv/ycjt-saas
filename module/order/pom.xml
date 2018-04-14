@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>module</artifactId>
+        <groupId>com.beitu.saas</groupId>
+        <version>0.1</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>order</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>order-client</module>
+        <module>order-dao</module>
+        <module>order-entity</module>
+        <module>order-service</module>
+    </modules>
+    <dependencies>
+        <dependency>
+            <groupId>com.fqgj</groupId>
+            <artifactId>system-exception</artifactId>
+            <version>${system-exception.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>system-log</artifactId>
+                    <groupId>com.fqgj</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.fqgj</groupId>
+            <artifactId>system-log</artifactId>
+            <version>${fqgj-system-log}</version>
+        </dependency>
+    </dependencies>
+
+
+</project>

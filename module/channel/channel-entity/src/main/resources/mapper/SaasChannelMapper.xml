@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beitu.saas.channel.dao.impl.SaasChannelDaoImpl">
+
+    <sql id="Param_Where_Clause">
+        <where>
+            <trim prefixOverrides="and">
+
+                <if test="saasChannelParam !=null and saasChannelParam.merchantCode != null">
+                    and merchant_code = #{saasChannelParam.merchantCode,jdbcType=VARCHAR}
+                </if>
+                <if test="saasChannelParam !=null and saasChannelParam.channelName != null">
+                    and channel_name = #{saasChannelParam.channelName,jdbcType=VARCHAR}
+                </if>
+                <if test="saasChannelParam !=null and saasChannelParam.channelCode != null">
+                    and channel_code = #{saasChannelParam.channelCode,jdbcType=VARCHAR}
+                </if>
+                <if test="saasChannelParam !=null and saasChannelParam.channelStatus != null">
+                    and channel_status = #{saasChannelParam.channelStatus,jdbcType=INTEGER}
+                </if>
+                <if test="saasChannelParam !=null and saasChannelParam.chargePersonCode != null">
+                    and charge_person_code = #{saasChannelParam.chargePersonCode,jdbcType=VARCHAR}
+                </if>
+                and channel_type=0 and deleted = 0
+            </trim>
+        </where>
+    </sql>
+
+    <sql id="Param_channel_order_stat_Where_Clause">
+        <where>
+            <trim prefixOverrides="and">
+                <if test="channelStatQueryParam.merchantCode != null">
+                    and merchant_code = #{channelStatQueryParam.merchantCode,jdbcType=VARCHAR}
+                </if>
+                <if test="channelStatQueryParam.createStartDate != null and channelStatQueryParam.createEndDate != null">
+                    and date_format(gmt_create, '%Y-%m-%d') &gt;=
+                    #{channelStatQueryParam.createStartDate,jdbcType=VARCHAR}
+                    and date_format(gmt_create, '%Y-%m-%d') &lt;
+                    #{channelStatQueryParam.createEndDate,jdbcType=VARCHAR}
+                </if>
+                group by channel_code
+            </trim>
+        </where>
+    </sql>
+
+
+    <select id="selectChannelEntityList" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from saas_channel
+        <include refid="Param_Where_Clause"/>
+        <include refid="paginationSql"/>
+    </select>
+
+    <select id="selectAllChannelEntityList" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from saas_channel
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="merchantCode !=null">
+                and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+            </if>
+            and deleted = false
+            and <![CDATA[ channel_type != 1 ]]>
+        </trim>
+        order by channel_type desc
+    </select>
+
+    <select id="countChannelEntityList" parameterType="map" resultType="INTEGER">
+        SELECT COUNT(*)
+        from saas_channel
+        <include refid="Param_Where_Clause"/>
+    </select>
+
+    <select id="selectChannelEntityByChannelCode" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from saas_channel
+        <where>
+            <trim prefixOverrides="and">
+                <if test="channelCode !=null">
+                    and channel_code = #{channelCode,jdbcType=VARCHAR}
+                </if>
+                and deleted = 0
+            </trim>
+        </where>
+    </select>
+
+    <select id="selectChannelStatList" parameterType="map"
+            resultType="com.beitu.saas.channel.vo.ChannelStatVo">
+        SELECT
+        channel_code channelCode,
+        count(distinct(order_numb)) intoPiecesNum,
+        count(distinct(case when order_status>200 then order_numb else null end)) primaryReviewerNum,
+        count(distinct(case when order_status>300 then order_numb else null end)) finalReviewerNum,
+        count(distinct(case when order_status>400 then order_numb else null end)) loanLenderNum
+        FROM saas_order
+        <include refid="Param_channel_order_stat_Where_Clause"/>
+        <include refid="paginationSql"/>
+    </select>
+
+
+    <select id="queryTotalChannelStatCount" parameterType="map" resultType="INTEGER">
+        SELECT count(1) FROM (
+        SELECT channel_code FROM saas_order
+        <include refid="Param_channel_order_stat_Where_Clause"/>
+        ) t
+    </select>
+
+    <select id="selectDefaultChannelEntityByMerchantCode" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from saas_channel
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="merchantCode !=null">
+                and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+            </if>
+            <if test="channelType !=null">
+                and channel_type = #{channelType,jdbcType=INTEGER}
+            </if>
+            and deleted = false
+        </trim>
+    </select>
+
+</mapper>

@@ -153,17 +153,17 @@ public class CalculateUtil {
 
     /**
      * 判断解密金额是否合法
-     * @param userId
+     * @param merchantCode
      * @param encrypt 加密字符串
      * @return
      */
-    public static Boolean isIllegalAmount(Long userId,String encrypt) {
+    public static Boolean isIllegalAmount(String merchantCode,String encrypt) {
         String decrypt = CryptUtil.Decrypt(encrypt);
         if (!decrypt.contains("_")){
             return Boolean.FALSE;
         }
         String decryptUserId = decrypt.substring(decrypt.indexOf("_") + 1,decrypt.length());
-        if (decryptUserId.equals(userId.toString())){
+        if (decryptUserId.equals(merchantCode)){
             return Boolean.TRUE;
         }
         return Boolean.FALSE;

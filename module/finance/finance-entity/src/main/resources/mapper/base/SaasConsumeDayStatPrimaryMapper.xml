@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beitu.saas.finance.dao.impl.SaasConsumeDayStatDaoImpl">
+    <resultMap id="BaseResultMap" type="com.beitu.saas.finance.entity.SaasConsumeDayStatEntity">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="dt" jdbcType="DATE" property="dt"/>
+        <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode"/>
+        <result column="consume_credit" jdbcType="BIGINT" property="consumeCredit"/>
+        <result column="consume_sms" jdbcType="BIGINT" property="consumeSms"/>
+        <result column="last_clear_dt" jdbcType="DATE" property="lastClearDt"/>
+        <result column="deleted" jdbcType="BIT" property="deleted"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id,
+    dt,
+    merchant_code,
+    consume_credit,
+    consume_sms,
+    last_clear_dt,
+    deleted,
+    gmt_modified,
+    gmt_create
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Long"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_consume_day_stat
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" keyColumn="id" keyProperty="id"
+            parameterType="com.beitu.saas.finance.entity.SaasConsumeDayStatEntity" useGeneratedKeys="true">
+        insert into saas_consume_day_stat
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="dt !=null">
+                dt,
+                </if>
+                <if test="merchantCode !=null">
+                merchant_code,
+                </if>
+                <if test="consumeCredit !=null">
+                consume_credit,
+                </if>
+                <if test="consumeSms !=null">
+                consume_sms,
+                </if>
+                <if test="lastClearDt !=null">
+                last_clear_dt,
+                </if>
+                <if test="deleted !=null">
+                deleted,
+                </if>
+                <if test="gmtModified !=null">
+                gmt_modified,
+                </if>
+                <if test="gmtCreate !=null">
+                gmt_create,
+                </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="dt != null">
+                    #{dt,jdbcType=DATE},
+                </if>
+                <if test="merchantCode != null">
+                    #{merchantCode,jdbcType=VARCHAR},
+                </if>
+                <if test="consumeCredit != null">
+                    #{consumeCredit,jdbcType=BIGINT},
+                </if>
+                <if test="consumeSms != null">
+                    #{consumeSms,jdbcType=BIGINT},
+                </if>
+                <if test="lastClearDt != null">
+                    #{lastClearDt,jdbcType=DATE},
+                </if>
+                <if test="deleted != null">
+                    #{deleted,jdbcType=BIT},
+                </if>
+                <if test="gmtModified != null">
+                    #{gmtModified,jdbcType=TIMESTAMP},
+                </if>
+                <if test="gmtCreate != null">
+                    #{gmtCreate,jdbcType=TIMESTAMP},
+                </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.beitu.saas.finance.entity.SaasConsumeDayStatEntity">
+        update saas_consume_day_stat
+        <set>
+                <if test="dt !=null">
+                dt = #{dt,jdbcType=DATE},
+                </if>
+                <if test="merchantCode !=null">
+                merchant_code = #{merchantCode,jdbcType=VARCHAR},
+                </if>
+                <if test="consumeCredit !=null">
+                consume_credit = #{consumeCredit,jdbcType=BIGINT},
+                </if>
+                <if test="consumeSms !=null">
+                consume_sms = #{consumeSms,jdbcType=BIGINT},
+                </if>
+                <if test="lastClearDt !=null">
+                last_clear_dt = #{lastClearDt,jdbcType=DATE},
+                </if>
+                <if test="deleted !=null">
+                deleted = #{deleted,jdbcType=BIT},
+                </if>
+                <if test="gmtModified !=null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+                </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteByPrimaryKey">
+        update  saas_consume_day_stat
+        set deleted = 1
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <sql id="paginationSql">
+        <if test="page != null">
+            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+        </if>
+    </sql>
+
+    <sql id="paging">
+        <if test="offset != null and limit != null">
+            limit #{offset},#{limit}
+        </if>
+    </sql>
+
+    <select id="selectByParams" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_consume_day_stat
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="dt !=null">
+                and dt = #{dt,jdbcType=DATE}
+            </if>
+            <if test="merchantCode !=null">
+                and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+            </if>
+            <if test="consumeCredit !=null">
+                and consume_credit = #{consumeCredit,jdbcType=BIGINT}
+            </if>
+            <if test="consumeSms !=null">
+                and consume_sms = #{consumeSms,jdbcType=BIGINT}
+            </if>
+            <if test="lastClearDt !=null">
+                and last_clear_dt = #{lastClearDt,jdbcType=DATE}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+        <include refid="paging"/>
+    </select>
+    <select id="queryTotal" resultType="INTEGER">
+        select count(*) from saas_consume_day_stat
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="dt !=null">
+                and dt = #{dt,jdbcType=DATE}
+            </if>
+            <if test="merchantCode !=null">
+                and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+            </if>
+            <if test="consumeCredit !=null">
+                and consume_credit = #{consumeCredit,jdbcType=BIGINT}
+            </if>
+            <if test="consumeSms !=null">
+                and consume_sms = #{consumeSms,jdbcType=BIGINT}
+            </if>
+            <if test="lastClearDt !=null">
+                and last_clear_dt = #{lastClearDt,jdbcType=DATE}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </select>
+</mapper>

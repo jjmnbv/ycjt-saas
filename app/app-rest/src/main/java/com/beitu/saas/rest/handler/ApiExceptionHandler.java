@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.client.HttpClientErrorException;
 
+import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.UndeclaredThrowableException;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
@@ -91,10 +93,12 @@ public class ApiExceptionHandler {
 //    }
 
     @ExceptionHandler(value = ApplicationException.class)
-    @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
-    public ApiResponse applicationErrorHandler(ApplicationException e) throws Exception {
+    public ApiResponse applicationErrorHandler(ApplicationException e,HttpServletResponse response) throws Exception {
         LOGGER.warn("异常信息为：{}", e);
+        if (e.getErrorId()==700){
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        }
         return new ApiResponse(e.getErrorId(), e.getMessage());
     }
     

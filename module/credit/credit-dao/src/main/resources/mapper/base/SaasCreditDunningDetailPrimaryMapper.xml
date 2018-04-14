@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beitu.saas.credit.dao.impl.SaasCreditDunningDetailDaoImpl">
+    <resultMap id="BaseResultMap" type="com.beitu.saas.credit.entity.SaasCreditDunningDetail">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="record_id" jdbcType="BIGINT" property="recordId"/>
+        <result column="call_tel_total_nums" jdbcType="INTEGER" property="callTelTotalNums"/>
+        <result column="call_total_times" jdbcType="INTEGER" property="callTotalTimes"/>
+        <result column="call_out_times" jdbcType="INTEGER" property="callOutTimes"/>
+        <result column="call_in_times" jdbcType="INTEGER" property="callInTimes"/>
+        <result column="call_total_duration" jdbcType="INTEGER" property="callTotalDuration"/>
+        <result column="call_avg_duration" jdbcType="DECIMAL" property="callAvgDuration"/>
+        <result column="call_out_duration" jdbcType="INTEGER" property="callOutDuration"/>
+        <result column="call_in_duration" jdbcType="INTEGER" property="callInDuration"/>
+        <result column="call_duration_below15" jdbcType="INTEGER" property="callDurationBelow15"/>
+        <result column="call_duration_between15and30" jdbcType="INTEGER" property="callDurationBetween15and30"/>
+        <result column="call_duration_above60" jdbcType="INTEGER" property="callDurationAbove60"/>
+        <result column="first_call_time" jdbcType="VARCHAR" property="firstCallTime"/>
+        <result column="last_call_time" jdbcType="VARCHAR" property="lastCallTime"/>
+        <result column="type" jdbcType="TINYINT" property="type"/>
+        <result column="deleted" jdbcType="BIT" property="deleted"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id,
+    record_id,
+    call_tel_total_nums,
+    call_total_times,
+    call_out_times,
+    call_in_times,
+    call_total_duration,
+    call_avg_duration,
+    call_out_duration,
+    call_in_duration,
+    call_duration_below15,
+    call_duration_between15and30,
+    call_duration_above60,
+    first_call_time,
+    last_call_time,
+    `type`,
+    deleted,
+    gmt_modified,
+    gmt_create
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Long"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_credit_dunning_detail
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" keyColumn="id" keyProperty="id"
+            parameterType="com.beitu.saas.credit.entity.SaasCreditDunningDetail" useGeneratedKeys="true">
+        insert into saas_credit_dunning_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="recordId !=null">
+                record_id,
+            </if>
+            <if test="callTelTotalNums !=null">
+                call_tel_total_nums,
+            </if>
+            <if test="callTotalTimes !=null">
+                call_total_times,
+            </if>
+            <if test="callOutTimes !=null">
+                call_out_times,
+            </if>
+            <if test="callInTimes !=null">
+                call_in_times,
+            </if>
+            <if test="callTotalDuration !=null">
+                call_total_duration,
+            </if>
+            <if test="callAvgDuration !=null">
+                call_avg_duration,
+            </if>
+            <if test="callOutDuration !=null">
+                call_out_duration,
+            </if>
+            <if test="callInDuration !=null">
+                call_in_duration,
+            </if>
+            <if test="callDurationBelow15 !=null">
+                call_duration_below15,
+            </if>
+            <if test="callDurationBetween15and30 !=null">
+                call_duration_between15and30,
+            </if>
+            <if test="callDurationAbove60 !=null">
+                call_duration_above60,
+            </if>
+            <if test="firstCallTime !=null">
+                first_call_time,
+            </if>
+            <if test="lastCallTime !=null">
+                last_call_time,
+            </if>
+            <if test="type !=null">
+                `type`,
+            </if>
+            <if test="deleted !=null">
+                deleted,
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified,
+            </if>
+            <if test="gmtCreate !=null">
+                gmt_create,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="recordId != null">
+                #{recordId,jdbcType=BIGINT},
+            </if>
+            <if test="callTelTotalNums != null">
+                #{callTelTotalNums,jdbcType=INTEGER},
+            </if>
+            <if test="callTotalTimes != null">
+                #{callTotalTimes,jdbcType=INTEGER},
+            </if>
+            <if test="callOutTimes != null">
+                #{callOutTimes,jdbcType=INTEGER},
+            </if>
+            <if test="callInTimes != null">
+                #{callInTimes,jdbcType=INTEGER},
+            </if>
+            <if test="callTotalDuration != null">
+                #{callTotalDuration,jdbcType=INTEGER},
+            </if>
+            <if test="callAvgDuration != null">
+                #{callAvgDuration,jdbcType=DECIMAL},
+            </if>
+            <if test="callOutDuration != null">
+                #{callOutDuration,jdbcType=INTEGER},
+            </if>
+            <if test="callInDuration != null">
+                #{callInDuration,jdbcType=INTEGER},
+            </if>
+            <if test="callDurationBelow15 != null">
+                #{callDurationBelow15,jdbcType=INTEGER},
+            </if>
+            <if test="callDurationBetween15and30 != null">
+                #{callDurationBetween15and30,jdbcType=INTEGER},
+            </if>
+            <if test="callDurationAbove60 != null">
+                #{callDurationAbove60,jdbcType=INTEGER},
+            </if>
+            <if test="firstCallTime != null">
+                #{firstCallTime,jdbcType=VARCHAR},
+            </if>
+            <if test="lastCallTime != null">
+                #{lastCallTime,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=TINYINT},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.beitu.saas.credit.entity.SaasCreditDunningDetail">
+        update saas_credit_dunning_detail
+        <set>
+            <if test="recordId !=null">
+                record_id = #{recordId,jdbcType=BIGINT},
+            </if>
+            <if test="callTelTotalNums !=null">
+                call_tel_total_nums = #{callTelTotalNums,jdbcType=INTEGER},
+            </if>
+            <if test="callTotalTimes !=null">
+                call_total_times = #{callTotalTimes,jdbcType=INTEGER},
+            </if>
+            <if test="callOutTimes !=null">
+                call_out_times = #{callOutTimes,jdbcType=INTEGER},
+            </if>
+            <if test="callInTimes !=null">
+                call_in_times = #{callInTimes,jdbcType=INTEGER},
+            </if>
+            <if test="callTotalDuration !=null">
+                call_total_duration = #{callTotalDuration,jdbcType=INTEGER},
+            </if>
+            <if test="callAvgDuration !=null">
+                call_avg_duration = #{callAvgDuration,jdbcType=DECIMAL},
+            </if>
+            <if test="callOutDuration !=null">
+                call_out_duration = #{callOutDuration,jdbcType=INTEGER},
+            </if>
+            <if test="callInDuration !=null">
+                call_in_duration = #{callInDuration,jdbcType=INTEGER},
+            </if>
+            <if test="callDurationBelow15 !=null">
+                call_duration_below15 = #{callDurationBelow15,jdbcType=INTEGER},
+            </if>
+            <if test="callDurationBetween15and30 !=null">
+                call_duration_between15and30 = #{callDurationBetween15and30,jdbcType=INTEGER},
+            </if>
+            <if test="callDurationAbove60 !=null">
+                call_duration_above60 = #{callDurationAbove60,jdbcType=INTEGER},
+            </if>
+            <if test="firstCallTime !=null">
+                first_call_time = #{firstCallTime,jdbcType=VARCHAR},
+            </if>
+            <if test="lastCallTime !=null">
+                last_call_time = #{lastCallTime,jdbcType=VARCHAR},
+            </if>
+            <if test="type !=null">
+                `type` = #{type,jdbcType=TINYINT},
+            </if>
+            <if test="deleted !=null">
+                deleted = #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteByPrimaryKey">
+        update  saas_credit_dunning_detail
+        set deleted = 1
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <sql id="paginationSql">
+        <if test="page != null">
+            limit #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+        </if>
+    </sql>
+
+    <sql id="paging">
+        <if test="offset != null and limit != null">
+            limit #{offset},#{limit}
+        </if>
+    </sql>
+
+    <select id="selectByParams" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_credit_dunning_detail
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="recordId !=null">
+                and record_id = #{recordId,jdbcType=BIGINT}
+            </if>
+            <if test="callTelTotalNums !=null">
+                and call_tel_total_nums = #{callTelTotalNums,jdbcType=INTEGER}
+            </if>
+            <if test="callTotalTimes !=null">
+                and call_total_times = #{callTotalTimes,jdbcType=INTEGER}
+            </if>
+            <if test="callOutTimes !=null">
+                and call_out_times = #{callOutTimes,jdbcType=INTEGER}
+            </if>
+            <if test="callInTimes !=null">
+                and call_in_times = #{callInTimes,jdbcType=INTEGER}
+            </if>
+            <if test="callTotalDuration !=null">
+                and call_total_duration = #{callTotalDuration,jdbcType=INTEGER}
+            </if>
+            <if test="callAvgDuration !=null">
+                and call_avg_duration = #{callAvgDuration,jdbcType=DECIMAL}
+            </if>
+            <if test="callOutDuration !=null">
+                and call_out_duration = #{callOutDuration,jdbcType=INTEGER}
+            </if>
+            <if test="callInDuration !=null">
+                and call_in_duration = #{callInDuration,jdbcType=INTEGER}
+            </if>
+            <if test="callDurationBelow15 !=null">
+                and call_duration_below15 = #{callDurationBelow15,jdbcType=INTEGER}
+            </if>
+            <if test="callDurationBetween15and30 !=null">
+                and call_duration_between15and30 = #{callDurationBetween15and30,jdbcType=INTEGER}
+            </if>
+            <if test="callDurationAbove60 !=null">
+                and call_duration_above60 = #{callDurationAbove60,jdbcType=INTEGER}
+            </if>
+            <if test="firstCallTime !=null">
+                and first_call_time = #{firstCallTime,jdbcType=VARCHAR}
+            </if>
+            <if test="lastCallTime !=null">
+                and last_call_time = #{lastCallTime,jdbcType=VARCHAR}
+            </if>
+            <if test="type !=null">
+                and `type` = #{type,jdbcType=TINYINT}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+        <include refid="paging"/>
+    </select>
+    <select id="queryTotal" resultType="INTEGER">
+        select count(*) from saas_credit_dunning_detail
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="recordId !=null">
+                and record_id = #{recordId,jdbcType=BIGINT}
+            </if>
+            <if test="callTelTotalNums !=null">
+                and call_tel_total_nums = #{callTelTotalNums,jdbcType=INTEGER}
+            </if>
+            <if test="callTotalTimes !=null">
+                and call_total_times = #{callTotalTimes,jdbcType=INTEGER}
+            </if>
+            <if test="callOutTimes !=null">
+                and call_out_times = #{callOutTimes,jdbcType=INTEGER}
+            </if>
+            <if test="callInTimes !=null">
+                and call_in_times = #{callInTimes,jdbcType=INTEGER}
+            </if>
+            <if test="callTotalDuration !=null">
+                and call_total_duration = #{callTotalDuration,jdbcType=INTEGER}
+            </if>
+            <if test="callAvgDuration !=null">
+                and call_avg_duration = #{callAvgDuration,jdbcType=DECIMAL}
+            </if>
+            <if test="callOutDuration !=null">
+                and call_out_duration = #{callOutDuration,jdbcType=INTEGER}
+            </if>
+            <if test="callInDuration !=null">
+                and call_in_duration = #{callInDuration,jdbcType=INTEGER}
+            </if>
+            <if test="callDurationBelow15 !=null">
+                and call_duration_below15 = #{callDurationBelow15,jdbcType=INTEGER}
+            </if>
+            <if test="callDurationBetween15and30 !=null">
+                and call_duration_between15and30 = #{callDurationBetween15and30,jdbcType=INTEGER}
+            </if>
+            <if test="callDurationAbove60 !=null">
+                and call_duration_above60 = #{callDurationAbove60,jdbcType=INTEGER}
+            </if>
+            <if test="firstCallTime !=null">
+                and first_call_time = #{firstCallTime,jdbcType=VARCHAR}
+            </if>
+            <if test="lastCallTime !=null">
+                and last_call_time = #{lastCallTime,jdbcType=VARCHAR}
+            </if>
+            <if test="type !=null">
+                and `type` = #{type,jdbcType=TINYINT}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </select>
+</mapper>

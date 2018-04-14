@@ -12,13 +12,12 @@
 
     <artifactId>user-client</artifactId>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.4</version>
-            </plugin>
-        </plugins>
-    </build>
+    <dependencies>
+        <dependency>
+            <groupId>com.beitu.saas</groupId>
+            <artifactId>user-entity</artifactId>
+            <version>0.1</version>
+        </dependency>
+    </dependencies>
+
 </project>

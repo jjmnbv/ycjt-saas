@@ -11,5 +11,17 @@
 
     <artifactId>user-service</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.beitu.saas</groupId>
+            <artifactId>user-client</artifactId>
+            <version>0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.beitu.saas</groupId>
+            <artifactId>user-dao</artifactId>
+            <version>0.1</version>
+        </dependency>
+    </dependencies>
 
 </project>

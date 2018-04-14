@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beitu.saas.collection.dao.impl.SaasCollectionOrderDaoImpl">
+
+    <sql id="Param_collection_order_Where_Clause">
+        <where>
+            <trim prefixOverrides="and">
+                <if test="collectionOrderQueryParam.mobile != null">
+                    and sb.mobile = #{collectionOrderQueryParam.mobile,jdbcType=VARCHAR}
+                </if>
+                <if test="collectionOrderQueryParam.name != null">
+                    and sbri.name = #{collectionOrderQueryParam.name,jdbcType=VARCHAR}
+                </if>
+                <if test="collectionOrderQueryParam.identityCode != null">
+                    and sbri.identity_code = #{collectionOrderQueryParam.identityCode,jdbcType=VARCHAR}
+                </if>
+                <if test="collectionOrderQueryParam.channelCode != null">
+                    and so.channel_code = #{collectionOrderQueryParam.channelCode,jdbcType=VARCHAR}
+                </if>
+                <if test="collectionOrderQueryParam.merchantCode != null">
+                    and sb.merchant_code = #{collectionOrderQueryParam.merchantCode,jdbcType=VARCHAR}
+                </if>
+                <if test="collectionOrderQueryParam.overdueStartDate != null and collectionOrderQueryParam.overdueEndDate != null">
+                    and date_format(so.repayment_dt, '%Y-%m-%d') &gt;=
+                    #{collectionOrderQueryParam.overdueStartDate,jdbcType=VARCHAR}
+                    and date_format(so.repayment_dt, '%Y-%m-%d') &lt;
+                    #{collectionOrderQueryParam.overdueEndDate,jdbcType=VARCHAR}
+                </if>
+                and sco.status=0 AND sco.deleted = 0 and so.deleted=0
+                and sb.deleted=0 and sbri.deleted=0 and sc.deleted=0
+            </trim>
+        </where>
+    </sql>
+
+    <select id="selectSaasCollectionOrderEntity" parameterType="map"
+            resultType="com.beitu.saas.collection.entity.SaasCollectionOrderEntity">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from saas_collection_order
+        <where>
+            <trim prefixOverrides="and">
+                <if test="orderNo !=null">
+                    and order_no = #{orderNo,jdbcType=VARCHAR}
+                </if>
+                and deleted = 0
+            </trim>
+        </where>
+
+    </select>
+
+    <select id="selectCollectionOrderListByPage" parameterType="map"
+            resultType="com.beitu.saas.collection.vo.CollectionOrderInfoDetailVo">
+        SELECT
+        sco.order_no orderNo,
+        sbri.name,
+        sb.mobile,
+        so.real_capital realCapital,
+        so.created_dt createdDt,
+        so.repayment_dt repaymentDt,
+        (CASE
+        WHEN sobd.relation_order_bill_detail_id IS NOT NULL THEN '是'
+        ELSE '否'
+        END) extend,
+        DATEDIFF(now(),so.repayment_dt) overdueDuration,
+        sc.channel_name channelName
+        FROM
+        saas_collection_order sco
+        LEFT JOIN
+        (SELECT s1.*
+        FROM saas_order s1 LEFT JOIN saas_order s2
+        ON (s1.order_numb = s2.order_numb AND s1.id &lt; s2.id)
+        WHERE s2.id IS NULL)
+        so ON sco.order_no = so.order_numb
+        LEFT JOIN
+        saas_borrower sb ON so.borrower_code = sb.borrower_code
+        LEFT JOIN
+        saas_borrower_real_info sbri ON so.borrower_code = sbri.borrower_code
+        LEFT JOIN
+        saas_channel sc ON so.channel_code = sc.channel_code
+        LEFT JOIN
+        saas_order_bill_detail sobd ON sco.order_no = sobd.order_numb
+        <include refid="Param_collection_order_Where_Clause"/>
+        <include refid="paginationSql"/>
+    </select>
+
+
+    <select id="queryTotalCollectionOrderListCount" parameterType="map" resultType="INTEGER">
+        SELECT COUNT(*) from (
+        select
+        sco.order_no orderNo
+        from saas_collection_order sco
+        left join saas_order so on sco.order_no=so.order_numb
+        left join saas_borrower sb on so.borrower_code=sb.borrower_code
+        left join saas_borrower_real_info sbri on so.borrower_code=sbri.borrower_code
+        left join saas_channel sc on so.channel_code=sc.channel_code
+        <include refid="Param_collection_order_Where_Clause"/>)t
+    </select>
+
+    <select id="queryCollectionOrderCount" parameterType="map" resultType="INTEGER">
+        SELECT
+        count(*)
+        from saas_collection_order
+        <where>
+            <trim prefixOverrides="and">
+                <if test="orderNo !=null">
+                    and order_no = #{orderNo,jdbcType=VARCHAR}
+                </if>
+                and deleted = 0
+            </trim>
+        </where>
+    </select>
+
+</mapper>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beitu.saas.auth.dao.impl.SaasAdminTokenDaoImpl">
+    <resultMap id="BaseResultMap" type="com.beitu.saas.auth.entity.SaasAdminToken">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="access_token" jdbcType="VARCHAR" property="accessToken"/>
+        <result column="admin_code" jdbcType="VARCHAR" property="adminCode"/>
+        <result column="expire_date" jdbcType="TIMESTAMP" property="expireDate"/>
+        <result column="deleted" jdbcType="TINYINT" property="deleted"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,
+        access_token,
+        admin_code,
+        expire_date,
+        deleted,
+        gmt_modified,
+        gmt_create
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_admin_token
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.beitu.saas.auth.entity.SaasAdminToken"  useGeneratedKeys="true">
+        insert into saas_admin_token
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="accessToken !=null">
+                access_token,
+            </if>
+            <if test="adminCode !=null">
+                admin_code,
+            </if>
+            <if test="expireDate !=null">
+                expire_date,
+            </if>
+            <if test="deleted !=null">
+                deleted,
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified,
+            </if>
+            <if test="gmtCreate !=null">
+                gmt_create,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="accessToken != null">
+                #{accessToken,jdbcType=VARCHAR},
+            </if>
+            <if test="adminCode != null">
+                #{adminCode,jdbcType=VARCHAR},
+            </if>
+            <if test="expireDate != null">
+                #{expireDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=TINYINT},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.beitu.saas.auth.entity.SaasAdminToken">
+        update saas_admin_token
+        <set>
+            <if test="accessToken !=null">
+                access_token = #{accessToken,jdbcType=VARCHAR},
+            </if>
+            <if test="adminCode !=null">
+                admin_code = #{adminCode,jdbcType=VARCHAR},
+            </if>
+            <if test="expireDate !=null">
+                expire_date = #{expireDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deleted !=null">
+                deleted = #{deleted,jdbcType=TINYINT},
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="deleteByPrimaryKey">
+        update  saas_admin_token
+        set deleted = 1
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <sql id="paginationSql">
+        <if test="page != null">
+            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+        </if>
+    </sql>
+
+    <sql id="paging">
+        <if test="offset != null and limit != null">
+            limit #{offset},#{limit}
+        </if>
+    </sql>
+
+    <select id="selectByParams" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_admin_token
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="accessToken !=null">
+                and access_token = #{accessToken,jdbcType=VARCHAR}
+            </if>
+            <if test="adminCode !=null">
+                and admin_code = #{adminCode,jdbcType=VARCHAR}
+            </if>
+            <if test="expireDate !=null">
+                and expire_date = #{expireDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=TINYINT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+        <include refid="paging"/>
+    </select>
+    <select id="queryTotal" resultType="INTEGER">
+        select count(*) from saas_admin_token
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="accessToken !=null">
+                and access_token = #{accessToken,jdbcType=VARCHAR}
+            </if>
+            <if test="adminCode !=null">
+                and admin_code = #{adminCode,jdbcType=VARCHAR}
+            </if>
+            <if test="expireDate !=null">
+                and expire_date = #{expireDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=TINYINT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </select>
+</mapper>

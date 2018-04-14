@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beitu.saas.order.dao.impl.SaasOrderBillDetailDaoImpl">
+
+    <sql id="conditions">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="merchantCode !=null">
+                and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+            </if>
+            <if test="channelCode !=null">
+                and channel_code = #{channelCode,jdbcType=VARCHAR}
+            </if>
+            <if test="orderNumbList !=null and orderNumbList.size > 0">
+                and order_numb IN
+                <foreach item="orderNumb" index="index" collection="orderNumbList" open="(" separator=","
+                         close=")">
+                    #{orderNumb}
+                </foreach>
+            </if>
+            <if test="borrowerCodeList !=null and borrowerCodeList.size > 0">
+                and borrower_code IN
+                <foreach item="borrowerCode" index="index" collection="borrowerCodeList" open="(" separator=","
+                         close=")">
+                    #{borrowerCode}
+                </foreach>
+            </if>
+            <if test="repaymentBeginDt != null">
+                and repayment_dt <![CDATA[ >= ]]> #{repaymentBeginDt,jdbcType=DATE}
+            </if>
+            <if test="repaymentEndDt != null">
+                and repayment_dt <![CDATA[ <= ]]> #{repaymentEndDt,jdbcType=DATE}
+            </if>
+            <if test="destroy !=null">
+                and destroy = #{destroy,jdbcType=BIT}
+            </if>
+            and visible = true
+            and deleted = false
+        </trim>
+    </sql>
+
+    <select id="countByConditions" resultType="java.lang.Integer">
+        select COUNT(1)
+        from saas_order_bill_detail
+        <include refid="conditions"/>
+    </select>
+
+    <select id="selectByConditions" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_order_bill_detail
+        <include refid="conditions"/>
+        order by abs(DATEDIFF(repayment_dt,NOW()))
+        <include refid="paginationSql"/>
+    </select>
+
+    <select id="selectByBorrowerCodeAndMerchantCode" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_order_bill_detail
+        where borrower_code = #{borrowerCode,jdbcType=VARCHAR} and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+        and deleted = false and visible = true
+        order by abs(DATEDIFF(repayment_dt,NOW()))
+    </select>
+
+    <select id="selectByOrderNumbAndMerchantCode" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_order_bill_detail
+        where order_numb = #{orderNumb,jdbcType=VARCHAR} and merchant_code = #{merchantCode,jdbcType=VARCHAR} and
+        deleted = false
+    </select>
+
+
+    <select id="selectLoanDataDetail" parameterType="java.lang.String"
+            resultType="com.beitu.saas.order.vo.LoanDataDetailVo">
+      select
+      sum(case when visible=1 then real_capital else 0 end) loanTotalAmount,
+      sum(case when created_dt=DATE_SUB(curdate(),INTERVAL 0 DAY) and visible=1 then real_capital else 0 end) todayLoanTotalAmount,
+      sum(case when visible=1 and destroy=1 then amount else 0 end) destroyTotalAmount,
+      sum(case when visible=1 and created_dt=DATE_SUB(curdate(),INTERVAL 0 DAY) then amount else 0 end) todayDestroyTotalAmount,
+      sum(case when visible=1 and destroy=0 then real_capital else 0 end) noRepayTotalAmount,
+      sum(case when visible=1 and destroy=0  and datediff(DATE_SUB(curdate(),INTERVAL 0 DAY),repayment_dt)>0 then real_capital else 0 end) overdueTotalAmount,
+      sum(case when visible=1 and destroy=0  and datediff(NOW(),repayment_dt)=1 then real_capital else 0 end) todayOverdueTotalAmount
+      from saas_order_bill_detail
+      where merchant_code = #{merchantCode,jdbcType=VARCHAR} and deleted = false
+    </select>
+
+    <select id="selectLoanStatDetailList" parameterType="java.lang.String"
+            resultType="com.beitu.saas.order.vo.LoanStateDetailVo">
+      select
+      sum(case when visible=1 then real_capital else null end) monthLoanTotalAmount,
+      sum(case when visible=1 and destroy=1 then amount else null end) monthDestroyTotalAmount,
+      count(distinct( case when visible=1 then borrower_code else null end)) monthLoanPersonNum,
+      date_format(gmt_create, '%Y-%m') `month`
+      from saas_order_bill_detail
+      where merchant_code = #{merchantCode,jdbcType=VARCHAR} and deleted = false
+      group by  date_format(gmt_create, '%Y-%m')
+    </select>
+
+
+    <select id="selectNoRepayOrder" parameterType="java.lang.String"
+            resultType="com.beitu.saas.order.vo.DashboardOrderVo">
+        select order_numb orderNo,real_capital realCapital, borrower_code borrowCode
+        from saas_order_bill_detail
+        where merchant_code = #{merchantCode,jdbcType=VARCHAR}
+        and datediff(now(),repayment_dt)=0
+        and visible=1 and destroy=0
+        and deleted = false
+    </select>
+
+    <select id="countNoRepayOrder" parameterType="map" resultType="INTEGER">
+        SELECT COUNT(*)
+        from saas_order_bill_detail
+        where merchant_code = #{merchantCode,jdbcType=VARCHAR}
+        and datediff(now(),repayment_dt)=0
+        and visible=1 and destroy=0
+        and deleted = false
+    </select>
+
+    <select id="selectOverdueOrder" parameterType="java.lang.String"
+            resultType="com.beitu.saas.order.vo.DashboardOrderVo">
+        select order_numb orderNo,real_capital realCapital,borrower_code borrowCode
+        from saas_order_bill_detail
+        where merchant_code = #{merchantCode,jdbcType=VARCHAR}
+        and datediff(now(),repayment_dt)=1
+        and visible=1 and destroy=0
+        and deleted = false
+    </select>
+
+    <select id="countOverdueOrder" parameterType="map" resultType="INTEGER">
+        SELECT COUNT(*)
+        from saas_order_bill_detail
+        where merchant_code = #{merchantCode,jdbcType=VARCHAR}
+        and datediff(now(),repayment_dt)=1
+        and visible=1 and destroy=0
+        and deleted = false
+    </select>
+
+</mapper>

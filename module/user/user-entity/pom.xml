@@ -11,5 +11,7 @@
 
     <artifactId>user-entity</artifactId>
 
+    <dependencies>
+    </dependencies>
 
 </project>
