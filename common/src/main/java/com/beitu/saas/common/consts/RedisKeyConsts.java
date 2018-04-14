@@ -73,6 +73,6 @@ public class RedisKeyConsts {
     /**
      * Open API推单处理缓存
      */
-    public static final String SAAS_OPEN_API_ORDER_PUSH = "SAAS_OPEN_ORDER_PUSH_{mobile}";
+    public static final String SAAS_OPEN_API_ORDER_PUSH_PROCESSING = "SAAS_OPEN_ORDER_PUSH_{mobile}";
 
 }

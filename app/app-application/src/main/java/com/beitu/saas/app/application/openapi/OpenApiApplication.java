@@ -68,13 +68,13 @@ public class OpenApiApplication {
             throw new ApplicationException(errorCodeEnum);
         }
         String mobile = pushData.getMobile();
-        String redisMobile = redisClient.get(RedisKeyConsts.SAAS_OPEN_API_ORDER_PUSH, mobile);
+        String redisMobile = redisClient.get(RedisKeyConsts.SAAS_OPEN_API_ORDER_PUSH_PROCESSING, mobile);
         if (StringUtils.isNotEmpty(redisMobile) && Objects.equals(redisMobile, mobile)) {
             OpenApiOrderPushErrorCodeEnum errorCodeEnum = OpenApiOrderPushErrorCodeEnum.ORDER_PUSH_IS_PROCESSING;
             LOGGER.warn("************************* 洋葱借条推单处理失败:{} *************************", errorCodeEnum.getMsg());
             throw new ApplicationException(errorCodeEnum);
         }
-        redisClient.set(RedisKeyConsts.SAAS_OPEN_API_ORDER_PUSH, mobile, TimeConsts.THIRTY_SECONDS, mobile);
+        redisClient.set(RedisKeyConsts.SAAS_OPEN_API_ORDER_PUSH_PROCESSING, mobile, TimeConsts.THIRTY_SECONDS, mobile);
         
         OpenApiOrderPushFromTypeEnum from = OpenApiOrderPushFromTypeEnum.YCJT_APP;
         if (logExistByMobile(mobile, from)) {
