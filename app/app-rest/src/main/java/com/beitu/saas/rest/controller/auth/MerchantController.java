@@ -121,7 +121,9 @@ public class MerchantController {
             BeanUtils.copyProperties(request.getLenderInfo(), saasMerchant);
         }
         AddMerchantRequest.AdminInfo adminInfo = request.getAdminInfo();
-        merchantApplication.addMerchant(saasMerchant, adminInfo.getPassword(), adminInfo.getAccountPhone(), adminInfo.getAccountName());
+        AddMerchantRequest.AccountInfo accountInfo = request.getAccountInfo();
+
+        merchantApplication.addMerchant(saasMerchant, adminInfo.getPassword(), adminInfo.getAccountPhone(), adminInfo.getAccountName(),accountInfo.getSms(),accountInfo.getCredit());
         return Response.ok();
     }
 
