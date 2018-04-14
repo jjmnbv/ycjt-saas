@@ -18,6 +18,7 @@ public enum OpenApiOrderPushErrorCodeEnum implements ErrorCodeEnum {
     LOG_MOBILE_EXIST_ERROR(20004, "已存在该手机号推单记录", HttpStatus.OK),
     ILLEGAL_SOURCE_IP(20005, "非法IP请求", HttpStatus.OK),
     SOURCE_IP_ACQUIRE_FAILURE(20006, "来源IP地址获取失败", HttpStatus.OK),
+    ORDER_PUSH_IS_PROCESSING(20007, "推单正在处理中，请勿重复推单", HttpStatus.OK),
     ORDER_PUSH_OFF(30000, "该功能暂时关闭", HttpStatus.OK);
 
     private Integer code;
