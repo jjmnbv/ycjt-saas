@@ -11,6 +11,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.net.InetAddress;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,7 +31,7 @@ public class CreditAndMsgDayClearTaksJob {
     @Autowired
     private SaasConsumeDayStatApplication saasConsumeDayStatApplication;
 
-    @Scheduled(cron = "0 12 16 * * ?")
+    @Scheduled(cron = "0 30 16 * * ?")
     public void creditAndMsgDayClear() {
         LOGGER.info("== 点券和短信日清算任务开始 ==");
         String taskSwitch = configUtil.getClearDayStatSwith();
@@ -38,14 +41,16 @@ public class CreditAndMsgDayClearTaksJob {
         }
 
         String ipWhite = configUtil.getClearDayStatIpWhite();
+        String[] whiteIps = ipWhite.split(",");
+        Set<String> set = new HashSet<String>(Arrays.asList(whiteIps));
         String hostIp = null;
         try {
             hostIp = InetAddress.getLocalHost().getHostAddress();
             LOGGER.info(" 白名单IP ;{}, 当前执行任务的主机IP: {}", ipWhite, hostIp);
         } catch (Exception e) {
-            LOGGER.error("!====== 点券和短信每日清算任务获取机器地址发生异常：{} ====!", e);
+            LOGGER.error("!====== 获取机器地址发生异常：{} ====!", e);
         }
-        if (StringUtils.isEmpty(ipWhite) || !ipWhite.equals(hostIp)) {
+        if (whiteIps.length == 0 || !set.contains(hostIp)) {
             LOGGER.info("!====== 点券和短信每日清算任务机器白名单限制 ====!");
             return;
         }
