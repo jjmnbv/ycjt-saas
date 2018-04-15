@@ -28,7 +28,7 @@ public class CreditAndMsgDayClearTaksJob {
     @Autowired
     private SaasConsumeDayStatApplication saasConsumeDayStatApplication;
 
-    @Scheduled(cron = "0 22 15 * * ?")
+    @Scheduled(cron = "0 30 15 * * ?")
     public void creditAndMsgDayClear() {
         String taskSwitch = configUtil.getClearDayStatSwith();
         if (StringUtils.isEmpty(taskSwitch) || taskSwitch.equals("false")) {
