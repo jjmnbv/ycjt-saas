@@ -31,7 +31,7 @@ public class CreditAndMsgDayClearTaksJob {
     @Autowired
     private SaasConsumeDayStatApplication saasConsumeDayStatApplication;
 
-    @Scheduled(cron = "0 30 16 * * ?")
+    @Scheduled(cron = "0 30 1 * * ?")
     public void creditAndMsgDayClear() {
         LOGGER.info("== 点券和短信日清算任务开始 ==");
         String taskSwitch = configUtil.getClearDayStatSwith();
