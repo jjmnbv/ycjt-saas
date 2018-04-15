@@ -51,7 +51,7 @@ public class OkController {
     @SignIgnore
     public String ok() {
         String hostAddress = IpChooseUtil.getHostAddress();
-        LOGGER.info("-------ok-------------",hostAddress);
+        LOGGER.info("-------ok-------------"+hostAddress);
         return "ok";
     }
 
