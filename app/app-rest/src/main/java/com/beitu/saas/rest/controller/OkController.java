@@ -50,8 +50,6 @@ public class OkController {
     @VisitorAccessible
     @SignIgnore
     public String ok() {
-        String hostAddress = IpChooseUtil.getHostAddress();
-        LOGGER.info("-------ok-------------"+hostAddress);
         return "ok";
     }
 
