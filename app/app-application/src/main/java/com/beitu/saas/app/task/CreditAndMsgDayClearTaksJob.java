@@ -28,13 +28,15 @@ public class CreditAndMsgDayClearTaksJob {
     @Autowired
     private SaasConsumeDayStatApplication saasConsumeDayStatApplication;
 
-    @Scheduled(cron = "0 50 15 * * ?")
+    @Scheduled(cron = "0 5 16 * * ?")
     public void creditAndMsgDayClear() {
+        LOGGER.info("== 点券和短信日清算任务开始 ==");
         String taskSwitch = configUtil.getClearDayStatSwith();
         if (StringUtils.isEmpty(taskSwitch) || taskSwitch.equals("false")) {
             LOGGER.info("!====== 点券和短信每日清算任务未开启 ====!");
             return;
         }
+
         String ipWhite = configUtil.getClearDayStatIpWhite();
         String hostIp = null;
         try {
@@ -48,7 +50,6 @@ public class CreditAndMsgDayClearTaksJob {
             return;
         }
 
-        LOGGER.info("== 点券和短信日清算任务开始 ==");
         try {
             saasConsumeDayStatApplication.creditAndMsgDayClear();
         } catch (Exception e) {
