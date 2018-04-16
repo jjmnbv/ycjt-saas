@@ -704,7 +704,6 @@ public class OrderApplication {
             saasOrderService.updateById(updateSaasOrder);
 
             orderBillDetailApplication.createOrderBillDetail(orderNumb, merchantCode);
-            ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, merchantCode, saasOrderVo.getSaasOrderId(), ContractTypeEnum.LENDER_DO_LOAN_CONTRACT_SIGN));
 
             sendApplication.sendNotifyMessageByBorrowerCode(merchantCode, saasOrderVo.getBorrowerCode(), new HashMap<String, String>(4) {{
                 put("money", saasOrderVo.getRealCapital().toString());
@@ -714,6 +713,8 @@ public class OrderApplication {
                 put("name", saasBorrowerRealInfoVo.getName());
                 put("money", saasOrderVo.getRealCapital().toString());
             }}, SaasSmsTypeEnum.SAAS_0012);
+
+            ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, merchantCode, saasOrderVo.getSaasOrderId(), ContractTypeEnum.LENDER_DO_LOAN_CONTRACT_SIGN));
         } else {
             saasOrderService.updateById(updateSaasOrder);
             updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.TO_CONFIRM_RECEIPT, lendRemark);
