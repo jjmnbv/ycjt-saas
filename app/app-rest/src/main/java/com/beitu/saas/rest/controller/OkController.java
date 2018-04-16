@@ -9,6 +9,7 @@ import com.beitu.saas.auth.service.SaasMerchantService;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.entity.SaasChannelEntity;
 import com.beitu.saas.channel.enums.ChannelTypeEnum;
+import com.beitu.saas.common.utils.IpChooseUtil;
 import com.beitu.saas.credit.client.SaasCreditCarrierService;
 import com.beitu.saas.credit.entity.SaasCreditCarrier;
 import com.fqgj.log.factory.LogFactory;
