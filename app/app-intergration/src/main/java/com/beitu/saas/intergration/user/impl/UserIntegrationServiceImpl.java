@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.handle.oss.OSSService;
 import com.beitu.saas.common.utils.HttpClientUtil;
+import com.beitu.saas.credit.client.SaasMultiDebitService;
 import com.beitu.saas.intergration.user.UserIntegrationService;
 import com.beitu.saas.intergration.user.consts.YoufenApiResCodeConst;
 import com.beitu.saas.intergration.user.consts.YoufenApiStatusCodeConst;
@@ -34,6 +35,8 @@ public class UserIntegrationServiceImpl implements UserIntegrationService {
     private ConfigUtil configUtil;
     @Autowired
     private OSSService ossService;
+    @Autowired
+    private SaasMultiDebitService saasMultiDebitService;
 
     @Override
     public UserNameIdNoValidationDto userNameMatchIdNo(UserNameIdNoValidationParam param) {
@@ -145,7 +148,7 @@ public class UserIntegrationServiceImpl implements UserIntegrationService {
         carrierUrl += "youfenCarrier" + "_" + userTime + "_" + MD5.md5(userTime + System.currentTimeMillis()) + ".json";
         carrierUrl = ossService.uploadFile(carrierUrl, resultJsonString);
         // TODO: 2018/4/16 入库操作 --- borrowerId 身份证 手机号 评分 ossurl 失效时间(到期后自动失效) 状态
-
+        //saasMultiDebitService.create(null);
         return new UserMultiDebitDto(UserMultiDebitCodeEnum.QUERY_SUCCESS.getCode(), UserMultiDebitCodeEnum.QUERY_SUCCESS.getMsg(), resultJsonString);
     }
 }

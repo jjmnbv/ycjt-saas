@@ -55,6 +55,16 @@
             <groupId>org.bouncycastle</groupId>
             <artifactId>bctsp-jdk15</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.beitu.saas</groupId>
+            <artifactId>credit-client</artifactId>
+            <version>0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.beitu.saas</groupId>
+            <artifactId>credit-service</artifactId>
+            <version>0.1</version>
+        </dependency>
         <!--e签宝  end-->
 
     </dependencies>
