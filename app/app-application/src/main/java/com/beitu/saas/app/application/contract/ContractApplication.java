@@ -228,46 +228,42 @@ public class ContractApplication {
         if (saasUserEsignAuthorizationVo == null) {
             throw new ApplicationException("请先进行签署授权");
         }
-        SaasOrder saasOrder = saasOrderService.selectById(orderId);
-        if (saasOrder == null || StringUtils.isEmpty(saasOrder.getTermUrl())) {
-            String url = getLoanContractUrl(orderId);
-            String loanContractUrl = configUtil.getPdfPath() + MD5.md5(OrderNoUtil.makeOrderNum()) + ".pdf";
-            contractCreateApplication.createLoanPdf(orderId, loanContractUrl);
-            File file = new File(loanContractUrl);
-            try {
-                InputStream inputStream = new FileInputStream(file);
-                url = ossService.uploadFile(inputStream, inputStream.available(), url);
-                file.delete();
-                return url;
-            } catch (Exception e) {
-                throw new ApplicationException("上传文件失败");
-            }
-        } else {
-            return saasOrder.getTermUrl();
+        String url = getLoanContractUrl(orderId);
+        String loanContractUrl = configUtil.getPdfPath() + MD5.md5(OrderNoUtil.makeOrderNum()) + ".pdf";
+        contractCreateApplication.createLoanPdf(orderId, loanContractUrl);
+        File file = new File(loanContractUrl);
+        try {
+            InputStream inputStream = new FileInputStream(file);
+            url = ossService.uploadFile(inputStream, inputStream.available(), url);
+            file.delete();
+            return url;
+        } catch (Exception e) {
+            throw new ApplicationException("上传文件失败");
         }
     }
 
+    /**
+     * 出借机构 签署 借款合同
+     *
+     * @param merchantCode 出借机构CODE
+     * @param orderId      可空
+     */
     public String lenderDoLoanContractSign(String merchantCode, Long orderId) {
         SaasUserEsignAuthorizationVo saasUserEsignAuthorizationVo = saasUserEsignAuthorizationService.getSuccessEsignAuthorizationByUserCode(merchantCode);
         if (saasUserEsignAuthorizationVo == null) {
             throw new ApplicationException("请先进行签署授权");
         }
-        SaasOrder saasOrder = saasOrderService.selectById(orderId);
-        if (saasOrder == null || StringUtils.isEmpty(saasOrder.getTermUrl())) {
-            String url = getLoanContractUrl(orderId);
-            String loanContractUrl = configUtil.getPdfPath() + MD5.md5(OrderNoUtil.makeOrderNum()) + ".pdf";
-            contractCreateApplication.createLoanPdf(orderId, loanContractUrl);
-            File file = new File(loanContractUrl);
-            try {
-                InputStream inputStream = new FileInputStream(file);
-                url = ossService.uploadFile(inputStream, inputStream.available(), url);
-                file.delete();
-                return url;
-            } catch (Exception e) {
-                throw new ApplicationException("上传文件失败");
-            }
-        } else {
-            return saasOrder.getTermUrl();
+        String url = getLoanContractUrl(orderId);
+        String loanContractUrl = configUtil.getPdfPath() + MD5.md5(OrderNoUtil.makeOrderNum()) + ".pdf";
+        contractCreateApplication.createLoanPdf(orderId, loanContractUrl);
+        File file = new File(loanContractUrl);
+        try {
+            InputStream inputStream = new FileInputStream(file);
+            url = ossService.uploadFile(inputStream, inputStream.available(), url);
+            file.delete();
+            return url;
+        } catch (Exception e) {
+            throw new ApplicationException("上传文件失败");
         }
     }
 
