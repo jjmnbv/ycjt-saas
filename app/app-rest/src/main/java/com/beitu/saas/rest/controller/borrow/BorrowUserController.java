@@ -6,14 +6,17 @@ import com.beitu.saas.app.api.ApiResponse;
 import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.application.borrower.BorrowerApplication;
 import com.beitu.saas.app.application.borrower.vo.BorrowerManagerInfoVo;
+import com.beitu.saas.app.application.credit.MultiDebitApplication;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.borrower.BorrowerInfoParam;
 import com.beitu.saas.rest.controller.borrow.request.BorrowSaveUserInfoRequest;
 import com.beitu.saas.rest.controller.borrow.request.BorrowUserLoginRequest;
 import com.beitu.saas.rest.controller.borrow.request.BorrowerManagerInfoRequest;
+import com.beitu.saas.rest.controller.borrow.request.UserMultiDebitInfoRequest;
 import com.beitu.saas.rest.controller.borrow.response.BorrowUserLoginSuccessResponse;
 import com.beitu.saas.rest.controller.borrow.response.BorrowerManagerInfoResponse;
 import com.fqgj.common.api.Page;
+import com.fqgj.common.api.Response;
 import com.fqgj.common.response.ModuleResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -40,6 +43,8 @@ public class BorrowUserController {
 
     @Autowired
     private BorrowerApplication borrowerApplication;
+    @Autowired
+    private MultiDebitApplication multiDebitApplication;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
@@ -75,6 +80,22 @@ public class BorrowUserController {
         borrowerInfoParam.setMerchantCode(merchantCode);
         List<BorrowerManagerInfoVo> borrowerInfoList = borrowerApplication.getBorrowerInfoListByPage(borrowerInfoParam, page);
         return new ModuleResponse<>(new BorrowerManagerInfoResponse(borrowerInfoList), page);
+    }
+
+    /**
+     * 用户借贷信息统计信息
+     *
+     * @param req
+     * @return
+     */
+    @SignIgnore
+    @VisitorAccessible
+    @RequestMapping(value = "/multiDebitGet", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "用户借贷信息统计", response = ApiResponse.class)
+    public Response multiDebitGet(@RequestBody @Valid UserMultiDebitInfoRequest req) {
+        String multiDebitInfo = multiDebitApplication.getMultiDebitInfo(req.getName(), req.getIdentityCode(), req.getMobile());
+        return Response.ok().putData(multiDebitInfo);
     }
 
 }
