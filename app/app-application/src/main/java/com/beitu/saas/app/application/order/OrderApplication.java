@@ -613,10 +613,6 @@ public class OrderApplication {
         if (StringUtils.isNotEmpty(saasOrderVo.getPreliminaryReviewerCode()) && !operatorCode.equals(saasOrderVo.getPreliminaryReviewerCode())) {
             throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
         }
-        SaasChannelEntity saasChannelEntity = saasChannelService.getDefaultSaasChannelByMerchantCode(merchantCode, ChannelTypeEnum.RECOMMEND_DEFINED.getType());
-        if (saasChannelEntity != null && saasChannelEntity.getChannelCode().equals(saasOrderVo.getChannelCode())) {
-            throw new ApplicationException("推荐流量无法审核，需要重新进件");
-        }
         updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.SUBMIT_FINAL_REVIEW, null);
         SaasOrder updateSaasOrder = new SaasOrder();
         updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
