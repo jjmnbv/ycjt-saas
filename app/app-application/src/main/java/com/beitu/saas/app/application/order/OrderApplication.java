@@ -184,6 +184,13 @@ public class OrderApplication {
         updateSaasOrder.setTermUrl(null);
         saasOrderService.updateSubmitRefuseOrder(updateSaasOrder);
 
+        if (!ChannelConsts.DEFAULT_CHANNEL_CREATOR_CODE.equals(saasOrderApplicationVo.getChannelCode())) {
+            SaasOrder updateTermSaasOrder = new SaasOrder();
+            updateTermSaasOrder.setId(saasOrderVo.getSaasOrderId());
+            updateTermSaasOrder.setTermUrl(contractApplication.borrowerDoLoanContractSign(saasOrderApplicationVo.getBorrowerCode(), saasOrderVo.getSaasOrderId()));
+            saasOrderService.updateById(updateTermSaasOrder);
+        }
+
         String borrowerCode = saasOrderApplicationVo.getBorrowerCode();
         SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCode(borrowerCode);
         sendApplication.sendNotifyMessage(saasOrderApplicationVo.getMerchantCode(), saasBorrowerVo.getMobile(), null, SaasSmsTypeEnum.SAAS_0004);
@@ -196,7 +203,6 @@ public class OrderApplication {
             put("name", saasBorrowerRealInfoVo.getName());
             put("phone", saasBorrowerVo.getMobile());
         }}, SaasSmsTypeEnum.SAAS_0005);
-
     }
 
     private Date getOrderExpireDate(Date repaymentDt) {
