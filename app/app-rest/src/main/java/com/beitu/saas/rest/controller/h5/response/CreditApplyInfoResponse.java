@@ -21,12 +21,12 @@ public class CreditApplyInfoResponse implements ResponseData {
      * 借款金额
      */
     @ApiModelProperty(value = "借款金额")
-    private String realCapital;
+    private Integer realCapital;
     /**
      * 借款年利率
      */
     @ApiModelProperty(value = "借款年利率")
-    private String totalInterestRatio;
+    private Integer totalInterestRatio;
     /**
      * 借款意图
      */
@@ -64,20 +64,20 @@ public class CreditApplyInfoResponse implements ResponseData {
         this.orderNumb = orderNumb;
     }
 
-    public String getRealCapital() {
+    public Integer getRealCapital() {
         return realCapital;
     }
 
     public void setRealCapital(BigDecimal realCapital) {
-        this.realCapital = realCapital.toString();
+        this.realCapital = realCapital.setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
     }
 
-    public String getTotalInterestRatio() {
+    public Integer getTotalInterestRatio() {
         return totalInterestRatio;
     }
 
     public void setTotalInterestRatio(BigDecimal totalInterestRatio) {
-        this.totalInterestRatio = totalInterestRatio.multiply(BigDecimal.valueOf(100L)).toString();
+        this.totalInterestRatio = totalInterestRatio.multiply(BigDecimal.valueOf(100L)).setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
     }
 
     public String getBorrowPurpose() {

@@ -169,6 +169,7 @@ public class OrderApplication {
         }
         SaasOrder updateSaasOrder = new SaasOrder();
         updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
+        updateSaasOrder.setChannelCode(saasOrderApplicationVo.getChannelCode());
         updateSaasOrder.setRealCapital(saasOrderApplicationVo.getRealCapital());
         updateSaasOrder.setTotalInterestRatio(saasOrderApplicationVo.getTotalInterestRatio());
         updateSaasOrder.setBorrowPurpose(saasOrderApplicationVo.getBorrowPurpose());

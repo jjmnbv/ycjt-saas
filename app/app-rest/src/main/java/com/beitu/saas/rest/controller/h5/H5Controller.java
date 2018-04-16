@@ -241,7 +241,7 @@ public class H5Controller {
         addOrderApplication.setOrderNumb(orderNumb);
         addOrderApplication.setChannelCode(channelCode);
         addOrderApplication.setMerchantCode(saasBorrowerVo.getMerchantCode());
-        addOrderApplication.setRealCapital(req.getRealCapital());
+        addOrderApplication.setRealCapital(req.getRealCapital().setScale(0, BigDecimal.ROUND_HALF_UP));
         addOrderApplication.setTotalInterestRatio(req.getTotalInterestRatio().setScale(0, BigDecimal.ROUND_HALF_UP).divide(new BigDecimal(100)));
         addOrderApplication.setRepaymentDt(DateUtil.addDate(new Date(), req.getBorrowingDuration()));
         addOrderApplication.setBorrowPurpose(req.getBorrowPurpose());
