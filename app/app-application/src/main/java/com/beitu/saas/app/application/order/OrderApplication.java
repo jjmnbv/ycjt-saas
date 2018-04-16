@@ -529,7 +529,7 @@ public class OrderApplication {
     private SaasOrderListVo convertSaasOrderVo2SaasOrderListVo(SaasOrderVo saasOrderVo) {
         SaasOrderListVo orderListVo = new SaasOrderListVo();
         orderListVo.setOrderNumb(saasOrderVo.getOrderNumb());
-        orderListVo.setApplyDate(DateUtil.getDate(saasOrderVo.getGmtCreate()));
+        orderListVo.setApplyDate(DateUtil.getDateTime(saasOrderVo.getGmtCreate()));
         orderListVo.setCapital(saasOrderVo.getRealCapital().toString());
         orderListVo.setRepaymentDate(DateUtil.getDate(saasOrderVo.getRepaymentDt()));
         orderListVo.setTotalInterestRatio(orderCalculateApplication.getInterestRatio(saasOrderVo.getTotalInterestRatio()));
