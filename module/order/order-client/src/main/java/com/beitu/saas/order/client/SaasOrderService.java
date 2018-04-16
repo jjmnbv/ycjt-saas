@@ -2,6 +2,7 @@ package com.beitu.saas.order.client;
 
 import com.beitu.saas.order.domain.QuerySaasOrderVo;
 import com.beitu.saas.order.domain.SaasOrderVo;
+import com.beitu.saas.order.entity.SaasOrder;
 import com.beitu.saas.order.enums.OrderStatusEnum;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.base.BaseService;
@@ -82,5 +83,13 @@ public interface SaasOrderService<T extends BaseEntity> extends BaseService<T> {
     SaasOrderVo getConfirmReceiptOrderByOrderNumb(String orderNumb);
 
     SaasOrderVo getMainSaasOrderByOrderNumb(String orderNumb);
+
+    /**
+     * 更新 提交驳回订单信息
+     *
+     * @param saasOrder 驳回订单信息
+     * @return
+     */
+    int updateSubmitRefuseOrder(SaasOrder saasOrder);
 
 }

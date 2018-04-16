@@ -36,4 +36,6 @@ public interface SaasOrderDao extends BaseMapper<SaasOrder> {
 
     SaasOrder selectMainSaasOrderByOrderNumb(String orderNumb);
 
+    int updateSubmitRefuseOrder(SaasOrder saasOrder);
+
 }

@@ -91,4 +91,9 @@ public class SaasOrderDaoImpl extends AbstractBaseMapper<SaasOrder> implements S
         return this.getSqlSession().selectOne(this.getStatement(".selectMainSaasOrderByOrderNumb"), orderNumb);
     }
 
+    @Override
+    public int updateSubmitRefuseOrder(SaasOrder saasOrder) {
+        return this.getSqlSession().update(this.getStatement(".updateSubmitRefuseOrder"), saasOrder);
+    }
+
 }

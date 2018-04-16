@@ -180,9 +180,9 @@ public class OrderApplication {
         updateSaasOrder.setTotalInterestRatio(saasOrderApplicationVo.getTotalInterestRatio());
         updateSaasOrder.setBorrowPurpose(saasOrderApplicationVo.getBorrowPurpose());
         updateSaasOrder.setRepaymentDt(saasOrderApplicationVo.getRepaymentDt());
-        updateSaasOrder.setTermUrl(saasOrderApplicationVo.getTermUrl());
         updateSaasOrder.setExpireDate(getOrderExpireDate(saasOrderApplicationVo.getRepaymentDt()));
-        saasOrderService.updateById(updateSaasOrder);
+        updateSaasOrder.setTermUrl(null);
+        saasOrderService.updateSubmitRefuseOrder(updateSaasOrder);
 
         String borrowerCode = saasOrderApplicationVo.getBorrowerCode();
         SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCode(borrowerCode);
