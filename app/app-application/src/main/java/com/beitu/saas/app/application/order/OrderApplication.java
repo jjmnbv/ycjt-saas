@@ -24,6 +24,7 @@ import com.beitu.saas.channel.enums.ChannelTypeEnum;
 import com.beitu.saas.collection.client.SaasCollectionOrderService;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.utils.DateUtil;
+import com.beitu.saas.common.utils.ShortUrlUtil;
 import com.beitu.saas.common.utils.ThreadPoolUtils;
 import com.beitu.saas.finance.client.SaasMerchantBalanceInfoService;
 import com.beitu.saas.finance.client.SaasMerchantCreditInfoService;
@@ -557,12 +558,15 @@ public class OrderApplication {
         if (saasChannelEntity != null) {
             orderListVo.setChannelName(saasChannelEntity.getChannelName());
         }
+        orderListVo.setZmCreditScore(saasBorrowerPersonalInfoService.getZmCreditScoreByBorrowerCodeAndOrderNumb(saasOrderVo.getBorrowerCode(), saasOrderVo.getOrderNumb()));
         if (StringUtils.isNotEmpty(saasOrderVo.getPreliminaryReviewerCode())) {
             orderListVo.setPreliminaryReviewer(saasAdminService.getSaasAdminByAdminCode(saasOrderVo.getPreliminaryReviewerCode()).getName());
         }
-        orderListVo.setZmCreditScore(saasBorrowerPersonalInfoService.getZmCreditScoreByBorrowerCodeAndOrderNumb(saasOrderVo.getBorrowerCode(), saasOrderVo.getOrderNumb()));
         if (StringUtils.isNotEmpty(saasOrderVo.getFinalReviewerCode())) {
             orderListVo.setFinalReviewer(saasAdminService.getSaasAdminByAdminCode(saasOrderVo.getFinalReviewerCode()).getName());
+        }
+        if (StringUtils.isNotEmpty(saasOrderVo.getLoanLenderCode())) {
+            orderListVo.setLoanLender(saasAdminService.getSaasAdminByAdminCode(saasOrderVo.getLoanLenderCode()).getName());
         }
         return orderListVo;
     }
@@ -607,7 +611,7 @@ public class OrderApplication {
         updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.PRELIMINARY_REVIEWER_REJECT, null);
 
         sendApplication.sendNotifyMessageByBorrowerCode(merchantCode, saasOrderVo.getBorrowerCode(), new HashMap(2) {{
-            put("channel_url", configUtil.getH5AddressURL() + "?channel=" + saasOrderVo.getChannelCode());
+            put("channel_url", ShortUrlUtil.generateShortUrl(configUtil.getH5AddressURL() + "?channel=" + saasOrderVo.getChannelCode()));
         }}, SaasSmsTypeEnum.SAAS_0007);
     }
 
@@ -663,7 +667,7 @@ public class OrderApplication {
         updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.FINAL_REVIEWER_REJECT, null);
 
         sendApplication.sendNotifyMessageByBorrowerCode(merchantCode, saasOrderVo.getBorrowerCode(), new HashMap(2) {{
-            put("channel_url", configUtil.getH5AddressURL() + "?channel=" + saasOrderVo.getChannelCode());
+            put("channel_url", ShortUrlUtil.generateShortUrl(configUtil.getH5AddressURL() + "?channel=" + saasOrderVo.getChannelCode()));
         }}, SaasSmsTypeEnum.SAAS_0007);
     }
 
@@ -720,7 +724,7 @@ public class OrderApplication {
             updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.TO_CONFIRM_RECEIPT, lendRemark);
 
             sendApplication.sendNotifyMessageByBorrowerCode(merchantCode, saasOrderVo.getBorrowerCode(), new HashMap(2) {{
-                put("channel_url", configUtil.getH5AddressURL() + "?channel=" + saasOrderVo.getChannelCode());
+                put("channel_url", ShortUrlUtil.generateShortUrl(configUtil.getH5AddressURL() + "?channel=" + saasOrderVo.getChannelCode()));
             }}, SaasSmsTypeEnum.SAAS_0010);
         }
 
@@ -824,7 +828,7 @@ public class OrderApplication {
         saasOrderService.create(extendSaasOrder);
 
         sendApplication.sendNotifyMessageByBorrowerCode(merchantCode, saasOrderVo.getBorrowerCode(), new HashMap(2) {{
-            put("channel_url", configUtil.getH5AddressURL() + "?channel=" + saasOrderVo.getChannelCode());
+            put("channel_url", ShortUrlUtil.generateShortUrl(configUtil.getH5AddressURL() + "?channel=" + saasOrderVo.getChannelCode()));
         }}, SaasSmsTypeEnum.SAAS_0014);
 
         SaasOrderStatusHistory saasOrderStatusHistory = new SaasOrderStatusHistory();
