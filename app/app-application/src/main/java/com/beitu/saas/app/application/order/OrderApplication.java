@@ -694,7 +694,16 @@ public class OrderApplication {
         updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
         updateSaasOrder.setLoanLenderCode(operatorCode);
 
-        if (!ChannelConsts.DEFAULT_CHANNEL_CREATOR_CODE.equals(saasOrderVo.getChannelCode())) {
+        SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(saasOrderVo.getChannelCode());
+        if (ChannelTypeEnum.SYSTEM_DEFINED.getType().equals(saasChannelEntity.getChannelType()) ||
+                ChannelTypeEnum.RECOMMEND_DEFINED.getType().equals(saasChannelEntity.getChannelType())) {
+            saasOrderService.updateById(updateSaasOrder);
+            updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.TO_CONFIRM_RECEIPT, lendRemark);
+
+            sendApplication.sendNotifyMessageByBorrowerCode(merchantCode, saasOrderVo.getBorrowerCode(), new HashMap(2) {{
+                put("channel_url", ShortUrlUtil.generateShortUrl(configUtil.getH5AddressURL() + "?channel=" + saasOrderVo.getChannelCode()));
+            }}, SaasSmsTypeEnum.SAAS_0010);
+        } else {
             updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.FOR_REIMBURSEMENT, lendRemark);
             updateSaasOrder.setCreatedDt(new Date());
             updateSaasOrder.setExpireDate(DateUtil.addYear(new Date(), 10));
@@ -712,13 +721,6 @@ public class OrderApplication {
                 put("name", saasBorrowerRealInfoVo.getName());
                 put("money", saasOrderVo.getRealCapital());
             }}, SaasSmsTypeEnum.SAAS_0012);
-        } else {
-            saasOrderService.updateById(updateSaasOrder);
-            updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.TO_CONFIRM_RECEIPT, lendRemark);
-
-            sendApplication.sendNotifyMessageByBorrowerCode(merchantCode, saasOrderVo.getBorrowerCode(), new HashMap(2) {{
-                put("channel_url", ShortUrlUtil.generateShortUrl(configUtil.getH5AddressURL() + "?channel=" + saasOrderVo.getChannelCode()));
-            }}, SaasSmsTypeEnum.SAAS_0010);
         }
 
         SaasOrderLendRemarkVo addSaasOrderLendRemarkVo = new SaasOrderLendRemarkVo();
