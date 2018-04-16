@@ -10,10 +10,10 @@ import java.util.List;
  * @description
  */
 public enum MerchantFlowZMEnum {
-    SHARED_ZM_610_DOWN(1L, "610分以下(8点券/单)", 1L),
-    SHARED_ZM_610_UP(2L, "610(含)分以上(10点券/单)", 1L),
-    ALONE_ZM_610_DOWN(1L, "610分以下(16点券/单)", 2L),
-    ALONE_ZM_610_UP(2L, "610(含)分以上(20点券/单)", 2L);
+    SHARED_ZM_610_DOWN(1L, "610分以下(6点券/单)", 1L),
+    SHARED_ZM_610_UP(2L, "610(含)分以上(8点券/单)", 1L),
+    ALONE_ZM_610_DOWN(1L, "610分以下(12点券/单)", 2L),
+    ALONE_ZM_610_UP(2L, "610(含)分以上(16点券/单)", 2L);
     private Long key;
     private String value;
     private Long flowType;
