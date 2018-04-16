@@ -120,7 +120,8 @@ public class CreditApplication {
         RiskModuleEnum riskModuleEnum = RiskModuleEnum.getRiskModuleEnumByModuleCode(moduleCode);
         switch (riskModuleEnum) {
             case APPLICATION:
-                if (saasOrderApplicationService.getByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb) != null) {
+                SaasOrderApplicationVo saasOrderApplicationVo = saasOrderApplicationService.getByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
+                if (saasOrderApplicationVo != null && saasOrderApplicationVo.getBorrowerAuthorizedSignLoan()) {
                     return BorrowerInfoApplyStatusEnum.FINISHED;
                 }
                 return BorrowerInfoApplyStatusEnum.INCOMPLETE;
