@@ -145,13 +145,6 @@ public class OrderApplication {
         saasOrder.setExpireDate(getOrderExpireDate(saasOrderApplicationVo.getRepaymentDt()));
         saasOrderService.create(saasOrder);
 
-        if (!ChannelConsts.DEFAULT_CHANNEL_CREATOR_CODE.equals(channelCode)) {
-            SaasOrder updateSaasOrder = new SaasOrder();
-            updateSaasOrder.setId(saasOrder.getId());
-            updateSaasOrder.setTermUrl(contractApplication.borrowerDoLoanContractSign(saasOrderApplicationVo.getBorrowerCode(), saasOrder.getId()));
-            saasOrderService.updateById(updateSaasOrder);
-        }
-
         String borrowerCode = saasOrderApplicationVo.getBorrowerCode();
         SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCode(borrowerCode);
         sendApplication.sendNotifyMessage(saasOrderApplicationVo.getMerchantCode(), saasBorrowerVo.getMobile(), null, SaasSmsTypeEnum.SAAS_0004);
@@ -181,15 +174,7 @@ public class OrderApplication {
         updateSaasOrder.setBorrowPurpose(saasOrderApplicationVo.getBorrowPurpose());
         updateSaasOrder.setRepaymentDt(saasOrderApplicationVo.getRepaymentDt());
         updateSaasOrder.setExpireDate(getOrderExpireDate(saasOrderApplicationVo.getRepaymentDt()));
-        updateSaasOrder.setTermUrl(null);
-        saasOrderService.updateSubmitRefuseOrder(updateSaasOrder);
-
-        if (!ChannelConsts.DEFAULT_CHANNEL_CREATOR_CODE.equals(saasOrderApplicationVo.getChannelCode())) {
-            SaasOrder updateTermSaasOrder = new SaasOrder();
-            updateTermSaasOrder.setId(saasOrderVo.getSaasOrderId());
-            updateTermSaasOrder.setTermUrl(contractApplication.borrowerDoLoanContractSign(saasOrderApplicationVo.getBorrowerCode(), saasOrderVo.getSaasOrderId()));
-            saasOrderService.updateById(updateTermSaasOrder);
-        }
+        saasOrderService.updateById(updateSaasOrder);
 
         String borrowerCode = saasOrderApplicationVo.getBorrowerCode();
         SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCode(borrowerCode);
@@ -698,8 +683,8 @@ public class OrderApplication {
         SaasOrder updateSaasOrder = new SaasOrder();
         updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
         updateSaasOrder.setLoanLenderCode(operatorCode);
-        ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, merchantCode, saasOrderVo.getSaasOrderId(), ContractTypeEnum.LENDER_DO_LOAN_CONTRACT_SIGN));
-        if (StringUtils.isNotEmpty(saasOrderVo.getTermUrl())) {
+
+        if (!ChannelConsts.DEFAULT_CHANNEL_CREATOR_CODE.equals(saasOrderVo.getChannelCode())) {
             updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.FOR_REIMBURSEMENT, lendRemark);
             updateSaasOrder.setCreatedDt(new Date());
             updateSaasOrder.setExpireDate(DateUtil.addYear(new Date(), 10));
@@ -707,6 +692,7 @@ public class OrderApplication {
             saasOrderService.updateById(updateSaasOrder);
 
             orderBillDetailApplication.createOrderBillDetail(orderNumb, merchantCode);
+            ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, merchantCode, saasOrderVo.getSaasOrderId(), ContractTypeEnum.LENDER_DO_LOAN_CONTRACT_SIGN));
 
             sendApplication.sendNotifyMessageByBorrowerCode(merchantCode, saasOrderVo.getBorrowerCode(), new HashMap(2) {{
                 put("money", saasOrderVo.getRealCapital());
