@@ -114,14 +114,16 @@ public class OrderBillDetailApplication {
         QuerySaasOrderBillDetailVo querySaasOrderBillDetailVo = new QuerySaasOrderBillDetailVo();
         querySaasOrderBillDetailVo.setMerchantCode(queryVo.getMerchantCode());
         querySaasOrderBillDetailVo.setChannelCode(queryVo.getChannelCode());
+        // 贷后管理 还款时间 查询参数
         if (queryVo.getRepaymentDuration() != null) {
             Date endDate = new Date();
             if (queryVo.getRepaymentEndDate() != null) {
-                querySaasOrderBillDetailVo.setRepaymentEndDt(queryVo.getRepaymentEndDate());
+                querySaasOrderBillDetailVo.setRepaymentBeginDt(queryVo.getRepaymentEndDate());
                 endDate = queryVo.getRepaymentEndDate();
             }
-            querySaasOrderBillDetailVo.setRepaymentBeginDt(DateUtil.addDate(endDate, -queryVo.getRepaymentDuration()));
+            querySaasOrderBillDetailVo.setRepaymentEndDt(DateUtil.addDate(endDate, queryVo.getRepaymentDuration()));
         }
+        // 逾期管理 还款时间 查询参数
         QueryRepaymentDtEnum queryRepaymentDtEnum = QueryRepaymentDtEnum.getByCode(queryVo.getQueryRepaymentDtKey());
         if (queryRepaymentDtEnum != null) {
             if (queryRepaymentDtEnum.getBeginParam() != null) {
