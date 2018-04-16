@@ -224,10 +224,6 @@ public class ContractApplication {
      * @param orderId      可空
      */
     public String borrowerDoLoanContractSign(String borrowerCode, Long orderId) {
-        SaasUserEsignAuthorizationVo saasUserEsignAuthorizationVo = saasUserEsignAuthorizationService.getSuccessEsignAuthorizationByUserCode(borrowerCode);
-        if (saasUserEsignAuthorizationVo == null) {
-            throw new ApplicationException("请先进行签署授权");
-        }
         String url = getLoanContractUrl(orderId);
         String loanContractUrl = configUtil.getPdfPath() + MD5.md5(OrderNoUtil.makeOrderNum()) + ".pdf";
         contractCreateApplication.createLoanPdf(orderId, loanContractUrl);
@@ -249,10 +245,6 @@ public class ContractApplication {
      * @param orderId      可空
      */
     public String lenderDoLoanContractSign(String merchantCode, Long orderId) {
-        SaasUserEsignAuthorizationVo saasUserEsignAuthorizationVo = saasUserEsignAuthorizationService.getSuccessEsignAuthorizationByUserCode(merchantCode);
-        if (saasUserEsignAuthorizationVo == null) {
-            throw new ApplicationException("请先进行签署授权");
-        }
         String url = getLoanContractUrl(orderId);
         String loanContractUrl = configUtil.getPdfPath() + MD5.md5(OrderNoUtil.makeOrderNum()) + ".pdf";
         contractCreateApplication.createLoanPdf(orderId, loanContractUrl);
@@ -268,10 +260,6 @@ public class ContractApplication {
     }
 
     public String borrowerDoExtendContractSign(String borrowerCode, Long orderId) {
-        SaasUserEsignAuthorizationVo saasUserEsignAuthorizationVo = saasUserEsignAuthorizationService.getSuccessEsignAuthorizationByUserCode(borrowerCode);
-        if (saasUserEsignAuthorizationVo == null) {
-            throw new ApplicationException("请先进行签署授权");
-        }
         SaasOrder saasOrder = saasOrderService.selectById(orderId);
         if (saasOrder == null || StringUtils.isEmpty(saasOrder.getTermUrl())) {
             String url = getExtendContractUrl(orderId);
@@ -292,10 +280,6 @@ public class ContractApplication {
     }
 
     public String lenderDoExtendContractSign(String merchantCode, Long orderId) {
-        SaasUserEsignAuthorizationVo saasUserEsignAuthorizationVo = saasUserEsignAuthorizationService.getSuccessEsignAuthorizationByUserCode(merchantCode);
-        if (saasUserEsignAuthorizationVo == null) {
-            throw new ApplicationException("请先进行签署授权");
-        }
         SaasOrder saasOrder = saasOrderService.selectById(orderId);
         if (saasOrder == null || StringUtils.isEmpty(saasOrder.getTermUrl())) {
             String url = getExtendContractUrl(orderId);
