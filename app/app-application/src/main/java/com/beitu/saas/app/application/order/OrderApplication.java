@@ -498,12 +498,12 @@ public class OrderApplication {
      */
     public List<DashboardOverdueOrderShowVo> getDataDashboardOverdueShowInfo(Integer menuType, String merchantCode, Page page) {
         List<DashboardOverdueOrderShowVo> dashboardOverdueOrderShowVos = new ArrayList<>();
-        if (menuType == DashboardTypeEnum.NO_REPAY.getType()) {
+        if (DashboardTypeEnum.NO_REPAY.getType().equals(menuType)) {
             List<DashboardOrderVo> noRepayOrderVos = saasOrderBillDetailService.getNoRepayOrderListByPage(merchantCode, page);
             dashboardOverdueOrderShowVos = this.getDashboardOrderShowList(noRepayOrderVos);
 
         }
-        if (menuType == DashboardTypeEnum.OVERDUE.getType()) {
+        if (DashboardTypeEnum.OVERDUE.getType().equals(menuType)) {
             List<DashboardOrderVo> overdueOrderVos = saasOrderBillDetailService.getOverdueOrderListByPage(merchantCode, page);
             dashboardOverdueOrderShowVos = this.getDashboardOrderShowList(overdueOrderVos);
         }
@@ -511,7 +511,12 @@ public class OrderApplication {
         return dashboardOverdueOrderShowVos;
     }
 
-    //获取数据看板订单信息
+    /**
+     * 获取数据看板订单信息
+     *
+     * @param dashboardOrderVos
+     * @return
+     */
     private List<DashboardOverdueOrderShowVo> getDashboardOrderShowList(List<DashboardOrderVo> dashboardOrderVos) {
         List<DashboardOverdueOrderShowVo> dashboardOverdueOrderShowVos = new ArrayList<>();
         dashboardOrderVos.stream().forEach(x -> {

@@ -59,7 +59,7 @@ public class SaasOrderVo implements ResponseData, Serializable {
      */
     private Date repaymentDt;
     /**
-     * 订单申请时间
+     * 订单计息时间
      */
     private Date createdDt;
     /**
@@ -70,6 +70,10 @@ public class SaasOrderVo implements ResponseData, Serializable {
      * 借款协议URL地址
      */
     private String termUrl;
+    /**
+     * 借款人是否授权签署借款合同
+     */
+    private Boolean borrowerAuthorizedSignLoan;
     /**
      * 展期关联订单ID
      */
@@ -212,6 +216,14 @@ public class SaasOrderVo implements ResponseData, Serializable {
 
     public void setTermUrl(String termUrl) {
         this.termUrl = termUrl;
+    }
+
+    public Boolean getBorrowerAuthorizedSignLoan() {
+        return this.borrowerAuthorizedSignLoan;
+    }
+
+    public void setBorrowerAuthorizedSignLoan(Boolean borrowerAuthorizedSignLoan) {
+        this.borrowerAuthorizedSignLoan = borrowerAuthorizedSignLoan;
     }
 
     public Long getRelationOrderId() {
