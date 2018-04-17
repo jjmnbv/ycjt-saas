@@ -2,8 +2,13 @@ package com.beitu.saas.rest.controller.credit;
 
 import com.alibaba.fastjson.JSON;
 import com.beitu.saas.app.annotations.SignIgnore;
+import com.beitu.saas.app.common.RequestLocalInfo;
+import com.beitu.saas.common.consts.RedisKeyConsts;
+import com.fqgj.base.services.redis.RedisClient;
+import com.fqgj.common.api.Response;
 import com.fqgj.log.factory.LogFactory;
 import com.fqgj.log.interfaces.Log;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,6 +30,8 @@ import java.util.zip.GZIPInputStream;
 public class GxbController {
 
     private static final Log LOGGER = LogFactory.getLog(GxbController.class);
+    @Autowired
+    private RedisClient redisClient;
 
     @SignIgnore
     @ResponseBody
@@ -35,12 +42,25 @@ public class GxbController {
             LOGGER.info(jsonStr);
         } catch (IOException e) {
             e.printStackTrace();
+            LOGGER.error("gxbEcommerceCallBack---{}", e);
+            return new HashMap(2) {{
+                put("retCode", 2);
+                put("retMsg", "失败");
+            }};
         }
         Map resultMap = new HashMap(2) {{
             put("retCode", 1);
-            put("retMsg","成功");
+            put("retMsg", "成功");
         }};
         return resultMap;
+    }
+
+    @RequestMapping(value = "/eb/notice", method = RequestMethod.POST)
+    public Response ecommerceSuccess() {
+        //if ()
+        //RequestLocalInfo.getCurrentAdmin().getSaasAdmin()
+        //redisClient.set(RedisKeyConsts.SAAS_GXB_ECOMMERCE,token,);
+        return Response.ok();
     }
 
     public String uncompress(InputStream inputStream) throws IOException {
