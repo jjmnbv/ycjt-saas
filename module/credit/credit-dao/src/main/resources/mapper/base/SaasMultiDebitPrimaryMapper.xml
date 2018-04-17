@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beitu.saas.credit.dao.impl.SaasMultiDebitDaoImpl">
+    <resultMap id="BaseResultMap" type="com.beitu.saas.credit.entity.SaasMultiDebitEntity">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="borrower_code" jdbcType="VARCHAR" property="borrowerCode"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="identity_code" jdbcType="VARCHAR" property="identityCode"/>
+        <result column="score" jdbcType="INTEGER" property="score"/>
+        <result column="fail_rate" jdbcType="DECIMAL" property="failRate"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="expired_dt" jdbcType="DATE" property="expiredDt"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="deleted" jdbcType="BIT" property="deleted"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id,
+    borrower_code,
+    mobile,
+    identity_code,
+    score,
+    fail_rate,
+    url,
+    expired_dt,
+    status,
+    deleted,
+    gmt_modified,
+    gmt_create
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Long"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_multi_debit
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" keyColumn="id" keyProperty="id"
+            parameterType="com.beitu.saas.credit.entity.SaasMultiDebitEntity" useGeneratedKeys="true">
+        insert into saas_multi_debit
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="borrowerCode !=null">
+                borrower_code,
+                </if>
+                <if test="mobile !=null">
+                mobile,
+                </if>
+                <if test="identityCode !=null">
+                identity_code,
+                </if>
+                <if test="score !=null">
+                score,
+                </if>
+                <if test="failRate !=null">
+                fail_rate,
+                </if>
+                <if test="url !=null">
+                url,
+                </if>
+                <if test="expiredDt !=null">
+                expired_dt,
+                </if>
+                <if test="status !=null">
+                status,
+                </if>
+                <if test="deleted !=null">
+                deleted,
+                </if>
+                <if test="gmtModified !=null">
+                gmt_modified,
+                </if>
+                <if test="gmtCreate !=null">
+                gmt_create,
+                </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="borrowerCode != null">
+                    #{borrowerCode,jdbcType=VARCHAR},
+                </if>
+                <if test="mobile != null">
+                    #{mobile,jdbcType=VARCHAR},
+                </if>
+                <if test="identityCode != null">
+                    #{identityCode,jdbcType=VARCHAR},
+                </if>
+                <if test="score != null">
+                    #{score,jdbcType=INTEGER},
+                </if>
+                <if test="failRate != null">
+                    #{failRate,jdbcType=DECIMAL},
+                </if>
+                <if test="url != null">
+                    #{url,jdbcType=VARCHAR},
+                </if>
+                <if test="expiredDt != null">
+                    #{expiredDt,jdbcType=DATE},
+                </if>
+                <if test="status != null">
+                    #{status,jdbcType=TINYINT},
+                </if>
+                <if test="deleted != null">
+                    #{deleted,jdbcType=BIT},
+                </if>
+                <if test="gmtModified != null">
+                    #{gmtModified,jdbcType=TIMESTAMP},
+                </if>
+                <if test="gmtCreate != null">
+                    #{gmtCreate,jdbcType=TIMESTAMP},
+                </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.beitu.saas.credit.entity.SaasMultiDebitEntity">
+        update saas_multi_debit
+        <set>
+                <if test="borrowerCode !=null">
+                borrower_code = #{borrowerCode,jdbcType=VARCHAR},
+                </if>
+                <if test="mobile !=null">
+                mobile = #{mobile,jdbcType=VARCHAR},
+                </if>
+                <if test="identityCode !=null">
+                identity_code = #{identityCode,jdbcType=VARCHAR},
+                </if>
+                <if test="score !=null">
+                score = #{score,jdbcType=INTEGER},
+                </if>
+                <if test="failRate !=null">
+                fail_rate = #{failRate,jdbcType=DECIMAL},
+                </if>
+                <if test="url !=null">
+                url = #{url,jdbcType=VARCHAR},
+                </if>
+                <if test="expiredDt !=null">
+                expired_dt = #{expiredDt,jdbcType=DATE},
+                </if>
+                <if test="status !=null">
+                status = #{status,jdbcType=TINYINT},
+                </if>
+                <if test="deleted !=null">
+                deleted = #{deleted,jdbcType=BIT},
+                </if>
+                <if test="gmtModified !=null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+                </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteByPrimaryKey">
+        update  saas_multi_debit
+        set deleted = 1
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <sql id="paginationSql">
+        <if test="page != null">
+            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+        </if>
+    </sql>
+
+    <sql id="paging">
+        <if test="offset != null and limit != null">
+            limit #{offset},#{limit}
+        </if>
+    </sql>
+
+    <select id="selectByParams" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_multi_debit
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="borrowerCode !=null">
+                and borrower_code = #{borrowerCode,jdbcType=VARCHAR}
+            </if>
+            <if test="mobile !=null">
+                and mobile = #{mobile,jdbcType=VARCHAR}
+            </if>
+            <if test="identityCode !=null">
+                and identity_code = #{identityCode,jdbcType=VARCHAR}
+            </if>
+            <if test="score !=null">
+                and score = #{score,jdbcType=INTEGER}
+            </if>
+            <if test="failRate !=null">
+                and fail_rate = #{failRate,jdbcType=DECIMAL}
+            </if>
+            <if test="url !=null">
+                and url = #{url,jdbcType=VARCHAR}
+            </if>
+            <if test="expiredDt !=null">
+                and expired_dt = #{expiredDt,jdbcType=DATE}
+            </if>
+            <if test="status !=null">
+                and status = #{status,jdbcType=TINYINT}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+        <include refid="paging"/>
+    </select>
+    <select id="queryTotal" resultType="INTEGER">
+        select count(*) from saas_multi_debit
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="borrowerCode !=null">
+                and borrower_code = #{borrowerCode,jdbcType=VARCHAR}
+            </if>
+            <if test="mobile !=null">
+                and mobile = #{mobile,jdbcType=VARCHAR}
+            </if>
+            <if test="identityCode !=null">
+                and identity_code = #{identityCode,jdbcType=VARCHAR}
+            </if>
+            <if test="score !=null">
+                and score = #{score,jdbcType=INTEGER}
+            </if>
+            <if test="failRate !=null">
+                and fail_rate = #{failRate,jdbcType=DECIMAL}
+            </if>
+            <if test="url !=null">
+                and url = #{url,jdbcType=VARCHAR}
+            </if>
+            <if test="expiredDt !=null">
+                and expired_dt = #{expiredDt,jdbcType=DATE}
+            </if>
+            <if test="status !=null">
+                and status = #{status,jdbcType=TINYINT}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </select>
+</mapper>

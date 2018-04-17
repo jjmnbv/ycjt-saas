@@ -13,15 +13,16 @@ import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.entity.SaasChannelEntity;
 import com.beitu.saas.channel.enums.ChannelTypeEnum;
+import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.enums.RestCodeEnum;
+import com.beitu.saas.common.handle.oss.OSSService;
 import com.beitu.saas.common.utils.IpChooseUtil;
 import com.beitu.saas.common.utils.OrderNoUtil;
 import com.beitu.saas.credit.client.SaasCreditCarrierService;
 import com.beitu.saas.credit.entity.SaasCreditCarrier;
-
-import com.beitu.saas.intergration.risk.RiskEcommerceService;
-import com.beitu.saas.intergration.risk.param.GXBEcommerceCrawlingParam;
-
+import com.beitu.saas.intergration.esign.EsignIntegrationService;
+import com.beitu.saas.intergration.esign.dto.AddPersonAccountSuccessDto;
+import com.beitu.saas.intergration.esign.param.PersonAccountParam;
 import com.beitu.saas.risk.helpers.CollectionUtils;
 import com.beitu.saas.risk.helpers.StringUtils;
 import com.beitu.saas.user.client.SaasEsignAccountService;
@@ -30,7 +31,8 @@ import com.beitu.saas.user.client.SaasUserEsignAuthorizationService;
 import com.beitu.saas.user.domain.SaasEsignAccountVo;
 import com.beitu.saas.user.domain.SaasEsignUserAuthorizationVo;
 import com.beitu.saas.user.entity.SaasUserEsignAuthorization;
-
+import com.fqgj.common.utils.MD5;
+import com.fqgj.exception.common.ApplicationException;
 import com.fqgj.log.factory.LogFactory;
 import com.fqgj.log.interfaces.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,23 +79,20 @@ public class OkController {
     private MerchantApplication merchantApplication;
 
     @Autowired
-    private RiskEcommerceService riskEcommerceService;
+    private ConfigUtil configUtil;
+
+    @Autowired
+    private EsignIntegrationService esignIntegrationService;
+
+    @Autowired
+    private OSSService ossService;
 
     @RequestMapping("/ok")
     @ResponseBody
     @VisitorAccessible
     @SignIgnore
     public String ok() {
-        GXBEcommerceCrawlingParam param = new GXBEcommerceCrawlingParam();
-        param.setIdcard("430224197111173910");
-        param.setName("王五");
-        param.setPhone("18819036332");
-        param.setReturnUrl("http://www.baidu.com");
-        param.setUserCode("12e31884bfbqdgey3");
-        String ecommerceCrawlingUrl = riskEcommerceService.getEcommerceCrawlingUrl(param);
-        LOGGER.info(ecommerceCrawlingUrl);
-        return ecommerceCrawlingUrl;
-        //return "ok";
+        return "ok";
     }
 
     @RequestMapping(value = "/stat", method = RequestMethod.GET)
@@ -145,8 +144,18 @@ public class OkController {
             }
             SaasEsignAccountVo saasEsignAccountVo1 = saasEsignAccountService.getByCode(saasEsignAccountVo.getCode());
             if (saasEsignAccountVo1 == null) {
-                saasEsignAccountVo.setAccountId(saasUserEsignAuthorization.getAccountId());
-                saasEsignAccountVo.setSealUrl(saasUserEsignAuthorization.getSealUrl());
+                PersonAccountParam personAccountParam = new PersonAccountParam();
+                personAccountParam.setUserCode(saasUserEsignAuthorization.getUserCode());
+                personAccountParam.setUserName(saasEsignAccountVo.getName());
+                personAccountParam.setIdentityCode(saasEsignAccountVo.getCode());
+                AddPersonAccountSuccessDto addPersonAccountSuccessDto = esignIntegrationService.addPersonAccount(personAccountParam);
+                if (addPersonAccountSuccessDto == null) {
+                    throw new ApplicationException("新增机构个人账户失败");
+                }
+                saasEsignAccountVo.setAccountId(addPersonAccountSuccessDto.getPersonAccountId());
+                String url = getAuthorizationUrl(saasUserEsignAuthorization.getUserCode());
+                ossService.uploadFile(url, addPersonAccountSuccessDto.getSealData());
+                saasEsignAccountVo.setSealUrl(url);
                 saasEsignAccountService.addSaasEsignAccountVo(saasEsignAccountVo);
             } else {
                 saasEsignCode = saasEsignAccountVo1.getSaasEsignCode();
@@ -166,5 +175,13 @@ public class OkController {
         return "ok";
     }
 
+    private String getAuthorizationUrl(String userCode) {
+        StringBuilder filePath = new StringBuilder("contract/authorization/");
+        if (configUtil.isServerTest()) {
+            filePath.append("test/");
+        }
+        filePath.append(userCode).append("_").append(MD5.md5(OrderNoUtil.makeOrderNum())).append(".pdf");
+        return filePath.toString();
+    }
 
 }
