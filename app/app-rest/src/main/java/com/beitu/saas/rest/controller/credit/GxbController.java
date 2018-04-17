@@ -1,10 +1,8 @@
 package com.beitu.saas.rest.controller.credit;
 
-import com.alibaba.fastjson.JSON;
 import com.beitu.saas.app.annotations.SignIgnore;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.common.config.ConfigUtil;
-import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.handle.oss.OSSService;
 import com.beitu.saas.common.utils.NetworkUtil;
 import com.beitu.saas.common.utils.OrderNoUtil;
