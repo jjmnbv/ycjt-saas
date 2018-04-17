@@ -56,6 +56,27 @@
             <artifactId>bctsp-jdk15</artifactId>
         </dependency>
         <!--e签宝  end-->
+        
+        <dependency>
+            <groupId>com.beitu.saas</groupId>
+            <artifactId>credit-client</artifactId>
+            <version>0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.beitu.saas</groupId>
+            <artifactId>credit-service</artifactId>
+            <version>0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.beitu.saas</groupId>
+            <artifactId>borrower-client</artifactId>
+            <version>0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.beitu.saas</groupId>
+            <artifactId>borrower-service</artifactId>
+            <version>0.1</version>
+        </dependency>
 
     </dependencies>
 

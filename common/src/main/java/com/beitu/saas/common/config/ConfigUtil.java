@@ -289,6 +289,10 @@ public class ConfigUtil {
         return config.getProperty("integration.youfen.validation.name.idcard.path", "/oreo/personal/validation/name/idcard");
     }
 
+    public String getYoufenMultiDebitPath() {
+        return config.getProperty("integration.youfen.verbose.union.multiDebit", "/oreo/verbose/union/multiDebit");
+    }
+
     public String getYoufenAccount() {
         return config.getProperty("integration.youfen.account", "yangcongtest");
     }
