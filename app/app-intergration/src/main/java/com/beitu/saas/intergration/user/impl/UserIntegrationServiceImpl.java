@@ -1,16 +1,21 @@
 package com.beitu.saas.intergration.user.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.beitu.saas.borrower.client.SaasBorrowerService;
+import com.beitu.saas.borrower.domain.SaasBorrowerVo;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.handle.oss.OSSService;
+import com.beitu.saas.common.utils.DateUtil;
 import com.beitu.saas.common.utils.HttpClientUtil;
 import com.beitu.saas.credit.client.SaasMultiDebitService;
+import com.beitu.saas.credit.entity.SaasMultiDebitEntity;
 import com.beitu.saas.intergration.user.UserIntegrationService;
 import com.beitu.saas.intergration.user.consts.YoufenApiResCodeConst;
 import com.beitu.saas.intergration.user.consts.YoufenApiStatusCodeConst;
 import com.beitu.saas.intergration.user.dto.UserMultiDebitDto;
 import com.beitu.saas.intergration.user.dto.UserNameIdNoValidationDto;
 import com.beitu.saas.intergration.user.enums.UserMultiDebitCodeEnum;
+import com.beitu.saas.intergration.user.enums.UserMultiDebitStatusEnum;
 import com.beitu.saas.intergration.user.enums.UserNameIdNoValidationCodeEnum;
 import com.beitu.saas.intergration.user.param.UserMultiDebitParam;
 import com.beitu.saas.intergration.user.param.UserNameIdNoValidationParam;
@@ -23,6 +28,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
@@ -37,6 +43,8 @@ public class UserIntegrationServiceImpl implements UserIntegrationService {
     private OSSService ossService;
     @Autowired
     private SaasMultiDebitService saasMultiDebitService;
+    @Autowired
+    private SaasBorrowerService saasBorrowerService;
 
     @Override
     public UserNameIdNoValidationDto userNameMatchIdNo(UserNameIdNoValidationParam param) {
@@ -95,7 +103,7 @@ public class UserIntegrationServiceImpl implements UserIntegrationService {
     }
 
     @Override
-    public UserMultiDebitDto userMultiDebit(UserMultiDebitParam param) {
+    public UserMultiDebitDto userMultiDebit(UserMultiDebitParam param, String merchantCode) {
         if (param == null) {
             return new UserMultiDebitDto(UserMultiDebitCodeEnum.OTHER_ERROR, "输入参数为空");
         }
@@ -124,9 +132,6 @@ public class UserIntegrationServiceImpl implements UserIntegrationService {
         }
 
         JSONObject dataJSONObject = jsonObject.getJSONObject("data");
-        if (dataJSONObject.size() == 0) {
-            return new UserMultiDebitDto(UserMultiDebitCodeEnum.OTHER_ERROR, "接口返回数据异常");
-        }
         String statusCode = dataJSONObject.getString("statusCode");
         String statusMsg = dataJSONObject.getString("statusMsg");
         if (!Objects.equals(statusCode, YoufenApiResCodeConst.QUERY_SUCCESS)) {
@@ -139,16 +144,35 @@ public class UserIntegrationServiceImpl implements UserIntegrationService {
         String failRate = evaluate.getString("failRate");
         String resultJsonString = result.toJSONString();
 
-        //json字符串上传oss并且返回到dto
-        String carrierUrl = "carrierData/";
+        String multiDebitUrl = "multiDebitData/";
         if (configUtil.isServerTest()) {
-            carrierUrl += "test/";
+            multiDebitUrl += "test/";
         }
         String userTime = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-        carrierUrl += "youfenCarrier" + "_" + userTime + "_" + MD5.md5(userTime + System.currentTimeMillis()) + ".json";
-        carrierUrl = ossService.uploadFile(carrierUrl, resultJsonString);
-        // TODO: 2018/4/16 入库操作 --- borrowerId 身份证 手机号 评分 ossurl 失效时间(到期后自动失效) 状态
-        //saasMultiDebitService.create(null);
-        return new UserMultiDebitDto(UserMultiDebitCodeEnum.QUERY_SUCCESS.getCode(), UserMultiDebitCodeEnum.QUERY_SUCCESS.getMsg(), resultJsonString);
+        multiDebitUrl += "youfenMultiDebit" + "_" + userTime + "_" + MD5.md5(userTime + System.currentTimeMillis()) + ".json";
+        multiDebitUrl = ossService.uploadFile(multiDebitUrl, resultJsonString);
+
+        this.createMultiDebit(param, merchantCode, score, failRate, multiDebitUrl);
+
+        return new UserMultiDebitDto(UserMultiDebitCodeEnum.REQUEST_SUCCESS.getCode(), UserMultiDebitCodeEnum.REQUEST_SUCCESS.getMsg(), resultJsonString);
+    }
+
+
+    private void createMultiDebit(UserMultiDebitParam param, String merchantCode, String score, String failRate, String multiDebitUrl) {
+        SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByMobileAndMerchantCode(param.getMobile(), merchantCode);
+        if (saasBorrowerVo == null) {
+            return;
+        }
+        SaasMultiDebitEntity entity = new SaasMultiDebitEntity()
+                .setBorrowerCode(saasBorrowerVo.getBorrowerCode())
+                .setMobile(param.getMobile())
+                .setIdentityCode(param.getIdentityNo())
+                .setScore(score == null ? 0 : Integer.valueOf(score))
+                .setFailRate(failRate == null ? BigDecimal.ZERO : new BigDecimal(failRate))
+                .setUrl(multiDebitUrl)
+                .setExpiredDt(DateUtil.addDate(new Date(), +30))
+                .setStatus(UserMultiDebitStatusEnum.EFFECTIVE.getType());
+
+        saasMultiDebitService.create(entity);
     }
 }

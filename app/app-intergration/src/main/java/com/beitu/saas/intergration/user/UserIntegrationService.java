@@ -21,6 +21,6 @@ public interface UserIntegrationService {
      * @param param
      * @return
      */
-    UserMultiDebitDto userMultiDebit(UserMultiDebitParam param);
+    UserMultiDebitDto userMultiDebit(UserMultiDebitParam param, String merchantCode);
 
 }

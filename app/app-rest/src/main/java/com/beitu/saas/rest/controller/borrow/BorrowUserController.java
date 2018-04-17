@@ -15,6 +15,7 @@ import com.beitu.saas.rest.controller.borrow.request.BorrowerManagerInfoRequest;
 import com.beitu.saas.rest.controller.borrow.request.UserMultiDebitInfoRequest;
 import com.beitu.saas.rest.controller.borrow.response.BorrowUserLoginSuccessResponse;
 import com.beitu.saas.rest.controller.borrow.response.BorrowerManagerInfoResponse;
+import com.beitu.saas.rest.controller.borrow.response.UserMultiDebitResponse;
 import com.fqgj.common.api.Page;
 import com.fqgj.common.api.Response;
 import com.fqgj.common.response.ModuleResponse;
@@ -88,14 +89,18 @@ public class BorrowUserController {
      * @param req
      * @return
      */
-    @SignIgnore
-    @VisitorAccessible
     @RequestMapping(value = "/multiDebitGet", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "用户借贷信息统计", response = ApiResponse.class)
     public Response multiDebitGet(@RequestBody @Valid UserMultiDebitInfoRequest req) {
-        String multiDebitInfo = multiDebitApplication.getMultiDebitInfo(req.getName(), req.getIdentityCode(), req.getMobile());
-        return Response.ok().putData(multiDebitInfo);
+        String multiDebitInfo = "";
+        String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
+        try {
+            multiDebitInfo = multiDebitApplication.getMultiDebitInfo(req.getName(), req.getIdentityCode(), req.getMobile(), merchantCode);
+        } catch (Exception e) {
+            return Response.error(null, e.getMessage());
+        }
+        return Response.ok().putData(new UserMultiDebitResponse(multiDebitInfo));
     }
 
 }

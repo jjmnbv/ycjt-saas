@@ -2,7 +2,9 @@ package com.beitu.saas.app.application.credit;
 
 import com.beitu.saas.intergration.user.UserIntegrationService;
 import com.beitu.saas.intergration.user.dto.UserMultiDebitDto;
+import com.beitu.saas.intergration.user.enums.UserMultiDebitCodeEnum;
 import com.beitu.saas.intergration.user.param.UserMultiDebitParam;
+import com.fqgj.exception.common.ApplicationException;
 import com.fqgj.log.factory.LogFactory;
 import com.fqgj.log.interfaces.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +33,14 @@ public class MultiDebitApplication {
      * @param mobile
      * @return
      */
-    public String getMultiDebitInfo(String name, String identityNo, String mobile) {
+    public String getMultiDebitInfo(String name, String identityNo, String mobile, String merchantCode) {
         UserMultiDebitParam userMultiDebitParam = new UserMultiDebitParam(name, identityNo, mobile);
-        UserMultiDebitDto userMultiDebitDto = userIntegrationService.userMultiDebit(userMultiDebitParam);
+        UserMultiDebitDto userMultiDebitDto = userIntegrationService.userMultiDebit(userMultiDebitParam, merchantCode);
+        if (userMultiDebitDto.getCode() != UserMultiDebitCodeEnum.REQUEST_SUCCESS.getCode()) {
+            LOGGER.error("多头借贷统计信息查询失败,原因: {}", userMultiDebitDto.getMsg());
+            throw new ApplicationException("多头借贷统计信息查询失败");
+        }
+
         return userMultiDebitDto.getResult();
     }
 
