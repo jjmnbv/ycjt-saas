@@ -83,7 +83,7 @@ public class MerchantApplication {
     private ContractApplication contractApplication;
 
     @Transactional(rollbackFor = Exception.class)
-    public void addMerchant(SaasMerchant saasMerchant, String password, String accountPhone, String accountName,Long sms,Long credit) {
+    public void addMerchant(SaasMerchant saasMerchant, String password, String accountPhone, String accountName, Long sms, Long credit) {
 
         //1.保存机构信息
         saasMerchant.setMerchantCode(GenerOrderNoUtil.generateOrderNo());
@@ -177,6 +177,9 @@ public class MerchantApplication {
     public MerchantContractInfoVo getMerchantContractInfo(String merchantCode) {
         MerchantContractInfoVo merchantContractInfoVo = new MerchantContractInfoVo();
         SaasMerchantVo saasMerchantVo = saasMerchantService.getByMerchantCode(merchantCode);
+        if (saasMerchantVo == null) {
+            return null;
+        }
         merchantContractInfoVo.setName(saasMerchantVo.getLenderName());
         merchantContractInfoVo.setCode(saasMerchantVo.getLenderIdcard());
         merchantContractInfoVo.setContractType(ContractConfigTypeEnum.PERSONAL_CONTRACT.getKey());

@@ -30,8 +30,11 @@ import com.beitu.saas.borrower.entity.SaasBorrowerIdentityInfo;
 import com.beitu.saas.borrower.entity.SaasBorrowerPersonalInfo;
 import com.beitu.saas.borrower.entity.SaasBorrowerWorkInfo;
 import com.beitu.saas.borrower.enums.BorrowerErrorCodeEnum;
+import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.domain.SaasH5ChannelVo;
+import com.beitu.saas.channel.entity.SaasChannelEntity;
 import com.beitu.saas.channel.enums.ChannelErrorCodeEnum;
+import com.beitu.saas.channel.enums.ChannelTypeEnum;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.consts.TermUrlConsts;
@@ -112,6 +115,9 @@ public class H5Controller {
 
     @Autowired
     private ContractApplication contractApplication;
+
+    @Autowired
+    private SaasChannelService saasChannelService;
 
     @VisitorAccessible
     @ParamsValidate
@@ -401,6 +407,13 @@ public class H5Controller {
         SaasBorrowerVo saasBorrowerVo = RequestLocalInfo.getCurrentAdmin().getSaasBorrower();
 
         String orderNumb = saasOrderService.getReviewerRefuseOrderNumb(saasBorrowerVo.getBorrowerCode(), channelCode);
+        if (StringUtils.isEmpty(orderNumb)) {
+            SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(channelCode);
+            if (ChannelTypeEnum.SYSTEM_DEFINED.getType().equals(saasChannelEntity.getChannelType()) ||
+                    ChannelTypeEnum.SYSTEM_DEFINED.getType().equals(saasChannelEntity.getChannelType())) {
+                throw new ApplicationException("该渠道不允许提交");
+            }
+        }
 
         return creditApplication.submitCreditInfo(saasBorrowerVo.getMerchantCode(), saasBorrowerVo.getBorrowerCode(), channelCode, orderNumb);
     }

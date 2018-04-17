@@ -43,7 +43,8 @@
                     <controller>controller</controller>
                     <!--#多个表逗号分割,all:全部表;borrower,article-->
                     <tables>
-                        saas_user_esign_authorization
+                        saas_esign_user_authorization,saas_esign_account
+                        <!--saas_user_esign_authorization,saas_esign_user_authorization,saas_esign_account-->
                     </tables>
                     <!--#多个模块逗号分割,生成什么模块all:全部模块;controller,domain,bean,dao,daoImpl,com.beitu.saas.borrower.service,serviceImpl,baseMapper,mapper-->
                     <generatorModules>dao,daoImpl,mapper,baseMapper,bean,service,serviceImpl,domain</generatorModules>

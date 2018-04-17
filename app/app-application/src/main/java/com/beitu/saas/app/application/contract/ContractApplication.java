@@ -15,13 +15,14 @@ import com.beitu.saas.finance.client.enums.CreditConsumeEnum;
 import com.beitu.saas.intergration.esign.EsignIntegrationService;
 import com.beitu.saas.intergration.esign.dto.AddOrganizeAccountSuccessDto;
 import com.beitu.saas.intergration.esign.dto.AddPersonAccountSuccessDto;
-import com.beitu.saas.intergration.esign.param.LicenseContractSignParam;
 import com.beitu.saas.intergration.esign.param.OrganizeAccountParam;
 import com.beitu.saas.intergration.esign.param.PersonAccountParam;
 import com.beitu.saas.order.client.SaasOrderService;
 import com.beitu.saas.order.entity.SaasOrder;
-import com.beitu.saas.user.client.SaasUserEsignAuthorizationService;
-import com.beitu.saas.user.domain.SaasUserEsignAuthorizationVo;
+import com.beitu.saas.user.client.SaasEsignAccountService;
+import com.beitu.saas.user.client.SaasEsignUserAuthorizationService;
+import com.beitu.saas.user.domain.SaasEsignAccountVo;
+import com.beitu.saas.user.domain.SaasEsignUserAuthorizationVo;
 import com.fqgj.common.utils.MD5;
 import com.fqgj.common.utils.StringUtils;
 import com.fqgj.exception.common.ApplicationException;
@@ -42,7 +43,10 @@ public class ContractApplication {
     private EsignIntegrationService esignIntegrationService;
 
     @Autowired
-    private SaasUserEsignAuthorizationService saasUserEsignAuthorizationService;
+    private SaasEsignUserAuthorizationService saasEsignUserAuthorizationService;
+
+    @Autowired
+    private SaasEsignAccountService saasEsignAccountService;
 
     @Autowired
     private SaasBorrowerRealInfoService saasBorrowerRealInfoService;
@@ -66,18 +70,22 @@ public class ContractApplication {
     private SaasCreditHistoryService saasCreditHistoryService;
 
     public Boolean needDoLicenseContractSign(String userCode) {
-        if (saasUserEsignAuthorizationService.isSuccessAuthorization(userCode)) {
+        if (saasEsignUserAuthorizationService.isSuccessAuthorization(userCode)) {
             return Boolean.FALSE;
         }
         return Boolean.TRUE;
     }
 
     public String getUserSealUrl(String userCode) {
-        SaasUserEsignAuthorizationVo saasUserEsignAuthorizationVo = saasUserEsignAuthorizationService.getSuccessEsignAuthorizationByUserCode(userCode);
-        if (saasUserEsignAuthorizationVo == null) {
+        SaasEsignUserAuthorizationVo saasEsignUserAuthorizationVo = saasEsignUserAuthorizationService.getByUserCode(userCode);
+        if (saasEsignUserAuthorizationVo == null) {
             return null;
         }
-        return saasUserEsignAuthorizationVo.getSealUrl();
+        SaasEsignAccountVo saasEsignAccountVo = saasEsignAccountService.getBySaasEsignCode(saasEsignUserAuthorizationVo.getSaasEsignCode());
+        if (saasEsignAccountVo == null) {
+            return null;
+        }
+        return saasEsignAccountVo.getSealUrl();
     }
 
     /**
@@ -86,24 +94,47 @@ public class ContractApplication {
      * @param borrowerCode 借款人
      */
     public void borrowerDoLicenseContractSign(String borrowerCode) {
-        if (StringUtils.isNotEmpty(getUserSealUrl(borrowerCode))) {
+        if (!needDoLicenseContractSign(borrowerCode)) {
             return;
         }
         SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode);
         if (saasBorrowerRealInfoVo == null) {
             throw new ApplicationException(RestCodeEnum.BORROWER_NOT_EXIST_ERROR);
         }
-        PersonAccountParam personAccountParam = new PersonAccountParam();
-        personAccountParam.setUserCode(borrowerCode);
-        personAccountParam.setUserName(saasBorrowerRealInfoVo.getName());
-        personAccountParam.setIdentityCode(saasBorrowerRealInfoVo.getIdentityCode());
-        AddPersonAccountSuccessDto addPersonAccountSuccessDto = esignIntegrationService.addPersonAccount(personAccountParam);
-        if (addPersonAccountSuccessDto == null) {
-            throw new ApplicationException("新增个人账户失败");
+        SaasEsignAccountVo saasEsignAccountVo = saasEsignAccountService.getByCode(saasBorrowerRealInfoVo.getIdentityCode());
+        String saasEsignCode;
+        String accountId;
+        String sealData;
+        if (saasEsignAccountVo != null) {
+            accountId = saasEsignAccountVo.getAccountId();
+            sealData = ossService.getFileContent(saasEsignAccountVo.getSealUrl());
+            saasEsignCode = saasEsignAccountVo.getSaasEsignCode();
+        } else {
+            PersonAccountParam personAccountParam = new PersonAccountParam();
+            personAccountParam.setUserCode(borrowerCode);
+            personAccountParam.setUserName(saasBorrowerRealInfoVo.getName());
+            personAccountParam.setIdentityCode(saasBorrowerRealInfoVo.getIdentityCode());
+            AddPersonAccountSuccessDto addPersonAccountSuccessDto = esignIntegrationService.addPersonAccount(personAccountParam);
+            if (addPersonAccountSuccessDto == null) {
+                throw new ApplicationException("新增个人账户失败");
+            }
+            accountId = addPersonAccountSuccessDto.getPersonAccountId();
+            sealData = addPersonAccountSuccessDto.getSealData();
+            if (StringUtils.isEmpty(sealData)) {
+                throw new ApplicationException("ESIGN印章生成失败");
+            }
+            saasEsignCode = OrderNoUtil.makeOrderNum();
+            SaasEsignAccountVo addSaasEsignAccountVo = new SaasEsignAccountVo();
+            addSaasEsignAccountVo.setName(saasBorrowerRealInfoVo.getName());
+            addSaasEsignAccountVo.setCode(saasBorrowerRealInfoVo.getIdentityCode());
+            addSaasEsignAccountVo.setAccountId(accountId);
+            String sealUrl = getSealUrl(borrowerCode);
+            ossService.uploadFile(sealUrl, sealData);
+            addSaasEsignAccountVo.setSealUrl(sealUrl);
+            addSaasEsignAccountVo.setSaasEsignCode(saasEsignCode);
+            saasEsignAccountService.addSaasEsignAccountVo(addSaasEsignAccountVo);
         }
-        String accountId = addPersonAccountSuccessDto.getPersonAccountId();
-        String sealData = addPersonAccountSuccessDto.getSealData();
-        doEsignAuthorization(saasBorrowerRealInfoVo.getMerchantCode(), borrowerCode, saasBorrowerRealInfoVo.getName(), accountId, null, sealData);
+        doEsignAuthorization(saasBorrowerRealInfoVo.getMerchantCode(), borrowerCode, saasBorrowerRealInfoVo.getName(), saasEsignCode, accountId, sealData);
     }
 
     /**
@@ -112,19 +143,21 @@ public class ContractApplication {
      * @param merchantCode 出借机构
      */
     public void lenderDoLicenseContractSign(String merchantCode) {
-        if (StringUtils.isNotEmpty(getUserSealUrl(merchantCode))) {
+        if (!needDoLicenseContractSign(merchantCode)) {
             return;
         }
-        String accountId = null;
-        String sealData;
-        String sealUrl = null;
         MerchantContractInfoVo merchantContractInfoVo = merchantApplication.getMerchantContractInfo(merchantCode);
         if (merchantContractInfoVo == null) {
             throw new ApplicationException(RestCodeEnum.MERCHANT_NOT_EXIST_ERROR);
         }
-        if (StringUtils.isNotEmpty(merchantContractInfoVo.getContractUrl())) {
-            sealUrl = merchantContractInfoVo.getContractUrl();
-            sealData = ossService.getFileContent(sealUrl);
+        SaasEsignAccountVo saasEsignAccountVo = saasEsignAccountService.getByCode(merchantContractInfoVo.getCode());
+        String saasEsignCode;
+        String accountId;
+        String sealData;
+        if (saasEsignAccountVo != null) {
+            accountId = saasEsignAccountVo.getAccountId();
+            sealData = ossService.getFileContent(saasEsignAccountVo.getSealUrl());
+            saasEsignCode = saasEsignAccountVo.getSaasEsignCode();
         } else {
             if (ContractConfigTypeEnum.PERSONAL_CONTRACT.getKey().equals(merchantContractInfoVo.getContractType())) {
                 PersonAccountParam personAccountParam = new PersonAccountParam();
@@ -149,27 +182,24 @@ public class ContractApplication {
                 accountId = successDto.getOrganizeAccountId();
                 sealData = successDto.getSealData();
             }
+            saasEsignCode = OrderNoUtil.makeOrderNum();
+            SaasEsignAccountVo addSaasEsignAccountVo = new SaasEsignAccountVo();
+            addSaasEsignAccountVo.setName(merchantContractInfoVo.getName());
+            addSaasEsignAccountVo.setCode(merchantContractInfoVo.getCode());
+            addSaasEsignAccountVo.setAccountId(accountId);
+            String sealUrl = getSealUrl(merchantCode);
+            ossService.uploadFile(sealUrl, sealData);
+            addSaasEsignAccountVo.setSealUrl(sealUrl);
+            addSaasEsignAccountVo.setSaasEsignCode(saasEsignCode);
+            saasEsignAccountService.addSaasEsignAccountVo(addSaasEsignAccountVo);
         }
-        doEsignAuthorization(merchantCode, merchantCode, ContractConsts.DEFAULT_DO_LICENSE_CONTRACT_SIGN_OPERATOR_NAME, accountId, sealUrl, sealData);
+        doEsignAuthorization(merchantCode, merchantCode, ContractConsts.DEFAULT_DO_LICENSE_CONTRACT_SIGN_OPERATOR_NAME, saasEsignCode, accountId, sealData);
     }
 
-    private void doEsignAuthorization(String merchantCode, String userCode, String name, String accountId, String sealUrl, String sealData) {
-        if (StringUtils.isEmpty(sealUrl)) {
-            sealUrl = getSealUrl(userCode);
-            ossService.uploadFile(sealUrl, sealData);
-        }
+    private void doEsignAuthorization(String merchantCode, String userCode, String name, String saasEsignCode, String accountId, String sealData) {
         String url = getAuthorizationUrl(userCode);
         String createFilePath = configUtil.getPdfPath() + MD5.md5(OrderNoUtil.makeOrderNum()) + ".pdf";
         contractCreateApplication.createAuthorizationPdf(userCode, createFilePath);
-        SaasUserEsignAuthorizationVo saasUserEsignAuthorizationVo = saasUserEsignAuthorizationService.getByUserCode(userCode);
-        if (saasUserEsignAuthorizationVo == null) {
-            saasUserEsignAuthorizationVo = new SaasUserEsignAuthorizationVo();
-            saasUserEsignAuthorizationVo.setUserCode(userCode);
-            saasUserEsignAuthorizationVo.setAccountId(accountId);
-            saasUserEsignAuthorizationVo.setSealUrl(sealUrl);
-            saasUserEsignAuthorizationVo.setSuccess(Boolean.FALSE);
-            saasUserEsignAuthorizationVo.setSaasUserEsignAuthorizationId(saasUserEsignAuthorizationService.create(saasUserEsignAuthorizationVo).getId());
-        }
         File file = new File(createFilePath);
         byte[] pdfContent = null;
         if (file.exists()) {
@@ -211,7 +241,11 @@ public class ContractApplication {
 
                 }
             }
-            saasUserEsignAuthorizationService.updateSaasUserEsignAuthorization(saasUserEsignAuthorizationVo.getSaasUserEsignAuthorizationId(), url);
+            SaasEsignUserAuthorizationVo addSaasEsignUserAuthorizationVo = new SaasEsignUserAuthorizationVo();
+            addSaasEsignUserAuthorizationVo.setUserCode(userCode);
+            addSaasEsignUserAuthorizationVo.setAuthorizationUrl(url);
+            addSaasEsignUserAuthorizationVo.setSaasEsignCode(saasEsignCode);
+            saasEsignUserAuthorizationService.addSaasEsignUserAuthorizationVo(addSaasEsignUserAuthorizationVo);
             saasCreditHistoryService.addExpenditureCreditHistory(merchantCode, name, CreditConsumeEnum.RISK_ESIGN);
         }
     }
@@ -224,10 +258,6 @@ public class ContractApplication {
      * @param orderId      可空
      */
     public String borrowerDoLoanContractSign(String borrowerCode, Long orderId) {
-        SaasUserEsignAuthorizationVo saasUserEsignAuthorizationVo = saasUserEsignAuthorizationService.getSuccessEsignAuthorizationByUserCode(borrowerCode);
-        if (saasUserEsignAuthorizationVo == null) {
-            throw new ApplicationException("请先进行签署授权");
-        }
         String url = getLoanContractUrl(orderId);
         String loanContractUrl = configUtil.getPdfPath() + MD5.md5(OrderNoUtil.makeOrderNum()) + ".pdf";
         contractCreateApplication.createLoanPdf(orderId, loanContractUrl);
@@ -249,10 +279,6 @@ public class ContractApplication {
      * @param orderId      可空
      */
     public String lenderDoLoanContractSign(String merchantCode, Long orderId) {
-        SaasUserEsignAuthorizationVo saasUserEsignAuthorizationVo = saasUserEsignAuthorizationService.getSuccessEsignAuthorizationByUserCode(merchantCode);
-        if (saasUserEsignAuthorizationVo == null) {
-            throw new ApplicationException("请先进行签署授权");
-        }
         String url = getLoanContractUrl(orderId);
         String loanContractUrl = configUtil.getPdfPath() + MD5.md5(OrderNoUtil.makeOrderNum()) + ".pdf";
         contractCreateApplication.createLoanPdf(orderId, loanContractUrl);
@@ -268,10 +294,6 @@ public class ContractApplication {
     }
 
     public String borrowerDoExtendContractSign(String borrowerCode, Long orderId) {
-        SaasUserEsignAuthorizationVo saasUserEsignAuthorizationVo = saasUserEsignAuthorizationService.getSuccessEsignAuthorizationByUserCode(borrowerCode);
-        if (saasUserEsignAuthorizationVo == null) {
-            throw new ApplicationException("请先进行签署授权");
-        }
         SaasOrder saasOrder = saasOrderService.selectById(orderId);
         if (saasOrder == null || StringUtils.isEmpty(saasOrder.getTermUrl())) {
             String url = getExtendContractUrl(orderId);
@@ -292,10 +314,6 @@ public class ContractApplication {
     }
 
     public String lenderDoExtendContractSign(String merchantCode, Long orderId) {
-        SaasUserEsignAuthorizationVo saasUserEsignAuthorizationVo = saasUserEsignAuthorizationService.getSuccessEsignAuthorizationByUserCode(merchantCode);
-        if (saasUserEsignAuthorizationVo == null) {
-            throw new ApplicationException("请先进行签署授权");
-        }
         SaasOrder saasOrder = saasOrderService.selectById(orderId);
         if (saasOrder == null || StringUtils.isEmpty(saasOrder.getTermUrl())) {
             String url = getExtendContractUrl(orderId);
