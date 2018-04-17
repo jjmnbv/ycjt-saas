@@ -6,19 +6,22 @@ import com.beitu.saas.auth.domain.SaasMerchantVo;
 import com.beitu.saas.auth.entity.SaasAdmin;
 import com.beitu.saas.auth.service.SaasAdminService;
 import com.beitu.saas.auth.service.SaasMerchantService;
-import com.beitu.saas.channel.domain.SaasChannelDetailVo;
-import com.beitu.saas.channel.domain.SaasChannelRiskSettingsVo;
-import com.beitu.saas.channel.domain.SaasH5ChannelVo;
-import com.beitu.saas.channel.enums.ChannelOperateTypeEnum;
-import com.beitu.saas.channel.enums.ChannelTypeEnum;
-import com.beitu.saas.channel.param.ChannelStatQueryParam;
-import com.beitu.saas.channel.param.SaasChannelParam;
 import com.beitu.saas.channel.client.SaasChannelRiskSettingsService;
 import com.beitu.saas.channel.client.SaasChannelService;
+import com.beitu.saas.channel.client.SaasModuleService;
+import com.beitu.saas.channel.domain.SaasChannelDetailVo;
+import com.beitu.saas.channel.domain.SaasChannelRiskSettingsVo;
 import com.beitu.saas.channel.domain.SaasChannelVo;
+import com.beitu.saas.channel.domain.SaasH5ChannelVo;
 import com.beitu.saas.channel.entity.SaasChannelEntity;
 import com.beitu.saas.channel.entity.SaasChannelRiskSettingsEntity;
+import com.beitu.saas.channel.entity.SaasModuleEntity;
+import com.beitu.saas.channel.enums.ChannelOperateTypeEnum;
 import com.beitu.saas.channel.enums.ChannelStatusEnum;
+import com.beitu.saas.channel.enums.ChannelTypeEnum;
+import com.beitu.saas.channel.enums.RiskModuleEnum;
+import com.beitu.saas.channel.param.ChannelStatQueryParam;
+import com.beitu.saas.channel.param.SaasChannelParam;
 import com.beitu.saas.channel.param.SaasChannelRiskSettingsParam;
 import com.beitu.saas.channel.vo.ChannelStatVo;
 import com.beitu.saas.common.config.ConfigUtil;
@@ -58,7 +61,8 @@ public class SaasChannelApplication {
     private ConfigUtil configUtil;
     @Autowired
     private SaasMerchantService saasMerchantService;
-
+    @Autowired
+    private SaasModuleService saasModuleService;
 
     /**
      * 获取机构下的所有管理员
@@ -201,18 +205,36 @@ public class SaasChannelApplication {
      * 根据渠道号获取风控配置信息
      */
     public List<SaasChannelRiskSettingsVo> getSaasChannelRiskSettingsByChannelCode(String channelCode) {
-        List<SaasChannelRiskSettingsEntity> entityList = saasChannelRiskSettingsService.getSaasChannelRiskSettingsByChannelCode(channelCode);
-        List<SaasChannelRiskSettingsVo> riskSettingsVos = new ArrayList<>();
-
-        entityList.stream().forEach(x -> {
-            SaasChannelRiskSettingsVo vo = new SaasChannelRiskSettingsVo()
-                    .setChannelCode(x.getChannelCode())
-                    .setItemCode(x.getItemCode())
-                    .setModuleCode(x.getModuleCode())
-                    .setRequired(x.getRequired());
-            riskSettingsVos.add(vo);
-        });
-
+        List<SaasChannelRiskSettingsVo> riskSettingsVos;
+        SaasChannelEntity channelEntity = saasChannelService.getSaasChannelByChannelCode(channelCode);
+        boolean isDefaultChannel = ChannelTypeEnum.SYSTEM_DEFINED.getType().equals(channelEntity.getChannelType())
+                || ChannelTypeEnum.RECOMMEND_DEFINED.getType().equals(channelEntity.getChannelType());
+        if (isDefaultChannel) {
+            List<SaasModuleEntity> saasModuleEntityList = saasModuleService.getSaasModuleEntityList();
+            riskSettingsVos = new ArrayList<>(saasModuleEntityList.size());
+            saasModuleEntityList.stream().forEach(x -> {
+                SaasChannelRiskSettingsVo saasChannelRiskSettingsVo = new SaasChannelRiskSettingsVo()
+                        .setChannelCode(channelCode)
+                        .setModuleCode(x.getModuleCode());
+                if (x.getModuleCode().equals(RiskModuleEnum.APPLICATION.getModuleCode())) {
+                    saasChannelRiskSettingsVo.setRequired(1);
+                } else {
+                    saasChannelRiskSettingsVo.setRequired(0);
+                }
+                riskSettingsVos.add(saasChannelRiskSettingsVo);
+            });
+        } else {
+            List<SaasChannelRiskSettingsEntity> entityList = saasChannelRiskSettingsService.getSaasChannelRiskSettingsByChannelCode(channelCode);
+            riskSettingsVos = new ArrayList<>(entityList.size());
+            entityList.stream().forEach(x -> {
+                SaasChannelRiskSettingsVo vo = new SaasChannelRiskSettingsVo()
+                        .setChannelCode(x.getChannelCode())
+                        .setItemCode(x.getItemCode())
+                        .setModuleCode(x.getModuleCode())
+                        .setRequired(x.getRequired());
+                riskSettingsVos.add(vo);
+            });
+        }
         LOGGER.info("渠道号: {} 的风控配置模块size:{}", channelCode, riskSettingsVos.size());
         return riskSettingsVos;
     }
