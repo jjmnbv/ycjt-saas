@@ -29,6 +29,11 @@ public class SaasMultiDebitServiceImpl extends AbstractBaseService implements Sa
     public List<SaasMultiDebitEntity> getMultiDebitEntityList(String mobile) {
         return saasMultiDebitDao.selectMultiDebitEntityList(mobile);
     }
+
+    @Override
+    public void updateExpiredMultiDebitEntity() {
+        saasMultiDebitDao.updateExpiredMultiDebitEntity();
+    }
 }
 
 

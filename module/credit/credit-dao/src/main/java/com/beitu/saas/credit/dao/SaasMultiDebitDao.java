@@ -12,5 +12,8 @@ import java.util.List;
  */
 
 public interface SaasMultiDebitDao extends BaseMapper<SaasMultiDebitEntity> {
+
     List<SaasMultiDebitEntity> selectMultiDebitEntityList(String mobile);
+
+    void updateExpiredMultiDebitEntity();
 }
