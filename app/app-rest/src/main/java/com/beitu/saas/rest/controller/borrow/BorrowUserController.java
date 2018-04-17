@@ -95,11 +95,18 @@ public class BorrowUserController {
     public Response multiDebitGet(@RequestBody @Valid UserMultiDebitInfoRequest req) {
         String multiDebitInfo = "";
         String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
-        try {
-            multiDebitInfo = multiDebitApplication.getMultiDebitInfo(req.getName(), req.getIdentityCode(), req.getMobile(), merchantCode);
-        } catch (Exception e) {
-            return Response.error(null, e.getMessage());
+
+        String urlJson = multiDebitApplication.getMultiDebitJson(req.getMobile());
+        if (urlJson == null) {
+            try {
+                multiDebitInfo = multiDebitApplication.getMultiDebitInfo(req.getName(), req.getIdentityCode(), req.getMobile(), merchantCode);
+            } catch (Exception e) {
+                return Response.error(null, e.getMessage());
+            }
+        } else {
+            multiDebitInfo = urlJson;
         }
+
         return Response.ok().putData(new UserMultiDebitResponse(multiDebitInfo));
     }
 

@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
@@ -139,11 +140,7 @@ public class UserIntegrationServiceImpl implements UserIntegrationService {
         }
 
         JSONObject result = dataJSONObject.getJSONObject("result");
-        JSONObject evaluate = result.getJSONObject("evaluate");
-        String score = evaluate.getString("score");
-        String failRate = evaluate.getString("failRate");
         String resultJsonString = result.toJSONString();
-
         String multiDebitUrl = "multiDebitData/";
         if (configUtil.isServerTest()) {
             multiDebitUrl += "test/";
@@ -152,17 +149,25 @@ public class UserIntegrationServiceImpl implements UserIntegrationService {
         multiDebitUrl += "youfenMultiDebit" + "_" + userTime + "_" + MD5.md5(userTime + System.currentTimeMillis()) + ".json";
         multiDebitUrl = ossService.uploadFile(multiDebitUrl, resultJsonString);
 
-        this.createMultiDebit(param, merchantCode, score, failRate, multiDebitUrl);
-
+        this.createMultiDebit(param, merchantCode, result, multiDebitUrl);
         return new UserMultiDebitDto(UserMultiDebitCodeEnum.REQUEST_SUCCESS.getCode(), UserMultiDebitCodeEnum.REQUEST_SUCCESS.getMsg(), resultJsonString);
     }
 
 
-    private void createMultiDebit(UserMultiDebitParam param, String merchantCode, String score, String failRate, String multiDebitUrl) {
+    private void createMultiDebit(UserMultiDebitParam param, String merchantCode, JSONObject result, String multiDebitUrl) {
         SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByMobileAndMerchantCode(param.getMobile(), merchantCode);
         if (saasBorrowerVo == null) {
             return;
         }
+
+        JSONObject evaluate = result.getJSONObject("evaluate");
+        String score = evaluate.getString("score");
+        String failRate = evaluate.getString("failRate");
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.MONTH, 1);//增加一个月
+
         SaasMultiDebitEntity entity = new SaasMultiDebitEntity()
                 .setBorrowerCode(saasBorrowerVo.getBorrowerCode())
                 .setMobile(param.getMobile())
@@ -170,7 +175,7 @@ public class UserIntegrationServiceImpl implements UserIntegrationService {
                 .setScore(score == null ? 0 : Integer.valueOf(score))
                 .setFailRate(failRate == null ? BigDecimal.ZERO : new BigDecimal(failRate))
                 .setUrl(multiDebitUrl)
-                .setExpiredDt(DateUtil.addDate(new Date(), +30))
+                .setExpiredDt(calendar.getTime())
                 .setStatus(UserMultiDebitStatusEnum.EFFECTIVE.getType());
 
         saasMultiDebitService.create(entity);
