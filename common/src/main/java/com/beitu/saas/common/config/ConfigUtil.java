@@ -324,4 +324,8 @@ public class ConfigUtil {
         return config.getProperty("gxb.h5.crawling.path", "https://prod.gxb.io/v2/auth");
     }
 
+    public String getGXBPushIP(){
+        return config.getProperty("gxb.push.ip", "139.196.95.4,139.224.12.200");
+    }
+
 }

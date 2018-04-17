@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
@@ -53,6 +55,13 @@ public class GxbController {
         //TODO 鉴权
         try {
             String ipAddress = NetworkUtil.getIpAddress(httpServletRequest);
+            List<String> ipList = Arrays.asList(configUtil.getGXBPushIP().split(","));
+            if (ipList.contains(ipAddress)){
+                return new HashMap(2) {{
+                    put("retCode", 2);
+                    put("retMsg", "失败");
+                }};
+            }
             LOGGER.info("========"+ipAddress);
             String jsonStr = uncompress(httpServletRequest.getInputStream());
             Map<String, Object> responseMap =  JSONUtils.json2map(jsonStr);
