@@ -1,5 +1,6 @@
 package com.beitu.saas.rest.controller.credit;
 
+import com.beitu.saas.app.annotations.SignIgnore;
 import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.application.collection.CollectionApplication;
 import com.beitu.saas.app.application.collection.vo.CollectionCommentListVo;
@@ -17,6 +18,9 @@ import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.app.enums.SaasLoanPlatformEnum;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.TermUrlConsts;
+import com.beitu.saas.common.handle.oss.OSSService;
+import com.beitu.saas.credit.client.SaasGxbEbService;
+import com.beitu.saas.credit.domain.SaasGxbEbVo;
 import com.beitu.saas.intergration.risk.pojo.LoanPlatformQueryPojo;
 import com.beitu.saas.order.client.SaasOrderService;
 import com.beitu.saas.order.domain.SaasOrderVo;
@@ -26,7 +30,9 @@ import com.beitu.saas.rest.controller.credit.request.CreditQueryRequest;
 import com.beitu.saas.rest.controller.credit.request.UserBaseInfoQueryRequest;
 import com.beitu.saas.rest.controller.credit.response.*;
 import com.beitu.saas.risk.helpers.StringUtils;
+import com.fqgj.common.api.Response;
 import com.fqgj.common.utils.CollectionUtils;
+import com.fqgj.common.utils.JSONUtils;
 import com.fqgj.exception.common.ApplicationException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -38,7 +44,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author linanjun
@@ -79,6 +87,12 @@ public class CreditQueryController {
 
     @Autowired
     private TongdunReportApplication tongdunReportApplication;
+
+    @Autowired
+    private SaasGxbEbService saasGxbEbService;
+
+    @Autowired
+    private OSSService ossService;
 
     @RequestMapping(value = "/base", method = RequestMethod.POST)
     @ResponseBody
@@ -180,6 +194,34 @@ public class CreditQueryController {
         String borrowerCode = getBorrowerCodeByOrderNumbAndMerchantCode(orderNumb, merchantCode);
         return new DataApiResponse<>(tongdunReportApplication.getTongdunReport(merchantCode, borrowerCode));
     }
+
+    @RequestMapping(value = "/eb/data", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "电商信息")
+    public Response getGxbEbUrl(@RequestBody @Valid CreditQueryRequest req) {
+        String orderNumb = req.getOrderNumb();
+        String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
+        String borrowerCode = getBorrowerCodeByOrderNumbAndMerchantCode(orderNumb, merchantCode);
+        // String borrowerCode = "12e31884bfbqdgey3";
+        SaasGxbEbVo saasGxbEbVo = saasGxbEbService.getGxbEbTopByBorrowerCode(borrowerCode);
+        configUtil.getAddressURLPrefix();
+        if (saasGxbEbVo != null) {
+            try {
+                String content = ossService.getFileContent(saasGxbEbVo.getJsonUrl());
+                Map<String, Object> map = JSONUtils.json2map(content);
+                return Response.ok().putData(new HashMap(4) {{
+                    put("ecommerceBaseInfo", map.get("ecommerceBaseInfo"));
+                    put("ecommerceConsigneeAddresses", map.get("ecommerceConsigneeAddresses"));
+                    put("ecommerceTrades", map.get("ecommerceTrades"));
+                    put("ecommerceBindedBankCards", map.get("ecommerceBindedBankCards"));
+                }});
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return Response.ok();
+    }
+
 
     private String getBorrowerCodeByOrderNumbAndMerchantCode(String orderNumb, String merchantCode) {
         SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(orderNumb, merchantCode);

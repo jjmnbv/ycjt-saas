@@ -3,6 +3,7 @@ package com.beitu.saas.credit.domain;
 import com.fqgj.common.api.ResponseData;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
 * User: xiaochong
@@ -25,6 +26,16 @@ public class SaasGxbEbVo implements ResponseData,Serializable{
     *爬取结果的url
     */
     private String jsonUrl;
+
+    private Date gmtCreate;
+
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
+    }
 
     public Long getSaasGxbEbId() {
         return saasGxbEbId;

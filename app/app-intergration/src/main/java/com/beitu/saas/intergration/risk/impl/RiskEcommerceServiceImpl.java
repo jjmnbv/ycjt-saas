@@ -65,12 +65,11 @@ public class RiskEcommerceServiceImpl implements RiskEcommerceService {
             throw new ApplicationException("授权失败");
         }
         String token = (String) ((Map) responseMap.get("data")).get("token");
-        Map urlMap = new HashMap() {{
+        Map urlMap = new HashMap(3) {{
             put("token", token);
-            put("returnUrl", param.getReturnUrl());
+            put("returnUrl", param.getReturnUrl() + token);
             put("title", "银柳智能风控系统");
         }};
-        //redisClient.set(RedisKeyConsts.SAAS_GXB_ECOMMERCE_TOKE,token,);
         return UrlUtils.appendParams(configUtil.getGXBCrawlingPath(), urlMap);
     }
 
