@@ -183,12 +183,12 @@ public class CreditApplication {
         if (saasBorrowerRealInfoService.getBorrowerRealInfoByIdentityCodeAndMerchantCode(identityCode, merchantCode) != null) {
             throw new ApplicationException(BorrowerErrorCodeEnum.IDENTITY_CODE_EXIST);
         }
+        if (saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode) != null) {
+            throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_HAS_REAL_NAME);
+        }
         saasCreditHistoryService.addExpenditureCreditHistory(merchantCode, name, CreditConsumeEnum.RISK_REALNAME);
         if (!realNameAuth(name, identityCode)) {
             return Boolean.FALSE;
-        }
-        if (saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode) != null) {
-            throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_HAS_REAL_NAME);
         }
         saasBorrowerRealInfoService.create(merchantCode, borrowerCode, name, identityCode);
         return Boolean.TRUE;
