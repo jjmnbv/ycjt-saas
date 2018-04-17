@@ -12,6 +12,8 @@ import com.beitu.saas.channel.enums.ChannelTypeEnum;
 import com.beitu.saas.common.utils.IpChooseUtil;
 import com.beitu.saas.credit.client.SaasCreditCarrierService;
 import com.beitu.saas.credit.entity.SaasCreditCarrier;
+import com.beitu.saas.intergration.risk.RiskEcommerceService;
+import com.beitu.saas.intergration.risk.param.GXBEcommerceCrawlingParam;
 import com.fqgj.log.factory.LogFactory;
 import com.fqgj.log.interfaces.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,12 +47,24 @@ public class OkController {
     @Autowired
     private SaasMerchantService saasMerchantService;
 
+    @Autowired
+    private RiskEcommerceService riskEcommerceService;
+
     @RequestMapping("/ok")
     @ResponseBody
     @VisitorAccessible
     @SignIgnore
     public String ok() {
-        return "ok";
+        GXBEcommerceCrawlingParam param = new GXBEcommerceCrawlingParam();
+        param.setIdcard("430224197111173910");
+        param.setName("王五");
+        param.setPhone("18819036332");
+        param.setReturnUrl("http://www.baidu.com");
+        param.setUserCode("12e31884bfbqdgey3");
+        String ecommerceCrawlingUrl = riskEcommerceService.getEcommerceCrawlingUrl(param);
+        LOGGER.info(ecommerceCrawlingUrl);
+        return ecommerceCrawlingUrl;
+        //return "ok";
     }
 
     @RequestMapping(value = "/stat", method = RequestMethod.GET)
