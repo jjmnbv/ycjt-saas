@@ -199,6 +199,7 @@ public class H5Controller {
             response.setBorrowPurpose(saasOrderApplicationVo.getBorrowPurpose());
             response.setRealCapital(saasOrderApplicationVo.getRealCapital());
             response.setTotalInterestRatio(saasOrderApplicationVo.getTotalInterestRatio());
+            response.setBorrowerAuthorizedSignLoan(saasOrderApplicationVo.getBorrowerAuthorizedSignLoan());
         }
         String token = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getToken();
         response.setNeedRealName(borrowerApplication.needRealName(borrowerCode));
@@ -245,6 +246,7 @@ public class H5Controller {
         addOrderApplication.setTotalInterestRatio(req.getTotalInterestRatio().setScale(0, BigDecimal.ROUND_HALF_UP).divide(new BigDecimal(100)));
         addOrderApplication.setRepaymentDt(DateUtil.addDate(new Date(), req.getBorrowingDuration()));
         addOrderApplication.setBorrowPurpose(req.getBorrowPurpose());
+        addOrderApplication.setBorrowerAuthorizedSignLoan(Boolean.TRUE);
         saasOrderApplicationService.save(addOrderApplication);
         return new ApiResponse("保存成功");
     }
