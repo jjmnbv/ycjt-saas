@@ -155,7 +155,7 @@ public class ContractController {
             SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(userCode);
             if (saasBorrowerRealInfoVo != null) {
                 response.setUserName(saasBorrowerRealInfoVo.getName());
-                response.setUserCode("身份证号：" + saasBorrowerRealInfoVo.getIdentityCode());
+                response.setUserCode(saasBorrowerRealInfoVo.getIdentityCode());
             }
             String sealUrl = contractApplication.getUserSealUrl(userCode);
             if (StringUtils.isNotEmpty(sealUrl)) {
@@ -169,7 +169,7 @@ public class ContractController {
             MerchantContractInfoVo merchantContractInfoVo = merchantApplication.getMerchantContractInfo(saasAdmin.getMerchantCode());
             if (ContractConfigTypeEnum.PERSONAL_CONTRACT.getKey().equals(merchantContractInfoVo.getContractType())) {
                 response.setUserName(merchantContractInfoVo.getName());
-                response.setUserCode("身份证号：" + merchantContractInfoVo.getCode());
+                response.setUserCode(merchantContractInfoVo.getCode());
             } else {
                 response.setUserName(merchantContractInfoVo.getName());
                 response.setUserCode("统一信用代码：" + merchantContractInfoVo.getCode());
