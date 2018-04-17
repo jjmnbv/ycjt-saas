@@ -7,13 +7,8 @@ import com.beitu.saas.app.application.order.OrderApplication;
 import com.beitu.saas.app.enums.BorrowerInfoApplyStatusEnum;
 import com.beitu.saas.borrower.client.*;
 import com.beitu.saas.borrower.enums.BorrowerErrorCodeEnum;
-import com.beitu.saas.channel.client.SaasChannelService;
-import com.beitu.saas.channel.client.SaasModuleService;
 import com.beitu.saas.channel.domain.SaasChannelRiskSettingsVo;
-import com.beitu.saas.channel.entity.SaasChannelEntity;
-import com.beitu.saas.channel.entity.SaasModuleEntity;
 import com.beitu.saas.channel.enums.ChannelErrorCodeEnum;
-import com.beitu.saas.channel.enums.ChannelTypeEnum;
 import com.beitu.saas.channel.enums.RiskModuleEnum;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.utils.OrderNoUtil;
@@ -102,33 +97,8 @@ public class CreditApplication {
     @Autowired
     private SaasCreditHistoryService saasCreditHistoryService;
 
-    @Autowired
-    private SaasChannelService saasChannelService;
-
-    @Autowired
-    private SaasModuleService saasModuleService;
-
     public List<CreditModuleListVo> listCreditModule(String merchantCode, String channelCode, String borrowerCode) {
         List<SaasChannelRiskSettingsVo> saasChannelRiskSettingsVoList = saasChannelApplication.getSaasChannelRiskSettingsByChannelCode(channelCode);
-
-        //默认渠道获取风控配置项
-        SaasChannelEntity channelEntity = saasChannelService.getSaasChannelByChannelCode(channelCode);
-        boolean defaultChannel = channelEntity.getChannelType() == ChannelTypeEnum.SYSTEM_DEFINED.getType() || channelEntity.getChannelType() == ChannelTypeEnum.RECOMMEND_DEFINED.getType();
-        if (defaultChannel) {
-            List<SaasModuleEntity> saasModuleEntityList = saasModuleService.getSaasModuleEntityList();
-            saasModuleEntityList.stream().forEach(x -> {
-                SaasChannelRiskSettingsVo saasChannelRiskSettingsVo = new SaasChannelRiskSettingsVo()
-                        .setChannelCode(channelCode)
-                        .setModuleCode(x.getModuleCode());
-                if (x.getModuleCode().equals(RiskModuleEnum.APPLICATION.getModuleCode())) {
-                    saasChannelRiskSettingsVo.setRequired(1);
-                } else {
-                    saasChannelRiskSettingsVo.setRequired(0);
-                }
-                saasChannelRiskSettingsVoList.add(saasChannelRiskSettingsVo);
-            });
-        }
-
         if (CollectionUtils.isEmpty(saasChannelRiskSettingsVoList)) {
             throw new ApplicationException(ChannelErrorCodeEnum.CHANNEL_MODULE);
         }
@@ -260,7 +230,7 @@ public class CreditApplication {
     public ApiResponse submitCreditInfo(String merchantCode, String borrowerCode, String channelCode, String orderNumb) {
         List<SaasChannelRiskSettingsVo> saasChannelRiskSettingsVoList = saasChannelApplication.getSaasChannelRiskSettingsByChannelCode(channelCode);
         if (CollectionUtils.isEmpty(saasChannelRiskSettingsVoList)) {
-            return new ApiResponse("提交手机号码成功");
+            throw new ApplicationException(ChannelErrorCodeEnum.CHANNEL_MODULE);
         }
         if (StringUtils.isNotEmpty(orderNumb)) {
             // 驳回订单再次进行提交操作

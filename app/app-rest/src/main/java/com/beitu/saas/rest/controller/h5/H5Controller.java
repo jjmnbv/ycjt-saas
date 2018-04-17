@@ -410,11 +410,10 @@ public class H5Controller {
         if (StringUtils.isEmpty(orderNumb)) {
             SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(channelCode);
             if (ChannelTypeEnum.SYSTEM_DEFINED.getType().equals(saasChannelEntity.getChannelType()) ||
-                    ChannelTypeEnum.SYSTEM_DEFINED.getType().equals(saasChannelEntity.getChannelType())) {
+                    ChannelTypeEnum.RECOMMEND_DEFINED.getType().equals(saasChannelEntity.getChannelType())) {
                 throw new ApplicationException("该渠道不允许提交");
             }
         }
-
         return creditApplication.submitCreditInfo(saasBorrowerVo.getMerchantCode(), saasBorrowerVo.getBorrowerCode(), channelCode, orderNumb);
     }
 
