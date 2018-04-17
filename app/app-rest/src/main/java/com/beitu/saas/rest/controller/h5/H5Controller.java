@@ -434,6 +434,7 @@ public class H5Controller {
     public DataApiResponse<H5OrderDetailResponse> getOrderDetail(@RequestBody @Valid QueryOrderDetailRequest req) {
         String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getMerchantCode();
         String token = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getToken();
+        String channel = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
         OrderDetailVo orderDetailVo = orderApplication.getOrderDetailVoByOrderNumbAndMerchantCode(req.getOrderNumb(), merchantCode);
         if (orderDetailVo == null) {
             return new DataApiResponse();
@@ -445,9 +446,10 @@ public class H5Controller {
             StringBuilder contractUrl = new StringBuilder();
             contractUrl.append(configUtil.getAddressURLPrefix()).append(SaasContractEnum.LOAN_CONTRACT.getUrl())
                     .append("?token=").append(token)
+                    .append("&channel=").append(channel)
                     .append("&platform=h5")
                     .append((configUtil.isServerTest() ? "&test=1" : ""))
-                    .append("?orderNumb=").append(req.getOrderNumb());
+                    .append("&orderNumb=").append(req.getOrderNumb());
             response.setHeaderTitle("确认借款");
             if (contractApplication.needDoLicenseContractSign(orderDetailVo.getBorrowerCode())) {
                 response.setContractTitle1(SaasContractEnum.LICENSE_CONTRACT.getMsg());
@@ -470,9 +472,10 @@ public class H5Controller {
             StringBuilder contractUrl = new StringBuilder();
             contractUrl.append(configUtil.getAddressURLPrefix()).append(SaasContractEnum.EXTEND_CONTRACT.getUrl())
                     .append("?token=").append(token)
+                    .append("&channel=").append(channel)
                     .append("&platform=h5")
                     .append((configUtil.isServerTest() ? "&test=1" : ""))
-                    .append("?orderNumb=").append(req.getOrderNumb());
+                    .append("&orderNumb=").append(req.getOrderNumb());
             response.setContractTitle1(SaasContractEnum.EXTEND_CONTRACT.getMsg());
             response.setContractUrl1(contractUrl.toString());
             response.setContract1DownloadUrl("");
