@@ -3,9 +3,15 @@ package com.beitu.saas.rest.controller.credit;
 import com.alibaba.fastjson.JSON;
 import com.beitu.saas.app.annotations.SignIgnore;
 import com.beitu.saas.app.common.RequestLocalInfo;
+import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.RedisKeyConsts;
+import com.beitu.saas.common.handle.oss.OSSService;
+import com.beitu.saas.common.utils.NetworkUtil;
+import com.beitu.saas.common.utils.OrderNoUtil;
 import com.fqgj.base.services.redis.RedisClient;
 import com.fqgj.common.api.Response;
+import com.fqgj.common.utils.JSONUtils;
+import com.fqgj.common.utils.MD5;
 import com.fqgj.log.factory.LogFactory;
 import com.fqgj.log.interfaces.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,14 +39,31 @@ public class GxbController {
     @Autowired
     private RedisClient redisClient;
 
+    @Autowired
+    private OSSService ossService;
+
+    @Autowired
+    private ConfigUtil configUtil;
+
     @SignIgnore
     @ResponseBody
     @RequestMapping(value = "/eb/callback", method = RequestMethod.POST)
     public Map gxbEcommerceCallBack(HttpServletRequest httpServletRequest) {
+
+        //TODO 鉴权
         try {
+            String ipAddress = NetworkUtil.getIpAddress(httpServletRequest);
+            LOGGER.info("========"+ipAddress);
             String jsonStr = uncompress(httpServletRequest.getInputStream());
-            LOGGER.info(jsonStr);
-        } catch (IOException e) {
+            Map<String, Object> responseMap =  JSONUtils.json2map(jsonStr);
+            String userCode = (String) responseMap.get("sequenceNo");
+            String authJson = (String) responseMap.get("authJson");
+
+            String url = ossService.uploadFile(getEbUrl(userCode), authJson);
+            LOGGER.info("========"+url);
+
+            LOGGER.info("========"+jsonStr);
+        } catch (Exception e) {
             e.printStackTrace();
             LOGGER.error("gxbEcommerceCallBack---{}", e);
             return new HashMap(2) {{
@@ -57,9 +80,11 @@ public class GxbController {
 
     @RequestMapping(value = "/eb/notice", method = RequestMethod.POST)
     public Response ecommerceSuccess() {
-        //if ()
-        //RequestLocalInfo.getCurrentAdmin().getSaasAdmin()
-        //redisClient.set(RedisKeyConsts.SAAS_GXB_ECOMMERCE,token,);
+        String platform = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getPlatform();
+
+       // if ()
+        RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
+       // redisClient.set(RedisKeyConsts.SAAS_GXB_ECOMMERCE,token,);
         return Response.ok();
     }
 
@@ -76,5 +101,14 @@ public class GxbController {
         gzipInputStream.close();
         inputStream.close();
         return writer.toString();
+    }
+
+    private String getEbUrl(String userCode) {
+        StringBuilder filePath = new StringBuilder("ecommerce/");
+        if (configUtil.isServerTest()) {
+            filePath.append("test/");
+        }
+        filePath.append(userCode).append("/").append(MD5.md5(OrderNoUtil.makeOrderNum()));
+        return filePath.toString();
     }
 }
