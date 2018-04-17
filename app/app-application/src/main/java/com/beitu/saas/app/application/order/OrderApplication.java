@@ -150,15 +150,16 @@ public class OrderApplication {
         SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCode(borrowerCode);
         sendApplication.sendNotifyMessage(saasOrderApplicationVo.getMerchantCode(), saasBorrowerVo.getMobile(), null, SaasSmsTypeEnum.SAAS_0004);
         SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(saasOrderApplicationVo.getChannelCode());
-        SaasAdmin saasAdmin = saasAdminService.getSaasAdminByAdminCode(saasChannelEntity.getChargePersonCode());
-        SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode);
-        sendApplication.sendNotifyMessage(saasOrderApplicationVo.getMerchantCode(), saasAdmin.getMobile(), new HashMap<String, String>(8) {{
-            put("channel_name", saasChannelEntity.getChannelName());
-            put("money", saasOrderApplicationVo.getRealCapital().toString());
-            put("name", saasBorrowerRealInfoVo.getName());
-            put("phone", saasBorrowerVo.getMobile());
-        }}, SaasSmsTypeEnum.SAAS_0005);
-
+        if (ChannelTypeEnum.USER_DEFINED.getType().equals(saasChannelEntity.getChannelType())) {
+            SaasAdmin saasAdmin = saasAdminService.getSaasAdminByAdminCode(saasChannelEntity.getChargePersonCode());
+            SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode);
+            sendApplication.sendNotifyMessage(saasOrderApplicationVo.getMerchantCode(), saasAdmin.getMobile(), new HashMap<String, String>(8) {{
+                put("channel_name", saasChannelEntity.getChannelName());
+                put("money", saasOrderApplicationVo.getRealCapital().toString());
+                put("name", saasBorrowerRealInfoVo.getName());
+                put("phone", saasBorrowerVo.getMobile());
+            }}, SaasSmsTypeEnum.SAAS_0005);
+        }
         return saasOrder;
     }
 
@@ -183,14 +184,16 @@ public class OrderApplication {
         SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCode(borrowerCode);
         sendApplication.sendNotifyMessage(saasOrderApplicationVo.getMerchantCode(), saasBorrowerVo.getMobile(), null, SaasSmsTypeEnum.SAAS_0004);
         SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(saasOrderApplicationVo.getChannelCode());
-        SaasAdmin saasAdmin = saasAdminService.getSaasAdminByAdminCode(saasChannelEntity.getChargePersonCode());
-        SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode);
-        sendApplication.sendNotifyMessage(saasOrderApplicationVo.getMerchantCode(), saasAdmin.getMobile(), new HashMap<String, String>(8) {{
-            put("channel_name", saasChannelEntity.getChannelName());
-            put("money", saasOrderApplicationVo.getRealCapital().toString());
-            put("name", saasBorrowerRealInfoVo.getName());
-            put("phone", saasBorrowerVo.getMobile());
-        }}, SaasSmsTypeEnum.SAAS_0005);
+        if (ChannelTypeEnum.USER_DEFINED.getType().equals(saasChannelEntity.getChannelType())) {
+            SaasAdmin saasAdmin = saasAdminService.getSaasAdminByAdminCode(saasChannelEntity.getChargePersonCode());
+            SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode);
+            sendApplication.sendNotifyMessage(saasOrderApplicationVo.getMerchantCode(), saasAdmin.getMobile(), new HashMap<String, String>(8) {{
+                put("channel_name", saasChannelEntity.getChannelName());
+                put("money", saasOrderApplicationVo.getRealCapital().toString());
+                put("name", saasBorrowerRealInfoVo.getName());
+                put("phone", saasBorrowerVo.getMobile());
+            }}, SaasSmsTypeEnum.SAAS_0005);
+        }
     }
 
     private Date getOrderExpireDate(Date repaymentDt) {
