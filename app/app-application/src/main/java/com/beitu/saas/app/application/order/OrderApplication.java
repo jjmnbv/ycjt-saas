@@ -760,18 +760,17 @@ public class OrderApplication {
         }
         if (contractApplication.needDoLicenseContractSign(borrowerCode)) {
             //生成授权合同
-            ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, borrowerCode, null, ContractTypeEnum.BORROWER_DO_AUTHORIZATION_CONTRACT_SIGN));
+            ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, borrowerCode, saasOrderVo.getSaasOrderId(), ContractTypeEnum.BORROWER_DO_AUTHORIZATION_CONTRACT_AND_LOAN_CONTRACT_SIGN));
+        } else {
+            ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, borrowerCode, saasOrderVo.getSaasOrderId(), ContractTypeEnum.BORROWER_DO_LOAN_CONTRACT_SIGN));
         }
-        ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, borrowerCode, saasOrderVo.getSaasOrderId(), ContractTypeEnum.BORROWER_DO_LOAN_CONTRACT_SIGN));
 
         updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.FOR_REIMBURSEMENT, null);
-        String termUrl = contractApplication.borrowerDoLoanContractSign(borrowerCode, saasOrderVo.getSaasOrderId());
         SaasOrder updateSaasOrder = new SaasOrder();
         updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
         updateSaasOrder.setCreatedDt(new Date());
         updateSaasOrder.setExpireDate(DateUtil.addYear(new Date(), 10));
         updateSaasOrder.setTotalInterestFee(orderCalculateApplication.getInterest(saasOrderVo.getRealCapital(), saasOrderVo.getTotalInterestRatio(), new Date(), saasOrderVo.getRepaymentDt(), Boolean.FALSE));
-        updateSaasOrder.setTermUrl(termUrl);
         saasOrderService.updateById(updateSaasOrder);
 
         sendApplication.sendNotifyMessageByBorrowerCode(merchantCode, saasOrderVo.getBorrowerCode(), new HashMap<String, String>(2) {{

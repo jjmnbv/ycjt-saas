@@ -14,7 +14,8 @@ public enum ContractTypeEnum implements MsgCodeEnum {
     BORROWER_DO_EXTEND_CONTRACT_SIGN(3, "借款人签署展期协议"),
     LENDER_DO_EXTEND_CONTRACT_SIGN(4, "出借人签署展期协议"),
     BORROWER_DO_AUTHORIZATION_CONTRACT_SIGN(5, "借款人签署授权书"),
-    LENDER_DO_AUTHORIZATION_CONTRACT_SIGN(6, "出借人签署授权书");
+    LENDER_DO_AUTHORIZATION_CONTRACT_SIGN(6, "出借人签署授权书"),
+    BORROWER_DO_AUTHORIZATION_CONTRACT_AND_LOAN_CONTRACT_SIGN(7, "借款人签署授权书和借款协议");
 
     ContractTypeEnum(Integer code, String msg) {
         this.code = code;
