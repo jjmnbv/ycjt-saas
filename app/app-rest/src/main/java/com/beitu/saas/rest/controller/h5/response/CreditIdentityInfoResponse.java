@@ -5,7 +5,6 @@ import com.fqgj.common.api.ResponseData;
 import com.fqgj.common.utils.StringUtils;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.springframework.beans.BeanUtils;
 
 /**
  * @author linanjun
@@ -33,14 +32,26 @@ public class CreditIdentityInfoResponse implements ResponseData {
 
     public CreditIdentityInfoResponse(SaasBorrowerIdentityInfoVo saasBorrowerIdentityInfoVo, String prefixUrl) {
         if (saasBorrowerIdentityInfoVo != null) {
-            if (StringUtils.isNotEmpty(saasBorrowerIdentityInfoVo.getFrontUrl())) {
-                this.frontUrl = prefixUrl + saasBorrowerIdentityInfoVo.getFrontUrl();
+            String frontUrl = saasBorrowerIdentityInfoVo.getFrontUrl();
+            if (StringUtils.isNotEmpty(frontUrl)) {
+                if (!frontUrl.contains("http:") && !frontUrl.contains("https:")) {
+                    frontUrl = prefixUrl + frontUrl;
+                }
+                this.frontUrl = frontUrl;
             }
-            if (StringUtils.isNotEmpty(saasBorrowerIdentityInfoVo.getBackUrl())) {
-                this.backUrl = prefixUrl + saasBorrowerIdentityInfoVo.getBackUrl();
+            String backUrl = saasBorrowerIdentityInfoVo.getBackUrl();
+            if (StringUtils.isNotEmpty(backUrl)) {
+                if (!backUrl.contains("http:") && !backUrl.contains("https:")) {
+                    backUrl = prefixUrl + backUrl;
+                }
+                this.backUrl = backUrl;
             }
-            if (StringUtils.isNotEmpty(saasBorrowerIdentityInfoVo.getHoldUrl())) {
-                this.holdUrl = prefixUrl + saasBorrowerIdentityInfoVo.getHoldUrl();
+            String holdUrl = saasBorrowerIdentityInfoVo.getHoldUrl();
+            if (StringUtils.isNotEmpty(holdUrl)) {
+                if (!holdUrl.contains("http:") && !holdUrl.contains("https:")) {
+                    holdUrl = prefixUrl + holdUrl;
+                }
+                this.holdUrl = holdUrl;
             }
         }
     }

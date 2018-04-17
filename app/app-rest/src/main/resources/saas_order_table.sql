@@ -255,18 +255,31 @@ CREATE TABLE `saas_borrower_work_info` (
   KEY `idy_order_numb` (`order_numb`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='SAAS借款人工作信息表';
 
-DROP TABLE IF EXISTS `saas_user_esign_authorization`;
-CREATE TABLE `saas_user_esign_authorization` (
+DROP TABLE IF EXISTS `saas_esign_user_authorization`;
+CREATE TABLE `saas_esign_user_authorization` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '表ID',
-  `user_code` varchar(32) DEFAULT NULL COMMENT '用户码',
-  `account_id` varchar(40) NOT NULL COMMENT '用户e签宝账户标识',
-  `seal_url` varchar(128) DEFAULT NULL COMMENT 'e签宝生成印章URL地址',
-  `authorization_url` varchar(128) DEFAULT NULL COMMENT '签章后授权协议URL地址',
-  `authorization_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '用户授权意愿时间',
-  `success` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否已成功授权',
+  `user_code` varchar(32) NOT NULL COMMENT '用户码',
+  `saas_esign_code` varchar(32) NOT NULL COMMENT 'SAAS账户信息CODE',
+  `authorization_url` varchar(128) NOT NULL COMMENT '签章授权协议URL地址',
   `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后修改时间',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`),
   KEY `idx_user_code` (`user_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='SAAS用户e签宝授权信息表';
+
+DROP TABLE IF EXISTS `saas_esign_account`;
+CREATE TABLE `saas_esign_account` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '表ID',
+  `saas_esign_code` varchar(32) NOT NULL COMMENT '账户信息CODE',
+  `name` varchar(64) NOT NULL COMMENT '印章名字',
+  `code` varchar(32) NOT NULL COMMENT '身份标识码',
+  `account_id` varchar(40) NOT NULL COMMENT 'e签宝账户标识',
+  `seal_url` varchar(128) DEFAULT NULL COMMENT 'e签宝生成印章URL地址',
+  `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
+  `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_code` (`code`),
+  KEY `idy_saas_esign_code` (`saas_esign_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='SAASe签宝账户信息表';
