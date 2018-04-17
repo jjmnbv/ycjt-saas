@@ -29,7 +29,7 @@ public class GxbController {
     @SignIgnore
     @ResponseBody
     @RequestMapping(value = "/eb/callback", method = RequestMethod.POST)
-    public String gxbEcommerceCallBack(HttpServletRequest httpServletRequest) {
+    public Map gxbEcommerceCallBack(HttpServletRequest httpServletRequest) {
         try {
             String jsonStr = uncompress(httpServletRequest.getInputStream());
             LOGGER.info(jsonStr);
@@ -37,9 +37,10 @@ public class GxbController {
             e.printStackTrace();
         }
         Map resultMap = new HashMap(2) {{
-            put("status", 200);
+            put("retCode", 1);
+            put("retMsg","成功");
         }};
-        return JSON.toJSONString(resultMap);
+        return resultMap;
     }
 
     public String uncompress(InputStream inputStream) throws IOException {
