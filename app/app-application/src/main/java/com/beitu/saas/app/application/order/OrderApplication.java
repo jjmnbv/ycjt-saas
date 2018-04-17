@@ -279,6 +279,7 @@ public class OrderApplication {
 
     private OrderDetailVo convertSaasOrderVo2OrderDetailVo(SaasOrderVo saasOrderVo) {
         OrderDetailVo orderDetailVo = new OrderDetailVo();
+        orderDetailVo.setBorrowerCode(saasOrderVo.getBorrowerCode());
         orderDetailVo.setRealCapital(saasOrderVo.getRealCapital().toString());
         orderDetailVo.setBorrowingDuration(DateUtil.countDay(saasOrderVo.getRepaymentDt(), saasOrderVo.getCreatedDt()));
         orderDetailVo.setTotalInterestRatio(orderCalculateApplication.getInterestRatio(saasOrderVo.getTotalInterestRatio()));

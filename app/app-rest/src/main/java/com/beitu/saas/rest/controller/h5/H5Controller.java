@@ -414,6 +414,9 @@ public class H5Controller {
                 throw new ApplicationException("该渠道不允许提交");
             }
         }
+        if (contractApplication.needDoLicenseContractSign(saasBorrowerVo.getBorrowerCode())) {
+            throw new ApplicationException("用户签署电子签章授权书失败，请重试");
+        }
         return creditApplication.submitCreditInfo(saasBorrowerVo.getMerchantCode(), saasBorrowerVo.getBorrowerCode(), channelCode, orderNumb);
     }
 
