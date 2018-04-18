@@ -214,6 +214,7 @@ public class CreditQueryController {
                     put("ecommerceConsigneeAddresses", map.get("ecommerceConsigneeAddresses"));
                     put("ecommerceTrades", map.get("ecommerceTrades"));
                     put("ecommerceBindedBankCards", map.get("ecommerceBindedBankCards"));
+                    put("ecommercePaymentAccounts", map.get("ecommercePaymentAccounts"));
                 }});
             } catch (Exception e) {
                 e.printStackTrace();

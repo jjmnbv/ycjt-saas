@@ -3,7 +3,10 @@ package com.beitu.saas.rest.controller.credit;
 import com.beitu.saas.app.annotations.SignIgnore;
 import com.beitu.saas.app.common.RequestBasicInfo;
 import com.beitu.saas.app.common.RequestLocalInfo;
+import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
+import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
 import com.beitu.saas.borrower.domain.SaasBorrowerVo;
+import com.beitu.saas.borrower.entity.SaasBorrowerRealInfo;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.consts.TimeConsts;
@@ -60,6 +63,9 @@ public class GxbController {
     @Autowired
     private RiskEcommerceService riskEcommerceService;
 
+    @Autowired
+    private SaasBorrowerRealInfoService saasBorrowerRealInfoService;
+
     @SignIgnore
     @ResponseBody
     @RequestMapping(value = "/eb/callback", method = RequestMethod.POST)
@@ -88,6 +94,7 @@ public class GxbController {
             saasGxbEb.setJsonUrl(url);
             saasGxbEb.setTaskToken((String) responseMap.get("token"));
             saasGxbEbService.saveGXBEbTop(saasGxbEb);
+            LOGGER.info("公信宝电商成功--------{}", url);
         } catch (Exception e) {
             e.printStackTrace();
             LOGGER.error("公信宝电商回调失败--------{}", e);
@@ -102,6 +109,10 @@ public class GxbController {
         SaasBorrowerVo saasBorrower = RequestLocalInfo.getCurrentAdmin().getSaasBorrower();
         RequestBasicInfo requestBasicInfo = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo();
         String borrowerCode = saasBorrower.getBorrowerCode();
+        SaasBorrowerRealInfoVo borrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode);
+        if (borrowerRealInfoVo == null) {
+            throw new ApiErrorException("请先实名");
+        }
         Object token = redisClient.get(RedisKeyConsts.SAAS_GXB_ECOMMERCE, borrowerCode);
         if (token != null) {
             throw new ApiErrorException("认证中...");
@@ -112,8 +123,8 @@ public class GxbController {
         StringBuilder sb = new StringBuilder(configUtil.getApiWebPath());
         sb.append("/eb/notice/").append(borrowerCode).append("/").append(requestBasicInfo.getPlatform()).append("/").append(requestBasicInfo.getChannel()).append("/");
         GXBEcommerceCrawlingParam param = new GXBEcommerceCrawlingParam();
-        param.setIdcard("430224197111173910");
-        param.setName("xxxx");
+        param.setIdcard(borrowerRealInfoVo.getIdentityCode());
+        param.setName(borrowerRealInfoVo.getName());
         param.setPhone(saasBorrower.getMobile());
         param.setReturnUrl(sb.toString());
         param.setUserCode(borrowerCode);
