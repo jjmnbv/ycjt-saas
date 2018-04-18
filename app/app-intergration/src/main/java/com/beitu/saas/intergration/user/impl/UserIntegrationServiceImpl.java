@@ -119,7 +119,7 @@ public class UserIntegrationServiceImpl implements UserIntegrationService {
         urlSb.append("name=" + param.getName() + "&");
         urlSb.append("cellphone=" + param.getMobile() + "&");
         urlSb.append("idcard=" + param.getIdentityNo() + "&");
-        urlSb.append("account=" + "yangcong099" + "");
+        urlSb.append("account=" + configUtil.getYoufenAccount() + "");
         String response = HttpClientUtil.doGet(urlSb.toString());
         if (response.contains("<")) {
             return new UserMultiDebitDto(UserMultiDebitCodeEnum.OTHER_ERROR, "接口返回异常");
