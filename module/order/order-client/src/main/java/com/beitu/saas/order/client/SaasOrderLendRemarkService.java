@@ -16,4 +16,6 @@ public interface SaasOrderLendRemarkService<T extends BaseEntity> extends BaseSe
 
     String getLendWayByOrderNumb(String orderNumb);
 
+    String getLendCertificateByOrderNumb(String orderNumb);
+
 }
