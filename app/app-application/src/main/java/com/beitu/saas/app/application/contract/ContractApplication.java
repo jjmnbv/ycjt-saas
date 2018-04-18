@@ -15,6 +15,7 @@ import com.beitu.saas.finance.client.enums.CreditConsumeEnum;
 import com.beitu.saas.intergration.esign.EsignIntegrationService;
 import com.beitu.saas.intergration.esign.dto.AddOrganizeAccountSuccessDto;
 import com.beitu.saas.intergration.esign.dto.AddPersonAccountSuccessDto;
+import com.beitu.saas.intergration.esign.param.LicenseContractSignParam;
 import com.beitu.saas.intergration.esign.param.OrganizeAccountParam;
 import com.beitu.saas.intergration.esign.param.PersonAccountParam;
 import com.beitu.saas.order.client.SaasOrderService;
@@ -217,13 +218,12 @@ public class ContractApplication {
                     e.printStackTrace();
                 }
             }
-//            LicenseContractSignParam licenseContractSignParam = new LicenseContractSignParam();
-//            licenseContractSignParam.setUserCode(merchantCode);
-//            licenseContractSignParam.setUserAccountId(accountId);
-//            licenseContractSignParam.setUserSealData(sealData);
-//            licenseContractSignParam.setSrcPdfContent(pdfContent);
-//            byte[] content = esignIntegrationService.doLicenseContractSign(licenseContractSignParam);
-            byte[] content = pdfContent;
+            LicenseContractSignParam licenseContractSignParam = new LicenseContractSignParam();
+            licenseContractSignParam.setUserCode(merchantCode);
+            licenseContractSignParam.setUserAccountId(accountId);
+            licenseContractSignParam.setUserSealData(sealData);
+            licenseContractSignParam.setSrcPdfContent(pdfContent);
+            byte[] content = esignIntegrationService.doLicenseContractSign(licenseContractSignParam);
             if (content == null) {
                 throw new ApplicationException("esign盖章失败");
             }
@@ -252,12 +252,11 @@ public class ContractApplication {
 
 
     /**
-     * 借款人 签署 借款合同
+     * 签署 借款合同
      *
-     * @param borrowerCode 借款人CODE
-     * @param orderId      可空
+     * @param orderId 订单ID
      */
-    public String borrowerDoLoanContractSign(String borrowerCode, Long orderId) {
+    public String doLoanContractSign(Long orderId) {
         String url = getLoanContractUrl(orderId);
         String loanContractUrl = configUtil.getPdfPath() + MD5.md5(OrderNoUtil.makeOrderNum()) + ".pdf";
         contractCreateApplication.createLoanPdf(orderId, loanContractUrl);
@@ -272,48 +271,7 @@ public class ContractApplication {
         }
     }
 
-    /**
-     * 出借机构 签署 借款合同
-     *
-     * @param merchantCode 出借机构CODE
-     * @param orderId      可空
-     */
-    public String lenderDoLoanContractSign(String merchantCode, Long orderId) {
-        String url = getLoanContractUrl(orderId);
-        String loanContractUrl = configUtil.getPdfPath() + MD5.md5(OrderNoUtil.makeOrderNum()) + ".pdf";
-        contractCreateApplication.createLoanPdf(orderId, loanContractUrl);
-        File file = new File(loanContractUrl);
-        try {
-            InputStream inputStream = new FileInputStream(file);
-            url = ossService.uploadFile(inputStream, inputStream.available(), url);
-            file.delete();
-            return url;
-        } catch (Exception e) {
-            throw new ApplicationException("上传文件失败");
-        }
-    }
-
-    public String borrowerDoExtendContractSign(String borrowerCode, Long orderId) {
-        SaasOrder saasOrder = saasOrderService.selectById(orderId);
-        if (saasOrder == null || StringUtils.isEmpty(saasOrder.getTermUrl())) {
-            String url = getExtendContractUrl(orderId);
-            String extendContractUrl = configUtil.getPdfPath() + MD5.md5(orderId + OrderNoUtil.makeOrderNum()) + ".pdf";
-            contractCreateApplication.createExtendPdf(orderId, extendContractUrl);
-            File file = new File(extendContractUrl);
-            try {
-                InputStream inputStream = new FileInputStream(file);
-                url = ossService.uploadFile(inputStream, inputStream.available(), url);
-                file.delete();
-                return url;
-            } catch (Exception e) {
-                throw new ApplicationException("上传文件失败");
-            }
-        } else {
-            return saasOrder.getTermUrl();
-        }
-    }
-
-    public String lenderDoExtendContractSign(String merchantCode, Long orderId) {
+    public String doExtendContractSign(String borrowerCode, Long orderId) {
         SaasOrder saasOrder = saasOrderService.selectById(orderId);
         if (saasOrder == null || StringUtils.isEmpty(saasOrder.getTermUrl())) {
             String url = getExtendContractUrl(orderId);
