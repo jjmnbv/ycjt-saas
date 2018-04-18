@@ -1,7 +1,7 @@
 package com.beitu.saas.order.dao;
 
-import com.fqgj.common.base.BaseMapper;
 import com.beitu.saas.order.entity.SaasOrderLendRemark;
+import com.fqgj.common.base.BaseMapper;
 
 /**
  * User: jungle
@@ -12,5 +12,7 @@ import com.beitu.saas.order.entity.SaasOrderLendRemark;
 public interface SaasOrderLendRemarkDao extends BaseMapper<SaasOrderLendRemark> {
 
     String selectLendWayByOrderNumb(String orderNumb);
+
+    String selectLendCertificateByOrderNumb(String orderNumb);
 
 }

@@ -70,6 +70,10 @@ public class SaasOrderBillDetailVo implements ResponseData, Serializable {
      */
     private BigDecimal amount;
     /**
+     * 手续费
+     */
+    private BigDecimal serviceFee;
+    /**
      * 展期关联账单ID
      */
     private Long relationOrderBillDetailId;
@@ -203,6 +207,14 @@ public class SaasOrderBillDetailVo implements ResponseData, Serializable {
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
+    }
+
+    public BigDecimal getServiceFee() {
+        return this.serviceFee;
+    }
+
+    public void setServiceFee(BigDecimal serviceFee) {
+        this.serviceFee = serviceFee;
     }
 
     public Long getRelationOrderBillDetailId() {
