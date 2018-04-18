@@ -38,7 +38,6 @@ public class RiskEcommerceServiceImpl implements RiskEcommerceService {
 
     @Override
     public String getEcommerceCrawlingUrl(GXBEcommerceCrawlingParam param) {
-
         String timestamp = String.valueOf(System.currentTimeMillis());
         String sequenceNo = param.getUserCode();
         String gxbSign = getGXBSign(configUtil.getGXBAppId(), configUtil.getGXBAppSecret(), authItem, timestamp, sequenceNo);
@@ -71,7 +70,7 @@ public class RiskEcommerceServiceImpl implements RiskEcommerceService {
             put("returnUrl", param.getReturnUrl() + token);
             put("title", "银柳智能风控系统");
         }};
-        redisClient.set(RedisKeyConsts.SAAS_GXB_ECOMMERCE_TOKN,token, TimeConsts.HALF_AN_HOUR,token);
+        redisClient.set(RedisKeyConsts.SAAS_GXB_ECOMMERCE_TOKN, token, TimeConsts.HALF_AN_HOUR, token);
         return UrlUtils.appendParams(configUtil.getGXBCrawlingPath(), urlMap);
     }
 

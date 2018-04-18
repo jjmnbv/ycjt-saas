@@ -1,6 +1,5 @@
 package com.beitu.saas.rest.controller.credit;
 
-import com.beitu.saas.app.annotations.SignIgnore;
 import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.application.collection.CollectionApplication;
 import com.beitu.saas.app.application.collection.vo.CollectionCommentListVo;
@@ -38,12 +37,13 @@ import com.beitu.saas.rest.controller.credit.request.CreditLoanPlatformRequest;
 import com.beitu.saas.rest.controller.credit.request.CreditQueryRequest;
 import com.beitu.saas.rest.controller.credit.request.UserBaseInfoQueryRequest;
 import com.beitu.saas.rest.controller.credit.response.*;
-import com.beitu.saas.risk.helpers.StringUtils;
 import com.fqgj.base.services.redis.RedisClient;
 import com.fqgj.common.api.Response;
+import com.fqgj.common.api.annotations.ParamsValidate;
 import com.fqgj.common.api.exception.ApiErrorException;
 import com.fqgj.common.utils.CollectionUtils;
 import com.fqgj.common.utils.JSONUtils;
+import com.fqgj.common.utils.StringUtils;
 import com.fqgj.exception.common.ApplicationException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -55,6 +55,7 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author linanjun
@@ -121,7 +122,7 @@ public class CreditQueryController {
         String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
 
         String orderNumb = req.getOrderNumb();
-        String borrowerCode = getBorrowerCodeByOrderNumbAndMerchantCode(orderNumb, merchantCode);
+        String borrowerCode = getBorrowerCodeByOrderNumbAndMerchantCode(orderNumb, req.getBorrowerCode(), merchantCode);
 
         OrderApplicationListVo orderApplicationListVo = null;
         List<OrderApplicationListVo> orderApplicationListVoList = orderApplyApplication.listOrderApplicationByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
@@ -150,7 +151,7 @@ public class CreditQueryController {
     @ApiOperation(value = "订单进件记录", response = OrderApplicationQueryResponse.class)
     public DataApiResponse<OrderApplicationQueryResponse> listOrderApplication(@RequestBody @Valid CreditQueryRequest req) {
         String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
-        String borrowerCode = getBorrowerCodeByOrderNumbAndMerchantCode(req.getOrderNumb(), merchantCode);
+        String borrowerCode = getBorrowerCodeByOrderNumbAndMerchantCode(req.getOrderNumb(), req.getBorrowerCode(), merchantCode);
         return new DataApiResponse<>(new OrderApplicationQueryResponse(orderApplyApplication.listOrderApplicationByBorrowerCodeAndOrderNumb(borrowerCode, null)));
     }
 
@@ -186,10 +187,11 @@ public class CreditQueryController {
     @RequestMapping(value = "/platform/data", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "多平台借贷爬取结果", response = LoanPlatformDataInfoResponse.class)
+    @ParamsValidate
     public DataApiResponse<LoanPlatformDataInfoResponse> getLoanPlatformData(@RequestBody @Valid CreditLoanPlatformRequest req) {
         String orderNumb = req.getOrderNumb();
         String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
-        String borrowerCode = getBorrowerCodeByOrderNumbAndMerchantCode(orderNumb, merchantCode);
+        String borrowerCode = getBorrowerCodeByOrderNumbAndMerchantCode(orderNumb, req.getBorrowerCode(), merchantCode);
         SaasLoanPlatformEnum platform = SaasLoanPlatformEnum.getByCode(req.getPlatform());
         LoanPlatformQueryPojo pojo = loanPlatformApplication.getLoanPlatformData(borrowerCode, platform);
         return new DataApiResponse<>(new LoanPlatformDataInfoResponse(pojo));
@@ -201,7 +203,7 @@ public class CreditQueryController {
     public DataApiResponse<CreditCarrierReportVo> getCarrierData(@RequestBody @Valid CreditQueryRequest req) {
         String orderNumb = req.getOrderNumb();
         String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
-        String borrowerCode = getBorrowerCodeByOrderNumbAndMerchantCode(orderNumb, merchantCode);
+        String borrowerCode = getBorrowerCodeByOrderNumbAndMerchantCode(orderNumb, req.getBorrowerCode(), merchantCode);
         return new DataApiResponse<>(carrierReportApplication.getCarrierReportByMerchantCodeAndBorrowerCode(merchantCode, borrowerCode));
     }
 
@@ -211,20 +213,19 @@ public class CreditQueryController {
     public DataApiResponse<TongdunReportVo> getBlackData(@RequestBody @Valid CreditQueryRequest req) {
         String orderNumb = req.getOrderNumb();
         String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
-        String borrowerCode = getBorrowerCodeByOrderNumbAndMerchantCode(orderNumb, merchantCode);
+        String borrowerCode = getBorrowerCodeByOrderNumbAndMerchantCode(orderNumb, req.getBorrowerCode(), merchantCode);
         return new DataApiResponse<>(tongdunReportApplication.getTongdunReport(merchantCode, borrowerCode));
     }
 
     @RequestMapping(value = "/eb/data", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "电商信息")
+    @ParamsValidate
     public Response getGxbEbData(@RequestBody @Valid CreditQueryRequest req) {
         String orderNumb = req.getOrderNumb();
         String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
-        String borrowerCode = getBorrowerCodeByOrderNumbAndMerchantCode(orderNumb, merchantCode);
-        // String borrowerCode = "12e31884bfbqdgey3";
+        String borrowerCode = getBorrowerCodeByOrderNumbAndMerchantCode(orderNumb, req.getBorrowerCode(), merchantCode);
         SaasGxbEbVo saasGxbEbVo = saasGxbEbService.getGxbEbTopByBorrowerCode(borrowerCode);
-        configUtil.getAddressURLPrefix();
         if (saasGxbEbVo != null) {
             try {
                 String content = ossService.getFileContent(saasGxbEbVo.getJsonUrl());
@@ -250,6 +251,9 @@ public class CreditQueryController {
         SaasBorrowerRealInfoVo borrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode);
         RequestBasicInfo requestBasicInfo = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo();
         SaasBorrowerVo borrowerVo = saasBorrowerService.getByBorrowerCode(borrowerCode);
+        if (!Objects.equals("web", requestBasicInfo.getPlatform())) {
+            throw new ApiErrorException("请求非法");
+        }
         if (borrowerRealInfoVo == null) {
             throw new ApiErrorException("请先实名");
         }
@@ -269,7 +273,14 @@ public class CreditQueryController {
     }
 
 
-    private String getBorrowerCodeByOrderNumbAndMerchantCode(String orderNumb, String merchantCode) {
+    private String getBorrowerCodeByOrderNumbAndMerchantCode(String orderNumb, String borrowerCode, String merchantCode) {
+        if (StringUtils.isNotEmpty(borrowerCode)) {
+            SaasBorrowerVo borrowerVo = saasBorrowerService.getByBorrowerCodeAndMerchantCode(borrowerCode, merchantCode);
+            if (borrowerVo == null) {
+                throw new ApiErrorException("用户不存在");
+            }
+            return borrowerCode;
+        }
         SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(orderNumb, merchantCode);
         if (saasOrderVo == null) {
             throw new ApplicationException(OrderErrorCodeEnum.ERROR_ORDER_NUMB);
