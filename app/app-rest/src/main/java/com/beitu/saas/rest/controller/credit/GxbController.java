@@ -94,6 +94,7 @@ public class GxbController {
             saasGxbEb.setJsonUrl(url);
             saasGxbEb.setTaskToken((String) responseMap.get("token"));
             saasGxbEbService.saveGXBEbTop(saasGxbEb);
+            redisClient.del(RedisKeyConsts.SAAS_GXB_ECOMMERCE_TOKN, (String) responseMap.get("token"));
             LOGGER.info("公信宝电商成功--------{}", url);
         } catch (Exception e) {
             e.printStackTrace();
@@ -142,10 +143,18 @@ public class GxbController {
             e.printStackTrace();
         }
         LOGGER.info("ecommerceSuccess--------" + ipAddress);
-        List<String> ipList = Arrays.asList(configUtil.getGXBPushIP().split(","));
+        //  List<String> ipList = Arrays.asList(configUtil.getGXBPushIP().split(","));
 //        if (!ipList.contains(ipAddress)) {
 //            return "error";
 //        }
+        Object obj1 = redisClient.get(RedisKeyConsts.SAAS_GXB_ECOMMERCE_TOKN, token);
+        if (obj1 == null) {
+            return "redirect:" + "https://www.baidu.com";
+        }
+        Object obj = redisClient.get(RedisKeyConsts.SAAS_GXB_ECOMMERCE, code);
+        if (obj != null) {
+            return "redirect:" + "https://www.baidu.com";
+        }
         redisClient.set(RedisKeyConsts.SAAS_GXB_ECOMMERCE, token, TimeConsts.FIFTEEN_SECONDS, code);
         if ("web".equals(platform)) {
             return "redirect:" + "https://www.baidu.com";

@@ -2,6 +2,7 @@ package com.beitu.saas.intergration.risk.impl;
 
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.RedisKeyConsts;
+import com.beitu.saas.common.consts.TimeConsts;
 import com.beitu.saas.common.utils.HttpClientUtil;
 import com.beitu.saas.common.utils.UrlUtils;
 import com.beitu.saas.intergration.risk.RiskEcommerceService;
@@ -70,6 +71,7 @@ public class RiskEcommerceServiceImpl implements RiskEcommerceService {
             put("returnUrl", param.getReturnUrl() + token);
             put("title", "银柳智能风控系统");
         }};
+        redisClient.set(RedisKeyConsts.SAAS_GXB_ECOMMERCE_TOKN,token, TimeConsts.HALF_AN_HOUR,token);
         return UrlUtils.appendParams(configUtil.getGXBCrawlingPath(), urlMap);
     }
 
