@@ -34,10 +34,13 @@ public class MultiDebitExpiredUpdateTaksJob {
     @Scheduled(cron = "0 30 2 * * ?")
     public void creditAndMsgDayClear() {
         LOGGER.info("== 过期的借贷统计清算任务开始 ==");
+        String taskSwitch = configUtil.getMultiDebitSwitch();
+        if (StringUtils.isEmpty(taskSwitch) || taskSwitch.equals("false")) {
+            LOGGER.info("!====== 过期的借贷统计清算任务未开启 ====!");
+            return;
+        }
 
-        String ipWhite = configUtil.getClearDayStatIpWhite();
-        String[] whiteIps = ipWhite.split(",");
-        Set<String> set = new HashSet<String>(Arrays.asList(whiteIps));
+        String ipWhite = configUtil.getMultiDebitIpWhite();
         String hostIp = null;
         try {
             hostIp = InetAddress.getLocalHost().getHostAddress();
@@ -45,7 +48,7 @@ public class MultiDebitExpiredUpdateTaksJob {
         } catch (Exception e) {
             LOGGER.error("!====== 获取机器地址发生异常：{} ====!", e);
         }
-        if (whiteIps.length == 0 || !set.contains(hostIp)) {
+        if (StringUtils.isEmpty(hostIp) || !ipWhite.equals(hostIp)) {
             LOGGER.info("!====== 过期的借贷统计清算任务机器白名单限制 ====!");
             return;
         }

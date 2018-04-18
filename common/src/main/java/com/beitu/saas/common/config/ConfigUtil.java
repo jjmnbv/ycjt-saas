@@ -267,8 +267,15 @@ public class ConfigUtil {
     /**
      * 点券和短信日清算开关
      */
-    public String getClearDayStatSwith() {
+    public String getClearDayStatSwitch() {
         return config.getProperty("clear.day.stat", "");
+    }
+
+    /**
+     * 过期借贷统计信息清算开关
+     */
+    public String getMultiDebitSwitch() {
+        return config.getProperty("multi.debit.update", "");
     }
 
     /**
@@ -276,6 +283,13 @@ public class ConfigUtil {
      */
     public String getClearDayStatIpWhite() {
         return config.getProperty("clear.day.stat.ip.white", "");
+    }
+
+    /**
+     * 过期的借贷统计清算任务执行机器IP
+     */
+    public String getMultiDebitIpWhite() {
+        return config.getProperty("multi.debit.update.ip.white", "");
     }
 
     /**
