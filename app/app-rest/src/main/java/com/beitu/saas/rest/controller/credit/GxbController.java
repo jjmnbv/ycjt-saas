@@ -121,7 +121,7 @@ public class GxbController {
             throw new ApiErrorException("电商有效期内，无需认证");
         }
         StringBuilder sb = new StringBuilder(configUtil.getApiWebPath());
-        sb.append("/eb/notice/").append(borrowerCode).append("/").append(requestBasicInfo.getPlatform()).append("/").append(requestBasicInfo.getChannel()).append("/");
+        sb.append("/gxb/eb/notice/").append(borrowerCode).append("/").append(requestBasicInfo.getPlatform()).append("/").append(requestBasicInfo.getChannel()).append("/");
         GXBEcommerceCrawlingParam param = new GXBEcommerceCrawlingParam();
         param.setIdcard(borrowerRealInfoVo.getIdentityCode());
         param.setName(borrowerRealInfoVo.getName());
@@ -142,9 +142,9 @@ public class GxbController {
         }
         LOGGER.info("ecommerceSuccess--------" + ipAddress);
         List<String> ipList = Arrays.asList(configUtil.getGXBPushIP().split(","));
-        if (!ipList.contains(ipAddress)) {
-            return "error";
-        }
+//        if (!ipList.contains(ipAddress)) {
+//            return "error";
+//        }
         redisClient.set(RedisKeyConsts.SAAS_GXB_ECOMMERCE, token, TimeConsts.FIFTEEN_SECONDS, code);
         if ("web".equals(platform)) {
             return "redirect:" + "https://www.baidu.com";
