@@ -25,6 +25,12 @@ public class OrderDetailQueryResponse implements ResponseData {
     @ApiModelProperty(value = "下载合同URL")
     private String downloadContractUrl;
 
+    @ApiModelProperty(value = "下款凭证URL")
+    private String[] lendCertificateUrlArray;
+
+    @ApiModelProperty(value = "下载下款凭证")
+    private String[] downloadLendCertificateArray;
+
     @ApiModelProperty
     private Boolean extend;
 
@@ -37,7 +43,7 @@ public class OrderDetailQueryResponse implements ResponseData {
     @ApiModelProperty(value = "展期账单信息")
     private List<SaasOrderDetailVo> extendOrderDetailVoList;
 
-    public OrderDetailQueryResponse(List<SaasOrderDetailVo> allOrderBillDetail, String viewContractUrl, String downloadContractUrl) {
+    public OrderDetailQueryResponse(List<SaasOrderDetailVo> allOrderBillDetail, String viewContractUrl, String downloadContractUrl, String[] lendCertificateUrlArray) {
         if (CollectionUtils.isEmpty(allOrderBillDetail)) {
             return;
         }
@@ -52,12 +58,15 @@ public class OrderDetailQueryResponse implements ResponseData {
         this.mainOrderDetailVo.setTotalInterestRatio(originalOrderDetailVo.getTotalInterestRatio());
         this.mainOrderDetailVo.setCreatedDate(originalOrderDetailVo.getCreatedDate());
         this.mainOrderDetailVo.setOverdueDuration(allOrderBillDetail.stream().collect(Collectors.summingInt(SaasOrderDetailVo::getOverdueDuration)));
+        this.mainOrderDetailVo.setServiceFee(allOrderBillDetail.stream().collect(Collectors.summingInt(SaasOrderDetailVo::getServiceFee)));
         try {
             this.mainOrderDetailVo.setBorrowingDuration(DateUtil.countDays(this.mainOrderDetailVo.getRepaymentDate(), this.mainOrderDetailVo.getCreatedDate()));
         } catch (Exception e) {
         }
         this.viewContractUrl = viewContractUrl;
         this.downloadContractUrl = downloadContractUrl;
+        this.lendCertificateUrlArray = lendCertificateUrlArray;
+        this.downloadLendCertificateArray = lendCertificateUrlArray;
     }
 
     public String getViewContractUrl() {
@@ -74,6 +83,22 @@ public class OrderDetailQueryResponse implements ResponseData {
 
     public void setDownloadContractUrl(String downloadContractUrl) {
         this.downloadContractUrl = downloadContractUrl;
+    }
+
+    public String[] getLendCertificateUrlArray() {
+        return lendCertificateUrlArray;
+    }
+
+    public void setLendCertificateUrlArray(String[] lendCertificateUrlArray) {
+        this.lendCertificateUrlArray = lendCertificateUrlArray;
+    }
+
+    public String[] getDownloadLendCertificateArray() {
+        return downloadLendCertificateArray;
+    }
+
+    public void setDownloadLendCertificateArray(String[] downloadLendCertificateArray) {
+        this.downloadLendCertificateArray = downloadLendCertificateArray;
     }
 
     public Boolean getExtend() {

@@ -30,6 +30,9 @@ public class AfterLendManagerExtendOrderRequest extends ParamsObject {
     @NotNull(message = "展期利率不能为空")
     private BigDecimal extendInterestRatio;
 
+    @ApiModelProperty(value = "手续费")
+    private BigDecimal serviceFee;
+
     public String getOrderNumb() {
         return orderNumb;
     }
@@ -54,10 +57,21 @@ public class AfterLendManagerExtendOrderRequest extends ParamsObject {
         this.extendInterestRatio = extendInterestRatio;
     }
 
+    public BigDecimal getServiceFee() {
+        return serviceFee;
+    }
+
+    public void setServiceFee(BigDecimal serviceFee) {
+        this.serviceFee = serviceFee;
+    }
+
     @Override
     public void validate() {
         if (this.extendInterestRatio.compareTo(new BigDecimal("0")) < 0 || this.extendInterestRatio.compareTo(new BigDecimal("24")) > 0) {
             throw new ApiIllegalArgumentException("展期利率不正确");
+        }
+        if (this.serviceFee != null && this.serviceFee.compareTo(this.serviceFee.setScale(0, BigDecimal.ROUND_HALF_UP)) != 0) {
+            throw new ApiIllegalArgumentException("手续费请输入整数");
         }
     }
 

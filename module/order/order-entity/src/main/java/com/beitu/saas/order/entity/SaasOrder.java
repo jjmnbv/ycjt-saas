@@ -7,8 +7,8 @@ import java.util.Date;
 
 /**
  * User: jungle
- * Date: 2018-04-16
- * Time: 16:04:58.243
+ * Date: 2018-04-18
+ * Time: 12:11:44.397
  * TableDesc:SAAS订单表
  */
 public class SaasOrder extends BaseEntity {
@@ -92,6 +92,10 @@ public class SaasOrder extends BaseEntity {
      * 备注
      */
     private String remark;
+    /**
+     * 手续费
+     */
+    private BigDecimal serviceFee;
     /**
      *
      */
@@ -275,6 +279,15 @@ public class SaasOrder extends BaseEntity {
 
     public SaasOrder setRemark(String remark) {
         this.remark = remark;
+        return this;
+    }
+
+    public BigDecimal getServiceFee() {
+        return this.serviceFee;
+    }
+
+    public SaasOrder setServiceFee(BigDecimal serviceFee) {
+        this.serviceFee = serviceFee;
         return this;
     }
 

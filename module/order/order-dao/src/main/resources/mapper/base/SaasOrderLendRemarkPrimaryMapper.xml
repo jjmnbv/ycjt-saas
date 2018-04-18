@@ -6,6 +6,7 @@
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="order_numb" jdbcType="VARCHAR" property="orderNumb"/>
         <result column="lend_way" jdbcType="VARCHAR" property="lendWay"/>
+        <result column="lend_certificate" jdbcType="VARCHAR" property="lendCertificate"/>
         <result column="lend_person_code" jdbcType="VARCHAR" property="lendPersonCode"/>
         <result column="deleted" jdbcType="BIT" property="deleted"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
@@ -16,6 +17,7 @@
     id,
     order_numb,
     lend_way,
+    lend_certificate,
     lend_person_code,
     deleted,
     gmt_modified,
@@ -40,6 +42,9 @@
             <if test="lendWay !=null">
                 lend_way,
             </if>
+            <if test="lendCertificate !=null">
+                lend_certificate,
+            </if>
             <if test="lendPersonCode !=null">
                 lend_person_code,
             </if>
@@ -59,6 +64,9 @@
             </if>
             <if test="lendWay != null">
                 #{lendWay,jdbcType=VARCHAR},
+            </if>
+            <if test="lendCertificate != null">
+                #{lendCertificate,jdbcType=VARCHAR},
             </if>
             <if test="lendPersonCode != null">
                 #{lendPersonCode,jdbcType=VARCHAR},
@@ -83,6 +91,9 @@
             </if>
             <if test="lendWay !=null">
                 lend_way = #{lendWay,jdbcType=VARCHAR},
+            </if>
+            <if test="lendCertificate !=null">
+                lend_certificate = #{lendCertificate,jdbcType=VARCHAR},
             </if>
             <if test="lendPersonCode !=null">
                 lend_person_code = #{lendPersonCode,jdbcType=VARCHAR},
@@ -129,6 +140,9 @@
             <if test="lendWay !=null">
                 and lend_way = #{lendWay,jdbcType=VARCHAR}
             </if>
+            <if test="lendCertificate !=null">
+                and lend_certificate = #{lendCertificate,jdbcType=VARCHAR}
+            </if>
             <if test="lendPersonCode !=null">
                 and lend_person_code = #{lendPersonCode,jdbcType=VARCHAR}
             </if>
@@ -155,6 +169,9 @@
             </if>
             <if test="lendWay !=null">
                 and lend_way = #{lendWay,jdbcType=VARCHAR}
+            </if>
+            <if test="lendCertificate !=null">
+                and lend_certificate = #{lendCertificate,jdbcType=VARCHAR}
             </if>
             <if test="lendPersonCode !=null">
                 and lend_person_code = #{lendPersonCode,jdbcType=VARCHAR}

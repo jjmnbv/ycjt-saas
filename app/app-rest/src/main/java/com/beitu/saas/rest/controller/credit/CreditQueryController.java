@@ -18,6 +18,7 @@ import com.beitu.saas.app.enums.SaasLoanPlatformEnum;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.TermUrlConsts;
 import com.beitu.saas.intergration.risk.pojo.LoanPlatformQueryPojo;
+import com.beitu.saas.order.client.SaasOrderLendRemarkService;
 import com.beitu.saas.order.client.SaasOrderService;
 import com.beitu.saas.order.domain.SaasOrderVo;
 import com.beitu.saas.order.enums.OrderErrorCodeEnum;
@@ -38,7 +39,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author linanjun
@@ -79,6 +82,9 @@ public class CreditQueryController {
 
     @Autowired
     private TongdunReportApplication tongdunReportApplication;
+
+    @Autowired
+    private SaasOrderLendRemarkService saasOrderLendRemarkService;
 
     @RequestMapping(value = "/base", method = RequestMethod.POST)
     @ResponseBody
@@ -136,7 +142,17 @@ public class CreditQueryController {
                 downloadContractUrl = configUtil.getAddressURLPrefix() + saasOrderVo.getTermUrl();
             }
         }
-        return new DataApiResponse<>(new OrderDetailQueryResponse(saasOrderDetailVoList, viewContractUrl, downloadContractUrl));
+        String[] lendCertificateUrlArray = null;
+        String lendCertificate = saasOrderLendRemarkService.getLendCertificateByOrderNumb(orderNumb);
+        if (StringUtils.isNotEmpty(lendCertificate)) {
+            lendCertificateUrlArray = lendCertificate.split(",");
+            final String pdfPrefix = configUtil.getAddressURLPrefix();
+            for (int i = 0; i < lendCertificateUrlArray.length; i++) {
+                String lendCertificateUrl = lendCertificateUrlArray[i];
+                lendCertificateUrlArray[i] = pdfPrefix + lendCertificateUrl;
+            }
+        }
+        return new DataApiResponse<>(new OrderDetailQueryResponse(saasOrderDetailVoList, viewContractUrl, downloadContractUrl, lendCertificateUrlArray));
     }
 
     @RequestMapping(value = "/collection/log", method = RequestMethod.POST)

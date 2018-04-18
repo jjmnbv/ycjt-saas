@@ -10,4 +10,11 @@
         and deleted = false
     </select>
 
+    <select id="selectLendCertificateByOrderNumb" resultType="java.lang.String">
+        select lend_certificate
+        from saas_order_lend_remark
+        where order_numb = #{orderNumb,jdbcType=VARCHAR}
+        and deleted = false
+    </select>
+
 </mapper>

@@ -19,4 +19,9 @@ public class SaasOrderLendRemarkDaoImpl extends AbstractBaseMapper<SaasOrderLend
         return this.getSqlSession().selectOne(this.getStatement(".selectLendWayByOrderNumb"), orderNumb);
     }
 
+    @Override
+    public String selectLendCertificateByOrderNumb(String orderNumb) {
+        return this.getSqlSession().selectOne(this.getStatement(".selectLendCertificateByOrderNumb"), orderNumb);
+    }
+
 }
