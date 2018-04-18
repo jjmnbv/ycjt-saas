@@ -20,6 +20,7 @@ import com.beitu.saas.rest.controller.order.request.*;
 import com.beitu.saas.rest.controller.order.response.LendingOrderDetailResponse;
 import com.beitu.saas.rest.controller.order.response.LendingOrderListResponse;
 import com.fqgj.common.api.Page;
+import com.fqgj.common.api.annotations.ParamsValidate;
 import com.fqgj.common.api.exception.ApiIllegalArgumentException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -95,6 +97,7 @@ public class ForLendingOrderController {
         return new DataApiResponse<>(response);
     }
 
+    @ParamsValidate
     @HasPermission(permissionKey = ButtonPermissionConsts.LOAN)
     @RequestMapping(value = "/agree", method = RequestMethod.POST)
     @ResponseBody
@@ -105,7 +108,7 @@ public class ForLendingOrderController {
         if (saasLendRemarkEnum == null) {
             throw new ApiIllegalArgumentException("请选择下款备注");
         }
-        orderApplication.lenderAgree(saasAdmin.getMerchantCode(), saasAdmin.getCode(), req.getOrderNumb(), saasLendRemarkEnum.getMsg());
+        orderApplication.lenderAgree(saasAdmin.getMerchantCode(), saasAdmin.getCode(), req.getOrderNumb(), saasLendRemarkEnum.getMsg(), req.getServiceFee(), req.getLendCertificateArray());
         return new ApiResponse("操作成功");
     }
 

@@ -24,6 +24,7 @@
         <result column="final_reviewer_code" jdbcType="VARCHAR" property="finalReviewerCode"/>
         <result column="loan_lender_code" jdbcType="VARCHAR" property="loanLenderCode"/>
         <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="service_fee" jdbcType="DECIMAL" property="serviceFee"/>
         <result column="version" jdbcType="BIGINT" property="version"/>
         <result column="deleted" jdbcType="BIT" property="deleted"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
@@ -52,6 +53,7 @@
     final_reviewer_code,
     loan_lender_code,
     remark,
+    service_fee,
     version,
     deleted,
     gmt_modified,
@@ -130,6 +132,9 @@
             <if test="remark !=null">
                 remark,
             </if>
+            <if test="serviceFee !=null">
+                service_fee,
+            </if>
             <if test="version !=null">
                 version,
             </if>
@@ -203,6 +208,9 @@
             </if>
             <if test="remark != null">
                 #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceFee != null">
+                #{serviceFee,jdbcType=DECIMAL},
             </if>
             <if test="version != null">
                 #{version,jdbcType=BIGINT},
@@ -281,6 +289,9 @@
             </if>
             <if test="remark !=null">
                 remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceFee !=null">
+                service_fee = #{serviceFee,jdbcType=DECIMAL},
             </if>
             <if test="version !=null">
                 version = #{version,jdbcType=BIGINT},
@@ -381,6 +392,9 @@
             <if test="remark !=null">
                 and remark = #{remark,jdbcType=VARCHAR}
             </if>
+            <if test="serviceFee !=null">
+                and service_fee = #{serviceFee,jdbcType=DECIMAL}
+            </if>
             <if test="version !=null">
                 and version = #{version,jdbcType=BIGINT}
             </if>
@@ -461,6 +475,9 @@
             </if>
             <if test="remark !=null">
                 and remark = #{remark,jdbcType=VARCHAR}
+            </if>
+            <if test="serviceFee !=null">
+                and service_fee = #{serviceFee,jdbcType=DECIMAL}
             </if>
             <if test="version !=null">
                 and version = #{version,jdbcType=BIGINT}

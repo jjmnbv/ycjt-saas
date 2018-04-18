@@ -84,7 +84,8 @@ public class AfterLendManageController {
     @ApiOperation(value = "展期", response = ApiResponse.class)
     public ApiResponse extend(@RequestBody @Valid AfterLendManagerExtendOrderRequest req) {
         SaasAdmin saasAdmin = RequestLocalInfo.getCurrentAdmin().getSaasAdmin();
-        orderApplication.extendOrder(saasAdmin.getMerchantCode(), saasAdmin.getCode(), req.getOrderNumb(), req.getRepaymentDt(), req.getExtendInterestRatio().divide(new BigDecimal("100")));
+        orderApplication.extendOrder(saasAdmin.getMerchantCode(), saasAdmin.getCode(), req.getOrderNumb(),
+                req.getRepaymentDt(), req.getExtendInterestRatio().divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP), req.getServiceFee());
         return new ApiResponse("操作成功");
     }
 

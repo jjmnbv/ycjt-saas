@@ -266,6 +266,7 @@ public class OrderBillDetailApplication {
             saasOrderDetailVo.setPeriod(i);
             saasOrderDetailVo.setOrderNumb(saasOrderBillDetailVo.getOrderNumb());
             saasOrderDetailVo.setCapital(saasOrderBillDetailVo.getRealCapital().toString());
+            saasOrderDetailVo.setServiceFee(saasOrderBillDetailVo.getServiceFee().intValue());
             Date createdDt;
             if (lastSaasOrderDetailVo == null) {
                 createdDt = saasOrderBillDetailVo.getGmtCreate();
