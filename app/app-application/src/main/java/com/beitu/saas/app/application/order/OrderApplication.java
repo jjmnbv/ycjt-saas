@@ -691,7 +691,7 @@ public class OrderApplication {
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
-    public void lenderAgree(String merchantCode, String operatorCode, String orderNumb, String lendRemark) {
+    public void lenderAgree(String merchantCode, String operatorCode, String orderNumb, String lendRemark, BigDecimal serviceFee, String[] lendCertificateArray) {
         SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(orderNumb, merchantCode);
         if (StringUtils.isNotEmpty(saasOrderVo.getLoanLenderCode()) && !operatorCode.equals(saasOrderVo.getLoanLenderCode())) {
             throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
@@ -699,6 +699,7 @@ public class OrderApplication {
         SaasOrder updateSaasOrder = new SaasOrder();
         updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
         updateSaasOrder.setLoanLenderCode(operatorCode);
+        updateSaasOrder.setServiceFee(serviceFee);
 
         if (saasOrderVo.getBorrowerAuthorizedSignLoan()) {
             updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.FOR_REIMBURSEMENT, lendRemark);
@@ -730,8 +731,21 @@ public class OrderApplication {
 
         SaasOrderLendRemarkVo addSaasOrderLendRemarkVo = new SaasOrderLendRemarkVo();
         addSaasOrderLendRemarkVo.setOrderNumb(orderNumb);
-        addSaasOrderLendRemarkVo.setLendWay(lendRemark);
         addSaasOrderLendRemarkVo.setLendPersonCode(operatorCode);
+        addSaasOrderLendRemarkVo.setLendWay(lendRemark);
+        if (lendCertificateArray != null && lendCertificateArray.length > 0) {
+            StringBuilder lendCertificate = new StringBuilder();
+            for (int i = 0; i < lendCertificateArray.length; i++) {
+                String lendCertificateItem = lendCertificateArray[i];
+                if (StringUtils.isNotEmpty(lendCertificateItem)) {
+                    lendCertificate.append(lendCertificateItem);
+                    if (i != lendCertificateArray.length - 1) {
+                        lendCertificate.append(",");
+                    }
+                }
+            }
+            addSaasOrderLendRemarkVo.setLendCertificate(lendCertificate.toString());
+        }
         saasOrderLendRemarkService.save(addSaasOrderLendRemarkVo);
     }
 
@@ -786,7 +800,7 @@ public class OrderApplication {
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
-    public void extendOrder(String merchantCode, String operatorCode, String orderNumb, Date repaymentDt, BigDecimal extendInterestRatio) {
+    public void extendOrder(String merchantCode, String operatorCode, String orderNumb, Date repaymentDt, BigDecimal extendInterestRatio, BigDecimal serviceFee) {
         SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(orderNumb, merchantCode);
 
         if (DateUtil.countDay(saasOrderVo.getRepaymentDt(), repaymentDt) >= 0
@@ -823,6 +837,7 @@ public class OrderApplication {
         extendSaasOrder.setPreliminaryReviewerCode(saasOrderVo.getPreliminaryReviewerCode());
         extendSaasOrder.setFinalReviewerCode(saasOrderVo.getFinalReviewerCode());
         extendSaasOrder.setLoanLenderCode(saasOrderVo.getLoanLenderCode());
+        extendSaasOrder.setServiceFee(serviceFee);
         extendSaasOrder.setRemark(saasOrderVo.getRemark());
         saasOrderService.create(extendSaasOrder);
 

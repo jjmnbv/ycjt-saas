@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -105,7 +106,7 @@ public class ForLendingOrderController {
         if (saasLendRemarkEnum == null) {
             throw new ApiIllegalArgumentException("请选择下款备注");
         }
-        orderApplication.lenderAgree(saasAdmin.getMerchantCode(), saasAdmin.getCode(), req.getOrderNumb(), saasLendRemarkEnum.getMsg());
+        orderApplication.lenderAgree(saasAdmin.getMerchantCode(), saasAdmin.getCode(), req.getOrderNumb(), saasLendRemarkEnum.getMsg(), req.getServiceFee(), req.getLendCertificateArray());
         return new ApiResponse("操作成功");
     }
 

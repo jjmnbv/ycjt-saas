@@ -30,6 +30,9 @@ public class AfterLendManagerExtendOrderRequest extends ParamsObject {
     @NotNull(message = "展期利率不能为空")
     private BigDecimal extendInterestRatio;
 
+    @ApiModelProperty(value = "手续费")
+    private BigDecimal serviceFee;
+
     public String getOrderNumb() {
         return orderNumb;
     }
@@ -52,6 +55,14 @@ public class AfterLendManagerExtendOrderRequest extends ParamsObject {
 
     public void setExtendInterestRatio(BigDecimal extendInterestRatio) {
         this.extendInterestRatio = extendInterestRatio;
+    }
+
+    public BigDecimal getServiceFee() {
+        return serviceFee;
+    }
+
+    public void setServiceFee(BigDecimal serviceFee) {
+        this.serviceFee = serviceFee;
     }
 
     @Override
