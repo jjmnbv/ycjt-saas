@@ -129,6 +129,7 @@ public class GxbController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        LOGGER.info("ecommerceSuccess--------" + ipAddress);
         List<String> ipList = Arrays.asList(configUtil.getGXBPushIP().split(","));
         if (!ipList.contains(ipAddress)) {
             return "error";
