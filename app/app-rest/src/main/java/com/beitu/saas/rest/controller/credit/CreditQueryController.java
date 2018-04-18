@@ -14,13 +14,22 @@ import com.beitu.saas.app.application.order.OrderBillDetailApplication;
 import com.beitu.saas.app.application.order.OrderStatusHistoryApplication;
 import com.beitu.saas.app.application.order.vo.OrderApplicationListVo;
 import com.beitu.saas.app.application.order.vo.SaasOrderDetailVo;
+import com.beitu.saas.app.common.RequestBasicInfo;
 import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.app.enums.SaasLoanPlatformEnum;
+import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
+import com.beitu.saas.borrower.client.SaasBorrowerService;
+import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
+import com.beitu.saas.borrower.domain.SaasBorrowerVo;
 import com.beitu.saas.common.config.ConfigUtil;
+import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.consts.TermUrlConsts;
 import com.beitu.saas.common.handle.oss.OSSService;
+import com.beitu.saas.common.utils.ShortUrlUtil;
 import com.beitu.saas.credit.client.SaasGxbEbService;
 import com.beitu.saas.credit.domain.SaasGxbEbVo;
+import com.beitu.saas.intergration.risk.RiskEcommerceService;
+import com.beitu.saas.intergration.risk.param.GXBEcommerceCrawlingParam;
 import com.beitu.saas.intergration.risk.pojo.LoanPlatformQueryPojo;
 import com.beitu.saas.order.client.SaasOrderService;
 import com.beitu.saas.order.domain.SaasOrderVo;
@@ -30,7 +39,9 @@ import com.beitu.saas.rest.controller.credit.request.CreditQueryRequest;
 import com.beitu.saas.rest.controller.credit.request.UserBaseInfoQueryRequest;
 import com.beitu.saas.rest.controller.credit.response.*;
 import com.beitu.saas.risk.helpers.StringUtils;
+import com.fqgj.base.services.redis.RedisClient;
 import com.fqgj.common.api.Response;
+import com.fqgj.common.api.exception.ApiErrorException;
 import com.fqgj.common.utils.CollectionUtils;
 import com.fqgj.common.utils.JSONUtils;
 import com.fqgj.exception.common.ApplicationException;
@@ -38,10 +49,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -93,6 +101,18 @@ public class CreditQueryController {
 
     @Autowired
     private OSSService ossService;
+
+    @Autowired
+    private SaasBorrowerRealInfoService saasBorrowerRealInfoService;
+
+    @Autowired
+    private RedisClient redisClient;
+
+    @Autowired
+    private RiskEcommerceService riskEcommerceService;
+
+    @Autowired
+    private SaasBorrowerService saasBorrowerService;
 
     @RequestMapping(value = "/base", method = RequestMethod.POST)
     @ResponseBody
@@ -198,7 +218,7 @@ public class CreditQueryController {
     @RequestMapping(value = "/eb/data", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "电商信息")
-    public Response getGxbEbUrl(@RequestBody @Valid CreditQueryRequest req) {
+    public Response getGxbEbData(@RequestBody @Valid CreditQueryRequest req) {
         String orderNumb = req.getOrderNumb();
         String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
         String borrowerCode = getBorrowerCodeByOrderNumbAndMerchantCode(orderNumb, merchantCode);
@@ -221,6 +241,31 @@ public class CreditQueryController {
             }
         }
         return Response.ok();
+    }
+
+    @RequestMapping(value = "/eb/url/{borrowerCode}", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(value = "电商信息")
+    public Response getGxbEbUrl(@PathVariable("borrowerCode") String borrowerCode) {
+        SaasBorrowerRealInfoVo borrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode);
+        RequestBasicInfo requestBasicInfo = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo();
+        SaasBorrowerVo borrowerVo = saasBorrowerService.getByBorrowerCode(borrowerCode);
+        if (borrowerRealInfoVo == null) {
+            throw new ApiErrorException("请先实名");
+        }
+        Object token = redisClient.get(RedisKeyConsts.SAAS_GXB_ECOMMERCE, borrowerCode);
+        if (token != null) {
+            throw new ApiErrorException("认证中...");
+        }
+        StringBuilder sb = new StringBuilder(configUtil.getApiWebPath());
+        sb.append("/gxb/eb/notice/").append(borrowerCode).append("/").append(requestBasicInfo.getPlatform()).append("/").append(0).append("/");
+        GXBEcommerceCrawlingParam param = new GXBEcommerceCrawlingParam();
+        param.setIdcard(borrowerRealInfoVo.getIdentityCode());
+        param.setName(borrowerRealInfoVo.getName());
+        param.setPhone(borrowerVo.getMobile());
+        param.setReturnUrl(sb.toString());
+        param.setUserCode(borrowerCode);
+        return Response.ok().putData(ShortUrlUtil.generateShortUrl(riskEcommerceService.getEcommerceCrawlingUrl(param)));
     }
 
 

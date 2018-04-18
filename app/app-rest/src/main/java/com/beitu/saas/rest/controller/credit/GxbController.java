@@ -130,7 +130,7 @@ public class GxbController {
 
     @RequestMapping(value = "/eb/notice/{code}/{platform}/{channelCode}/{token}", method = RequestMethod.GET)
     @SignIgnore
-    public String ecommerceSuccess(@PathVariable("token") String token, @PathVariable("code") String code, HttpServletRequest httpServletRequest, @PathVariable("platform") String platform, @PathVariable("channelCode") Integer channelCode, @RequestParam String success) {
+    public String ecommerceSuccess(@PathVariable("code") String code, @PathVariable("platform") String platform, @PathVariable("channelCode") String channelCode, @PathVariable("token") String token, @RequestParam String success, HttpServletRequest httpServletRequest) {
         String ipAddress = null;
         try {
             ipAddress = NetworkUtil.getIpAddress(httpServletRequest);
@@ -139,7 +139,7 @@ public class GxbController {
         }
         LOGGER.info("ecommerceSuccess--------" + ipAddress);
         LOGGER.info("ecommerceSuccess---------------" + success);
-        if (Objects.equals(1, success)) {
+        if (Objects.equals("1", success)) {
             Object obj1 = redisClient.get(RedisKeyConsts.SAAS_GXB_ECOMMERCE_TOKN, token);
             if (obj1 == null) {
                 return "redirect:" + "https://www.baidu.com";
