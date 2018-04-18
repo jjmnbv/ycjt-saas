@@ -94,7 +94,7 @@ public class GxbController {
             saasGxbEb.setJsonUrl(url);
             saasGxbEb.setTaskToken((String) responseMap.get("token"));
             saasGxbEbService.saveGXBEbTop(saasGxbEb);
-            redisClient.del(RedisKeyConsts.SAAS_GXB_ECOMMERCE_TOKN, (String) responseMap.get("token"));
+            redisClient.expire(RedisKeyConsts.SAAS_GXB_ECOMMERCE_TOKN,TimeConsts.ONE_MINUTE, (String) responseMap.get("token"));
             LOGGER.info("公信宝电商成功--------{}", url);
         } catch (Exception e) {
             e.printStackTrace();
