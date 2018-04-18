@@ -27,6 +27,7 @@ import com.beitu.saas.common.handle.oss.OSSService;
 import com.beitu.saas.common.utils.ShortUrlUtil;
 import com.beitu.saas.credit.client.SaasGxbEbService;
 import com.beitu.saas.credit.domain.SaasGxbEbVo;
+import com.beitu.saas.credit.enums.CreditErrorCodeEnum;
 import com.beitu.saas.intergration.risk.RiskEcommerceService;
 import com.beitu.saas.intergration.risk.param.GXBEcommerceCrawlingParam;
 import com.beitu.saas.intergration.risk.pojo.LoanPlatformQueryPojo;
@@ -241,13 +242,16 @@ public class CreditQueryController {
                 e.printStackTrace();
             }
         }
-        return Response.ok();
+        return Response.error(CreditErrorCodeEnum.CREDIT_DS_NO_EXITSR);
     }
 
-    @RequestMapping(value = "/eb/url/{borrowerCode}", method = RequestMethod.GET)
+    @RequestMapping(value = "/eb/url", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "电商信息")
-    public Response getGxbEbUrl(@PathVariable("borrowerCode") String borrowerCode) {
+    @ApiOperation(value = "获取电商url")
+    public Response getGxbEbUrl(@RequestBody @Valid CreditQueryRequest req) {
+        String orderNumb = req.getOrderNumb();
+        String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
+        String borrowerCode = getBorrowerCodeByOrderNumbAndMerchantCode(orderNumb, req.getBorrowerCode(), merchantCode);
         SaasBorrowerRealInfoVo borrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode);
         RequestBasicInfo requestBasicInfo = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo();
         SaasBorrowerVo borrowerVo = saasBorrowerService.getByBorrowerCode(borrowerCode);
