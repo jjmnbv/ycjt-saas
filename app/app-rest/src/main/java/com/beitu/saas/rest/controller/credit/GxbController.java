@@ -94,7 +94,7 @@ public class GxbController {
             saasGxbEb.setJsonUrl(url);
             saasGxbEb.setTaskToken((String) responseMap.get("token"));
             saasGxbEbService.saveGXBEbTop(saasGxbEb);
-            redisClient.expire(RedisKeyConsts.SAAS_GXB_ECOMMERCE_TOKN,TimeConsts.ONE_MINUTE, (String) responseMap.get("token"));
+            redisClient.expire(RedisKeyConsts.SAAS_GXB_ECOMMERCE_TOKN, TimeConsts.ONE_MINUTE, (String) responseMap.get("token"));
             LOGGER.info("公信宝电商成功--------{}", url);
         } catch (Exception e) {
             e.printStackTrace();
@@ -151,6 +151,7 @@ public class GxbController {
         if (obj1 == null) {
             return "redirect:" + "https://www.baidu.com";
         }
+        redisClient.del(RedisKeyConsts.SAAS_GXB_ECOMMERCE_TOKN, token);
         Object obj = redisClient.get(RedisKeyConsts.SAAS_GXB_ECOMMERCE, code);
         if (obj != null) {
             return "redirect:" + "https://www.baidu.com";
