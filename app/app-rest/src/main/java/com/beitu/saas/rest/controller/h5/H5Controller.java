@@ -433,6 +433,8 @@ public class H5Controller {
     @ApiOperation(value = "用户订单详情", response = H5OrderDetailResponse.class)
     public DataApiResponse<H5OrderDetailResponse> getOrderDetail(@RequestBody @Valid QueryOrderDetailRequest req) {
         String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getMerchantCode();
+        String token = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getToken();
+        String channel = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
         OrderDetailVo orderDetailVo = orderApplication.getOrderDetailVoByOrderNumbAndMerchantCode(req.getOrderNumb(), merchantCode);
         if (orderDetailVo == null) {
             return new DataApiResponse();
@@ -440,12 +442,14 @@ public class H5Controller {
         H5OrderDetailResponse response = new H5OrderDetailResponse();
         BeanUtils.copyProperties(orderDetailVo, response);
         response.setOrderNumb(req.getOrderNumb());
-        StringBuilder contractUrl = new StringBuilder();
-        contractUrl.append(configUtil.getAddressURLPrefix()).append(TermUrlConsts.pdfViewUrl)
-                .append("?file=/").append(orderDetailVo.getTermUrl());
-        StringBuilder downloadContractUrl = new StringBuilder();
-        downloadContractUrl.append(configUtil.getAddressURLPrefix()).append(orderDetailVo.getTermUrl());
         if (OrderStatusEnum.TO_CONFIRM_RECEIPT.getCode().equals(orderDetailVo.getOrderStatus())) {
+            StringBuilder contractUrl = new StringBuilder();
+            contractUrl.append(configUtil.getAddressURLPrefix()).append(SaasContractEnum.LOAN_CONTRACT.getUrl())
+                    .append("?token=").append(token)
+                    .append("&channel=").append(channel)
+                    .append("&platform=h5")
+                    .append((configUtil.isServerTest() ? "&test=1" : ""))
+                    .append("&orderNumb=").append(req.getOrderNumb());
             response.setHeaderTitle("确认借款");
             if (contractApplication.needDoLicenseContractSign(orderDetailVo.getBorrowerCode())) {
                 response.setContractTitle1(SaasContractEnum.LICENSE_CONTRACT.getMsg());
@@ -465,13 +469,25 @@ public class H5Controller {
             response.setButtonType(H5OrderDetailButtonTypeEnum.CONFIRM_RECEIPT_BUTTON_TYPE.getCode());
         } else if (OrderStatusEnum.TO_CONFIRM_EXTEND.getCode().equals(orderDetailVo.getOrderStatus())) {
             response.setHeaderTitle("确认展期");
+            StringBuilder contractUrl = new StringBuilder();
+            contractUrl.append(configUtil.getAddressURLPrefix()).append(SaasContractEnum.EXTEND_CONTRACT.getUrl())
+                    .append("?token=").append(token)
+                    .append("&channel=").append(channel)
+                    .append("&platform=h5")
+                    .append((configUtil.isServerTest() ? "&test=1" : ""))
+                    .append("&orderNumb=").append(req.getOrderNumb());
             response.setContractTitle1(SaasContractEnum.EXTEND_CONTRACT.getMsg());
             response.setContractUrl1(contractUrl.toString());
-            response.setContract1DownloadUrl(downloadContractUrl.toString());
+            response.setContract1DownloadUrl("");
             response.setVisible(Boolean.TRUE);
             response.setButtonTitle(H5OrderDetailButtonTypeEnum.CONFIRM_EXTEND_BUTTON_TYPE.getMsg());
             response.setButtonType(H5OrderDetailButtonTypeEnum.CONFIRM_EXTEND_BUTTON_TYPE.getCode());
         } else {
+            StringBuilder contractUrl = new StringBuilder();
+            contractUrl.append(configUtil.getAddressURLPrefix()).append(TermUrlConsts.pdfViewUrl)
+                    .append("?file=/").append(orderDetailVo.getTermUrl());
+            StringBuilder downloadContractUrl = new StringBuilder();
+            downloadContractUrl.append(configUtil.getAddressURLPrefix()).append(orderDetailVo.getTermUrl());
             response.setVisible(Boolean.FALSE);
             response.setContractTitle1(SaasContractEnum.LOAN_CONTRACT.getMsg());
             response.setContractUrl1(contractUrl.toString());
