@@ -99,6 +99,10 @@ public class SaasOrderVo implements ResponseData, Serializable {
      */
     private String remark;
     /**
+     * 手续费
+     */
+    private BigDecimal serviceFee;
+    /**
      *
      */
     private Long version;
@@ -272,6 +276,14 @@ public class SaasOrderVo implements ResponseData, Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public BigDecimal getServiceFee() {
+        return this.serviceFee;
+    }
+
+    public void setServiceFee(BigDecimal serviceFee) {
+        this.serviceFee = serviceFee;
     }
 
     public Long getVersion() {

@@ -17,6 +17,7 @@
         <result column="late_interest_ratio" jdbcType="DECIMAL" property="lateInterestRatio"/>
         <result column="late_interest" jdbcType="DECIMAL" property="lateInterest"/>
         <result column="amount" jdbcType="DECIMAL" property="amount"/>
+        <result column="service_fee" jdbcType="DECIMAL" property="serviceFee"/>
         <result column="relation_order_bill_detail_id" jdbcType="BIGINT" property="relationOrderBillDetailId"/>
         <result column="visible" jdbcType="BIT" property="visible"/>
         <result column="destroy" jdbcType="BIT" property="destroy"/>
@@ -42,6 +43,7 @@
     late_interest_ratio,
     late_interest,
     amount,
+    service_fee,
     relation_order_bill_detail_id,
     visible,
     destroy,
@@ -102,6 +104,9 @@
             </if>
             <if test="amount !=null">
                 amount,
+            </if>
+            <if test="serviceFee !=null">
+                service_fee,
             </if>
             <if test="relationOrderBillDetailId !=null">
                 relation_order_bill_detail_id,
@@ -167,6 +172,9 @@
             </if>
             <if test="amount != null">
                 #{amount,jdbcType=DECIMAL},
+            </if>
+            <if test="serviceFee != null">
+                #{serviceFee,jdbcType=DECIMAL},
             </if>
             <if test="relationOrderBillDetailId != null">
                 #{relationOrderBillDetailId,jdbcType=BIGINT},
@@ -236,6 +244,9 @@
             </if>
             <if test="amount !=null">
                 amount = #{amount,jdbcType=DECIMAL},
+            </if>
+            <if test="serviceFee !=null">
+                service_fee = #{serviceFee,jdbcType=DECIMAL},
             </if>
             <if test="relationOrderBillDetailId !=null">
                 relation_order_bill_detail_id = #{relationOrderBillDetailId,jdbcType=BIGINT},
@@ -327,6 +338,9 @@
             <if test="amount !=null">
                 and amount = #{amount,jdbcType=DECIMAL}
             </if>
+            <if test="serviceFee !=null">
+                and service_fee = #{serviceFee,jdbcType=DECIMAL}
+            </if>
             <if test="relationOrderBillDetailId !=null">
                 and relation_order_bill_detail_id = #{relationOrderBillDetailId,jdbcType=BIGINT}
             </if>
@@ -398,6 +412,9 @@
             </if>
             <if test="amount !=null">
                 and amount = #{amount,jdbcType=DECIMAL}
+            </if>
+            <if test="serviceFee !=null">
+                and service_fee = #{serviceFee,jdbcType=DECIMAL}
             </if>
             <if test="relationOrderBillDetailId !=null">
                 and relation_order_bill_detail_id = #{relationOrderBillDetailId,jdbcType=BIGINT}
