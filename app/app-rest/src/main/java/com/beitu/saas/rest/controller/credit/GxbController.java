@@ -6,7 +6,6 @@ import com.beitu.saas.app.common.RequestLocalInfo;
 import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
 import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
 import com.beitu.saas.borrower.domain.SaasBorrowerVo;
-import com.beitu.saas.borrower.entity.SaasBorrowerRealInfo;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.consts.TimeConsts;
@@ -16,7 +15,6 @@ import com.beitu.saas.common.utils.OrderNoUtil;
 import com.beitu.saas.credit.client.SaasGxbEbService;
 import com.beitu.saas.credit.entity.SaasGxbEb;
 import com.beitu.saas.intergration.risk.RiskEcommerceService;
-import com.beitu.saas.intergration.risk.RiskIntergrationService;
 import com.beitu.saas.intergration.risk.param.GXBEcommerceCrawlingParam;
 import com.fqgj.base.services.redis.RedisClient;
 import com.fqgj.common.api.Response;
@@ -32,10 +30,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.zip.GZIPInputStream;
 
 /**
@@ -135,7 +130,7 @@ public class GxbController {
 
     @RequestMapping(value = "/eb/notice/{code}/{platform}/{channelCode}/{token}", method = RequestMethod.GET)
     @SignIgnore
-    public String ecommerceSuccess(@PathVariable("token") String token, @PathVariable("code") String code, HttpServletRequest httpServletRequest, @PathVariable("platform") String platform, @PathVariable("channelCode") String channelCode) {
+    public String ecommerceSuccess(@PathVariable("token") String token, @PathVariable("code") String code, HttpServletRequest httpServletRequest, @PathVariable("platform") String platform, @PathVariable("channelCode") Integer channelCode, @RequestParam String success) {
         String ipAddress = null;
         try {
             ipAddress = NetworkUtil.getIpAddress(httpServletRequest);
@@ -143,20 +138,19 @@ public class GxbController {
             e.printStackTrace();
         }
         LOGGER.info("ecommerceSuccess--------" + ipAddress);
-        //  List<String> ipList = Arrays.asList(configUtil.getGXBPushIP().split(","));
-//        if (!ipList.contains(ipAddress)) {
-//            return "error";
-//        }
-        Object obj1 = redisClient.get(RedisKeyConsts.SAAS_GXB_ECOMMERCE_TOKN, token);
-        if (obj1 == null) {
-            return "redirect:" + "https://www.baidu.com";
+        LOGGER.info("ecommerceSuccess---------------" + success);
+        if (Objects.equals(1, success)) {
+            Object obj1 = redisClient.get(RedisKeyConsts.SAAS_GXB_ECOMMERCE_TOKN, token);
+            if (obj1 == null) {
+                return "redirect:" + "https://www.baidu.com";
+            }
+            redisClient.del(RedisKeyConsts.SAAS_GXB_ECOMMERCE_TOKN, token);
+            Object obj = redisClient.get(RedisKeyConsts.SAAS_GXB_ECOMMERCE, code);
+            if (obj != null) {
+                return "redirect:" + "https://www.baidu.com";
+            }
+            redisClient.set(RedisKeyConsts.SAAS_GXB_ECOMMERCE, token, TimeConsts.FIFTEEN_SECONDS, code);
         }
-        redisClient.del(RedisKeyConsts.SAAS_GXB_ECOMMERCE_TOKN, token);
-        Object obj = redisClient.get(RedisKeyConsts.SAAS_GXB_ECOMMERCE, code);
-        if (obj != null) {
-            return "redirect:" + "https://www.baidu.com";
-        }
-        redisClient.set(RedisKeyConsts.SAAS_GXB_ECOMMERCE, token, TimeConsts.FIFTEEN_SECONDS, code);
         if ("web".equals(platform)) {
             return "redirect:" + "https://www.baidu.com";
         }
