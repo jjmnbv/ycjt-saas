@@ -610,6 +610,11 @@
                 <artifactId>bcmail-jdk16</artifactId>
                 <version>1.46</version>
             </dependency>
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bctsp-jdk15</artifactId>
+                <version>1.46</version>
+            </dependency>
             <!--e签宝  end-->
 
             <!-- 个推 start -->
