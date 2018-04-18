@@ -70,6 +70,9 @@ public class AfterLendManagerExtendOrderRequest extends ParamsObject {
         if (this.extendInterestRatio.compareTo(new BigDecimal("0")) < 0 || this.extendInterestRatio.compareTo(new BigDecimal("24")) > 0) {
             throw new ApiIllegalArgumentException("展期利率不正确");
         }
+        if (this.serviceFee != null && this.serviceFee.compareTo(this.serviceFee.setScale(2, BigDecimal.ROUND_HALF_UP)) != 0) {
+            throw new ApiIllegalArgumentException("手续费请输入最多两位小数的数字");
+        }
     }
 
 }

@@ -1,6 +1,7 @@
 package com.beitu.saas.rest.controller.order.request;
 
 import com.fqgj.common.api.ParamsObject;
+import com.fqgj.common.api.exception.ApiIllegalArgumentException;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
@@ -65,7 +66,9 @@ public class LenderAgreeOrderRequest extends ParamsObject {
 
     @Override
     public void validate() {
-
+        if (this.serviceFee != null && this.serviceFee.compareTo(this.serviceFee.setScale(2, BigDecimal.ROUND_HALF_UP)) != 0) {
+            throw new ApiIllegalArgumentException("手续费请输入最多两位小数的数字");
+        }
     }
 
 }

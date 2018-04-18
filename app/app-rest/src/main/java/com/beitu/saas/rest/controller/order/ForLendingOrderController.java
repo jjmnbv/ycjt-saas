@@ -20,6 +20,7 @@ import com.beitu.saas.rest.controller.order.request.*;
 import com.beitu.saas.rest.controller.order.response.LendingOrderDetailResponse;
 import com.beitu.saas.rest.controller.order.response.LendingOrderListResponse;
 import com.fqgj.common.api.Page;
+import com.fqgj.common.api.annotations.ParamsValidate;
 import com.fqgj.common.api.exception.ApiIllegalArgumentException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -96,6 +97,7 @@ public class ForLendingOrderController {
         return new DataApiResponse<>(response);
     }
 
+    @ParamsValidate
     @HasPermission(permissionKey = ButtonPermissionConsts.LOAN)
     @RequestMapping(value = "/agree", method = RequestMethod.POST)
     @ResponseBody
