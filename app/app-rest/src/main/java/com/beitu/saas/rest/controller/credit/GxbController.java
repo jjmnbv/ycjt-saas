@@ -43,7 +43,7 @@ import java.util.zip.GZIPInputStream;
  * @create 2018/4/16 下午9:37
  * @description
  */
-@RestController
+@Controller
 @RequestMapping("/gxb")
 public class GxbController {
 
@@ -104,6 +104,7 @@ public class GxbController {
     }
 
     @RequestMapping(value = "/eb/url", method = RequestMethod.GET)
+    @ResponseBody
     @ApiOperation("获取电商认证url")
     public Response getGxbEbUrl() {
         SaasBorrowerVo saasBorrower = RequestLocalInfo.getCurrentAdmin().getSaasBorrower();
