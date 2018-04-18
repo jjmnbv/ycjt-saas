@@ -53,6 +53,10 @@ public class GenerateContractThread implements Runnable {
             case LENDER_DO_AUTHORIZATION_CONTRACT_SIGN:
                 contractApplication.lenderDoLicenseContractSign(userCode);
                 break;
+            case BORROWER_DO_AUTHORIZATION_CONTRACT_AND_LOAN_CONTRACT_SIGN:
+                contractApplication.borrowerDoLicenseContractSign(userCode);
+                termUrl = contractApplication.borrowerDoLoanContractSign(userCode, orderId);
+                break;
         }
         if (StringUtils.isNotEmpty(termUrl)) {
             SaasOrder saasOrder = new SaasOrder();

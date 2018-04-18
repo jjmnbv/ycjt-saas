@@ -10,7 +10,7 @@ CREATE TABLE `saas_order_application` (
   `late_interest_ratio` decimal(5,4) NOT NULL DEFAULT '0.2400' COMMENT '逾期利率',
   `borrow_purpose` varchar(32) DEFAULT NULL COMMENT '借款意图',
   `repayment_dt` date NOT NULL COMMENT '账单应还日',
-  `term_url` varchar(256) DEFAULT NULL COMMENT '借款协议URL地址',
+  `borrower_authorized_sign_loan` bit(1) NOT NULL DEFAULT b'0' COMMENT '借款人是否授权签署借款合同',
   `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后修改时间',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -36,12 +36,13 @@ CREATE TABLE `saas_order` (
   `repayment_dt` date NOT NULL COMMENT '账单应还日',
   `created_dt` date DEFAULT NULL COMMENT '订单计息时间',
   `expire_date` datetime NOT NULL COMMENT '订单过期时间',
-  `term_url` varchar(256) DEFAULT NULL COMMENT '借款协议URL地址',
   `relation_order_id` bigint(20) unsigned DEFAULT NULL COMMENT '展期关联订单ID',
-  `order_status` smallint(4) NOT NULL COMMENT '订单状态',  
+  `order_status` smallint(4) NOT NULL COMMENT '订单状态',
   `preliminary_reviewer_code` varchar(32) DEFAULT NULL COMMENT '初审员',
   `final_reviewer_code` varchar(32) DEFAULT NULL COMMENT '复审员',
   `loan_lender_code` varchar(32) DEFAULT NULL COMMENT '放款人',
+  `term_url` varchar(256) DEFAULT NULL COMMENT '借款协议URL地址',
+  `borrower_authorized_sign_loan` bit(1) NOT NULL DEFAULT b'0' COMMENT '借款人是否授权签署借款合同',
   `remark` varchar(128) DEFAULT NULL COMMENT '备注',
   `version` bigint(20) NOT NULL DEFAULT '0',
   `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
@@ -254,18 +255,31 @@ CREATE TABLE `saas_borrower_work_info` (
   KEY `idy_order_numb` (`order_numb`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='SAAS借款人工作信息表';
 
-DROP TABLE IF EXISTS `saas_user_esign_authorization`;
-CREATE TABLE `saas_user_esign_authorization` (
+DROP TABLE IF EXISTS `saas_esign_user_authorization`;
+CREATE TABLE `saas_esign_user_authorization` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '表ID',
-  `user_code` varchar(32) DEFAULT NULL COMMENT '用户码',
-  `account_id` varchar(40) NOT NULL COMMENT '用户e签宝账户标识',
-  `seal_url` varchar(128) DEFAULT NULL COMMENT 'e签宝生成印章URL地址',
-  `authorization_url` varchar(128) DEFAULT NULL COMMENT '签章后授权协议URL地址',
-  `authorization_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '用户授权意愿时间',
-  `success` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否已成功授权',
+  `user_code` varchar(32) NOT NULL COMMENT '用户码',
+  `saas_esign_code` varchar(32) NOT NULL COMMENT 'SAAS账户信息CODE',
+  `authorization_url` varchar(128) NOT NULL COMMENT '签章授权协议URL地址',
   `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后修改时间',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`),
   KEY `idx_user_code` (`user_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='SAAS用户e签宝授权信息表';
+
+DROP TABLE IF EXISTS `saas_esign_account`;
+CREATE TABLE `saas_esign_account` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '表ID',
+  `saas_esign_code` varchar(32) NOT NULL COMMENT '账户信息CODE',
+  `name` varchar(64) NOT NULL COMMENT '印章名字',
+  `code` varchar(32) NOT NULL COMMENT '身份标识码',
+  `account_id` varchar(40) NOT NULL COMMENT 'e签宝账户标识',
+  `seal_url` varchar(128) DEFAULT NULL COMMENT 'e签宝生成印章URL地址',
+  `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
+  `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_code` (`code`),
+  KEY `idy_saas_esign_code` (`saas_esign_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='SAASe签宝账户信息表';

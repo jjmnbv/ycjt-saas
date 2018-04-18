@@ -39,6 +39,12 @@ public class CreditApplyInfoResponse implements ResponseData {
     private Integer borrowingDuration;
 
     /**
+     * 借款人是否授权签署借款合同
+     */
+    @ApiModelProperty(value = "是否授权签署借款合同")
+    private Boolean borrowerAuthorizedSignLoan;
+
+    /**
      * 是否需要实名
      */
     @ApiModelProperty(value = "是否需要实名")
@@ -94,6 +100,14 @@ public class CreditApplyInfoResponse implements ResponseData {
 
     public void setBorrowingDuration(Integer borrowingDuration) {
         this.borrowingDuration = borrowingDuration;
+    }
+
+    public Boolean getBorrowerAuthorizedSignLoan() {
+        return borrowerAuthorizedSignLoan;
+    }
+
+    public void setBorrowerAuthorizedSignLoan(Boolean borrowerAuthorizedSignLoan) {
+        this.borrowerAuthorizedSignLoan = borrowerAuthorizedSignLoan;
     }
 
     public Boolean getNeedRealName() {

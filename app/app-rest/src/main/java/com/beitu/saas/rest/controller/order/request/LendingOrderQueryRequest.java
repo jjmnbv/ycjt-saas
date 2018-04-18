@@ -1,6 +1,7 @@
 package com.beitu.saas.rest.controller.order.request;
 
 import com.beitu.saas.channel.consts.ChannelConsts;
+import com.beitu.saas.order.consts.OrderConsts;
 import com.fqgj.common.api.ParamsObject;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -26,6 +27,9 @@ public class LendingOrderQueryRequest extends ParamsObject {
 
     @ApiModelProperty(value = "渠道")
     private String channelCode;
+
+    @ApiModelProperty(value = "状态")
+    private Integer orderStatus;
 
     @ApiModelProperty(value = "申请时长")
     private Integer applyDuration;
@@ -64,6 +68,16 @@ public class LendingOrderQueryRequest extends ParamsObject {
     public void setChannelCode(String channelCode) {
         if (!ChannelConsts.DEFAULT_ALL_CHANNEL_CODE.equals(channelCode)) {
             this.channelCode = channelCode;
+        }
+    }
+
+    public Integer getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(Integer orderStatus) {
+        if (!OrderConsts.DEFAULT_ALL_ORDER_STATUS_CODE.equals(orderStatus)) {
+            this.orderStatus = orderStatus;
         }
     }
 

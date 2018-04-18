@@ -116,6 +116,10 @@ public class ContractController {
             SaasOrderVo saasOrderVo = null;
             for (int i = saasOrderVoList.size() - 1; i > -1; i--) {
                 saasOrderVo = saasOrderVoList.get(i);
+                if (OrderStatusEnum.TO_CONFIRM_EXTEND.getCode().equals(saasOrderVo.getOrderStatus())) {
+                    response.setOrderNo(getContractNumbByOrderId(saasOrderVo.getSaasOrderId()));
+                    response.setRepaymentDt(DateUtil.getDate(saasOrderVo.getRepaymentDt()));
+                }
                 if (OrderStatusEnum.FOR_REIMBURSEMENT.getCode().equals(saasOrderVo.getOrderStatus())) {
                     break;
                 }
@@ -155,7 +159,7 @@ public class ContractController {
             SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(userCode);
             if (saasBorrowerRealInfoVo != null) {
                 response.setUserName(saasBorrowerRealInfoVo.getName());
-                response.setUserCode("身份证号：" + saasBorrowerRealInfoVo.getIdentityCode());
+                response.setUserCode(saasBorrowerRealInfoVo.getIdentityCode());
             }
             String sealUrl = contractApplication.getUserSealUrl(userCode);
             if (StringUtils.isNotEmpty(sealUrl)) {
@@ -169,7 +173,7 @@ public class ContractController {
             MerchantContractInfoVo merchantContractInfoVo = merchantApplication.getMerchantContractInfo(saasAdmin.getMerchantCode());
             if (ContractConfigTypeEnum.PERSONAL_CONTRACT.getKey().equals(merchantContractInfoVo.getContractType())) {
                 response.setUserName(merchantContractInfoVo.getName());
-                response.setUserCode("身份证号：" + merchantContractInfoVo.getCode());
+                response.setUserCode(merchantContractInfoVo.getCode());
             } else {
                 response.setUserName(merchantContractInfoVo.getName());
                 response.setUserCode("统一信用代码：" + merchantContractInfoVo.getCode());
@@ -214,7 +218,7 @@ public class ContractController {
             if (!userCode.equals(saasOrderVo.getBorrowerCode()) && !userCode.equals(saasOrderVo.getMerchantCode())) {
                 throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
             }
-            response.setOrderNo(saasOrderVo.getSaasOrderId() + "");
+            response.setOrderNo(getContractNumbByOrderId(saasOrderVo.getSaasOrderId()));
             response.setRealCapital(saasOrderVo.getRealCapital());
             response.setRealCapitalCN(NumberToCNUtil.number2CNMontrayUnit(saasOrderVo.getRealCapital()));
             response.setCreatedDt(DateUtil.getDate(new Date()));

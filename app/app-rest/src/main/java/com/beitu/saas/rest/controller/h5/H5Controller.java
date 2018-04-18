@@ -30,8 +30,11 @@ import com.beitu.saas.borrower.entity.SaasBorrowerIdentityInfo;
 import com.beitu.saas.borrower.entity.SaasBorrowerPersonalInfo;
 import com.beitu.saas.borrower.entity.SaasBorrowerWorkInfo;
 import com.beitu.saas.borrower.enums.BorrowerErrorCodeEnum;
+import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.domain.SaasH5ChannelVo;
+import com.beitu.saas.channel.entity.SaasChannelEntity;
 import com.beitu.saas.channel.enums.ChannelErrorCodeEnum;
+import com.beitu.saas.channel.enums.ChannelTypeEnum;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.consts.RedisKeyConsts;
 import com.beitu.saas.common.consts.TermUrlConsts;
@@ -112,6 +115,9 @@ public class H5Controller {
 
     @Autowired
     private ContractApplication contractApplication;
+
+    @Autowired
+    private SaasChannelService saasChannelService;
 
     @VisitorAccessible
     @ParamsValidate
@@ -199,6 +205,7 @@ public class H5Controller {
             response.setBorrowPurpose(saasOrderApplicationVo.getBorrowPurpose());
             response.setRealCapital(saasOrderApplicationVo.getRealCapital());
             response.setTotalInterestRatio(saasOrderApplicationVo.getTotalInterestRatio());
+            response.setBorrowerAuthorizedSignLoan(saasOrderApplicationVo.getBorrowerAuthorizedSignLoan());
         }
         String token = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getToken();
         response.setNeedRealName(borrowerApplication.needRealName(borrowerCode));
@@ -245,6 +252,7 @@ public class H5Controller {
         addOrderApplication.setTotalInterestRatio(req.getTotalInterestRatio().setScale(0, BigDecimal.ROUND_HALF_UP).divide(new BigDecimal(100)));
         addOrderApplication.setRepaymentDt(DateUtil.addDate(new Date(), req.getBorrowingDuration()));
         addOrderApplication.setBorrowPurpose(req.getBorrowPurpose());
+        addOrderApplication.setBorrowerAuthorizedSignLoan(Boolean.TRUE);
         saasOrderApplicationService.save(addOrderApplication);
         return new ApiResponse("保存成功");
     }
@@ -399,7 +407,16 @@ public class H5Controller {
         SaasBorrowerVo saasBorrowerVo = RequestLocalInfo.getCurrentAdmin().getSaasBorrower();
 
         String orderNumb = saasOrderService.getReviewerRefuseOrderNumb(saasBorrowerVo.getBorrowerCode(), channelCode);
-
+        if (StringUtils.isEmpty(orderNumb)) {
+            SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(channelCode);
+            if (ChannelTypeEnum.SYSTEM_DEFINED.getType().equals(saasChannelEntity.getChannelType()) ||
+                    ChannelTypeEnum.RECOMMEND_DEFINED.getType().equals(saasChannelEntity.getChannelType())) {
+                throw new ApplicationException("该渠道不允许提交");
+            }
+        }
+        if (contractApplication.needDoLicenseContractSign(saasBorrowerVo.getBorrowerCode())) {
+            throw new ApplicationException("用户签署电子签章授权书失败，请重试");
+        }
         return creditApplication.submitCreditInfo(saasBorrowerVo.getMerchantCode(), saasBorrowerVo.getBorrowerCode(), channelCode, orderNumb);
     }
 
@@ -416,6 +433,8 @@ public class H5Controller {
     @ApiOperation(value = "用户订单详情", response = H5OrderDetailResponse.class)
     public DataApiResponse<H5OrderDetailResponse> getOrderDetail(@RequestBody @Valid QueryOrderDetailRequest req) {
         String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasBorrower().getMerchantCode();
+        String token = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getToken();
+        String channel = RequestLocalInfo.getCurrentAdmin().getRequestBasicInfo().getChannel();
         OrderDetailVo orderDetailVo = orderApplication.getOrderDetailVoByOrderNumbAndMerchantCode(req.getOrderNumb(), merchantCode);
         if (orderDetailVo == null) {
             return new DataApiResponse();
@@ -423,12 +442,14 @@ public class H5Controller {
         H5OrderDetailResponse response = new H5OrderDetailResponse();
         BeanUtils.copyProperties(orderDetailVo, response);
         response.setOrderNumb(req.getOrderNumb());
-        StringBuilder contractUrl = new StringBuilder();
-        contractUrl.append(configUtil.getAddressURLPrefix()).append(TermUrlConsts.pdfViewUrl)
-                .append("?file=/").append(orderDetailVo.getTermUrl());
-        StringBuilder downloadContractUrl = new StringBuilder();
-        downloadContractUrl.append(configUtil.getAddressURLPrefix()).append(orderDetailVo.getTermUrl());
         if (OrderStatusEnum.TO_CONFIRM_RECEIPT.getCode().equals(orderDetailVo.getOrderStatus())) {
+            StringBuilder contractUrl = new StringBuilder();
+            contractUrl.append(configUtil.getAddressURLPrefix()).append(SaasContractEnum.LOAN_CONTRACT.getUrl())
+                    .append("?token=").append(token)
+                    .append("&channel=").append(channel)
+                    .append("&platform=h5")
+                    .append((configUtil.isServerTest() ? "&test=1" : ""))
+                    .append("&orderNumb=").append(req.getOrderNumb());
             response.setHeaderTitle("确认借款");
             if (contractApplication.needDoLicenseContractSign(orderDetailVo.getBorrowerCode())) {
                 response.setContractTitle1(SaasContractEnum.LICENSE_CONTRACT.getMsg());
@@ -448,13 +469,25 @@ public class H5Controller {
             response.setButtonType(H5OrderDetailButtonTypeEnum.CONFIRM_RECEIPT_BUTTON_TYPE.getCode());
         } else if (OrderStatusEnum.TO_CONFIRM_EXTEND.getCode().equals(orderDetailVo.getOrderStatus())) {
             response.setHeaderTitle("确认展期");
+            StringBuilder contractUrl = new StringBuilder();
+            contractUrl.append(configUtil.getAddressURLPrefix()).append(SaasContractEnum.EXTEND_CONTRACT.getUrl())
+                    .append("?token=").append(token)
+                    .append("&channel=").append(channel)
+                    .append("&platform=h5")
+                    .append((configUtil.isServerTest() ? "&test=1" : ""))
+                    .append("&orderNumb=").append(req.getOrderNumb());
             response.setContractTitle1(SaasContractEnum.EXTEND_CONTRACT.getMsg());
             response.setContractUrl1(contractUrl.toString());
-            response.setContract1DownloadUrl(downloadContractUrl.toString());
+            response.setContract1DownloadUrl("");
             response.setVisible(Boolean.TRUE);
             response.setButtonTitle(H5OrderDetailButtonTypeEnum.CONFIRM_EXTEND_BUTTON_TYPE.getMsg());
             response.setButtonType(H5OrderDetailButtonTypeEnum.CONFIRM_EXTEND_BUTTON_TYPE.getCode());
         } else {
+            StringBuilder contractUrl = new StringBuilder();
+            contractUrl.append(configUtil.getAddressURLPrefix()).append(TermUrlConsts.pdfViewUrl)
+                    .append("?file=/").append(orderDetailVo.getTermUrl());
+            StringBuilder downloadContractUrl = new StringBuilder();
+            downloadContractUrl.append(configUtil.getAddressURLPrefix()).append(orderDetailVo.getTermUrl());
             response.setVisible(Boolean.FALSE);
             response.setContractTitle1(SaasContractEnum.LOAN_CONTRACT.getMsg());
             response.setContractUrl1(contractUrl.toString());

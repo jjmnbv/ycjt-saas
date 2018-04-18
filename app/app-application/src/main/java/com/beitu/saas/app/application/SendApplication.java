@@ -11,6 +11,7 @@ import com.beitu.saas.borrower.client.SaasBorrowerService;
 import com.beitu.saas.borrower.domain.SaasBorrowerVo;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.entity.SaasChannelEntity;
+import com.beitu.saas.channel.enums.ChannelTypeEnum;
 import com.beitu.saas.finance.client.SaasSmsHistoryService;
 import com.beitu.saas.sms.client.SmsMsgService;
 import com.beitu.saas.sms.enums.MessageSendErrorCodeEnum;
@@ -86,14 +87,15 @@ public class SendApplication {
     }
 
     public void sendNotifyMessageByChannelCode(String merchantCode, String channelCode, Map map, SaasSmsTypeEnum saasSmsTypeEnum) {
-        try {
-            SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(channelCode);
+        SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(channelCode);
+        if (ChannelTypeEnum.USER_DEFINED.getType().equals(saasChannelEntity.getChannelType())) {
             SaasAdmin saasAdmin = saasAdminService.getSaasAdminByAdminCode(saasChannelEntity.getChargePersonCode());
-            sendNotifyMessage(merchantCode, saasAdmin.getMobile(), map, saasSmsTypeEnum);
-        } catch (Exception e) {
-            e.printStackTrace();
+            try {
+                sendNotifyMessage(merchantCode, saasAdmin.getMobile(), map, saasSmsTypeEnum);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-
     }
 
     public void sendNotifyMessageByBorrowerCode(String merchantCode, String sendCode, Map map, SaasSmsTypeEnum saasSmsTypeEnum) {

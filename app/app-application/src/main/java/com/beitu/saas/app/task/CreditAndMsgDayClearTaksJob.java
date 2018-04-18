@@ -34,7 +34,7 @@ public class CreditAndMsgDayClearTaksJob {
     @Scheduled(cron = "0 30 1 * * ?")
     public void creditAndMsgDayClear() {
         LOGGER.info("== 点券和短信日清算任务开始 ==");
-        String taskSwitch = configUtil.getClearDayStatSwith();
+        String taskSwitch = configUtil.getClearDayStatSwitch();
         if (StringUtils.isEmpty(taskSwitch) || taskSwitch.equals("false")) {
             LOGGER.info("!====== 点券和短信每日清算任务未开启 ====!");
             return;

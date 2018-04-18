@@ -120,7 +120,8 @@ public class CreditApplication {
         RiskModuleEnum riskModuleEnum = RiskModuleEnum.getRiskModuleEnumByModuleCode(moduleCode);
         switch (riskModuleEnum) {
             case APPLICATION:
-                if (saasOrderApplicationService.getByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb) != null) {
+                SaasOrderApplicationVo saasOrderApplicationVo = saasOrderApplicationService.getByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
+                if (saasOrderApplicationVo != null && saasOrderApplicationVo.getBorrowerAuthorizedSignLoan()) {
                     return BorrowerInfoApplyStatusEnum.FINISHED;
                 }
                 return BorrowerInfoApplyStatusEnum.INCOMPLETE;
@@ -182,12 +183,12 @@ public class CreditApplication {
         if (saasBorrowerRealInfoService.getBorrowerRealInfoByIdentityCodeAndMerchantCode(identityCode, merchantCode) != null) {
             throw new ApplicationException(BorrowerErrorCodeEnum.IDENTITY_CODE_EXIST);
         }
+        if (saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode) != null) {
+            throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_HAS_REAL_NAME);
+        }
         saasCreditHistoryService.addExpenditureCreditHistory(merchantCode, name, CreditConsumeEnum.RISK_REALNAME);
         if (!realNameAuth(name, identityCode)) {
             return Boolean.FALSE;
-        }
-        if (saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode) != null) {
-            throw new ApplicationException(BorrowerErrorCodeEnum.USER_PROFILE_HAS_REAL_NAME);
         }
         saasBorrowerRealInfoService.create(merchantCode, borrowerCode, name, identityCode);
         return Boolean.TRUE;
@@ -229,7 +230,7 @@ public class CreditApplication {
     public ApiResponse submitCreditInfo(String merchantCode, String borrowerCode, String channelCode, String orderNumb) {
         List<SaasChannelRiskSettingsVo> saasChannelRiskSettingsVoList = saasChannelApplication.getSaasChannelRiskSettingsByChannelCode(channelCode);
         if (CollectionUtils.isEmpty(saasChannelRiskSettingsVoList)) {
-            return new ApiResponse("提交手机号码成功");
+            throw new ApplicationException(ChannelErrorCodeEnum.CHANNEL_MODULE);
         }
         if (StringUtils.isNotEmpty(orderNumb)) {
             // 驳回订单再次进行提交操作
