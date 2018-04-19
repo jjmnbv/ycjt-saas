@@ -114,7 +114,7 @@ public class EsignIntegrationServiceImpl implements EsignIntegrationService {
         SignPDFStreamBean signPDFStreamBean = new SignPDFStreamBean();
         signPDFStreamBean.setStream(borrowerDoContractSignParam.getSrcPdfContent());
         SignType signType = SignType.Key;
-        PosBean posBean = setKeyPosBean("⼄⽅：", 200, 5, 60);
+        PosBean posBean = setKeyPosBean("⼄⽅：", 200, 5, 140);
         UserSignService userSignService = UserSignServiceFactory.instance();
         FileDigestSignResult finalResult = userSignService.localSignPDF(borrowerDoContractSignParam.getBorrowerAccountId(), borrowerDoContractSignParam.getBorrowerSealData(), signPDFStreamBean, posBean, signType);
         if (0 != finalResult.getErrCode()) {
@@ -132,7 +132,7 @@ public class EsignIntegrationServiceImpl implements EsignIntegrationService {
         SignPDFStreamBean signPDFStreamBean = new SignPDFStreamBean();
         signPDFStreamBean.setStream(lenderDoContractSignParam.getSrcPdfContent());
         SignType signType = SignType.Key;
-        PosBean posBean = setKeyPosBean("甲⽅：", 200, 5, 60);
+        PosBean posBean = setKeyPosBean("甲⽅：", 200, 5, 140);
         UserSignService userSignService = UserSignServiceFactory.instance();
         FileDigestSignResult finalResult = userSignService.localSignPDF(lenderDoContractSignParam.getMerchantAccountId(), lenderDoContractSignParam.getMerchantSealData(), signPDFStreamBean, posBean, signType);
         if (0 != finalResult.getErrCode()) {
