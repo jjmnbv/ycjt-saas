@@ -30,20 +30,36 @@ public interface EsignIntegrationService {
     AddOrganizeAccountSuccessDto addOrganizeAccount(OrganizeAccountParam organizeAccountParam);
 
     /**
-     * 借款人 签署 协议
+     * 借款人 签署 借款协议
      *
      * @param borrowerDoContractSignParam
      * @return
      */
-    byte[] borrowerDoContractSign(BorrowerDoContractSignParam borrowerDoContractSignParam);
+    byte[] borrowerDoLoanContractSign(BorrowerDoContractSignParam borrowerDoContractSignParam);
 
     /**
-     * 机构 签署 协议
+     * 机构 签署 借款协议
      *
      * @param lenderDoContractSignParam
      * @return
      */
-    byte[] lenderDoContractSign(LenderDoContractSignParam lenderDoContractSignParam);
+    byte[] lenderDoLoanContractSign(LenderDoContractSignParam lenderDoContractSignParam);
+
+    /**
+     * 借款人 签署 展期协议
+     *
+     * @param borrowerDoContractSignParam
+     * @return
+     */
+    byte[] borrowerDoExpendContractSign(BorrowerDoContractSignParam borrowerDoContractSignParam);
+
+    /**
+     * 机构 签署 展期协议
+     *
+     * @param lenderDoContractSignParam
+     * @return
+     */
+    byte[] lenderDoExpendContractSign(LenderDoContractSignParam lenderDoContractSignParam);
 
     /**
      * 签署 授权协议

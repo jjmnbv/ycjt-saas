@@ -8,16 +8,10 @@ import com.beitu.saas.app.application.credit.CarrierReportApplication;
 import com.beitu.saas.app.application.credit.DunningReportApplication;
 import com.beitu.saas.app.application.finance.SaasConsumeDayStatApplication;
 import com.beitu.saas.auth.domain.MerchantContractInfoVo;
-import com.beitu.saas.auth.service.SaasMerchantService;
 import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
 import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
-import com.beitu.saas.channel.client.SaasChannelService;
-import com.beitu.saas.channel.entity.SaasChannelEntity;
-import com.beitu.saas.channel.enums.ChannelTypeEnum;
 import com.beitu.saas.common.config.ConfigUtil;
-import com.beitu.saas.common.enums.RestCodeEnum;
 import com.beitu.saas.common.handle.oss.OSSService;
-import com.beitu.saas.common.utils.IpChooseUtil;
 import com.beitu.saas.common.utils.OrderNoUtil;
 import com.beitu.saas.credit.client.SaasCreditCarrierService;
 import com.beitu.saas.credit.entity.SaasCreditCarrier;
@@ -40,9 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
 /**
  * @author xiaochong
@@ -194,8 +186,12 @@ public class OkController {
     @ResponseBody
     @VisitorAccessible
     @SignIgnore
-    public String createContract(@RequestParam(value = "orderId") Long orderId) {
-        contractApplication.doExtendContractSign(orderId);
+    public String createContract(@RequestParam(value = "orderId") Long orderId, @RequestParam(value = "type") Integer type) {
+        if (1 == type) {
+            contractApplication.doExtendContractSign(orderId);
+        } else {
+            contractApplication.doLoanContractSign(orderId);
+        }
         return "ok";
     }
 
