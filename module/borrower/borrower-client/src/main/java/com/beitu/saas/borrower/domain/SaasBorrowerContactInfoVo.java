@@ -26,6 +26,15 @@ public class SaasBorrowerContactInfoVo implements ResponseData, Serializable {
      */
     private String url;
     
+    public SaasBorrowerContactInfoVo() {
+    }
+    
+    public SaasBorrowerContactInfoVo(String merchantCode, String borrowerCode, String url) {
+        this.merchantCode = merchantCode;
+        this.borrowerCode = borrowerCode;
+        this.url = url;
+    }
+    
     public Long getSaasBorrowerContactInfoId() {
         return saasBorrowerContactInfoId;
     }
