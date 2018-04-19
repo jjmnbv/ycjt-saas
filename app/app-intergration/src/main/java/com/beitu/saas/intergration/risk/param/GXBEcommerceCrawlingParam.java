@@ -17,6 +17,16 @@ public class GXBEcommerceCrawlingParam {
 
     private String userCode;
 
+    private String merchantCode;
+
+    public String getMerchantCode() {
+        return merchantCode;
+    }
+
+    public void setMerchantCode(String merchantCode) {
+        this.merchantCode = merchantCode;
+    }
+
     public String getUserCode() {
         return userCode;
     }

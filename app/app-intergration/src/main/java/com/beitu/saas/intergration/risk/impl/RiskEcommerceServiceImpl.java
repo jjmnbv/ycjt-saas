@@ -70,7 +70,7 @@ public class RiskEcommerceServiceImpl implements RiskEcommerceService {
             put("returnUrl", param.getReturnUrl() + token);
             put("title", "银柳智能风控系统");
         }};
-        redisClient.set(RedisKeyConsts.SAAS_GXB_ECOMMERCE_TOKN, token, TimeConsts.HALF_AN_HOUR, token);
+        redisClient.set(RedisKeyConsts.SAAS_GXB_ECOMMERCE_TOKN, param.getMerchantCode(), TimeConsts.HALF_AN_HOUR, token);
         return UrlUtils.appendParams(configUtil.getGXBCrawlingPath(), urlMap);
     }
 

@@ -14,6 +14,9 @@ import com.beitu.saas.common.utils.NetworkUtil;
 import com.beitu.saas.common.utils.OrderNoUtil;
 import com.beitu.saas.credit.client.SaasGxbEbService;
 import com.beitu.saas.credit.entity.SaasGxbEb;
+import com.beitu.saas.finance.client.SaasCreditHistoryService;
+import com.beitu.saas.finance.client.SaasMerchantCreditInfoService;
+import com.beitu.saas.finance.client.enums.CreditConsumeEnum;
 import com.beitu.saas.intergration.risk.RiskEcommerceService;
 import com.beitu.saas.intergration.risk.param.GXBEcommerceCrawlingParam;
 import com.fqgj.base.services.redis.RedisClient;
@@ -61,6 +64,9 @@ public class GxbController {
     @Autowired
     private SaasBorrowerRealInfoService saasBorrowerRealInfoService;
 
+    @Autowired
+    private SaasCreditHistoryService saasCreditHistoryService;
+
     @SignIgnore
     @ResponseBody
     @RequestMapping(value = "/eb/callback", method = RequestMethod.POST)
@@ -90,6 +96,8 @@ public class GxbController {
             saasGxbEb.setTaskToken((String) responseMap.get("token"));
             saasGxbEbService.saveGXBEbTop(saasGxbEb);
             redisClient.expire(RedisKeyConsts.SAAS_GXB_ECOMMERCE_TOKN, TimeConsts.ONE_MINUTE, (String) responseMap.get("token"));
+            String merchantCode = redisClient.getString(RedisKeyConsts.SAAS_GXB_ECOMMERCE_TOKN, (String) responseMap.get("token"));
+            saasCreditHistoryService.addExpenditureCreditHistory(merchantCode, (String) responseMap.get("name"), CreditConsumeEnum.RISK_EB);
             LOGGER.info("公信宝电商成功--------{}", url);
         } catch (Exception e) {
             e.printStackTrace();
@@ -125,6 +133,7 @@ public class GxbController {
         param.setPhone(saasBorrower.getMobile());
         param.setReturnUrl(sb.toString());
         param.setUserCode(borrowerCode);
+        param.setMerchantCode(saasBorrower.getMerchantCode());
         return Response.ok().putData(riskEcommerceService.getEcommerceCrawlingUrl(param));
     }
 

@@ -287,6 +287,7 @@ public class CreditQueryController {
         param.setPhone(borrowerVo.getMobile());
         param.setReturnUrl(sb.toString());
         param.setUserCode(borrowerCode);
+        param.setMerchantCode(borrowerRealInfoVo.getMerchantCode());
         return Response.ok().putData(ShortUrlUtil.generateShortUrl(riskEcommerceService.getEcommerceCrawlingUrl(param)));
     }
 
