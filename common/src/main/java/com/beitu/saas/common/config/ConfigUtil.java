@@ -346,4 +346,8 @@ public class ConfigUtil {
         return config.getProperty("gxb.push.ip", "139.196.95.4,139.224.12.200");
     }
 
+    public Boolean enableFlowConfig() {
+        return config.getBooleanProperty("flow.config.enable", true);
+
+    }
 }

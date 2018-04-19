@@ -95,8 +95,8 @@ public class GxbController {
             saasGxbEb.setJsonUrl(url);
             saasGxbEb.setTaskToken((String) responseMap.get("token"));
             saasGxbEbService.saveGXBEbTop(saasGxbEb);
+            String merchantCode = redisClient.get(RedisKeyConsts.SAAS_GXB_ECOMMERCE_TOKN, (String) responseMap.get("token"));
             redisClient.expire(RedisKeyConsts.SAAS_GXB_ECOMMERCE_TOKN, TimeConsts.ONE_MINUTE, (String) responseMap.get("token"));
-            String merchantCode = redisClient.getString(RedisKeyConsts.SAAS_GXB_ECOMMERCE_TOKN, (String) responseMap.get("token"));
             saasCreditHistoryService.addExpenditureCreditHistory(merchantCode, (String) responseMap.get("name"), CreditConsumeEnum.RISK_EB);
             LOGGER.info("公信宝电商成功--------{}", url);
         } catch (Exception e) {
@@ -147,7 +147,6 @@ public class GxbController {
             e.printStackTrace();
         }
         LOGGER.info("ecommerceSuccess--------" + ipAddress);
-        LOGGER.info("ecommerceSuccess---------------" + success);
         if (Objects.equals("1", success)) {
             Object obj1 = redisClient.get(RedisKeyConsts.SAAS_GXB_ECOMMERCE_TOKN, token);
             if (obj1 == null) {
