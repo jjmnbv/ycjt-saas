@@ -1,7 +1,9 @@
 package com.beitu.saas.app.application.openapi;
 
 import com.beitu.saas.app.application.openapi.vo.*;
+import com.beitu.saas.borrower.client.SaasBorrowerContactInfoService;
 import com.beitu.saas.borrower.client.SaasBorrowerGpsLogService;
+import com.beitu.saas.borrower.domain.SaasBorrowerContactInfoVo;
 import com.beitu.saas.borrower.domain.SaasBorrowerGpsLogVo;
 import com.beitu.saas.credit.client.*;
 import com.beitu.saas.credit.domain.*;
@@ -62,6 +64,9 @@ public class OpenApiCreditInfoApplication {
     
     @Autowired
     private SaasBorrowerGpsLogService saasBorrowerGpsLogService;
+    
+    @Autowired
+    private SaasBorrowerContactInfoService saasBorrowerContactInfoService;
     
     @Transactional
     public Long addCreditCarrierInfo(OrderPushUserCarrierInfoVo carrierInfo, String borrowerCode, String merchantCode) {
@@ -219,6 +224,14 @@ public class OpenApiCreditInfoApplication {
             }
         });
         saasBorrowerGpsLogService.batchAddSaasBorrowerGpsLogVo(addList);
+    }
+    
+    public void addContactsInfo(OrderPushUserContactsInfoVo contactsInfo, String borrowerCode, String merchantCode) {
+        if (contactsInfo == null) {
+            return;
+        }
+        SaasBorrowerContactInfoVo vo = new SaasBorrowerContactInfoVo(merchantCode, borrowerCode, contactsInfo.getUrl());
+        saasBorrowerContactInfoService.addContactInfo(vo);
     }
     
 }
