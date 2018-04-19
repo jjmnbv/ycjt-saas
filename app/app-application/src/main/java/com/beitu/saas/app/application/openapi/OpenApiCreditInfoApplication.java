@@ -209,7 +209,7 @@ public class OpenApiCreditInfoApplication {
         List<SaasBorrowerGpsLogVo> addList = new ArrayList<>(locationsInfo.size());
         locationsInfo.forEach(object -> {
             Date logTime = object.getGmtCreate();
-            if (logTime != null && logTime.after(lastDate)) {
+            if (lastDate == null || (logTime != null && logTime.after(lastDate))) {
                 SaasBorrowerGpsLogVo gpsLogVo = new SaasBorrowerGpsLogVo();
                 BeanUtils.copyProperties(object, gpsLogVo);
                 gpsLogVo.setMerchantCode(merchantCode);
