@@ -3,6 +3,7 @@ package com.beitu.saas.rest.controller;
 import com.beitu.saas.app.annotations.SignIgnore;
 import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.application.auth.MerchantApplication;
+import com.beitu.saas.app.application.contract.ContractApplication;
 import com.beitu.saas.app.application.credit.CarrierReportApplication;
 import com.beitu.saas.app.application.credit.DunningReportApplication;
 import com.beitu.saas.app.application.finance.SaasConsumeDayStatApplication;
@@ -88,6 +89,9 @@ public class OkController {
 
     @Autowired
     private OSSService ossService;
+
+    @Autowired
+    private ContractApplication contractApplication;
 
     @RequestMapping("/ok")
     @ResponseBody
@@ -184,6 +188,15 @@ public class OkController {
         }
         filePath.append(userCode).append("_").append(MD5.md5(OrderNoUtil.makeOrderNum())).append(".pdf");
         return filePath.toString();
+    }
+
+    @RequestMapping(value = "/contract/credit", method = RequestMethod.POST)
+    @ResponseBody
+    @VisitorAccessible
+    @SignIgnore
+    public String creditContract() {
+        contractApplication.doLoanContractSign(258L);
+        return "ok";
     }
 
 }
