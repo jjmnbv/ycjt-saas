@@ -60,6 +60,9 @@ public class BorrowerBaseInfoApplication {
 
     @Autowired
     private SaasCreditCarrierRecordService saasCreditCarrierRecordService;
+    
+    @Autowired
+    private SaasBorrowerGpsLogService saasBorrowerGpsLogService;
 
     @Autowired
     private ConfigUtil configUtil;
@@ -191,5 +194,20 @@ public class BorrowerBaseInfoApplication {
         });
         return new BorrowerLivingAreaVo(results);
     }
-
+    
+    public BorrowerLivingAreaVo getUserGpsInfo(String merchantCode, String borrowerCode) {
+        List<SaasBorrowerGpsLogVo> saasBorrowerGpsLogVoList = saasBorrowerGpsLogService.listByBorrowerCodeAndMerchantCode(merchantCode, borrowerCode);
+        if (CollectionUtils.isEmpty(saasBorrowerGpsLogVoList)) {
+            return null;
+        }
+        List<BorrowerLivingAreaDetailVo> results = new ArrayList<>(saasBorrowerGpsLogVoList.size());
+        saasBorrowerGpsLogVoList.forEach(saasBorrowerGpsLogVo -> {
+            BorrowerLivingAreaDetailVo borrowerLivingAreaDetailVo = new BorrowerLivingAreaDetailVo();
+            borrowerLivingAreaDetailVo.setAddress(saasBorrowerGpsLogVo.getLocation());
+            borrowerLivingAreaDetailVo.setCreatedDate(saasBorrowerGpsLogVo.getLogTime());
+            results.add(borrowerLivingAreaDetailVo);
+        });
+        return new BorrowerLivingAreaVo(results);
+    }
+    
 }
