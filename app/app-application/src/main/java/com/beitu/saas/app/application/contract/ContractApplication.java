@@ -358,27 +358,7 @@ public class ContractApplication {
 
             @Override
             byte[] doEsign(byte[] pdfContent) {
-                LenderDoContractSignParam lenderDoContractSignParam = new LenderDoContractSignParam();
-                lenderDoContractSignParam.setMerchantCode(saasOrder.getMerchantCode());
-                lenderDoContractSignParam.setMerchantAccountId(lenderEsignAccountVo.getAccountId());
-                lenderDoContractSignParam.setMerchantSealData(lenderSealData);
-                lenderDoContractSignParam.setSrcPdfContent(pdfContent);
-                byte[] content = esignIntegrationService.lenderDoExtendContractSign(lenderDoContractSignParam);
-                if (content == null) {
-                    throw new ApplicationException("esign盖章失败");
-                }
-                saasCreditHistoryService.addExpenditureCreditHistory(saasOrder.getMerchantCode(), "展期合同" + orderId + "出借方", CreditConsumeEnum.RISK_ESIGN);
-                BorrowerDoContractSignParam borrowerDoContractSignParam = new BorrowerDoContractSignParam();
-                borrowerDoContractSignParam.setBorrowerCode(saasOrder.getBorrowerCode());
-                borrowerDoContractSignParam.setBorrowerAccountId(borrowerEsignAccountVo.getAccountId());
-                borrowerDoContractSignParam.setBorrowerSealData(borrowerSealData);
-                borrowerDoContractSignParam.setSrcPdfContent(content);
-                byte[] finalContent = esignIntegrationService.borrowerDoExtendContractSign(borrowerDoContractSignParam);
-                if (content == null) {
-                    throw new ApplicationException("esign盖章失败");
-                }
-                saasCreditHistoryService.addExpenditureCreditHistory(saasOrder.getMerchantCode(), "展期合同" + orderId + "借款方", CreditConsumeEnum.RISK_ESIGN);
-                return finalContent;
+                return pdfContent;
             }
 
             @Override
