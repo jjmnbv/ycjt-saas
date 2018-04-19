@@ -15,9 +15,7 @@ import com.beitu.saas.finance.client.enums.CreditConsumeEnum;
 import com.beitu.saas.intergration.esign.EsignIntegrationService;
 import com.beitu.saas.intergration.esign.dto.AddOrganizeAccountSuccessDto;
 import com.beitu.saas.intergration.esign.dto.AddPersonAccountSuccessDto;
-import com.beitu.saas.intergration.esign.param.LicenseContractSignParam;
-import com.beitu.saas.intergration.esign.param.OrganizeAccountParam;
-import com.beitu.saas.intergration.esign.param.PersonAccountParam;
+import com.beitu.saas.intergration.esign.param.*;
 import com.beitu.saas.order.client.SaasOrderService;
 import com.beitu.saas.order.entity.SaasOrder;
 import com.beitu.saas.user.client.SaasEsignAccountService;
@@ -218,10 +216,10 @@ public class ContractApplication {
                 licenseContractSignParam.setUserSealData(sealData);
                 licenseContractSignParam.setSrcPdfContent(pdfContent);
                 byte[] content = esignIntegrationService.doLicenseContractSign(licenseContractSignParam);
-                saasCreditHistoryService.addExpenditureCreditHistory(merchantCode, name, CreditConsumeEnum.RISK_ESIGN);
                 if (content == null) {
                     throw new ApplicationException("esign盖章失败");
                 }
+                saasCreditHistoryService.addExpenditureCreditHistory(merchantCode, name, CreditConsumeEnum.RISK_ESIGN);
                 return content;
             }
 
@@ -248,73 +246,46 @@ public class ContractApplication {
      * @param orderId 订单ID
      */
     public void doLoanContractSign(Long orderId) {
-        final SaasOrder saasOrder = saasOrderService.selectById(orderId);
-        new DoSign() {
-
+        new DoLoanOrExtendContractSign(orderId) {
             @Override
-            String getLocalContractFilePath() {
-                return configUtil.getPdfPath() + orderId + "_" + MD5.md5(OrderNoUtil.makeOrderNum()) + ".pdf";
-            }
-
-            @Override
-            void createLocalContract(String localContractFilePath) {
+            void createLocalLoanOrExtendContract(String localContractFilePath) {
                 contractCreateApplication.createLoanPdf(orderId, localContractFilePath);
             }
 
             @Override
-            byte[] doEsign(byte[] pdfContent) {
-                return pdfContent;
-            }
-
-            @Override
-            String getContractUrl() {
+            String getLoanOrExtendContractUrl(Long orderId) {
                 return getLoanContractUrl(orderId);
             }
 
-            @Override
-            void afterCompletion(String url) {
-                SaasOrder updateSaasOrder = new SaasOrder();
-                updateSaasOrder.setId(saasOrder.getId());
-                updateSaasOrder.setTermUrl(url);
-                saasOrderService.updateById(updateSaasOrder);
-            }
-
-        }.doSign();
+        }.doLoanOrExtendContractSign();
     }
 
+    /**
+     * 签署 展期合同
+     *
+     * @param orderId 订单ID
+     */
     public void doExtendContractSign(Long orderId) {
-        final SaasOrder saasOrder = saasOrderService.selectById(orderId);
-        new DoSign() {
-
+        new DoLoanOrExtendContractSign(orderId) {
             @Override
-            String getLocalContractFilePath() {
-                return configUtil.getPdfPath() + orderId + "_" + MD5.md5(OrderNoUtil.makeOrderNum()) + ".pdf";
-            }
-
-            @Override
-            void createLocalContract(String localContractFilePath) {
+            void createLocalLoanOrExtendContract(String localContractFilePath) {
                 contractCreateApplication.createExtendPdf(orderId, localContractFilePath);
             }
 
             @Override
-            byte[] doEsign(byte[] pdfContent) {
-                return pdfContent;
-            }
-
-            @Override
-            String getContractUrl() {
+            String getLoanOrExtendContractUrl(Long orderId) {
                 return getExtendContractUrl(orderId);
             }
 
-            @Override
-            void afterCompletion(String url) {
-                SaasOrder updateSaasOrder = new SaasOrder();
-                updateSaasOrder.setId(saasOrder.getId());
-                updateSaasOrder.setTermUrl(url);
-                saasOrderService.updateById(updateSaasOrder);
-            }
+        }.doLoanOrExtendContractSign();
+    }
 
-        }.doSign();
+    private SaasEsignAccountVo getSaasEsignAccountVo(String userCode) {
+        SaasEsignUserAuthorizationVo saasEsignUserAuthorizationVo = saasEsignUserAuthorizationService.getByUserCode(userCode);
+        if (saasEsignUserAuthorizationVo == null) {
+            return null;
+        }
+        return saasEsignAccountService.getBySaasEsignCode(saasEsignUserAuthorizationVo.getSaasEsignCode());
     }
 
     private String getSealUrl(String userCode) {
@@ -354,6 +325,91 @@ public class ContractApplication {
 
     }
 
+    private abstract class DoLoanOrExtendContractSign {
+
+        private Long orderId;
+
+        public DoLoanOrExtendContractSign(Long orderId) {
+            this.orderId = orderId;
+        }
+
+        abstract void createLocalLoanOrExtendContract(String localContractFilePath);
+
+        abstract String getLoanOrExtendContractUrl(Long orderId);
+
+        public void doLoanOrExtendContractSign() {
+            final SaasOrder saasOrder = saasOrderService.selectById(orderId);
+            SaasEsignAccountVo borrowerEsignAccountVo = getSaasEsignAccountVo(saasOrder.getBorrowerCode());
+            if (borrowerEsignAccountVo == null) {
+                throw new ApplicationException("借款方未签署电子协议授权书");
+            }
+            final String borrowerSealData = ossService.getFileContent(borrowerEsignAccountVo.getSealUrl());
+            if (StringUtils.isEmpty(borrowerSealData)) {
+                throw new ApplicationException("借款方印章数据丢失");
+            }
+            SaasEsignAccountVo lenderEsignAccountVo = getSaasEsignAccountVo(saasOrder.getMerchantCode());
+            if (lenderEsignAccountVo == null) {
+                throw new ApplicationException("出借方未签署电子协议授权书");
+            }
+            final String lenderSealData = ossService.getFileContent(lenderEsignAccountVo.getSealUrl());
+            if (StringUtils.isEmpty(lenderSealData)) {
+                throw new ApplicationException("出借方印章数据丢失");
+            }
+            new DoSign() {
+
+                @Override
+                String getLocalContractFilePath() {
+                    return configUtil.getPdfPath() + orderId + "_" + MD5.md5(OrderNoUtil.makeOrderNum()) + ".pdf";
+                }
+
+                @Override
+                void createLocalContract(String localContractFilePath) {
+                    createLocalLoanOrExtendContract(localContractFilePath);
+                }
+
+                @Override
+                String getContractUrl() {
+                    return getLoanOrExtendContractUrl(orderId);
+                }
+
+                @Override
+                byte[] doEsign(byte[] pdfContent) {
+                    LenderDoContractSignParam lenderDoContractSignParam = new LenderDoContractSignParam();
+                    lenderDoContractSignParam.setMerchantCode(saasOrder.getMerchantCode());
+                    lenderDoContractSignParam.setMerchantAccountId(lenderEsignAccountVo.getAccountId());
+                    lenderDoContractSignParam.setMerchantSealData(lenderSealData);
+                    lenderDoContractSignParam.setSrcPdfContent(pdfContent);
+                    byte[] content = esignIntegrationService.lenderDoContractSign(lenderDoContractSignParam);
+                    if (content == null) {
+                        throw new ApplicationException("esign盖章失败");
+                    }
+                    saasCreditHistoryService.addExpenditureCreditHistory(saasOrder.getMerchantCode(), "借款合同" + orderId + "出借方", CreditConsumeEnum.RISK_ESIGN);
+                    BorrowerDoContractSignParam borrowerDoContractSignParam = new BorrowerDoContractSignParam();
+                    borrowerDoContractSignParam.setBorrowerCode(saasOrder.getBorrowerCode());
+                    borrowerDoContractSignParam.setBorrowerAccountId(borrowerEsignAccountVo.getAccountId());
+                    borrowerDoContractSignParam.setBorrowerSealData(borrowerSealData);
+                    borrowerDoContractSignParam.setSrcPdfContent(content);
+                    byte[] finalContent = esignIntegrationService.lenderDoContractSign(lenderDoContractSignParam);
+                    if (content == null) {
+                        throw new ApplicationException("esign盖章失败");
+                    }
+                    saasCreditHistoryService.addExpenditureCreditHistory(saasOrder.getMerchantCode(), "借款合同" + orderId + "借款方", CreditConsumeEnum.RISK_ESIGN);
+                    return finalContent;
+                }
+
+                @Override
+                void afterCompletion(String url) {
+                    SaasOrder updateSaasOrder = new SaasOrder();
+                    updateSaasOrder.setId(saasOrder.getId());
+                    updateSaasOrder.setTermUrl(url);
+                    saasOrderService.updateById(updateSaasOrder);
+                }
+
+            }.doSign();
+        }
+
+    }
+
     private abstract class DoSign {
 
         abstract String getLocalContractFilePath();
@@ -385,6 +441,9 @@ public class ContractApplication {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                }
+                if (pdfContent == null) {
+                    throw new ApplicationException("本地合同生成失败");
                 }
                 byte[] content = doEsign(pdfContent);
                 if (content == null) {
