@@ -37,7 +37,7 @@
         <init-param>
             <param-name>exclusions</param-name>
             <param-value>
-                /swagger-resources/*,/webjars/*,/*.html,*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*,/ok,/credit/carrier/callback/1,/file/upload,/
+                /swagger-resources/*,/webjars/*,/*.html,*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*,/ok,/credit/carrier/callback/1,/file/upload,/gxb/eb/callback,/
             </param-value>
         </init-param>
     </filter>

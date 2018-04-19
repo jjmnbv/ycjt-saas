@@ -18,7 +18,8 @@ public enum CreditConsumeEnum {
     RISK_MULTI_PLATFORM_LENDING(0, "风控-多平台借贷"),
     RISK_ESIGN(1, "风控-电子签签署"),
     RISK_DIANHUABANG(1, "风控-催收分"),
-    RISK_REALNAME(1, "风控-实名认证"),;
+    RISK_REALNAME(1, "风控-实名认证"),
+    RISK_EB(1, "风控-电商认证");
 
     private Integer num;
 
