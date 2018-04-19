@@ -41,6 +41,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * @author xiaochong
@@ -126,7 +127,9 @@ public class OkController {
         if (CollectionUtils.isEmpty(saasUserEsignAuthorizationList)) {
             return "null";
         }
+        CountDownLatch countDownLatch = new CountDownLatch(100);
         saasUserEsignAuthorizationList.forEach(saasUserEsignAuthorization -> {
+            countDownLatch.countDown();
             String saasEsignCode = OrderNoUtil.makeOrderNum();
             SaasEsignAccountVo saasEsignAccountVo = new SaasEsignAccountVo();
             saasEsignAccountVo.setSaasEsignCode(saasEsignCode);
@@ -171,7 +174,7 @@ public class OkController {
             }
             saasUserEsignAuthorizationService.deleteById(saasUserEsignAuthorization.getId());
         });
-        return "ok";
+        return String.valueOf(countDownLatch.getCount());
     }
 
     private String getAuthorizationUrl(String userCode) {
