@@ -163,7 +163,9 @@ public class OSSService {
                 outputStream.closeEntry();
                 ossInputStream.close();
             }
+            outputStream.flush();
             outputStream.close();
+            response.flushBuffer();
         } catch (IOException e) {
         } finally {
             // 关闭流

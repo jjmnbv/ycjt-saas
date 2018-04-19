@@ -1,5 +1,6 @@
 package com.beitu.saas.rest.controller.file;
 
+import com.beitu.saas.app.annotations.SignIgnore;
 import com.beitu.saas.app.api.DataApiResponse;
 import com.beitu.saas.app.enums.FileErrorCodeEnum;
 import com.beitu.saas.common.config.ConfigUtil;
@@ -64,13 +65,13 @@ public class FileController {
         return new DataApiResponse<>(FileErrorCodeEnum.UPLOAD_FILE_FAILURE);
     }
 
-    @RequestMapping(value = "/download/zip", method = RequestMethod.POST)
+    @RequestMapping(value = "/download/zip", method = RequestMethod.GET)
     @ApiOperation(value = "多个OSS文件打包下载", response = FileUploadSuccessResponse.class)
-    public void downloadZip(@RequestBody @Valid DownloadZipRequest req, HttpServletResponse response) {
-        if (StringUtils.isEmpty(req.getFilePaths())) {
+    public void downloadZip(@RequestParam(value = "filePaths") String filePaths, HttpServletResponse response) {
+        if (StringUtils.isEmpty(filePaths)) {
             return;
         }
-        String[] filePathArray = req.getFilePaths().split(",");
+        String[] filePathArray = filePaths.split(",");
         ossService.zipOssFiles(response, filePathArray);
     }
 
