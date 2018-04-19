@@ -33,19 +33,18 @@ public class GenerateContractThread implements Runnable {
 
     @Override
     public void run() {
-        String termUrl = null;
         switch (contractTypeEnum) {
             case BORROWER_DO_LOAN_CONTRACT_SIGN:
-                termUrl = contractApplication.borrowerDoLoanContractSign(userCode, orderId);
+                contractApplication.doLoanContractSign(orderId);
                 break;
             case LENDER_DO_LOAN_CONTRACT_SIGN:
-                termUrl = contractApplication.lenderDoLoanContractSign(userCode, orderId);
+                contractApplication.doLoanContractSign(orderId);
                 break;
             case BORROWER_DO_EXTEND_CONTRACT_SIGN:
-                termUrl = contractApplication.borrowerDoExtendContractSign(userCode, orderId);
+                contractApplication.doExtendContractSign(orderId);
                 break;
             case LENDER_DO_EXTEND_CONTRACT_SIGN:
-                termUrl = contractApplication.lenderDoExtendContractSign(userCode, orderId);
+                contractApplication.doExtendContractSign(orderId);
                 break;
             case BORROWER_DO_AUTHORIZATION_CONTRACT_SIGN:
                 contractApplication.borrowerDoLicenseContractSign(userCode);
@@ -55,14 +54,8 @@ public class GenerateContractThread implements Runnable {
                 break;
             case BORROWER_DO_AUTHORIZATION_CONTRACT_AND_LOAN_CONTRACT_SIGN:
                 contractApplication.borrowerDoLicenseContractSign(userCode);
-                termUrl = contractApplication.borrowerDoLoanContractSign(userCode, orderId);
+                contractApplication.doLoanContractSign(orderId);
                 break;
-        }
-        if (StringUtils.isNotEmpty(termUrl)) {
-            SaasOrder saasOrder = new SaasOrder();
-            saasOrder.setId(orderId);
-            saasOrder.setTermUrl(termUrl);
-            saasOrderService.updateById(saasOrder);
         }
     }
 

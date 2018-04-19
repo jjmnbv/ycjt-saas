@@ -1,6 +1,10 @@
 package com.beitu.saas.app.application.openapi;
 
 import com.beitu.saas.app.application.openapi.vo.*;
+import com.beitu.saas.borrower.client.SaasBorrowerContactInfoService;
+import com.beitu.saas.borrower.client.SaasBorrowerGpsLogService;
+import com.beitu.saas.borrower.domain.SaasBorrowerContactInfoVo;
+import com.beitu.saas.borrower.domain.SaasBorrowerGpsLogVo;
 import com.beitu.saas.credit.client.*;
 import com.beitu.saas.credit.domain.*;
 import com.beitu.saas.credit.entity.SaasCreditBmp;
@@ -17,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -56,6 +61,12 @@ public class OpenApiCreditInfoApplication {
     
     @Autowired
     private SaasCreditTongdunDetailService saasCreditTongdunDetailService;
+    
+    @Autowired
+    private SaasBorrowerGpsLogService saasBorrowerGpsLogService;
+    
+    @Autowired
+    private SaasBorrowerContactInfoService saasBorrowerContactInfoService;
     
     @Transactional
     public Long addCreditCarrierInfo(OrderPushUserCarrierInfoVo carrierInfo, String borrowerCode, String merchantCode) {
@@ -193,4 +204,34 @@ public class OpenApiCreditInfoApplication {
             saasCreditTongdunDetailService.addSaasCreditTongdunDetail(saasCreditTongdunDetailVo);
         }
     }
+    
+    @Transactional
+    public void addLocationsInfo(List<OrderPushUserLocationInfoVo> locationsInfo, String borrowerCode, String merchantCode) {
+        if (CollectionUtils.isEmpty(locationsInfo)) {
+            return;
+        }
+        Date lastDate = saasBorrowerGpsLogService.getLastDateByBorrowerCodeAndMerchantCode(merchantCode, borrowerCode);
+        List<SaasBorrowerGpsLogVo> addList = new ArrayList<>(locationsInfo.size());
+        locationsInfo.forEach(object -> {
+            Date logTime = object.getGmtCreate();
+            if (lastDate == null || (logTime != null && logTime.after(lastDate))) {
+                SaasBorrowerGpsLogVo gpsLogVo = new SaasBorrowerGpsLogVo();
+                BeanUtils.copyProperties(object, gpsLogVo);
+                gpsLogVo.setMerchantCode(merchantCode);
+                gpsLogVo.setBorrowerCode(borrowerCode);
+                gpsLogVo.setLogTime(logTime);
+                addList.add(gpsLogVo);
+            }
+        });
+        saasBorrowerGpsLogService.batchAddSaasBorrowerGpsLogVo(addList);
+    }
+    
+    public void addContactsInfo(OrderPushUserContactsInfoVo contactsInfo, String borrowerCode, String merchantCode) {
+        if (contactsInfo == null) {
+            return;
+        }
+        SaasBorrowerContactInfoVo vo = new SaasBorrowerContactInfoVo(merchantCode, borrowerCode, contactsInfo.getUrl());
+        saasBorrowerContactInfoService.addContactInfo(vo);
+    }
+    
 }

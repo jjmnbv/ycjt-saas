@@ -43,7 +43,7 @@ public class SaasEsignAccountServiceImpl extends AbstractBaseService implements 
         if (CollectionUtils.isEmpty(saasEsignAccountList)) {
             return null;
         }
-        return SaasEsignAccountVo.convertEntityToVO(saasEsignAccountList.get(0));
+        return SaasEsignAccountVo.convertEntityToVO(saasEsignAccountList.get(saasEsignAccountList.size() - 1));
     }
 
     @Override
@@ -55,7 +55,7 @@ public class SaasEsignAccountServiceImpl extends AbstractBaseService implements 
         if (CollectionUtils.isEmpty(saasEsignAccountList)) {
             return null;
         }
-        return SaasEsignAccountVo.convertEntityToVO(saasEsignAccountList.get(0));
+        return SaasEsignAccountVo.convertEntityToVO(saasEsignAccountList.get(saasEsignAccountList.size() - 1));
     }
 }
 

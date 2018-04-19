@@ -3,20 +3,15 @@ package com.beitu.saas.rest.controller;
 import com.beitu.saas.app.annotations.SignIgnore;
 import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.application.auth.MerchantApplication;
+import com.beitu.saas.app.application.contract.ContractApplication;
 import com.beitu.saas.app.application.credit.CarrierReportApplication;
 import com.beitu.saas.app.application.credit.DunningReportApplication;
 import com.beitu.saas.app.application.finance.SaasConsumeDayStatApplication;
 import com.beitu.saas.auth.domain.MerchantContractInfoVo;
-import com.beitu.saas.auth.service.SaasMerchantService;
 import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
 import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
-import com.beitu.saas.channel.client.SaasChannelService;
-import com.beitu.saas.channel.entity.SaasChannelEntity;
-import com.beitu.saas.channel.enums.ChannelTypeEnum;
 import com.beitu.saas.common.config.ConfigUtil;
-import com.beitu.saas.common.enums.RestCodeEnum;
 import com.beitu.saas.common.handle.oss.OSSService;
-import com.beitu.saas.common.utils.IpChooseUtil;
 import com.beitu.saas.common.utils.OrderNoUtil;
 import com.beitu.saas.credit.client.SaasCreditCarrierService;
 import com.beitu.saas.credit.entity.SaasCreditCarrier;
@@ -36,9 +31,9 @@ import com.fqgj.exception.common.ApplicationException;
 import com.fqgj.log.factory.LogFactory;
 import com.fqgj.log.interfaces.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -87,6 +82,9 @@ public class OkController {
     @Autowired
     private OSSService ossService;
 
+    @Autowired
+    private ContractApplication contractApplication;
+
     @RequestMapping("/ok")
     @ResponseBody
     @VisitorAccessible
@@ -119,23 +117,23 @@ public class OkController {
     @ResponseBody
     @VisitorAccessible
     @SignIgnore
+    @Transactional(rollbackFor = Exception.class)
     public String syncEsignData() {
-        List<SaasUserEsignAuthorization> saasUserEsignAuthorizationList = saasUserEsignAuthorizationService.selectByParams(new HashMap<String, Object>(2) {{
-            put("deleted", Boolean.FALSE);
-        }});
+        List<SaasUserEsignAuthorization> saasUserEsignAuthorizationList = saasUserEsignAuthorizationService.selectByParams(null);
         if (CollectionUtils.isEmpty(saasUserEsignAuthorizationList)) {
             return "null";
         }
+        StringBuilder results = new StringBuilder();
         saasUserEsignAuthorizationList.forEach(saasUserEsignAuthorization -> {
             String saasEsignCode = OrderNoUtil.makeOrderNum();
             SaasEsignAccountVo saasEsignAccountVo = new SaasEsignAccountVo();
             saasEsignAccountVo.setSaasEsignCode(saasEsignCode);
             SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(saasUserEsignAuthorization.getUserCode());
             if (saasBorrowerRealInfoVo != null) {
-                saasEsignAccountVo.setName(saasBorrowerRealInfoVo.getName());
-                saasEsignAccountVo.setCode(saasBorrowerRealInfoVo.getIdentityCode());
+                return;
             } else {
                 MerchantContractInfoVo merchantContractInfoVo = merchantApplication.getMerchantContractInfo(saasUserEsignAuthorization.getUserCode());
+                results.append(saasUserEsignAuthorization.getUserCode()).append(",");
                 if (merchantContractInfoVo == null) {
                     return;
                 }
@@ -172,7 +170,7 @@ public class OkController {
             }
             saasUserEsignAuthorizationService.deleteById(saasUserEsignAuthorization.getId());
         });
-        return "ok";
+        return results.toString();
     }
 
     private String getAuthorizationUrl(String userCode) {
@@ -182,6 +180,19 @@ public class OkController {
         }
         filePath.append(userCode).append("_").append(MD5.md5(OrderNoUtil.makeOrderNum())).append(".pdf");
         return filePath.toString();
+    }
+
+    @RequestMapping(value = "/contract/create", method = RequestMethod.GET)
+    @ResponseBody
+    @VisitorAccessible
+    @SignIgnore
+    public String createContract(@RequestParam(value = "orderId") Long orderId, @RequestParam(value = "type") Integer type) {
+        if (1 == type) {
+            contractApplication.doExtendContractSign(orderId);
+        } else {
+            contractApplication.doLoanContractSign(orderId);
+        }
+        return "ok";
     }
 
 }

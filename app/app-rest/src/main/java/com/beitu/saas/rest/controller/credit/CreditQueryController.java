@@ -52,6 +52,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -138,7 +139,7 @@ public class CreditQueryController {
         BorrowerIdentityInfoVo borrowerIdentityInfoVo = borrowerBaseInfoApplication.getUserIdentityInfoVo(borrowerCode, orderNumb);
         BorrowerWorkInfoVo borrowerWorkInfoVo = borrowerBaseInfoApplication.getUserWorkInfoVo(borrowerCode, orderNumb);
         BorrowerEmergentContactVo borrowerEmergentContactVo = borrowerBaseInfoApplication.getUserEmergentContactVo(merchantCode, borrowerCode, orderNumb);
-        BorrowerLivingAreaVo borrowerLivingAreaVo = null;
+        BorrowerLivingAreaVo borrowerLivingAreaVo = borrowerBaseInfoApplication.getUserGpsInfo(merchantCode, borrowerCode);
 
         return new DataApiResponse<>(new UserBaseInfoResponse(orderApplicationListVo, borrowerPersonalInfoVo, borrowerIdentityInfoVo, borrowerWorkInfoVo, borrowerEmergentContactVo, borrowerLivingAreaVo));
     }
@@ -176,17 +177,12 @@ public class CreditQueryController {
                 downloadContractUrl = configUtil.getAddressURLPrefix() + saasOrderVo.getTermUrl();
             }
         }
-        String[] lendCertificateUrlArray = null;
         String lendCertificate = saasOrderLendRemarkService.getLendCertificateByOrderNumb(orderNumb);
+        String[] lendCertificateUrlArray = null;
         if (StringUtils.isNotEmpty(lendCertificate)) {
             lendCertificateUrlArray = lendCertificate.split(",");
-            final String pdfPrefix = configUtil.getAddressURLPrefix();
-            for (int i = 0; i < lendCertificateUrlArray.length; i++) {
-                String lendCertificateUrl = lendCertificateUrlArray[i];
-                lendCertificateUrlArray[i] = pdfPrefix + lendCertificateUrl;
-            }
         }
-        return new DataApiResponse<>(new OrderDetailQueryResponse(saasOrderDetailVoList, viewContractUrl, downloadContractUrl, lendCertificateUrlArray));
+        return new DataApiResponse<>(new OrderDetailQueryResponse(saasOrderDetailVoList, viewContractUrl, downloadContractUrl, configUtil.getAddressURLPrefix(), lendCertificateUrlArray));
     }
 
     @RequestMapping(value = "/collection/log", method = RequestMethod.POST)
