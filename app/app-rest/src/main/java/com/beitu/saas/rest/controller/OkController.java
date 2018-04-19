@@ -36,6 +36,7 @@ import com.fqgj.exception.common.ApplicationException;
 import com.fqgj.log.factory.LogFactory;
 import com.fqgj.log.interfaces.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -119,10 +120,9 @@ public class OkController {
     @ResponseBody
     @VisitorAccessible
     @SignIgnore
+    @Transactional(rollbackFor = Exception.class)
     public String syncEsignData() {
-        List<SaasUserEsignAuthorization> saasUserEsignAuthorizationList = saasUserEsignAuthorizationService.selectByParams(new HashMap<String, Object>(2) {{
-            put("deleted", Boolean.FALSE);
-        }});
+        List<SaasUserEsignAuthorization> saasUserEsignAuthorizationList = saasUserEsignAuthorizationService.selectByParams(null);
         if (CollectionUtils.isEmpty(saasUserEsignAuthorizationList)) {
             return "null";
         }
@@ -132,8 +132,7 @@ public class OkController {
             saasEsignAccountVo.setSaasEsignCode(saasEsignCode);
             SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(saasUserEsignAuthorization.getUserCode());
             if (saasBorrowerRealInfoVo != null) {
-                saasEsignAccountVo.setName(saasBorrowerRealInfoVo.getName());
-                saasEsignAccountVo.setCode(saasBorrowerRealInfoVo.getIdentityCode());
+                return;
             } else {
                 MerchantContractInfoVo merchantContractInfoVo = merchantApplication.getMerchantContractInfo(saasUserEsignAuthorization.getUserCode());
                 if (merchantContractInfoVo == null) {
