@@ -1,5 +1,7 @@
 package com.beitu.saas.rest.controller.order;
 
+import com.beitu.saas.app.annotations.SignIgnore;
+import com.beitu.saas.app.annotations.VisitorAccessible;
 import com.beitu.saas.app.application.order.OrderApplication;
 import com.beitu.saas.app.application.order.vo.DashboardOverdueOrderShowVo;
 import com.beitu.saas.app.application.order.vo.DataDashboardLoanShowVo;
@@ -37,6 +39,7 @@ public class DataDashboardController {
 
     @RequestMapping(value = "/loan/query", method = RequestMethod.POST)
     @ApiOperation(value = "放款数据", response = DataDashboardLoanResponse.class)
+    @ResponseBody
     public Response loanQuery() {
         String merchantCode = RequestLocalInfo.getCurrentAdmin().getSaasAdmin().getMerchantCode();
         DataDashboardLoanShowVo dataDashboardLoanShowVo = orderApplication.getDataDashboardInfo(merchantCode);
@@ -45,6 +48,7 @@ public class DataDashboardController {
 
     }
 
+    @ResponseBody
     @RequestMapping(value = "overdue/query/{menuType}", method = RequestMethod.POST)
     @ApiOperation(value = "逾期数据-menuType:0-待收 1-逾期", response = DataDashboardOverdueResponse.class)
     public ModuleResponse overdueQuery(@PathVariable("menuType") Integer menuType, Page page) {

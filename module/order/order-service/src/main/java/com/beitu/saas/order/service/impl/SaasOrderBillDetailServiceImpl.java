@@ -102,6 +102,11 @@ public class SaasOrderBillDetailServiceImpl extends AbstractBaseService implemen
     }
 
     @Override
+    public List<LoanStateDetailVo> getDestroyStateDetailList(String merchantCode) {
+        List<LoanStateDetailVo> loanStateDetailVos = saasOrderBillDetailDao.selectDestroyStatDetailList(merchantCode);
+        return loanStateDetailVos.size() == 0 ? new ArrayList<>() : saasOrderBillDetailDao.selectDestroyStatDetailList(merchantCode);    }
+
+    @Override
     public List<DashboardOrderVo> getNoRepayOrderListByPage(String merchantCode, Page page) {
         List<DashboardOrderVo> dashboardOrderVos = saasOrderBillDetailDao.selectNoRepayOrder(merchantCode, page);
         return dashboardOrderVos.size() == 0 ? new ArrayList<>() : saasOrderBillDetailDao.selectNoRepayOrder(merchantCode, page);
