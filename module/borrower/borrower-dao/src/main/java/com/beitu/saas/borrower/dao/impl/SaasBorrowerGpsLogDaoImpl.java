@@ -33,7 +33,7 @@ public class SaasBorrowerGpsLogDaoImpl extends AbstractBaseMapper<SaasBorrowerGp
         params.put("merchantCode", merchantCode);
         params.put("borrowerCode", borrowerCode);
         params.put("limit", limit);
-        return this.getSqlSession().selectOne(this.getStatement(".selectByBorrowerCodeAndMerchantCode"), params);
+        return this.getSqlSession().selectList(this.getStatement(".selectByBorrowerCodeAndMerchantCode"), params);
     }
     
 }
