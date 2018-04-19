@@ -15,9 +15,10 @@ import java.util.List;
 
 @Repository
 public class SaasCreditBmpDetailDaoImpl extends AbstractBaseMapper<SaasCreditBmpDetail> implements SaasCreditBmpDetailDao {
-
+    
     @Override
     public int batchAddSaasCreditBmpDetail(List<SaasCreditBmpDetail> saasCreditBmpDetailList) {
         return this.getSqlSession().insert(this.getStatement(".batchAddSaasCreditBmpDetail"), saasCreditBmpDetailList);
     }
+    
 }
