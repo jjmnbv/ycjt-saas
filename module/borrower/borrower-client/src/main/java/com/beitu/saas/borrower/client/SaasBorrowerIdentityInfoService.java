@@ -10,11 +10,11 @@ import com.fqgj.common.entity.BaseEntity;
  * Time: 15:56:46.984
  */
 public interface SaasBorrowerIdentityInfoService<T extends BaseEntity> extends BaseService<T> {
-
+    
     int countByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb);
-
+    
     SaasBorrowerIdentityInfoVo getByBorrowerCodeAndOrderNumb(String borrowerCode, String orderNumb);
-
+    
     Boolean updateOrderNumbByBorrowerCode(String orderNumb, String borrowerCode);
-
+    
 }

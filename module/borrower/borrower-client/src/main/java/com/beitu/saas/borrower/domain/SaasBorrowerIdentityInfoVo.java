@@ -12,9 +12,9 @@ import java.io.Serializable;
  * Time: 20:25:59.876
  */
 public class SaasBorrowerIdentityInfoVo implements ResponseData, Serializable {
-
+    
     private Long saasBorrowerIdentityInfoId;
-
+    
     /**
      * 借款人CODE
      */
@@ -35,56 +35,55 @@ public class SaasBorrowerIdentityInfoVo implements ResponseData, Serializable {
      * 手持身份证图片URL
      */
     private String holdUrl;
-
+    
     public Long getSaasBorrowerIdentityInfoId() {
         return saasBorrowerIdentityInfoId;
     }
-
+    
     public void setSaasBorrowerIdentityInfoId(Long saasBorrowerIdentityInfoId) {
         this.saasBorrowerIdentityInfoId = saasBorrowerIdentityInfoId;
     }
-
-
+    
     public String getBorrowerCode() {
         return this.borrowerCode;
     }
-
+    
     public void setBorrowerCode(String borrowerCode) {
         this.borrowerCode = borrowerCode;
     }
-
+    
     public String getOrderNumb() {
         return this.orderNumb;
     }
-
+    
     public void setOrderNumb(String orderNumb) {
         this.orderNumb = orderNumb;
     }
-
+    
     public String getFrontUrl() {
         return this.frontUrl;
     }
-
+    
     public void setFrontUrl(String frontUrl) {
         this.frontUrl = frontUrl;
     }
-
+    
     public String getBackUrl() {
         return this.backUrl;
     }
-
+    
     public void setBackUrl(String backUrl) {
         this.backUrl = backUrl;
     }
-
+    
     public String getHoldUrl() {
         return this.holdUrl;
     }
-
+    
     public void setHoldUrl(String holdUrl) {
         this.holdUrl = holdUrl;
     }
-
+    
     public static SaasBorrowerIdentityInfoVo convertEntityToVO(SaasBorrowerIdentityInfo saasBorrowerIdentityInfo) {
         if (saasBorrowerIdentityInfo == null) {
             return null;
@@ -94,7 +93,7 @@ public class SaasBorrowerIdentityInfoVo implements ResponseData, Serializable {
         saasBorrowerIdentityInfoVo.setSaasBorrowerIdentityInfoId(saasBorrowerIdentityInfo.getId());
         return saasBorrowerIdentityInfoVo;
     }
-
+    
     public static SaasBorrowerIdentityInfo convertVOToEntity(SaasBorrowerIdentityInfoVo saasBorrowerIdentityInfoVo) {
         if (saasBorrowerIdentityInfoVo == null) {
             return null;
@@ -104,5 +103,5 @@ public class SaasBorrowerIdentityInfoVo implements ResponseData, Serializable {
         saasBorrowerIdentityInfo.setId(saasBorrowerIdentityInfoVo.getSaasBorrowerIdentityInfoId());
         return saasBorrowerIdentityInfo;
     }
-
+    
 }
