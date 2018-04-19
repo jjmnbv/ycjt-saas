@@ -127,9 +127,8 @@ public class OkController {
         if (CollectionUtils.isEmpty(saasUserEsignAuthorizationList)) {
             return "null";
         }
-        CountDownLatch countDownLatch = new CountDownLatch(100);
+        StringBuilder results = new StringBuilder();
         saasUserEsignAuthorizationList.forEach(saasUserEsignAuthorization -> {
-            countDownLatch.countDown();
             String saasEsignCode = OrderNoUtil.makeOrderNum();
             SaasEsignAccountVo saasEsignAccountVo = new SaasEsignAccountVo();
             saasEsignAccountVo.setSaasEsignCode(saasEsignCode);
@@ -138,6 +137,7 @@ public class OkController {
                 return;
             } else {
                 MerchantContractInfoVo merchantContractInfoVo = merchantApplication.getMerchantContractInfo(saasUserEsignAuthorization.getUserCode());
+                results.append(saasUserEsignAuthorization.getUserCode()).append(",");
                 if (merchantContractInfoVo == null) {
                     return;
                 }
@@ -174,7 +174,7 @@ public class OkController {
             }
             saasUserEsignAuthorizationService.deleteById(saasUserEsignAuthorization.getId());
         });
-        return String.valueOf(countDownLatch.getCount());
+        return results.toString();
     }
 
     private String getAuthorizationUrl(String userCode) {
