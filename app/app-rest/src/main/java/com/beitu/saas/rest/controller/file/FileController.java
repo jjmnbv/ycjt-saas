@@ -5,17 +5,18 @@ import com.beitu.saas.app.enums.FileErrorCodeEnum;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.handle.oss.OSSService;
 import com.beitu.saas.common.utils.OrderNoUtil;
+import com.beitu.saas.rest.controller.file.request.DownloadZipRequest;
 import com.beitu.saas.rest.controller.file.response.FileUploadSuccessResponse;
+import com.beitu.saas.risk.helpers.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.InputStream;
 
 
@@ -46,7 +47,7 @@ public class FileController {
         String fileName = getFileName(uploadFile.getOriginalFilename());
         InputStream inputStream = null;
         try {
-            inputStream =uploadFile.getInputStream();
+            inputStream = uploadFile.getInputStream();
             String url = ossService.uploadFile(inputStream, inputStream.available(), fileName);
             return new DataApiResponse<>(new FileUploadSuccessResponse(url));
         } catch (Exception e) {
@@ -61,6 +62,16 @@ public class FileController {
             }
         }
         return new DataApiResponse<>(FileErrorCodeEnum.UPLOAD_FILE_FAILURE);
+    }
+
+    @RequestMapping(value = "/download/zip", method = RequestMethod.POST)
+    @ApiOperation(value = "多个OSS文件打包下载", response = FileUploadSuccessResponse.class)
+    public void downloadZip(@RequestBody @Valid DownloadZipRequest req, HttpServletResponse response) {
+        if (StringUtils.isEmpty(req.getFilePaths())) {
+            return;
+        }
+        String[] filePathArray = req.getFilePaths().split(",");
+        ossService.zipOssFiles(response, filePathArray);
     }
 
     private String getFileName(String originalFilename) {

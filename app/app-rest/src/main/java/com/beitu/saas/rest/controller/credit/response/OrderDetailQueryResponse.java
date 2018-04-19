@@ -25,6 +25,9 @@ public class OrderDetailQueryResponse implements ResponseData {
     @ApiModelProperty(value = "下载合同URL")
     private String downloadContractUrl;
 
+    @ApiModelProperty
+    private Boolean hasLendCertificate;
+
     @ApiModelProperty(value = "下款凭证URL")
     private String[] lendCertificateUrlArray;
 
@@ -65,6 +68,11 @@ public class OrderDetailQueryResponse implements ResponseData {
         }
         this.viewContractUrl = viewContractUrl;
         this.downloadContractUrl = downloadContractUrl;
+        if (lendCertificateUrlArray == null) {
+            this.hasLendCertificate = Boolean.FALSE;
+        } else {
+            this.hasLendCertificate = Boolean.TRUE;
+        }
         this.lendCertificateUrlArray = lendCertificateUrlArray;
         this.downloadLendCertificateArray = lendCertificateUrlArray;
     }
@@ -131,5 +139,13 @@ public class OrderDetailQueryResponse implements ResponseData {
 
     public void setExtendOrderDetailVoList(List<SaasOrderDetailVo> extendOrderDetailVoList) {
         this.extendOrderDetailVoList = extendOrderDetailVoList;
+    }
+
+    public Boolean getHasLendCertificate() {
+        return hasLendCertificate;
+    }
+
+    public void setHasLendCertificate(Boolean hasLendCertificate) {
+        this.hasLendCertificate = hasLendCertificate;
     }
 }

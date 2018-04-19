@@ -3,14 +3,18 @@ package com.beitu.saas.common.handle.oss;
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.model.*;
 import com.beitu.saas.common.config.ConfigUtil;
+import com.fqgj.common.utils.CollectionUtils;
 import com.fqgj.log.factory.LogFactory;
 import com.fqgj.log.interfaces.Log;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @Component
 public class OSSService {
@@ -124,6 +128,58 @@ public class OSSService {
             }
         }
         return content;
+    }
+
+    /**
+     * 压缩 OSS多个文件
+     *
+     * @param response
+     * @param filePathArray oss文件路径Array
+     */
+    public void zipOssFiles(HttpServletResponse response, String[] filePathArray) {
+        if (filePathArray == null || filePathArray.length == 0) {
+            return;
+        }
+        OSSClient client = new OSSClient(configUtil.getEndpoint(), configUtil.getAccessKeyId(), configUtil.getAccessKeySecret());
+        ZipOutputStream outputStream = null;
+        InputStream ossInputStream = null;
+        byte[] buf = new byte[1024];
+        try {
+            outputStream = new ZipOutputStream(response.getOutputStream());
+            for (int i = 0; i < filePathArray.length; i++) {
+                String filePath = filePathArray[i];
+                if (StringUtils.isEmpty(filePath)) {
+                    continue;
+                }
+                OSSObject ossObject = client.getObject(configUtil.getBucketName(), filePath);
+                ossInputStream = ossObject.getObjectContent();
+                outputStream.putNextEntry(new ZipEntry(getFileNameByOssFilePath(filePath)));
+                int len;
+                while ((len = ossInputStream.read(buf)) > 0) {
+                    outputStream.write(buf, 0, len);
+                }
+                outputStream.closeEntry();
+                ossInputStream.close();
+            }
+            outputStream.close();
+        } catch (IOException e) {
+        } finally {
+            // 关闭流
+            try {
+                if (ossInputStream != null) {
+                    ossInputStream.close();
+                }
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            } catch (IOException e) {
+            }
+        }
+    }
+
+    private String getFileNameByOssFilePath(String ossFilePath) {
+        int index = ossFilePath.lastIndexOf("/");
+        return ossFilePath.substring(index + 1);
     }
 
     private byte[] input2byte(InputStream inStream) throws IOException {
