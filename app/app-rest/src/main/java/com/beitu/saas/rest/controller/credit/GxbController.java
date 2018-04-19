@@ -147,7 +147,6 @@ public class GxbController {
             e.printStackTrace();
         }
         LOGGER.info("ecommerceSuccess--------" + ipAddress);
-        LOGGER.info("ecommerceSuccess---------------" + success);
         if (Objects.equals("1", success)) {
             Object obj1 = redisClient.get(RedisKeyConsts.SAAS_GXB_ECOMMERCE_TOKN, token);
             if (obj1 == null) {
