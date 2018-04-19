@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beitu.saas.borrower.dao.impl.SaasBorrowerGpsLogDaoImpl">
+    <resultMap id="BaseResultMap" type="com.beitu.saas.borrower.entity.SaasBorrowerGpsLog">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode"/>
+        <result column="borrower_code" jdbcType="VARCHAR" property="borrowerCode"/>
+        <result column="longitude" jdbcType="VARCHAR" property="longitude"/>
+        <result column="latitude" jdbcType="VARCHAR" property="latitude"/>
+        <result column="location" jdbcType="VARCHAR" property="location"/>
+        <result column="log_time" jdbcType="TIMESTAMP" property="logTime"/>
+        <result column="deleted" jdbcType="BIT" property="deleted"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        merchant_code,
+        borrower_code,
+        longitude,
+        latitude,
+        location,
+        log_time,
+        deleted,
+        gmt_modified,
+        gmt_create
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Long"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_borrower_gps_log
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" keyColumn="id" keyProperty="id"
+            parameterType="com.beitu.saas.borrower.entity.SaasBorrowerGpsLog" useGeneratedKeys="true">
+        insert into saas_borrower_gps_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="merchantCode !=null">
+                merchant_code,
+            </if>
+            <if test="borrowerCode !=null">
+                borrower_code,
+            </if>
+            <if test="longitude !=null">
+                longitude,
+            </if>
+            <if test="latitude !=null">
+                latitude,
+            </if>
+            <if test="location !=null">
+                location,
+            </if>
+            <if test="logTime !=null">
+                log_time,
+            </if>
+            <if test="deleted !=null">
+                deleted,
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified,
+            </if>
+            <if test="gmtCreate !=null">
+                gmt_create,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="merchantCode != null">
+                #{merchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="borrowerCode != null">
+                #{borrowerCode,jdbcType=VARCHAR},
+            </if>
+            <if test="longitude != null">
+                #{longitude,jdbcType=VARCHAR},
+            </if>
+            <if test="latitude != null">
+                #{latitude,jdbcType=VARCHAR},
+            </if>
+            <if test="location != null">
+                #{location,jdbcType=VARCHAR},
+            </if>
+            <if test="logTime != null">
+                #{logTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.beitu.saas.borrower.entity.SaasBorrowerGpsLog">
+        update saas_borrower_gps_log
+        <set>
+            <if test="merchantCode !=null">
+                merchant_code = #{merchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="borrowerCode !=null">
+                borrower_code = #{borrowerCode,jdbcType=VARCHAR},
+            </if>
+            <if test="longitude !=null">
+                longitude = #{longitude,jdbcType=VARCHAR},
+            </if>
+            <if test="latitude !=null">
+                latitude = #{latitude,jdbcType=VARCHAR},
+            </if>
+            <if test="location !=null">
+                location = #{location,jdbcType=VARCHAR},
+            </if>
+            <if test="logTime !=null">
+                log_time = #{logTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deleted !=null">
+                deleted = #{deleted,jdbcType=BIT},
+            </if>
+            <if test="gmtModified !=null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteByPrimaryKey">
+        update  saas_borrower_gps_log
+        set deleted = 1
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <sql id="paginationSql">
+        <if test="page != null">
+            limit #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+        </if>
+    </sql>
+
+    <sql id="paging">
+        <if test="offset != null and limit != null">
+            limit #{offset},#{limit}
+        </if>
+    </sql>
+
+    <select id="selectByParams" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from saas_borrower_gps_log
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="merchantCode !=null">
+                and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+            </if>
+            <if test="borrowerCode !=null">
+                and borrower_code = #{borrowerCode,jdbcType=VARCHAR}
+            </if>
+            <if test="longitude !=null">
+                and longitude = #{longitude,jdbcType=VARCHAR}
+            </if>
+            <if test="latitude !=null">
+                and latitude = #{latitude,jdbcType=VARCHAR}
+            </if>
+            <if test="location !=null">
+                and location = #{location,jdbcType=VARCHAR}
+            </if>
+            <if test="logTime !=null">
+                and log_time = #{logTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+        <include refid="paging"/>
+    </select>
+    <select id="queryTotal" resultType="INTEGER">
+        select count(*) from saas_borrower_gps_log
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id !=null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="merchantCode !=null">
+                and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+            </if>
+            <if test="borrowerCode !=null">
+                and borrower_code = #{borrowerCode,jdbcType=VARCHAR}
+            </if>
+            <if test="longitude !=null">
+                and longitude = #{longitude,jdbcType=VARCHAR}
+            </if>
+            <if test="latitude !=null">
+                and latitude = #{latitude,jdbcType=VARCHAR}
+            </if>
+            <if test="location !=null">
+                and location = #{location,jdbcType=VARCHAR}
+            </if>
+            <if test="logTime !=null">
+                and log_time = #{logTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="deleted !=null">
+                and deleted = #{deleted,jdbcType=BIT}
+            </if>
+            <if test="gmtModified !=null">
+                and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            <if test="gmtCreate !=null">
+                and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </select>
+</mapper>
