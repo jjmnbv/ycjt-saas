@@ -78,7 +78,7 @@
       sum(case when visible=1 then real_capital else 0 end) loanTotalAmount,
       sum(case when created_dt=DATE_SUB(curdate(),INTERVAL 0 DAY) and visible=1 then real_capital else 0 end) todayLoanTotalAmount,
       sum(case when visible=1 and destroy=1 then amount else 0 end) destroyTotalAmount,
-      sum(case when visible=1 and created_dt=DATE_SUB(curdate(),INTERVAL 0 DAY) then amount else 0 end) todayDestroyTotalAmount,
+      sum(case when visible=1 and destroy=1 and datediff(now(),actual_destroy_dt)=0 then amount else 0 end) todayDestroyTotalAmount,
       sum(case when visible=1 and destroy=0 then real_capital else 0 end) noRepayTotalAmount,
       sum(case when visible=1 and destroy=0  and datediff(DATE_SUB(curdate(),INTERVAL 0 DAY),repayment_dt)>0 then real_capital else 0 end) overdueTotalAmount,
       sum(case when visible=1 and destroy=0  and datediff(NOW(),repayment_dt)=1 then real_capital else 0 end) todayOverdueTotalAmount
