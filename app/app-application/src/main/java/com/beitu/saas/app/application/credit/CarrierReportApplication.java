@@ -107,7 +107,7 @@ public class CarrierReportApplication {
         List<SaasCreditCarrierRecordVo> longDurationList = saasCreditCarrierRecordService.listByRecordIdAndRecordTypeEnum(recordId, CreditCarrierRecordTypeEnum.LONG_DURATION);
         if (CollectionUtils.isNotEmpty(longDurationList)) {
             List<CreditCarrierLongDurationListVo> creditCarrierLongDurationListVoList = new ArrayList<>(longDurationList.size());
-            highFreqList.forEach(saasCreditCarrierRecordVo -> creditCarrierLongDurationListVoList.add(new CreditCarrierLongDurationListVo(saasCreditCarrierRecordVo, creditBmpMatchVos)));
+            longDurationList.forEach(saasCreditCarrierRecordVo -> creditCarrierLongDurationListVoList.add(new CreditCarrierLongDurationListVo(saasCreditCarrierRecordVo, creditBmpMatchVos)));
             creditCarrierReportVo.setLongDuration(creditCarrierLongDurationListVoList);
         }
 

@@ -25,6 +25,9 @@ public class OrderDetailQueryResponse implements ResponseData {
     @ApiModelProperty(value = "下载合同URL")
     private String downloadContractUrl;
 
+    @ApiModelProperty
+    private Boolean hasLendCertificate;
+
     @ApiModelProperty(value = "下款凭证URL")
     private String[] lendCertificateUrlArray;
 
@@ -43,7 +46,7 @@ public class OrderDetailQueryResponse implements ResponseData {
     @ApiModelProperty(value = "展期账单信息")
     private List<SaasOrderDetailVo> extendOrderDetailVoList;
 
-    public OrderDetailQueryResponse(List<SaasOrderDetailVo> allOrderBillDetail, String viewContractUrl, String downloadContractUrl, String[] lendCertificateUrlArray) {
+    public OrderDetailQueryResponse(List<SaasOrderDetailVo> allOrderBillDetail, String viewContractUrl, String downloadContractUrl, String filePrefix, String[] lendCertificateUrlArray) {
         if (CollectionUtils.isEmpty(allOrderBillDetail)) {
             return;
         }
@@ -65,8 +68,17 @@ public class OrderDetailQueryResponse implements ResponseData {
         }
         this.viewContractUrl = viewContractUrl;
         this.downloadContractUrl = downloadContractUrl;
-        this.lendCertificateUrlArray = lendCertificateUrlArray;
-        this.downloadLendCertificateArray = lendCertificateUrlArray;
+        if (lendCertificateUrlArray == null) {
+            this.hasLendCertificate = Boolean.FALSE;
+        } else {
+            this.hasLendCertificate = Boolean.TRUE;
+            this.lendCertificateUrlArray = new String[lendCertificateUrlArray.length];
+            for (int i = 0; i < lendCertificateUrlArray.length; i++) {
+                String lendCertificateUrl = lendCertificateUrlArray[i];
+                this.lendCertificateUrlArray[i] = filePrefix + lendCertificateUrl;
+            }
+            this.downloadLendCertificateArray = lendCertificateUrlArray;
+        }
     }
 
     public String getViewContractUrl() {
@@ -131,5 +143,13 @@ public class OrderDetailQueryResponse implements ResponseData {
 
     public void setExtendOrderDetailVoList(List<SaasOrderDetailVo> extendOrderDetailVoList) {
         this.extendOrderDetailVoList = extendOrderDetailVoList;
+    }
+
+    public Boolean getHasLendCertificate() {
+        return hasLendCertificate;
+    }
+
+    public void setHasLendCertificate(Boolean hasLendCertificate) {
+        this.hasLendCertificate = hasLendCertificate;
     }
 }

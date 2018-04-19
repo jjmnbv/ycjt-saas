@@ -75,4 +75,8 @@ public class RedisKeyConsts {
      */
     public static final String SAAS_OPEN_API_ORDER_PUSH_PROCESSING = "SAAS_OPEN_ORDER_PUSH_{mobile}";
 
+    public static final String SAAS_GXB_ECOMMERCE = "SAAS_GXB_ECOMMERCE_{code}";
+
+    public static final String SAAS_GXB_ECOMMERCE_TOKN = "SAAS_GXB_ECOMMERCE_TOKE_{token}";
+
 }

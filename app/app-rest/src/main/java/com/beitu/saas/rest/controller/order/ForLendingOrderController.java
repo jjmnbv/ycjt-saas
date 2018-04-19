@@ -91,7 +91,9 @@ public class ForLendingOrderController {
             response.setTotalInterestRatio(orderCalculateApplication.getInterestRatio(saasOrderVo.getTotalInterestRatio()));
             response.setBorrowingDuration(DateUtil.countDay(saasOrderVo.getRepaymentDt(), new Date()) + "天");
             SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(saasOrderVo.getBorrowerCode());
-            response.setBorrowerName(saasBorrowerRealInfoVo.getName());
+            if (saasBorrowerRealInfoVo != null) {
+                response.setBorrowerName(saasBorrowerRealInfoVo.getName());
+            }
         }
         response.setOrderNumb(req.getOrderNumb());
         return new DataApiResponse<>(response);

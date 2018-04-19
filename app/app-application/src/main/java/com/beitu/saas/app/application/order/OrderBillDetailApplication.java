@@ -232,6 +232,7 @@ public class OrderBillDetailApplication {
         }
         addSaasOrderBillDetail.setRepaymentDt(saasOrderVo.getRepaymentDt());
         addSaasOrderBillDetail.setInterest(saasOrderVo.getTotalInterestFee());
+        addSaasOrderBillDetail.setServiceFee(saasOrderVo.getServiceFee());
         addSaasOrderBillDetail.setVisible(Boolean.TRUE);
         saasOrderBillDetailService.create(addSaasOrderBillDetail);
     }

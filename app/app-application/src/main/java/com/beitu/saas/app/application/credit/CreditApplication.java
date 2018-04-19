@@ -36,6 +36,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -121,7 +122,9 @@ public class CreditApplication {
         switch (riskModuleEnum) {
             case APPLICATION:
                 SaasOrderApplicationVo saasOrderApplicationVo = saasOrderApplicationService.getByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
-                if (saasOrderApplicationVo != null && saasOrderApplicationVo.getBorrowerAuthorizedSignLoan()) {
+                if (saasOrderApplicationVo != null
+                        && (new Date()).compareTo(saasOrderApplicationVo.getRepaymentDt()) < 0
+                        && saasOrderApplicationVo.getBorrowerAuthorizedSignLoan()) {
                     return BorrowerInfoApplyStatusEnum.FINISHED;
                 }
                 return BorrowerInfoApplyStatusEnum.INCOMPLETE;
