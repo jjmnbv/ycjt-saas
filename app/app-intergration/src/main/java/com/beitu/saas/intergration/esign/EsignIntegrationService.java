@@ -51,7 +51,7 @@ public interface EsignIntegrationService {
      * @param borrowerDoContractSignParam
      * @return
      */
-    byte[] borrowerDoExpendContractSign(BorrowerDoContractSignParam borrowerDoContractSignParam);
+    byte[] borrowerDoExtendContractSign(BorrowerDoContractSignParam borrowerDoContractSignParam);
 
     /**
      * 机构 签署 展期协议
@@ -59,7 +59,7 @@ public interface EsignIntegrationService {
      * @param lenderDoContractSignParam
      * @return
      */
-    byte[] lenderDoExpendContractSign(LenderDoContractSignParam lenderDoContractSignParam);
+    byte[] lenderDoExtendContractSign(LenderDoContractSignParam lenderDoContractSignParam);
 
     /**
      * 签署 授权协议

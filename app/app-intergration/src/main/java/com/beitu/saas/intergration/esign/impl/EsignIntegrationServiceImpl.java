@@ -142,14 +142,14 @@ public class EsignIntegrationServiceImpl implements EsignIntegrationService {
     }
 
     @Override
-    public byte[] borrowerDoExpendContractSign(BorrowerDoContractSignParam borrowerDoContractSignParam) {
+    public byte[] borrowerDoExtendContractSign(BorrowerDoContractSignParam borrowerDoContractSignParam) {
         if (StringUtils.isEmpty(borrowerDoContractSignParam.getBorrowerSealData())) {
             throw new ApplicationException("用户印章数据丢失");
         }
         SignPDFStreamBean signPDFStreamBean = new SignPDFStreamBean();
         signPDFStreamBean.setStream(borrowerDoContractSignParam.getSrcPdfContent());
-        SignType signType = SignType.Key;
-        PosBean posBean = setKeyPosBean("⼄⽅：", 200, 5, 140);
+        SignType signType = SignType.Single;
+        PosBean posBean =  setXYPosBean("1", 360, 240, 60);
         UserSignService userSignService = UserSignServiceFactory.instance();
         FileDigestSignResult finalResult = userSignService.localSignPDF(borrowerDoContractSignParam.getBorrowerAccountId(), borrowerDoContractSignParam.getBorrowerSealData(), signPDFStreamBean, posBean, signType);
         if (0 != finalResult.getErrCode()) {
@@ -160,14 +160,14 @@ public class EsignIntegrationServiceImpl implements EsignIntegrationService {
     }
 
     @Override
-    public byte[] lenderDoExpendContractSign(LenderDoContractSignParam lenderDoContractSignParam) {
+    public byte[] lenderDoExtendContractSign(LenderDoContractSignParam lenderDoContractSignParam) {
         if (StringUtils.isEmpty(lenderDoContractSignParam.getMerchantSealData())) {
             throw new ApplicationException("机构印章数据丢失");
         }
         SignPDFStreamBean signPDFStreamBean = new SignPDFStreamBean();
         signPDFStreamBean.setStream(lenderDoContractSignParam.getSrcPdfContent());
-        SignType signType = SignType.Key;
-        PosBean posBean = setKeyPosBean("甲⽅：", 200, 5, 140);
+        SignType signType = SignType.Single;
+        PosBean posBean =  setXYPosBean("1", 360, 270, 60);
         UserSignService userSignService = UserSignServiceFactory.instance();
         FileDigestSignResult finalResult = userSignService.localSignPDF(lenderDoContractSignParam.getMerchantAccountId(), lenderDoContractSignParam.getMerchantSealData(), signPDFStreamBean, posBean, signType);
         if (0 != finalResult.getErrCode()) {

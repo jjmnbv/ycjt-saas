@@ -363,7 +363,7 @@ public class ContractApplication {
                 lenderDoContractSignParam.setMerchantAccountId(lenderEsignAccountVo.getAccountId());
                 lenderDoContractSignParam.setMerchantSealData(lenderSealData);
                 lenderDoContractSignParam.setSrcPdfContent(pdfContent);
-                byte[] content = esignIntegrationService.lenderDoExpendContractSign(lenderDoContractSignParam);
+                byte[] content = esignIntegrationService.lenderDoExtendContractSign(lenderDoContractSignParam);
                 if (content == null) {
                     throw new ApplicationException("esign盖章失败");
                 }
@@ -373,7 +373,7 @@ public class ContractApplication {
                 borrowerDoContractSignParam.setBorrowerAccountId(borrowerEsignAccountVo.getAccountId());
                 borrowerDoContractSignParam.setBorrowerSealData(borrowerSealData);
                 borrowerDoContractSignParam.setSrcPdfContent(content);
-                byte[] finalContent = esignIntegrationService.borrowerDoExpendContractSign(borrowerDoContractSignParam);
+                byte[] finalContent = esignIntegrationService.borrowerDoExtendContractSign(borrowerDoContractSignParam);
                 if (content == null) {
                     throw new ApplicationException("esign盖章失败");
                 }
