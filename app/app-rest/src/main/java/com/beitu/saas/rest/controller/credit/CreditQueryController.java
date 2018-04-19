@@ -52,6 +52,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -180,13 +181,10 @@ public class CreditQueryController {
         String lendCertificate = saasOrderLendRemarkService.getLendCertificateByOrderNumb(orderNumb);
         if (StringUtils.isNotEmpty(lendCertificate)) {
             lendCertificateUrlArray = lendCertificate.split(",");
-            final String pdfPrefix = configUtil.getAddressURLPrefix();
-            for (int i = 0; i < lendCertificateUrlArray.length; i++) {
-                String lendCertificateUrl = lendCertificateUrlArray[i];
-                lendCertificateUrlArray[i] = pdfPrefix + lendCertificateUrl;
-            }
+            final String filePrefix = ;
+
         }
-        return new DataApiResponse<>(new OrderDetailQueryResponse(saasOrderDetailVoList, viewContractUrl, downloadContractUrl, lendCertificateUrlArray));
+        return new DataApiResponse<>(new OrderDetailQueryResponse(saasOrderDetailVoList, viewContractUrl, downloadContractUrl, configUtil.getAddressURLPrefix(), lendCertificateUrlArray));
     }
 
     @RequestMapping(value = "/collection/log", method = RequestMethod.POST)

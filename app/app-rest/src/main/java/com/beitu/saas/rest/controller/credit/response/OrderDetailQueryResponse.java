@@ -46,7 +46,7 @@ public class OrderDetailQueryResponse implements ResponseData {
     @ApiModelProperty(value = "展期账单信息")
     private List<SaasOrderDetailVo> extendOrderDetailVoList;
 
-    public OrderDetailQueryResponse(List<SaasOrderDetailVo> allOrderBillDetail, String viewContractUrl, String downloadContractUrl, String[] lendCertificateUrlArray) {
+    public OrderDetailQueryResponse(List<SaasOrderDetailVo> allOrderBillDetail, String viewContractUrl, String downloadContractUrl, String filePrefix, String[] lendCertificateUrlArray) {
         if (CollectionUtils.isEmpty(allOrderBillDetail)) {
             return;
         }
@@ -72,9 +72,13 @@ public class OrderDetailQueryResponse implements ResponseData {
             this.hasLendCertificate = Boolean.FALSE;
         } else {
             this.hasLendCertificate = Boolean.TRUE;
+            this.lendCertificateUrlArray = new String[lendCertificateUrlArray.length];
+            for (int i = 0; i < lendCertificateUrlArray.length; i++) {
+                String lendCertificateUrl = lendCertificateUrlArray[i];
+                this.lendCertificateUrlArray[i] = filePrefix + lendCertificateUrl;
+            }
+            this.downloadLendCertificateArray = lendCertificateUrlArray;
         }
-        this.lendCertificateUrlArray = lendCertificateUrlArray;
-        this.downloadLendCertificateArray = lendCertificateUrlArray;
     }
 
     public String getViewContractUrl() {
