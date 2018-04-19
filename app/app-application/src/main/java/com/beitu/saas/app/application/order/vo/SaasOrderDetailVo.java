@@ -43,6 +43,9 @@ public class SaasOrderDetailVo implements ResponseData {
     @ApiModelProperty(value = "逾期天数")
     private Integer overdueDuration;
 
+    @ApiModelProperty(value = "手续费")
+    private Integer serviceFee;
+
     @ApiModelProperty(value = "订单状态")
     private String orderStatus;
 
@@ -124,6 +127,14 @@ public class SaasOrderDetailVo implements ResponseData {
 
     public void setOverdueDuration(Integer overdueDuration) {
         this.overdueDuration = overdueDuration;
+    }
+
+    public Integer getServiceFee() {
+        return serviceFee;
+    }
+
+    public void setServiceFee(Integer serviceFee) {
+        this.serviceFee = serviceFee;
     }
 
     public String getOrderStatus() {

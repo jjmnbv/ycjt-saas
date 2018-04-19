@@ -24,6 +24,10 @@ public class SaasOrderLendRemarkVo implements ResponseData, Serializable {
      */
     private String lendWay;
     /**
+     * 下款凭证
+     */
+    private String lendCertificate;
+    /**
      * 放款人
      */
     private String lendPersonCode;
@@ -51,6 +55,14 @@ public class SaasOrderLendRemarkVo implements ResponseData, Serializable {
 
     public void setLendWay(String lendWay) {
         this.lendWay = lendWay;
+    }
+
+    public String getLendCertificate() {
+        return this.lendCertificate;
+    }
+
+    public void setLendCertificate(String lendCertificate) {
+        this.lendCertificate = lendCertificate;
     }
 
     public String getLendPersonCode() {

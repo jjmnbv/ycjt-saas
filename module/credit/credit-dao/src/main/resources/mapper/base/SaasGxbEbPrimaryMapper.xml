@@ -1,52 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.beitu.saas.order.dao.impl.SaasOrderLendRemarkDaoImpl">
-    <resultMap id="BaseResultMap" type="com.beitu.saas.order.entity.SaasOrderLendRemark">
+<mapper namespace="com.beitu.saas.credit.dao.impl.SaasGxbEbDaoImpl">
+    <resultMap id="BaseResultMap" type="com.beitu.saas.credit.entity.SaasGxbEb">
         <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="order_numb" jdbcType="VARCHAR" property="orderNumb"/>
-        <result column="lend_way" jdbcType="VARCHAR" property="lendWay"/>
-        <result column="lend_certificate" jdbcType="VARCHAR" property="lendCertificate"/>
-        <result column="lend_person_code" jdbcType="VARCHAR" property="lendPersonCode"/>
+        <result column="borrower_code" jdbcType="VARCHAR" property="borrowerCode"/>
+        <result column="task_token" jdbcType="VARCHAR" property="taskToken"/>
+        <result column="json_url" jdbcType="VARCHAR" property="jsonUrl"/>
         <result column="deleted" jdbcType="BIT" property="deleted"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
         <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
     </resultMap>
-
     <sql id="Base_Column_List">
-    id,
-    order_numb,
-    lend_way,
-    lend_certificate,
-    lend_person_code,
-    deleted,
-    gmt_modified,
-    gmt_create
+        id,
+        borrower_code,
+        task_token,
+        json_url,
+        deleted,
+        gmt_modified,
+        gmt_create
     </sql>
 
-    <select id="selectByPrimaryKey" parameterType="Long"
-            resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey" parameterType="Long" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from saas_order_lend_remark
+        from saas_gxb_eb
         where id = #{id,jdbcType=BIGINT}
     </select>
 
-    <insert id="insert" keyColumn="id" keyProperty="id"
-            parameterType="com.beitu.saas.order.entity.SaasOrderLendRemark" useGeneratedKeys="true">
-        insert into saas_order_lend_remark
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.beitu.saas.credit.entity.SaasGxbEb"  useGeneratedKeys="true">
+        insert into saas_gxb_eb
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="orderNumb !=null">
-                order_numb,
+            <if test="borrowerCode !=null">
+                borrower_code,
             </if>
-            <if test="lendWay !=null">
-                lend_way,
+            <if test="taskToken !=null">
+                task_token,
             </if>
-            <if test="lendCertificate !=null">
-                lend_certificate,
-            </if>
-            <if test="lendPersonCode !=null">
-                lend_person_code,
+            <if test="jsonUrl !=null">
+                json_url,
             </if>
             <if test="deleted !=null">
                 deleted,
@@ -59,17 +51,14 @@
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="orderNumb != null">
-                #{orderNumb,jdbcType=VARCHAR},
+            <if test="borrowerCode != null">
+                #{borrowerCode,jdbcType=VARCHAR},
             </if>
-            <if test="lendWay != null">
-                #{lendWay,jdbcType=VARCHAR},
+            <if test="taskToken != null">
+                #{taskToken,jdbcType=VARCHAR},
             </if>
-            <if test="lendCertificate != null">
-                #{lendCertificate,jdbcType=VARCHAR},
-            </if>
-            <if test="lendPersonCode != null">
-                #{lendPersonCode,jdbcType=VARCHAR},
+            <if test="jsonUrl != null">
+                #{jsonUrl,jdbcType=VARCHAR},
             </if>
             <if test="deleted != null">
                 #{deleted,jdbcType=BIT},
@@ -83,20 +72,17 @@
         </trim>
     </insert>
 
-    <update id="updateByPrimaryKey" parameterType="com.beitu.saas.order.entity.SaasOrderLendRemark">
-        update saas_order_lend_remark
+    <update id="updateByPrimaryKey" parameterType="com.beitu.saas.credit.entity.SaasGxbEb">
+        update saas_gxb_eb
         <set>
-            <if test="orderNumb !=null">
-                order_numb = #{orderNumb,jdbcType=VARCHAR},
+            <if test="borrowerCode !=null">
+                borrower_code = #{borrowerCode,jdbcType=VARCHAR},
             </if>
-            <if test="lendWay !=null">
-                lend_way = #{lendWay,jdbcType=VARCHAR},
+            <if test="taskToken !=null">
+                task_token = #{taskToken,jdbcType=VARCHAR},
             </if>
-            <if test="lendCertificate !=null">
-                lend_certificate = #{lendCertificate,jdbcType=VARCHAR},
-            </if>
-            <if test="lendPersonCode !=null">
-                lend_person_code = #{lendPersonCode,jdbcType=VARCHAR},
+            <if test="jsonUrl !=null">
+                json_url = #{jsonUrl,jdbcType=VARCHAR},
             </if>
             <if test="deleted !=null">
                 deleted = #{deleted,jdbcType=BIT},
@@ -109,14 +95,14 @@
     </update>
 
     <update id="deleteByPrimaryKey">
-        update  saas_order_lend_remark
+        update  saas_gxb_eb
         set deleted = 1
         where id = #{id,jdbcType=BIGINT}
     </update>
 
     <sql id="paginationSql">
         <if test="page != null">
-            limit #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
+            limit  #{page.startIndex,jdbcType=INTEGER},#{page.endIndex,jdbcType=INTEGER}
         </if>
     </sql>
 
@@ -129,22 +115,19 @@
     <select id="selectByParams" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from saas_order_lend_remark
+        from saas_gxb_eb
         <trim prefix="where" prefixOverrides="and|or">
             <if test="id !=null">
                 and id = #{id,jdbcType=BIGINT}
             </if>
-            <if test="orderNumb !=null">
-                and order_numb = #{orderNumb,jdbcType=VARCHAR}
+            <if test="borrowerCode !=null">
+                and borrower_code = #{borrowerCode,jdbcType=VARCHAR}
             </if>
-            <if test="lendWay !=null">
-                and lend_way = #{lendWay,jdbcType=VARCHAR}
+            <if test="taskToken !=null">
+                and task_token = #{taskToken,jdbcType=VARCHAR}
             </if>
-            <if test="lendCertificate !=null">
-                and lend_certificate = #{lendCertificate,jdbcType=VARCHAR}
-            </if>
-            <if test="lendPersonCode !=null">
-                and lend_person_code = #{lendPersonCode,jdbcType=VARCHAR}
+            <if test="jsonUrl !=null">
+                and json_url = #{jsonUrl,jdbcType=VARCHAR}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}
@@ -159,22 +142,19 @@
         <include refid="paging"/>
     </select>
     <select id="queryTotal" resultType="INTEGER">
-        select count(*) from saas_order_lend_remark
+        select count(*) from saas_gxb_eb
         <trim prefix="where" prefixOverrides="and|or">
             <if test="id !=null">
                 and id = #{id,jdbcType=BIGINT}
             </if>
-            <if test="orderNumb !=null">
-                and order_numb = #{orderNumb,jdbcType=VARCHAR}
+            <if test="borrowerCode !=null">
+                and borrower_code = #{borrowerCode,jdbcType=VARCHAR}
             </if>
-            <if test="lendWay !=null">
-                and lend_way = #{lendWay,jdbcType=VARCHAR}
+            <if test="taskToken !=null">
+                and task_token = #{taskToken,jdbcType=VARCHAR}
             </if>
-            <if test="lendCertificate !=null">
-                and lend_certificate = #{lendCertificate,jdbcType=VARCHAR}
-            </if>
-            <if test="lendPersonCode !=null">
-                and lend_person_code = #{lendPersonCode,jdbcType=VARCHAR}
+            <if test="jsonUrl !=null">
+                and json_url = #{jsonUrl,jdbcType=VARCHAR}
             </if>
             <if test="deleted !=null">
                 and deleted = #{deleted,jdbcType=BIT}

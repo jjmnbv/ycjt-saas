@@ -4,8 +4,8 @@ import com.fqgj.common.entity.BaseEntity;
 
 /**
  * User: jungle
- * Date: 2018-04-12
- * Time: 20:39:32.645
+ * Date: 2018-04-18
+ * Time: 14:26:16.862
  * TableDesc:SAAS订单放款备注表
  */
 public class SaasOrderLendRemark extends BaseEntity {
@@ -17,6 +17,10 @@ public class SaasOrderLendRemark extends BaseEntity {
      * 放款途径
      */
     private String lendWay;
+    /**
+     * 下款凭证
+     */
+    private String lendCertificate;
     /**
      * 放款人
      */
@@ -38,6 +42,15 @@ public class SaasOrderLendRemark extends BaseEntity {
 
     public SaasOrderLendRemark setLendWay(String lendWay) {
         this.lendWay = lendWay;
+        return this;
+    }
+
+    public String getLendCertificate() {
+        return this.lendCertificate;
+    }
+
+    public SaasOrderLendRemark setLendCertificate(String lendCertificate) {
+        this.lendCertificate = lendCertificate;
         return this;
     }
 

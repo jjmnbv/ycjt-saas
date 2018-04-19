@@ -136,41 +136,6 @@ public class ConfigUtil {
         return config.getBooleanProperty("swagger.enable", false);
     }
 
-    //crawl.taobao.url 淘宝的爬取地址
-    public String getCrawlTaoBaoUrl() {
-        return config.getProperty("crawl.taobao.url", "");
-    }
-
-    //crawl.jd.url 京东的爬取地址
-    public String getCrawlJDUrl() {
-        return config.getProperty("crawl.jd.url", "");
-    }
-
-    //crawl.query.url  查询
-    public String getCrawlQueryUrl() {
-        return config.getProperty("crawl.query.url", "");
-    }
-
-    //京东爬取次数
-    public int getCrwalJDTimes() {
-        return config.getIntProperty("crawl.jd.times", 6);
-    }
-
-    //淘宝爬取次数
-    public int getCrwalTaoBaoTimes() {
-        return config.getIntProperty("crawl.taoBao.times", 9);
-    }
-
-    //京东爬取间隔
-    public int getCrwalJDInterval() {
-        return config.getIntProperty("crawl.jd.interval", 10);
-    }
-
-    //淘宝爬取间隔
-    public int getCrwalTaoBaoInterval() {
-        return config.getIntProperty("crawl.taobao.interval", 5);
-    }
-
     public String getESignProjectId() {
         return config.getProperty("esign.project.id", "");
     }
@@ -364,4 +329,25 @@ public class ConfigUtil {
         return config.getProperty("open.order.push.ip.white.list", "");
     }
 
+    public String getGXBAppId(){
+        return config.getProperty("gxb.appid", "gxb576c4d54a76b8fd2");
+    }
+    public String getGXBAppSecret(){
+        return config.getProperty("gxb.appSecret", "430009e5471f45de847c35965fe99c4a");
+    }
+    public String getGXBAuthPath(){
+        return config.getProperty("gxb.auth.path", "https://prod.gxb.io/crawler/auth/v2/get_auth_token");
+    }
+    public String getGXBCrawlingPath(){
+        return config.getProperty("gxb.h5.crawling.path", "https://prod.gxb.io/v2/auth");
+    }
+
+    public String getGXBPushIP(){
+        return config.getProperty("gxb.push.ip", "139.196.95.4,139.224.12.200");
+    }
+
+    public Boolean enableFlowConfig() {
+        return config.getBooleanProperty("flow.config.enable", true);
+
+    }
 }
