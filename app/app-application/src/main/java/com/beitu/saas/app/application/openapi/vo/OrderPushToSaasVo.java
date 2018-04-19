@@ -1,5 +1,7 @@
 package com.beitu.saas.app.application.openapi.vo;
 
+import java.util.List;
+
 public class OrderPushToSaasVo {
     
     private OrderPushUserBasicInfoVo basicInfo;
@@ -21,6 +23,10 @@ public class OrderPushToSaasVo {
     private OrderPushUserBmpInfoVo bmpInfo;
     
     private OrderPushUserTongdunInfoVo tongdunInfo;
+    
+    private List<OrderPushUserLocationInfoVo> locationsInfo;
+    
+    private OrderPushUserContactsInfoVo contactsInfo;
     
     public OrderPushUserBasicInfoVo getBasicInfo() {
         return basicInfo;
@@ -100,5 +106,21 @@ public class OrderPushToSaasVo {
     
     public void setTongdunInfo(OrderPushUserTongdunInfoVo tongdunInfo) {
         this.tongdunInfo = tongdunInfo;
+    }
+    
+    public List<OrderPushUserLocationInfoVo> getLocationsInfo() {
+        return locationsInfo;
+    }
+    
+    public void setLocationsInfo(List<OrderPushUserLocationInfoVo> locationsInfo) {
+        this.locationsInfo = locationsInfo;
+    }
+    
+    public OrderPushUserContactsInfoVo getContactsInfo() {
+        return contactsInfo;
+    }
+    
+    public void setContactsInfo(OrderPushUserContactsInfoVo contactsInfo) {
+        this.contactsInfo = contactsInfo;
     }
 }

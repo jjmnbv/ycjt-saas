@@ -98,6 +98,8 @@ public class OpenApiMerchantApplication {
         OrderPushUserDunningInfoVo dunningInfo = userAndOrderData.getDunningInfo();
         OrderPushUserBmpInfoVo bmpInfo = userAndOrderData.getBmpInfo();
         OrderPushUserTongdunInfoVo tongdunInfo = userAndOrderData.getTongdunInfo();
+        List<OrderPushUserLocationInfoVo> locationsInfo = userAndOrderData.getLocationsInfo();
+        OrderPushUserContactsInfoVo contactsInfo = userAndOrderData.getContactsInfo();
         
         String borrowerCode = borrowerRelatedDataVo.getBorrowerCode();
         
@@ -109,6 +111,7 @@ public class OpenApiMerchantApplication {
         openApiCreditInfoApplication.addCreditDunningInfo(dunningInfo, borrowerCode, merchantCode, carrierId);
         openApiCreditInfoApplication.addCreditBmpInfo(bmpInfo, borrowerCode, merchantCode);
         openApiCreditInfoApplication.addCreditTongdunInfo(tongdunInfo, borrowerCode, merchantCode);
+        openApiCreditInfoApplication.addLocationsInfo(locationsInfo, borrowerCode, merchantCode);
         
         saasCreditHistoryService.addExpenditureCreditHistory(merchantCode, "system", CreditConsumeEnum.FLOW_REPORT);
     }
