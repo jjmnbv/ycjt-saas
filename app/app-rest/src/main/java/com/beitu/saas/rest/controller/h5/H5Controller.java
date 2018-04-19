@@ -201,7 +201,11 @@ public class H5Controller {
 
         SaasOrderApplicationVo saasOrderApplicationVo = saasOrderApplicationService.getByBorrowerCodeAndOrderNumb(borrowerCode, orderNumb);
         if (saasOrderApplicationVo != null) {
-            response.setBorrowingDuration(DateUtil.countDay(saasOrderApplicationVo.getRepaymentDt(), new Date()));
+            Integer borrowingDuration = DateUtil.countDay(saasOrderApplicationVo.getRepaymentDt(), new Date());
+            if (borrowingDuration < 1) {
+                borrowingDuration = 1;
+            }
+            response.setBorrowingDuration(borrowingDuration);
             response.setBorrowPurpose(saasOrderApplicationVo.getBorrowPurpose());
             response.setRealCapital(saasOrderApplicationVo.getRealCapital());
             response.setTotalInterestRatio(saasOrderApplicationVo.getTotalInterestRatio());
