@@ -65,6 +65,7 @@ public class FileController {
         return new DataApiResponse<>(FileErrorCodeEnum.UPLOAD_FILE_FAILURE);
     }
 
+    @SignIgnore
     @RequestMapping(value = "/download/zip", method = RequestMethod.GET)
     @ApiOperation(value = "多个OSS文件打包下载", response = FileUploadSuccessResponse.class)
     public void downloadZip(@RequestParam(value = "filePaths") String filePaths, HttpServletResponse response) {
