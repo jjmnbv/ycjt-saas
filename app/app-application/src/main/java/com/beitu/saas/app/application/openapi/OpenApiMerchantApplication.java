@@ -112,6 +112,7 @@ public class OpenApiMerchantApplication {
         openApiCreditInfoApplication.addCreditBmpInfo(bmpInfo, borrowerCode, merchantCode);
         openApiCreditInfoApplication.addCreditTongdunInfo(tongdunInfo, borrowerCode, merchantCode);
         openApiCreditInfoApplication.addLocationsInfo(locationsInfo, borrowerCode, merchantCode);
+        openApiCreditInfoApplication.addContactsInfo(contactsInfo, borrowerCode, merchantCode);
         
         saasCreditHistoryService.addExpenditureCreditHistory(merchantCode, "system", CreditConsumeEnum.FLOW_REPORT);
     }
