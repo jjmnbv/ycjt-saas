@@ -195,7 +195,7 @@ public class OkController {
     @VisitorAccessible
     @SignIgnore
     public String createContract(@RequestParam(value = "orderId") Long orderId) {
-        contractApplication.doLoanContractSign(orderId);
+        contractApplication.doExtendContractSign(orderId);
         return "ok";
     }
 
