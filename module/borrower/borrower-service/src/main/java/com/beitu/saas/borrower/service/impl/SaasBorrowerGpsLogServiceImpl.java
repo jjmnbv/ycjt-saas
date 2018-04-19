@@ -39,9 +39,9 @@ public class SaasBorrowerGpsLogServiceImpl extends AbstractBaseService implement
     }
     
     @Override
-    public Date getLastDateByBorrowerCodeAndMerchantCode(String borrowerCode, String merchantCode) {
+    public Date getLastDateByBorrowerCodeAndMerchantCode(String merchantCode, String borrowerCode) {
         List<SaasBorrowerGpsLog> logs = saasBorrowerGpsLogDao.selectByBorrowerCodeAndMerchantCode(merchantCode, borrowerCode, 1);
-        if (CollectionUtils.isNotEmpty(logs)) {
+        if (CollectionUtils.isEmpty(logs)) {
             return null;
         }
         return logs.get(0).getLogTime();
@@ -50,7 +50,7 @@ public class SaasBorrowerGpsLogServiceImpl extends AbstractBaseService implement
     @Override
     public List<SaasBorrowerGpsLogVo> listByBorrowerCodeAndMerchantCode(String merchantCode, String borrowerCode) {
         List<SaasBorrowerGpsLog> logs = saasBorrowerGpsLogDao.selectByBorrowerCodeAndMerchantCode(merchantCode, borrowerCode, null);
-        if (CollectionUtils.isNotEmpty(logs)) {
+        if (CollectionUtils.isEmpty(logs)) {
             return null;
         }
         List<SaasBorrowerGpsLogVo> list = new ArrayList<>(logs.size());

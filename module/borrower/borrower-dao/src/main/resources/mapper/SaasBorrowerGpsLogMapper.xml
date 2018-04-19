@@ -29,16 +29,16 @@
         <include refid="Base_Column_List"/>
         FROM `saas_borrower_gps_log`
         WHERE
-        <if test="merchantCode !=null">
+        <if test="merchantCode != null">
             `merchant_code` = #{merchantCode,jdbcType=VARCHAR} AND
         </if>
-        <if test="borrowerCode !=null">
+        <if test="borrowerCode != null">
             `borrower_code` = #{borrowerCode,jdbcType=VARCHAR} AND
         </if>
         `deleted` = 0
         ORDER BY `log_time` DESC
-        <if test="limit != null ">
-            limit #{limit,jdbcType=INTEGER}
+        <if test="limit != null">
+            LIMIT #{limit,jdbcType=INTEGER}
         </if>
     </select>
 
