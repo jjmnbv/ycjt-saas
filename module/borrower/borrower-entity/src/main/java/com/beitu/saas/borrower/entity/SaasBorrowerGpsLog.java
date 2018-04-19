@@ -7,10 +7,14 @@ import java.util.Date;
 /**
  * User: linchengyu
  * Date: 2018-04-19
- * Time: 14:04:03.569
+ * Time: 15:36:27.241
  * TableDesc:借款人GPS信息表
  */
 public class SaasBorrowerGpsLog extends BaseEntity {
+    /**
+     * 机构CODE
+     */
+    private String merchantCode;
     /**
      * 借款人CODE
      */
@@ -31,6 +35,15 @@ public class SaasBorrowerGpsLog extends BaseEntity {
      * 地理位置记录时间
      */
     private Date logTime;
+    
+    public String getMerchantCode() {
+        return this.merchantCode;
+    }
+    
+    public SaasBorrowerGpsLog setMerchantCode(String merchantCode) {
+        this.merchantCode = merchantCode;
+        return this;
+    }
     
     public String getBorrowerCode() {
         return this.borrowerCode;

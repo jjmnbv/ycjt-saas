@@ -1,6 +1,8 @@
 package com.beitu.saas.borrower.domain;
 
+import com.beitu.saas.borrower.entity.SaasBorrowerGpsLog;
 import com.fqgj.common.api.ResponseData;
+import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -14,6 +16,10 @@ public class SaasBorrowerGpsLogVo implements ResponseData, Serializable {
     
     private Long saasBorrowerGpsLogId;
     
+    /**
+     * 机构CODE
+     */
+    private String merchantCode;
     /**
      * 借款人CODE
      */
@@ -41,6 +47,14 @@ public class SaasBorrowerGpsLogVo implements ResponseData, Serializable {
     
     public void setSaasBorrowerGpsLogId(Long saasBorrowerGpsLogId) {
         this.saasBorrowerGpsLogId = saasBorrowerGpsLogId;
+    }
+    
+    public String getMerchantCode() {
+        return merchantCode;
+    }
+    
+    public void setMerchantCode(String merchantCode) {
+        this.merchantCode = merchantCode;
     }
     
     public String getBorrowerCode() {
@@ -82,4 +96,25 @@ public class SaasBorrowerGpsLogVo implements ResponseData, Serializable {
     public void setLogTime(Date logTime) {
         this.logTime = logTime;
     }
+    
+    public static SaasBorrowerGpsLog convertVO2Entity(SaasBorrowerGpsLogVo saasBorrowerGpsLogVo) {
+        if (saasBorrowerGpsLogVo == null) {
+            return null;
+        }
+        SaasBorrowerGpsLog saasBorrowerGpsLog = new SaasBorrowerGpsLog();
+        BeanUtils.copyProperties(saasBorrowerGpsLogVo, saasBorrowerGpsLog);
+        saasBorrowerGpsLog.setId(saasBorrowerGpsLogVo.getSaasBorrowerGpsLogId());
+        return saasBorrowerGpsLog;
+    }
+    
+    public static SaasBorrowerGpsLogVo convertEntity2VO(SaasBorrowerGpsLog saasBorrowerGpsLog) {
+        if (saasBorrowerGpsLog == null) {
+            return null;
+        }
+        SaasBorrowerGpsLogVo saasBorrowerGpsLogVo = new SaasBorrowerGpsLogVo();
+        BeanUtils.copyProperties(saasBorrowerGpsLog, saasBorrowerGpsLogVo);
+        saasBorrowerGpsLogVo.setSaasBorrowerGpsLogId(saasBorrowerGpsLog.getId());
+        return saasBorrowerGpsLogVo;
+    }
+    
 }

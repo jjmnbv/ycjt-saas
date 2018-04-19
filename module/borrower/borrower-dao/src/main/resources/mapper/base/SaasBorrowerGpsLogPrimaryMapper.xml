@@ -4,6 +4,7 @@
 <mapper namespace="com.beitu.saas.borrower.dao.impl.SaasBorrowerGpsLogDaoImpl">
     <resultMap id="BaseResultMap" type="com.beitu.saas.borrower.entity.SaasBorrowerGpsLog">
         <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode"/>
         <result column="borrower_code" jdbcType="VARCHAR" property="borrowerCode"/>
         <result column="longitude" jdbcType="VARCHAR" property="longitude"/>
         <result column="latitude" jdbcType="VARCHAR" property="latitude"/>
@@ -15,15 +16,16 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-    id,
-    borrower_code,
-    longitude,
-    latitude,
-    location,
-    log_time,
-    deleted,
-    gmt_modified,
-    gmt_create
+        id,
+        merchant_code,
+        borrower_code,
+        longitude,
+        latitude,
+        location,
+        log_time,
+        deleted,
+        gmt_modified,
+        gmt_create
     </sql>
 
     <select id="selectByPrimaryKey" parameterType="Long"
@@ -38,6 +40,9 @@
             parameterType="com.beitu.saas.borrower.entity.SaasBorrowerGpsLog" useGeneratedKeys="true">
         insert into saas_borrower_gps_log
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="merchantCode !=null">
+                merchant_code,
+            </if>
             <if test="borrowerCode !=null">
                 borrower_code,
             </if>
@@ -64,6 +69,9 @@
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="merchantCode != null">
+                #{merchantCode,jdbcType=VARCHAR},
+            </if>
             <if test="borrowerCode != null">
                 #{borrowerCode,jdbcType=VARCHAR},
             </if>
@@ -94,6 +102,9 @@
     <update id="updateByPrimaryKey" parameterType="com.beitu.saas.borrower.entity.SaasBorrowerGpsLog">
         update saas_borrower_gps_log
         <set>
+            <if test="merchantCode !=null">
+                merchant_code = #{merchantCode,jdbcType=VARCHAR},
+            </if>
             <if test="borrowerCode !=null">
                 borrower_code = #{borrowerCode,jdbcType=VARCHAR},
             </if>
@@ -145,6 +156,9 @@
             <if test="id !=null">
                 and id = #{id,jdbcType=BIGINT}
             </if>
+            <if test="merchantCode !=null">
+                and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+            </if>
             <if test="borrowerCode !=null">
                 and borrower_code = #{borrowerCode,jdbcType=VARCHAR}
             </if>
@@ -177,6 +191,9 @@
         <trim prefix="where" prefixOverrides="and|or">
             <if test="id !=null">
                 and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="merchantCode !=null">
+                and merchant_code = #{merchantCode,jdbcType=VARCHAR}
             </if>
             <if test="borrowerCode !=null">
                 and borrower_code = #{borrowerCode,jdbcType=VARCHAR}
