@@ -177,12 +177,10 @@ public class CreditQueryController {
                 downloadContractUrl = configUtil.getAddressURLPrefix() + saasOrderVo.getTermUrl();
             }
         }
-        String[] lendCertificateUrlArray = null;
         String lendCertificate = saasOrderLendRemarkService.getLendCertificateByOrderNumb(orderNumb);
+        String[] lendCertificateUrlArray = null;
         if (StringUtils.isNotEmpty(lendCertificate)) {
             lendCertificateUrlArray = lendCertificate.split(",");
-            final String filePrefix = ;
-
         }
         return new DataApiResponse<>(new OrderDetailQueryResponse(saasOrderDetailVoList, viewContractUrl, downloadContractUrl, configUtil.getAddressURLPrefix(), lendCertificateUrlArray));
     }
