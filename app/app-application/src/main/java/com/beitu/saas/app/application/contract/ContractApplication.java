@@ -389,7 +389,7 @@ public class ContractApplication {
                     borrowerDoContractSignParam.setBorrowerAccountId(borrowerEsignAccountVo.getAccountId());
                     borrowerDoContractSignParam.setBorrowerSealData(borrowerSealData);
                     borrowerDoContractSignParam.setSrcPdfContent(content);
-                    byte[] finalContent = esignIntegrationService.lenderDoContractSign(lenderDoContractSignParam);
+                    byte[] finalContent = esignIntegrationService.borrowerDoContractSign(borrowerDoContractSignParam);
                     if (content == null) {
                         throw new ApplicationException("esign盖章失败");
                     }
