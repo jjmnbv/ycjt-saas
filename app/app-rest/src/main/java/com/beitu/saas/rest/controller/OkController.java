@@ -194,8 +194,8 @@ public class OkController {
     @ResponseBody
     @VisitorAccessible
     @SignIgnore
-    public String createContract() {
-        contractApplication.doLoanContractSign(258L);
+    public String createContract(@RequestParam(value = "orderId") Long orderId) {
+        contractApplication.doLoanContractSign(orderId);
         return "ok";
     }
 
