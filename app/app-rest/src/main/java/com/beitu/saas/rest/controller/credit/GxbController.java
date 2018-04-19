@@ -160,7 +160,7 @@ public class GxbController {
             redisClient.set(RedisKeyConsts.SAAS_GXB_ECOMMERCE, token, TimeConsts.FIFTEEN_SECONDS, code);
         }
         if ("web".equals(platform)) {
-            return "redirect:" + "https://www.baidu.com";
+            return "redirect:" + "http://beitu-saas.oss-cn-hangzhou.aliyuncs.com/h5/Success-view/index.html";
         }
         return "redirect:" + configUtil.getH5AddressURL() + "?channel=" + channelCode
                 + "#/formList";
