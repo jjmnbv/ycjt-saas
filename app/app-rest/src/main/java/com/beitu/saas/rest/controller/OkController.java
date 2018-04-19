@@ -190,11 +190,11 @@ public class OkController {
         return filePath.toString();
     }
 
-    @RequestMapping(value = "/contract/credit", method = RequestMethod.POST)
+    @RequestMapping(value = "/contract/create", method = RequestMethod.GET)
     @ResponseBody
     @VisitorAccessible
     @SignIgnore
-    public String creditContract() {
+    public String createContract() {
         contractApplication.doLoanContractSign(258L);
         return "ok";
     }
