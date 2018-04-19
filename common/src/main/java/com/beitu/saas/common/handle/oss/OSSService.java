@@ -140,7 +140,6 @@ public class OSSService {
         if (filePathArray == null || filePathArray.length == 0) {
             return;
         }
-        response.reset();
         response.setHeader("Content-disposition","attachment; filename=lendCertificate.zip");
         response.setContentType("application/zip");
         OSSClient client = new OSSClient(configUtil.getEndpoint(), configUtil.getAccessKeyId(), configUtil.getAccessKeySecret());
