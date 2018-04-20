@@ -7,8 +7,8 @@ import java.util.Date;
 
 /**
  * User: jungle
- * Date: 2018-04-03
- * Time: 19:26:04.836
+ * Date: 2018-04-16
+ * Time: 16:04:58.262
  * TableDesc:SAAS订单申请表
  */
 public class SaasOrderApplication extends BaseEntity {
@@ -49,9 +49,9 @@ public class SaasOrderApplication extends BaseEntity {
      */
     private Date repaymentDt;
     /**
-     * 借款协议URL地址
+     * 借款人是否授权签署借款合同
      */
-    private String termUrl;
+    private Boolean borrowerAuthorizedSignLoan;
 
 
     public String getMerchantCode() {
@@ -135,12 +135,12 @@ public class SaasOrderApplication extends BaseEntity {
         return this;
     }
 
-    public String getTermUrl() {
-        return this.termUrl;
+    public Boolean getBorrowerAuthorizedSignLoan() {
+        return this.borrowerAuthorizedSignLoan;
     }
 
-    public SaasOrderApplication setTermUrl(String termUrl) {
-        this.termUrl = termUrl;
+    public SaasOrderApplication setBorrowerAuthorizedSignLoan(Boolean borrowerAuthorizedSignLoan) {
+        this.borrowerAuthorizedSignLoan = borrowerAuthorizedSignLoan;
         return this;
     }
 }

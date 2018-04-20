@@ -54,9 +54,9 @@ public class SaasOrderApplicationVo implements ResponseData, Serializable {
      */
     private Date repaymentDt;
     /**
-     * 借款协议URL地址
+     * 借款人是否授权签署借款合同
      */
-    private String termUrl;
+    private Boolean borrowerAuthorizedSignLoan;
 
     private Date gmtCreate;
 
@@ -141,12 +141,12 @@ public class SaasOrderApplicationVo implements ResponseData, Serializable {
         this.repaymentDt = repaymentDt;
     }
 
-    public String getTermUrl() {
-        return this.termUrl;
+    public Boolean getBorrowerAuthorizedSignLoan() {
+        return this.borrowerAuthorizedSignLoan;
     }
 
-    public void setTermUrl(String termUrl) {
-        this.termUrl = termUrl;
+    public void setBorrowerAuthorizedSignLoan(Boolean borrowerAuthorizedSignLoan) {
+        this.borrowerAuthorizedSignLoan = borrowerAuthorizedSignLoan;
     }
 
     public Date getGmtCreate() {

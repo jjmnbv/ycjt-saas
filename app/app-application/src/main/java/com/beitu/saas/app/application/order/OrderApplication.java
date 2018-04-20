@@ -24,6 +24,7 @@ import com.beitu.saas.channel.enums.ChannelTypeEnum;
 import com.beitu.saas.collection.client.SaasCollectionOrderService;
 import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.utils.DateUtil;
+import com.beitu.saas.common.utils.ShortUrlUtil;
 import com.beitu.saas.common.utils.ThreadPoolUtils;
 import com.beitu.saas.finance.client.SaasMerchantBalanceInfoService;
 import com.beitu.saas.finance.client.SaasMerchantCreditInfoService;
@@ -150,15 +151,16 @@ public class OrderApplication {
         SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCode(borrowerCode);
         sendApplication.sendNotifyMessage(saasOrderApplicationVo.getMerchantCode(), saasBorrowerVo.getMobile(), null, SaasSmsTypeEnum.SAAS_0004);
         SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(saasOrderApplicationVo.getChannelCode());
-        SaasAdmin saasAdmin = saasAdminService.getSaasAdminByAdminCode(saasChannelEntity.getChargePersonCode());
-        SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode);
-        sendApplication.sendNotifyMessage(saasOrderApplicationVo.getMerchantCode(), saasAdmin.getMobile(), new HashMap<String, String>(8) {{
-            put("channel_name", saasChannelEntity.getChannelName());
-            put("money", saasOrderApplicationVo.getRealCapital().toString());
-            put("name", saasBorrowerRealInfoVo.getName());
-            put("phone", saasBorrowerVo.getMobile());
-        }}, SaasSmsTypeEnum.SAAS_0005);
-
+        if (ChannelTypeEnum.USER_DEFINED.getType().equals(saasChannelEntity.getChannelType())) {
+            SaasAdmin saasAdmin = saasAdminService.getSaasAdminByAdminCode(saasChannelEntity.getChargePersonCode());
+            SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode);
+            sendApplication.sendNotifyMessage(saasOrderApplicationVo.getMerchantCode(), saasAdmin.getMobile(), new HashMap<String, String>(8) {{
+                put("channel_name", saasChannelEntity.getChannelName());
+                put("money", saasOrderApplicationVo.getRealCapital().toString());
+                put("name", saasBorrowerRealInfoVo.getName());
+                put("phone", saasBorrowerVo.getMobile());
+            }}, SaasSmsTypeEnum.SAAS_0005);
+        }
         return saasOrder;
     }
 
@@ -176,20 +178,23 @@ public class OrderApplication {
         updateSaasOrder.setBorrowPurpose(saasOrderApplicationVo.getBorrowPurpose());
         updateSaasOrder.setRepaymentDt(saasOrderApplicationVo.getRepaymentDt());
         updateSaasOrder.setExpireDate(getOrderExpireDate(saasOrderApplicationVo.getRepaymentDt()));
+        updateSaasOrder.setBorrowerAuthorizedSignLoan(saasOrderApplicationVo.getBorrowerAuthorizedSignLoan());
         saasOrderService.updateById(updateSaasOrder);
 
         String borrowerCode = saasOrderApplicationVo.getBorrowerCode();
         SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCode(borrowerCode);
         sendApplication.sendNotifyMessage(saasOrderApplicationVo.getMerchantCode(), saasBorrowerVo.getMobile(), null, SaasSmsTypeEnum.SAAS_0004);
         SaasChannelEntity saasChannelEntity = saasChannelService.getSaasChannelByChannelCode(saasOrderApplicationVo.getChannelCode());
-        SaasAdmin saasAdmin = saasAdminService.getSaasAdminByAdminCode(saasChannelEntity.getChargePersonCode());
-        SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode);
-        sendApplication.sendNotifyMessage(saasOrderApplicationVo.getMerchantCode(), saasAdmin.getMobile(), new HashMap<String, String>(8) {{
-            put("channel_name", saasChannelEntity.getChannelName());
-            put("money", saasOrderApplicationVo.getRealCapital().toString());
-            put("name", saasBorrowerRealInfoVo.getName());
-            put("phone", saasBorrowerVo.getMobile());
-        }}, SaasSmsTypeEnum.SAAS_0005);
+        if (ChannelTypeEnum.USER_DEFINED.getType().equals(saasChannelEntity.getChannelType())) {
+            SaasAdmin saasAdmin = saasAdminService.getSaasAdminByAdminCode(saasChannelEntity.getChargePersonCode());
+            SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(borrowerCode);
+            sendApplication.sendNotifyMessage(saasOrderApplicationVo.getMerchantCode(), saasAdmin.getMobile(), new HashMap<String, String>(8) {{
+                put("channel_name", saasChannelEntity.getChannelName());
+                put("money", saasOrderApplicationVo.getRealCapital().toString());
+                put("name", saasBorrowerRealInfoVo.getName());
+                put("phone", saasBorrowerVo.getMobile());
+            }}, SaasSmsTypeEnum.SAAS_0005);
+        }
     }
 
     private Date getOrderExpireDate(Date repaymentDt) {
@@ -275,6 +280,7 @@ public class OrderApplication {
 
     private OrderDetailVo convertSaasOrderVo2OrderDetailVo(SaasOrderVo saasOrderVo) {
         OrderDetailVo orderDetailVo = new OrderDetailVo();
+        orderDetailVo.setBorrowerCode(saasOrderVo.getBorrowerCode());
         orderDetailVo.setRealCapital(saasOrderVo.getRealCapital().toString());
         orderDetailVo.setBorrowingDuration(DateUtil.countDay(saasOrderVo.getRepaymentDt(), saasOrderVo.getCreatedDt()));
         orderDetailVo.setTotalInterestRatio(orderCalculateApplication.getInterestRatio(saasOrderVo.getTotalInterestRatio()));
@@ -420,7 +426,12 @@ public class OrderApplication {
             page.setTotalCount(0);
             return null;
         }
-        querySaasOrderVo.setOrderStatusList(Arrays.asList(OrderStatusEnum.SUBMIT_LOAN_LENDER.getCode()));
+        if (queryOrderVo.getOrderStatus() != null) {
+            querySaasOrderVo.setOrderStatusList(Arrays.asList(queryOrderVo.getOrderStatus()));
+        } else {
+            querySaasOrderVo.setOrderStatusList(Arrays.asList(OrderStatusEnum.SUBMIT_LOAN_LENDER.getCode(),
+                    OrderStatusEnum.TO_CONFIRM_RECEIPT.getCode()));
+        }
         List<SaasOrderVo> saasOrderVoList = saasOrderService.listByQuerySaasOrderVoAndPage(querySaasOrderVo, page);
         if (CollectionUtils.isEmpty(saasOrderVoList)) {
             return null;
@@ -500,12 +511,12 @@ public class OrderApplication {
      */
     public List<DashboardOverdueOrderShowVo> getDataDashboardOverdueShowInfo(Integer menuType, String merchantCode, Page page) {
         List<DashboardOverdueOrderShowVo> dashboardOverdueOrderShowVos = new ArrayList<>();
-        if (menuType == DashboardTypeEnum.NO_REPAY.getType()) {
+        if (DashboardTypeEnum.NO_REPAY.getType().equals(menuType)) {
             List<DashboardOrderVo> noRepayOrderVos = saasOrderBillDetailService.getNoRepayOrderListByPage(merchantCode, page);
             dashboardOverdueOrderShowVos = this.getDashboardOrderShowList(noRepayOrderVos);
 
         }
-        if (menuType == DashboardTypeEnum.OVERDUE.getType()) {
+        if (DashboardTypeEnum.OVERDUE.getType().equals(menuType)) {
             List<DashboardOrderVo> overdueOrderVos = saasOrderBillDetailService.getOverdueOrderListByPage(merchantCode, page);
             dashboardOverdueOrderShowVos = this.getDashboardOrderShowList(overdueOrderVos);
         }
@@ -513,7 +524,12 @@ public class OrderApplication {
         return dashboardOverdueOrderShowVos;
     }
 
-    //获取数据看板订单信息
+    /**
+     * 获取数据看板订单信息
+     *
+     * @param dashboardOrderVos
+     * @return
+     */
     private List<DashboardOverdueOrderShowVo> getDashboardOrderShowList(List<DashboardOrderVo> dashboardOrderVos) {
         List<DashboardOverdueOrderShowVo> dashboardOverdueOrderShowVos = new ArrayList<>();
         dashboardOrderVos.stream().forEach(x -> {
@@ -552,12 +568,15 @@ public class OrderApplication {
         if (saasChannelEntity != null) {
             orderListVo.setChannelName(saasChannelEntity.getChannelName());
         }
+        orderListVo.setZmCreditScore(saasBorrowerPersonalInfoService.getZmCreditScoreByBorrowerCodeAndOrderNumb(saasOrderVo.getBorrowerCode(), saasOrderVo.getOrderNumb()));
         if (StringUtils.isNotEmpty(saasOrderVo.getPreliminaryReviewerCode())) {
             orderListVo.setPreliminaryReviewer(saasAdminService.getSaasAdminByAdminCode(saasOrderVo.getPreliminaryReviewerCode()).getName());
         }
-        orderListVo.setZmCreditScore(saasBorrowerPersonalInfoService.getZmCreditScoreByBorrowerCodeAndOrderNumb(saasOrderVo.getBorrowerCode(), saasOrderVo.getOrderNumb()));
         if (StringUtils.isNotEmpty(saasOrderVo.getFinalReviewerCode())) {
             orderListVo.setFinalReviewer(saasAdminService.getSaasAdminByAdminCode(saasOrderVo.getFinalReviewerCode()).getName());
+        }
+        if (StringUtils.isNotEmpty(saasOrderVo.getLoanLenderCode())) {
+            orderListVo.setLoanLender(saasAdminService.getSaasAdminByAdminCode(saasOrderVo.getLoanLenderCode()).getName());
         }
         return orderListVo;
     }
@@ -602,7 +621,7 @@ public class OrderApplication {
         updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.PRELIMINARY_REVIEWER_REJECT, null);
 
         sendApplication.sendNotifyMessageByBorrowerCode(merchantCode, saasOrderVo.getBorrowerCode(), new HashMap<String, String>(2) {{
-            put("channel_url", configUtil.getH5AddressURL() + "?channel=" + saasOrderVo.getChannelCode());
+            put("channel_url", ShortUrlUtil.generateShortUrl(configUtil.getH5AddressURL() + "?channel=" + saasOrderVo.getChannelCode()));
         }}, SaasSmsTypeEnum.SAAS_0007);
     }
 
@@ -611,10 +630,6 @@ public class OrderApplication {
         SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(orderNumb, merchantCode);
         if (StringUtils.isNotEmpty(saasOrderVo.getPreliminaryReviewerCode()) && !operatorCode.equals(saasOrderVo.getPreliminaryReviewerCode())) {
             throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
-        }
-        SaasChannelEntity saasChannelEntity = saasChannelService.getDefaultSaasChannelByMerchantCode(merchantCode, ChannelTypeEnum.RECOMMEND_DEFINED.getType());
-        if (saasChannelEntity != null && saasChannelEntity.getChannelCode().equals(saasOrderVo.getChannelCode())) {
-            throw new ApplicationException("推荐流量无法审核，需要重新进件");
         }
         updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.SUBMIT_FINAL_REVIEW, null);
         SaasOrder updateSaasOrder = new SaasOrder();
@@ -658,7 +673,7 @@ public class OrderApplication {
         updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.FINAL_REVIEWER_REJECT, null);
 
         sendApplication.sendNotifyMessageByBorrowerCode(merchantCode, saasOrderVo.getBorrowerCode(), new HashMap<String, String>(2) {{
-            put("channel_url", configUtil.getH5AddressURL() + "?channel=" + saasOrderVo.getChannelCode());
+            put("channel_url", ShortUrlUtil.generateShortUrl(configUtil.getH5AddressURL() + "?channel=" + saasOrderVo.getChannelCode()));
         }}, SaasSmsTypeEnum.SAAS_0007);
     }
 
@@ -684,7 +699,7 @@ public class OrderApplication {
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
-    public void lenderAgree(String merchantCode, String operatorCode, String orderNumb, String lendRemark) {
+    public void lenderAgree(String merchantCode, String operatorCode, String orderNumb, String lendRemark, BigDecimal serviceFee, String[] lendCertificateArray) {
         SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(orderNumb, merchantCode);
         if (StringUtils.isNotEmpty(saasOrderVo.getLoanLenderCode()) && !operatorCode.equals(saasOrderVo.getLoanLenderCode())) {
             throw new ApplicationException(OrderErrorCodeEnum.NO_PERMISSION_OPERATE_ORDER);
@@ -692,8 +707,9 @@ public class OrderApplication {
         SaasOrder updateSaasOrder = new SaasOrder();
         updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
         updateSaasOrder.setLoanLenderCode(operatorCode);
+        updateSaasOrder.setServiceFee(serviceFee);
 
-        if (!ChannelConsts.DEFAULT_CHANNEL_CREATOR_CODE.equals(saasOrderVo.getChannelCode())) {
+        if (saasOrderVo.getBorrowerAuthorizedSignLoan()) {
             updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.FOR_REIMBURSEMENT, lendRemark);
             updateSaasOrder.setCreatedDt(new Date());
             updateSaasOrder.setExpireDate(DateUtil.addYear(new Date(), 10));
@@ -701,7 +717,6 @@ public class OrderApplication {
             saasOrderService.updateById(updateSaasOrder);
 
             orderBillDetailApplication.createOrderBillDetail(orderNumb, merchantCode);
-            ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, merchantCode, saasOrderVo.getSaasOrderId(), ContractTypeEnum.LENDER_DO_LOAN_CONTRACT_SIGN));
 
             sendApplication.sendNotifyMessageByBorrowerCode(merchantCode, saasOrderVo.getBorrowerCode(), new HashMap<String, String>(4) {{
                 put("money", saasOrderVo.getRealCapital().toString());
@@ -711,19 +726,34 @@ public class OrderApplication {
                 put("name", saasBorrowerRealInfoVo.getName());
                 put("money", saasOrderVo.getRealCapital().toString());
             }}, SaasSmsTypeEnum.SAAS_0012);
+
+            ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, merchantCode, saasOrderVo.getSaasOrderId(), ContractTypeEnum.LENDER_DO_LOAN_CONTRACT_SIGN));
         } else {
             saasOrderService.updateById(updateSaasOrder);
             updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.TO_CONFIRM_RECEIPT, lendRemark);
 
             sendApplication.sendNotifyMessageByBorrowerCode(merchantCode, saasOrderVo.getBorrowerCode(), new HashMap<String, String>(2) {{
-                put("channel_url", configUtil.getH5AddressURL() + "?channel=" + saasOrderVo.getChannelCode());
+                put("channel_url", ShortUrlUtil.generateShortUrl(configUtil.getH5AddressURL() + "?channel=" + saasOrderVo.getChannelCode()));
             }}, SaasSmsTypeEnum.SAAS_0010);
         }
 
         SaasOrderLendRemarkVo addSaasOrderLendRemarkVo = new SaasOrderLendRemarkVo();
         addSaasOrderLendRemarkVo.setOrderNumb(orderNumb);
-        addSaasOrderLendRemarkVo.setLendWay(lendRemark);
         addSaasOrderLendRemarkVo.setLendPersonCode(operatorCode);
+        addSaasOrderLendRemarkVo.setLendWay(lendRemark);
+        if (lendCertificateArray != null && lendCertificateArray.length > 0) {
+            StringBuilder lendCertificate = new StringBuilder();
+            for (int i = 0; i < lendCertificateArray.length; i++) {
+                String lendCertificateItem = lendCertificateArray[i];
+                if (StringUtils.isNotEmpty(lendCertificateItem)) {
+                    lendCertificate.append(lendCertificateItem);
+                    if (i != lendCertificateArray.length - 1) {
+                        lendCertificate.append(",");
+                    }
+                }
+            }
+            addSaasOrderLendRemarkVo.setLendCertificate(lendCertificate.toString());
+        }
         saasOrderLendRemarkService.save(addSaasOrderLendRemarkVo);
     }
 
@@ -752,18 +782,17 @@ public class OrderApplication {
         }
         if (contractApplication.needDoLicenseContractSign(borrowerCode)) {
             //生成授权合同
-            ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, borrowerCode, null, ContractTypeEnum.BORROWER_DO_AUTHORIZATION_CONTRACT_SIGN));
+            ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, borrowerCode, saasOrderVo.getSaasOrderId(), ContractTypeEnum.BORROWER_DO_AUTHORIZATION_CONTRACT_AND_LOAN_CONTRACT_SIGN));
+        } else {
+            ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, borrowerCode, saasOrderVo.getSaasOrderId(), ContractTypeEnum.BORROWER_DO_LOAN_CONTRACT_SIGN));
         }
-        ThreadPoolUtils.getTaskInstance().execute(new GenerateContractThread(contractApplication, saasOrderService, borrowerCode, saasOrderVo.getSaasOrderId(), ContractTypeEnum.BORROWER_DO_LOAN_CONTRACT_SIGN));
 
         updateOrderStatus(merchantCode, operatorCode, orderNumb, OrderStatusEnum.FOR_REIMBURSEMENT, null);
-        String termUrl = contractApplication.borrowerDoLoanContractSign(borrowerCode, saasOrderVo.getSaasOrderId());
         SaasOrder updateSaasOrder = new SaasOrder();
         updateSaasOrder.setId(saasOrderVo.getSaasOrderId());
         updateSaasOrder.setCreatedDt(new Date());
         updateSaasOrder.setExpireDate(DateUtil.addYear(new Date(), 10));
         updateSaasOrder.setTotalInterestFee(orderCalculateApplication.getInterest(saasOrderVo.getRealCapital(), saasOrderVo.getTotalInterestRatio(), new Date(), saasOrderVo.getRepaymentDt(), Boolean.FALSE));
-        updateSaasOrder.setTermUrl(termUrl);
         saasOrderService.updateById(updateSaasOrder);
 
         sendApplication.sendNotifyMessageByBorrowerCode(merchantCode, saasOrderVo.getBorrowerCode(), new HashMap<String, String>(2) {{
@@ -779,7 +808,7 @@ public class OrderApplication {
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
-    public void extendOrder(String merchantCode, String operatorCode, String orderNumb, Date repaymentDt, BigDecimal extendInterestRatio) {
+    public void extendOrder(String merchantCode, String operatorCode, String orderNumb, Date repaymentDt, BigDecimal extendInterestRatio, BigDecimal serviceFee) {
         SaasOrderVo saasOrderVo = saasOrderService.getByOrderNumbAndMerchantCode(orderNumb, merchantCode);
 
         if (DateUtil.countDay(saasOrderVo.getRepaymentDt(), repaymentDt) >= 0
@@ -816,11 +845,12 @@ public class OrderApplication {
         extendSaasOrder.setPreliminaryReviewerCode(saasOrderVo.getPreliminaryReviewerCode());
         extendSaasOrder.setFinalReviewerCode(saasOrderVo.getFinalReviewerCode());
         extendSaasOrder.setLoanLenderCode(saasOrderVo.getLoanLenderCode());
+        extendSaasOrder.setServiceFee(serviceFee);
         extendSaasOrder.setRemark(saasOrderVo.getRemark());
         saasOrderService.create(extendSaasOrder);
 
         sendApplication.sendNotifyMessageByBorrowerCode(merchantCode, saasOrderVo.getBorrowerCode(), new HashMap<String, String>(2) {{
-            put("channel_url", configUtil.getH5AddressURL() + "?channel=" + saasOrderVo.getChannelCode());
+            put("channel_url", ShortUrlUtil.generateShortUrl(configUtil.getH5AddressURL() + "?channel=" + saasOrderVo.getChannelCode()));
         }}, SaasSmsTypeEnum.SAAS_0014);
 
         SaasOrderStatusHistory saasOrderStatusHistory = new SaasOrderStatusHistory();

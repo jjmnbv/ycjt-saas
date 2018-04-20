@@ -4,6 +4,7 @@ import com.beitu.saas.app.application.order.vo.OrderApplicationListVo;
 import com.beitu.saas.borrower.client.SaasBorrowerRealInfoService;
 import com.beitu.saas.borrower.client.SaasBorrowerService;
 import com.beitu.saas.borrower.domain.SaasBorrowerRealInfoVo;
+import com.beitu.saas.borrower.domain.SaasBorrowerVo;
 import com.beitu.saas.channel.client.SaasChannelService;
 import com.beitu.saas.channel.entity.SaasChannelEntity;
 import com.beitu.saas.order.client.SaasOrderApplicationService;
@@ -63,7 +64,10 @@ public class OrderApplyApplication {
         if (saasBorrowerRealInfoVo != null) {
             orderApplicationListVo.setBorrowerName(saasBorrowerRealInfoVo.getName());
         }
-        orderApplicationListVo.setBorrowerMobile(saasBorrowerService.getByBorrowerCodeAndMerchantCode(saasOrderApplicationVo.getBorrowerCode(), saasOrderApplicationVo.getMerchantCode()).getMobile());
+        SaasBorrowerVo saasBorrowerVo = saasBorrowerService.getByBorrowerCodeAndMerchantCode(saasOrderApplicationVo.getBorrowerCode(), saasOrderApplicationVo.getMerchantCode());
+        if (saasBorrowerVo != null) {
+            orderApplicationListVo.setBorrowerMobile(saasBorrowerVo.getMobile());
+        }
         OrderStatusEnum orderStatusEnum = saasOrderService.getOrderStatusByOrderNumb(saasOrderApplicationVo.getOrderNumb());
         if (orderStatusEnum != null) {
             orderApplicationListVo.setOrderStatus(orderStatusEnum.getMsg());

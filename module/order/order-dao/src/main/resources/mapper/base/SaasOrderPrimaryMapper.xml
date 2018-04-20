@@ -17,12 +17,14 @@
         <result column="created_dt" jdbcType="DATE" property="createdDt"/>
         <result column="expire_date" jdbcType="TIMESTAMP" property="expireDate"/>
         <result column="term_url" jdbcType="VARCHAR" property="termUrl"/>
+        <result column="borrower_authorized_sign_loan" jdbcType="BIT" property="borrowerAuthorizedSignLoan"/>
         <result column="relation_order_id" jdbcType="BIGINT" property="relationOrderId"/>
         <result column="order_status" jdbcType="SMALLINT" property="orderStatus"/>
         <result column="preliminary_reviewer_code" jdbcType="VARCHAR" property="preliminaryReviewerCode"/>
         <result column="final_reviewer_code" jdbcType="VARCHAR" property="finalReviewerCode"/>
         <result column="loan_lender_code" jdbcType="VARCHAR" property="loanLenderCode"/>
         <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="service_fee" jdbcType="DECIMAL" property="serviceFee"/>
         <result column="version" jdbcType="BIGINT" property="version"/>
         <result column="deleted" jdbcType="BIT" property="deleted"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
@@ -44,12 +46,14 @@
     created_dt,
     expire_date,
     term_url,
+    borrower_authorized_sign_loan,
     relation_order_id,
     order_status,
     preliminary_reviewer_code,
     final_reviewer_code,
     loan_lender_code,
     remark,
+    service_fee,
     version,
     deleted,
     gmt_modified,
@@ -107,6 +111,9 @@
             <if test="termUrl !=null">
                 term_url,
             </if>
+            <if test="borrowerAuthorizedSignLoan !=null">
+                borrower_authorized_sign_loan,
+            </if>
             <if test="relationOrderId !=null">
                 relation_order_id,
             </if>
@@ -124,6 +131,9 @@
             </if>
             <if test="remark !=null">
                 remark,
+            </if>
+            <if test="serviceFee !=null">
+                service_fee,
             </if>
             <if test="version !=null">
                 version,
@@ -178,6 +188,9 @@
             <if test="termUrl != null">
                 #{termUrl,jdbcType=VARCHAR},
             </if>
+            <if test="borrowerAuthorizedSignLoan != null">
+                #{borrowerAuthorizedSignLoan,jdbcType=BIT},
+            </if>
             <if test="relationOrderId != null">
                 #{relationOrderId,jdbcType=BIGINT},
             </if>
@@ -195,6 +208,9 @@
             </if>
             <if test="remark != null">
                 #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceFee != null">
+                #{serviceFee,jdbcType=DECIMAL},
             </if>
             <if test="version != null">
                 #{version,jdbcType=BIGINT},
@@ -253,6 +269,9 @@
             <if test="termUrl !=null">
                 term_url = #{termUrl,jdbcType=VARCHAR},
             </if>
+            <if test="borrowerAuthorizedSignLoan !=null">
+                borrower_authorized_sign_loan = #{borrowerAuthorizedSignLoan,jdbcType=BIT},
+            </if>
             <if test="relationOrderId !=null">
                 relation_order_id = #{relationOrderId,jdbcType=BIGINT},
             </if>
@@ -270,6 +289,9 @@
             </if>
             <if test="remark !=null">
                 remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceFee !=null">
+                service_fee = #{serviceFee,jdbcType=DECIMAL},
             </if>
             <if test="version !=null">
                 version = #{version,jdbcType=BIGINT},
@@ -349,6 +371,9 @@
             <if test="termUrl !=null">
                 and term_url = #{termUrl,jdbcType=VARCHAR}
             </if>
+            <if test="borrowerAuthorizedSignLoan !=null">
+                and borrower_authorized_sign_loan = #{borrowerAuthorizedSignLoan,jdbcType=BIT}
+            </if>
             <if test="relationOrderId !=null">
                 and relation_order_id = #{relationOrderId,jdbcType=BIGINT}
             </if>
@@ -366,6 +391,9 @@
             </if>
             <if test="remark !=null">
                 and remark = #{remark,jdbcType=VARCHAR}
+            </if>
+            <if test="serviceFee !=null">
+                and service_fee = #{serviceFee,jdbcType=DECIMAL}
             </if>
             <if test="version !=null">
                 and version = #{version,jdbcType=BIGINT}
@@ -427,6 +455,9 @@
             <if test="termUrl !=null">
                 and term_url = #{termUrl,jdbcType=VARCHAR}
             </if>
+            <if test="borrowerAuthorizedSignLoan !=null">
+                and borrower_authorized_sign_loan = #{borrowerAuthorizedSignLoan,jdbcType=BIT}
+            </if>
             <if test="relationOrderId !=null">
                 and relation_order_id = #{relationOrderId,jdbcType=BIGINT}
             </if>
@@ -444,6 +475,9 @@
             </if>
             <if test="remark !=null">
                 and remark = #{remark,jdbcType=VARCHAR}
+            </if>
+            <if test="serviceFee !=null">
+                and service_fee = #{serviceFee,jdbcType=DECIMAL}
             </if>
             <if test="version !=null">
                 and version = #{version,jdbcType=BIGINT}

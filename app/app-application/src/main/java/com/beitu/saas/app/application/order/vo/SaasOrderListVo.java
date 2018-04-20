@@ -41,6 +41,8 @@ public class SaasOrderListVo implements ResponseData {
 
     private String finalReviewer;
 
+    private String loanLender;
+
     public String getOrderNumb() {
         return orderNumb;
     }
@@ -167,5 +169,13 @@ public class SaasOrderListVo implements ResponseData {
 
     public void setFinalReviewer(String finalReviewer) {
         this.finalReviewer = finalReviewer;
+    }
+
+    public String getLoanLender() {
+        return loanLender;
+    }
+
+    public void setLoanLender(String loanLender) {
+        this.loanLender = loanLender;
     }
 }

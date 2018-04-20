@@ -11,10 +11,10 @@ import com.beitu.saas.common.config.ConfigUtil;
 import com.beitu.saas.common.enums.RestCodeEnum;
 import com.beitu.saas.common.utils.DateUtil;
 import com.beitu.saas.common.utils.OrderNoUtil;
-import com.beitu.saas.common.utils.StringUtil;
 import com.beitu.saas.order.client.SaasOrderService;
 import com.beitu.saas.order.entity.SaasOrder;
 import com.beitu.saas.order.enums.OrderErrorCodeEnum;
+import com.fqgj.common.utils.MD5;
 import com.fqgj.common.utils.NumberToCNUtil;
 import com.fqgj.exception.common.ApplicationException;
 import com.fqgj.log.factory.LogFactory;
@@ -28,9 +28,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -215,6 +215,29 @@ public class ContractCreateApplication {
 
     private String getContractNumbByOrderId(Long orderId) {
         return String.format("%0" + configUtil.getContractNumbLength() + "d", orderId);
+    }
+
+    public void createLocalLoanContract() {
+        String loanContractUrl = configUtil.getPdfPath() + 308 + ".pdf";
+
+        Map<String, String> data = new HashMap<>(16);
+        data.put("borrowUserName", "赖华明");
+        data.put("borrowIdentityNo", "440223199610294738");
+
+        data.put("lenderUserName", "罗佳");
+        data.put("lenderIdentityNo", "430624198910077112");
+
+        data.put("orderNo", getContractNumbByOrderId(308L));
+
+        data.put("createdDt", "2018-04-15");
+        data.put("deadline", "7");
+        BigDecimal realCapital = new BigDecimal("1000");
+        data.put("realCapital", realCapital.toString());
+        data.put("realCapitalCN", NumberToCNUtil.number2CNMontrayUnit(realCapital));
+        data.put("repaymentDt", "2018-04-22");
+        data.put("totalInterestRatio", orderCalculateApplication.getInterestRatio(new BigDecimal("0.24")));
+        data.put("inscribeDate", "2018年04月15日");
+        generateContract(ContractConsts.LOAN_PDF_PATH, loanContractUrl, data);
     }
 
 }

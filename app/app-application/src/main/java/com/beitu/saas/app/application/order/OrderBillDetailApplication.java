@@ -232,6 +232,7 @@ public class OrderBillDetailApplication {
         }
         addSaasOrderBillDetail.setRepaymentDt(saasOrderVo.getRepaymentDt());
         addSaasOrderBillDetail.setInterest(saasOrderVo.getTotalInterestFee());
+        addSaasOrderBillDetail.setServiceFee(saasOrderVo.getServiceFee());
         addSaasOrderBillDetail.setVisible(Boolean.TRUE);
         saasOrderBillDetailService.create(addSaasOrderBillDetail);
     }
@@ -266,6 +267,7 @@ public class OrderBillDetailApplication {
             saasOrderDetailVo.setPeriod(i);
             saasOrderDetailVo.setOrderNumb(saasOrderBillDetailVo.getOrderNumb());
             saasOrderDetailVo.setCapital(saasOrderBillDetailVo.getRealCapital().toString());
+            saasOrderDetailVo.setServiceFee(saasOrderBillDetailVo.getServiceFee().intValue());
             Date createdDt;
             if (lastSaasOrderDetailVo == null) {
                 createdDt = saasOrderBillDetailVo.getGmtCreate();

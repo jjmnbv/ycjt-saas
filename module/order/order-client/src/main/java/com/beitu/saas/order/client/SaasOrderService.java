@@ -84,12 +84,4 @@ public interface SaasOrderService<T extends BaseEntity> extends BaseService<T> {
 
     SaasOrderVo getMainSaasOrderByOrderNumb(String orderNumb);
 
-    /**
-     * 更新 提交驳回订单信息
-     *
-     * @param saasOrder 驳回订单信息
-     * @return
-     */
-    int updateSubmitRefuseOrder(SaasOrder saasOrder);
-
 }
