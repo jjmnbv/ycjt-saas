@@ -18,6 +18,11 @@ import com.beitu.saas.credit.entity.SaasCreditCarrier;
 import com.beitu.saas.intergration.esign.EsignIntegrationService;
 import com.beitu.saas.intergration.esign.dto.AddPersonAccountSuccessDto;
 import com.beitu.saas.intergration.esign.param.PersonAccountParam;
+import com.beitu.saas.order.client.SaasOrderApplicationService;
+import com.beitu.saas.order.client.SaasOrderService;
+import com.beitu.saas.order.domain.SaasOrderApplicationVo;
+import com.beitu.saas.order.entity.SaasOrder;
+import com.beitu.saas.order.entity.SaasOrderApplication;
 import com.beitu.saas.risk.helpers.CollectionUtils;
 import com.beitu.saas.risk.helpers.StringUtils;
 import com.beitu.saas.user.client.SaasEsignAccountService;
@@ -34,6 +39,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -59,28 +65,16 @@ public class OkController {
     private SaasConsumeDayStatApplication saasConsumeDayStatApplication;
 
     @Autowired
-    private SaasUserEsignAuthorizationService saasUserEsignAuthorizationService;
-
-    @Autowired
-    private SaasEsignAccountService saasEsignAccountService;
+    private SaasOrderService saasOrderService;
 
     @Autowired
     private SaasEsignUserAuthorizationService saasEsignUserAuthorizationService;
 
     @Autowired
-    private SaasBorrowerRealInfoService saasBorrowerRealInfoService;
-
-    @Autowired
-    private MerchantApplication merchantApplication;
+    private SaasOrderApplicationService saasOrderApplicationService;
 
     @Autowired
     private ConfigUtil configUtil;
-
-    @Autowired
-    private EsignIntegrationService esignIntegrationService;
-
-    @Autowired
-    private OSSService ossService;
 
     @Autowired
     private ContractApplication contractApplication;
@@ -113,73 +107,37 @@ public class OkController {
         return "ok";
     }
 
-    @RequestMapping(value = "/esign/data/sync", method = RequestMethod.GET)
+    @RequestMapping(value = "/order/data/sync", method = RequestMethod.GET)
     @ResponseBody
     @VisitorAccessible
     @SignIgnore
     @Transactional(rollbackFor = Exception.class)
-    public String syncEsignData() {
-        List<SaasUserEsignAuthorization> saasUserEsignAuthorizationList = saasUserEsignAuthorizationService.selectByParams(null);
-        if (CollectionUtils.isEmpty(saasUserEsignAuthorizationList)) {
+    public String syncOrderData() {
+        List<SaasOrder> saasOrderList = saasOrderService.selectByParams(new HashMap<String, Object>(4) {{
+            put("deleted", Boolean.FALSE);
+        }});
+        if (CollectionUtils.isEmpty(saasOrderList)) {
             return "null";
         }
-        StringBuilder results = new StringBuilder();
-        saasUserEsignAuthorizationList.forEach(saasUserEsignAuthorization -> {
-            String saasEsignCode = OrderNoUtil.makeOrderNum();
-            SaasEsignAccountVo saasEsignAccountVo = new SaasEsignAccountVo();
-            saasEsignAccountVo.setSaasEsignCode(saasEsignCode);
-            SaasBorrowerRealInfoVo saasBorrowerRealInfoVo = saasBorrowerRealInfoService.getBorrowerRealInfoByBorrowerCode(saasUserEsignAuthorization.getUserCode());
-            if (saasBorrowerRealInfoVo != null) {
+        saasOrderList.forEach(saasOrder -> {
+            String borrowerCode = saasOrder.getBorrowerCode();
+            SaasEsignUserAuthorizationVo saasEsignUserAuthorizationVo = saasEsignUserAuthorizationService.getByUserCode(borrowerCode);
+            if (saasEsignUserAuthorizationVo == null || StringUtils.isEmpty(saasEsignUserAuthorizationVo.getAuthorizationUrl())) {
                 return;
-            } else {
-                MerchantContractInfoVo merchantContractInfoVo = merchantApplication.getMerchantContractInfo(saasUserEsignAuthorization.getUserCode());
-                results.append(saasUserEsignAuthorization.getUserCode()).append(",");
-                if (merchantContractInfoVo == null) {
-                    return;
-                }
-                saasEsignAccountVo.setName(merchantContractInfoVo.getName());
-                saasEsignAccountVo.setCode(merchantContractInfoVo.getCode());
             }
-            SaasEsignAccountVo saasEsignAccountVo1 = saasEsignAccountService.getByCode(saasEsignAccountVo.getCode());
-            if (saasEsignAccountVo1 == null) {
-                PersonAccountParam personAccountParam = new PersonAccountParam();
-                personAccountParam.setUserCode(saasUserEsignAuthorization.getUserCode());
-                personAccountParam.setUserName(saasEsignAccountVo.getName());
-                personAccountParam.setIdentityCode(saasEsignAccountVo.getCode());
-                AddPersonAccountSuccessDto addPersonAccountSuccessDto = esignIntegrationService.addPersonAccount(personAccountParam);
-                if (addPersonAccountSuccessDto == null) {
-                    throw new ApplicationException("新增机构个人账户失败");
-                }
-                saasEsignAccountVo.setAccountId(addPersonAccountSuccessDto.getPersonAccountId());
-                String url = getAuthorizationUrl(saasUserEsignAuthorization.getUserCode());
-                ossService.uploadFile(url, addPersonAccountSuccessDto.getSealData());
-                saasEsignAccountVo.setSealUrl(url);
-                saasEsignAccountService.addSaasEsignAccountVo(saasEsignAccountVo);
-            } else {
-                saasEsignCode = saasEsignAccountVo1.getSaasEsignCode();
+            SaasOrder updateSaasOrder = new SaasOrder();
+            updateSaasOrder.setId(saasOrder.getId());
+            updateSaasOrder.setBorrowerAuthorizedSignLoan(Boolean.TRUE);
+            saasOrderService.updateById(updateSaasOrder);
+            SaasOrderApplicationVo saasOrderApplicationVo = saasOrderApplicationService.getByBorrowerCodeAndOrderNumb(saasOrder.getBorrowerCode(), saasOrder.getOrderNumb());
+            if (saasOrderApplicationVo != null) {
+                SaasOrderApplication updateSaasOrderApplication = new SaasOrderApplication();
+                updateSaasOrderApplication.setId(saasOrderApplicationVo.getSaasOrderApplicationId());
+                updateSaasOrderApplication.setBorrowerAuthorizedSignLoan(Boolean.TRUE);
+                saasOrderApplicationService.updateById(updateSaasOrderApplication);
             }
-            if (StringUtils.isNotEmpty(saasUserEsignAuthorization.getAuthorizationUrl())) {
-                SaasEsignUserAuthorizationVo saasEsignUserAuthorizationVo1 = saasEsignUserAuthorizationService.getByUserCode(saasUserEsignAuthorization.getUserCode());
-                if (saasEsignUserAuthorizationVo1 == null) {
-                    SaasEsignUserAuthorizationVo saasEsignUserAuthorizationVo = new SaasEsignUserAuthorizationVo();
-                    saasEsignUserAuthorizationVo.setUserCode(saasUserEsignAuthorization.getUserCode());
-                    saasEsignUserAuthorizationVo.setSaasEsignCode(saasEsignCode);
-                    saasEsignUserAuthorizationVo.setAuthorizationUrl(saasUserEsignAuthorization.getAuthorizationUrl());
-                    saasEsignUserAuthorizationService.addSaasEsignUserAuthorizationVo(saasEsignUserAuthorizationVo);
-                }
-            }
-            saasUserEsignAuthorizationService.deleteById(saasUserEsignAuthorization.getId());
         });
-        return results.toString();
-    }
-
-    private String getAuthorizationUrl(String userCode) {
-        StringBuilder filePath = new StringBuilder("contract/authorization/");
-        if (configUtil.isServerTest()) {
-            filePath.append("test/");
-        }
-        filePath.append(userCode).append("_").append(MD5.md5(OrderNoUtil.makeOrderNum())).append(".pdf");
-        return filePath.toString();
+        return "ok";
     }
 
     @RequestMapping(value = "/contract/create", method = RequestMethod.GET)
