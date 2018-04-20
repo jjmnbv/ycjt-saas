@@ -104,7 +104,7 @@ public class SaasChannelController {
             saasChannelApplication.addOrUpdateChannel(saasChannelParam, settingsVos);
         } catch (Exception e) {
             LOGGER.error("==  创建渠道失败, 机构号:{}, 渠道名称:{} ,失败原因:{}  ==", merchantCode, saasChannelRequestParam.getChannelName(), e);
-            return Response.error(null, ChannelErrorCodeEnum.CHANNEL_PARAM_INVALID.getMsg());
+            return Response.error(null, e.getMessage());
         }
         return Response.ok().putData("操作成功");
     }
