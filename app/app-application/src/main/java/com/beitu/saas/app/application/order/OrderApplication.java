@@ -59,6 +59,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author linanjun
@@ -485,11 +486,18 @@ public class OrderApplication {
                 .setMerchantSms(smsInfoByMerchantCode == null ? 0L : smsInfoByMerchantCode.getValue());
 
         //走势曲线图
+        //放款金额月统计
         List<LoanStateDetailVo> loanStateDetailVos = saasOrderBillDetailService.getLoanStateDetailList(merchantCode);
+        //回收金额月统计
+        List<LoanStateDetailVo> destroyStateDetailVos = saasOrderBillDetailService.getDestroyStateDetailList(merchantCode);
+        Map<String, LoanStateDetailVo> destroyStateMap = destroyStateDetailVos.stream().collect(Collectors.toMap(LoanStateDetailVo::getMonth, item -> item));
+
         List<LoanStateDetailShowVo> stateDetailShowVos = new ArrayList<>();
         loanStateDetailVos.stream().forEach(x -> {
             LoanStateDetailShowVo loanStateDetailShowVo = new LoanStateDetailShowVo();
             BeanUtils.copyProperties(x, loanStateDetailShowVo);
+            LoanStateDetailVo destroyState = destroyStateMap.get(x.getMonth());
+            loanStateDetailShowVo.setMonthDestroyTotalAmount(destroyState == null ? BigDecimal.ZERO : destroyState.getMonthDestroyTotalAmount());
             stateDetailShowVos.add(loanStateDetailShowVo);
         });
         dataDashboardLoanShowVo.setLoanStateDetailShowVos(stateDetailShowVos);

@@ -76,9 +76,9 @@
             resultType="com.beitu.saas.order.vo.LoanDataDetailVo">
       select
       sum(case when visible=1 then real_capital else 0 end) loanTotalAmount,
-      sum(case when created_dt=DATE_SUB(curdate(),INTERVAL 0 DAY) and visible=1 then real_capital else 0 end) todayLoanTotalAmount,
+      sum(case when datediff(NOW(),created_dt)=0 and visible=1 then real_capital else 0 end) todayLoanTotalAmount,
       sum(case when visible=1 and destroy=1 then amount else 0 end) destroyTotalAmount,
-      sum(case when visible=1 and created_dt=DATE_SUB(curdate(),INTERVAL 0 DAY) then amount else 0 end) todayDestroyTotalAmount,
+      sum(case when visible=1 and destroy=1 and datediff(NOW(),actual_destroy_dt)=0 then amount else 0 end) todayDestroyTotalAmount,
       sum(case when visible=1 and destroy=0 then real_capital else 0 end) noRepayTotalAmount,
       sum(case when visible=1 and destroy=0  and datediff(DATE_SUB(curdate(),INTERVAL 0 DAY),repayment_dt)>0 then real_capital else 0 end) overdueTotalAmount,
       sum(case when visible=1 and destroy=0  and datediff(NOW(),repayment_dt)=1 then real_capital else 0 end) todayOverdueTotalAmount
@@ -89,13 +89,22 @@
     <select id="selectLoanStatDetailList" parameterType="java.lang.String"
             resultType="com.beitu.saas.order.vo.LoanStateDetailVo">
       select
-      sum(case when visible=1 then real_capital else null end) monthLoanTotalAmount,
-      sum(case when visible=1 and destroy=1 then amount else null end) monthDestroyTotalAmount,
-      count(distinct( case when visible=1 then borrower_code else null end)) monthLoanPersonNum,
+      sum(case when visible=1 then real_capital else 0 end) monthLoanTotalAmount,
+      count(distinct( case when visible=1 then borrower_code else 0 end)) monthLoanPersonNum,
       date_format(gmt_create, '%Y-%m') `month`
       from saas_order_bill_detail
       where merchant_code = #{merchantCode,jdbcType=VARCHAR} and deleted = false
       group by  date_format(gmt_create, '%Y-%m')
+    </select>
+
+    <select id="selectDestroyStatDetailList" parameterType="java.lang.String"
+            resultType="com.beitu.saas.order.vo.LoanStateDetailVo">
+        select
+        sum(case when visible=1 and destroy=1 then amount else 0 end) monthDestroyTotalAmount,
+        date_format(actual_destroy_date, '%Y-%m') `month`
+        from saas_order_bill_detail
+        where merchant_code = #{merchantCode,jdbcType=VARCHAR} and visible=1 and destroy=1 and deleted = false
+        group by  date_format(actual_destroy_date, '%Y-%m')
     </select>
 
 

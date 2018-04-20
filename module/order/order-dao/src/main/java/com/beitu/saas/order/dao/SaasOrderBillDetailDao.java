@@ -30,6 +30,8 @@ public interface SaasOrderBillDetailDao extends BaseMapper<SaasOrderBillDetail> 
 
     List<LoanStateDetailVo> selectLoanStatDetailList(String merchantCode);
 
+    List<LoanStateDetailVo> selectDestroyStatDetailList(String merchantCode);
+
     List<DashboardOrderVo> selectNoRepayOrder(String merchantCode, Page page);
 
     Integer countNoRepayOrder(String merchantCode);

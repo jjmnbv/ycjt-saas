@@ -28,6 +28,8 @@ public interface SaasOrderBillDetailService<T extends BaseEntity> extends BaseSe
 
     List<LoanStateDetailVo> getLoanStateDetailList(String merchantCode);
 
+    List<LoanStateDetailVo> getDestroyStateDetailList(String merchantCode);
+
     List<DashboardOrderVo> getNoRepayOrderListByPage(String merchantCode, Page page);
 
     List<DashboardOrderVo> getOverdueOrderListByPage(String merchantCode, Page page);
