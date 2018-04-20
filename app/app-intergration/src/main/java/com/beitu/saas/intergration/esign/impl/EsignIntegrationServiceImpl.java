@@ -1,6 +1,5 @@
 package com.beitu.saas.intergration.esign.impl;
 
-import com.beitu.saas.common.utils.contract.utils.FileHelper;
 import com.beitu.saas.intergration.esign.EsignIntegrationService;
 import com.beitu.saas.intergration.esign.dto.AddOrganizeAccountSuccessDto;
 import com.beitu.saas.intergration.esign.dto.AddPersonAccountSuccessDto;
@@ -24,16 +23,11 @@ import com.timevale.esign.sdk.tech.impl.constants.OrganRegType;
 import com.timevale.esign.sdk.tech.impl.constants.SignType;
 import com.timevale.esign.sdk.tech.service.AccountService;
 import com.timevale.esign.sdk.tech.service.SealService;
-import com.timevale.esign.sdk.tech.service.SelfSignService;
 import com.timevale.esign.sdk.tech.service.UserSignService;
 import com.timevale.esign.sdk.tech.service.factory.AccountServiceFactory;
 import com.timevale.esign.sdk.tech.service.factory.SealServiceFactory;
-import com.timevale.esign.sdk.tech.service.factory.SelfSignServiceFactory;
 import com.timevale.esign.sdk.tech.service.factory.UserSignServiceFactory;
 import org.springframework.stereotype.Service;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 
 /**
  * @author linanjun
@@ -188,7 +182,6 @@ public class EsignIntegrationServiceImpl implements EsignIntegrationService {
         PosBean posBean = setXYPosBean("1", 360, 170, 140);
         UserSignService userSignService = UserSignServiceFactory.instance();
         FileDigestSignResult finalResult = userSignService.localSignPDF(licenseContractSignParam.getUserAccountId(), licenseContractSignParam.getUserSealData(), signPDFStreamBean, posBean, signType);
-        LOGGER.error("授权协议授权方签章返回结果:{}", finalResult);
         if (0 != finalResult.getErrCode()) {
             LOGGER.error("授权协议授权方签章失败:" + finalResult.getMsg() + " --- userCode:" + licenseContractSignParam.getUserCode());
             return null;
